@@ -39,7 +39,7 @@ namespace VTuber.Core.EventCenter
             return false;
         }
 
-        public virtual void Register(KeyType key, DelegateType @delegate)
+        public virtual void RegisterListener(KeyType key, DelegateType @delegate)
         {
             if (m_events.TryGetValue(key, out DelegateType outDelegate))
             {
@@ -51,7 +51,7 @@ namespace VTuber.Core.EventCenter
             }
         }
 
-        public virtual bool Unregister(KeyType key, DelegateType @delegate)
+        public virtual bool RemoveListener(KeyType key, DelegateType @delegate)
         {
             if (m_events.TryGetValue(key, out DelegateType outDelegate))
             {
