@@ -5,17 +5,16 @@ namespace VTuber.Character
 {
     public class VCharacterAttributeManager
     {
-        public List<VCharacterAttribute> Attributes { get; set; }
+        public Dictionary<string, VCharacterAttribute> Attributes { get; set; }
         
         public VCharacterAttributeManager(VCharacterAttributeManagerConfiguration configuration)
         {
-            Attributes = new List<VCharacterAttribute>();
+            Attributes = new Dictionary<string, VCharacterAttribute>();
 
             foreach (var attribute in configuration.attributes)  
             {
-                Attributes.Add(attribute.GetAttribute());
+                Attributes.Add(attribute.attributeName, attribute.GetAttribute());
             }
         }
-        
     }
 }

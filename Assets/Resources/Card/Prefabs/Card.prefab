@@ -196,11 +196,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2078c8f7d4a41768f95171d0b4c6341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Background: {fileID: 5418081280116854409}
-  Facade: {fileID: 492576563808840563}
-  Name: {fileID: 3601492734164757646}
-  Description: {fileID: 3844727032169294534}
-  Score: {fileID: 4763495925145233135}
+  background: {fileID: 5418081280116854409}
+  facade: {fileID: 492576563808840563}
+  name: {fileID: 3601492734164757646}
+  description: {fileID: 3844727032169294534}
+  cost: {fileID: 4763495925145233135}
+  handCardUI: {fileID: 0}
 --- !u!1 &6920681300705595744
 GameObject:
   m_ObjectHideFlags: 0

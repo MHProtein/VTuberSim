@@ -17,21 +17,21 @@ namespace VTuber.Core.Foundation
         
         private static bool _isDebugEnabled = true;
         
-        public static void Log(object message, bool ignore = false)
+        public static void Log(object message)
         {
-            if (!ignore && !IsDebugEnabled) return;
+            if (!IsDebugEnabled) return;
             Debug.Log(message);
         }
         
-        public static void LogWarning(object message, bool ignore = false)
+        public static void LogWarning(object message)
         {
-            if (!ignore && !IsDebugEnabled) return;
+            if (!IsDebugEnabled) return;
             Debug.LogWarning(message);
         }
         
-        public static void LogError(object message, bool ignore = false)
+        public static void LogError(object message)
         {
-            if (!ignore && !IsDebugEnabled) return;
+            if (!IsDebugEnabled) return;
             Debug.LogError(message);
         }
         

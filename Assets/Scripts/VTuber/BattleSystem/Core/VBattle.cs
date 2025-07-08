@@ -1,38 +1,85 @@
-﻿using VTuber.Character;
+﻿using System.Collections.Generic;
+using VTuber.BattleSystem.BattleAttribute;
+using VTuber.Character;
+using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VBattle
+    public class VBattle : VMonoBehaviour
     {
         private VBattleConfiguration _configuration;
 
-        VCharacterBattleAttributes characterBattleAttributes;
+        private VBattleAttributeManager _battleAttributeManager;
+        private VCardPilesManager _cardPilesManager;
 
-        int currentTurn = 1;
-        int maxTurnCount => _configuration.maxTurnCount;
-        int currentPlayCountLeft = 0;
+        private int _currentPlayCountLeft = 0;
         
-        public VBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration)
+        //Attributes
+        private VBattleTurnAttribute _turnAttribute;
+        private VBattleScoreAttribute _scoreAttribute;
+        
+        
+        public int TurnLeft => _turnAttribute.Value;
+        
+        private int MaxTurnCount => _configuration.maxTurnCount;
+
+        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
         {
-            this._configuration = configuration;
-            this.characterBattleAttributes = new VCharacterBattleAttributes(characterAttributeManager);
+            _configuration = configuration;
+
+            _battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
+            _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary);
+
+            _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount, false);
+            _scoreAttribute = new VBattleScoreAttribute(0, false);
+            
+            _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
+            _battleAttributeManager.AddAttribute("BAScore", _scoreAttribute);
+            
+            InitializeTurn();
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            //_cardPilesManager.OnEnable();
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            //_cardPilesManager.OnDisable();
         }
 
         public void InitializeTurn()
         {
-            
+            VRootEventCenter.Instance.Raise(VRootEventKeys.OnTurnBegin, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft},
+                {"HandSize", _configuration.maxHandSize}
+            });
         }
-        
+
         public void EndTurn()
         {
-            currentTurn++;
-            if (currentTurn > maxTurnCount)
+            _turnAttribute.DecreaseTurn();
+            if (TurnLeft <= 0)
             {
                 // End battle
             }
             else
             {
-                InitializeTurn();
+                VRootEventCenter.Instance.Raise(VRootEventKeys.OnTurnEnd, new Dictionary<string, object>
+                {
+                    {"TurnLeft", TurnLeft}
+                });
             }
         }
     }
