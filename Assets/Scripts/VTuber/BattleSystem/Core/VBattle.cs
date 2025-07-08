@@ -1,38 +1,63 @@
-﻿using VTuber.Character;
+﻿using System.Collections.Generic;
+using VTuber.BattleSystem.BattleAttribute;
+using VTuber.Character;
+using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VBattle
+    public class VBattle : VMonoBehaviour
     {
         private VBattleConfiguration _configuration;
 
-        VCharacterBattleAttributes characterBattleAttributes;
+        VBattleAttributeManager _battleAttributeManager;
 
-        int currentTurn = 1;
-        int maxTurnCount => _configuration.maxTurnCount;
-        int currentPlayCountLeft = 0;
+        private int _currentPlayCountLeft = 0;
         
-        public VBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration)
+        //Attributes
+        private VBattleTurnAttribute _turnAttribute;
+        private VBattleScoreAttribute _scoreAttribute;
+        
+        
+        public int TurnLeft => _turnAttribute.Value;
+        
+        private int MaxTurnCount => _configuration.maxTurnCount;
+
+        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration)
         {
             this._configuration = configuration;
-            this.characterBattleAttributes = new VCharacterBattleAttributes(characterAttributeManager);
+
+            _battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
+
+            _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount, false);
+            _scoreAttribute = new VBattleScoreAttribute(0, false);
+            
+            _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
+            _battleAttributeManager.AddAttribute("BAScore", _scoreAttribute);
         }
 
         public void InitializeTurn()
         {
-            
+            VRootEventCenter.Instance.Raise(VRootEventKeys.OnTurnBegin, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft},
+                {"HandSize", _configuration.maxHandSize}
+            });
         }
-        
+
         public void EndTurn()
         {
-            currentTurn++;
-            if (currentTurn > maxTurnCount)
+            _turnAttribute.DecreaseTurn();
+            if (TurnLeft <= 0)
             {
                 // End battle
             }
             else
             {
-                InitializeTurn();
+                VRootEventCenter.Instance.Raise(VRootEventKeys.OnTurnEnd, new Dictionary<string, object>
+                {
+                    {"TurnLeft", TurnLeft}
+                });
             }
         }
     }

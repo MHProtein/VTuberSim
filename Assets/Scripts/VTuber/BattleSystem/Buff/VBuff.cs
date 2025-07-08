@@ -1,21 +1,37 @@
 ﻿using System.Collections.Generic;
-using VTuber.BattleSystem.Core.Buff.Actions;
 
-namespace VTuber.BattleSystem.Core.Buff
+namespace VTuber.BattleSystem.Buff
 {
-    public class VBuff
+    public abstract class VBuff
     {
-        VBuffConfiguration configuration;
-        private List<VAction> actions;
+        private VBuffConfiguration _configuration;
         
         public VBuff(VBuffConfiguration configuration)
         {
-            this.configuration = configuration;
-            actions = new List<VAction>();
-            foreach (var actionConfiguration in configuration.actionConfigurations)
-            {
-                actions.Add(actionConfiguration.CreateAction());
-            }
+            _configuration = configuration;
         }
+
+        public abstract int ApplyBuff(int value);
+
+        public virtual bool IsStackable(VBuff buff)
+        {
+            return _configuration.stackable;
+        }
+        
+        public virtual void Stack(VBuff buff)
+        {
+            
+        }
+        
+        public string GetBuffName()
+        {
+            return _configuration.buffName;
+        }
+
+        public string GetAttributeToApplyName()
+        {
+            return _configuration.battleAttributeToApplyName;
+        }
+        
     }
 }

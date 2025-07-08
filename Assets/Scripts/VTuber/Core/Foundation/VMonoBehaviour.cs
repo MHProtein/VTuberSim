@@ -4,12 +4,12 @@ namespace VTuber.Core.Foundation
 {
     public class VMonoBehaviour : MonoBehaviour
     {
-        protected void Awake()
+        protected virtual void Awake()
         {
         
         }
 
-        protected void Start()
+        protected virtual void Start()
         {
     
         }
