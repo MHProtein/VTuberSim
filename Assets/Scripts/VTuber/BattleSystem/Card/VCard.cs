@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 

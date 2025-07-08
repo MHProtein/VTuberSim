@@ -8,5 +8,6 @@ namespace VTuber.BattleSystem.Effect
     {
         [StringToEnum] public string effectName;
         [TextArea] public string description;
+        
     }
 }
