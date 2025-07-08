@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.BattleAttribute;
+using VTuber.BattleSystem.Buff;
+using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -18,6 +20,7 @@ namespace VTuber.BattleSystem.Core
         //Attributes
         private VBattleTurnAttribute _turnAttribute;
         private VBattleScoreAttribute _scoreAttribute;
+        private VBattleAttribute _shieldAttribute;
         
         
         public int TurnLeft => _turnAttribute.Value;
@@ -33,9 +36,11 @@ namespace VTuber.BattleSystem.Core
 
             _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount, false);
             _scoreAttribute = new VBattleScoreAttribute(0, false);
-            
+            _shieldAttribute = new VBattleAttribute(0, false);
+                
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
-            _battleAttributeManager.AddAttribute("BAScore", _scoreAttribute);
+            _battleAttributeManager.AddAttribute("BAPopularity", _scoreAttribute);
+            _battleAttributeManager.AddAttribute("BAShield", _shieldAttribute);
             
             InitializeTurn();
         }
@@ -50,12 +55,14 @@ namespace VTuber.BattleSystem.Core
         {
             base.OnEnable();
             //_cardPilesManager.OnEnable();
+            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnCardPlayed, OnCardPlayed);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             //_cardPilesManager.OnDisable();
+            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnCardPlayed, OnCardPlayed);
         }
 
         public void InitializeTurn()
@@ -81,6 +88,15 @@ namespace VTuber.BattleSystem.Core
                     {"TurnLeft", TurnLeft}
                 });
             }
+        }
+        
+        private void OnCardPlayed(Dictionary<string, object> messagedict)
+        {
+            var buffs = messagedict["Buffs"] as List<VBuff>;
+            var effects = messagedict["Effects"] as List<VEffect>;
+            
+            
+            
         }
     }
 }

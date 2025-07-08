@@ -115,7 +115,7 @@ MonoBehaviour:
       Data: BATurn
     - Name: 
       Entry: 1
-      Data: BAScore
+      Data: BAShield
     - Name: 
       Entry: 13
       Data: 
