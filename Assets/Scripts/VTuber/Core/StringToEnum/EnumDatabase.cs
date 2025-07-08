@@ -17,14 +17,19 @@ namespace VTuber.Core.StringToEnum
                 enumData = new Dictionary<string, List<string>>();
         }
         
-        public List<string> GetEnumData()
+        public List<string> GetEnumData(string key)
         {
-            var allEnums = new List<string>();
-            foreach (var enumList in enumData.Values)
+            if (key == "")
             {
-                allEnums.AddRange(enumList);
+                var allEnums = new List<string>();
+                foreach (var enumList in enumData.Values)
+                {
+                    allEnums.AddRange(enumList);
+                }
+                return allEnums;
             }
-            return allEnums;
+
+            return enumData[key];
         }
         
     }

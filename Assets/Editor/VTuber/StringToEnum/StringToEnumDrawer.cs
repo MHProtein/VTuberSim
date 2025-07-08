@@ -41,10 +41,10 @@ namespace Editor.VTuber.StringToEnum
                     return;
                 }
                 
-                var enumData = EnumDatabase.Instance.GetEnumData();
+                var enumData = EnumDatabase.Instance.GetEnumData(((StringToEnumAttribute)attribute).Key);
                 
                 searchWindow.Init(enumData, (index) => SetValue(enumData[index]));
-
+                
                 Rect center = position;
                 float width = 120;
                 float height = 26;

@@ -12,16 +12,32 @@ namespace VTuber.BattleSystem.Core
     {
         private VBattleConfiguration _configuration;
 
+        #region Managers
+
+        public VBattleAttributeManager BattleAttributeManager => _battleAttributeManager;
         private VBattleAttributeManager _battleAttributeManager;
+        
+        public VCardPilesManager CardPilesManager => _cardPilesManager;
         private VCardPilesManager _cardPilesManager;
+        
+        public VBuffManager BuffManager => _buffManager;
+        private VBuffManager _buffManager;
+
+        #endregion
+
+
+        #region Attributes
+
+        private VBattleTurnAttribute _turnAttribute;
+        private VBattleScoreAttribute _scoreAttribute;
+        private VBattleAttribute _shieldAttribute;
+
+        #endregion
 
         private int _currentPlayCountLeft = 0;
         
         //Attributes
-        private VBattleTurnAttribute _turnAttribute;
-        private VBattleScoreAttribute _scoreAttribute;
-        private VBattleAttribute _shieldAttribute;
-        
+
         
         public int TurnLeft => _turnAttribute.Value;
         
@@ -32,7 +48,8 @@ namespace VTuber.BattleSystem.Core
             _configuration = configuration;
 
             _battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
-            _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary);
+            _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary); 
+            _buffManager = new VBuffManager(this);
 
             _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount, false);
             _scoreAttribute = new VBattleScoreAttribute(0, false);
@@ -88,6 +105,7 @@ namespace VTuber.BattleSystem.Core
                     {"TurnLeft", TurnLeft}
                 });
             }
+            
         }
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)

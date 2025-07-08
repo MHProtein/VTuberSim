@@ -38,11 +38,6 @@ namespace VTuber.BattleSystem.Core
             }
         }
 
-        void AddBuff(VBuff buff)
-        {
-            _battleAttributes[buff.GetAttributeToApplyName()].AddBuff(buff);
-        }
-
         public void AddAttribute(string name, VBattleAttribute attribute)
         {
             _battleAttributes.Add(name, attribute);
