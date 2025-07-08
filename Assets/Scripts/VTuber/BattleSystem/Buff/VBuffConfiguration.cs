@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
 using VTuber.Core.TypeSerialization;
@@ -21,6 +23,8 @@ namespace VTuber.BattleSystem.Buff
         [ShowIf("ShouldShowDuration")]public int duration;
         public bool stackable = true;
         [StringToEnum] public string battleAttributeToApplyName;
+
+        public List<VEffect> effects;
         
         protected Type buffType;
 

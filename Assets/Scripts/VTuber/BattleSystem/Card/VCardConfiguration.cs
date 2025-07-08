@@ -16,11 +16,18 @@ namespace VTuber.BattleSystem.Card
         
         [StringToEnum] public List<string> cardTags;
             
+        public Sprite background;
+        public Sprite facade;
+        
         public int cost;
-        public Sprite icon;
+        public bool isExaust = false;
 
         public List<VBuffConfiguration> buffs;
         public List<VEffectConfiguration> effects;
-        
+
+        public VCard CreateCard()
+        {
+            return new VCard(this);
+        }
     }
 }

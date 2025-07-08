@@ -10,9 +10,7 @@ namespace VTuber.Core.EventCenter
         public const string OnDrawCards = "OnDrawCards";
         public const string OnCardsAddedToDiscardPile = "OnCardsAddedToDiscardPile";
         
-        
-        // public const string OnCardPlayed = "OnCardPlayed";
-        // public const string OnCardDrawn = "OnCardDrawn";
+        public const string OnCardPlayed = "OnCardPlayed";
         // public const string OnCardExhausted = "OnCardExhausted";
         // public const string OnCardDiscarded = "OnCardDiscarded";
     }

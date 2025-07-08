@@ -10,7 +10,8 @@ namespace VTuber.BattleSystem.Core
     {
         private VBattleConfiguration _configuration;
 
-        VBattleAttributeManager _battleAttributeManager;
+        private VBattleAttributeManager _battleAttributeManager;
+        private VCardPilesManager _cardPilesManager;
 
         private int _currentPlayCountLeft = 0;
         
@@ -23,17 +24,38 @@ namespace VTuber.BattleSystem.Core
         
         private int MaxTurnCount => _configuration.maxTurnCount;
 
-        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration)
+        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
         {
-            this._configuration = configuration;
+            _configuration = configuration;
 
             _battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
+            _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary);
 
             _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount, false);
             _scoreAttribute = new VBattleScoreAttribute(0, false);
             
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAScore", _scoreAttribute);
+            
+            InitializeTurn();
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            //_cardPilesManager.OnEnable();
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            //_cardPilesManager.OnDisable();
         }
 
         public void InitializeTurn()

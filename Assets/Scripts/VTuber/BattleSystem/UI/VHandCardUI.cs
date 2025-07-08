@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Card;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -9,7 +10,7 @@ namespace VTuber.BattleSystem.UI
 {
     public class VHandCardUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
-        public VCardUI cardUI;
+        public VCard card;
         public VBattleUI battleUI;
         
         private bool _isMoving = false;
@@ -62,6 +63,7 @@ namespace VTuber.BattleSystem.UI
         private Dictionary<string, object> message;
 
         private bool selectClickUp = false;
+
         
         protected override void Awake()
         {
@@ -118,21 +120,21 @@ namespace VTuber.BattleSystem.UI
         {
             CardMovement();
             DetectDeselect();
-            //Play();
+            Play();
         }
         
-        // private void Play()
-        // {
-        //     if (selfSelected && Input.GetMouseButtonUp(0))
-        //         selectClickUp = true;
-        //     if (card.playable && !doubleCheck && selectClickUp && Input.GetMouseButtonDown(0))
-        //     {
-        //         Deselect();
-        //         card.Play();
-        //         battleUI.Rearrange(index);
-        //         Destroy(gameObject);
-        //     }
-        // }
+        private void Play()
+        {
+            if (selfSelected && Input.GetMouseButtonUp(0))
+                selectClickUp = true;
+            if (selectClickUp && Input.GetMouseButtonDown(0))
+            {
+                Deselect();
+                card.Play();
+                battleUI.Rearrange(index);
+                Destroy(gameObject);
+            }
+        }
         
         private void CardMovement()
         {
@@ -184,10 +186,9 @@ namespace VTuber.BattleSystem.UI
 
         private void Deselect()
         {
-            _moveWithMouse = false;
             selfSelected = false;
             selectClickUp = false;
-            //battleUI.Selected(false);
+            battleUI.Selected(false);
             ExitInspection();
         }
         
@@ -212,6 +213,14 @@ namespace VTuber.BattleSystem.UI
             transform.SetSiblingIndex(_originalSiblingIndex);
         }
 
+        private void Select()
+        {
+            selected = true;
+            selfSelected = true;
+            battleUI.Selected(true);
+            VDebug.Log($"Card {card.CardName} selected at index {index}");
+        }
+        
         public void OnPointerEnter(PointerEventData eventData)
         {
             _isPointerStaying = true;
@@ -235,8 +244,8 @@ namespace VTuber.BattleSystem.UI
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            // if (eventData.button == PointerEventData.InputButton.Left && !selected)
-            //     Select();
+            if (eventData.button == PointerEventData.InputButton.Left && !selected)
+                Select();
         }
     }
 }

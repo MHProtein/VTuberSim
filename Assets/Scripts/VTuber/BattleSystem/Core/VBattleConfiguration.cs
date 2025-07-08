@@ -5,7 +5,8 @@ namespace VTuber.BattleSystem.Core
     public class VBattleConfiguration : VScriptableObject
     {
         public int maxTurnCount = 10;
-        public int maxHandSize = 3;
+        public int maxHandSize = 5;
+        public int handSize = 3;
         public int defaultPlayPerTurn = 1;
     }
 }
