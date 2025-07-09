@@ -41,14 +41,14 @@ namespace VTuber.BattleSystem.Buff
             }
         }
 
-        public void AddBuffs(List<VBuff> buffs)
+        public void AddBuffs(List<VBuffConfiguration> buffs)
         {
             if (buffs == null || buffs.Count == 0)
                 return;
 
             foreach (var buff in buffs)
             {
-                AddBuff(buff);
+                AddBuff(buff.CreateBuff());
             }
         }
         

@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c844b88d14584325a50f3164ddc22e72, type: 3}
-  m_Name: SampleCadConfig
+  m_Script: {fileID: 11500000, guid: 896851c42cd34bdc83961715806e9d7b, type: 3}
+  m_Name: VBuffConfiguration
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,16 +21,13 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  cardName: SampleCard
-  description: dsafasdfasdf
-  cardType: BAStamina
-  cardTags:
-  - BAScore
-  background: {fileID: 0}
-  facade: {fileID: 0}
-  cost: 1
-  isExaust: 0
-  buffs:
-  - {fileID: 11400000, guid: 6ed99eefc31657f42a78dd5a9679d21f, type: 2}
+  buffName: BAddParams
+  icon: {fileID: 0}
+  buffTemporalType: 1
+  layer: -1
+  duration: 3
+  stackable: 1
+  battleAttributeToApplyName: BAParameter
+  whenToApply: 2
   effects:
-  - {fileID: 11400000, guid: 7705b677a0a31d64dbc2aaf41add7257, type: 2}
+  - {fileID: 11400000, guid: cd965168e0479f249acdecefd301dd9c, type: 2}

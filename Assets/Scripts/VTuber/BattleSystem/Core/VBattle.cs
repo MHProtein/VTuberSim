@@ -115,6 +115,11 @@ namespace VTuber.BattleSystem.Core
             }
             else
             {
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
+                {
+                    {"TurnLeft", TurnLeft}
+                });
+                
                 VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnResolution, new Dictionary<string, object>
                 {
                     {"TurnLeft", TurnLeft}
@@ -131,7 +136,7 @@ namespace VTuber.BattleSystem.Core
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
-            var buffs = messagedict["Buffs"] as List<VBuff>;
+            var buffs = messagedict["Buffs"] as List<VBuffConfiguration>;
             var effects = messagedict["Effects"] as List<VEffectConfiguration>;
             
             _buffManager.AddBuffs(buffs);

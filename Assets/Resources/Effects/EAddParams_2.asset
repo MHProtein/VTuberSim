@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c844b88d14584325a50f3164ddc22e72, type: 3}
-  m_Name: SampleCadConfig
+  m_Script: {fileID: 11500000, guid: cd1f26f126c94bf5ace245b6c46d9f2d, type: 3}
+  m_Name: EAddParams_2
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,16 +21,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  cardName: SampleCard
-  description: dsafasdfasdf
-  cardType: BAStamina
-  cardTags:
-  - BAScore
-  background: {fileID: 0}
-  facade: {fileID: 0}
-  cost: 1
-  isExaust: 0
-  buffs:
-  - {fileID: 11400000, guid: 6ed99eefc31657f42a78dd5a9679d21f, type: 2}
-  effects:
-  - {fileID: 11400000, guid: 7705b677a0a31d64dbc2aaf41add7257, type: 2}
+  effectName: EAddParams
+  description: Add To Params
+  conditions: []
+  attributeName: BAParameter
+  addValue: 2
