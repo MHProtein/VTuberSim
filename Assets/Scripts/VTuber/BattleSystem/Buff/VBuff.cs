@@ -8,7 +8,6 @@ namespace VTuber.BattleSystem.Buff
 {
     public class VBuff
     {
-        public VRootEventKey WhenToApply => _configuration.whenToApply;
         
         private VBuffConfiguration _configuration;
 
@@ -16,8 +15,15 @@ namespace VTuber.BattleSystem.Buff
 
         private List<VEffect> _effects;
         
+        public VRootEventKey WhenToApply => _configuration.whenToApply;
+        
         public int Duration { get; private set; }
+        
         public int Layer { get; private set; }
+        
+        public int Id { get; private set; }
+        
+        public bool IsPermanent => _configuration.IsBuffPermanent();
         
         public VBuff(VBuffConfiguration configuration)
         {
@@ -32,8 +38,9 @@ namespace VTuber.BattleSystem.Buff
             
         }
 
-        public void OnBuffAdded(VBattle battle)
+        public void OnBuffAdded(VBattle battle, int id)
         {
+            Id = id;
             _battle = battle;
             VRootEventCenter.Instance.RegisterListener(WhenToApply, ApplyBuff);
         }
@@ -49,13 +56,20 @@ namespace VTuber.BattleSystem.Buff
         /// <returns>if true then remove</returns>
         public bool DecrementDuration()
         {
-            if (_configuration.IsBuffPersistent())
-            {
-                Duration -= 1;
-                if (Duration <= 0)
-                    return true;
-            }
+            if (IsPermanent)
+                return false;
+            
+            Duration -= 1;
+            if (Duration <= 0)
+                return true;
+            
             VDebug.Log($"{_configuration.buffName} duration decremented to {Duration}");
+            
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            {
+                { "Id", Id },
+                {"Value", Duration}
+            });
             return false;
         }
 
@@ -78,17 +92,25 @@ namespace VTuber.BattleSystem.Buff
         
         public virtual void Stack(VBuff buff)
         {
+            int value = 0;
             if (_configuration.IsBuffPermanent())
             {
                 Layer += buff.Layer;
                 VDebug.Log($"{_configuration.buffName} stacked to {Layer} layers");
+                value = Layer;
             }
             else
             {
                 Duration += buff.Duration;
                 VDebug.Log($"{_configuration.buffName} stacked to {Duration} turns");
+                value = Duration;
             }
             
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            {
+                { "Id", Id },
+                {"Value", value}
+            });
         }
         
         public string GetBuffName()
