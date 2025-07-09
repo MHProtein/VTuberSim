@@ -8,6 +8,7 @@ namespace VTuber.BattleSystem.Buff
     {
         private readonly List<VBuff> _buffs = new List<VBuff>();
         private VBattle _battle;
+        private int idDistributor = 0;
 
         public VBuffManager(VBattle battle)
         {
@@ -38,6 +39,11 @@ namespace VTuber.BattleSystem.Buff
             {
                 buff.OnBuffRemoved();
                 _buffs.Remove(buff);
+                            
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffRemoved, new Dictionary<string, object>
+                {
+                    { "Id", buff.Id }
+                });
             }
         }
 
@@ -65,8 +71,13 @@ namespace VTuber.BattleSystem.Buff
             else
             {
                 _buffs.Add(buff);
-                buff.OnBuffAdded(_battle);
+                buff.OnBuffAdded(_battle, idDistributor++);
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffAdded, new Dictionary<string, object>
+                {
+                    { "Buff", buff }
+                });
             }
+            
         }
         
         public void Clear()

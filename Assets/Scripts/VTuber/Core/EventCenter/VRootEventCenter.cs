@@ -18,6 +18,9 @@ namespace VTuber.Core.EventCenter
         OnParameterChange,
         OnMultiplierChange,
         OnPopularityChange,
+        OnBuffAdded,
+        OnBuffRemoved,
+        OnBuffValueUpdated,
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);
