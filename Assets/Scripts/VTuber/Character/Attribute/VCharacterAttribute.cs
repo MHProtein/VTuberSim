@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
-using VTuber.Character.AttributeConfigurations;
 
 namespace VTuber.Character.Attribute
 {

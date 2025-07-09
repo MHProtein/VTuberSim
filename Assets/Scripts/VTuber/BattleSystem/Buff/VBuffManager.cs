@@ -14,9 +14,14 @@ namespace VTuber.BattleSystem.Buff
             _battle = battle;
         }
 
-        void OnEnable()
+        public void OnEnable()
         {
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnEnd, OnTurnEnd);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+        }
+        
+        public void OnDisable()
+        {
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
 
         private void OnTurnEnd(Dictionary<string, object> messagedict)
@@ -36,6 +41,17 @@ namespace VTuber.BattleSystem.Buff
             }
         }
 
+        public void AddBuffs(List<VBuffConfiguration> buffs)
+        {
+            if (buffs == null || buffs.Count == 0)
+                return;
+
+            foreach (var buff in buffs)
+            {
+                AddBuff(buff.CreateBuff());
+            }
+        }
+        
         public void AddBuff(VBuff buff)
         {
             if (buff == null || string.IsNullOrEmpty(buff.GetBuffName()))

@@ -1,25 +1,35 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
-    public abstract class VBuff
+    public class VBuff
     {
-        public int Layer => _configuration.layer;
-        
-        public VRootEventKeys WhenToApply => _configuration.whenToApply;
+        public VRootEventKey WhenToApply => _configuration.whenToApply;
         
         private VBuffConfiguration _configuration;
 
         private VBattle _battle;
 
+        private List<VEffect> _effects;
+        
         public int Duration { get; private set; }
+        public int Layer { get; private set; }
         
         public VBuff(VBuffConfiguration configuration)
         {
             _configuration = configuration;
             Duration = _configuration.duration;
+            _effects = new List<VEffect>();
+            
+            foreach (var effect in _configuration.effects)
+            {
+                _effects.Add(effect.CreateEffect());
+            }
+            
         }
 
         public void OnBuffAdded(VBattle battle)
@@ -45,7 +55,7 @@ namespace VTuber.BattleSystem.Buff
                 if (Duration <= 0)
                     return true;
             }
-
+            VDebug.Log($"{_configuration.buffName} duration decremented to {Duration}");
             return false;
         }
 
@@ -54,9 +64,9 @@ namespace VTuber.BattleSystem.Buff
             if (_configuration.effects == null || _configuration.effects.Count == 0)
                 return;
             
-            foreach (var effect in _configuration.effects)
+            foreach (var effect in _effects)
             {
-                if(effect.IsConditionMet(_battle, message))
+                if(effect.AreConditionsMet(_battle, message))
                     effect.ApplyEffect(_battle);
             }
         }
@@ -68,6 +78,16 @@ namespace VTuber.BattleSystem.Buff
         
         public virtual void Stack(VBuff buff)
         {
+            if (_configuration.IsBuffPermanent())
+            {
+                Layer += buff.Layer;
+                VDebug.Log($"{_configuration.buffName} stacked to {Layer} layers");
+            }
+            else
+            {
+                Duration += buff.Duration;
+                VDebug.Log($"{_configuration.buffName} stacked to {Duration} turns");
+            }
             
         }
         

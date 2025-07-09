@@ -11,6 +11,7 @@ namespace VTuber.BattleSystem.UI
     public class VHandCardUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
         public VCard card;
+        public VCardUI cardUI;
         public VBattleUI battleUI;
         
         private bool _isMoving = false;
@@ -130,8 +131,8 @@ namespace VTuber.BattleSystem.UI
             if (selectClickUp && Input.GetMouseButtonDown(0))
             {
                 Deselect();
-                card.Play();
                 battleUI.Rearrange(index);
+                card.Play();
                 Destroy(gameObject);
             }
         }
@@ -188,7 +189,9 @@ namespace VTuber.BattleSystem.UI
         {
             selfSelected = false;
             selectClickUp = false;
+            cardUI.background.color = Color.white;
             battleUI.Selected(false);
+            
             ExitInspection();
         }
         
@@ -217,8 +220,8 @@ namespace VTuber.BattleSystem.UI
         {
             selected = true;
             selfSelected = true;
+            cardUI.background.color = Color.cyan;
             battleUI.Selected(true);
-            VDebug.Log($"Card {card.CardName} selected at index {index}");
         }
         
         public void OnPointerEnter(PointerEventData eventData)

@@ -1,19 +1,14 @@
-﻿namespace VTuber.BattleSystem.BattleAttribute
+﻿using System.Collections.Generic;
+using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
+
+namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VBattleTurnAttribute : VBattleAttribute
     {
-        public VBattleTurnAttribute(int maxTurn, bool isPercentage) : base(maxTurn, isPercentage)
+        public VBattleTurnAttribute(int maxTurn) : base(maxTurn, false, VRootEventKey.OnTurnChange)
         {
         }
-        
-        public void DecreaseTurn()
-        {
-            if (Value > 0)
-            {
-                --Value;
-            }
-        }
-        
         
     }
 }

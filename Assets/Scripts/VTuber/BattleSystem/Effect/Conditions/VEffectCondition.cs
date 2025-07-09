@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {

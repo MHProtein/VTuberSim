@@ -19,7 +19,6 @@ namespace VTuber.Core.TypeSerialization
         {
             if (!TryGetType(assemblyQualifiedName, out var type))
             {
-                Debug.LogError($"Type {assemblyQualifiedName} not found");
                 return;
             }
 

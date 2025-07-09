@@ -17,23 +17,23 @@ namespace VTuber.BattleSystem.Buff
     }
     public class VBuffConfiguration : VScriptableObject
     {
-        [StringToEnum] public string buffName;
+        [StringToEnum("Buffs")] public string buffName;
         public Sprite icon;
         public BuffTemporalType buffTemporalType;
         [ShowIf("IsBuffPermanent")] public int layer = -1;
         [ShowIf("IsBuffPersistent")] public int duration = -1;
         [ShowIf("IsBuffPersistent")] public bool stackable = true;
-        [StringToEnum] public string battleAttributeToApplyName;
+        [StringToEnum("BattleAttributes")] public string battleAttributeToApplyName;
 
-        public VRootEventKeys whenToApply;
+        public VRootEventKey whenToApply;
         
-        public List<VEffect> effects;
+        public List<VEffectConfiguration> effects;
         
         protected Type buffType;
 
         public VBuff CreateBuff()
         {
-            return (VBuff)Activator.CreateInstance(buffType, this);
+            return new VBuff(this);
         }
      
         

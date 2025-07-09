@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.kyrylokuzyk.primetween": {
+      "version": "file:../Assets/Plugins/PrimeTween/internal/com.kyrylokuzyk.primetween.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
     "com.unity.collab-proxy": {
       "version": "2.8.2",
       "depth": 0,

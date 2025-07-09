@@ -30,5 +30,7 @@ MonoBehaviour:
   facade: {fileID: 0}
   cost: 1
   isExaust: 0
-  buffs: []
-  effects: []
+  buffs:
+  - {fileID: 11400000, guid: 6ed99eefc31657f42a78dd5a9679d21f, type: 2}
+  effects:
+  - {fileID: 11400000, guid: 7705b677a0a31d64dbc2aaf41add7257, type: 2}
