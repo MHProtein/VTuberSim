@@ -9,7 +9,7 @@ namespace VTuber.BattleSystem.Effect
 {
     public class VEffectConfiguration : VScriptableObject
     {
-        [StringToEnum] public string effectName;
+        [StringToEnum("Effects")] public string effectName;
         [TextArea] public string description;
         
         public List<VEffectCondition> conditions;

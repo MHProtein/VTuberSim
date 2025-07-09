@@ -13,7 +13,7 @@ namespace VTuber.Character.Attribute
     public class VCharacterAttributeConfiguration : VScriptableObject
     {
         [Header("Attribute Configuration")]
-        [StringToEnum] public string attributeName;
+        [StringToEnum("CharacterAttributes")] public string attributeName;
         
         [TextArea] public string description;
         
@@ -29,7 +29,7 @@ namespace VTuber.Character.Attribute
         [ShowIf("isConvertToBattleAttribute")]
         [Core.TypeSerialization.TypeFilter(typeof(VBattleAttribute))] 
         public SerializableType battleAttribute;
-        [StringToEnum] public string battleAttributeName;
+        [StringToEnum("BattleAttributes")] public string battleAttributeName;
         public bool isBattleAttributePercentage = false;
         
         public VCharacterAttribute GetAttribute()

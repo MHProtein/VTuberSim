@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.Effect
         
         public abstract void ApplyEffect(VBattle battle);
 
-        public bool IsConditionMet(VBattle battle, Dictionary<string, object> message)
+        public bool AreConditionsMet(VBattle battle, Dictionary<string, object> message)
         {
             foreach (var condition in _configuration.conditions)
             {

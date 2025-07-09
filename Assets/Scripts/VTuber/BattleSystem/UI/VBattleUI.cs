@@ -100,7 +100,7 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.index = _handSlotsCards.Count;
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
-                //cardUI.handCardUI.card = cardUI.Card;
+                handCardUI.cardUI = cardUI;
                 handCardUI.SetPosition(position, smoothTime, true);
                 handCardUI.SetRotation(rotation, smoothTime, true);
                 SetHandCardPositionRotation(handCardUI, position.x);

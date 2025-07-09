@@ -2,7 +2,7 @@
 {
     public class VBattleTurnAttribute : VBattleAttribute
     {
-        public VBattleTurnAttribute(int maxTurn, bool isPercentage) : base(maxTurn, isPercentage)
+        public VBattleTurnAttribute(int maxTurn) : base(maxTurn, false)
         {
         }
         

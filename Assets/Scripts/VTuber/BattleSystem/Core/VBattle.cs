@@ -24,19 +24,17 @@ namespace VTuber.BattleSystem.Core
         private VBuffManager _buffManager;
 
         #endregion
-
-
+        
         #region Attributes
 
         private VBattleTurnAttribute _turnAttribute;
-        private VBattleScoreAttribute _scoreAttribute;
-        private VBattleAttribute _shieldAttribute;
+        // private VBattlePopularityAttribute _popularityAttribute;
+        // private VBattleParameterAttribute _parameterAttribute;
+        // private VBattleAttribute _shieldAttribute;
 
         #endregion
 
         private int _currentPlayCountLeft = 0;
-        
-        //Attributes
 
         
         public int TurnLeft => _turnAttribute.Value;
@@ -47,17 +45,17 @@ namespace VTuber.BattleSystem.Core
         {
             _configuration = configuration;
 
-            _battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
+            //_battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
             _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
 
-            _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount, false);
-            _scoreAttribute = new VBattleScoreAttribute(0, false);
-            _shieldAttribute = new VBattleAttribute(0, false);
-                
+            _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount);
+            
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
-            _battleAttributeManager.AddAttribute("BAPopularity", _scoreAttribute);
-            _battleAttributeManager.AddAttribute("BAShield", _shieldAttribute);
+            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
+            _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleParameterAttribute(0));
+            //_battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false));
             
             InitializeTurn();
         }
@@ -72,6 +70,7 @@ namespace VTuber.BattleSystem.Core
         {
             base.OnEnable();
             //_cardPilesManager.OnEnable();
+            _buffManager.OnEnable();
             VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnCardPlayed, OnCardPlayed);
         }
 
@@ -113,8 +112,18 @@ namespace VTuber.BattleSystem.Core
             var buffs = messagedict["Buffs"] as List<VBuff>;
             var effects = messagedict["Effects"] as List<VEffect>;
             
+            _buffManager.AddBuffs(buffs);
             
+            if (effects == null || effects.Count == 0)
+                return;
             
+            foreach (var effect in effects)
+            {
+                if (effect.AreConditionsMet(this, messagedict))
+                {
+                    effect.ApplyEffect(this);
+                }
+            }
         }
     }
 }

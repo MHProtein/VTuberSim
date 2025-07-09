@@ -16,5 +16,26 @@ namespace VTuber.BattleSystem.BattleAttribute
             Value = value;
             _isPercentage = isPercentage;
         }
+        
+        public virtual void AddTo(int delta)
+        {
+            Value += delta;
+        }
+        
+        public virtual void MultiplyWith(int delta)
+        {
+            Value *= delta;
+        }
+
+        public virtual void OnEnable()
+        {
+            
+        }
+        
+        public virtual void OnDisable()
+        {
+            
+        }
+        
     }
 }

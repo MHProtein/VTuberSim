@@ -56,7 +56,7 @@ namespace VTuber.BattleSystem.Buff
             
             foreach (var effect in _configuration.effects)
             {
-                if(effect.IsConditionMet(_battle, message))
+                if(effect.AreConditionsMet(_battle, message))
                     effect.ApplyEffect(_battle);
             }
         }
