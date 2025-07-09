@@ -34,7 +34,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 3
+      Data: 4
     - Name: 
       Entry: 7
       Data: 
@@ -88,16 +88,22 @@ MonoBehaviour:
       Data: 3|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 9
+      Data: 11
+    - Name: 
+      Entry: 1
+      Data: BAPopularity
+    - Name: 
+      Entry: 1
+      Data: BAParameter
+    - Name: 
+      Entry: 1
+      Data: BATurn
     - Name: 
       Entry: 1
       Data: BAStamina
     - Name: 
       Entry: 1
       Data: BAViewerCount
-    - Name: 
-      Entry: 1
-      Data: BAPopularity
     - Name: 
       Entry: 1
       Data: BASingingMultiplier
@@ -112,10 +118,10 @@ MonoBehaviour:
       Data: BAMembershipCount
     - Name: 
       Entry: 1
-      Data: BATurn
+      Data: BAShield
     - Name: 
       Entry: 1
-      Data: BAShield
+      Data: BAPlayLeft
     - Name: 
       Entry: 13
       Data: 
@@ -140,6 +146,30 @@ MonoBehaviour:
     - Name: 
       Entry: 1
       Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Effects
+    - Name: $v
+      Entry: 7
+      Data: 5|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 1
+      Data: EAddParams
     - Name: 
       Entry: 13
       Data: 

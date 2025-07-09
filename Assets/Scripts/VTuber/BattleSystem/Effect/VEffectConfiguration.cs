@@ -14,6 +14,10 @@ namespace VTuber.BattleSystem.Effect
         
         public List<VEffectCondition> conditions;
         
+        public virtual VEffect CreateEffect()
+        {
+            return new VEffect(this);
+        }
 
     }
 }

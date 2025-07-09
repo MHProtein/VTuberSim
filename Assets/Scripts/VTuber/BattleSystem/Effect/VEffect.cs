@@ -3,16 +3,19 @@ using VTuber.BattleSystem.Core;
 
 namespace VTuber.BattleSystem.Effect
 {
-    public abstract class VEffect
+    public class VEffect
     {
-        private VEffectConfiguration _configuration;
+        protected VEffectConfiguration _configuration;
 
         public VEffect(VEffectConfiguration configuration)
         {
             _configuration = configuration;
         }
-        
-        public abstract void ApplyEffect(VBattle battle);
+
+        public virtual void ApplyEffect(VBattle battle)
+        {
+            
+        }
 
         public bool AreConditionsMet(VBattle battle, Dictionary<string, object> message)
         {

@@ -5,7 +5,7 @@ namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VBattleParameterAttribute : VBattleAttribute
     {
-        public VBattleParameterAttribute(int value) : base(value, false)
+        public VBattleParameterAttribute(int value) : base(value, false, VRootEventKey.OnParameterChange)
         {
             
         }
@@ -13,11 +13,11 @@ namespace VTuber.BattleSystem.BattleAttribute
         public override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnEnd, OnTurnEnd);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
 
             void OnTurnEnd(Dictionary<string, object> messagedict)
             {
-                Value = 0; 
+                Value = 0;
             }
         }
     }

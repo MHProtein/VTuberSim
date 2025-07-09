@@ -16,12 +16,12 @@ namespace VTuber.BattleSystem.Buff
 
         public void OnEnable()
         {
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnEnd, OnTurnEnd);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
         
         public void OnDisable()
         {
-            VRootEventCenter.Instance.RemoveListener(VRootEventKeys.OnTurnEnd, OnTurnEnd);
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
 
         private void OnTurnEnd(Dictionary<string, object> messagedict)

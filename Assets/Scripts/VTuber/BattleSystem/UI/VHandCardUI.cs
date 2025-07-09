@@ -131,8 +131,8 @@ namespace VTuber.BattleSystem.UI
             if (selectClickUp && Input.GetMouseButtonDown(0))
             {
                 Deselect();
-                card.Play();
                 battleUI.Rearrange(index);
+                card.Play();
                 Destroy(gameObject);
             }
         }
@@ -222,7 +222,6 @@ namespace VTuber.BattleSystem.UI
             selfSelected = true;
             cardUI.background.color = Color.cyan;
             battleUI.Selected(true);
-            VDebug.Log($"Card {card.CardName} selected at index {index}");
         }
         
         public void OnPointerEnter(PointerEventData eventData)

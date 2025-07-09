@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Analytics;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
@@ -36,16 +37,22 @@ namespace VTuber.BattleSystem.Core
             {
                 attribute.Value.OnEnable();
             }
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnEnd, OnTurnEnd);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnResolution, OnTurnResolution);
         }
 
-        private void OnTurnEnd(Dictionary<string, object> messagedict)
+        private void OnTurnResolution(Dictionary<string, object> messagedict)
         {
             var parameter = _battleAttributes["BAParameter"].Value;
             float multiplier = _battleAttributes["BASingingMultiplier"].Value / 100f;
             _battleAttributes["BAPopularity"].AddTo((int)(parameter * multiplier));
+
         }
 
+        public bool TryGetAttribute(string name, out VBattleAttribute attribute)
+        {
+            return _battleAttributes.TryGetValue(name, out attribute);
+        }
+        
         public void OnDisable()
         {
             foreach (var attribute in _battleAttributes)

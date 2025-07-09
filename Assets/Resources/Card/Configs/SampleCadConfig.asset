@@ -31,4 +31,5 @@ MonoBehaviour:
   cost: 1
   isExaust: 0
   buffs: []
-  effects: []
+  effects:
+  - {fileID: 11400000, guid: 7705b677a0a31d64dbc2aaf41add7257, type: 2}

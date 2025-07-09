@@ -8,7 +8,7 @@ namespace VTuber.BattleSystem.Buff
     {
         public int Layer => _configuration.layer;
         
-        public VRootEventKeys WhenToApply => _configuration.whenToApply;
+        public VRootEventKey WhenToApply => _configuration.whenToApply;
         
         private VBuffConfiguration _configuration;
 

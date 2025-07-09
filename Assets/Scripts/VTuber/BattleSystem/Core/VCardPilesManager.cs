@@ -3,6 +3,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -37,19 +38,20 @@ namespace VTuber.BattleSystem.Core
             _maxHandSize = maxHandSize;
             
             _deck.AddRange(cardLibrary.GetCards());
+            _drawPile.AddRange(_deck);
         }
         
         public void OnEnable()
         {
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnBegin, OnTurnBegin);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnEnd, OnTurnEnd);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
         
         
         public void OnDisable()
         {
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnBegin, OnTurnBegin);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKeys.OnTurnEnd, OnTurnEnd);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
 
         private void OnTurnEnd(Dictionary<string, object> messagedict)
@@ -61,12 +63,11 @@ namespace VTuber.BattleSystem.Core
             
             Dictionary<string, object> message = new Dictionary<string, object>();
             message.Add("Cards", _handPile);
-            VRootEventCenter.Instance.Raise(VRootEventKeys.OnCardsAddedToDiscardPile, message);
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnCardsAddedToDiscardPile, message);
             
             _handPile.Clear();
-
-            //Clear the draw pile if its size is less than the hand size
-            if (_drawPile.Count < (int)messagedict["HandSize"])
+            
+            if (_drawPile.Count < _handSize)
             {
                 List<VCard> cards = new List<VCard>();
                 foreach (var card in _drawPile)
@@ -78,7 +79,7 @@ namespace VTuber.BattleSystem.Core
                     
                 message.Clear();
                 message.Add("Cards", cards);
-                VRootEventCenter.Instance.Raise(VRootEventKeys.OnDrawCards, message);
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnDrawCards, message);
             }
         }
 
@@ -87,7 +88,6 @@ namespace VTuber.BattleSystem.Core
         {      
             if (drawCount <= 0)
                 return;
-            
             if (drawCount + _handPile.Count > _maxHandSize)
             {
                 drawCount = _maxHandSize - _handPile.Count;
@@ -100,7 +100,7 @@ namespace VTuber.BattleSystem.Core
             else
             {
                 DiscardToDraw();
-                DrawFromDrawPile(drawCount - _handPile.Count + 1);
+                DrawFromDrawPile(drawCount);
             } 
         }
 
@@ -142,7 +142,7 @@ namespace VTuber.BattleSystem.Core
             _drawPile.AddRange(_discardPile);
             _discardPile.Clear();
             
-            VRootEventCenter.Instance.Raise(VRootEventKeys.OnDiscardToDraw, null);
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnDiscardToDraw, null);
         }
         
         private void DrawFromDrawPile(int n)
@@ -164,9 +164,10 @@ namespace VTuber.BattleSystem.Core
                 _drawPile.Remove(card);
             }
 
+            VDebug.Log("Drawn Cards: " + cards.Count);
             Dictionary<string, object> message = new Dictionary<string, object>();
             message.Add("Cards", cards);
-            VRootEventCenter.Instance.Raise(VRootEventKeys.OnDrawCards, message);
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnDrawCards, message);
         }
 
     }

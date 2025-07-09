@@ -25,7 +25,7 @@ namespace VTuber.BattleSystem.Buff
         [ShowIf("IsBuffPersistent")] public bool stackable = true;
         [StringToEnum] public string battleAttributeToApplyName;
 
-        public VRootEventKeys whenToApply;
+        public VRootEventKey whenToApply;
         
         public List<VEffect> effects;
         

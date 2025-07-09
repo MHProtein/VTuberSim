@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace VTuber.Core.EventCenter
 {
@@ -43,6 +44,7 @@ namespace VTuber.Core.EventCenter
         {
             if (m_events.TryGetValue(key, out DelegateType outDelegate))
             {
+                
                 m_events[key] = (DelegateType)Delegate.Combine(outDelegate, @delegate);
             }
             else

@@ -19,6 +19,7 @@ namespace VTuber.BattleSystem.Card
         public void Play()
         {
             VDebug.Log("play card: " + CardName);
+            VDebug.Log("effects: " + _configuration.effects.Count);
             Dictionary<string, object> message = new Dictionary<string, object>()
             {
                 { "Card", this },
@@ -26,7 +27,7 @@ namespace VTuber.BattleSystem.Card
                 { "Buffs", _configuration.buffs },
                 { "Effects", _configuration.effects }
             };
-            VRootEventCenter.Instance.Raise(VRootEventKeys.OnCardPlayed, message);
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }
     }
 }
