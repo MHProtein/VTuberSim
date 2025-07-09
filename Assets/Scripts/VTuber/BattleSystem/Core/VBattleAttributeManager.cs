@@ -37,15 +37,17 @@ namespace VTuber.BattleSystem.Core
             {
                 attribute.Value.OnEnable();
             }
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnResolution, OnTurnResolution);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnParameterChange, OnParameterChange);
         }
 
-        private void OnTurnResolution(Dictionary<string, object> messagedict)
+        private void OnParameterChange(Dictionary<string, object> messagedict)
         {
-            var parameter = _battleAttributes["BAParameter"].Value;
-            float multiplier = _battleAttributes["BASingingMultiplier"].Value / 100f;
-            _battleAttributes["BAPopularity"].AddTo((int)(parameter * multiplier));
-
+            if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
+            {
+                float multiplier = _battleAttributes["BASingingMultiplier"].Value / 100f;
+                int delta = (int)messagedict["Delta"];
+                _battleAttributes["BAPopularity"].AddTo((int)(delta * multiplier));
+            }
         }
 
         public bool TryGetAttribute(string name, out VBattleAttribute attribute)
@@ -59,6 +61,7 @@ namespace VTuber.BattleSystem.Core
             {
                 attribute.Value.OnDisable();
             }
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnParameterChange, OnParameterChange);
         }
 
         public void AddAttribute(string name, VBattleAttribute attribute)
