@@ -78,5 +78,20 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributes.Remove(name);
             }
         }
+
+        public void ApplyCost(int cost)
+        {
+            var stamina = _battleAttributes["BAStamina"] as VBattleStaminaAttribute;
+            var shield = _battleAttributes["BAShield"];
+
+            int costAfterShield = cost - shield.Value;
+            
+            if(costAfterShield <= 0)
+            {
+                shield.AddTo(-cost);
+            }
+            
+            stamina.AddTo(-costAfterShield);
+        }
     }
 }

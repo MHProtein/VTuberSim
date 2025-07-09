@@ -23,9 +23,9 @@ namespace VTuber.BattleSystem.Card
             Dictionary<string, object> message = new Dictionary<string, object>()
             {
                 { "Card", this },
-                { "Configuration", _configuration },
                 { "Buffs", _configuration.buffs },
-                { "Effects", _configuration.effects }
+                { "Effects", _configuration.effects },
+                { "Cost", _configuration.cost }
             };
             VRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }

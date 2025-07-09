@@ -9,15 +9,19 @@ namespace VTuber.Core.EventCenter
         OnTurnEndBuffApply,
         OnTurnResolution,
         OnTurnEnd,
+        
         OnDiscardToDraw,
         OnDrawCards,
         OnCardsAddedToDiscardPile,
         OnCardPlayed,
+        
         OnPlayLeftChange,
         OnTurnChange,
         OnParameterChange,
         OnMultiplierChange,
         OnPopularityChange,
+        OnStaminaChange,
+        
         OnBuffAdded,
         OnBuffRemoved,
         OnBuffValueUpdated,

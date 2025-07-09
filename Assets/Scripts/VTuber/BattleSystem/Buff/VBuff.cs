@@ -122,5 +122,29 @@ namespace VTuber.BattleSystem.Buff
         {
             return _configuration.battleAttributeToApplyName;
         }
+
+        public void AddLayerOrDuration(int value)
+        {
+            if (_configuration.IsBuffPermanent())
+            {
+                Layer += value;
+                VDebug.Log($"{_configuration.buffName} layer increased to {Layer}");
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+                {
+                    { "Id", Id },
+                    {"Value", Layer}
+                });
+            }
+            else
+            {
+                Duration += value;
+                VDebug.Log($"{_configuration.buffName} duration increased to {Duration}");
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+                {
+                    { "Id", Id },
+                    {"Value", Duration}
+                });
+            } 
+        }
     }
 }

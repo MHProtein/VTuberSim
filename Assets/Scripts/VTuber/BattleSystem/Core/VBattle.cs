@@ -45,6 +45,13 @@ namespace VTuber.BattleSystem.Core
         
         private int MaxTurnCount => _configuration.maxTurnCount;
 
+        private bool shouldNextCardPlayTwice = false;
+        
+        public void NextCardPlayTwice()
+        {
+            shouldNextCardPlayTwice = true;
+        }
+        
         public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
         {
             _configuration = configuration;
@@ -72,9 +79,13 @@ namespace VTuber.BattleSystem.Core
             
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
+            
             _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleMultiplierAttribute(500));
+            
+            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(30, 30));
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0));
             
             InitializeTurn();
         }
@@ -85,6 +96,7 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.OnEnable();
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
+            
             VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
         }
 
@@ -94,6 +106,7 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.OnDisable();
             _cardPilesManager.OnDisable();
             _buffManager.OnDisable();
+            
             VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
         }
 
@@ -139,6 +152,27 @@ namespace VTuber.BattleSystem.Core
             var buffs = messagedict["Buffs"] as List<VBuffConfiguration>;
             var effects = messagedict["Effects"] as List<VEffectConfiguration>;
             
+            if (shouldNextCardPlayTwice)
+            {
+                ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
+                shouldNextCardPlayTwice = false;
+            }
+            
+            _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+            
+            ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
+            
+            _playLeftAttribute.AddTo(-1);
+            VDebug.Log("Play Left: " + PlayLeft);
+            
+            if (PlayLeft <= 0)
+            {
+                EndTurn();
+            }
+        }
+
+        private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
+        {
             _buffManager.AddBuffs(buffs);
             if(effects is not null)
             {
@@ -151,14 +185,7 @@ namespace VTuber.BattleSystem.Core
                     }
                 }
             }
-            
-            _playLeftAttribute.AddTo(-1);
-            VDebug.Log("Play Left: " + PlayLeft);
-            
-            if (PlayLeft <= 0)
-            {
-                EndTurn();
-            }
         }
+        
     }
 }
