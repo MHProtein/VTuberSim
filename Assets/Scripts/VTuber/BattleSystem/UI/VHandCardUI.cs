@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.Core.EventCenter;
@@ -16,30 +18,24 @@ namespace VTuber.BattleSystem.UI
         
         private bool _isMoving = false;
         
-        public Vector3 TargetPosition => _targetPosition;
         private Vector3 _targetPosition;
         private Vector3 _positionVelocity;
         private float _positionSmoothTime;
-
-        private bool _isScaling = false;
         
-        public Vector3 TargetScale => _targetScale;
         private Vector3 _targetScale;
         private Vector3 _scaleVelocity;
         private float _scaleSmoothTime;
-    
-        private bool _isRotating = false;
         
-        public Vector3 TargetRotation => _targetRotation;
-        private Vector3 _targetRotation;
         private float _rotationVelocity;
         private float _rotationSmoothTime;
         private float _deltaTime;
         
         public int index;
 
+        private bool _inspectable;
+
         [Header("Inspection")] 
-        public Vector3 inspectionScale = new Vector3(1.5f, 1.5f, 1.0f);
+        private Vector3 _inspectionScale;
         public float inspectionY = 150.0f;
 
         public Vector3 OriginalScale => _originalScale;
@@ -64,13 +60,25 @@ namespace VTuber.BattleSystem.UI
         private Dictionary<string, object> message;
 
         private bool selectClickUp = false;
+        private Vector3 _targetRotation;
+        private bool _isScaling;
+        private bool _isRotating;
 
-        
+        public VHandCardUI(Vector3 targetRotation, bool isScaling)
+        {
+            _targetRotation = targetRotation;
+            _isScaling = isScaling;
+        }
+
+
         protected override void Awake()
         {
             base.Awake();
+            _inspectable = true;
+            _inspectionScale = new Vector3(1.0f, 1.0f, 1.0f);
             _originalSiblingIndex = transform.GetSiblingIndex();
             message = new Dictionary<string, object>();
+            PrimeTweenConfig.warnEndValueEqualsCurrent = false;
         }
 
         protected override void OnEnable()
@@ -83,6 +91,20 @@ namespace VTuber.BattleSystem.UI
             base.OnDisable();
         }
         
+        public void MoveToDiscardPile(Vector3 targetPosition, float smoothTime)
+        {
+            _inspectable = false;
+            Tween.Position(transform, targetPosition, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
+            Tween.Scale(transform, Vector3.zero, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
+        }
+
+        private void DestroyGameObject()
+        {
+            if(gameObject)
+                Destroy(gameObject);
+        }
+
+
         public void SetPosition(Vector3 targetPosition, float smoothTime, bool setOriginal)
         {
             _isMoving = true;
@@ -90,6 +112,11 @@ namespace VTuber.BattleSystem.UI
             _positionSmoothTime = smoothTime;
             if (setOriginal)
                 _originalPosition = targetPosition;
+            Tween.LocalPosition(transform, _targetPosition, _positionSmoothTime, Ease.Linear).OnComplete(
+                ()=>
+                {
+                    _isMoving = false;
+                });
         }
         
         public void SetOriginalPosition(float smoothTime)
@@ -106,6 +133,11 @@ namespace VTuber.BattleSystem.UI
             _scaleSmoothTime = smoothTime;
             if (setOriginal)
                 _originalScale = _targetScale;
+            Tween.Scale(transform, targetScale, smoothTime, Ease.Linear).OnComplete(
+                ()=>
+                {
+                    _isScaling = false;
+                });;
         }
         
         public void SetRotation(Vector3 targetAngle, float smoothTime, bool setOriginal)
@@ -115,63 +147,52 @@ namespace VTuber.BattleSystem.UI
             _rotationSmoothTime = smoothTime;
             if (setOriginal)
                 _originalRotation = _targetRotation;
+            Tween.LocalRotation(transform, targetAngle, smoothTime, Ease.Linear).OnComplete(
+                ()=>
+                {
+                    _isRotating = false;
+                });;
         }
 
         private void Update()
         {
             CardMovement();
             DetectDeselect();
-            Play();
         }
         
         private void Play()
         {
-            if (selfSelected && Input.GetMouseButtonUp(0))
-                selectClickUp = true;
-            if (selectClickUp && Input.GetMouseButtonDown(0))
-            {
-                Deselect();
-                battleUI.Rearrange(index);
-                card.Play();
-                Destroy(gameObject);
-            }
+            Deselect();
+            _inspectable = false;
+            card.Play();
         }
         
         private void CardMovement()
         {
-            if (_isMoving)
-            {
-                transform.localPosition = Vector3.SmoothDamp(transform.localPosition, _targetPosition, ref _positionVelocity, _positionSmoothTime);
-                if (Mathf.Abs(transform.localPosition.x - _targetPosition.x) < 0.01f
-                    && Mathf.Abs(transform.localPosition.y - _targetPosition.y) < 0.01f)
-                {
-                    _isMoving = false;
-                }
-            }
-            
-            if (_isScaling)
-            {
-                transform.localScale = Vector3.SmoothDamp(transform.localScale, _targetScale, ref _scaleVelocity, _scaleSmoothTime);
-                if (Mathf.Abs(transform.localScale.x - _targetScale.x) < 0.01f
-                    && Mathf.Abs(transform.localScale.y - _targetScale.y) < 0.01f)
-                    _isScaling = false;
-            }
-
-            if (_isRotating)
-            {
-                _deltaTime += Time.deltaTime;
-                transform.localEulerAngles = Vector3.Slerp(transform.localEulerAngles,
-                    _targetRotation, _deltaTime / _rotationSmoothTime);
-                if (Mathf.Abs(transform.localEulerAngles.z - _targetRotation.z) < 0.01f)
-                    _isRotating = false;
-            }
-
-            if (_moveWithMouse)
-            {
-                transform.position = Input.mousePosition;
-            }
-            
-            DetectDeselect();
+            // if (_isMoving)
+            // {
+            //
+            //     if (Mathf.Abs(transform.localPosition.x - _targetPosition.x) < 0.1f
+            //         && Mathf.Abs(transform.localPosition.y - _targetPosition.y) < 0.01f)
+            //     {
+            //         _isMoving = false;
+            //     }
+            // }
+            //
+            // if (_isScaling)
+            // {
+            //     transform.localScale = Vector3.SmoothDamp(transform.localScale, _targetScale, ref _scaleVelocity, _scaleSmoothTime);
+            //     if (Mathf.Abs(transform.localScale.x - _targetScale.x) < 0.01f
+            //         && Mathf.Abs(transform.localScale.y - _targetScale.y) < 0.01f)
+            //         _isScaling = false;
+            // }
+            //
+            // if (_isRotating)
+            // {
+            //     _deltaTime += Time.deltaTime;
+            //     if (Mathf.Abs(transform.localEulerAngles.z - _targetRotation.z) < 0.01f)
+            //         _isRotating = false;
+            // }
         }
         
         private void DetectDeselect()
@@ -197,12 +218,14 @@ namespace VTuber.BattleSystem.UI
         
         private void Inspect()
         {
+            if (!_inspectable)
+                return;
             var pos = new Vector3(_originalPosition.x, inspectionY, _originalPosition.z);
             SetPosition(pos, _positionSmoothTime, false);
 
             SetRotation(Vector3.zero, _rotationSmoothTime, false);
 
-            SetScale(inspectionScale, _scaleSmoothTime, false);
+            SetScale(_inspectionScale, _scaleSmoothTime, false);
             transform.SetAsLastSibling();
         }
 
@@ -218,6 +241,7 @@ namespace VTuber.BattleSystem.UI
 
         private void Select()
         {
+            Inspect();
             selected = true;
             selfSelected = true;
             cardUI.background.color = Color.cyan;
@@ -228,7 +252,7 @@ namespace VTuber.BattleSystem.UI
         {
             _isPointerStaying = true;
         
-            if (selected)
+            if (selected || !_inspectable)
                 return;
             Inspect();
             //battleUI.MoveAway(index);
@@ -236,10 +260,9 @@ namespace VTuber.BattleSystem.UI
         
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (selected)
-            {
+            if (selected || !_inspectable)
                 return;
-            }
+            
             _isPointerStaying = false;
             ExitInspection();
             //battleUI.MoveBack(index);
@@ -247,8 +270,12 @@ namespace VTuber.BattleSystem.UI
         
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (!_inspectable)
+                return;
             if (eventData.button == PointerEventData.InputButton.Left && !selected)
                 Select();
+            else if(selfSelected && eventData.button == PointerEventData.InputButton.Left)
+                Play();
         }
     }
 }

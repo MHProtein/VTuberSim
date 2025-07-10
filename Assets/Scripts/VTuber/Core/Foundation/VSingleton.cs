@@ -1,34 +1,39 @@
 ﻿using System;
+using UnityEngine;
 
 namespace VTuber.Core.Foundation
 {
-    public class VSingleton<T>
+    public class VSingleton<T> : VMonoBehaviour where T : VMonoBehaviour
     {
-        private static T _instance;
-
         public static T Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = CreateInstance<T>();
-                }
-                return _instance;
+                return instance;
             }
         }
 
-        private static T1 CreateInstance<T1>()
+        protected static T instance;
+
+        protected override void Awake()
         {
-            return Activator.CreateInstance<T1>();
+            if(instance is null)
+                instance = this as T;
         }
 
-        ~VSingleton()
+        protected override void Start()
         {
-            if (_instance != null)
-            {
-                _instance = default(T);
-            }
+            
+        }
+
+        protected static void CreateInstance()
+        {
+            if(instance is not null)
+                return;
+
+            GameObject go = new GameObject();
+            instance = go.AddComponent<T>();
+            go.name = instance.GetType().Name;
         }
         
     }

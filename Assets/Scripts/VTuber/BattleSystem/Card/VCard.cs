@@ -1,19 +1,39 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
+using VTuber.BattleSystem.Buff;
+using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Card
 {
+    public enum VCardRarity
+    {
+        Common, //blue
+        Rare,  //purple
+        Epic,  //gold
+    }
     public class VCard
     {
+        public int Id { get; private set; }
         public string CardName => _configuration.cardName;
         public bool IsExaust => _configuration.isExaust;
+        public string CardType => _configuration.cardType;
+        public string Description => _configuration.description;
+        public List<string> CardTags => _configuration.cardTags;
+        public int Cost => _configuration.cost;
+        public Sprite Background => _configuration.background;
+        public Sprite Facade => _configuration.facade;
+        public List<VBuffConfiguration> Buffs => _configuration.buffs;
+        public List<VEffectConfiguration> Effects => _configuration.effects;
+        public VCardRarity Rarity => _configuration.rarity;
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration)
+        public VCard(VCardConfiguration configuration, int id)
         {
             _configuration = configuration;
+            Id = id;
         }
 
         public void Play()
@@ -23,9 +43,9 @@ namespace VTuber.BattleSystem.Card
             Dictionary<string, object> message = new Dictionary<string, object>()
             {
                 { "Card", this },
-                { "Configuration", _configuration },
                 { "Buffs", _configuration.buffs },
-                { "Effects", _configuration.effects }
+                { "Effects", _configuration.effects },
+                { "Cost", _configuration.cost }
             };
             VRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }

@@ -28,13 +28,17 @@ namespace VTuber.BattleSystem.BattleAttribute
         
         public virtual void AddTo(int delta)
         {
+            if (delta == 0)
+                return;
             int temp = Value;
             Value = Mathf.Clamp(Value + delta, _minValue, _maxValue);
             SendEvent(Value, Value - temp);
         }
         
         public virtual void MultiplyWith(int delta)
-        {
+        {         
+            if (delta == 1)
+                return;
             int temp = Value;
             Value = Mathf.Clamp(Value * delta, _minValue, _maxValue);
             SendEvent(Value, Value - temp);

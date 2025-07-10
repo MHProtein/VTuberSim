@@ -30,5 +30,15 @@ namespace VTuber.BattleSystem.UI
         {
             
         }
+        
+        public void SetCard(VCardUI card)
+        {
+            background.sprite = card.background.sprite;
+            facade.sprite = card.facade.sprite;
+            name.text = card.name.text;
+            description.text = card.description.text;
+            cost.text = card.cost.text;
+        }
+        
     }
 }

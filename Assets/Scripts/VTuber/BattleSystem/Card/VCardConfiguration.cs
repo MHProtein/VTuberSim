@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Card
         [StringToEnum] public string cardType;
         
         [StringToEnum] public List<string> cardTags;
+        public VCardRarity rarity;
             
         public Sprite background;
         public Sprite facade;
@@ -25,9 +26,12 @@ namespace VTuber.BattleSystem.Card
         public List<VBuffConfiguration> buffs;
         public List<VEffectConfiguration> effects;
 
+
+        private static int idDistributor = 0;
+        
         public VCard CreateCard()
         {
-            return new VCard(this);
+            return new VCard(this, idDistributor++);
         }
     }
 }

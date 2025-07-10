@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
@@ -9,7 +10,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VBattle : VMonoBehaviour
+    public class VBattle : VSingleton<VBattle>
     {
         private VBattleConfiguration _configuration;
 
@@ -38,13 +39,25 @@ namespace VTuber.BattleSystem.Core
         #endregion
 
         private int _currentPlayCountLeft = 0;
-
         
         public int TurnLeft => _turnAttribute.Value;
         public int PlayLeft => _playLeftAttribute.Value;
         
         private int MaxTurnCount => _configuration.maxTurnCount;
 
+        private bool shouldNextCardPlayTwice = false;
+        private bool shouldRedraw = false;
+        
+        public void NextCardPlayTwice()
+        {
+            shouldNextCardPlayTwice = true;
+        }
+        
+        public void RedrawRest()
+        {
+            shouldRedraw = true;
+        }
+        
         public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
         {
             _configuration = configuration;
@@ -60,8 +73,7 @@ namespace VTuber.BattleSystem.Core
             base.Awake();
             
         }
-
- 
+        
         
         protected override void Start()
         {
@@ -72,9 +84,18 @@ namespace VTuber.BattleSystem.Core
             
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
+            
             _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleMultiplierAttribute(500));
+            
+            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(30, 30));
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0));
+            
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnBattleBegin, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft},
+            });
             
             InitializeTurn();
         }
@@ -85,8 +106,30 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.OnEnable();
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
+            
             VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
         }
+
+        private void OnCardDisposed(Dictionary<string, object> messagedict)
+        {
+            _playLeftAttribute.AddTo(-1);
+            VDebug.Log("Play Left: " + PlayLeft);
+            if (PlayLeft <= 0)
+            {
+                EndTurn();
+                if (shouldRedraw) shouldRedraw = false;
+                return;
+            }
+
+            if (shouldRedraw)
+            {
+                shouldRedraw = false;
+                Redraw();
+            }
+        }
+
 
         protected override void OnDisable()
         {
@@ -94,7 +137,21 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.OnDisable();
             _cardPilesManager.OnDisable();
             _buffManager.OnDisable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+        }
+        
+        private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
+        {
+            StartCoroutine(DelayInitializeTurn((float)messagedict["DelaySeconds"]));
+        }
+        
+        IEnumerator DelayInitializeTurn(float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+
+            InitializeTurn();
         }
 
         public void InitializeTurn()
@@ -108,6 +165,7 @@ namespace VTuber.BattleSystem.Core
 
         public void EndTurn()
         {
+            Debug.Log("End Turn: " + TurnLeft);
             _turnAttribute.AddTo(-1);
             if (TurnLeft <= 0)
             {
@@ -129,9 +187,7 @@ namespace VTuber.BattleSystem.Core
                 {
                     {"TurnLeft", TurnLeft}
                 });
-                InitializeTurn();
             }
-            
         }
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
@@ -139,25 +195,34 @@ namespace VTuber.BattleSystem.Core
             var buffs = messagedict["Buffs"] as List<VBuffConfiguration>;
             var effects = messagedict["Effects"] as List<VEffectConfiguration>;
             
-            _buffManager.AddBuffs(buffs);
-            if(effects is not null)
+            if (shouldNextCardPlayTwice)
             {
-                foreach (var effectConfig in effects)
-                {
-                    var effect = effectConfig.CreateEffect();
-                    if (effect.AreConditionsMet(this, messagedict))
-                    {
-                        effect.ApplyEffect(this);
-                    }
-                }
+                ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
+                shouldNextCardPlayTwice = false;
             }
             
-            _playLeftAttribute.AddTo(-1);
-            VDebug.Log("Play Left: " + PlayLeft);
+            _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
             
-            if (PlayLeft <= 0)
+            ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
+        }
+
+        private void Redraw()
+        {
+            _cardPilesManager.RedrawCards();
+        }
+
+        private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
+        {
+            _buffManager.AddBuffs(buffs);
+            if(effects is  null)
+                return;
+            
+            foreach (var effectConfig in effects)
             {
-                EndTurn();
+                var effect = effectConfig.CreateEffect();
+                if (!effect.AreConditionsMet(this, messagedict))
+                    continue;
+                effect.ApplyEffect(this);
             }
         }
     }

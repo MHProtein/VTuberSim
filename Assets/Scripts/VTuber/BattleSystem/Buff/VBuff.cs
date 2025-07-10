@@ -29,6 +29,7 @@ namespace VTuber.BattleSystem.Buff
         {
             _configuration = configuration;
             Duration = _configuration.duration;
+            Layer = configuration.layer;
             _effects = new List<VEffect>();
             
             foreach (var effect in _configuration.effects)
@@ -77,11 +78,14 @@ namespace VTuber.BattleSystem.Buff
         {
             if (_configuration.effects == null || _configuration.effects.Count == 0)
                 return;
-            
-            foreach (var effect in _effects)
+
+            for (int i = 0; i < Layer; i++)
             {
-                if(effect.AreConditionsMet(_battle, message))
-                    effect.ApplyEffect(_battle);
+                foreach (var effect in _effects)
+                {
+                    if(effect.AreConditionsMet(_battle, message))
+                        effect.ApplyEffect(_battle);
+                }
             }
         }
 
@@ -121,6 +125,30 @@ namespace VTuber.BattleSystem.Buff
         public string GetAttributeToApplyName()
         {
             return _configuration.battleAttributeToApplyName;
+        }
+
+        public void AddLayerOrDuration(int value)
+        {
+            if (_configuration.IsBuffPermanent())
+            {
+                Layer += value;
+                VDebug.Log($"{_configuration.buffName} layer increased to {Layer}");
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+                {
+                    { "Id", Id },
+                    {"Value", Layer}
+                });
+            }
+            else
+            {
+                Duration += value;
+                VDebug.Log($"{_configuration.buffName} duration increased to {Duration}");
+                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+                {
+                    { "Id", Id },
+                    {"Value", Duration}
+                });
+            } 
         }
     }
 }
