@@ -206,7 +206,7 @@ namespace VTuber.BattleSystem.UI
             Deselect();
         }
 
-        private void Deselect()
+        public void Deselect()
         {
             selfSelected = false;
             selectClickUp = false;
@@ -220,7 +220,7 @@ namespace VTuber.BattleSystem.UI
         {
             if (!_inspectable)
                 return;
-            var pos = new Vector3(_originalPosition.x, inspectionY, _originalPosition.z);
+            var pos = new Vector3(_originalPosition.x, _originalPosition.y + 150, _originalPosition.z);
             SetPosition(pos, _positionSmoothTime, false);
 
             SetRotation(Vector3.zero, _rotationSmoothTime, false);
@@ -276,6 +276,12 @@ namespace VTuber.BattleSystem.UI
                 Select();
             else if(selfSelected && eventData.button == PointerEventData.InputButton.Left)
                 Play();
+            
+            if (selected && !selfSelected)
+            {
+                battleUI.UnselectCurrent();
+                Select();
+            }
         }
     }
 }

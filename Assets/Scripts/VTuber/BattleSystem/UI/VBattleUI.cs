@@ -422,6 +422,16 @@ namespace VTuber.BattleSystem.UI
         {
             ui.SetPosition(new Vector3(offset, 0.0f, 0.0f), drawCardTime, true);
         }
-        
+
+        public void UnselectCurrent()
+        {
+            foreach (var cardUI in _handSlotsCards)
+            {
+                if (cardUI.selfSelected)
+                {
+                    cardUI.Deselect();
+                }
+            }
+        }
     }
 }
