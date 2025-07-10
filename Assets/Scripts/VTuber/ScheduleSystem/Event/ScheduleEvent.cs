@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Runtime;
 
 namespace VTuber.ScheduleSystem.Event
 {
@@ -33,6 +32,7 @@ namespace VTuber.ScheduleSystem.Event
         /// <summary>
         /// 执行事件逻辑
         /// </summary>
+
         public bool Execute(PlayerStatus player)
         {
             if (!CanExecute(player))
@@ -41,18 +41,8 @@ namespace VTuber.ScheduleSystem.Event
                 return false;
             }
 
-            player.ConsumeStamina(_config.staminaCost);
-
-            // // 示例：增加心情与技能经验
-            // player.AddMood(_config.moodBonus);
-            // player.AddSkillExp(_config.skillExpBonus);
-            //
-            // // 发送事件（可选）
-            // VRootEventCenter.Instance.Raise(VRootEventKeys.OnScheduleEventExecuted, new System.Collections.Generic.Dictionary<string, object>
-            // {
-            //     { "Event", this },
-            //     { "PlayerStatus", player }
-            // });
+            player.Stamina -= _config.staminaCost;
+            player.Experience += _config.skillExpBonus;
 
             return true;
         }
