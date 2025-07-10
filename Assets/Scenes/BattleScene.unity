@@ -608,7 +608,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Draw Pile
+  m_text: Discard Pile
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2447,10 +2447,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   content: {fileID: 3570739658017042034}
   scrollView: {fileID: 6624756268379911116}
-  smoothTime: 0.08
+  discardPileTransform: {fileID: 269380485}
+  drawPileTransform: {fileID: 1216859206}
   handSlotsContent: {fileID: 1667902798}
+  cardToDisposeTime: 0.3
+  smoothTime: 0.14
   overlap: -0.331
-  curve: 0
   cardSize: {x: 300, y: 500}
 --- !u!224 &161672024755008649
 RectTransform:
@@ -2819,10 +2821,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6624756268379911116}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1955263078}
+        m_TargetAssemblyTypeName: VTuber.BattleSystem.UI.VBattleUI, Assembly-CSharp
+        m_MethodName: ShowExit
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

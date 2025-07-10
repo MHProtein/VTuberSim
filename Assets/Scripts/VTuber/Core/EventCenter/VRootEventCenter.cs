@@ -15,6 +15,7 @@ namespace VTuber.Core.EventCenter
         OnDrawCards,
         OnCardsAddedToDiscardPile,
         OnCardPlayed,
+        OnCardDisposed,
         
         OnPlayLeftChange,
         OnTurnChange,
@@ -26,6 +27,11 @@ namespace VTuber.Core.EventCenter
         OnBuffAdded,
         OnBuffRemoved,
         OnBuffValueUpdated,
+        
+        OnNotifyTurnBeginDelay,
+        
+        OnRequestDrawCards,
+        OnRedrawCards
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

@@ -26,9 +26,12 @@ namespace VTuber.BattleSystem.Card
         public List<VBuffConfiguration> buffs;
         public List<VEffectConfiguration> effects;
 
+
+        private static int idDistributor = 0;
+        
         public VCard CreateCard()
         {
-            return new VCard(this);
+            return new VCard(this, idDistributor++);
         }
     }
 }

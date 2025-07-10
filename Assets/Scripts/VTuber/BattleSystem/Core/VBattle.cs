@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
@@ -38,7 +39,6 @@ namespace VTuber.BattleSystem.Core
         #endregion
 
         private int _currentPlayCountLeft = 0;
-
         
         public int TurnLeft => _turnAttribute.Value;
         public int PlayLeft => _playLeftAttribute.Value;
@@ -46,10 +46,16 @@ namespace VTuber.BattleSystem.Core
         private int MaxTurnCount => _configuration.maxTurnCount;
 
         private bool shouldNextCardPlayTwice = false;
+        private bool shouldRedraw = false;
         
         public void NextCardPlayTwice()
         {
             shouldNextCardPlayTwice = true;
+        }
+        
+        public void RedrawRest()
+        {
+            shouldRedraw = true;
         }
         
         public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
@@ -67,8 +73,7 @@ namespace VTuber.BattleSystem.Core
             base.Awake();
             
         }
-
- 
+        
         
         protected override void Start()
         {
@@ -103,6 +108,19 @@ namespace VTuber.BattleSystem.Core
             _buffManager.OnEnable();
             
             VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
+        }
+
+        private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
+        {
+            StartCoroutine(DelayInitializeTurn((float)messagedict["DelaySeconds"]));
+        }
+        
+        IEnumerator DelayInitializeTurn(float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+
+            InitializeTurn();
         }
 
         protected override void OnDisable()
@@ -112,7 +130,7 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnDisable();
             _buffManager.OnDisable();
             
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
         }
 
         public void InitializeTurn()
@@ -147,9 +165,7 @@ namespace VTuber.BattleSystem.Core
                 {
                     {"TurnLeft", TurnLeft}
                 });
-                InitializeTurn();
             }
-            
         }
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
@@ -169,28 +185,40 @@ namespace VTuber.BattleSystem.Core
             
             _playLeftAttribute.AddTo(-1);
             VDebug.Log("Play Left: " + PlayLeft);
-            
+
             if (PlayLeft <= 0)
             {
                 EndTurn();
+                if (shouldRedraw) shouldRedraw = false;
+                return;
             }
+
+            if (shouldRedraw)
+            {
+                shouldRedraw = false;
+                Redraw();
+            }
+            
+        }
+
+        private void Redraw()
+        {
+            _cardPilesManager.RedrawCards();
         }
 
         private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
         {
             _buffManager.AddBuffs(buffs);
-            if(effects is not null)
+            if(effects is  null)
+                return;
+            
+            foreach (var effectConfig in effects)
             {
-                foreach (var effectConfig in effects)
-                {
-                    var effect = effectConfig.CreateEffect();
-                    if (effect.AreConditionsMet(this, messagedict))
-                    {
-                        effect.ApplyEffect(this);
-                    }
-                }
+                var effect = effectConfig.CreateEffect();
+                if (!effect.AreConditionsMet(this, messagedict))
+                    continue;
+                effect.ApplyEffect(this);
             }
         }
-        
     }
 }

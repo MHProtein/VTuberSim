@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Card
     }
     public class VCard
     {
+        public int Id { get; private set; }
         public string CardName => _configuration.cardName;
         public bool IsExaust => _configuration.isExaust;
         public string CardType => _configuration.cardType;
@@ -29,9 +30,10 @@ namespace VTuber.BattleSystem.Card
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration)
+        public VCard(VCardConfiguration configuration, int id)
         {
             _configuration = configuration;
+            Id = id;
         }
 
         public void Play()
