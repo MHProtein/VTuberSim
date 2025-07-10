@@ -20,7 +20,7 @@ namespace VTuber.BattleSystem.Buff
         [StringToEnum("Buffs")] public string buffName;
         public Sprite icon;
         public BuffTemporalType buffTemporalType;
-        [ShowIf("IsBuffPermanent")] public int layer = -1;
+        [ShowIf("IsBuffPermanent")] public int layer = 1;
         [ShowIf("IsBuffPersistent")] public int duration = -1;
         [ShowIf("IsBuffPersistent")] public bool stackable = true;
         [StringToEnum("BattleAttributes")] public string battleAttributeToApplyName;

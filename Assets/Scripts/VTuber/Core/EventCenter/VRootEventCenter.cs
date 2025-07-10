@@ -5,6 +5,7 @@ namespace VTuber.Core.EventCenter
     public enum VRootEventKey
     {
         Default,
+        OnBattleBegin,
         OnTurnBegin,
         OnTurnEndBuffApply,
         OnTurnResolution,

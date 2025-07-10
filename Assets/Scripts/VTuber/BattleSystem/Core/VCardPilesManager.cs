@@ -10,19 +10,19 @@ namespace VTuber.BattleSystem.Core
     public class VCardPilesManager
     {
         public List<VCard> Deck => _deck;
-        [SerializeField] public List<VCard> _deck = new List<VCard>();
+        private List<VCard> _deck = new List<VCard>();
 
         public List<VCard> DrawPile => _drawPile;
-        [SerializeField] public List<VCard> _drawPile = new List<VCard>();
+        private List<VCard> _drawPile = new List<VCard>();
 
         public List<VCard> DiscardPile => _discardPile;
-        public List<VCard> _discardPile = new List<VCard>();
+        private List<VCard> _discardPile = new List<VCard>();
 
         public List<VCard> HandPile => _handPile;
-        [SerializeField] public List<VCard> _handPile = new List<VCard>();
+        private List<VCard> _handPile = new List<VCard>();
         
         public List<VCard> ExaustPile => _exaustPile;
-        [SerializeField] public List<VCard> _exaustPile = new List<VCard>();
+        private List<VCard> _exaustPile = new List<VCard>();
         
         private int _handSize;
         private int _maxHandSize;

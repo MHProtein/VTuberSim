@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Card
         [StringToEnum] public string cardType;
         
         [StringToEnum] public List<string> cardTags;
+        public VCardRarity rarity;
             
         public Sprite background;
         public Sprite facade;

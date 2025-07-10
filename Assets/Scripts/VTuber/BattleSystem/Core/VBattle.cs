@@ -9,7 +9,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VBattle : VMonoBehaviour
+    public class VBattle : VSingleton<VBattle>
     {
         private VBattleConfiguration _configuration;
 
@@ -86,6 +86,11 @@ namespace VTuber.BattleSystem.Core
             
             _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(30, 30));
             _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0));
+            
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnBattleBegin, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft},
+            });
             
             InitializeTurn();
         }

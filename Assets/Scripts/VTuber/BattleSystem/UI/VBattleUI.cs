@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -14,6 +15,10 @@ namespace VTuber.BattleSystem.UI
 {
     public class VBattleUI : VUIBehaviour
     {
+        [SerializeField] private Transform content;
+        private List<VCardUI> _displayingCards = new List<VCardUI>();
+        [SerializeField] private GameObject scrollView;
+        
         public float smoothTime = 0.2f;
         [FormerlySerializedAs("cardSlots")] [SerializeField] private RectTransform handSlotsContent;
         private bool arrangingHandSlots = false;
@@ -27,7 +32,7 @@ namespace VTuber.BattleSystem.UI
         public Vector2 cardSize;
         private Vector2 _scaledCardSize;
         private Vector2 _handSlotsSize;
-        
+
         public void Rearrange(int index)
         {
             if (_handSlotsCards.Count == 0)
@@ -36,12 +41,43 @@ namespace VTuber.BattleSystem.UI
             Rearrange();
         }
         
+        public VCardUI SpawnCardUI(VCard card, Transform parent)
+        {
+            if (card == null)
+            {
+                VDebug.LogError("SpawnCardUI: Card is null");
+                return null;
+            }
+            
+            var cardUI = Instantiate(cardUIPrefab, parent).GetComponent<VCardUI>();
+            
+            return cardUI;
+        }
+        
         public void Selected(bool value)
         {
             foreach (var ui in _handSlotsCards)
             {
                 ui.selected = value;
             }
+        }
+        
+        private void ShowCardScroll(IEnumerable<VCard> cards)
+        {
+            scrollView.SetActive(true);
+            foreach (var card in cards)
+            {
+                _displayingCards.Add(SpawnCardUI(card, content));
+            }
+        }
+        
+        public void ShowDrawPile()
+        {
+            ShowCardScroll(VBattle.Instance.CardPilesManager.DrawPile);
+        }        
+        public void ShowDiscard()
+        {
+            ShowCardScroll(VBattle.Instance.CardPilesManager.DiscardPile);
         }
         
         protected override void Awake()
@@ -280,7 +316,6 @@ namespace VTuber.BattleSystem.UI
         {
             ui.SetPosition(new Vector3(offset, 0.0f, 0.0f), smoothTime, true);
         }
-
         
     }
 }
