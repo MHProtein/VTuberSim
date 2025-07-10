@@ -16,6 +16,7 @@ namespace VTuber.Core.EventCenter
         OnCardsAddedToDiscardPile,
         OnCardPlayed,
         OnCardDisposed,
+        OnTurnEndCardDisposed,
         
         OnPlayLeftChange,
         OnTurnChange,

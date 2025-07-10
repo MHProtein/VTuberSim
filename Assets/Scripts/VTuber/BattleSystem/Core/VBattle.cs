@@ -109,8 +109,39 @@ namespace VTuber.BattleSystem.Core
             
             VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
+            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
         }
 
+        private void OnCardDisposed(Dictionary<string, object> messagedict)
+        {
+            _playLeftAttribute.AddTo(-1);
+            VDebug.Log("Play Left: " + PlayLeft);
+            if (PlayLeft <= 0)
+            {
+                EndTurn();
+                if (shouldRedraw) shouldRedraw = false;
+                return;
+            }
+
+            if (shouldRedraw)
+            {
+                shouldRedraw = false;
+                Redraw();
+            }
+        }
+
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            _battleAttributeManager.OnDisable();
+            _cardPilesManager.OnDisable();
+            _buffManager.OnDisable();
+            
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+        }
+        
         private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
         {
             StartCoroutine(DelayInitializeTurn((float)messagedict["DelaySeconds"]));
@@ -121,16 +152,6 @@ namespace VTuber.BattleSystem.Core
             yield return new WaitForSeconds(delayTime);
 
             InitializeTurn();
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            _battleAttributeManager.OnDisable();
-            _cardPilesManager.OnDisable();
-            _buffManager.OnDisable();
-            
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
         }
 
         public void InitializeTurn()
@@ -144,6 +165,7 @@ namespace VTuber.BattleSystem.Core
 
         public void EndTurn()
         {
+            Debug.Log("End Turn: " + TurnLeft);
             _turnAttribute.AddTo(-1);
             if (TurnLeft <= 0)
             {
@@ -182,23 +204,6 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
             
             ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
-            
-            _playLeftAttribute.AddTo(-1);
-            VDebug.Log("Play Left: " + PlayLeft);
-
-            if (PlayLeft <= 0)
-            {
-                EndTurn();
-                if (shouldRedraw) shouldRedraw = false;
-                return;
-            }
-
-            if (shouldRedraw)
-            {
-                shouldRedraw = false;
-                Redraw();
-            }
-            
         }
 
         private void Redraw()

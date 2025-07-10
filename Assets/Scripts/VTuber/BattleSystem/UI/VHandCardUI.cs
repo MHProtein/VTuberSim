@@ -75,7 +75,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.Awake();
             _inspectable = true;
-            _inspectionScale = new Vector3(1.3f, 1.3f, 1.0f);
+            _inspectionScale = new Vector3(1.0f, 1.0f, 1.0f);
             _originalSiblingIndex = transform.GetSiblingIndex();
             message = new Dictionary<string, object>();
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
@@ -270,7 +270,7 @@ namespace VTuber.BattleSystem.UI
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!_inspectable || _isMoving)
+            if (!_inspectable)
                 return;
             if (eventData.button == PointerEventData.InputButton.Left && !selected)
                 Select();
