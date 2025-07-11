@@ -25,7 +25,7 @@ namespace VTuber.BattleSystem.UI
         [Space(3)]
         [Header("Animations")]
         [SerializeField] private float cardToDisposeTime = 0.2f;
-        [SerializeField] private float drawCardTime = 0.2f;
+        [FormerlySerializedAs("drawCardTime")] [SerializeField] private float drawCardToSlotTime = 0.2f;
         [SerializeField] private float cardMoveAfterPlayingTime = 0.2f;
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
@@ -41,6 +41,8 @@ namespace VTuber.BattleSystem.UI
         public Vector2 cardSize;
         private Vector2 _scaledCardSize;
         private Vector2 _handSlotsSize;
+
+        private VHandCardUI cardToDispose;
 
         public void Rearrange(int index)
         {
@@ -108,24 +110,35 @@ namespace VTuber.BattleSystem.UI
             cardUIPrefab = Resources.Load<GameObject>("Card/Prefabs/card");
             _handSlotsCards = new List<VHandCardUI>();
             _handSlotsSize = handSlotsContent.rect.size;
+            cardToDispose = null;
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnDrawCards, OnDrawCards);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnDrawCards, OnDrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnEffectAnimationFinished, OnEffectAnimationFinished);
         }
-        
+
         protected override void OnDisable()
         {
             base.OnDisable();
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnDrawCards, OnDrawCards);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnDrawCards, OnDrawCards);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnEffectAnimationFinished, OnEffectAnimationFinished);
+        }
+        
+        private void OnEffectAnimationFinished(Dictionary<string, object> messagedict)
+        {
+            if (cardToDispose is not null)
+            {
+                DisposeCard(cardToDispose);
+                cardToDispose = null;
+            }
         }
 
         private void OnCardPlayed(Dictionary<string, object> messagedict)
@@ -137,15 +150,27 @@ namespace VTuber.BattleSystem.UI
                 return;
             
             cardUI.SetPosition(cardUI.transform.localPosition + Vector3.up * 500.0f, cardMoveAfterPlayingTime, false);
+            cardToDispose = cardUI;
+            
+            int index = cardUI.index;
+            Rearrange(index);
 
-            StartCoroutine(DelayDisposeCard(cardMoveAfterPlayingTime + cardApplyTime, cardUI));
+            foreach (var handSlotsCard in _handSlotsCards)
+            {
+                handSlotsCard.SetInteractive(false);
+            }
+            
+            StartCoroutine(DelayNotifyCardMovedToPlayPosition(cardMoveAfterPlayingTime + cardApplyTime, cardUI));
         }
         
-        IEnumerator DelayDisposeCard(float delayTime, VHandCardUI cardUI)
+        IEnumerator DelayNotifyCardMovedToPlayPosition(float delayTime, VHandCardUI cardUI)
         {
             yield return new WaitForSeconds(delayTime);
             
-            DisposeCard(cardUI);
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardMovedToPlayPosition, new Dictionary<string, object>
+            {
+                {"Card", cardUI.card},
+            });
         }
         
         private VHandCardUI GetCardById(int cardId)
@@ -155,43 +180,83 @@ namespace VTuber.BattleSystem.UI
 
         private void OnRedrawCards(Dictionary<string, object> messagedict)
         {
+            RedrawCards(messagedict["ShouldPlayTwice"] as bool? ?? false);
+        }
+
+        private void RedrawCards(bool shouldPlayTwice)
+        {
+            
+            int redrawCount = _handSlotsCards.Count;
             for (int i = _handSlotsCards.Count - 1; i >= 0; i--)
             {
                 DisposeCard(_handSlotsCards[i], false);
             }
-            
-            StartCoroutine(DelayDrawCards(cardToDisposeTime, (int)messagedict["RedrawCount"]));
+            _handSlotsCards.Clear();
+            StartCoroutine(DelayDrawCards(cardToDisposeTime, redrawCount, shouldPlayTwice));
         }
         
-        IEnumerator DelayDrawCards(float delayTime, int drawCount)
+        IEnumerator DelayDrawCards(float delayTime, int drawCount, bool shouldPlayTwice)
         {
             yield return new WaitForSeconds(delayTime);
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnRequestDrawCards, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRequestDrawCards, new Dictionary<string, object>
             {
                 {"DrawCount", drawCount}
             });
+            if (shouldPlayTwice)
+            {
+                StartCoroutine(DelayPlayTwiceDrawCards(drawCardToSlotTime));
+            }
+            else
+            {
+                DisposeCard(cardToDispose);
+                cardToDispose = null;
+            }
         }
 
-        private void DisposeCard(VHandCardUI cardUI, bool shouldNotify = true)
-        {
-            cardUI.MoveToDiscardPile(discardPileTransform.position, cardToDisposeTime);
-            int index = cardUI.index;
-            Rearrange(index);
-            
-            if(!shouldNotify)
-                return;
-            StartCoroutine(DelayNotifyCardDisposed(cardToDisposeTime, cardUI));
-        }
-        
-        IEnumerator DelayNotifyCardDisposed(float delayTime, VHandCardUI cardUI)
+        IEnumerator DelayPlayTwiceDrawCards(float delayTime)
         {
             yield return new WaitForSeconds(delayTime);
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnCardDisposed, new Dictionary<string, object>
+            RedrawCards(false);
+        }
+
+        private void DisposeCard(VHandCardUI cardUI, bool isUsed = true)
+        {
+            if(cardUI is null)
+                return;
+            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardBeginDisposal, new Dictionary<string, object>
             {
                 {"Card", cardUI.card}
             });
+            
+            cardUI.MoveToDiscardPile(discardPileTransform.position, cardToDisposeTime);
+            
+            StartCoroutine(DelayNotifyCardDisposed(cardToDisposeTime, cardUI, isUsed));
+        }
+        
+        IEnumerator DelayNotifyCardDisposed(float delayTime, VHandCardUI cardUI, bool isUsed)
+        {
+            yield return new WaitForSeconds(delayTime);
+            
+            foreach (var handSlotsCard in _handSlotsCards)
+            {
+                handSlotsCard.SetInteractive(true);
+            }
+            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardDisposed, new Dictionary<string, object>
+            {
+                {"Card", cardUI.card}
+            });
+
+            if (isUsed)
+            {
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardUsed, new Dictionary<string, object>
+                {
+                    {"Card", cardUI.card}
+                });
+            }
         }
 
         private void OnDrawCards(Dictionary<string, object> messageDict)
@@ -209,16 +274,15 @@ namespace VTuber.BattleSystem.UI
             {
                 DisposeCard(_handSlotsCards[i], false);
             }
-        
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndCardDisposed, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndCardDisposed, new Dictionary<string, object>
             {
                 {"Cards", _handSlotsCards.Select(ui => ui.card)}
             });
             
             _handSlotsCards.Clear();
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyTurnBeginDelay, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyTurnBeginDelay, new Dictionary<string, object>
             {
                 {"DelaySeconds", cardToDisposeTime},
             });
@@ -240,13 +304,11 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
                 handCardUI.cardUI = cardUI;
-                handCardUI.SetPosition(position, drawCardTime, true);
-                handCardUI.SetRotation(rotation, drawCardTime, true);
-                handCardUI.SetScale(Vector3.one, drawCardTime, true);
+                handCardUI.ToHandSlot(position, rotation, Vector3.one, drawCardToSlotTime);
                 SetHandCardPositionRotation(handCardUI, position.x);
-                handCardUI.SetScale(scale, drawCardTime, true);
+                handCardUI.SetScale(scale, drawCardToSlotTime, true);
                 _handSlotsCards.Add(handCardUI);
-                yield return new WaitForSeconds(drawCardTime);
+                yield return new WaitForSeconds(drawCardToSlotTime);
             }
             arrangingHandSlots = false;
         }
@@ -265,7 +327,7 @@ namespace VTuber.BattleSystem.UI
                 foreach (var card in _handSlotsCards)
                 {
                     Vector3 target = new Vector3(scale, scale, 1.0f);
-                    card.SetScale(target, drawCardTime, true);
+                    card.SetScale(target, drawCardToSlotTime, true);
                 }
             }
             else
@@ -273,7 +335,7 @@ namespace VTuber.BattleSystem.UI
                 scale = 1.0f;
                 foreach (var card in _handSlotsCards)
                 {
-                    card.SetScale(Vector3.one, drawCardTime, true);
+                    card.SetScale(Vector3.one, drawCardToSlotTime, true);
                 }
             }
             
@@ -282,7 +344,7 @@ namespace VTuber.BattleSystem.UI
             
             if (_handSlotsCards.Count == 1)
             {
-                _handSlotsCards[0].SetScale(Vector3.one, drawCardTime, true);
+                _handSlotsCards[0].SetScale(Vector3.one, drawCardToSlotTime, true);
                 SetHandCardPositionRotation(_handSlotsCards[0], -(cardSize.x / 2.0f));
                 return (new Vector3(_scaledCardSize.x / 2.0f, 0.0f, 0.0f),
                     new Vector3(0.0f, 0.0f, (curve / 2.0f)),  Vector3.one);
@@ -354,7 +416,7 @@ namespace VTuber.BattleSystem.UI
                 foreach (var card in _handSlotsCards)
                 {
                     Vector3 target = new Vector3(scale, scale, 1.0f);
-                    card.SetScale(target, drawCardTime, true);
+                    card.SetScale(target, drawCardToSlotTime, true);
                 }
             }
             else
@@ -362,7 +424,7 @@ namespace VTuber.BattleSystem.UI
                 scale = 1.0f;
                 foreach (var card in _handSlotsCards)
                 {
-                    card.SetScale(Vector3.one, drawCardTime, true);
+                    card.SetScale(Vector3.one, drawCardToSlotTime, true);
                 }
             }
             
@@ -372,16 +434,16 @@ namespace VTuber.BattleSystem.UI
 
             if (_handSlotsCards.Count == 1)
             {
-                _handSlotsCards[0].SetScale(Vector3.one, drawCardTime, true);
+                _handSlotsCards[0].SetScale(Vector3.one, drawCardToSlotTime, true);
                 SetHandCardPositionRotation(_handSlotsCards[0], 0.0f);
             }
             
             if (_handSlotsCards.Count == 2)
             {
-                _handSlotsCards[0].SetScale(Vector3.one, drawCardTime, true);
+                _handSlotsCards[0].SetScale(Vector3.one, drawCardToSlotTime, true);
                 SetHandCardPositionRotation(_handSlotsCards[0], -(cardSize.x / 2.0f));
                 
-                _handSlotsCards[1].SetScale(Vector3.one, drawCardTime, true);
+                _handSlotsCards[1].SetScale(Vector3.one, drawCardToSlotTime, true);
                 SetHandCardPositionRotation(_handSlotsCards[1], cardSize.x / 2.0f);
             }
             
@@ -427,7 +489,18 @@ namespace VTuber.BattleSystem.UI
         
         private void SetHandCardPositionRotation(VHandCardUI ui, float offset)
         {
-            ui.SetPosition(new Vector3(offset, 0.0f, 0.0f), drawCardTime, true);
+            ui.SetPosition(new Vector3(offset, 0.0f, 0.0f), drawCardToSlotTime, true);
+        }
+        
+        public void UnselectCurrent()
+        {
+            foreach (var cardUI in _handSlotsCards)
+            {
+                if (cardUI.selfSelected)
+                {
+                    cardUI.Deselect();
+                }
+            }
         }
 
         public void UnselectCurrent()

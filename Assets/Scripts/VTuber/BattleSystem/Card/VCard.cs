@@ -47,7 +47,7 @@ namespace VTuber.BattleSystem.Card
                 { "Effects", _configuration.effects },
                 { "Cost", _configuration.cost }
             };
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }
     }
 }

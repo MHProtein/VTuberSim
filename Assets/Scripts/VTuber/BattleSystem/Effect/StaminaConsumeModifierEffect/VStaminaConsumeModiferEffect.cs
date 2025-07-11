@@ -19,7 +19,7 @@ namespace VTuber.BattleSystem.Effect.StaminaConsumeModifierEffect
             _deltaPoints = configuration.deltaPoints;
         }
 
-        public override void ApplyEffect(VBattle battle)
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
             if(battle.BattleAttributeManager.TryGetAttribute("BAStamina", out var atrribute))
             {
@@ -28,10 +28,10 @@ namespace VTuber.BattleSystem.Effect.StaminaConsumeModifierEffect
                 switch (_modifierType)
                 {
                     case VStaminaConsumeModifierType.Rate:
-                        staminaAttribute.ChangeConsumeRate(_deltaRate);
+                        staminaAttribute.ChangeConsumeRate(_deltaRate * layer);
                         break;
                     case VStaminaConsumeModifierType.Points:
-                        staminaAttribute.ChangeConsumeReducedPoints(_deltaPoints);
+                        staminaAttribute.ChangeConsumeReducedPoints(_deltaPoints * layer);
                         break;
                 }
             }

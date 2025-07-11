@@ -37,7 +37,7 @@ namespace VTuber.BattleSystem.Core
             {
                 attribute.Value.OnEnable();
             }
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnParameterChange, OnParameterChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnParameterChange, OnParameterChange);
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
@@ -46,7 +46,7 @@ namespace VTuber.BattleSystem.Core
             {
                 float multiplier = _battleAttributes["BASingingMultiplier"].Value / 100f;
                 int delta = (int)messagedict["Delta"];
-                _battleAttributes["BAPopularity"].AddTo((int)(delta * multiplier));
+                _battleAttributes["BAPopularity"].AddTo((int)(delta * multiplier), false);
             }
         }
 
@@ -61,7 +61,7 @@ namespace VTuber.BattleSystem.Core
             {
                 attribute.Value.OnDisable();
             }
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnParameterChange, OnParameterChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnParameterChange, OnParameterChange);
         }
 
         public void AddAttribute(string name, VBattleAttribute attribute)
@@ -86,11 +86,11 @@ namespace VTuber.BattleSystem.Core
 
             int costAfterShield = cost - shield.Value;
 
-            shield.AddTo(-cost);
+            shield.AddTo(-cost, false);
             if (costAfterShield <= 0)
                 return;
             
-            stamina.AddTo(-costAfterShield);
+            stamina.AddTo(-costAfterShield, false);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace VTuber.BattleSystem.Effect
             
         }
 
-        public override void ApplyEffect(VBattle battle)
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
             base.ApplyEffect(battle);
             battle.RedrawRest();

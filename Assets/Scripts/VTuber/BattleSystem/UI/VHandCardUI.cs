@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -74,21 +75,18 @@ namespace VTuber.BattleSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            _inspectable = true;
+            _inspectable = false;
             _inspectionScale = new Vector3(1.0f, 1.0f, 1.0f);
             _originalSiblingIndex = transform.GetSiblingIndex();
             message = new Dictionary<string, object>();
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
         }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-        }     
         
-        protected override void OnDisable()
+        public void ToHandSlot(Vector3 position, Vector3 rotation, Vector3 scale, float smoothTime)
         {
-            base.OnDisable();
+            SetPosition(position, smoothTime, true, () => SetInteractive(true));
+            SetRotation(rotation, smoothTime, true);
+            SetScale(scale, smoothTime, true);
         }
         
         public void MoveToDiscardPile(Vector3 targetPosition, float smoothTime)
@@ -103,20 +101,10 @@ namespace VTuber.BattleSystem.UI
             if(gameObject)
                 Destroy(gameObject);
         }
-
-
-        public void SetPosition(Vector3 targetPosition, float smoothTime, bool setOriginal)
+        
+        public void SetInteractive(bool interactive)
         {
-            _isMoving = true;
-            _targetPosition = targetPosition;
-            _positionSmoothTime = smoothTime;
-            if (setOriginal)
-                _originalPosition = targetPosition;
-            Tween.LocalPosition(transform, _targetPosition, _positionSmoothTime, Ease.Linear).OnComplete(
-                ()=>
-                {
-                    _isMoving = false;
-                });
+            _inspectable = interactive;
         }
         
         public void SetOriginalPosition(float smoothTime)
@@ -124,6 +112,22 @@ namespace VTuber.BattleSystem.UI
             _isMoving = true;
             _targetPosition = _originalPosition;
             _positionSmoothTime = smoothTime;
+        }
+        
+        public void SetPosition(Vector3 targetPosition, float smoothTime, bool setOriginal, Action action = null)
+        {
+            _isMoving = true;
+            _targetPosition = targetPosition;
+            _positionSmoothTime = smoothTime;
+            if (setOriginal)
+                _originalPosition = targetPosition;
+            var tween = Tween.LocalPosition(transform, _targetPosition, _positionSmoothTime, Ease.Linear).OnComplete(
+                ()=>
+                {
+                    _isMoving = false;
+                    if (action is not null)
+                        action();
+                });
         }
         
         public void SetScale(Vector3 targetScale, float smoothTime, bool setOriginal)
@@ -205,37 +209,29 @@ namespace VTuber.BattleSystem.UI
 
             Deselect();
         }
-
-        public void Deselect()
-        {
-            selfSelected = false;
-            selectClickUp = false;
-            cardUI.background.color = Color.white;
-            battleUI.Selected(false);
-            
-            ExitInspection();
-        }
         
         private void Inspect()
         {
             if (!_inspectable)
                 return;
-            var pos = new Vector3(_originalPosition.x, _originalPosition.y + 150, _originalPosition.z);
-            SetPosition(pos, _positionSmoothTime, false);
 
-            SetRotation(Vector3.zero, _rotationSmoothTime, false);
+            var pos = new Vector3(_originalPosition.x, inspectionY, _originalPosition.z);
+            // SetPosition(pos, _positionSmoothTime, false);
+            //
+            // SetRotation(Vector3.zero, _rotationSmoothTime, false);
+            //
+            // SetScale(_inspectionScale, _scaleSmoothTime, false);
 
-            SetScale(_inspectionScale, _scaleSmoothTime, false);
             transform.SetAsLastSibling();
         }
 
         private void ExitInspection()
         {
-            SetPosition(_originalPosition, _positionSmoothTime, false);
-
-            SetRotation(_originalRotation, _rotationSmoothTime, false);
-
-            SetScale(_originalScale, _scaleSmoothTime, false);
+            // SetPosition(_originalPosition, _positionSmoothTime, false);
+            //
+            // SetRotation(_originalRotation, _rotationSmoothTime, false);
+            //
+            // SetScale(_originalScale, _scaleSmoothTime, false);
             transform.SetSiblingIndex(_originalSiblingIndex);
         }
 
@@ -246,6 +242,18 @@ namespace VTuber.BattleSystem.UI
             selfSelected = true;
             cardUI.background.color = Color.cyan;
             battleUI.Selected(true);
+            SetPosition(transform.localPosition + Vector3.up * 50, 0.1f, false);
+        }
+        
+        public void Deselect()
+        {
+            selfSelected = false;
+            selectClickUp = false;
+            cardUI.background.color = Color.white;
+            battleUI.Selected(false);
+            SetPosition(_originalPosition, 0.08f, false);
+            
+            ExitInspection();
         }
         
         public void OnPointerEnter(PointerEventData eventData)

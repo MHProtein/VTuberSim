@@ -26,7 +26,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             consumeReducedPoints += points;
         }
         
-        public override void AddTo(int delta)
+        public override void AddTo(int delta, bool isFromCard, bool shouldApplyTwice = false)
         {
             if (delta == 0)
             {
@@ -51,7 +51,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             }
             
             if (delta != 0)
-                SendEvent(Value, delta);
+                SendEvent(Value, delta, isFromCard);
         }
         
         private void ResetConsumeModifiers()
