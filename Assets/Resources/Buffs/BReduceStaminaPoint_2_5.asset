@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 896851c42cd34bdc83961715806e9d7b, type: 3}
-  m_Name: BAddParams_2
+  m_Name: BReduceStaminaPoint_2_5
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,13 +21,13 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  buffName: BAddParams
+  buffName: BReduceStaminaConsumption
   icon: {fileID: 0}
   buffTemporalType: 1
-  layer: -1
-  duration: 3
+  layer: 1
+  duration: 5
   stackable: 1
-  battleAttributeToApplyName: BAParameter
-  whenToApply: 4
+  battleAttributeToApplyName: BAStamina
+  whenToApply: 10
   effects:
-  - {fileID: 11400000, guid: cd965168e0479f249acdecefd301dd9c, type: 2}
+  - {fileID: 11400000, guid: 59b53a212ca2dcf41954be3e789ea872, type: 2}

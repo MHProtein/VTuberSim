@@ -59,6 +59,7 @@ namespace VTuber.BattleSystem.UI
             }
             
             var cardUI = Instantiate(cardUIPrefab, parent).GetComponent<VCardUI>();
+            cardUI.SetCard(card);
             
             return cardUI;
         }
@@ -154,6 +155,11 @@ namespace VTuber.BattleSystem.UI
 
         private void OnRedrawCards(Dictionary<string, object> messagedict)
         {
+            for (int i = _handSlotsCards.Count - 1; i >= 0; i--)
+            {
+                DisposeCard(_handSlotsCards[i], false);
+            }
+            
             StartCoroutine(DelayDrawCards(cardToDisposeTime, (int)messagedict["RedrawCount"]));
         }
         
@@ -167,13 +173,13 @@ namespace VTuber.BattleSystem.UI
             });
         }
 
-        private void DisposeCard(VHandCardUI cardUI, bool isNotify = true)
+        private void DisposeCard(VHandCardUI cardUI, bool shouldNotify = true)
         {
             cardUI.MoveToDiscardPile(discardPileTransform.position, cardToDisposeTime);
             int index = cardUI.index;
             Rearrange(index);
             
-            if(!isNotify)
+            if(!shouldNotify)
                 return;
             StartCoroutine(DelayNotifyCardDisposed(cardToDisposeTime, cardUI));
         }
@@ -224,8 +230,9 @@ namespace VTuber.BattleSystem.UI
             foreach (var card in cards)
             {
                 var cardUI = Instantiate(cardUIPrefab, drawPileTransform.position, Quaternion.identity, null).GetComponent<VCardUI>();
+                cardUI.SetCard(card);
                 cardUI.transform.localScale = Vector3.zero;
-                cardUI.transform.parent = handSlotsContent;
+                cardUI.transform.SetParent(handSlotsContent);
                 
                 var handCardUI = cardUI.AddComponent<VHandCardUI>();
                 (Vector3 position, Vector3 rotation, Vector3 scale) = ReserveSpaceForNewCard();

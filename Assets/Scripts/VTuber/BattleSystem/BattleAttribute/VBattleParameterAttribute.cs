@@ -14,11 +14,18 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             base.OnEnable();
             VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
-
-            void OnTurnEnd(Dictionary<string, object> messagedict)
-            {
-                Value = 0;
-            }
         }
+
+        public override void OnDisable()
+        {
+            base.OnDisable();
+            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+        }
+
+        void OnTurnEnd(Dictionary<string, object> messagedict)
+        {
+            SetValue(0);
+        }
+        
     }
 }

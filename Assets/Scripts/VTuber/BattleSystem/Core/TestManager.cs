@@ -11,6 +11,7 @@ namespace VTuber.BattleSystem.Core
     {
         [SerializeField] private VBattle _battle;
         [SerializeField] private VBattleConfiguration _battleConfiguration;
+        [SerializeField] private List<VCardConfiguration> _cardConfigurations;
         
         private VCardLibrary _cardLibrary;
         
@@ -18,12 +19,15 @@ namespace VTuber.BattleSystem.Core
         {
             base.Awake();
             _cardLibrary = new VCardLibrary();
-            VCardConfiguration cardConfig = Resources.Load<VCardConfiguration>("Card/Configs/SampleCadConfig");
 
-            for (int i = 0; i < 10; i++)
+            foreach (var config in _cardConfigurations)
             {
-                _cardLibrary.AddCard(cardConfig);
+                for (int i = 0; i < 5; i++)
+                {
+                    _cardLibrary.AddCard(config);
+                }
             }
+
             _battle.InitializeBattle(null, _battleConfiguration, _cardLibrary);
         }
 

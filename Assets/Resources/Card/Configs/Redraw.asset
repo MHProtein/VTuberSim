@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896851c42cd34bdc83961715806e9d7b, type: 3}
-  m_Name: BAddParams_2
+  m_Script: {fileID: 11500000, guid: c844b88d14584325a50f3164ddc22e72, type: 3}
+  m_Name: Redraw
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,13 +21,15 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  buffName: BAddParams
-  icon: {fileID: 0}
-  buffTemporalType: 1
-  layer: -1
-  duration: 3
-  stackable: 1
-  battleAttributeToApplyName: BAParameter
-  whenToApply: 4
+  cardName: Redraw
+  description: Redraw
+  cardType: 
+  cardTags: []
+  rarity: 0
+  background: {fileID: 0}
+  facade: {fileID: 0}
+  cost: 0
+  isExaust: 0
+  buffs: []
   effects:
-  - {fileID: 11400000, guid: cd965168e0479f249acdecefd301dd9c, type: 2}
+  - {fileID: 11400000, guid: 0b2ce367b9040934dba478b330fcfa30, type: 2}

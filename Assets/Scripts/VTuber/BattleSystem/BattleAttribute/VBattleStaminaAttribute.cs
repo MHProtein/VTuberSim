@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
@@ -17,12 +18,12 @@ namespace VTuber.BattleSystem.BattleAttribute
 
         public void ChangeConsumeRate(float rate)
         {
-            consumeRate = rate;
+            consumeRate += rate;
         }
         
         public void ChangeConsumeReducedPoints(int points)
         {
-            consumeReducedPoints = points;
+            consumeReducedPoints += points;
         }
         
         public override void AddTo(int delta)
@@ -40,7 +41,12 @@ namespace VTuber.BattleSystem.BattleAttribute
             else
             {
                 delta = (int)(delta * consumeRate) + consumeReducedPoints;
+                
+                if (delta > 0)
+                    delta = 0;
+                
                 Value = Mathf.Clamp(delta + Value, _minValue, _maxValue);
+                VDebug.Log($"Stamina consumed: {delta}, current value: {Value}, consume rate: {consumeRate}, reduced points: {consumeReducedPoints}");
                 ResetConsumeModifiers();
             }
             
@@ -53,6 +59,5 @@ namespace VTuber.BattleSystem.BattleAttribute
             consumeRate = 1f;
             consumeReducedPoints = 0;
         }
-        
     }
 }

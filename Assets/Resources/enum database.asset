@@ -142,10 +142,13 @@ MonoBehaviour:
       Data: 4|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 1
       Data: BAddParams
+    - Name: 
+      Entry: 1
+      Data: BReduceStaminaConsumption
     - Name: 
       Entry: 13
       Data: 

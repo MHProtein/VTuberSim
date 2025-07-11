@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override void ApplyEffect(VBattle battle)
         {
-            if(battle.BuffManager.TryGetBuff("_buffName", out var buff))
+            if(battle.BuffManager.TryGetBuff(_configuration.buffName, out var buff))
             {
                 buff.AddLayerOrDuration(_configuration.addValue);
                 VDebug.Log($"Effect {_configuration.effectName} applied {_configuration.addValue} to buff {buff.GetBuffName()} with ID {buff.Id}");
