@@ -502,16 +502,5 @@ namespace VTuber.BattleSystem.UI
                 }
             }
         }
-
-        public void UnselectCurrent()
-        {
-            foreach (var cardUI in _handSlotsCards)
-            {
-                if (cardUI.selfSelected)
-                {
-                    cardUI.Deselect();
-                }
-            }
-        }
     }
 }
