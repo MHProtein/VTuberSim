@@ -107,6 +107,8 @@ namespace VTuber.BattleSystem.Core
             InitializeTurn();
         }
 
+        
+        
         protected override void OnEnable()
         {
             base.OnEnable();
