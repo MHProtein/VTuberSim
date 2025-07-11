@@ -209,19 +209,19 @@ namespace VTuber.BattleSystem.UI
 
             Deselect();
         }
-
-
         
         private void Inspect()
         {
             if (!_inspectable)
                 return;
+
             var pos = new Vector3(_originalPosition.x, inspectionY, _originalPosition.z);
             // SetPosition(pos, _positionSmoothTime, false);
             //
             // SetRotation(Vector3.zero, _rotationSmoothTime, false);
             //
             // SetScale(_inspectionScale, _scaleSmoothTime, false);
+
             transform.SetAsLastSibling();
         }
 
