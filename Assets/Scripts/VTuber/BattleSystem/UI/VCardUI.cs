@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Card;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
@@ -31,14 +32,17 @@ namespace VTuber.BattleSystem.UI
             
         }
         
-        public void SetCard(VCardUI card)
+        public void SetCard(VCard card)
         {
-            background.sprite = card.background.sprite;
-            facade.sprite = card.facade.sprite;
-            name.text = card.name.text;
-            description.text = card.description.text;
-            cost.text = card.cost.text;
+            if(card.Background)
+                background.sprite = card.Background;
+            
+            if(card.Facade)
+                facade.sprite = card.Facade;
+            
+            name.text = card.CardName;
+            description.text = card.Description;
+            cost.text = card.Cost.ToString();
         }
-        
     }
 }

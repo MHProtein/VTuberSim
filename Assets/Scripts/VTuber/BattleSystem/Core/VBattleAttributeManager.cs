@@ -85,11 +85,10 @@ namespace VTuber.BattleSystem.Core
             var shield = _battleAttributes["BAShield"];
 
             int costAfterShield = cost - shield.Value;
-            
-            if(costAfterShield <= 0)
-            {
-                shield.AddTo(-cost);
-            }
+
+            shield.AddTo(-cost);
+            if (costAfterShield <= 0)
+                return;
             
             stamina.AddTo(-costAfterShield);
         }

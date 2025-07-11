@@ -169,6 +169,7 @@ namespace VTuber.BattleSystem.Core
                     _exaustPile.Add(_handPile[i]);
                 else
                     _discardPile.Add(_handPile[i]);
+                
             }
             
             _handPile.Clear();

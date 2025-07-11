@@ -2,6 +2,7 @@
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.BattleSystem.Effect.StaminaConsumeModifierEffect;
 using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
 
@@ -9,7 +10,7 @@ namespace VTuber.BattleSystem.Effect
 {
     public class VEffectConfiguration : VScriptableObject
     {
-        [StringToEnum("Effects")] public string effectName;
+        public string effectName;
         [TextArea] public string description;
         
         public List<VEffectCondition> conditions;
@@ -18,6 +19,5 @@ namespace VTuber.BattleSystem.Effect
         {
             return new VEffect(this);
         }
-
     }
 }

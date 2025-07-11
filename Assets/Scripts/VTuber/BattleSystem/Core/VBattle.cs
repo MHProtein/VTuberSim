@@ -89,8 +89,8 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleMultiplierAttribute(500));
             
-            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(30, 30));
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0));
+            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, 100));
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false, VRootEventKey.OnShieldChange));
             
             VRootEventCenter.Instance.Raise(VRootEventKey.OnBattleBegin, new Dictionary<string, object>
             {
@@ -195,26 +195,30 @@ namespace VTuber.BattleSystem.Core
             var buffs = messagedict["Buffs"] as List<VBuffConfiguration>;
             var effects = messagedict["Effects"] as List<VEffectConfiguration>;
             
+                            
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnPreCardApply, messagedict);
+            
+            _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+            
+            ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
+            
             if (shouldNextCardPlayTwice)
             {
                 ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
                 shouldNextCardPlayTwice = false;
             }
-            
-            _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
-            
-            ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
         }
 
         private void Redraw()
         {
             _cardPilesManager.RedrawCards();
+            VRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, null);
         }
 
         private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
         {
             _buffManager.AddBuffs(buffs);
-            if(effects is  null)
+            if(effects is null)
                 return;
             
             foreach (var effectConfig in effects)

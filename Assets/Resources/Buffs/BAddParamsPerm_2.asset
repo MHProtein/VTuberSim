@@ -28,6 +28,6 @@ MonoBehaviour:
   duration: 3
   stackable: 1
   battleAttributeToApplyName: BAParameter
-  whenToApply: 2
+  whenToApply: 4
   effects:
   - {fileID: 11400000, guid: cd965168e0479f249acdecefd301dd9c, type: 2}
