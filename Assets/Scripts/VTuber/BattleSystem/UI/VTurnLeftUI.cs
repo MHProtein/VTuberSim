@@ -13,7 +13,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.OnEnable();
   
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnChange, dict =>
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnChange, dict =>
             {
                 turnLeftText.text = $"TurnLeft: {dict["NewValue"] as int? ?? 0}";
             });

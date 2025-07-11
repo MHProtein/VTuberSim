@@ -13,7 +13,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.OnEnable();
             
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnShieldChange,
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnShieldChange,
                 dict => { popularityText.text = $"Shield: {dict["NewValue"] as int? ?? 0}"; });
         }
     }

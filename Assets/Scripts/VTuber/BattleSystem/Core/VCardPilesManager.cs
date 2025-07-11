@@ -43,11 +43,11 @@ namespace VTuber.BattleSystem.Core
         
         public void OnEnable()
         {
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRequestDrawCards, OnRequestDrawCards);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEndCardDisposed, OnTurnEndCardDisposed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRequestDrawCards, OnRequestDrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEndCardDisposed, OnTurnEndCardDisposed);
         }
 
 
@@ -55,11 +55,11 @@ namespace VTuber.BattleSystem.Core
 
         public void OnDisable()
         {
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnRequestDrawCards, OnRequestDrawCards);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEndCardDisposed, OnTurnEndCardDisposed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnRequestDrawCards, OnRequestDrawCards);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEndCardDisposed, OnTurnEndCardDisposed);
         }
         
         private void OnRequestDrawCards(Dictionary<string, object> messagedict)
@@ -123,7 +123,7 @@ namespace VTuber.BattleSystem.Core
             
             DisposeAllCards();
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, new Dictionary<string, object>
             {
                 {"RedrawCount", redrawCount},
             });
@@ -185,7 +185,7 @@ namespace VTuber.BattleSystem.Core
             _drawPile.AddRange(_discardPile);
             _discardPile.Clear();
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnDiscardToDraw, null);
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnDiscardToDraw, null);
         }
         
         private void DrawFromDrawPile(int n)
@@ -210,7 +210,7 @@ namespace VTuber.BattleSystem.Core
             VDebug.Log("Drawn Cards: " + cards.Count);
             Dictionary<string, object> message = new Dictionary<string, object>();
             message.Add("Cards", cards);
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnDrawCards, message);
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnDrawCards, message);
         }
     }
 }

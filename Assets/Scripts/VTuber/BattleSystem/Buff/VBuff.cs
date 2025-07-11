@@ -43,12 +43,12 @@ namespace VTuber.BattleSystem.Buff
         {
             Id = id;
             _battle = battle;
-            VRootEventCenter.Instance.RegisterListener(WhenToApply, ApplyBuff);
+            VBattleRootEventCenter.Instance.RegisterListener(WhenToApply, ApplyBuff);
         }
         
         public void OnBuffRemoved()
         {
-            VRootEventCenter.Instance.RemoveListener(WhenToApply, ApplyBuff);
+            VBattleRootEventCenter.Instance.RemoveListener(WhenToApply, ApplyBuff);
         }
         
         /// <summary>
@@ -66,7 +66,7 @@ namespace VTuber.BattleSystem.Buff
             
             VDebug.Log($"{_configuration.buffName} duration decremented to {Duration}");
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
                 {"Value", Duration}
@@ -110,7 +110,7 @@ namespace VTuber.BattleSystem.Buff
                 value = Duration;
             }
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
                 {"Value", value}
@@ -133,7 +133,7 @@ namespace VTuber.BattleSystem.Buff
             {
                 Layer += value;
                 VDebug.Log($"{_configuration.buffName} layer increased to {Layer}");
-                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
                 {
                     { "Id", Id },
                     {"Value", Layer}
@@ -143,7 +143,7 @@ namespace VTuber.BattleSystem.Buff
             {
                 Duration += value;
                 VDebug.Log($"{_configuration.buffName} duration increased to {Duration}");
-                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
                 {
                     { "Id", Id },
                     {"Value", Duration}

@@ -34,7 +34,7 @@ namespace VTuber.BattleSystem.Core
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
         }
 
         private void OnTurnBegin(Dictionary<string, object> messagedict)

@@ -12,7 +12,7 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPlayLeftChange,
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPlayLeftChange,
                 dict => { PlayLeftText.text = $"PlayLeft: {dict["NewValue"] as int? ?? 0}"; });
         }
     }

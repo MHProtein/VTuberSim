@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.OnEnable();
             
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPopularityChange,
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPopularityChange,
                 dict => { popularityText.text = $"Popularity: {dict["NewValue"] as int? ?? 0}"; });
         }
 

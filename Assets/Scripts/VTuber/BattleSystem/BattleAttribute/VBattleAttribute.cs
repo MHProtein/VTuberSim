@@ -63,7 +63,7 @@ namespace VTuber.BattleSystem.BattleAttribute
                 { "NewValue", newValue },
                 { "Delta", delta }
             };
-            VRootEventCenter.Instance.Raise(_eventKey, messageDict);
+            VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
         }
 
         public virtual void OnEnable()

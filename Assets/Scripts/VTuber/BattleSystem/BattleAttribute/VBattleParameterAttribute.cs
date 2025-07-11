@@ -13,13 +13,13 @@ namespace VTuber.BattleSystem.BattleAttribute
         public override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
 
         public override void OnDisable()
         {
             base.OnDisable();
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
 
         void OnTurnEnd(Dictionary<string, object> messagedict)

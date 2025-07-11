@@ -92,7 +92,7 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, 100));
             _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false, VRootEventKey.OnShieldChange));
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnBattleBegin, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBattleBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
             });
@@ -107,9 +107,9 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
             
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
         }
 
         private void OnCardDisposed(Dictionary<string, object> messagedict)
@@ -138,8 +138,8 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnDisable();
             _buffManager.OnDisable();
             
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
         }
         
         private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
@@ -156,7 +156,7 @@ namespace VTuber.BattleSystem.Core
 
         public void InitializeTurn()
         {
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnBegin, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnTurnBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
                 {"HandSize", _configuration.maxHandSize}
@@ -173,17 +173,17 @@ namespace VTuber.BattleSystem.Core
             }
             else
             {
-                VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
                 {
                     {"TurnLeft", TurnLeft}
                 });
                 
-                VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnResolution, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnTurnResolution, new Dictionary<string, object>
                 {
                     {"TurnLeft", TurnLeft}
                 });
                 
-                VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEnd, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEnd, new Dictionary<string, object>
                 {
                     {"TurnLeft", TurnLeft}
                 });
@@ -196,7 +196,7 @@ namespace VTuber.BattleSystem.Core
             var effects = messagedict["Effects"] as List<VEffectConfiguration>;
             
                             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnPreCardApply, messagedict);
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPreCardApply, messagedict);
             
             _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
             
@@ -212,7 +212,7 @@ namespace VTuber.BattleSystem.Core
         private void Redraw()
         {
             _cardPilesManager.RedrawCards();
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, null);
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, null);
         }
 
         private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)

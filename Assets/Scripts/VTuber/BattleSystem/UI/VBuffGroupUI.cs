@@ -52,17 +52,17 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffRemoved, OnBuffRemoved);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffRemoved, OnBuffRemoved);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
         
         protected override void OnDisable()
         {
             base.OnDisable();
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffRemoved, OnBuffRemoved);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffRemoved, OnBuffRemoved);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
 
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)

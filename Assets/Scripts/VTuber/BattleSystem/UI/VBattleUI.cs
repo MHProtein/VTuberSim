@@ -113,19 +113,19 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnDrawCards, OnDrawCards);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnDrawCards, OnDrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
         }
         
         protected override void OnDisable()
         {
             base.OnDisable();
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnDrawCards, OnDrawCards);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnDrawCards, OnDrawCards);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
         }
 
         private void OnCardPlayed(Dictionary<string, object> messagedict)
@@ -167,7 +167,7 @@ namespace VTuber.BattleSystem.UI
         {
             yield return new WaitForSeconds(delayTime);
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnRequestDrawCards, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRequestDrawCards, new Dictionary<string, object>
             {
                 {"DrawCount", drawCount}
             });
@@ -188,7 +188,7 @@ namespace VTuber.BattleSystem.UI
         {
             yield return new WaitForSeconds(delayTime);
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnCardDisposed, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardDisposed, new Dictionary<string, object>
             {
                 {"Card", cardUI.card}
             });
@@ -211,14 +211,14 @@ namespace VTuber.BattleSystem.UI
             }
         
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndCardDisposed, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndCardDisposed, new Dictionary<string, object>
             {
                 {"Cards", _handSlotsCards.Select(ui => ui.card)}
             });
             
             _handSlotsCards.Clear();
             
-            VRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyTurnBeginDelay, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyTurnBeginDelay, new Dictionary<string, object>
             {
                 {"DelaySeconds", cardToDisposeTime},
             });

@@ -13,7 +13,7 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnParameterChange,
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnParameterChange,
                 dict => { ParameterText.text = $"Parameter: {dict["NewValue"] as int? ?? 0}"; });
         }
     }

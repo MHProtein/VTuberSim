@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.OnEnable();
             
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnMultiplierChange,
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnMultiplierChange,
                 dict => { MultiplierText.text = $"Multiplier: {dict["NewValue"] as int? ?? 0}%"; });
         }
     }

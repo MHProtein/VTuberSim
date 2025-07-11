@@ -17,12 +17,12 @@ namespace VTuber.BattleSystem.Buff
 
         public void OnEnable()
         {
-            VRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
         
         public void OnDisable()
         {
-            VRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
         }
 
         private void OnTurnEnd(Dictionary<string, object> messagedict)
@@ -40,7 +40,7 @@ namespace VTuber.BattleSystem.Buff
                 buff.OnBuffRemoved();
                 _buffs.Remove(buff);
                             
-                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffRemoved, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffRemoved, new Dictionary<string, object>
                 {
                     { "Id", buff.Id }
                 });
@@ -72,7 +72,7 @@ namespace VTuber.BattleSystem.Buff
             {
                 _buffs.Add(buff);
                 buff.OnBuffAdded(_battle, _idDistributor++);
-                VRootEventCenter.Instance.Raise(VRootEventKey.OnBuffAdded, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
                     { "Buff", buff }
                 });
