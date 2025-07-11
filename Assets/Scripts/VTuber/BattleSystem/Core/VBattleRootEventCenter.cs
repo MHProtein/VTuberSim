@@ -14,8 +14,10 @@ namespace VTuber.Core.EventCenter
         OnDiscardToDraw,
         OnDrawCards,
         OnCardsAddedToDiscardPile,
-        OnCardPlayed,
-        OnPreCardApply,
+        OnCardPlayed, //when clicked
+        OnCardBeginDisposal, //when disposal animation begins
+        OnPreCardApply, //when card is about to be applied, but not yet
+        OnCardUsed, //when disposed
         OnCardDisposed,
         OnTurnEndCardDisposed,
         
@@ -34,7 +36,11 @@ namespace VTuber.Core.EventCenter
         OnNotifyTurnBeginDelay,
         
         OnRequestDrawCards,
-        OnRedrawCards
+        OnRedrawCards,
+        
+        OnCardMovedToPlayPosition,
+        OnEffectAnimationFinished,
+        OnPlayTheSecondTime
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

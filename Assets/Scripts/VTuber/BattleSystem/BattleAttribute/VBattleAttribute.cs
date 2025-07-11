@@ -22,46 +22,48 @@ namespace VTuber.BattleSystem.BattleAttribute
             _eventKey = eventKey;
             _minValue = minValue;
             _maxValue = maxValue;
-            InitSetValue(value);
+            InitSetValue(value, false);
             _isPercentage = isPercentage;
         }
         
-        public virtual void AddTo(int delta)
+        public virtual void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)
         {
             if (delta == 0)
                 return;
             int temp = Value;
             Value = Mathf.Clamp(Value + delta, _minValue, _maxValue);
-            SendEvent(Value, Value - temp);
+            SendEvent(Value, Value - temp, isFromCard, shouldPlayTwice);
         }
         
-        public virtual void MultiplyWith(int delta)
+        public virtual void MultiplyWith(int delta, bool isFromCard, bool shouldPlayTwice = false)
         {         
             if (delta == 1)
                 return;
             int temp = Value;
             Value = Mathf.Clamp(Value * delta, _minValue, _maxValue);
-            SendEvent(Value, Value - temp);
+            SendEvent(Value, Value - temp, isFromCard, shouldPlayTwice);
         }
 
-        private void InitSetValue(int value)
+        private void InitSetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
         {
             Value = Mathf.Clamp(value, _minValue, _maxValue);
-            SendEvent(Value, value - Value);
+            SendEvent(Value, value - Value, isFromCard, shouldPlayTwice);
         }
         
-        protected virtual void SetValue(int value)
+        protected virtual void SetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
         {
             Value = Mathf.Clamp(value, _minValue, _maxValue);
-            SendEvent(Value, value - Value);
+            SendEvent(Value, value - Value, isFromCard, shouldPlayTwice);
         }
         
-        public void SendEvent(int newValue, int delta)  
+        public void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)  
         {
             var messageDict = new Dictionary<string, object>
             {
                 { "NewValue", newValue },
-                { "Delta", delta }
+                { "Delta", delta },
+                {"IsFromCard", isFromCard },
+                {"ShouldPlayTwice", shouldPlayTwice }
             };
             VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
         }

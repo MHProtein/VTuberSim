@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
@@ -47,18 +48,18 @@ namespace VTuber.BattleSystem.Buff
             }
         }
 
-        public void AddBuffs(List<VBuffConfiguration> buffs)
+        public void AddBuffs(List<VBuffConfiguration> buffs, bool isFromCard, bool shouldPlayTwice)
         {
             if (buffs == null || buffs.Count == 0)
                 return;
 
             foreach (var buff in buffs)
             {
-                AddBuff(buff.CreateBuff());
+                AddBuff(buff.CreateBuff(), isFromCard, shouldPlayTwice);
             }
         }
         
-        public void AddBuff(VBuff buff)
+        public void AddBuff(VBuff buff, bool isFromCard, bool shouldPlayTwice)
         {
             if (buff == null || string.IsNullOrEmpty(buff.GetBuffName()))
                 return;
@@ -66,7 +67,7 @@ namespace VTuber.BattleSystem.Buff
             var existingBuff = _buffs.Find(b => b.GetBuffName() == buff.GetBuffName());
             if (existingBuff != null)
             {
-                existingBuff.Stack(buff);
+                existingBuff.Stack(buff, isFromCard, shouldPlayTwice);
             }
             else
             {
@@ -74,10 +75,11 @@ namespace VTuber.BattleSystem.Buff
                 buff.OnBuffAdded(_battle, _idDistributor++);
                 VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
-                    { "Buff", buff }
+                    { "Buff", buff },
+                    {"IsFromCard",  isFromCard},
+                    {"ShouldPlayTwice", shouldPlayTwice },
                 });
             }
-            
         }
         
         public void Clear()
@@ -94,6 +96,21 @@ namespace VTuber.BattleSystem.Buff
         {
             buff = _buffs.Find(b => b.GetBuffName() == buffId);
             return buff != null;
+        }
+
+        public void ModifyBuff(string name, int value, bool isFromCard, bool shouldApplyTwice = false)
+        {
+            if(TryGetBuff(name, out var buff))
+            {
+                buff.AddLayerOrDuration(value, isFromCard, shouldApplyTwice);
+                VDebug.Log($"Effect {name} applied {value} to buff {buff.GetBuffName()} with ID {buff.Id}");
+                return;
+            }
+            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnEffectAnimationFinished, new Dictionary<string ,object>()
+            {
+                
+            });
         }
         
     }

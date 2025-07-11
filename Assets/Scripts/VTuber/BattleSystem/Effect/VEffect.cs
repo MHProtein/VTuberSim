@@ -12,7 +12,7 @@ namespace VTuber.BattleSystem.Effect
             _configuration = configuration;
         }
 
-        public virtual void ApplyEffect(VBattle battle)
+        public virtual void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
             
         }

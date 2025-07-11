@@ -44,46 +44,27 @@ namespace VTuber.BattleSystem.Core
         public void OnEnable()
         {
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRequestDrawCards, OnRequestDrawCards);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEndCardDisposed, OnTurnEndCardDisposed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardBeginDisposal, OnCardBeginDisposal);
         }
-
-
-
 
         public void OnDisable()
         {
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnBegin, OnTurnBegin);
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnRequestDrawCards, OnRequestDrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEndCardDisposed, OnTurnEndCardDisposed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardBeginDisposal, OnCardBeginDisposal);
         }
-        
+
+        private void OnCardBeginDisposal(Dictionary<string, object> messagedict)
+        {
+            RemoveFromHandPile(messagedict["Card"] as VCard);
+        }
+
         private void OnRequestDrawCards(Dictionary<string, object> messagedict)
         {
             DrawCards((int)messagedict["DrawCount"]);
-        }
-
-        private void OnTurnEndCardDisposed(Dictionary<string, object> messagedict)
-        {
-            DisposeAllCards();
-            // if (_drawPile.Count < _handSize)
-            // {
-            //     List<VCard> cards = new List<VCard>();
-            //     foreach (var card in _drawPile)
-            //     {
-            //         cards.Add(card);
-            //         _handPile.Add(card);
-            //     }
-            //     _drawPile.Clear();
-            //         
-            //     Dictionary<string, object> message = new Dictionary<string, object>();
-            //     message.Add("Cards", cards);
-            //     VRootEventCenter.Instance.Raise(VRootEventKey.OnDrawCards, message);
-            // }
         }
 
         public void DrawCards(int drawCount)
@@ -114,35 +95,14 @@ namespace VTuber.BattleSystem.Core
             _handPile.Clear();
             _exaustPile.Clear();
         }
-
-        public void RedrawCards()
-        {
-            int redrawCount = _handPile.Count;
-            if(redrawCount <= 0)
-                return;
-            
-            DisposeAllCards();
-            
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, new Dictionary<string, object>
-            {
-                {"RedrawCount", redrawCount},
-            });
-        }
-        
-        private void OnCardPlayed(Dictionary<string, object> args)
-        {
-            VCard card = args["Card"] as VCard;
-            
-            DisposeCard(card);
-        }
         
         private void OnCardDisposed(Dictionary<string, object> args)
         {
             VCard card = args["Card"] as VCard;
             DisposeCard(card);
         }
-
-        private void DisposeCard(VCard card)
+        
+        private void RemoveFromHandPile(VCard card)
         {
             if(card is null)
                 return;
@@ -151,28 +111,21 @@ namespace VTuber.BattleSystem.Core
             {
                 if (card == _handPile[i])
                 {
-                    if(card.IsExaust)
-                        _exaustPile.Add(_handPile[i]);
-                    else
-                        _discardPile.Add(_handPile[i]);
                     _handPile.RemoveAt(i);
                     break;
                 }
             }
         }
         
-        private void DisposeAllCards()
+        private void DisposeCard(VCard card)
         {
-            for (int i = 0; i < _handPile.Count; i++)
-            {
-                if(_handPile[i].IsExaust)
-                    _exaustPile.Add(_handPile[i]);
-                else
-                    _discardPile.Add(_handPile[i]);
-                
-            }
+            if(card is null)
+                return;
             
-            _handPile.Clear();
+            if(card.IsExaust)
+                _exaustPile.Add(card);
+            else
+                _discardPile.Add(card);
         }
         
         private void OnTurnBegin(Dictionary<string, object> messagedict)

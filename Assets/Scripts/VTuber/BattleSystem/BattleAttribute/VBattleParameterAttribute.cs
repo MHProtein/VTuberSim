@@ -24,7 +24,7 @@ namespace VTuber.BattleSystem.BattleAttribute
 
         void OnTurnEnd(Dictionary<string, object> messagedict)
         {
-            SetValue(0);
+            SetValue(0, false);
         }
         
     }

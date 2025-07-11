@@ -31,6 +31,9 @@ namespace VTuber.BattleSystem.Buff
             Duration = _configuration.duration;
             Layer = configuration.layer;
             _effects = new List<VEffect>();
+
+            if (!IsPermanent)
+                Layer = 1;
             
             foreach (var effect in _configuration.effects)
             {
@@ -69,7 +72,9 @@ namespace VTuber.BattleSystem.Buff
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
-                {"Value", Duration}
+                {"Value", Duration},
+                {"IsFromCard", false},
+                {"ShouldPlayTwice", false}
             });
             return false;
         }
@@ -78,14 +83,11 @@ namespace VTuber.BattleSystem.Buff
         {
             if (_configuration.effects == null || _configuration.effects.Count == 0)
                 return;
-
-            for (int i = 0; i < Layer; i++)
+            
+            foreach (var effect in _effects)
             {
-                foreach (var effect in _effects)
-                {
-                    if(effect.AreConditionsMet(_battle, message))
-                        effect.ApplyEffect(_battle);
-                }
+                if(effect.AreConditionsMet(_battle, message))
+                    effect.ApplyEffect(_battle, Layer);
             }
         }
 
@@ -94,7 +96,7 @@ namespace VTuber.BattleSystem.Buff
             return _configuration.stackable;
         }
         
-        public virtual void Stack(VBuff buff)
+        public virtual void Stack(VBuff buff, bool isFromCard, bool shouldPlayTwice)
         {
             int value = 0;
             if (_configuration.IsBuffPermanent())
@@ -113,7 +115,9 @@ namespace VTuber.BattleSystem.Buff
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
-                {"Value", value}
+                {"Value", value},
+                {"IsFromCard", isFromCard},
+                {"ShouldPlayTwice", shouldPlayTwice}
             });
         }
         
@@ -127,7 +131,7 @@ namespace VTuber.BattleSystem.Buff
             return _configuration.battleAttributeToApplyName;
         }
 
-        public void AddLayerOrDuration(int value)
+        public void AddLayerOrDuration(int value, bool isFromCard, bool shouldPlayTwice)
         {
             if (_configuration.IsBuffPermanent())
             {
@@ -136,7 +140,9 @@ namespace VTuber.BattleSystem.Buff
                 VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
                 {
                     { "Id", Id },
-                    {"Value", Layer}
+                    {"Value", Layer},
+                    {"IsFromCard", isFromCard},
+                    {"ShouldPlayTwice", shouldPlayTwice}
                 });
             }
             else
@@ -146,9 +152,11 @@ namespace VTuber.BattleSystem.Buff
                 VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
                 {
                     { "Id", Id },
-                    {"Value", Duration}
+                    {"Value", Duration},
+                    {"IsFromCard", isFromCard},
+                    {"ShouldPlayTwice", shouldPlayTwice}
                 });
-            } 
+            }
         }
     }
 }

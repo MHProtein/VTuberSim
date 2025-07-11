@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
+using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
@@ -48,9 +49,15 @@ namespace VTuber.BattleSystem.Core
         private bool shouldNextCardPlayTwice = false;
         private bool shouldRedraw = false;
         
+        private List<VBuffConfiguration> _playTwiceBuffConfigurations;
+        private List<VEffectConfiguration> _playTwiceEffectConfigurations;
+        private Dictionary<string, object> _playTwiceMessageDict;
+
         public void NextCardPlayTwice()
         {
             shouldNextCardPlayTwice = true;
+            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnEffectAnimationFinished, new Dictionary<string ,object>() { });
         }
         
         public void RedrawRest()
@@ -109,27 +116,10 @@ namespace VTuber.BattleSystem.Core
             
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardUsed, OnCardUsed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardMovedToPlayPosition, OnCardMovedToPlayPosition);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
         }
-
-        private void OnCardDisposed(Dictionary<string, object> messagedict)
-        {
-            _playLeftAttribute.AddTo(-1);
-            VDebug.Log("Play Left: " + PlayLeft);
-            if (PlayLeft <= 0)
-            {
-                EndTurn();
-                if (shouldRedraw) shouldRedraw = false;
-                return;
-            }
-
-            if (shouldRedraw)
-            {
-                shouldRedraw = false;
-                Redraw();
-            }
-        }
-
 
         protected override void OnDisable()
         {
@@ -138,8 +128,48 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnDisable();
             _buffManager.OnDisable();
             
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardUsed, OnCardUsed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardMovedToPlayPosition, OnCardMovedToPlayPosition);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
+        }
+        
+        private void OnPlayTheSecondTime(Dictionary<string, object> messagedict)
+        {
+            shouldNextCardPlayTwice = false;
+            
+            if(_playTwiceBuffConfigurations is not null &&
+               _playTwiceEffectConfigurations is not null &&
+               _playTwiceMessageDict is not null)
+                ApplyCardEffectsAndBuffs(_playTwiceBuffConfigurations, _playTwiceEffectConfigurations, _playTwiceMessageDict);
+            
+            _playTwiceBuffConfigurations = null;
+            _playTwiceEffectConfigurations = null;
+            _playTwiceMessageDict = null;
+        }
+        
+        private void OnCardMovedToPlayPosition(Dictionary<string, object> messagedict)
+        {
+            var card = messagedict["Card"] as VCard;
+            if (card is null)
+                return;
+            var buffs = card.Buffs;
+            var effects = card.Effects;
+            
+            ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
+        }
+        
+        private void OnCardUsed(Dictionary<string, object> messagedict)
+        {
+            _playLeftAttribute.AddTo(-1, false);
+            VDebug.Log("Play Left: " + PlayLeft);
+            if (PlayLeft <= 0)
+            {
+                EndTurn();
+                if (shouldRedraw) shouldRedraw = false;
+                return;
+            }
         }
         
         private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
@@ -166,7 +196,7 @@ namespace VTuber.BattleSystem.Core
         public void EndTurn()
         {
             Debug.Log("End Turn: " + TurnLeft);
-            _turnAttribute.AddTo(-1);
+            _turnAttribute.AddTo(-1, false);
             if (TurnLeft <= 0)
             {
                 // End battle
@@ -192,41 +222,51 @@ namespace VTuber.BattleSystem.Core
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
-            var buffs = messagedict["Buffs"] as List<VBuffConfiguration>;
-            var effects = messagedict["Effects"] as List<VEffectConfiguration>;
-            
-                            
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPreCardApply, messagedict);
             
             _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
-            
-            ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
-            
-            if (shouldNextCardPlayTwice)
-            {
-                ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
-                shouldNextCardPlayTwice = false;
-            }
         }
 
         private void Redraw()
         {
-            _cardPilesManager.RedrawCards();
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, null);
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRedrawCards, new Dictionary<string, object>
+            {
+                {"ShouldPlayTwice", shouldNextCardPlayTwice},
+            });
+            if (shouldNextCardPlayTwice)
+                shouldNextCardPlayTwice = false;
         }
 
-        private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
+        private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects,
+            Dictionary<string, object> messagedict)
         {
-            _buffManager.AddBuffs(buffs);
             if(effects is null)
                 return;
+            
+            if (shouldNextCardPlayTwice)
+            {
+                _playTwiceBuffConfigurations = buffs;
+                _playTwiceEffectConfigurations = effects;
+                _playTwiceMessageDict = messagedict;
+            }
+            
+            _buffManager.AddBuffs(buffs, true, shouldNextCardPlayTwice);
             
             foreach (var effectConfig in effects)
             {
                 var effect = effectConfig.CreateEffect();
+                
                 if (!effect.AreConditionsMet(this, messagedict))
                     continue;
-                effect.ApplyEffect(this);
+                effect.ApplyEffect(this, 1, true, shouldNextCardPlayTwice);
+            }
+            
+            if (shouldRedraw)
+            {
+                shouldRedraw = false;
+                if (PlayLeft == 0)
+                    return;
+                Redraw();
             }
         }
     }

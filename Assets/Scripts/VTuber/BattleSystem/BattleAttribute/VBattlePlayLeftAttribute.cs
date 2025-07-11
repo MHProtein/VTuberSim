@@ -14,13 +14,13 @@ namespace VTuber.BattleSystem.BattleAttribute
         public override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn));
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn, false));
         }
         
         public override void OnDisable()
         {
             base.OnDisable();
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn));
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn, false));
         }
     }
 }

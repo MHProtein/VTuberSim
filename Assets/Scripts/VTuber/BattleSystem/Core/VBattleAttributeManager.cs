@@ -46,7 +46,7 @@ namespace VTuber.BattleSystem.Core
             {
                 float multiplier = _battleAttributes["BASingingMultiplier"].Value / 100f;
                 int delta = (int)messagedict["Delta"];
-                _battleAttributes["BAPopularity"].AddTo((int)(delta * multiplier));
+                _battleAttributes["BAPopularity"].AddTo((int)(delta * multiplier), false);
             }
         }
 
@@ -86,11 +86,11 @@ namespace VTuber.BattleSystem.Core
 
             int costAfterShield = cost - shield.Value;
 
-            shield.AddTo(-cost);
+            shield.AddTo(-cost, false);
             if (costAfterShield <= 0)
                 return;
             
-            stamina.AddTo(-costAfterShield);
+            stamina.AddTo(-costAfterShield, false);
         }
     }
 }
