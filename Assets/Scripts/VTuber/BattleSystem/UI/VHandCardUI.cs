@@ -130,6 +130,7 @@ namespace VTuber.BattleSystem.UI
                 });
         }
         
+        
         public void SetScale(Vector3 targetScale, float smoothTime, bool setOriginal)
         {
             _isScaling = true;
