@@ -258,6 +258,8 @@ namespace VTuber.BattleSystem.Core
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
+            VDebug.Log(messagedict is null);
+
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPreCardApply, messagedict);
 
             switch ((CostType)messagedict["CostType"])

@@ -22,7 +22,7 @@ namespace VTuber.BattleSystem.Card
         public string Description => _configuration.description;
         public List<string> CardTags => _configuration.cardTags;
         public CostType CostType => _configuration.costType;
-        public int CostCostBuffId => _configuration.costBuffId;
+        public int CostBuffId => _configuration.costBuffId;
         public int Cost => _configuration.cost;
         public Sprite Background => _configuration.background;
         public Sprite Facade => _configuration.facade;
@@ -47,7 +47,9 @@ namespace VTuber.BattleSystem.Card
             {
                 { "Card", this },
                 { "Effects", _configuration.effects },
-                { "Cost", _configuration.cost }
+                { "Cost", _configuration.cost },
+                {"CostType", CostType},
+                {"CostBuffId", CostBuffId}
             };
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }
