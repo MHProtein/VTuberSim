@@ -122,7 +122,7 @@ namespace VTuber.BattleSystem.UI
 
             if (_isFromCard)
             {
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnEffectAnimationFinished, new Dictionary<string ,object>()
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
                 {
                 
                 });

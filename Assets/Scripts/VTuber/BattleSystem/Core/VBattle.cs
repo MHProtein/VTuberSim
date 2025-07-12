@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
@@ -56,7 +57,7 @@ namespace VTuber.BattleSystem.Core
         {
             shouldNextCardPlayTwice = true;
             
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnEffectAnimationFinished, new Dictionary<string ,object>() { });
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>() { });
         }
         
         public void RedrawRest()
@@ -113,12 +114,16 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
             
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnStaminaChange, OnStaminaChange);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardUsed, OnCardUsed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardMovedToPlayPosition, OnCardMovedToPlayPosition);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
         }
 
         protected override void OnDisable()
@@ -128,12 +133,58 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnDisable();
             _buffManager.OnDisable();
             
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnStaminaChange, OnStaminaChange);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardUsed, OnCardUsed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardMovedToPlayPosition, OnCardMovedToPlayPosition);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
+        }
+        
+        private void OnCardMovedToHandSlot(Dictionary<string, object> messagedict)
+        {
+            VCard card = messagedict["Card"] as VCard;
+            
+            switch (card.CostType)
+            {
+                case CostType.Stamina:
+                    card.SetPlayable(_battleAttributeManager.TestCost(card.Cost));
+                    break;
+                case CostType.Buff:
+                    card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    break;
+            }
+        }
+        
+        private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
+        {
+            foreach (var card in _cardPilesManager.HandPile)
+            {
+                if(card.CostType == CostType.Buff)
+                    card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
+            }
+        }
+
+        private void OnBuffAdded(Dictionary<string, object> messagedict)
+        {
+            foreach (var card in _cardPilesManager.HandPile)
+            {
+                if(card.CostType == CostType.Buff)
+                    card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
+            } 
+        }
+        
+        private void OnStaminaChange(Dictionary<string, object> messagedict)
+        {
+            foreach (var card in _cardPilesManager.HandPile)
+            {
+                if(card.CostType == CostType.Stamina)
+                    card.SetPlayable(_battleAttributeManager.TestCost(card.Cost));
+            }
         }
         
         private void OnSkipTurnClicked(Dictionary<string, object> messagedict)
@@ -170,7 +221,6 @@ namespace VTuber.BattleSystem.Core
             {
                 EndTurn();
                 if (shouldRedraw) shouldRedraw = false;
-                return;
             }
         }
         
@@ -224,9 +274,21 @@ namespace VTuber.BattleSystem.Core
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
+            VDebug.Log(messagedict is null);
+
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPreCardApply, messagedict);
-            
-            _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+
+            switch ((CostType)messagedict["CostType"])
+            {
+                case CostType.Stamina:
+                    _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+                    break;
+                case CostType.Buff:
+                    _buffManager.ApplyCost((int)messagedict["CostBuffId"], (int)messagedict["Cost"]);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void Redraw()
@@ -235,14 +297,22 @@ namespace VTuber.BattleSystem.Core
             {
                 {"ShouldPlayTwice", shouldNextCardPlayTwice},
             });
+            
             if (shouldNextCardPlayTwice)
                 shouldNextCardPlayTwice = false;
         }
 
         private void ApplyCardEffects(List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
         {
-            if(effects is null)
+            if (effects is null)
+            {
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard,
+                    new Dictionary<string, object>()
+                    {
+
+                    });
                 return;
+            }
             
             if (shouldNextCardPlayTwice)
             {

@@ -38,8 +38,9 @@ namespace VTuber.Core.EventCenter
         OnRequestDrawCards,
         OnRedrawCards,
         
+        OnCardMovedToHandSlot,
         OnCardMovedToPlayPosition,
-        OnEffectAnimationFinished,
+        OnNotifyBeginDisposeCard,
         OnPlayTheSecondTime,
         OnSkipTurnClicked,
     }

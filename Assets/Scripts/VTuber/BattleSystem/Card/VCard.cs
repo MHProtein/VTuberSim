@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
@@ -21,11 +23,15 @@ namespace VTuber.BattleSystem.Card
         public string CardType => _configuration.cardType;
         public string Description => _configuration.description;
         public List<string> CardTags => _configuration.cardTags;
+        public CostType CostType => _configuration.costType;
+        public int CostBuffId => _configuration.costBuffId;
         public int Cost => _configuration.cost;
         public Sprite Background => _configuration.background;
         public Sprite Facade => _configuration.facade;
         public List<VEffectConfiguration> Effects => _configuration.effects;
         public VCardRarity Rarity => _configuration.rarity;
+        
+        public Action<bool> SetPlayable;
         
         private readonly VCardConfiguration _configuration;
         
@@ -43,7 +49,9 @@ namespace VTuber.BattleSystem.Card
             {
                 { "Card", this },
                 { "Effects", _configuration.effects },
-                { "Cost", _configuration.cost }
+                { "Cost", _configuration.cost },
+                {"CostType", CostType},
+                {"CostBuffId", CostBuffId}
             };
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }

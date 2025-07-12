@@ -1,11 +1,17 @@
 ﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Card
-{
+{    public enum CostType
+    {
+        Stamina,
+        Buff,
+    }
     public class VCardConfiguration : VScriptableObject
     {
         public string cardName;
@@ -19,6 +25,8 @@ namespace VTuber.BattleSystem.Card
         public Sprite background;
         public Sprite facade;
         
+        public CostType costType = CostType.Stamina;
+        [FormerlySerializedAs("buffId")] [ShowIf("@costType == CostType.Buff")] public int costBuffId;
         public int cost;
         public bool isExaust = false;
 

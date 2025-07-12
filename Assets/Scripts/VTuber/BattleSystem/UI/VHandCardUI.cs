@@ -75,7 +75,7 @@ namespace VTuber.BattleSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            _inspectable = false;
+            SetInteractive(false);
             _inspectionScale = new Vector3(1.0f, 1.0f, 1.0f);
             _originalSiblingIndex = transform.GetSiblingIndex();
             message = new Dictionary<string, object>();
@@ -91,7 +91,7 @@ namespace VTuber.BattleSystem.UI
         
         public void MoveToDiscardPile(Vector3 targetPosition, float smoothTime)
         {
-            _inspectable = false;
+            SetInteractive(false);
             Tween.Position(transform, targetPosition, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
             Tween.Scale(transform, Vector3.zero, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
         }
@@ -100,6 +100,19 @@ namespace VTuber.BattleSystem.UI
         {
             if(gameObject)
                 Destroy(gameObject);
+        }
+        
+        public void SetCardPlayble(bool isPlayable)
+        {
+            if (!isPlayable)
+            {
+                SetInteractive(false);
+                cardUI.background.color = Color.gray;
+                return;
+            }
+            
+            SetInteractive(true);
+            cardUI.background.color = Color.white;
         }
         
         public void SetInteractive(bool interactive)
@@ -168,7 +181,7 @@ namespace VTuber.BattleSystem.UI
         private void Play()
         {
             Deselect();
-            _inspectable = false;
+            SetInteractive(false);
             card.Play();
         }
         
