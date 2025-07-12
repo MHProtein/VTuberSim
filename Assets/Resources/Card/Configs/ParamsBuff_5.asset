@@ -21,8 +21,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  cardName: AddParamsBuffLayer
-  description: AddParamsBuff 5 Layers
+  cardName: AddParamsBuffTurns
+  description: AddParamsBuff 5 Turns
   cardType: 
   cardTags: []
   rarity: 0
@@ -30,6 +30,5 @@ MonoBehaviour:
   facade: {fileID: 0}
   cost: 10
   isExaust: 0
-  buffs: []
   effects:
-  - {fileID: 11400000, guid: fb43de298eaf48248a19cc474a5771c2, type: 2}
+  - {fileID: 11400000, guid: 28d328faae6d1e948ab3a8ae2cb6e37d, type: 2}

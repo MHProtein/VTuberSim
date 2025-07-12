@@ -24,7 +24,6 @@ namespace VTuber.BattleSystem.Card
         public int Cost => _configuration.cost;
         public Sprite Background => _configuration.background;
         public Sprite Facade => _configuration.facade;
-        public List<VBuffConfiguration> Buffs => _configuration.buffs;
         public List<VEffectConfiguration> Effects => _configuration.effects;
         public VCardRarity Rarity => _configuration.rarity;
         
@@ -43,7 +42,6 @@ namespace VTuber.BattleSystem.Card
             Dictionary<string, object> message = new Dictionary<string, object>()
             {
                 { "Card", this },
-                { "Buffs", _configuration.buffs },
                 { "Effects", _configuration.effects },
                 { "Cost", _configuration.cost }
             };

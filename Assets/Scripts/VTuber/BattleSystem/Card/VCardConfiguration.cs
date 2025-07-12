@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
@@ -23,7 +22,6 @@ namespace VTuber.BattleSystem.Card
         public int cost;
         public bool isExaust = false;
 
-        public List<VBuffConfiguration> buffs;
         public List<VEffectConfiguration> effects;
 
 

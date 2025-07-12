@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -10,41 +11,36 @@ using VTuber.Core.TypeSerialization;
 
 namespace VTuber.BattleSystem.Buff
 {
-    public enum BuffTemporalType
+    public enum BuffType
     {
         Permanent,
         Persistent,
     }
     public class VBuffConfiguration : VScriptableObject
     {
-        [StringToEnum("Buffs")] public string buffName;
+        public int buffId;
+        public string buffName;
         public Sprite icon;
-        public BuffTemporalType buffTemporalType;
-        [ShowIf("IsBuffPermanent")] public int layer = 1;
-        [ShowIf("IsBuffPersistent")] public int duration = -1;
-        [ShowIf("IsBuffPersistent")] public bool stackable = true;
-        [StringToEnum("BattleAttributes")] public string battleAttributeToApplyName;
+        [FormerlySerializedAs("buffTemporalType")] public BuffType buffType;
+        public bool stackable = true;
 
         public VRootEventKey whenToApply;
         
         public List<VEffectConfiguration> effects;
-        
-        protected Type buffType;
 
         public VBuff CreateBuff()
         {
             return new VBuff(this);
         }
-     
         
         public bool IsBuffPersistent()
         {
-            return buffTemporalType == BuffTemporalType.Persistent;
+            return buffType == BuffType.Persistent;
         }
         
         public bool IsBuffPermanent()
         {
-            return buffTemporalType == BuffTemporalType.Permanent;
+            return buffType == BuffType.Permanent;
         }
     }
 }

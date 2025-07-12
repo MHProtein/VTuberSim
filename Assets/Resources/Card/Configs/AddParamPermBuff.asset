@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0195a876e38447fd8b70ea3899238cc6, type: 3}
-  m_Name: EAddParamBuffLayer_5
+  m_Script: {fileID: 11500000, guid: c844b88d14584325a50f3164ddc22e72, type: 3}
+  m_Name: AddParamPermBuff
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,8 +21,14 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  effectName: AddParamsBuff_5
-  description: AddParamsBuff 5 layers
-  conditions: []
-  buffName: BAddParams
-  addValue: 5
+  cardName: AddParamPermBuff
+  description: AddParamBuff Perm
+  cardType: 
+  cardTags: []
+  rarity: 0
+  background: {fileID: 0}
+  facade: {fileID: 0}
+  cost: 10
+  isExaust: 0
+  effects:
+  - {fileID: 11400000, guid: 0d2ff1976814d3c4d8118df23591e16c, type: 2}

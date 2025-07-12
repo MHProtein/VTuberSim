@@ -8,14 +8,14 @@ namespace VTuber.BattleSystem.Effect.Conditions
 {
     public class VBuffLayerCondition : VEffectCondition
     {
-        [StringToEnum("Buffs")] public string buffName;
+        public int buffId;
         public int layerCount;
         
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
-            if (battle.BuffManager.TryGetBuff(buffName, out var buff))
+            if (battle.BuffManager.TryGetBuff(buffId, out var buff))
             {
-                if (buff.Layer > layerCount)
+                if (buff.value > layerCount)
                     return true;
             }
 

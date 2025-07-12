@@ -2,8 +2,6 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-using VTuber.BattleSystem.Buff;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -97,18 +95,14 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBuffAdded(Dictionary<string, object> messagedict)
         {
-            VBuff buff = messagedict["Buff"] as VBuff;
-            if (buff is null)
-                return;
-            
             _isFromCard = messagedict["IsFromCard"] as bool? ?? false;
             _shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
 
-            VBuffUI buffUI = new VBuffUI(Instantiate<GameObject>(buffCellPrefab), buff.IsPermanent, buff.GetBuffName());
+            VBuffUI buffUI = new VBuffUI(Instantiate<GameObject>(buffCellPrefab), (bool)messagedict["IsPermanent"], (string)messagedict["BuffName"]);
             buffUI.gameObject.transform.SetParent(transform);
             buffUI.gameObject.transform.localScale = Vector3.zero;
-            buffUI.SetText(buff.IsPermanent ? buff.Layer : buff.Duration);
-            _buffUIs.Add(buff.Id, buffUI);
+            buffUI.SetText((int)messagedict["Value"]);
+            _buffUIs.Add((int)messagedict["Id"], buffUI);
 
             Tween.Scale(buffUI.gameObject.transform, Vector3.one, 0.5f).OnComplete(OnMovedToSlot);
             _buffUIToSetParent = buffUI;

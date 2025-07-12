@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896851c42cd34bdc83961715806e9d7b, type: 3}
-  m_Name: BAddParams_2
+  m_Script: {fileID: 11500000, guid: 0195a876e38447fd8b70ea3899238cc6, type: 3}
+  m_Name: AddBuffReduceStamina_2_5
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,13 +21,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  buffName: BAddParams
-  icon: {fileID: 0}
-  buffTemporalType: 1
-  layer: -1
-  duration: 3
-  stackable: 1
-  battleAttributeToApplyName: BAParameter
-  whenToApply: 4
-  effects:
-  - {fileID: 11400000, guid: cd965168e0479f249acdecefd301dd9c, type: 2}
+  effectName: AddBuffReduceStamina_2_5
+  description: 
+  conditions: []
+  buffConfig: {fileID: 11400000, guid: 957b95d75864ded4dac1081e1479cf08, type: 2}
+  addValue: 5

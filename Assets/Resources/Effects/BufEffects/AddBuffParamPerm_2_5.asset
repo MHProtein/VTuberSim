@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896851c42cd34bdc83961715806e9d7b, type: 3}
-  m_Name: BReduceStaminaPoint_2_5
+  m_Script: {fileID: 11500000, guid: 0195a876e38447fd8b70ea3899238cc6, type: 3}
+  m_Name: AddBuffParamPerm_2_5
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,13 +21,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  buffName: BReduceStaminaConsumption
-  icon: {fileID: 0}
-  buffTemporalType: 1
-  layer: 1
-  duration: 5
-  stackable: 1
-  battleAttributeToApplyName: BAStamina
-  whenToApply: 10
-  effects:
-  - {fileID: 11400000, guid: 59b53a212ca2dcf41954be3e789ea872, type: 2}
+  effectName: AddBuffParamPerm_2_5
+  description: 
+  conditions: []
+  buffConfig: {fileID: 11400000, guid: df8377de82e27ea41898f4a2a91313d0, type: 2}
+  addValue: 5

@@ -16,7 +16,10 @@ namespace VTuber.BattleSystem.Effect
         {
             if (battle.BattleAttributeManager.TryGetAttribute(_configuration.attributeName, out var attribute))
             {
-                attribute.AddTo(_configuration.addValue * layer, isFromCard, shouldApplyTwice);
+                int value = _configuration.addValue;
+                if (_configuration.multiplyByLayer)
+                    value *= layer;
+                attribute.AddTo(value, isFromCard, shouldApplyTwice);
                 VDebug.Log($"Effect{_configuration.effectName} added {_configuration.addValue} to {_configuration.attributeName}. New value: {attribute.Value}");
             }
         }

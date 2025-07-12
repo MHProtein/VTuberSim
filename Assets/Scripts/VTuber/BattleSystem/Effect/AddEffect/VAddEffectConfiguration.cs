@@ -7,6 +7,7 @@ namespace VTuber.BattleSystem.Effect
     {
         [StringToEnum("BattleAttributes")] public string attributeName;
         public int addValue;
+        public bool multiplyByLayer = false;
 
         public override VEffect CreateEffect()
         {
