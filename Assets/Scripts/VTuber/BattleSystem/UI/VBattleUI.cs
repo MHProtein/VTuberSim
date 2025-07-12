@@ -103,6 +103,11 @@ namespace VTuber.BattleSystem.UI
             _displayingCards.Clear();
         }
         
+        public void SkipTurn()
+        {
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnSkipTurnClicked, new Dictionary<string, object>());
+        }
+        
         protected override void Awake()
         {
             base.Awake();
@@ -187,11 +192,7 @@ namespace VTuber.BattleSystem.UI
         {
             
             int redrawCount = _handSlotsCards.Count;
-            for (int i = _handSlotsCards.Count - 1; i >= 0; i--)
-            {
-                DisposeCard(_handSlotsCards[i], false);
-            }
-            _handSlotsCards.Clear();
+            DisposeAllCards();
             StartCoroutine(DelayDrawCards(cardToDisposeTime, redrawCount, shouldPlayTwice));
         }
         
@@ -221,6 +222,15 @@ namespace VTuber.BattleSystem.UI
             RedrawCards(false);
         }
 
+        public void DisposeAllCards()
+        {
+            for (int i = _handSlotsCards.Count - 1; i >= 0; i--)
+            {
+                DisposeCard(_handSlotsCards[i], false);
+            }
+            _handSlotsCards.Clear();
+        }
+        
         private void DisposeCard(VHandCardUI cardUI, bool isUsed = true)
         {
             if(cardUI is null)
@@ -270,15 +280,7 @@ namespace VTuber.BattleSystem.UI
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
-            for (int i = _handSlotsCards.Count - 1; i >= 0; i--)
-            {
-                DisposeCard(_handSlotsCards[i], false);
-            }
-            
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnTurnEndCardDisposed, new Dictionary<string, object>
-            {
-                {"Cards", _handSlotsCards.Select(ui => ui.card)}
-            });
+            DisposeAllCards();
             
             _handSlotsCards.Clear();
             

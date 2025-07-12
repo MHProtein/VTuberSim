@@ -17,13 +17,14 @@ namespace VTuber.BattleSystem.UI
             base.Awake();
 
             key = VRootEventKey.OnPopularityChange;
+            SetFontStyle(popularityText, FontStyles.Bold);
         }
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
             base.OnValueChanged(messagedict);
             int delta = messagedict["Delta"] as int ? ?? 0;
-            popularityText.text = $"Popularity: {messagedict["NewValue"] as int? ?? 0}";
+            popularityText.text = $"热度: {messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             

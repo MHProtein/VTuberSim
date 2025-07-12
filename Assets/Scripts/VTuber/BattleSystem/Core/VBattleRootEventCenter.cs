@@ -40,7 +40,8 @@ namespace VTuber.Core.EventCenter
         
         OnCardMovedToPlayPosition,
         OnEffectAnimationFinished,
-        OnPlayTheSecondTime
+        OnPlayTheSecondTime,
+        OnSkipTurnClicked,
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -49,6 +50,10 @@ namespace VTuber.BattleSystem.UI
                 });
                 isFromCard = false;
             }
+        }
+
+        protected void SetFontStyle(TMP_Text text, FontStyles style)
+        {
         }
 
     }
