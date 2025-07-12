@@ -106,8 +106,6 @@ namespace VTuber.BattleSystem.Core
             
             InitializeTurn();
         }
-
-        
         
         protected override void OnEnable()
         {
@@ -121,6 +119,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardUsed, OnCardUsed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardMovedToPlayPosition, OnCardMovedToPlayPosition);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
         }
 
         protected override void OnDisable()
@@ -135,6 +134,12 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardUsed, OnCardUsed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardMovedToPlayPosition, OnCardMovedToPlayPosition);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
+        }
+        
+        private void OnSkipTurnClicked(Dictionary<string, object> messagedict)
+        {
+            EndTurn();
         }
         
         private void OnPlayTheSecondTime(Dictionary<string, object> messagedict)
