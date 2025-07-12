@@ -17,13 +17,14 @@ namespace VTuber.BattleSystem.UI
             base.Awake();
 
             key = VRootEventKey.OnParameterChange;
+            SetFontStyle(ParameterText, FontStyles.Bold);
         }
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
             base.OnValueChanged(messagedict);
             int delta = messagedict["Delta"] as int ? ?? 0;
-            ParameterText.text = $"Parameter: {messagedict["NewValue"] as int? ?? 0}";
+            ParameterText.text = $"参数: {messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             

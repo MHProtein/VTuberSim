@@ -17,13 +17,14 @@ namespace VTuber.BattleSystem.UI
             base.Awake();
 
             key = VRootEventKey.OnStaminaChange;
+            SetFontStyle(staminaText, FontStyles.Bold);
         }
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
             base.OnValueChanged(messagedict);
             int delta = messagedict["Delta"] as int ? ?? 0;
-            staminaText.text = $"Stamina: {messagedict["NewValue"] as int? ?? 0}";
+            staminaText.text = $"体力: {messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             

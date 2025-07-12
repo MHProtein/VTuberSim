@@ -17,13 +17,14 @@ namespace VTuber.BattleSystem.UI
             base.Awake();
 
             key = VRootEventKey.OnMultiplierChange;
+            SetFontStyle(MultiplierText, FontStyles.Bold);
         }
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
             base.OnValueChanged(messagedict);
             int delta = messagedict["Delta"] as int ? ?? 0;
-            MultiplierText.text = $"Multiplier: {messagedict["NewValue"] as int? ?? 0}";
+            MultiplierText.text = $"倍率: {messagedict["NewValue"] as int? ?? 0}%";
             if(delta == 0)
                 return;
             

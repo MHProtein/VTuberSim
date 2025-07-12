@@ -16,13 +16,14 @@ namespace VTuber.BattleSystem.UI
             base.Awake();
 
             key = VRootEventKey.OnTurnChange;
+            SetFontStyle(turnLeftText, FontStyles.Bold);
         }
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
             base.OnValueChanged(messagedict);
             int delta = messagedict["Delta"] as int? ?? 0;
-            turnLeftText.text = $"TurnLeft: {messagedict["NewValue"] as int? ?? 0}";
+            turnLeftText.text = $"回合: {messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             
