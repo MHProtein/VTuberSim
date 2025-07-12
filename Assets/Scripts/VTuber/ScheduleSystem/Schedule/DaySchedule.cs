@@ -11,20 +11,63 @@ namespace VTuber.ScheduleSystem.Schedule
     {
         private readonly Dictionary<TimeOfDay, ScheduleEvent> _events = new();
 
-        public void SetEvent(TimeOfDay timeOfDay, ScheduleEvent evt)
+        public bool CanScheduleEvent(TimeOfDay startTime, int duration)
         {
-            _events[timeOfDay] = evt;
+            var times = GetTimeSlots(startTime, duration);
+            foreach (var t in times)
+            {
+                if (_events.ContainsKey(t)) return false;
+            }
+            return true;
+        }
+        
+        private class ScheduledSlot
+        {
+            public ScheduleEvent Event;
+            public bool IsPrimarySlot; // 只在第一个时间段执行
+        }
+
+        private readonly Dictionary<TimeOfDay, ScheduledSlot> _slots = new();
+
+        public void SetEvent(TimeOfDay timeOfDay, ScheduleEvent evt, bool isPrimary)
+        {
+            _slots[timeOfDay] = new ScheduledSlot { Event = evt, IsPrimarySlot = isPrimary };
         }
 
         public ScheduleEvent GetEvent(TimeOfDay timeOfDay)
         {
-            _events.TryGetValue(timeOfDay, out var evt);
-            return evt;
+            if (_slots.TryGetValue(timeOfDay, out var slot))
+                return slot?.Event;
+            return null;
         }
 
+        public bool IsPrimary(TimeOfDay timeOfDay)
+        {
+            if (_slots.TryGetValue(timeOfDay, out var slot))
+                return slot?.IsPrimarySlot ?? false;
+            return false;
+        }
+        
         public Dictionary<TimeOfDay, ScheduleEvent> GetAllEvents()
         {
             return new Dictionary<TimeOfDay, ScheduleEvent>(_events);
         }
+
+        private List<TimeOfDay> GetTimeSlots(TimeOfDay start, int duration)
+        {
+            List<TimeOfDay> slots = new();
+            int startInt = (int)start;
+
+            for (int i = 0; i < duration; i++)
+            {
+                int t = startInt + i;
+                if (t > (int)TimeOfDay.Evening)
+                    break; // 超出一天范围
+                slots.Add((TimeOfDay)t);
+            }
+
+            return slots;
+        }
     }
+
 }
