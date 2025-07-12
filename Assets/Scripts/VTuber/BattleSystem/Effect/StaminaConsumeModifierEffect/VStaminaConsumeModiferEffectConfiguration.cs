@@ -20,6 +20,8 @@ namespace VTuber.BattleSystem.Effect.StaminaConsumeModifierEffect
         [ShowIf("@modifierType == VStaminaConsumeModifierType.Points")]
         public int deltaPoints;
         
+        public bool multiplyByLayer = false;
+        
         public override VEffect CreateEffect()
         {
             return new VStaminaConsumeModiferEffect(this);

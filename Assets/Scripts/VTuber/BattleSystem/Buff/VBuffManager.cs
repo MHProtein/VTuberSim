@@ -1,13 +1,91 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
+    public class VBuffItem
+    {
+        public VBuff buff;
+        public int value;
+        public int Id { get; private set; }
+        public int ConfigId => buff.ConfigId;
+        
+        private VBattle _battle;
+        
+        public VBuffItem(VBuff buff, int value)
+        {
+            this.buff = buff;
+            this.value = value;
+        }
+        
+        public bool DecrementDuration()
+        {
+            if (buff.IsPermanent)
+                return false;
+            
+            value -= 1;
+            if (value <= 0)
+                return true;
+            
+            VDebug.Log($"{buff.GetBuffName()} duration decremented to {value}");
+            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            {
+                { "Id", Id },
+                {"Value", value},
+                {"IsFromCard", false},
+                {"ShouldPlayTwice", false}
+            });
+            return false;
+        }
+        
+        public virtual void Stack(int addValue, bool isFromCard, bool shouldPlayTwice)
+        {
+
+            value += addValue;
+            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            {
+                { "Id", Id },
+                {"Value", value},
+                {"IsFromCard", isFromCard},
+                {"ShouldPlayTwice", shouldPlayTwice}
+            });
+        }
+        
+        public void OnBuffAdded(VBattle battle, int id)
+        {
+            Id = id;
+            _battle = battle;
+            VBattleRootEventCenter.Instance.RegisterListener(buff.WhenToApply, ApplyBuff);
+        }
+        
+        public void OnBuffRemoved()
+        {
+            VBattleRootEventCenter.Instance.RemoveListener(buff.WhenToApply, ApplyBuff);
+        }
+        
+        public void ApplyBuff(Dictionary<string, object> message)
+        {
+            if (buff.Effects == null || buff.Effects.Count == 0)
+                return;
+            
+            foreach (var effect in buff.Effects)
+            {
+                if(effect.AreConditionsMet(_battle, message))
+                    effect.ApplyEffect(_battle, value);
+            }
+        }
+        
+    }
+    
     public class VBuffManager
     {
-        private readonly List<VBuff> _buffs = new List<VBuff>();
+        private readonly List<VBuffItem> _buffs = new List<VBuffItem>();
         private VBattle _battle;
         private int _idDistributor = 0;
 
@@ -28,7 +106,7 @@ namespace VTuber.BattleSystem.Buff
 
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
-            var buffsToRemove = new List<VBuff>();
+            var buffsToRemove = new List<VBuffItem>();
             foreach (var buff in _buffs)
             {
                 if (buff.DecrementDuration())
@@ -47,37 +125,30 @@ namespace VTuber.BattleSystem.Buff
                 });
             }
         }
-
-        public void AddBuffs(List<VBuffConfiguration> buffs, bool isFromCard, bool shouldPlayTwice)
-        {
-            if (buffs == null || buffs.Count == 0)
-                return;
-
-            foreach (var buff in buffs)
-            {
-                AddBuff(buff.CreateBuff(), isFromCard, shouldPlayTwice);
-            }
-        }
         
-        public void AddBuff(VBuff buff, bool isFromCard, bool shouldPlayTwice)
+        public void AddBuff(VBuff buff, int value, bool isFromCard, bool shouldPlayTwice)
         {
             if (buff == null || string.IsNullOrEmpty(buff.GetBuffName()))
                 return;
 
-            var existingBuff = _buffs.Find(b => b.GetBuffName() == buff.GetBuffName());
-            if (existingBuff != null)
+            var existingBuff = _buffs.Find(b => b.ConfigId == buff.ConfigId);
+            if (existingBuff != null && buff.IsStackable())
             {
-                existingBuff.Stack(buff, isFromCard, shouldPlayTwice);
+                existingBuff.Stack(value, isFromCard, shouldPlayTwice);
             }
             else
             {
-                _buffs.Add(buff);
-                buff.OnBuffAdded(_battle, _idDistributor++);
+                var buffItem = new VBuffItem(buff, value);
+                _buffs.Add(buffItem);
+                buffItem.OnBuffAdded(_battle, _idDistributor++);
                 VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
-                    { "Buff", buff },
-                    {"IsFromCard",  isFromCard},
-                    {"ShouldPlayTwice", shouldPlayTwice },
+                    { "Id", buffItem.Id },
+                    { "BuffName", buff.GetBuffName()}, 
+                    { "IsPermanent", buff.IsPermanent },
+                    { "Value", value},
+                    { "IsFromCard",  isFromCard},
+                    { "ShouldPlayTwice", shouldPlayTwice },
                 });
             }
         }
@@ -89,29 +160,13 @@ namespace VTuber.BattleSystem.Buff
 
         public List<VBuff> GetAllBuffs()
         {
-            return new List<VBuff>(_buffs);
-        }
-        
-        public bool TryGetBuff(string buffId, out VBuff buff)
-        {
-            buff = _buffs.Find(b => b.GetBuffName() == buffId);
-            return buff != null;
+            return new List<VBuff>(_buffs.Select(buffItem => buffItem.buff));
         }
 
-        public void ModifyBuff(string name, int value, bool isFromCard, bool shouldApplyTwice = false)
+        public bool TryGetBuff(int buffId, out VBuffItem buff)
         {
-            if(TryGetBuff(name, out var buff))
-            {
-                buff.AddLayerOrDuration(value, isFromCard, shouldApplyTwice);
-                VDebug.Log($"Effect {name} applied {value} to buff {buff.GetBuffName()} with ID {buff.Id}");
-                return;
-            }
-            
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnEffectAnimationFinished, new Dictionary<string ,object>()
-            {
-                
-            });
+            buff = _buffs.Find(b => b.ConfigId == buffId);
+            return buff != null;
         }
-        
     }
 }

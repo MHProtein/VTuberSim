@@ -13,7 +13,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {            
-            battle.BuffManager.ModifyBuff(_configuration.buffName, _configuration.addValue * layer, isFromCard, shouldApplyTwice);
+            battle.BuffManager.AddBuff(_configuration.buffConfig.CreateBuff(), _configuration.addValue * layer, isFromCard, shouldApplyTwice);
         }
             
     }

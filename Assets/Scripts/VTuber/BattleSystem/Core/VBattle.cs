@@ -49,7 +49,6 @@ namespace VTuber.BattleSystem.Core
         private bool shouldNextCardPlayTwice = false;
         private bool shouldRedraw = false;
         
-        private List<VBuffConfiguration> _playTwiceBuffConfigurations;
         private List<VEffectConfiguration> _playTwiceEffectConfigurations;
         private Dictionary<string, object> _playTwiceMessageDict;
 
@@ -146,12 +145,9 @@ namespace VTuber.BattleSystem.Core
         {
             shouldNextCardPlayTwice = false;
             
-            if(_playTwiceBuffConfigurations is not null &&
-               _playTwiceEffectConfigurations is not null &&
-               _playTwiceMessageDict is not null)
-                ApplyCardEffectsAndBuffs(_playTwiceBuffConfigurations, _playTwiceEffectConfigurations, _playTwiceMessageDict);
+            if(_playTwiceEffectConfigurations is not null && _playTwiceMessageDict is not null)
+                ApplyCardEffects( _playTwiceEffectConfigurations, _playTwiceMessageDict);
             
-            _playTwiceBuffConfigurations = null;
             _playTwiceEffectConfigurations = null;
             _playTwiceMessageDict = null;
         }
@@ -161,10 +157,9 @@ namespace VTuber.BattleSystem.Core
             var card = messagedict["Card"] as VCard;
             if (card is null)
                 return;
-            var buffs = card.Buffs;
             var effects = card.Effects;
             
-            ApplyCardEffectsAndBuffs(buffs, effects, messagedict);
+            ApplyCardEffects(effects, messagedict);
         }
         
         private void OnCardUsed(Dictionary<string, object> messagedict)
@@ -244,20 +239,16 @@ namespace VTuber.BattleSystem.Core
                 shouldNextCardPlayTwice = false;
         }
 
-        private void ApplyCardEffectsAndBuffs(List<VBuffConfiguration> buffs, List<VEffectConfiguration> effects,
-            Dictionary<string, object> messagedict)
+        private void ApplyCardEffects(List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
         {
             if(effects is null)
                 return;
             
             if (shouldNextCardPlayTwice)
             {
-                _playTwiceBuffConfigurations = buffs;
                 _playTwiceEffectConfigurations = effects;
                 _playTwiceMessageDict = messagedict;
             }
-            
-            _buffManager.AddBuffs(buffs, true, shouldNextCardPlayTwice);
             
             foreach (var effectConfig in effects)
             {
