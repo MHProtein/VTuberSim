@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
@@ -29,7 +31,7 @@ namespace VTuber.BattleSystem.Card
         public List<VEffectConfiguration> Effects => _configuration.effects;
         public VCardRarity Rarity => _configuration.rarity;
         
-        public bool isPlayable;
+        public Action<bool> SetPlayable;
         
         private readonly VCardConfiguration _configuration;
         

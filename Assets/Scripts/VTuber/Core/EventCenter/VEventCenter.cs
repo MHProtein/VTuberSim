@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using VTuber.Core.Foundation;
 
 namespace VTuber.Core.EventCenter
 {
@@ -35,7 +36,7 @@ namespace VTuber.Core.EventCenter
             {
                 if (_delegate == null)
                 {
-                    Debug.LogWarning($"Event with key {key} has no listeners.");
+                    VDebug.LogWarning($"Event with key {key} has no listeners.");
                     return false;
                 }
                 _delegate.DynamicInvoke(args);
@@ -49,7 +50,6 @@ namespace VTuber.Core.EventCenter
         {
             if (m_events.TryGetValue(key, out DelegateType outDelegate))
             {
-                
                 m_events[key] = (DelegateType)Delegate.Combine(outDelegate, @delegate);
             }
             else

@@ -102,14 +102,15 @@ namespace VTuber.BattleSystem.UI
                 Destroy(gameObject);
         }
         
-        public void SetCardUnusable()
+        public void SetCardPlayble(bool isPlayable)
         {
-            SetInteractive(false);
-            cardUI.background.color = Color.gray;
-        }
-        
-        public void SetCardUsable()
-        {
+            if (!isPlayable)
+            {
+                SetInteractive(false);
+                cardUI.background.color = Color.gray;
+                return;
+            }
+            
             SetInteractive(true);
             cardUI.background.color = Color.white;
         }

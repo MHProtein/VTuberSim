@@ -125,7 +125,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnEffectAnimationFinished, OnEffectAnimationFinished);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyBeginDisposeCard, OnEffectAnimationFinished);
         }
 
         protected override void OnDisable()
@@ -134,7 +134,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnDrawCards, OnDrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnEffectAnimationFinished, OnEffectAnimationFinished);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyBeginDisposeCard, OnEffectAnimationFinished);
         }
         
         private void OnEffectAnimationFinished(Dictionary<string, object> messagedict)
@@ -305,12 +305,20 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.index = _handSlotsCards.Count;
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
+                card.SetPlayable = handCardUI.SetCardPlayble;
                 handCardUI.cardUI = cardUI;
                 handCardUI.ToHandSlot(position, rotation, Vector3.one, drawCardToSlotTime);
                 SetHandCardPositionRotation(handCardUI, position.x);
                 handCardUI.SetScale(scale, drawCardToSlotTime, true);
                 _handSlotsCards.Add(handCardUI);
+                
                 yield return new WaitForSeconds(drawCardToSlotTime);
+                
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardMovedToHandSlot,
+                    new Dictionary<string, object>()
+                    {
+                        { "Card", card }
+                    });
             }
             arrangingHandSlots = false;
         }

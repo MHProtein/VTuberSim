@@ -44,7 +44,7 @@ namespace VTuber.BattleSystem.UI
             
             if (isFromCard)
             {
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnEffectAnimationFinished, new Dictionary<string ,object>()
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
                 {
                     
                 });

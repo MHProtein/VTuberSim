@@ -97,6 +97,11 @@ namespace VTuber.BattleSystem.Buff
   
             return value <= 0;
         }
+
+        public bool TestCost(int cost)
+        {
+            return value >= cost;
+        }
     }
 
     
@@ -199,5 +204,15 @@ namespace VTuber.BattleSystem.Buff
                     RemoveBuff(buffItem);
             }
         }
+
+        public bool TestCost(int id, int cost)
+        {
+            if (TryGetBuff(id, out var buffItem))
+            {
+                return buffItem.TestCost(cost);
+            }
+            return false;
+        }
+        
     }
 }
