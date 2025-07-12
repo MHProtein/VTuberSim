@@ -13,75 +13,92 @@ namespace VTuber.BattleSystem.Buff
         public int value;
         public int Id { get; private set; }
         public int ConfigId => buff.ConfigId;
-        
+
         private VBattle _battle;
-        
+
         public VBuffItem(VBuff buff, int value)
         {
             this.buff = buff;
             this.value = value;
         }
-        
+
         public bool DecrementDuration()
         {
             if (buff.IsPermanent)
                 return false;
-            
+
             value -= 1;
             if (value <= 0)
                 return true;
-            
+
             VDebug.Log($"{buff.GetBuffName()} duration decremented to {value}");
-            
+
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
-                {"Value", value},
-                {"IsFromCard", false},
-                {"ShouldPlayTwice", false}
+                { "Value", value },
+                { "IsFromCard", false },
+                { "ShouldPlayTwice", false }
             });
             return false;
         }
-        
+
         public virtual void Stack(int addValue, bool isFromCard, bool shouldPlayTwice)
         {
-
             value += addValue;
-            
+
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
-                {"Value", value},
-                {"IsFromCard", isFromCard},
-                {"ShouldPlayTwice", shouldPlayTwice}
+                { "Value", value },
+                { "IsFromCard", isFromCard },
+                { "ShouldPlayTwice", shouldPlayTwice }
             });
         }
-        
+
         public void OnBuffAdded(VBattle battle, int id)
         {
             Id = id;
             _battle = battle;
             VBattleRootEventCenter.Instance.RegisterListener(buff.WhenToApply, ApplyBuff);
         }
-        
+
         public void OnBuffRemoved()
         {
             VBattleRootEventCenter.Instance.RemoveListener(buff.WhenToApply, ApplyBuff);
         }
-        
+
         public void ApplyBuff(Dictionary<string, object> message)
         {
             if (buff.Effects == null || buff.Effects.Count == 0)
                 return;
-            
+
             foreach (var effect in buff.Effects)
             {
-                if(effect.AreConditionsMet(_battle, message))
+                if (effect.AreConditionsMet(_battle, message))
                     effect.ApplyEffect(_battle, value);
             }
         }
-        
+
+        public bool ApplyCost(int cost)
+        {
+            if (cost <= 0 || value < cost)
+                return false;
+
+            value -= cost;
+            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            {
+                { "Id", Id },
+                { "Value", value },
+                { "IsFromCard", false },
+                { "ShouldPlayTwice", false }
+            });
+  
+            return value <= 0;
+        }
     }
+
     
     public class VBuffManager
     {
@@ -114,16 +131,21 @@ namespace VTuber.BattleSystem.Buff
                     buffsToRemove.Add(buff);
                 }
             }
-            foreach (var buff in buffsToRemove)
+            foreach (var buffItem in buffsToRemove)
             {
-                buff.OnBuffRemoved();
-                _buffs.Remove(buff);
-                            
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffRemoved, new Dictionary<string, object>
-                {
-                    { "Id", buff.Id }
-                });
+                RemoveBuff(buffItem);
             }
+        }
+
+        private void RemoveBuff(VBuffItem buffItem)
+        {
+            buffItem.OnBuffRemoved();
+            _buffs.Remove(buffItem);
+                            
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffRemoved, new Dictionary<string, object>
+            {
+                { "Id", buffItem.Id }
+            });
         }
         
         public void AddBuff(VBuff buff, int value, bool isFromCard, bool shouldPlayTwice)
@@ -167,6 +189,15 @@ namespace VTuber.BattleSystem.Buff
         {
             buff = _buffs.Find(b => b.ConfigId == buffId);
             return buff != null;
+        }
+
+        public void ApplyCost(int id, int cost)
+        {
+            if (TryGetBuff(id, out var buffItem))
+            {
+                if(buffItem.ApplyCost(cost))
+                    RemoveBuff(buffItem);
+            }
         }
     }
 }

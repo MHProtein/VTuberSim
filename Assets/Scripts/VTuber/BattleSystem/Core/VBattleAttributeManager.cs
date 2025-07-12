@@ -92,5 +92,18 @@ namespace VTuber.BattleSystem.Core
             
             stamina.AddTo(-costAfterShield, false);
         }
+
+        // public bool TestCost(int cost)
+        // {
+        //     var stamina = _battleAttributes["BAStamina"] as VBattleStaminaAttribute;
+        //     var shield = _battleAttributes["BAShield"];
+        //     
+        //     int costAfterShield = cost - shield.Value;
+        //     
+        //     if (costAfterShield <= 0)
+        //         return true;
+        //     
+        //     stamina.AddTo(-costAfterShield, false);
+        // }
     }
 }

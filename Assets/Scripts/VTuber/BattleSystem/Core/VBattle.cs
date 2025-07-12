@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
@@ -113,6 +114,9 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
             
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnDrawCards, OnDrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardUsed, OnCardUsed);
@@ -128,12 +132,42 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnDisable();
             _buffManager.OnDisable();
             
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnDrawCards, OnDrawCards);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyTurnBeginDelay, OnNotifyTurnBeginDelay);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardUsed, OnCardUsed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardMovedToPlayPosition, OnCardMovedToPlayPosition);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
+        }
+        
+        private void OnDrawCards(Dictionary<string, object> messagedict)
+        {
+            List<VCard> cards = messagedict["Cards"] as List<VCard>;
+
+            foreach (var card in cards)
+            {
+                switch (card.CostType)
+                {
+                    case CostType.Stamina:
+                        //card.isPlayable = _battleAttributeManager.TestCost(card.Cost);
+                        break;
+                    case CostType.Buff:
+                        break;
+                }
+            }
+        }
+        
+        private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
+        {
+            
+        }
+
+        private void OnBuffAdded(Dictionary<string, object> messagedict)
+        {
+            
         }
         
         private void OnSkipTurnClicked(Dictionary<string, object> messagedict)
@@ -225,8 +259,18 @@ namespace VTuber.BattleSystem.Core
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPreCardApply, messagedict);
-            
-            _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+
+            switch ((CostType)messagedict["CostType"])
+            {
+                case CostType.Stamina:
+                    _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+                    break;
+                case CostType.Buff:
+                    _buffManager.ApplyCost((int)messagedict["CostBuffId"], (int)messagedict["Cost"]);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private void Redraw()

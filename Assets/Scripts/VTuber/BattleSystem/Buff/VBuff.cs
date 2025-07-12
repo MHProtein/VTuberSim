@@ -32,14 +32,6 @@ namespace VTuber.BattleSystem.Buff
             }
             
         }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns>if true then remove</returns>
-
-
- 
 
         public virtual bool IsStackable()
         {

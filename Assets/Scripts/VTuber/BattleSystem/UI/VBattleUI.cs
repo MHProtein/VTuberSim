@@ -268,15 +268,6 @@ namespace VTuber.BattleSystem.UI
                 });
             }
         }
-
-        private void OnDrawCards(Dictionary<string, object> messageDict)
-        {
-            List<VCard> cards = messageDict["Cards"] as List<VCard>;
-            if (cards == null)
-                return;
-            
-            StartCoroutine(DrawCard(cards));
-        }
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
@@ -288,6 +279,15 @@ namespace VTuber.BattleSystem.UI
             {
                 {"DelaySeconds", cardToDisposeTime},
             });
+        }
+        
+        private void OnDrawCards(Dictionary<string, object> messageDict)
+        {
+            List<VCard> cards = messageDict["Cards"] as List<VCard>;
+            if (cards == null)
+                return;
+            
+            StartCoroutine(DrawCard(cards));
         }
 
         private IEnumerator DrawCard(IEnumerable<VCard> cards)

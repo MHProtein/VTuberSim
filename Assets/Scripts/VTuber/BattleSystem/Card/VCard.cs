@@ -21,11 +21,15 @@ namespace VTuber.BattleSystem.Card
         public string CardType => _configuration.cardType;
         public string Description => _configuration.description;
         public List<string> CardTags => _configuration.cardTags;
+        public CostType CostType => _configuration.costType;
+        public int CostCostBuffId => _configuration.costBuffId;
         public int Cost => _configuration.cost;
         public Sprite Background => _configuration.background;
         public Sprite Facade => _configuration.facade;
         public List<VEffectConfiguration> Effects => _configuration.effects;
         public VCardRarity Rarity => _configuration.rarity;
+        
+        public bool isPlayable;
         
         private readonly VCardConfiguration _configuration;
         
