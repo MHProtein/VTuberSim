@@ -28,17 +28,19 @@ namespace VTuber.BattleSystem.Card
         public int Cost => _configuration.cost;
         public Sprite Background => _configuration.background;
         public Sprite Facade => _configuration.facade;
-        public List<VEffectConfiguration> Effects => _configuration.effects;
+        
+        public List<VEffect> Effects;
         public VCardRarity Rarity => _configuration.rarity;
         
         public Action<bool> SetPlayable;
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration, int id)
+        public VCard(VCardConfiguration configuration, int id, List<VEffect> effects)
         {
             _configuration = configuration;
             Id = id;
+            Effects = effects;
         }
 
         public void Play()

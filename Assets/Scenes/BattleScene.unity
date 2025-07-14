@@ -768,16 +768,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _battle: {fileID: 1464773855}
   _battleConfiguration: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}
-  _cardConfigurations:
-  - {fileID: 11400000, guid: 32df7e16971b04a4a8443d79f014fbfe, type: 2}
-  - {fileID: 11400000, guid: 3a29b2fe302b8fa4aa9af4ba96cc1a68, type: 2}
-  - {fileID: 11400000, guid: 90055ba216c28c5479bbe80773ca607b, type: 2}
-  - {fileID: 11400000, guid: c3110d5a6e6ba3542b8668d4e598848c, type: 2}
-  - {fileID: 11400000, guid: bc89de46a1415394d86332e463717c4f, type: 2}
-  - {fileID: 11400000, guid: 3735c21a92f8f3f4983eef8be5809620, type: 2}
-  - {fileID: 11400000, guid: 98e89205181a1b744bfd937c907e21f0, type: 2}
-  - {fileID: 11400000, guid: 447eed768734a6a4a975551ad810768a, type: 2}
-  - {fileID: 11400000, guid: 6ef327fc4b61db54ab8cf33d93b5ddf8, type: 2}
 --- !u!4 &507292049
 Transform:
   m_ObjectHideFlags: 0
@@ -1467,8 +1457,9 @@ GameObject:
   - component: {fileID: 1129613499}
   - component: {fileID: 1129613498}
   - component: {fileID: 1129613497}
+  - component: {fileID: 1129613500}
   m_Layer: 5
-  m_Name: EndTurn
+  m_Name: SkipTurn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1588,6 +1579,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1129613495}
   m_CullTransparentMesh: 1
+--- !u!114 &1129613500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129613495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05756568650f41c58a566afa05eb9904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1216859205
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
-﻿using UnityEngine.Serialization;
+﻿using CsvHelper;
+using UnityEngine.Serialization;
 using VTuber.BattleSystem.Buff;
 using VTuber.Core.StringToEnum;
 
@@ -6,10 +7,16 @@ namespace VTuber.BattleSystem.Effect
 {
     public class VBuffModifyEffectConfiguration : VEffectConfiguration
     { 
-        public VBuffConfiguration buffConfig;
-        
+        public int buffID;
+            
         public int addValue;
-        
+
+        public VBuffModifyEffectConfiguration(CsvReader csv) : base(csv)
+        {
+            buffID = csv.GetField<int>("BuffID");
+            addValue = csv.GetField<int>("BuffDelta");
+        }
+
         public override VEffect CreateEffect()
         {
             return new VBuffModifyEffect(this);

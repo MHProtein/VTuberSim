@@ -1,0 +1,11 @@
+﻿ID,Name,Description,Type,Condition,MultiplyByLayer,AttributeName,AttributeDelta,BuffID,BuffDelta,StaminaModifyType,StaminaDelta
+0,DoublePlay,Play the next card twice,VDoublePlayEffect,,0,,,,,,
+1,AddParams,Add {AttributeDelta} Parameters,VAddEffect,,1,BAParameter,2,,,,
+2,AddParams,Add {AttributeDelta} Parameters,VAddEffect,,1,BAParameter,10,,,,
+3,AddShield,Add {AttributeDelta} Shields,VAddEffect,,1,BAShield,5,,,,
+4,AddTurn,Add {AttributeDelta} Turns,VAddEffect,,0,BATurn,2,,,,
+5,Redraw,Redraw the rest hand pile,VRedrawEffect,,0,,,,,,
+6,ReduceStaminaCost,Reduce Stamina Cost by 2 Points,VStaminaCostModiferEffect,,0,,,,,Points,2
+7,AddBuff_0,AddParamsPerm_2,VBuffModifyEffect,,0,,,0,5,,
+8,AddBuff_1,AddParamsPersist_2,VBuffModifyEffect,,0,,,1,5,,
+9,AddBuff_2,ReduceStaminaPersist_2,VBuffModifyEffect,,0,,,2,5,,

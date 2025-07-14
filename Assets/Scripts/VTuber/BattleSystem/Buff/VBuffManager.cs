@@ -75,7 +75,7 @@ namespace VTuber.BattleSystem.Buff
 
             foreach (var effect in buff.Effects)
             {
-                if (effect.AreConditionsMet(_battle, message))
+                if (effect.CanApply(_battle, message))
                     effect.ApplyEffect(_battle, value);
             }
         }

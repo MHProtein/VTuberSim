@@ -1,0 +1,10 @@
+﻿ID,Name,Description,Rarity,Type,Tag1,Tag2,Tag3,Tag4,Tag5,CostType,CostBuffID,Cost,IsExaust,Effect1,Effect2,Effect3,Effect4_L1,Effect4_L2,Effect5_L1,Effect5_L2
+0,AddParamsPerm,,Common,,,,,,,Stamina,,10,0,7,,,,,,
+1,AddParamsPersist,,Common,,,,,,,Stamina,,10,0,8,,,,,,
+2,AddParams,,Common,,,,,,,Stamina,,10,0,2,,,,,,
+3,AddShield,,Common,,,,,,,Stamina,,2,0,3,,,,,,
+4,PlayTwiceNext,,Common,,,,,,,Stamina,,5,0,0,,,,,,
+5,Redraw,,Common,,,,,,,Stamina,,5,0,5,,,,,,
+6,AddTurn,,Common,,,,,,,Stamina,,5,0,4,,,,,,
+7,ReduceStaminaCost,,Common,,,,,,,Stamina,,5,0,9,,,,,,
+8,CostParamsPerm,,Common,,,,,,,Buff,0,2,0,,,,,,,

@@ -17,7 +17,7 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnChange,
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin,
                 dict => button.interactable = true);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd,
                 dict => button.interactable = false);
