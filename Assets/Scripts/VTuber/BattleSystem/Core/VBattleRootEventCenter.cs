@@ -15,8 +15,8 @@ namespace VTuber.Core.EventCenter
         OnDrawCards,
         OnCardsAddedToDiscardPile,
         OnCardPlayed, //when clicked
-        OnCardBeginDisposal, //when disposal animation begins
         OnPreCardApply, //when card is about to be applied, but not yet
+        OnCardBeginDisposal, //when disposal animation begins
         OnCardUsed, //when disposed
         OnCardDisposed,
         OnTurnEndCardDisposed,

@@ -1,5 +1,6 @@
 ﻿using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -13,7 +14,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {            
-            battle.BuffManager.AddBuff(_configuration.buffConfig.CreateBuff(), _configuration.addValue * layer, isFromCard, shouldApplyTwice);
+            battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_configuration.buffID), _configuration.addValue * layer, isFromCard, shouldApplyTwice);
         }
             
     }

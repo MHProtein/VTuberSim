@@ -16,21 +16,15 @@ namespace VTuber.BattleSystem.Buff
         
         public VRootEventKey WhenToApply => _configuration.whenToApply;
         
-        public int ConfigId => _configuration.buffId;
+        public int ConfigId => _configuration.id;
         
         public bool IsPermanent => _configuration.IsBuffPermanent();
         
         
-        public VBuff(VBuffConfiguration configuration)
+        public VBuff(VBuffConfiguration configuration, List<VEffect> effects)
         {
             _configuration = configuration;
-            _effects = new List<VEffect>();
-            
-            foreach (var effect in _configuration.effects)
-            {
-                _effects.Add(effect.CreateEffect());
-            }
-            
+            _effects = effects;
         }
 
         public virtual bool IsStackable()

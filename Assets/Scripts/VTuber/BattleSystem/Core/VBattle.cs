@@ -12,7 +12,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VBattle : VSingleton<VBattle>
+    public class VBattle : VSingletonMonobehaviour<VBattle>
     {
         private VBattleConfiguration _configuration;
 
@@ -50,7 +50,7 @@ namespace VTuber.BattleSystem.Core
         private bool shouldNextCardPlayTwice = false;
         private bool shouldRedraw = false;
         
-        private List<VEffectConfiguration> _playTwiceEffectConfigurations;
+        private List<VEffect> _playTwiceEffects;
         private Dictionary<string, object> _playTwiceMessageDict;
 
         public void NextCardPlayTwice()
@@ -196,10 +196,10 @@ namespace VTuber.BattleSystem.Core
         {
             shouldNextCardPlayTwice = false;
             
-            if(_playTwiceEffectConfigurations is not null && _playTwiceMessageDict is not null)
-                ApplyCardEffects( _playTwiceEffectConfigurations, _playTwiceMessageDict);
+            if(_playTwiceEffects is not null && _playTwiceMessageDict is not null)
+                ApplyCardEffects( _playTwiceEffects, _playTwiceMessageDict);
             
-            _playTwiceEffectConfigurations = null;
+            _playTwiceEffects = null;
             _playTwiceMessageDict = null;
         }
         
@@ -302,7 +302,7 @@ namespace VTuber.BattleSystem.Core
                 shouldNextCardPlayTwice = false;
         }
 
-        private void ApplyCardEffects(List<VEffectConfiguration> effects, Dictionary<string, object> messagedict)
+        private void ApplyCardEffects(List<VEffect> effects, Dictionary<string, object> messagedict)
         {
             if (effects is null)
             {
@@ -316,15 +316,13 @@ namespace VTuber.BattleSystem.Core
             
             if (shouldNextCardPlayTwice)
             {
-                _playTwiceEffectConfigurations = effects;
+                _playTwiceEffects = effects;
                 _playTwiceMessageDict = messagedict;
             }
             
-            foreach (var effectConfig in effects)
+            foreach (var effect in effects)
             {
-                var effect = effectConfig.CreateEffect();
-                
-                if (!effect.AreConditionsMet(this, messagedict))
+                if (!effect.CanApply(this, messagedict))
                     continue;
                 effect.ApplyEffect(this, 1, true, shouldNextCardPlayTwice);
             }

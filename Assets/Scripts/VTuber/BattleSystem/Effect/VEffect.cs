@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect.Conditions;
 
 namespace VTuber.BattleSystem.Effect
 {
     public class VEffect
     {
         protected VEffectConfiguration _configuration;
+        public VEffectCondition condition;
 
         public VEffect(VEffectConfiguration configuration)
         {
             _configuration = configuration;
+            condition = configuration.condition;
         }
 
         public virtual void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
@@ -17,16 +20,9 @@ namespace VTuber.BattleSystem.Effect
             
         }
 
-        public bool AreConditionsMet(VBattle battle, Dictionary<string, object> message)
+        public bool CanApply(VBattle battle, Dictionary<string, object> message)
         {
-            foreach (var condition in _configuration.conditions)
-            {
-                if (!condition.IsTrue(battle, message))
-                {
-                    return false;
-                }
-            }
-
+            //return condition.IsTrue(battle, message);
             return true;
         }
         

@@ -112,7 +112,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.Awake();
             
-            cardUIPrefab = Resources.Load<GameObject>("Card/Prefabs/card");
+            cardUIPrefab = Resources.Load<GameObject>("Prefabs/UI/Card");
             _handSlotsCards = new List<VHandCardUI>();
             _handSlotsSize = handSlotsContent.rect.size;
             cardToDispose = null;
@@ -279,6 +279,7 @@ namespace VTuber.BattleSystem.UI
             {
                 {"DelaySeconds", cardToDisposeTime},
             });
+            
         }
         
         private void OnDrawCards(Dictionary<string, object> messageDict)

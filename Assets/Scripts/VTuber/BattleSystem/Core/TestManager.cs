@@ -11,23 +11,17 @@ namespace VTuber.BattleSystem.Core
     {
         [SerializeField] private VBattle _battle;
         [SerializeField] private VBattleConfiguration _battleConfiguration;
-        [SerializeField] private List<VCardConfiguration> _cardConfigurations;
         
         private VCardLibrary _cardLibrary;
         
         protected override void Awake()
         {
             base.Awake();
+
+            CardDataLoader loader = new CardDataLoader("Assets\\Resources\\Configurations");
+            
             _cardLibrary = new VCardLibrary();
-
-            foreach (var config in _cardConfigurations)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    _cardLibrary.AddCard(config);
-                }
-            }
-
+            _cardLibrary.AddCards(loader.Load());
             _battle.InitializeBattle(null, _battleConfiguration, _cardLibrary);
         }
 

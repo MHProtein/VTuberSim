@@ -1,4 +1,5 @@
-﻿using UnityEngine.Serialization;
+﻿using CsvHelper;
+using UnityEngine.Serialization;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect
@@ -7,7 +8,12 @@ namespace VTuber.BattleSystem.Effect
     {
         [StringToEnum("BattleAttributes")] public string attributeName;
         public int addValue;
-        public bool multiplyByLayer = false;
+
+        public VAddEffectConfiguration(CsvReader csv) : base(csv)
+        {
+            attributeName = csv.GetField<string>("AttributeName");
+            addValue = csv.GetField<int>("AttributeDelta");
+        }
 
         public override VEffect CreateEffect()
         {
