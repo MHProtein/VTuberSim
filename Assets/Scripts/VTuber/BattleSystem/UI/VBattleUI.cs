@@ -106,8 +106,7 @@ namespace VTuber.BattleSystem.UI
             scrollView.SetActive(false);
             foreach (var card in _displayingCards)
             {
-                if (card)
-                    Destroy(card.gameObject);
+                if (card) Destroy(card.gameObject);
             }
             _displayingCards.Clear();
         }

@@ -304,7 +304,7 @@ namespace VTuber.BattleSystem.Core
 
         private void ApplyCardEffects(List<VEffect> effects, Dictionary<string, object> messagedict)
         {
-            if (effects is null)
+            if (effects is null || effects.Count == 0)
             {
                 VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard,
                     new Dictionary<string, object>()

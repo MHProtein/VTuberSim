@@ -6,26 +6,30 @@ using VTuber.BattleSystem.Card;
 using CsvHelper;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
 namespace VTuber.Character
 {
-    public class CardDataLoader
+    public class BattleResourcesLoader
     {
         private string _cardDataPath;
         private string _effectDataPath;
         private string _buffDataPath;
+        private string _conditionDataPath;
         
-        public CardDataLoader(string path)
+        public BattleResourcesLoader(string path)
         {
             _cardDataPath = Path.Join(path, "Cards.csv");
             _effectDataPath = Path.Join(path, "Effects.csv");
             _buffDataPath = Path.Join(path, "Buffs.csv");
+            _conditionDataPath = Path.Join(path, "Conditions.csv");
         }
 
         public List<VCardConfiguration> Load()
         {
+            LoadConditions();
             LoadEffects();
             LoadBuffs();
             return LoadCards();
@@ -98,6 +102,35 @@ namespace VTuber.Character
             }
 
             VBattleDataManager.Instance.SetBuffConfigurations(buffConfigurations);
+        }
+        
+        
+        private void LoadConditions()
+        {
+            List<VEffectCondition> conditions = new List<VEffectCondition>();
+
+            using (var reader = new StreamReader(_conditionDataPath))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                csv.Read();
+                csv.ReadHeader();
+
+                while (csv.Read())
+                {
+                    Type conditionType = Type.GetType("VTuber.BattleSystem.Effect.Conditions." + csv.GetField<string>("Type"));
+                    
+                    if (conditionType is null)
+                    {
+                        VDebug.LogError($"Effect type {csv.GetField<string>("Type")} not found.");
+                        continue;
+                    }
+                    
+                    VEffectCondition condition = (VEffectCondition)Activator.CreateInstance(conditionType, csv);
+                    conditions.Add(condition);
+                }
+            }
+
+            VBattleDataManager.Instance.SetConditions(conditions);
         }
     }
 }

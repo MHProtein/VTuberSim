@@ -4,6 +4,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect
@@ -24,8 +25,9 @@ namespace VTuber.BattleSystem.Effect
             description = csv.GetField<string>("Description");
             multiplyByLayer = csv.GetField<int>("MultiplyByLayer") == 1;
             
-            //todo: add condition parsing
-            //condition = ;
+            int? conditionId = csv.GetField<int?>("Condition");
+            if(conditionId.HasValue)
+                condition = VBattleDataManager.Instance.GetConditionByID(conditionId.Value);
         }
         
         public virtual VEffect CreateEffect()

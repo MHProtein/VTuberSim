@@ -47,8 +47,8 @@ namespace VTuber.BattleSystem.Card
                 { "Card", this },
                 { "Effects", _configuration.effects },
                 { "Cost", _configuration.cost },
-                {"CostType", CostType},
-                {"CostBuffId", CostBuffId}
+                { "CostType", CostType },
+                { "CostBuffId", CostBuffId }
             };
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }
