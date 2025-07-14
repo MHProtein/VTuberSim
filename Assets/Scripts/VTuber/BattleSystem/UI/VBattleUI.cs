@@ -92,6 +92,15 @@ namespace VTuber.BattleSystem.UI
             ShowCardScroll(VBattle.Instance.CardPilesManager.DiscardPile);
         }
         
+        public void ShowDeck()
+        {
+            ShowCardScroll(VBattle.Instance.CardPilesManager.Deck);
+        }
+
+        public void ShowExaustPile()
+        {
+            ShowCardScroll(VBattle.Instance.CardPilesManager.ExaustPile);
+        }
         public void ShowExit()
         {
             scrollView.SetActive(false);

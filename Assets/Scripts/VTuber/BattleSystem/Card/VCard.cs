@@ -9,12 +9,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Card
 {
-    public enum VCardRarity
-    {
-        Common, //blue
-        Rare,  //purple
-        Epic,  //gold
-    }
+
     public class VCard
     {
         public int Id { get; private set; }
