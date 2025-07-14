@@ -304,7 +304,7 @@ namespace VTuber.BattleSystem.Core
 
         private void ApplyCardEffects(List<VEffect> effects, Dictionary<string, object> messagedict)
         {
-            if (effects is null)
+            if (effects is null || effects.Count == 0)
             {
                 VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard,
                     new Dictionary<string, object>()
@@ -319,12 +319,23 @@ namespace VTuber.BattleSystem.Core
                 _playTwiceEffects = effects;
                 _playTwiceMessageDict = messagedict;
             }
-            
+            bool effectApplied = false;
             foreach (var effect in effects)
             {
                 if (!effect.CanApply(this, messagedict))
                     continue;
+                effectApplied = true;
                 effect.ApplyEffect(this, 1, true, shouldNextCardPlayTwice);
+            }
+
+            if (!effectApplied)
+            {
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard,
+                    new Dictionary<string, object>()
+                    {
+
+                    });
+                return;
             }
             
             if (shouldRedraw)

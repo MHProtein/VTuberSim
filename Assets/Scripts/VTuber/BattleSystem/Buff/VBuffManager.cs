@@ -36,7 +36,9 @@ namespace VTuber.BattleSystem.Buff
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
+                { "BuffId", buff.ConfigId},
                 { "Value", value },
+                { "Delta", -1 },
                 { "IsFromCard", false },
                 { "ShouldPlayTwice", false }
             });
@@ -50,7 +52,9 @@ namespace VTuber.BattleSystem.Buff
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
+                { "BuffId", buff.ConfigId},
                 { "Value", value },
+                { "Delta", addValue},
                 { "IsFromCard", isFromCard },
                 { "ShouldPlayTwice", shouldPlayTwice }
             });
@@ -84,13 +88,15 @@ namespace VTuber.BattleSystem.Buff
         {
             if (cost <= 0 || value < cost)
                 return false;
-
+            
             value -= cost;
             
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
+                { "BuffId", buff.ConfigId},
                 { "Value", value },
+                { "Delta", cost},
                 { "IsFromCard", false },
                 { "ShouldPlayTwice", false }
             });
@@ -171,7 +177,8 @@ namespace VTuber.BattleSystem.Buff
                 VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
                     { "Id", buffItem.Id },
-                    { "BuffName", buff.GetBuffName()}, 
+                    { "BuffId", buff.ConfigId },
+                    { "BuffName", buff.GetBuffName() }, 
                     { "IsPermanent", buff.IsPermanent },
                     { "Value", value},
                     { "IsFromCard",  isFromCard},

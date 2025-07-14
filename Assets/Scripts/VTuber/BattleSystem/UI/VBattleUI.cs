@@ -92,13 +92,21 @@ namespace VTuber.BattleSystem.UI
             ShowCardScroll(VBattle.Instance.CardPilesManager.DiscardPile);
         }
         
+        public void ShowDeck()
+        {
+            ShowCardScroll(VBattle.Instance.CardPilesManager.Deck);
+        }
+
+        public void ShowExaustPile()
+        {
+            ShowCardScroll(VBattle.Instance.CardPilesManager.ExaustPile);
+        }
         public void ShowExit()
         {
             scrollView.SetActive(false);
             foreach (var card in _displayingCards)
             {
-                if (card)
-                    Destroy(card.gameObject);
+                if (card) Destroy(card.gameObject);
             }
             _displayingCards.Clear();
         }

@@ -1,0 +1,86 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "Design_genius(1).moc3",
+		"Textures": [
+			"Design_genius(1).4096/texture_00.png",
+			"Design_genius(1).4096/texture_01.png",
+			"Design_genius(1).4096/texture_02.png"
+		],
+		"Physics": "Design_genius(1).physics3.json",
+		"DisplayInfo": "Design_genius(1).cdi3.json",
+		"Expressions": [
+			{
+				"Name": "expression1",
+				"File": "zs1.exp3.json"
+			},
+			{
+				"Name": "expression2",
+				"File": "zs11.exp3.json"
+			},
+			{
+				"Name": "1",
+				"File": "1.exp3.json"
+			},
+			{
+				"Name": "2",
+				"File": "2.exp3.json"
+			},
+			{
+				"Name": "3",
+				"File": "3.exp3.json"
+			},
+			{
+				"Name": "4",
+				"File": "4.exp3.json"
+			},
+			{
+				"Name": "5",
+				"File": "5.exp3.json"
+			},
+			{
+				"Name": "6",
+				"File": "6.exp3.json"
+			},
+			{
+				"Name": "7",
+				"File": "7.exp3.json"
+			},
+			{
+				"Name": "expression3",
+				"File": "10.exp3.json"
+			},
+			{
+				"Name": "expression5",
+				"File": "12.exp3.json"
+			},
+			{
+				"Name": "expression9",
+				"File": "sy.exp3.json"
+			}
+		],
+		"Motions": {
+			"": [
+				{
+					"File": "idle.motion3.json"
+				}
+			]
+		}
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamEyeLOpen",
+				"ParamEyeROpen"
+			]
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	],
+	"HitAreas": []
+}

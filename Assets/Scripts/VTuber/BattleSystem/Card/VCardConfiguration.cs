@@ -10,11 +10,20 @@ using VTuber.Core.Managers;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Card
-{    public enum CostType
+{   
+    public enum CostType
     {
         Stamina,
         Buff,
     }
+    
+    public enum VCardRarity
+    {
+        Common, //blue
+        Rare,  //purple
+        Epic,  //gold
+    }
+    
     public class VCardConfiguration
     {
         public int id;
