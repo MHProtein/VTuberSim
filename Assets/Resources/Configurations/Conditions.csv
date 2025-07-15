@@ -1,2 +1,2 @@
-﻿ID,Description,Type,OperatorType,AttributeName,TargetValue,TargetDelta
-0,,VAttributeCondition,GreaterThan ,BAStamina,80,
+ID,Description,Type,OperatorType,AttributeName,BuffID,TargetValue,TargetDelta
+0,,VAttributeCondition,GreaterThan ,BAStamina,,80,

@@ -14,8 +14,6 @@ namespace VTuber.BattleSystem.Buff
         public List<VEffect> Effects => _effects;
         private List<VEffect> _effects;
         
-        public VRootEventKey WhenToApply => _configuration.whenToApply;
-        
         public int ConfigId => _configuration.id;
         
         public bool IsPermanent => _configuration.IsBuffPermanent();

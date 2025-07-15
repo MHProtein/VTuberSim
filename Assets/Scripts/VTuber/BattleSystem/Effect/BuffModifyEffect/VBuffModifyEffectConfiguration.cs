@@ -10,6 +10,7 @@ namespace VTuber.BattleSystem.Effect
         public int buffID;
             
         public int addValue;
+        public float addPercentage;
 
         public VBuffModifyEffectConfiguration(CsvReader csv) : base(csv)
         {
