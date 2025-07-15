@@ -8,13 +8,14 @@ namespace VTuber.BattleSystem.Effect
     public class VEffect
     {
         protected VEffectConfiguration _configuration;
-        public VEffectCondition condition;
+        public List<VEffectCondition> conditions;
         public VRootEventKey whenToApply;
+        protected bool _isUpgraded;
 
         public VEffect(VEffectConfiguration configuration)
         {
             _configuration = configuration;
-            condition = configuration.condition;
+            conditions = configuration.conditions;
             whenToApply = configuration.whenToApply;
         }
 
@@ -25,8 +26,27 @@ namespace VTuber.BattleSystem.Effect
 
         public bool CanApply(VBattle battle, Dictionary<string, object> message)
         {
-            //return condition.IsTrue(battle, message);
+            if (conditions == null || conditions.Count == 0)
+                return true;
+
+            foreach (var condition in conditions)
+            {
+                if (!condition.IsTrue(battle, message))
+                {
+                    return false;
+                }
+            }
             return true;
+        }
+        
+        public virtual void Upgrade()
+        {
+            _isUpgraded = true;
+        }
+        
+        public virtual void Downgrade()
+        {
+            _isUpgraded = false;
         }
         
     }

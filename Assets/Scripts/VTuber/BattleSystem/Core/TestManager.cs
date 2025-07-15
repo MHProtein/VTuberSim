@@ -18,7 +18,7 @@ namespace VTuber.BattleSystem.Core
         {
             base.Awake();
 
-            BattleResourcesLoader loader = new BattleResourcesLoader("Assets\\Resources\\Configurations");
+            BattleResourcesLoader loader = new BattleResourcesLoader("Assets\\Resources\\Configurations\\NewCards.xlsx");
             
             _cardLibrary = new VCardLibrary();
             _cardLibrary.AddCards(loader.Load());

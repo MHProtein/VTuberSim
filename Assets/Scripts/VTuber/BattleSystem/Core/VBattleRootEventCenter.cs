@@ -43,6 +43,10 @@ namespace VTuber.Core.EventCenter
         OnNotifyBeginDisposeCard,
         OnPlayTheSecondTime,
         OnSkipTurnClicked,
+        
+        OnRequestPickCardsFromPile,
+        OnBeginPickCardsFromPile,
+        OnCardsPickedFromPile,
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

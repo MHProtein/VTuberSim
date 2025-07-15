@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using CsvHelper;
-using CsvHelper.Configuration.Attributes;
+using Spire.Xls;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
 
@@ -11,12 +10,11 @@ namespace VTuber.BattleSystem.Effect.Conditions
         private string _attributeName;
         private int _targetValue;
 
-        public VAttributeCondition(CsvReader csv) : base(csv)
+        public VAttributeCondition(CellRange row) : base(row)
         {
-            _attributeName = csv.GetField<string>("AttributeName");
-            _targetValue = csv.GetField<int>("TargetValue");
+            _attributeName = row.Columns[VConditionHeaderIndex.NameOrID].Value;
+            _targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
         }
-
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
             if (battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CsvHelper;
+using Spire.Xls;
 using UnityEditor.Sprites;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
@@ -12,10 +12,10 @@ namespace VTuber.BattleSystem.Effect.Conditions
         public int buffId;
         public int targetValue;
 
-        public VBuffLayerCondition(CsvReader csv) : base(csv)
+        public VBuffLayerCondition(CellRange row) : base(row)
         {
-            buffId = csv.GetField<int>("BuffID");
-            targetValue = csv.GetField<int>("TargetValue");
+            buffId = ToInt(row.Columns[VConditionHeaderIndex.NameOrID].Value);
+            targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
         }
 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)

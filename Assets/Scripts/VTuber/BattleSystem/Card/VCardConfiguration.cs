@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CsvHelper;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using Spire.Xls;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Effect;
@@ -24,6 +25,35 @@ namespace VTuber.BattleSystem.Card
         Epic,  //gold
     }
     
+    public class VCardHeaderIndex
+    {
+        public const int Id = 0;
+        public const int Name = 1;
+        public const int Description = 2;
+        public const int Rarity = 3;
+        public const int Type = 4;
+        public const int CostType = 5;
+        public const int CostBuffID = 6;
+        public const int Cost = 7;
+        public const int UpgradedCost = 8;
+        public const int IsExhaust = 9;
+        public const int Effect1 = 10;
+        public const int E1Param = 11;
+        public const int Effect2 = 12;
+        public const int E2Param = 13;
+        public const int Effect3 = 14;
+        public const int E3Param = 15;
+        public const int E3UpgradedParam = 16;
+        public const int Effect4 = 17;
+        public const int E4Param = 18;
+        public const int E4UpgradedParam = 19;
+        public const int NewEffect1 = 20;
+        public const int NE1Param = 21;
+        public const int NewEffect2 = 22;
+        public const int NE2Param = 23;
+    }
+
+    
     public class VCardConfiguration
     {
         public int id;
@@ -32,7 +62,6 @@ namespace VTuber.BattleSystem.Card
         
         public string cardType;
         
-        public List<string> cardTags;
         public VCardRarity rarity;
             
         public Sprite background;
@@ -40,78 +69,88 @@ namespace VTuber.BattleSystem.Card
         
         public CostType costType = CostType.Stamina;
         public int costBuffId;
-        public int cost;
-        public bool isExaust = false;
+        public VUpgradableValue<int> cost;
+        public bool IsExhaust = false;
 
-        public List<int> effects;
-        public Dictionary<int, int> upgradeEffects;
+        public List<VEffect> effects;
+        public List<VEffect> upgradableEffects;
+        public List<VEffect> newEffects;
 
         private static int idDistributor = 0;
+        
+        private bool _isUpgraded = false;
 
-        public VCardConfiguration(CsvReader csv)
+        public VCardConfiguration(CellRange row)
         {
-            cardName = csv.GetField<string>("Name");
-            description = csv.GetField<string>("Description");
-            cardType = csv.GetField<string>("Type");
-            cardTags = new List<string>();
+            effects = new List<VEffect>();
+            upgradableEffects = new List<VEffect>();
+            newEffects = new List<VEffect>();
             
-            for (int i = 0; i < 5; i++)
-            {
-                cardTags.Add(csv.GetField<string>("Tag" + (i + 1)));
-            }
             
-            costType = Enum.Parse<CostType>(csv.GetField<string>("CostType"));
+            id = Convert.ToInt32(row.Columns[VCardHeaderIndex.Id].Value);
+            cardName = row.Columns[VCardHeaderIndex.Name].Value;
+            description = row.Columns[VCardHeaderIndex.Description].Value;
+            rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value);
+            cardType = row.Columns[VCardHeaderIndex.Type].Value;
+            
+            costType = Enum.Parse<CostType>(row.Columns[VCardHeaderIndex.CostType].Value);
+            
             if(costType == CostType.Buff)
-                costBuffId = csv.GetField<int>("CostBuffID");
-            cost = csv.GetField<int>("Cost");
-            isExaust = csv.GetField<int>("IsExaust") == 1;
-            rarity = Enum.Parse<VCardRarity>(csv.GetField<string>("Rarity"));
+                costBuffId = Convert.ToInt32(row.Columns[VCardHeaderIndex.Id].Value);
+            
+            cost = new VUpgradableValue<int>(Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value),
+                Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value));
+            
+            IsExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
             
             //background = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Background"));
             //facade = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Facade"));
             
-            effects = new List<int>();
-            for (int i = 0; i < 3; i++)
+            for (int i = VCardHeaderIndex.Effect1; i <= VCardHeaderIndex.E2Param; i += 2)
             {
-                int? effect = csv.GetField<int?>("Effect" + (i + 1));
-                if (effect.HasValue)
+                var effectIDStr = row.Columns[i].Value;
+                if(effectIDStr.IsNullOrWhitespace())
+                    continue;
+                int effectID = Convert.ToInt32(effectIDStr);
+
+                if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
                 {
-                    effects.Add(effect.Value);
+                    string parameter = row.Columns[i + 1].Value;
+                    effects.Add(config.CreateEffect(parameter, parameter));
                 }
             }
-
-            upgradeEffects = new Dictionary<int, int>();
-            for (int i = 4; i < 6; i++)
+            for (int i = VCardHeaderIndex.Effect3; i < VCardHeaderIndex.E4UpgradedParam; i += 3)
             {
-                int? effect = csv.GetField<int?>($"Effect{i}_L1");
-                if (effect.HasValue)
+                var effectIDStr = row.Columns[i].Value;
+                if(effectIDStr.IsNullOrWhitespace())
+                    continue;
+                int effectID = Convert.ToInt32(effectIDStr);
+
+                if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
                 {
-                    upgradeEffects.Add(effect.Value, csv.GetField<int>($"Effect{i}_L2"));
+                    string parameter = row.Columns[i + 1].Value;
+                    string upgradedParameter = row.Columns[i + 2].Value;
+                    upgradableEffects.Add(config.CreateEffect(parameter, upgradedParameter));
+                }
+            }
+            
+            for (int i = VCardHeaderIndex.NewEffect1; i < VCardHeaderIndex.NE2Param; i += 2)
+            {
+                var effectIDStr = row.Columns[i].Value;
+                if(effectIDStr.IsNullOrWhitespace())
+                    continue;
+                int effectID = Convert.ToInt32(effectIDStr);
+
+                if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
+                {
+                    newEffects.Add(config.CreateEffect(string.Empty, string.Empty));
                 }
             }
         }
         
         public VCard CreateCard()
         {
-            return new VCard(this, idDistributor++, CreateEffects());
-        }
-        
-        protected List<VEffect> CreateEffects()
-        {
-            List<VEffect> effectList = new List<VEffect>();
-            foreach (var effectId in effects)
-            {
-
-                if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effectId, out var config))
-                {
-                    effectList.Add(config.CreateEffect());
-                }
-                else
-                {
-                    VDebug.LogError($"Effect with ID {effectId} not found for card {cardName}");
-                }
-            }
-            return effectList;
+            return new VCard(this, idDistributor++, effects);
         }
     }
 }

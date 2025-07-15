@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>FreeSpire.XLS</id>
+    <version>14.2.0</version>
+    <title>Free Spire.XLS for .NET</title>
+    <authors>E-iceblue</authors>
+    <owners>E-iceblue</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">license.txt</license>
+    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
+    <projectUrl>https://www.e-iceblue.com/Introduce/free-xls-component.html</projectUrl>
+    <iconUrl>http://www.e-iceblue.com/images/product_logo/product_buy/xlsnetfree.png</iconUrl>
+    <description>Free Spire.XLS for .NET is a standalone Excel .NET library and does not depend on Microsoft Office Excel. It supports both for the old Excel 97-2003 format (.xls) and for the new Excel 2007 and Excel 2010 (.xlsx, .xlsm).
+
+Powerful &amp; High Quality Excel File Conversion
+Free Spire.XLS for .NET has powerful conversion ability and it enables converting Excel files to most common and popular formats. Convert Excel to HTML/XML
+Convert XML to Excel
+Convert Excel to Text
+Convert Excel to PDF
+
+Create Excel Report from Comprehensive Workbook Designer
+Free Spire.XLS for .NET enables developers to generate Excel workbook from scratch, or load a workbook from either folder or file stream. Developers can also save it to file, file stream or web response. Free Spire.XLS for .NET offers a wide range of security features including Excel encryption/decryption, cells hide/unhide, and worksheets lock/unlock. 
+
+Freely operate worksheet
+Free Spire.XLS for .NET enables developers to create, add, delete, rename, edit and move worksheet in either C#, VB.NET or ASP.NET. Developers can also copy, move, and consolidate across worksheets with full contents. This professional Excel .NET class library also embeds many flexible options for displaying worksheets, such as page breaks, zoom-setting, freeze panes, headers/footers, print paper size and print area etc. 
+
+Free version is limited to 5 sheets per workbook and 200 rows per sheet. This limitation is enforced during reading or writing XLS or PDF files. From Free Spire.XLS v7.8, there is no any limitation when loading and saving .xlsx file format. When converting Excel files to PDF files, you can only get the first 3 pages of PDF file.</description>
+    <summary>A standalone C#/VB.NET component, Free Spire.XLS for .NET enables developers to create, manage and manipulate Excel files on any .NET applications( C#, VB.NET, ASP.NET, .NET Core).</summary>
+    <releaseNotes>The most release version of Free Spire.XLS relased.</releaseNotes>
+    <copyright>Copyright © 2024 e-iceblue. All Rights Reserved.</copyright>
+    <language>en-US</language>
+    <tags>.NET Excel, C# VB.NET ASP.NET free controls, .xlsb, .xlsx, .xlsm, .ods,xls-to-pdf, xlsx-to-pdf,signature, netcore, .net standard, Visual-Studio, VisualStudio, pdf-to-excel, merge-excel, worksheet, C#, VB.NET,library</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.8" />
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="SkiaSharp" version="1.68.0" />
+        <dependency id="System.Text.Encoding.CodePages" version="4.5.0" />
+        <dependency id="System.Security.Cryptography.Xml" version="4.5.0" />
+        <dependency id="System.Security.Permissions" version="4.5.0" />
+        <dependency id="System.Security.Cryptography.Pkcs" version="4.5.0" />
+        <dependency id="System.Buffers" version="4.5.1" />
+        <dependency id="System.Memory" version="4.5.5" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

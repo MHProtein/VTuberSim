@@ -1,6 +1,6 @@
 ﻿using System;
-using CsvHelper;
 using Sirenix.OdinInspector;
+using Spire.Xls;
 using UnityEngine;
 
 namespace VTuber.BattleSystem.Effect
@@ -14,24 +14,14 @@ namespace VTuber.BattleSystem.Effect
     {
         public VStaminaCostModifierType modifierType;
         
-        [Tooltip("Rate += Rate + Delta")]
-        [ShowIf("@modifierType == VStaminaConsumeModifierType.Rate")]
-        public float deltaRate;
-        
-        [Tooltip("Points += Points + Delta")]
-        [ShowIf("@modifierType == VStaminaConsumeModifierType.Points")]
-        public int deltaPoints;
-        
-        public VStaminaCostModiferEffectConfiguration(CsvReader csv) : base(csv)
+        public VStaminaCostModiferEffectConfiguration(CellRange row) : base(row)
         {
-            modifierType = Enum.Parse<VStaminaCostModifierType>(csv.GetField<string>("StaminaModifyType"));
-            deltaRate = csv.GetField<float>("StaminaDelta");
-            deltaPoints = csv.GetField<int>("StaminaDelta");
+            modifierType = Enum.Parse<VStaminaCostModifierType>(row.Columns[VEffectHeaderIndex.Parameter].Value);
         }
 
-        public override VEffect CreateEffect()
+        public override VEffect CreateEffect(string parameter, string upgradedParameter) 
         {
-            return new VStaminaCostModiferEffect(this);
+            return new VStaminaCostModiferEffect(this, parameter, upgradedParameter);
         }
     }
 }

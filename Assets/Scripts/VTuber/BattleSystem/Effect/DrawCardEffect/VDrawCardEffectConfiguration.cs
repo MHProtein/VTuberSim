@@ -1,19 +1,17 @@
-﻿using CsvHelper;
+﻿using Spire.Xls;
 using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Effect
 {
     public class VDrawCardEffectConfiguration : VEffectConfiguration
     {
-        public int drawCardCount;
-        public VDrawCardEffectConfiguration(CsvReader csv) : base(csv)
+        public VDrawCardEffectConfiguration(CellRange row) : base(row)
         {
-            drawCardCount = csv.GetField<int>("DrawCount");
         }
 
-        public override VEffect CreateEffect()
+        public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            return new VDrawCardEffect(this);
+            return new VDrawCardEffect(this, parameter, upgradedParameter);
         }
     }
 }

@@ -32,5 +32,10 @@ namespace VTuber.BattleSystem.UI
             cost.text = card.Cost.ToString();
             Card = card;
         }
+
+        public void SetBackgroundColor(Color color)
+        {
+            background.color = color;
+        }
     }
 }

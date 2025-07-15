@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -21,8 +23,8 @@ namespace VTuber.BattleSystem.Core
         public List<VCard> HandPile => _handPile;
         private List<VCard> _handPile = new List<VCard>();
         
-        public List<VCard> ExaustPile => _exaustPile;
-        private List<VCard> _exaustPile = new List<VCard>();
+        public List<VCard> ExhaustPile => _exhaustPile;
+        private List<VCard> _exhaustPile = new List<VCard>();
         
         private int _handSize;
         private int _maxHandSize;
@@ -33,7 +35,7 @@ namespace VTuber.BattleSystem.Core
             _drawPile = new List<VCard>();
             _discardPile = new List<VCard>();
             _handPile = new List<VCard>();
-            _exaustPile = new List<VCard>();
+            _exhaustPile = new List<VCard>();
             _handSize = handSize;
             _maxHandSize = maxHandSize;
             
@@ -48,6 +50,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnRemoveCardFromHandPile);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardBeginDisposal, OnRemoveCardFromHandPile);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
         }
 
         public void OnDisable()
@@ -57,8 +60,56 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardDisposed, OnCardDisposed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnRemoveCardFromHandPile);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardBeginDisposal, OnRemoveCardFromHandPile);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
         }
 
+        private void OnCardsPickedFromPile(Dictionary<string, object> messagedict)
+        {
+            VCardPileType cardPileType = (VCardPileType)messagedict["CardPileType"];
+            List<VCard> pickedCards = messagedict["PickedCards"] as List<VCard>;
+            
+            if (pickedCards == null || pickedCards.Count == 0)
+                return;
+
+            List<VCard> pile = null;
+            
+            switch (cardPileType)
+            {
+                case VCardPileType.DrawPile:
+                    pile = _drawPile;
+                    break;
+                case VCardPileType.Discard:
+                    pile = _discardPile;
+                    break;
+                case VCardPileType.Exhaust:
+                    pile = _exhaustPile;
+                    break;
+            }
+            
+            RemoveCardsFromPile(pile, pickedCards);
+            _handPile.AddRange(pickedCards);
+        }
+
+        private void RemoveCardsFromPile(List<VCard> pile, List<VCard> cardsToRemove)
+        {
+            foreach (var card in cardsToRemove)
+            {
+                RemoveCardFrom(pile, card);
+            }
+        }
+        
+        private void RemoveCardFrom(List<VCard> pile, VCard card)
+        {
+            for (int i = pile.Count - 1; i >= 0; i--)
+            {
+                if(pile[i] == card)
+                {
+                    pile.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+        
         private void OnRemoveCardFromHandPile(Dictionary<string, object> messagedict)
         {
             RemoveFromHandPile(messagedict["Card"] as VCard);
@@ -132,7 +183,7 @@ namespace VTuber.BattleSystem.Core
             _drawPile.Clear();
             _discardPile.Clear();
             _handPile.Clear();
-            _exaustPile.Clear();
+            _exhaustPile.Clear();
         }
         
         private void RemoveFromHandPile(VCard card)
@@ -155,8 +206,8 @@ namespace VTuber.BattleSystem.Core
             if(card is null)
                 return;
             
-            if(card.IsExaust)
-                _exaustPile.Add(card);
+            if(card.IsExhaust)
+                _exhaustPile.Add(card);
             else
                 _discardPile.Add(card);
         }

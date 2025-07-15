@@ -1,15 +1,15 @@
-﻿using CsvHelper;
-using Sirenix.Utilities;
+﻿using Sirenix.Utilities;
+using Spire.Xls;
 
 namespace VTuber.BattleSystem.Effect
 {
     public class VDoublePlayEffectConfiguration : VEffectConfiguration
     {
-        public VDoublePlayEffectConfiguration(CsvReader csv) : base(csv)
+        public VDoublePlayEffectConfiguration(CellRange row) : base(row)
         {
         }
 
-        public override VEffect CreateEffect()
+        public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
             return new VDoublePlayEffect(this);
         }

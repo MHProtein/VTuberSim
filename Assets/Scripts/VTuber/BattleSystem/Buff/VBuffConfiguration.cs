@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using CsvHelper;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using Spire.Xls;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Effect;
@@ -18,6 +19,21 @@ namespace VTuber.BattleSystem.Buff
         Permanent,
         Persistent,
     }
+    
+    public class VBuffHeaderIndex
+    {
+        public const int Id = 0;
+        public const int Name = 1;
+        public const int BuffType = 2;
+        public const int Stackable = 3;
+        public const int Effect1 = 4;
+        public const int E1Param = 5;
+        public const int Effect2 = 6;
+        public const int E2Param = 7;
+        public const int Effect3 = 8;
+        public const int E3Param = 9;
+    }
+    
     public class VBuffConfiguration
     {
         public int id;
@@ -26,48 +42,34 @@ namespace VTuber.BattleSystem.Buff
         public BuffType buffType;
         public bool stackable = true;
         
-        public List<int> effects;
+        public List<VEffect> effects;
 
-        public VBuffConfiguration(CsvReader csv)
+        public VBuffConfiguration(CellRange row)
         {
-            id = csv.GetField<int>("ID");
-            buffName = csv.GetField<string>("Name");
+            id = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Id].Value);
+            buffName = row.Columns[VBuffHeaderIndex.Name].Value;
             //icon = csv.GetField<string>("Icon");
-            buffType = Enum.Parse<BuffType>(csv.GetField<string>("BuffType"));
-            stackable = csv.GetField<int>("Stackable") == 1;
-
-            effects = new List<int>();
-            for (int i = 0; i < 3; i++)
-            {
-                int? effect = csv.GetField<int?>("Effect" + (i + 1));
-                if (effect.HasValue)
+            buffType = Enum.Parse<BuffType>(row.Columns[VBuffHeaderIndex.BuffType].Value);
+            stackable =  Convert.ToInt32(row.Columns[VBuffHeaderIndex.Stackable].Value) == 1;
+            effects = new List<VEffect>();
+            for (int i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E3Param; i += 2)
+            {               
+                var effectIDStr = row.Columns[i].Value;
+                if(effectIDStr.IsNullOrWhitespace())
+                    continue;
+                int effect = Convert.ToInt32(effectIDStr);
+                
+                if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effect, out var config))
                 {
-                    effects.Add(effect.Value);
+                    string parameter = row.Columns[i + 1].Value;
+                    effects.Add(config.CreateEffect(parameter, parameter));
                 }
             }
         }
 
         public VBuff CreateBuff()
         {
-            return new VBuff(this, CreateEffects());
-        }
-        
-        protected List<VEffect> CreateEffects()
-        {
-            List<VEffect> effectList = new List<VEffect>();
-            foreach (var effectId in effects)
-            {
-
-                if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effectId, out var config))
-                {
-                    effectList.Add(config.CreateEffect());
-                }
-                else
-                {
-                    VDebug.LogError($"Effect with ID {effectId} not found for buff {buffName}");
-                }
-            }
-            return effectList;
+            return new VBuff(this, effects);
         }
         
         public bool IsBuffPersistent()
