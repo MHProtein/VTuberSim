@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -16,11 +17,17 @@ namespace VTuber.BattleSystem.UI
     public class VBattleUI : VUIBehaviour
     {
         [SerializeField] private Transform content;
-        [SerializeField] private GameObject scrollView;
+        [FormerlySerializedAs("scrollView")] [SerializeField] private GameObject cardPileScrollView;
         [SerializeField] private Transform discardPileTransform;
         [SerializeField] private Transform drawPileTransform;
         
         [FormerlySerializedAs("cardSlots")] [SerializeField] private RectTransform handSlotsContent;
+        
+        [Space(3)]
+        [Header("PickCard Menu")]
+        [SerializeField] private GameObject pickCardMenuScroll;
+        private VPickCardMenu _pickCardMenu;
+        
         
         [Space(3)]
         [Header("Animations")]
@@ -73,14 +80,53 @@ namespace VTuber.BattleSystem.UI
                 ui.selected = value;
             }
         }
-        
-        private void ShowCardScroll(IEnumerable<VCard> cards)
+
+        public enum CardPileType
         {
-            scrollView.SetActive(true);
+            DrawPile,
+            Discard,
+            Deck,
+            Exhaust
+        }
+        
+        private void ShowPickCardMenu(CardPileType cardPileType, int count)
+        {
+            List<VCard> cards;
+
+            switch (cardPileType)
+            {
+                case CardPileType.DrawPile:
+                    cards = VBattle.Instance.CardPilesManager.DrawPile.ToList();
+                    break;
+                case CardPileType.Discard:
+                    cards = VBattle.Instance.CardPilesManager.DiscardPile.ToList();
+                    break;
+                case CardPileType.Deck:
+                    cards = VBattle.Instance.CardPilesManager.Deck.ToList();
+                    break;
+                case CardPileType.Exhaust:
+                    cards = VBattle.Instance.CardPilesManager.ExaustPile.ToList();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(cardPileType), cardPileType, null);
+            }
+
+            var cardUIs = ShowCardScroll(cards);
+            
+            pickCardMenuScroll.SetActive(true);
+            _pickCardMenu.BeginPickCard(cardUIs);
+        }
+        
+        private List<VCardUI> ShowCardScroll(IEnumerable<VCard> cards)
+        {
+            List<VCardUI> cardUIs = new List<VCardUI>();
+            cardPileScrollView.SetActive(true);
             foreach (var card in cards)
             {
-                _displayingCards.Add(SpawnCardUI(card, content));
+                cardUIs.Add(SpawnCardUI(card, content));
             }
+
+            return cardUIs;
         }
         
         public void ShowDrawPile()
@@ -103,7 +149,7 @@ namespace VTuber.BattleSystem.UI
         }
         public void ShowExit()
         {
-            scrollView.SetActive(false);
+            cardPileScrollView.SetActive(false);
             foreach (var card in _displayingCards)
             {
                 if (card) Destroy(card.gameObject);
@@ -124,6 +170,7 @@ namespace VTuber.BattleSystem.UI
             _handSlotsCards = new List<VHandCardUI>();
             _handSlotsSize = handSlotsContent.rect.size;
             cardToDispose = null;
+            _pickCardMenu = pickCardMenuScroll.GetComponent<VPickCardMenu>();
         }
 
         protected override void OnEnable()
@@ -210,7 +257,9 @@ namespace VTuber.BattleSystem.UI
             
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRequestDrawCards, new Dictionary<string, object>
             {
-                {"DrawCount", drawCount}
+                {"DrawCount", drawCount}, 
+                {"IsFromCard", false}, 
+                {"ShouldPlayTwice", shouldPlayTwice}
             });
             if (shouldPlayTwice)
             {
@@ -296,10 +345,10 @@ namespace VTuber.BattleSystem.UI
             if (cards == null)
                 return;
             
-            StartCoroutine(DrawCard(cards));
+            StartCoroutine(DrawCard(cards, (bool)messageDict["IsFromCard"], (bool)messageDict["ShouldPlayTwice"]));
         }
 
-        private IEnumerator DrawCard(IEnumerable<VCard> cards)
+        private IEnumerator DrawCard(IEnumerable<VCard> cards, bool isFromCard, bool shouldPlayTwice)
         {
             arrangingHandSlots = true;
             foreach (var card in cards)
@@ -330,6 +379,21 @@ namespace VTuber.BattleSystem.UI
                     });
             }
             arrangingHandSlots = false;
+            
+            if (shouldPlayTwice)
+            {
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPlayTheSecondTime, new Dictionary<string ,object>()
+                {
+                    
+                });
+            }
+            else if (isFromCard)
+            {
+                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
+                {
+                    
+                });
+            }
         }
         
         private (Vector3 position, Vector3 rotation, Vector3 scale) ReserveSpaceForNewCard()

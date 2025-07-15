@@ -1,4 +1,4 @@
-﻿ID,Name,BuffType,Stackable,WhenToApply,Effect1,Effect2,Effect3
-0,AddParamsPerm_2,Permanent,1,OnTurnResolution,1,,
-1,AddParamsPersist_2,Persistent,1,OnTurnResolution,1,,
-2,ReduceStaminaPersist_2,Persistent,1,OnPreCardApply,6,,
+ID,Name,BuffType,Stackable,Effect1,Effect2,Effect3
+0,AddParamsPerm_2,Permanent,1,1,,
+1,AddParamsPersist_2,Persistent,1,1,,
+2,ReduceStaminaPersist_2,Persistent,1,6,,

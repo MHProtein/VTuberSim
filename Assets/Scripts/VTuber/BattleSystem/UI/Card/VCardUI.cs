@@ -8,7 +8,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VCardUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+    public class VCardUI : VUIBehaviour
     {
         [FormerlySerializedAs("Background")] [SerializeField] public Image background;
         [FormerlySerializedAs("Facade")] [SerializeField] public Image facade;
@@ -16,21 +16,8 @@ namespace VTuber.BattleSystem.UI
         [FormerlySerializedAs("Name")] [SerializeField] public TMP_Text name;
         [FormerlySerializedAs("Description")] [SerializeField] public TMP_Text description;
         [SerializeField] public TMP_Text cost;
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            
-        }
+        
+        public VCard Card { get; private set; }
         
         public void SetCard(VCard card)
         {
@@ -43,6 +30,7 @@ namespace VTuber.BattleSystem.UI
             name.text = card.CardName;
             description.text = card.Description;
             cost.text = card.Cost.ToString();
+            Card = card;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.Core.EventCenter;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -8,11 +9,13 @@ namespace VTuber.BattleSystem.Effect
     {
         protected VEffectConfiguration _configuration;
         public VEffectCondition condition;
+        public VRootEventKey whenToApply;
 
         public VEffect(VEffectConfiguration configuration)
         {
             _configuration = configuration;
             condition = configuration.condition;
+            whenToApply = configuration.whenToApply;
         }
 
         public virtual void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)

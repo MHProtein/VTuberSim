@@ -25,8 +25,6 @@ namespace VTuber.BattleSystem.Buff
         public Sprite icon;
         public BuffType buffType;
         public bool stackable = true;
-
-        public VRootEventKey whenToApply;
         
         public List<int> effects;
 
@@ -37,7 +35,6 @@ namespace VTuber.BattleSystem.Buff
             //icon = csv.GetField<string>("Icon");
             buffType = Enum.Parse<BuffType>(csv.GetField<string>("BuffType"));
             stackable = csv.GetField<int>("Stackable") == 1;
-            whenToApply = Enum.Parse<VRootEventKey>(csv.GetField<string>("WhenToApply"));
 
             effects = new List<int>();
             for (int i = 0; i < 3; i++)

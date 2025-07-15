@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -64,24 +65,21 @@ namespace VTuber.BattleSystem.Buff
         {
             Id = id;
             _battle = battle;
-            VBattleRootEventCenter.Instance.RegisterListener(buff.WhenToApply, ApplyBuff);
+
+            foreach (var effect in buff.Effects)
+            {
+                VBattleRootEventCenter.Instance.RegisterListener(effect.whenToApply, dict =>
+                {
+                    if (effect.CanApply(_battle, dict))
+                        effect.ApplyEffect(_battle, value);
+                });
+            }
+            
         }
 
         public void OnBuffRemoved()
         {
-            VBattleRootEventCenter.Instance.RemoveListener(buff.WhenToApply, ApplyBuff);
-        }
-
-        public void ApplyBuff(Dictionary<string, object> message)
-        {
-            if (buff.Effects == null || buff.Effects.Count == 0)
-                return;
-
-            foreach (var effect in buff.Effects)
-            {
-                if (effect.CanApply(_battle, message))
-                    effect.ApplyEffect(_battle, value);
-            }
+            
         }
 
         public bool ApplyCost(int cost)
@@ -152,7 +150,7 @@ namespace VTuber.BattleSystem.Buff
         {
             buffItem.OnBuffRemoved();
             _buffs.Remove(buffItem);
-                            
+            
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffRemoved, new Dictionary<string, object>
             {
                 { "Id", buffItem.Id }
