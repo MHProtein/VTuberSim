@@ -124,6 +124,8 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
+            
         }
 
         protected override void OnDisable()
@@ -143,7 +145,24 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnPlayTheSecondTime, OnPlayTheSecondTime);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
         }
+        
+        private void OnRequestPickCardsFromPile(Dictionary<string, object> messagedict)
+        {
+            int cardCount = (int)messagedict["CardCount"];
+            if(_cardPilesManager.HandPile.Count + cardCount > _configuration.maxHandSize)
+            {
+                cardCount = _configuration.maxHandSize - _cardPilesManager.HandPile.Count;
+            }
+
+            if (cardCount <= 0)
+                return;
+
+            messagedict["CardCount"] = cardCount;
+            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBeginPickCardsFromPile, messagedict);
+        }
+
         
         private void OnCardMovedToHandSlot(Dictionary<string, object> messagedict)
         {

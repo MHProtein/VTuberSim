@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -16,7 +17,7 @@ namespace VTuber.BattleSystem.UI
 {
     public class VBattleUI : VUIBehaviour
     {
-        [SerializeField] private Transform content;
+        [SerializeField] private Transform cardPileContent;
         [FormerlySerializedAs("scrollView")] [SerializeField] private GameObject cardPileScrollView;
         [SerializeField] private Transform discardPileTransform;
         [SerializeField] private Transform drawPileTransform;
@@ -26,8 +27,8 @@ namespace VTuber.BattleSystem.UI
         [Space(3)]
         [Header("PickCard Menu")]
         [SerializeField] private GameObject pickCardMenuScroll;
+        [SerializeField]private Transform pickCardContent;
         private VPickCardMenu _pickCardMenu;
-        
         
         [Space(3)]
         [Header("Animations")]
@@ -80,47 +81,35 @@ namespace VTuber.BattleSystem.UI
                 ui.selected = value;
             }
         }
-
-        public enum CardPileType
-        {
-            DrawPile,
-            Discard,
-            Deck,
-            Exhaust
-        }
         
-        private void ShowPickCardMenu(CardPileType cardPileType, int count)
+        public void ShowPickCardMenu(VCardPileType cardPileType, int count, bool isFromCard, bool shouldPlayTwice)
         {
             List<VCard> cards;
 
             switch (cardPileType)
             {
-                case CardPileType.DrawPile:
+                case VCardPileType.DrawPile:
                     cards = VBattle.Instance.CardPilesManager.DrawPile.ToList();
                     break;
-                case CardPileType.Discard:
+                case VCardPileType.Discard:
                     cards = VBattle.Instance.CardPilesManager.DiscardPile.ToList();
                     break;
-                case CardPileType.Deck:
-                    cards = VBattle.Instance.CardPilesManager.Deck.ToList();
-                    break;
-                case CardPileType.Exhaust:
-                    cards = VBattle.Instance.CardPilesManager.ExaustPile.ToList();
+                case VCardPileType.Exhaust:
+                    cards = VBattle.Instance.CardPilesManager.ExhaustPile.ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cardPileType), cardPileType, null);
             }
 
-            var cardUIs = ShowCardScroll(cards);
+            var cardUIs = ShowCardScroll(cards, pickCardContent);
             
             pickCardMenuScroll.SetActive(true);
-            _pickCardMenu.BeginPickCard(cardUIs);
+            _pickCardMenu.BeginPickCard(cardUIs, count, cardPileType, isFromCard, shouldPlayTwice);
         }
         
-        private List<VCardUI> ShowCardScroll(IEnumerable<VCard> cards)
+        private List<VCardUI> ShowCardScroll(IEnumerable<VCard> cards, Transform content)
         {
             List<VCardUI> cardUIs = new List<VCardUI>();
-            cardPileScrollView.SetActive(true);
             foreach (var card in cards)
             {
                 cardUIs.Add(SpawnCardUI(card, content));
@@ -131,21 +120,25 @@ namespace VTuber.BattleSystem.UI
         
         public void ShowDrawPile()
         {
-            ShowCardScroll(VBattle.Instance.CardPilesManager.DrawPile);
+            cardPileScrollView.SetActive(true);
+            ShowCardScroll(VBattle.Instance.CardPilesManager.DrawPile, cardPileContent);
         }        
         public void ShowDiscard()
         {
-            ShowCardScroll(VBattle.Instance.CardPilesManager.DiscardPile);
+            cardPileScrollView.SetActive(true);
+            ShowCardScroll(VBattle.Instance.CardPilesManager.DiscardPile, cardPileContent);
         }
         
         public void ShowDeck()
         {
-            ShowCardScroll(VBattle.Instance.CardPilesManager.Deck);
+            cardPileScrollView.SetActive(true);
+            ShowCardScroll(VBattle.Instance.CardPilesManager.Deck, cardPileContent);
         }
 
         public void ShowExaustPile()
         {
-            ShowCardScroll(VBattle.Instance.CardPilesManager.ExaustPile);
+            cardPileScrollView.SetActive(true);
+            ShowCardScroll(VBattle.Instance.CardPilesManager.ExhaustPile, cardPileContent);
         }
         public void ShowExit()
         {
@@ -181,6 +174,8 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnRedrawCards, OnRedrawCards);
             VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnNotifyBeginDisposeCard, OnEffectAnimationFinished);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
+            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
         }
 
         protected override void OnDisable()
@@ -190,6 +185,20 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnNotifyBeginDisposeCard, OnEffectAnimationFinished);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
+            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
+        }        
+        
+        private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)
+        {
+            ShowPickCardMenu((VCardPileType)messagedict["CardPileType"], (int)messagedict["CardCount"], (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]);
+        }
+        
+        private void OnCardsPickedFromPile(Dictionary<string, object> messagedict)
+        {
+            pickCardMenuScroll.SetActive(false);
+            var cards = messagedict["PickedCards"] as List<VCard>;
+            StartCoroutine(DrawCard(cards, (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]));
         }
         
         private void OnEffectAnimationFinished(Dictionary<string, object> messagedict)

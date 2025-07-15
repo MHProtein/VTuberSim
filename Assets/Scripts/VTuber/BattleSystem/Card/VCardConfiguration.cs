@@ -81,14 +81,14 @@ namespace VTuber.BattleSystem.Card
             }
 
             upgradeEffects = new Dictionary<int, int>();
-            for (int i = 4; i < 6; i++)
-            {
-                int? effect = csv.GetField<int?>($"Effect{i}_L1");
-                if (effect.HasValue)
-                {
-                    upgradeEffects.Add(effect.Value, csv.GetField<int>($"Effect{i}_L2"));
-                }
-            }
+            // for (int i = 4; i < 6; i++)
+            // {
+            //     int? effect = csv.GetField<int?>($"Effect{i}_L1");
+            //     if (effect.HasValue)
+            //     {
+            //         upgradeEffects.Add(effect.Value, csv.GetField<int>($"Effect{i}_L2"));
+            //     }
+            // }
         }
         
         public VCard CreateCard()
