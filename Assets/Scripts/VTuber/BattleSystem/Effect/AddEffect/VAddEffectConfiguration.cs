@@ -1,5 +1,6 @@
-﻿using CsvHelper;
+﻿using Spire.Xls;
 using UnityEngine.Serialization;
+using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect
@@ -7,17 +8,15 @@ namespace VTuber.BattleSystem.Effect
     public class VAddEffectConfiguration : VEffectConfiguration
     {
         [StringToEnum("BattleAttributes")] public string attributeName;
-        public int addValue;
 
-        public VAddEffectConfiguration(CsvReader csv) : base(csv)
+        public VAddEffectConfiguration(CellRange row) : base(row)
         {
-            attributeName = csv.GetField<string>("AttributeName");
-            addValue = csv.GetField<int>("AttributeDelta");
+            attributeName = row.Columns[VEffectHeaderIndex.Parameter].Value;
         }
 
-        public override VEffect CreateEffect()
+        public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            return new VAddEffect(this);
+            return new VAddEffect(this, parameter, upgradedParameter);
         }
     }
 }

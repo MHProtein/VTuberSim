@@ -1,6 +1,8 @@
-﻿using CsvHelper;
+﻿using System;
+using Spire.Xls;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Buff;
+using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect
@@ -9,18 +11,16 @@ namespace VTuber.BattleSystem.Effect
     { 
         public int buffID;
             
-        public int addValue;
-        public float addPercentage;
 
-        public VBuffModifyEffectConfiguration(CsvReader csv) : base(csv)
+        public VBuffModifyEffectConfiguration(CellRange row) : base(row)
         {
-            buffID = csv.GetField<int>("BuffID");
-            addValue = csv.GetField<int>("BuffDelta");
+            VDebug.Log(row.Columns[VEffectHeaderIndex.Parameter].Value);
+            buffID = Convert.ToInt32(row.Columns[VEffectHeaderIndex.Parameter].Value);
         }
 
-        public override VEffect CreateEffect()
+        public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            return new VBuffModifyEffect(this);
+            return new VBuffModifyEffect(this, parameter, upgradedParameter);
         }
     }
 }

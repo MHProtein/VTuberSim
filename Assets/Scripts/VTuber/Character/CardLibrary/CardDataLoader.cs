@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Spire.Xls;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using VTuber.BattleSystem.Card;
-using CsvHelper;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
@@ -14,123 +14,104 @@ namespace VTuber.Character
 {
     public class BattleResourcesLoader
     {
-        private string _cardDataPath;
-        private string _effectDataPath;
-        private string _buffDataPath;
-        private string _conditionDataPath;
-        
-        public BattleResourcesLoader(string path)
+        private readonly string _xlsxPath;
+
+        public BattleResourcesLoader(string xlsxPath)
         {
-            _cardDataPath = Path.Join(path, "Cards.csv");
-            _effectDataPath = Path.Join(path, "Effects.csv");
-            _buffDataPath = Path.Join(path, "Buffs.csv");
-            _conditionDataPath = Path.Join(path, "Conditions.csv");
+            _xlsxPath = xlsxPath;
         }
 
         public List<VCardConfiguration> Load()
         {
-            LoadConditions();
-            LoadEffects();
-            LoadBuffs();
-            return LoadCards();
-        }
-        
-        private List<VCardConfiguration> LoadCards()
-        {
-            List<VCardConfiguration> cardConfigurations = new List<VCardConfiguration>();
-            
-            using (var reader = new StreamReader(_cardDataPath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Read();
-                csv.ReadHeader();
+            var workbook = new Workbook();
+            workbook.LoadFromFile(_xlsxPath);
 
-                while (csv.Read())
-                {
-                    VCardConfiguration card = new VCardConfiguration(csv);
-                    cardConfigurations.Add(card);
-                }
-            }
-            
-            VBattleDataManager.Instance.SetCardConfigurations(cardConfigurations);
-            return cardConfigurations;
+            LoadConditions(workbook);
+            LoadEffects(workbook);
+            LoadBuffs(workbook);
+            return LoadCards(workbook);
         }
 
-        private void LoadEffects()
+        private Worksheet Sheet(Workbook wb, string name)
         {
-            List<VEffectConfiguration> effectConfigurations = new List<VEffectConfiguration>();
-            
-            using (var reader = new StreamReader(_effectDataPath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Read();
-                csv.ReadHeader();
-
-                while (csv.Read())
-                {
-                    Type effectType = Type.GetType("VTuber.BattleSystem.Effect." + csv.GetField<string>("Type") + "Configuration");
-                    
-                    if (effectType is null)
-                    {
-                        VDebug.LogError($"Effect type {csv.GetField<string>("Type")} not found.");
-                        continue;
-                    }
-                    
-                    VEffectConfiguration effect = (VEffectConfiguration)Activator.CreateInstance(effectType, csv);
-                    effectConfigurations.Add(effect);
-                }
-            }
-            
-            VBattleDataManager.Instance.SetEffectConfigurations(effectConfigurations);
+            var sheet = wb.Worksheets[name];
+            if (sheet == null)
+                throw new FileNotFoundException($"Worksheet '{name}' not found in {_xlsxPath}");
+            return sheet;
         }
 
-        private void LoadBuffs()
+        private List<VCardConfiguration> LoadCards(Workbook wb)
         {
-            List<VBuffConfiguration> buffConfigurations = new List<VBuffConfiguration>();
+            var sheet = Sheet(wb, "Cards");
+            var list = new List<VCardConfiguration>();
 
-            using (var reader = new StreamReader(_buffDataPath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
             {
-                csv.Read();
-                csv.ReadHeader();
-
-                while (csv.Read())
-                {
-                    VBuffConfiguration buff = new VBuffConfiguration(csv);
-                    buffConfigurations.Add(buff);
-                }
+                var row = sheet.Rows[r];
+                var cfg = new VCardConfiguration(row);
+                list.Add(cfg);
             }
 
-            VBattleDataManager.Instance.SetBuffConfigurations(buffConfigurations);
+            VBattleDataManager.Instance.SetCardConfigurations(list);
+            return list;
         }
-        
-        
-        private void LoadConditions()
+
+        private void LoadEffects(Workbook wb)
         {
-            List<VEffectCondition> conditions = new List<VEffectCondition>();
+            var sheet = Sheet(wb, "Effects");
+            var list = new List<VEffectConfiguration>();
 
-            using (var reader = new StreamReader(_conditionDataPath))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
             {
-                csv.Read();
-                csv.ReadHeader();
-
-                while (csv.Read())
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VEffectHeaderIndex.Type].Value;
+                var effectType = Type.GetType("VTuber.BattleSystem.Effect." + typeName + "Configuration");
+                if (effectType == null)
                 {
-                    Type conditionType = Type.GetType("VTuber.BattleSystem.Effect.Conditions." + csv.GetField<string>("Type"));
-                    
-                    if (conditionType is null)
-                    {
-                        VDebug.LogError($"Effect type {csv.GetField<string>("Type")} not found.");
-                        continue;
-                    }
-                    
-                    VEffectCondition condition = (VEffectCondition)Activator.CreateInstance(conditionType, csv);
-                    conditions.Add(condition);
+                    VDebug.LogError($"Effect type {typeName} not found.");
+                    continue;
                 }
+                var effect = (VEffectConfiguration)Activator.CreateInstance(effectType, row);
+                list.Add(effect);
             }
 
-            VBattleDataManager.Instance.SetConditions(conditions);
+            VBattleDataManager.Instance.SetEffectConfigurations(list);
+        }
+
+        private void LoadBuffs(Workbook wb)
+        {
+            var sheet = Sheet(wb, "Buffs");
+            var list = new List<VBuffConfiguration>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var cfg = new VBuffConfiguration(sheet.Rows[r]);
+                list.Add(cfg);
+            }
+
+            VBattleDataManager.Instance.SetBuffConfigurations(list);
+        }
+
+        private void LoadConditions(Workbook wb)
+        {
+            var sheet = Sheet(wb, "Conditions");
+            var list = new List<VEffectCondition>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VConditionHeaderIndex.Type].Value;
+                var condType = Type.GetType("VTuber.BattleSystem.Effect.Conditions." + typeName);
+                if (condType == null)
+                {
+                    VDebug.LogError($"Condition type {typeName} not found.");
+                    continue;
+                }
+                var cond = (VEffectCondition)Activator.CreateInstance(condType, row);
+                list.Add(cond);
+            }
+
+            VBattleDataManager.Instance.SetConditions(list);
         }
     }
 }

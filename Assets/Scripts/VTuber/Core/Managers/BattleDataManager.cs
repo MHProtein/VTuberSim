@@ -74,11 +74,11 @@ namespace VTuber.Core.Managers
             }
         }
 
-        public VEffect CreateEffectByID(int effectID)
+        public VEffect CreateEffectByID(int effectID, string parameter, string upgradedParameter)
         {
             if (_effectConfigurations.TryGetValue(effectID, out var effectConfig))
             {
-                return effectConfig.CreateEffect();
+                return effectConfig.CreateEffect(parameter, upgradedParameter);
             }
 
             return null;

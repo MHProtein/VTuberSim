@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CsvHelper;
+using Spire.Xls;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
 
@@ -9,9 +9,9 @@ namespace VTuber.BattleSystem.Effect.Conditions
     {
         private string _targetValue;
 
-        public VCardTypeCondition(CsvReader csv) : base(csv)
+        public VCardTypeCondition(CellRange row) : base(row)
         {
-            _targetValue = csv.GetField<string>("TargetValue");
+            _targetValue = row.Columns[VConditionHeaderIndex.TargetValue].Value;
         }
 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)

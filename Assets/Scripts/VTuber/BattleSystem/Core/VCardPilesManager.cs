@@ -206,7 +206,7 @@ namespace VTuber.BattleSystem.Core
             if(card is null)
                 return;
             
-            if(card.IsExaust)
+            if(card.IsExhaust)
                 _exhaustPile.Add(card);
             else
                 _discardPile.Add(card);

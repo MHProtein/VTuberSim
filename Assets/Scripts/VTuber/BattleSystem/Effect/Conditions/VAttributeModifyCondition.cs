@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CsvHelper;
+using Spire.Xls;
 using VTuber.BattleSystem.Core;
 
 namespace VTuber.BattleSystem.Effect.Conditions
@@ -9,12 +9,12 @@ namespace VTuber.BattleSystem.Effect.Conditions
         private int _targetValue;
         private int _targetDelta;
 
-        public VAttributeModifyCondition(CsvReader csv) : base(csv)
+        public VAttributeModifyCondition(CellRange row) : base(row)
         {
-            _targetValue = csv.GetField<int>("TargetValue");
-            _targetDelta = csv.GetField<int>("TargetDelta");
+            _targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
+            _targetDelta = ToInt( row.Columns[VConditionHeaderIndex.TargetDelta].Value);
         }
-
+ 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
             return Compare((int)message["NewValue"], _targetValue) && Compare((int)message["Delta"], _targetDelta);

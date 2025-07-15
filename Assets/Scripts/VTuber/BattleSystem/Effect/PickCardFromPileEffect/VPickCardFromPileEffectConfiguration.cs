@@ -1,5 +1,5 @@
 ﻿using System;
-using CsvHelper;
+using Spire.Xls;
 
 namespace VTuber.BattleSystem.Effect
 {      
@@ -14,15 +14,14 @@ namespace VTuber.BattleSystem.Effect
     {
         public VCardPileType cardPileType;
         public int cardCount;
-        public VPickCardFromPileEffectConfiguration(CsvReader csv) : base(csv)
+        public VPickCardFromPileEffectConfiguration(CellRange row) : base(row)
         {
-            cardPileType = Enum.Parse<VCardPileType>(csv.GetField<string>("CardPileType"));
-            cardCount = csv.GetField<int>("CardCount");
+            cardPileType = Enum.Parse<VCardPileType>(row.Columns[VEffectHeaderIndex.Parameter].Value);
         }
 
-        public override VEffect CreateEffect()
+        public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            return new VPickCardFromPileEffect(this);
+            return new VPickCardFromPileEffect(this, parameter, upgradedParameter);
         }
     }
 }

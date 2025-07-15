@@ -14,13 +14,12 @@ namespace VTuber.BattleSystem.Card
     {
         public int Id { get; private set; }
         public string CardName => _configuration.cardName;
-        public bool IsExaust => _configuration.isExaust;
+        public bool IsExhaust => _configuration.IsExhaust;
         public string CardType => _configuration.cardType;
         public string Description => _configuration.description;
-        public List<string> CardTags => _configuration.cardTags;
         public CostType CostType => _configuration.costType;
         public int CostBuffId => _configuration.costBuffId;
-        public int Cost => _configuration.cost;
+        public int Cost => _configuration.cost.Value;
         public Sprite Background => _configuration.background;
         public Sprite Facade => _configuration.facade;
         
@@ -46,7 +45,7 @@ namespace VTuber.BattleSystem.Card
             {
                 { "Card", this },
                 { "Effects", _configuration.effects },
-                { "Cost", _configuration.cost },
+                { "Cost", _configuration.cost.Value },
                 { "CostType", CostType },
                 { "CostBuffId", CostBuffId }
             };

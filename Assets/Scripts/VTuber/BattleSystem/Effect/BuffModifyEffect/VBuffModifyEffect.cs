@@ -1,4 +1,5 @@
-﻿using VTuber.BattleSystem.Core;
+﻿using System;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
@@ -7,14 +8,21 @@ namespace VTuber.BattleSystem.Effect
     public class VBuffModifyEffect : VEffect
     {
         VBuffModifyEffectConfiguration _configuration;
-        public VBuffModifyEffect(VBuffModifyEffectConfiguration configuration) : base(configuration)
+        public VUpgradableValue<int> _addValue;
+ 
+        public VBuffModifyEffect(VBuffModifyEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             _configuration = configuration;
+            _addValue = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
-        {            
-            battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_configuration.buffID), _configuration.addValue * layer, isFromCard, shouldApplyTwice);
+        {
+            int value = _addValue.Value;
+            if (_configuration.multiplyByLayer > 0.0f)
+                value *= (int)(layer * _configuration.multiplyByLayer);
+            
+            battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
         }
             
     }

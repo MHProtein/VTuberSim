@@ -8,18 +8,20 @@ namespace VTuber.BattleSystem.Effect
     {
         private VStaminaCostModifierType _modifierType;
         
-        private float _deltaRate;
+        private VUpgradableValue<float> _deltaRate;
 
-        private int _deltaPoints;
+        private VUpgradableValue<int> _deltaPoints;
         
-        private bool _multiplyByLayer;
+        private float _multiplyByLayer;
         
-        public VStaminaCostModiferEffect(VStaminaCostModiferEffectConfiguration configuration) : base(configuration)
+        
+        public VStaminaCostModiferEffect(VStaminaCostModiferEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             _modifierType = configuration.modifierType;
-            _deltaRate = configuration.deltaRate;
-            _deltaPoints = configuration.deltaPoints;
-            _multiplyByLayer = configuration.multiplyByLayer;
+            
+            _deltaRate = new VUpgradableValue<float>(Convert.ToSingle(parameter), Convert.ToSingle(upgradedParameter));
+
+            _deltaPoints = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
@@ -31,13 +33,34 @@ namespace VTuber.BattleSystem.Effect
                 switch (_modifierType)
                 {
                     case VStaminaCostModifierType.Rate:
-                        staminaAttribute.ChangeConsumeRate(_multiplyByLayer ? _deltaRate * layer : _deltaRate);
+                        float rateValue = _deltaRate.Value;
+                        if(_multiplyByLayer > 0.0f)
+                            rateValue *= layer * _multiplyByLayer;
+                        staminaAttribute.ChangeConsumeRate(rateValue);
                         break;
-                    case VStaminaCostModifierType.Points:
-                        staminaAttribute.ChangeConsumeReducedPoints(_multiplyByLayer ? _deltaPoints * layer : _deltaPoints);
+                    case VStaminaCostModifierType.Points:             
+                        float pointValue = _deltaPoints.Value;
+                        if(_multiplyByLayer > 0.0f)
+                            pointValue *= layer * _multiplyByLayer;
+                        staminaAttribute.ChangeConsumeReducedPoints((int)pointValue);
                         break;
                 }
             }
         }
+
+        public override void Upgrade()
+        {
+            base.Upgrade();
+            _deltaRate.Upgrade();
+            _deltaPoints.Upgrade();
+        }
+        
+        public override void Downgrade()
+        {
+            base.Downgrade();
+            _deltaRate.Downgrade();
+            _deltaPoints.Downgrade();
+        }
+        
     }
 }
