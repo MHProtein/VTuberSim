@@ -7,7 +7,6 @@ namespace VTuber.BattleSystem.Effect
     public class VAttributeGainPointsModifierEffect : VEffect
     {
         private string _attributeName;
-        private readonly VUpgradableValue<float> _deltaRate;
 
         private readonly VUpgradableValue<int> _deltaPoints;
 
@@ -20,8 +19,6 @@ namespace VTuber.BattleSystem.Effect
         public VAttributeGainPointsModifierEffect(VAttributeGainPointsModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             _attributeName = configuration.attributeName;
-            _deltaRate = new VUpgradableValue<float>(Convert.ToSingle(parameter), Convert.ToSingle(upgradedParameter));
-
             _deltaPoints = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
         }
 
@@ -30,7 +27,7 @@ namespace VTuber.BattleSystem.Effect
             if (applied)
                 return;
             applied = true;
-            if(battle.BattleAttributeManager.TryGetAttribute("BAStamina", out var attribute))
+            if(battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
                 float pointValue = _deltaPoints.Value;
                 if(MultiplyByLayer > 0.0f)
@@ -45,14 +42,12 @@ namespace VTuber.BattleSystem.Effect
         public override void Upgrade()
         {
             base.Upgrade();
-            _deltaRate.Upgrade();
             _deltaPoints.Upgrade();
         }
         
         public override void Downgrade()
         {
             base.Downgrade();
-            _deltaRate.Downgrade();
             _deltaPoints.Downgrade();
         }
 
