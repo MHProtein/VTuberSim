@@ -1,4 +1,5 @@
 ﻿using UnityEngine.UI;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -17,9 +18,9 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin,
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin,
                 dict => button.interactable = true);
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd,
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd,
                 dict => button.interactable = false);
         }
     }

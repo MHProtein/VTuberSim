@@ -7,14 +7,15 @@ namespace VTuber.Character
     {
         public Dictionary<string, VCharacterAttribute> Attributes { get; set; }
         
-        public VCharacterAttributeManager(VCharacterAttributeManagerConfiguration configuration)
+        public VCharacterAttributeManager()
         {
             Attributes = new Dictionary<string, VCharacterAttribute>();
-
-            foreach (var attribute in configuration.attributes)  
-            {
-                Attributes.Add(attribute.attributeName, attribute.GetAttribute());
-            }
         }
+
+        public void AddAttribute(string name, VCharacterAttribute attribute)
+        {
+            Attributes.TryAdd(name, attribute);
+        }
+        
     }
 }

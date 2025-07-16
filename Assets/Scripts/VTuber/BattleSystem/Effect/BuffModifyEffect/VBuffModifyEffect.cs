@@ -19,8 +19,8 @@ namespace VTuber.BattleSystem.Effect
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
             int value = _addValue.Value;
-            if (_configuration.multiplyByLayer > 0.0f)
-                value *= (int)(layer * _configuration.multiplyByLayer);
+            if (MultiplyByLayer > 0.0f)
+                value *= (int)(layer * MultiplyByLayer);
             
             battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
         }

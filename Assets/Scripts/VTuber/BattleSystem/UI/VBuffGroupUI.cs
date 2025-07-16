@@ -2,6 +2,7 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -56,17 +57,17 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffRemoved, OnBuffRemoved);
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
         
         protected override void OnDisable()
         {
             base.OnDisable();
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffAdded, OnBuffAdded);
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffRemoved, OnBuffRemoved);
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
 
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
@@ -112,7 +113,7 @@ namespace VTuber.BattleSystem.UI
         {
             if (_shouldPlayTwice)
             {
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPlayTheSecondTime, new Dictionary<string ,object>()
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime, new Dictionary<string ,object>()
                 {
                     
                 });
@@ -122,7 +123,7 @@ namespace VTuber.BattleSystem.UI
 
             if (_isFromCard)
             {
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
                 {
                 
                 });

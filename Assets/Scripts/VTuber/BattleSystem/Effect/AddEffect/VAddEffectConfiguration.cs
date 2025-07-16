@@ -16,6 +16,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
+            upgradable = parameter != upgradedParameter;
             return new VAddEffect(this, parameter, upgradedParameter);
         }
     }

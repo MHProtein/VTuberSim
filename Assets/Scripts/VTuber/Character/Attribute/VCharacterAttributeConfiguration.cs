@@ -20,7 +20,6 @@ namespace VTuber.Character.Attribute
         [Space(5)]
         [Core.TypeSerialization.TypeFilter(typeof(VCharacterAttribute))] public SerializableType attribute;
         
-        public int defaultValue ;
         public bool isPercentage = false;
         
         [Space(5)]

@@ -11,6 +11,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
+            upgradable = parameter != upgradedParameter;
             return new VDrawCardEffect(this, parameter, upgradedParameter);
         }
     }

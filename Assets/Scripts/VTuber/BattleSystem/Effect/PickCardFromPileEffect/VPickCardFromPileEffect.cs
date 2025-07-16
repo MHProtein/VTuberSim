@@ -17,7 +17,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnRequestPickCardsFromPile, new Dictionary<string, object>()
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRequestPickCardsFromPile, new Dictionary<string, object>()
             {
                 { "CardPileType", _cardPileType },
                 { "CardCount", _cardCount.Value },

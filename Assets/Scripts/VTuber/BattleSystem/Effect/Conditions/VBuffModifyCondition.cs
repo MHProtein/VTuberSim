@@ -20,6 +20,10 @@ namespace VTuber.BattleSystem.Effect.Conditions
 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
+            if (!message.ContainsKey("NewValue") || !message.ContainsKey("Delta") || !message.ContainsKey("BuffId"))
+            {
+                return false;
+            }
             if ((int)message["BuffId"] != _buffId)
                 return false;
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using VTuber.Core.EventCenter;
 
-namespace VTuber.Core.EventCenter
+namespace VTuber.BattleSystem.Core
 {
-    public enum VRootEventKey
+    public enum VBattleEventKey
     {
         Default,
         OnBattleBegin,
@@ -50,7 +51,7 @@ namespace VTuber.Core.EventCenter
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);
-    public class VBattleRootEventCenter : VEventCenter<VBattleRootEventCenter, VRootEventKey, FunctionWithADict>
+    public class VBattleRootEventCenter : VEventCenter<VBattleRootEventCenter, VBattleEventKey, FunctionWithADict>
     {
         
     }

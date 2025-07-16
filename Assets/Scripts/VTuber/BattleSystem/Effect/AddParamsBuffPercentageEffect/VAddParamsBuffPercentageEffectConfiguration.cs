@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
+            upgradable = parameter != upgradedParameter;
             float percentage = Convert.ToSingle(parameter);
             float upgradedPercentage = Convert.ToSingle(upgradedParameter);
             return new VBuffAddPercentageEffect(this, buffID, percentage, upgradedPercentage);

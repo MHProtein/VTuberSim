@@ -9,14 +9,19 @@ namespace VTuber.BattleSystem.Effect
     {
         protected VEffectConfiguration _configuration;
         public List<VEffectCondition> conditions;
-        public VRootEventKey whenToApply;
+        public VBattleEventKey whenToApply;
+        public bool upgradable = false;
         protected bool _isUpgraded;
+        public float MultiplyByLayer => _configuration.multiplyByLayer;
 
+        public int applyLatency;
+        
         public VEffect(VEffectConfiguration configuration)
         {
             _configuration = configuration;
             conditions = configuration.conditions;
             whenToApply = configuration.whenToApply;
+            upgradable = configuration.upgradable;
         }
 
         public virtual void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
@@ -26,6 +31,8 @@ namespace VTuber.BattleSystem.Effect
 
         public bool CanApply(VBattle battle, Dictionary<string, object> message)
         {
+            if (applyLatency > 0)
+                return false;
             if (conditions == null || conditions.Count == 0)
                 return true;
 
@@ -41,12 +48,31 @@ namespace VTuber.BattleSystem.Effect
         
         public virtual void Upgrade()
         {
+            if(!upgradable)
+                return;
             _isUpgraded = true;
         }
         
         public virtual void Downgrade()
-        {
+        {            
+            if(!upgradable)
+                return;
             _isUpgraded = false;
+        }
+
+        public virtual void OnBuffLayerChange(int layer)
+        {
+            
+        }
+        
+        public virtual void OnBuffRemove()
+        {
+            
+        }
+
+        public void OnTurnEnd()
+        {
+            applyLatency--;
         }
         
     }

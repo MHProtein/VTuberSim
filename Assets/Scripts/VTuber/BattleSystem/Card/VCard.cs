@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
+using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -28,7 +29,6 @@ namespace VTuber.BattleSystem.Card
         public Sprite Facade => _configuration.facade;
         
         private List<VEffect> _effects;
-        private List<VEffect> _upgradableEffects;
         private List<VEffect> _newEffects;
 
         public bool IsUpgraded => _isUpgraded;
@@ -43,7 +43,6 @@ namespace VTuber.BattleSystem.Card
             {
                 List<VEffect> effects = new List<VEffect>();
                 effects.AddRange(_effects);
-                effects.AddRange(_upgradableEffects);
                 if (_isUpgraded)
                 {
                     effects.AddRange(_newEffects);
@@ -57,22 +56,17 @@ namespace VTuber.BattleSystem.Card
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration, uint id, List<VCardEffectItem> effects, List<VCardEffectItem> upgradableEffects, List<VCardEffectItem> newEffects)
+        public VCard(VCardConfiguration configuration, uint id, List<VCardEffectItem> effects, List<VCardEffectItem> newEffects)
         {
             _configuration = configuration;
             Id = id;
             _effects = new List<VEffect>();
-            _upgradableEffects = new List<VEffect>();
+            _effects = new List<VEffect>();
             _newEffects = new List<VEffect>();
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
             foreach (var effect in effects)
             {
                 _effects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
-            }
-            
-            foreach (var effect in upgradableEffects)
-            {
-                _upgradableEffects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.upgradedParameter));
             }
             
             foreach (var effect in newEffects)
@@ -93,7 +87,7 @@ namespace VTuber.BattleSystem.Card
                 { "CostType", CostType },
                 { "CostBuffId", CostBuffId }
             };
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardPlayed, message);
         }
 
         public void Upgrade(bool isTemporary)
@@ -107,7 +101,7 @@ namespace VTuber.BattleSystem.Card
             isTemporaryUpgraded = isTemporary;
             _cost.Upgrade();
             
-            foreach (var effect in _upgradableEffects)
+            foreach (var effect in _effects)
             {
                 effect.Upgrade();
             }
@@ -124,7 +118,7 @@ namespace VTuber.BattleSystem.Card
             isTemporaryUpgraded = false;
             _cost.Downgrade();
             
-            foreach (var effect in _upgradableEffects)
+            foreach (var effect in _effects)
             {
                 effect.Downgrade();
             }

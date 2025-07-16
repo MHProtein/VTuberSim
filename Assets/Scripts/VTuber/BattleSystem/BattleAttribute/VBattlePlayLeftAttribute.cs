@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 
 namespace VTuber.BattleSystem.BattleAttribute
@@ -6,7 +7,7 @@ namespace VTuber.BattleSystem.BattleAttribute
     public class VBattlePlayLeftAttribute : VBattleAttribute
     {
         private int _defaultPlayCountPerTurn;
-        public VBattlePlayLeftAttribute(int value) : base(value, false, VRootEventKey.OnPlayLeftChange)
+        public VBattlePlayLeftAttribute(int value) : base(value, false, VBattleEventKey.OnPlayLeftChange)
         {
             _defaultPlayCountPerTurn = value;
         }
@@ -14,13 +15,13 @@ namespace VTuber.BattleSystem.BattleAttribute
         public override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn, false));
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn, false));
         }
         
         public override void OnDisable()
         {
             base.OnDisable();
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn, false));
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnBegin, dict => SetValue(_defaultPlayCountPerTurn, false));
         }
     }
 }
