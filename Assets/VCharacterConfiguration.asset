@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec66bdb3fca43db99ebce2e448e9841, type: 3}
-  m_Name: so_preview cfg
+  m_Script: {fileID: 11500000, guid: 73b1393968f147f79d506ac36817e430, type: 3}
+  m_Name: VCharacterConfiguration
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,14 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  displayDatas:
-  - key: Tools
-    value:
-    - name: EnumDatabase
-      path: 
-      so: {fileID: 11400000, guid: d3f0a9e886756b64b8bec297f2f59c9c, type: 2}
-  - key: 
-    value:
-    - name: CharacterConfig
-      path: 
-      so: {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
+  staminaInitialValue: 3
+  staminaMinValue: 0
+  staminaMaxValue: 6
+  staminaConfiguration: {fileID: 0}

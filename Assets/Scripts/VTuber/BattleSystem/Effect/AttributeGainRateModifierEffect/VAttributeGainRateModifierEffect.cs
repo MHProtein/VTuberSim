@@ -9,8 +9,6 @@ namespace VTuber.BattleSystem.Effect
         private readonly string _attributeName;
         private readonly VUpgradableValue<float> _deltaRate;
 
-        private readonly VUpgradableValue<int> _deltaPoints;
-
         private Action<uint> _onBuffRemove;
         private Action<uint, float> _onBuffLayerChangeRate;
         private Action<uint, int> _onBuffLayerChangePoints;
@@ -22,8 +20,6 @@ namespace VTuber.BattleSystem.Effect
             _attributeName = configuration.attributeName;
             
             _deltaRate = new VUpgradableValue<float>(Convert.ToSingle(parameter), Convert.ToSingle(upgradedParameter));
-
-            _deltaPoints = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
@@ -47,14 +43,12 @@ namespace VTuber.BattleSystem.Effect
         {
             base.Upgrade();
             _deltaRate.Upgrade();
-            _deltaPoints.Upgrade();
         }
         
         public override void Downgrade()
         {
             base.Downgrade();
             _deltaRate.Downgrade();
-            _deltaPoints.Downgrade();
         }
 
         public override void OnBuffLayerChange(int layer)
