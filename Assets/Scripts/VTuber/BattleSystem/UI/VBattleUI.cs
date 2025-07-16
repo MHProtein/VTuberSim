@@ -242,7 +242,7 @@ namespace VTuber.BattleSystem.UI
             });
         }
         
-        private VHandCardUI GetCardById(int cardId)
+        private VHandCardUI GetCardById(uint cardId)
         {
             return _handSlotsCards.FirstOrDefault(ui => ui.card.Id == cardId);
         }

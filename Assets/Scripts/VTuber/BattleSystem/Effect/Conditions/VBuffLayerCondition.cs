@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Spire.Xls;
 using UnityEditor.Sprites;
 using VTuber.BattleSystem.Buff;
@@ -9,12 +10,12 @@ namespace VTuber.BattleSystem.Effect.Conditions
 {
     public class VBuffLayerCondition : VEffectCondition
     {
-        public int buffId;
+        public uint buffId;
         public int targetValue;
 
         public VBuffLayerCondition(CellRange row) : base(row)
         {
-            buffId = ToInt(row.Columns[VConditionHeaderIndex.NameOrID].Value);
+            buffId =  Convert.ToUInt32(row.Columns[VConditionHeaderIndex.NameOrID].Value);
             targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
         }
 

@@ -25,8 +25,8 @@ namespace VTuber.BattleSystem.Effect
     }
     
     public class VEffectConfiguration
-    {
-        public int id;
+    { 
+        public uint id;
         public string effectName;
         [TextArea] public string description;
         public float multiplyByLayer = 0.0f;
@@ -37,7 +37,7 @@ namespace VTuber.BattleSystem.Effect
 
         public VEffectConfiguration(CellRange row)
         {
-            id = Convert.ToInt32(row.Columns[VEffectHeaderIndex.Id].Value);
+            id = Convert.ToUInt32(row.Columns[VEffectHeaderIndex.Id].Value);
             effectName = row.Columns[VEffectHeaderIndex.Name].Value;
             description = row.Columns[VEffectHeaderIndex.Description].Value;
             multiplyByLayer = Convert.ToSingle(row.Columns[VEffectHeaderIndex.MultiplyByLayer].Value);
@@ -55,7 +55,7 @@ namespace VTuber.BattleSystem.Effect
                 if (string.IsNullOrEmpty(conditionStr))
                     continue;
                 
-                conditions.Add(VBattleDataManager.Instance.GetConditionByID(Convert.ToInt32(conditionStr)));
+                conditions.Add(VBattleDataManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr)));
             }
         }
         

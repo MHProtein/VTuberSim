@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.Buff
         public List<VEffect> Effects => _effects;
         private List<VEffect> _effects;
         
-        public int ConfigId => _configuration.id;
+        public uint ConfigId => _configuration.id;
         
         public bool IsPermanent => _configuration.IsBuffPermanent();
         

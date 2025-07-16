@@ -40,7 +40,7 @@ namespace VTuber.BattleSystem.UI
     {
         [SerializeField] private GameObject buffCellPrefab;
 
-        private Dictionary<int, VBuffUI> _buffUIs;
+        private Dictionary<uint, VBuffUI> _buffUIs;
 
         private VBuffUI _buffUIToSetParent;
         
@@ -50,7 +50,7 @@ namespace VTuber.BattleSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            _buffUIs = new Dictionary<int, VBuffUI>();
+            _buffUIs = new Dictionary<uint, VBuffUI>();
         }
 
         protected override void OnEnable()
@@ -71,7 +71,7 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
         {
-            if (_buffUIs.TryGetValue((int)messagedict["Id"], out VBuffUI buffUI))
+            if (_buffUIs.TryGetValue((uint)messagedict["Id"], out VBuffUI buffUI))
             {
                 _isFromCard = messagedict["IsFromCard"] as bool? ?? false;
                 _shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
@@ -85,8 +85,8 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBuffRemoved(Dictionary<string, object> messagedict)
         {
-            int id = (int)messagedict["Id"];
-            if (_buffUIs.TryGetValue((int)messagedict["Id"], out VBuffUI buffUI))
+            uint id = (uint)messagedict["Id"];
+            if (_buffUIs.TryGetValue((uint)messagedict["Id"], out VBuffUI buffUI))
             {
                 Destroy(buffUI.gameObject);
                 _buffUIs.Remove(id);
@@ -102,7 +102,7 @@ namespace VTuber.BattleSystem.UI
             buffUI.gameObject.transform.SetParent(transform);
             buffUI.gameObject.transform.localScale = Vector3.zero;
             buffUI.SetText((int)messagedict["Value"]);
-            _buffUIs.Add((int)messagedict["Id"], buffUI);
+            _buffUIs.Add((uint)messagedict["Id"], buffUI);
 
             Tween.Scale(buffUI.gameObject.transform, Vector3.one, 0.5f).OnComplete(OnMovedToSlot);
             _buffUIToSetParent = buffUI;

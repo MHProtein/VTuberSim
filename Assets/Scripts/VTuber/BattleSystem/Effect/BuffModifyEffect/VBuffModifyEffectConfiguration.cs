@@ -9,13 +9,13 @@ namespace VTuber.BattleSystem.Effect
 {
     public class VBuffModifyEffectConfiguration : VEffectConfiguration
     { 
-        public int buffID;
+        public uint buffID;
             
 
         public VBuffModifyEffectConfiguration(CellRange row) : base(row)
         {
             VDebug.Log(row.Columns[VEffectHeaderIndex.Parameter].Value);
-            buffID = Convert.ToInt32(row.Columns[VEffectHeaderIndex.Parameter].Value);
+            buffID = Convert.ToUInt32(row.Columns[VEffectHeaderIndex.Parameter].Value);
         }
 
         public override VEffect CreateEffect(string parameter, string upgradedParameter)

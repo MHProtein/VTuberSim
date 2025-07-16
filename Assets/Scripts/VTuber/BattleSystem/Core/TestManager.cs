@@ -21,7 +21,18 @@ namespace VTuber.BattleSystem.Core
             BattleResourcesLoader loader = new BattleResourcesLoader("Assets\\Resources\\Configurations\\NewCards.xlsx");
             
             _cardLibrary = new VCardLibrary();
-            _cardLibrary.AddCards(loader.Load());
+            var cardConfigs = loader.Load();
+            List<VCard> cards = new List<VCard>();
+
+            foreach (var cardConfig in cardConfigs)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    cards.Add(cardConfig.CreateCard());
+                }
+            }
+
+            _cardLibrary.AddCards(cards);
             _battle.InitializeBattle(null, _battleConfiguration, _cardLibrary);
         }
 
