@@ -131,7 +131,7 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             if (modifier.Modifiers.Count == 0)
                 return modifier.DefaultValue;
-            int total = 0;
+            int total = modifier.DefaultValue;
             foreach (var mod in modifier.Modifiers)
             {
                 total += mod.Value;
@@ -143,7 +143,7 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             if (modifier.Modifiers.Count == 0)
                 return modifier.DefaultValue;
-            float total = 0.0f;
+            float total = modifier.DefaultValue;
             foreach (var mod in modifier.Modifiers)
             {
                 total += mod.Value;
