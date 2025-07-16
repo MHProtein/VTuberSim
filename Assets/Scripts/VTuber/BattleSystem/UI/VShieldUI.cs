@@ -3,6 +3,7 @@ using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -17,7 +18,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.Awake();
 
-            key = VRootEventKey.OnShieldChange;
+            key = VBattleEventKey.OnShieldChange;
             SetFontStyle(shieldText, FontStyles.Bold);
         }
 

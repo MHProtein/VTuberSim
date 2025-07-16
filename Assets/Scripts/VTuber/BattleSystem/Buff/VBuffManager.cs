@@ -11,7 +11,9 @@ namespace VTuber.BattleSystem.Buff
     public class VBuffItem
     {
         public VBuff buff;
-        public int value;
+
+        public int Value => value;
+        private int value;
         public uint Id { get; private set; }
         public uint ConfigId => buff.ConfigId;
 
@@ -29,20 +31,27 @@ namespace VTuber.BattleSystem.Buff
                 return false;
 
             value -= 1;
-            if (value <= 0)
+            if (Value <= 0)
                 return true;
 
-            VDebug.Log($"{buff.GetBuffName()} duration decremented to {value}");
+            VDebug.Log($"{buff.GetBuffName()} duration decremented to {Value}");
 
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
                 { "BuffId", buff.ConfigId},
-                { "Value", value },
+                { "Value", Value },
                 { "Delta", -1 },
                 { "IsFromCard", false },
                 { "ShouldPlayTwice", false }
             });
+
+            foreach (var effect in buff.Effects)
+            {
+                effect.OnTurnEnd();
+                effect.OnBuffLayerChange(value);
+            }
+            
             return false;
         }
 
@@ -50,15 +59,20 @@ namespace VTuber.BattleSystem.Buff
         {
             value += addValue;
 
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
                 { "BuffId", buff.ConfigId},
-                { "Value", value },
+                { "Value", Value },
                 { "Delta", addValue},
                 { "IsFromCard", isFromCard },
                 { "ShouldPlayTwice", shouldPlayTwice }
             });
+            
+            foreach (var effect in buff.Effects)
+            {
+                effect.OnBuffLayerChange(value);
+            }
         }
 
         public void OnBuffAdded(VBattle battle, uint id)
@@ -68,10 +82,12 @@ namespace VTuber.BattleSystem.Buff
 
             foreach (var effect in buff.Effects)
             {
+                if (effect.CanApply(_battle, null))
+                    effect.ApplyEffect(_battle, Value);
                 VBattleRootEventCenter.Instance.RegisterListener(effect.whenToApply, dict =>
                 {
                     if (effect.CanApply(_battle, dict))
-                        effect.ApplyEffect(_battle, value);
+                        effect.ApplyEffect(_battle, Value);
                 });
             }
             
@@ -79,32 +95,39 @@ namespace VTuber.BattleSystem.Buff
 
         public void OnBuffRemoved()
         {
-            
+            foreach (var effect in buff.Effects)
+            {
+                effect.OnBuffRemove();
+            }
         }
 
         public bool ApplyCost(int cost)
         {
-            if (cost <= 0 || value < cost)
+            if (cost <= 0 || Value < cost)
                 return false;
             
             value -= cost;
             
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffValueUpdated, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
                 { "BuffId", buff.ConfigId},
-                { "Value", value },
+                { "Value", Value },
                 { "Delta", cost},
                 { "IsFromCard", false },
                 { "ShouldPlayTwice", false }
             });
-  
-            return value <= 0;
+            
+            foreach (var effect in buff.Effects)
+            {
+                effect.OnBuffLayerChange(value);
+            }
+            return Value <= 0;
         }
 
         public bool TestCost(int cost)
         {
-            return value >= cost;
+            return Value >= cost;
         }
     }
 
@@ -122,12 +145,12 @@ namespace VTuber.BattleSystem.Buff
 
         public void OnEnable()
         {
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
         }
         
         public void OnDisable()
         {
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
         }
 
         private void OnTurnEnd(Dictionary<string, object> messagedict)
@@ -151,7 +174,7 @@ namespace VTuber.BattleSystem.Buff
             buffItem.OnBuffRemoved();
             _buffs.Remove(buffItem);
             
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffRemoved, new Dictionary<string, object>
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffRemoved, new Dictionary<string, object>
             {
                 { "Id", buffItem.Id }
             });
@@ -172,7 +195,7 @@ namespace VTuber.BattleSystem.Buff
                 var buffItem = new VBuffItem(buff, value);
                 _buffs.Add(buffItem);
                 buffItem.OnBuffAdded(_battle, _idDistributor++);
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnBuffAdded, new Dictionary<string, object>
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
                     { "Id", buffItem.Id },
                     { "BuffId", buff.ConfigId },

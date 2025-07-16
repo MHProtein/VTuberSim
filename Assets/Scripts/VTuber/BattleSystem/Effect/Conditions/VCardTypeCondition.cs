@@ -16,6 +16,10 @@ namespace VTuber.BattleSystem.Effect.Conditions
 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
+            if (!message.ContainsKey("Card"))
+            {
+                return false; // Ensure the message contains a valid card
+            }
             return _targetValue.Equals(((VCard)message["Card"]).CardType);
         }
     }

@@ -23,7 +23,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (battle.BuffManager.TryGetBuff(buffId, out var buff))
             {
-                return Compare(buff.value, targetValue);
+                return Compare(buff.Value, targetValue);
             }
 
             return false;

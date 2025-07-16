@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -65,7 +66,7 @@ namespace VTuber.BattleSystem.UI
             SelectCardText.text = $"Selected {_pickedCards.Count} cards.";
             ConfirmButton.interactable = false;
 
-            VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardsPickedFromPile, new Dictionary<string, object>()
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardsPickedFromPile, new Dictionary<string, object>()
             {
                 { "CardPileType", _cardPileType },
                 { "PickedCards", new List<VCard>(_pickedCards) }, 

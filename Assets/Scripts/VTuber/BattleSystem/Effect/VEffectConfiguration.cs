@@ -13,15 +13,16 @@ namespace VTuber.BattleSystem.Effect
 {
     public class VEffectHeaderIndex
     {
-        public const int Id = 0;
-        public const int Name = 1;
-        public const int Description = 2;
-        public const int Type = 3;
-        public const int WhenToApply = 4;
-        public const int Condition1 = 5;
-        public const int Condition2 = 6;
-        public const int MultiplyByLayer = 7;
-        public const int Parameter = 8;
+        public const int Id              = 0;
+        public const int Name            = 1;
+        public const int Description     = 2;
+        public const int Type            = 3;
+        public const int WhenToApply     = 4;
+        public const int Latency         = 5;
+        public const int Condition1      = 6;
+        public const int Condition2      = 7;
+        public const int MultiplyByLayer = 8;
+        public const int Parameter       = 9;
     }
     
     public class VEffectConfiguration
@@ -30,9 +31,10 @@ namespace VTuber.BattleSystem.Effect
         public string effectName;
         [TextArea] public string description;
         public float multiplyByLayer = 0.0f;
+        public bool upgradable = false;
         
-        public VRootEventKey whenToApply;
-        
+        public VBattleEventKey whenToApply;
+        public int latency = 0;
         public List<VEffectCondition> conditions;
 
         public VEffectConfiguration(CellRange row)
@@ -44,9 +46,11 @@ namespace VTuber.BattleSystem.Effect
             
             string whenToApplyStr = row.Columns[VEffectHeaderIndex.WhenToApply].Value;
             if (string.IsNullOrEmpty(whenToApplyStr))
-                whenToApply = VRootEventKey.Default;
+                whenToApply = VBattleEventKey.Default;
             else
-                whenToApply = Enum.Parse<VRootEventKey>(whenToApplyStr);
+                whenToApply = Enum.Parse<VBattleEventKey>(whenToApplyStr);
+            
+            latency = Convert.ToInt32(row.Columns[VEffectHeaderIndex.Latency].Value);
             
             conditions = new List<VEffectCondition>();
             for (int i = VEffectHeaderIndex.Condition1; i <= VEffectHeaderIndex.Condition2; i++)

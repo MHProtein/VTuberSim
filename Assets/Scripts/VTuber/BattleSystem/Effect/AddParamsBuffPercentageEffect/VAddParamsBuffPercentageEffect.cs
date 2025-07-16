@@ -22,10 +22,10 @@ namespace VTuber.BattleSystem.Effect
             
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
-                int delta = (int)((_percentage.Value) * buff.value);
+                int delta = (int)((_percentage.Value) * buff.Value);
                 
-                if (_configuration.multiplyByLayer > 0.0f)
-                    delta *= (int)(layer * _configuration.multiplyByLayer);
+                if (MultiplyByLayer > 0.0f)
+                    delta *= (int)(layer * MultiplyByLayer);
                 
                 if (battle.BattleAttributeManager.TryGetAttribute("BAParameter", out var attribute))
                 {

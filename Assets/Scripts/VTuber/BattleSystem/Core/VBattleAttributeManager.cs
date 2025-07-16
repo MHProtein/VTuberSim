@@ -37,7 +37,7 @@ namespace VTuber.BattleSystem.Core
             {
                 attribute.Value.OnEnable();
             }
-            VBattleRootEventCenter.Instance.RegisterListener(VRootEventKey.OnParameterChange, OnParameterChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
@@ -61,7 +61,7 @@ namespace VTuber.BattleSystem.Core
             {
                 attribute.Value.OnDisable();
             }
-            VBattleRootEventCenter.Instance.RemoveListener(VRootEventKey.OnParameterChange, OnParameterChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
         }
 
         public void AddAttribute(string name, VBattleAttribute attribute)

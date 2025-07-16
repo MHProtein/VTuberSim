@@ -19,7 +19,7 @@ namespace VTuber.BattleSystem.Effect.BuffAddPercentageEffect
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
 
-                int value = (int)((_percentage.Value) * buff.value);
+                int value = (int)((_percentage.Value) * buff.Value);
                 
                 if (_configuration.multiplyByLayer > 0.0f)
                     value *= (int)(layer * _configuration.multiplyByLayer);

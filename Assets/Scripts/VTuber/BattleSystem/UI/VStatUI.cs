@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TMPro;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -7,7 +8,7 @@ namespace VTuber.BattleSystem.UI
 {
     public class VStatUI : VUIBehaviour
     {
-        protected VRootEventKey key = VRootEventKey.Default;
+        protected VBattleEventKey key = VBattleEventKey.Default;
         private bool isFromCard = false;
         private bool shouldPlayTwice = false;
         
@@ -34,7 +35,7 @@ namespace VTuber.BattleSystem.UI
         {
             if (shouldPlayTwice)
             {
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnPlayTheSecondTime, new Dictionary<string ,object>()
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime, new Dictionary<string ,object>()
                 {
                     
                 });
@@ -44,7 +45,7 @@ namespace VTuber.BattleSystem.UI
             
             if (isFromCard)
             {
-                VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
                 {
                     
                 });
