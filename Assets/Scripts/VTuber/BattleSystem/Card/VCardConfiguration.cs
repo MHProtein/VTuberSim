@@ -74,7 +74,7 @@ namespace VTuber.BattleSystem.Card
         public Sprite facade;
         
         public CostType costType = CostType.Stamina;
-        public int costBuffId;
+        public uint costBuffId;
         public int cost;
         public int upgradedCost;
         public bool IsExhaust = false;
@@ -102,7 +102,7 @@ namespace VTuber.BattleSystem.Card
             costType = Enum.Parse<CostType>(row.Columns[VCardHeaderIndex.CostType].Value);
             
             if(costType == CostType.Buff)
-                costBuffId = Convert.ToInt32(row.Columns[VCardHeaderIndex.Id].Value);
+                costBuffId = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value);
 
             cost = Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value);
             upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value);

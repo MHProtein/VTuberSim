@@ -19,7 +19,7 @@ namespace VTuber.BattleSystem.Card
         public string CardType => _configuration.cardType;
         public string Description => _configuration.description;
         public CostType CostType => _configuration.costType;
-        public int CostBuffId => _configuration.costBuffId;
+        public uint CostBuffId => _configuration.costBuffId;
         
         public int Cost => _cost.Value;
         private VUpgradableValue<int> _cost;

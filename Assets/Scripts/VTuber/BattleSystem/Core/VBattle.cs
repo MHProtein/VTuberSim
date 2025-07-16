@@ -303,7 +303,7 @@ namespace VTuber.BattleSystem.Core
                     _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
                     break;
                 case CostType.Buff:
-                    _buffManager.ApplyCost((int)messagedict["CostBuffId"], (int)messagedict["Cost"]);
+                    _buffManager.ApplyCost((uint)messagedict["CostBuffId"], (int)messagedict["Cost"]);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

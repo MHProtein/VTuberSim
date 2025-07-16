@@ -12,7 +12,7 @@ namespace VTuber.BattleSystem.Buff
     {
         public VBuff buff;
         public int value;
-        public int Id { get; private set; }
+        public uint Id { get; private set; }
         public uint ConfigId => buff.ConfigId;
 
         private VBattle _battle;
@@ -61,7 +61,7 @@ namespace VTuber.BattleSystem.Buff
             });
         }
 
-        public void OnBuffAdded(VBattle battle, int id)
+        public void OnBuffAdded(VBattle battle, uint id)
         {
             Id = id;
             _battle = battle;
@@ -113,7 +113,7 @@ namespace VTuber.BattleSystem.Buff
     {
         private readonly List<VBuffItem> _buffs = new List<VBuffItem>();
         private VBattle _battle;
-        private int _idDistributor = 0;
+        private uint _idDistributor = 0;
 
         public VBuffManager(VBattle battle)
         {
@@ -195,13 +195,13 @@ namespace VTuber.BattleSystem.Buff
             return new List<VBuff>(_buffs.Select(buffItem => buffItem.buff));
         }
 
-        public bool TryGetBuff(int buffId, out VBuffItem buff)
+        public bool TryGetBuff(uint buffId, out VBuffItem buff)
         {
             buff = _buffs.Find(b => b.ConfigId == buffId);
             return buff != null;
         }
 
-        public void ApplyCost(int id, int cost)
+        public void ApplyCost(uint id, int cost)
         {
             if (TryGetBuff(id, out var buffItem))
             {
@@ -210,7 +210,7 @@ namespace VTuber.BattleSystem.Buff
             }
         }
 
-        public bool TestCost(int id, int cost)
+        public bool TestCost(uint id, int cost)
         {
             if (TryGetBuff(id, out var buffItem))
             {
