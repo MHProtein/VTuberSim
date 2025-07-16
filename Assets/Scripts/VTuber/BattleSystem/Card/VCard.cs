@@ -64,7 +64,7 @@ namespace VTuber.BattleSystem.Card
             _effects = new List<VEffect>();
             _upgradableEffects = new List<VEffect>();
             _newEffects = new List<VEffect>();
-            
+            _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
             foreach (var effect in effects)
             {
                 _effects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
