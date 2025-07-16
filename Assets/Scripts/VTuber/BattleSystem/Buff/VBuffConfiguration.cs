@@ -36,7 +36,7 @@ namespace VTuber.BattleSystem.Buff
     
     public class VBuffConfiguration
     {
-        public int id;
+        public uint id;
         public string buffName;
         public Sprite icon;
         public BuffType buffType;
@@ -46,7 +46,7 @@ namespace VTuber.BattleSystem.Buff
 
         public VBuffConfiguration(CellRange row)
         {
-            id = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Id].Value);
+            id = Convert.ToUInt32(row.Columns[VBuffHeaderIndex.Id].Value);
             buffName = row.Columns[VBuffHeaderIndex.Name].Value;
             //icon = csv.GetField<string>("Icon");
             buffType = Enum.Parse<BuffType>(row.Columns[VBuffHeaderIndex.BuffType].Value);
@@ -57,7 +57,7 @@ namespace VTuber.BattleSystem.Buff
                 var effectIDStr = row.Columns[i].Value;
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
-                int effect = Convert.ToInt32(effectIDStr);
+                uint effect = Convert.ToUInt32(effectIDStr);
                 
                 if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effect, out var config))
                 {

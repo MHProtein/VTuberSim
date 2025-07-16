@@ -6,35 +6,79 @@ using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Card
 {
 
     public class VCard
     {
-        public int Id { get; private set; }
+        public uint Id { get; private set; }
         public string CardName => _configuration.cardName;
         public bool IsExhaust => _configuration.IsExhaust;
         public string CardType => _configuration.cardType;
         public string Description => _configuration.description;
         public CostType CostType => _configuration.costType;
         public int CostBuffId => _configuration.costBuffId;
-        public int Cost => _configuration.cost.Value;
+        
+        public int Cost => _cost.Value;
+        private VUpgradableValue<int> _cost;
+        
         public Sprite Background => _configuration.background;
         public Sprite Facade => _configuration.facade;
         
-        public List<VEffect> Effects;
+        private List<VEffect> _effects;
+        private List<VEffect> _upgradableEffects;
+        private List<VEffect> _newEffects;
+
+        public bool IsUpgraded => _isUpgraded;
+        public bool IsTemporaryUpgraded => isTemporaryUpgraded;
+        
+        private bool _isUpgraded = false;
+        private bool isTemporaryUpgraded = false;
+        
+        public List<VEffect> Effects
+        {
+            get
+            {
+                List<VEffect> effects = new List<VEffect>();
+                effects.AddRange(_effects);
+                effects.AddRange(_upgradableEffects);
+                if (_isUpgraded)
+                {
+                    effects.AddRange(_newEffects);
+                }
+                return effects;
+            }
+        }
         public VCardRarity Rarity => _configuration.rarity;
         
         public Action<bool> SetPlayable;
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration, int id, List<VEffect> effects)
+        public VCard(VCardConfiguration configuration, uint id, List<VCardEffectItem> effects, List<VCardEffectItem> upgradableEffects, List<VCardEffectItem> newEffects)
         {
             _configuration = configuration;
             Id = id;
-            Effects = effects;
+            _effects = new List<VEffect>();
+            _upgradableEffects = new List<VEffect>();
+            _newEffects = new List<VEffect>();
+            
+            foreach (var effect in effects)
+            {
+                _effects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
+            }
+            
+            foreach (var effect in upgradableEffects)
+            {
+                _upgradableEffects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.upgradedParameter));
+            }
+            
+            foreach (var effect in newEffects)
+            {
+                _newEffects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.upgradedParameter));
+            }
         }
 
         public void Play()
@@ -44,12 +88,47 @@ namespace VTuber.BattleSystem.Card
             Dictionary<string, object> message = new Dictionary<string, object>()
             {
                 { "Card", this },
-                { "Effects", _configuration.effects },
-                { "Cost", _configuration.cost.Value },
+                { "Effects", Effects },
+                { "Cost", Cost },
                 { "CostType", CostType },
                 { "CostBuffId", CostBuffId }
             };
             VBattleRootEventCenter.Instance.Raise(VRootEventKey.OnCardPlayed, message);
         }
+
+        public void Upgrade(bool isTemporary)
+        {
+            if (_isUpgraded)
+            {
+                return;
+            }
+            
+            _isUpgraded = true;
+            isTemporaryUpgraded = isTemporary;
+            _cost.Upgrade();
+            
+            foreach (var effect in _upgradableEffects)
+            {
+                effect.Upgrade();
+            }
+        }
+
+        public void Downgrade()
+        {
+            if (!_isUpgraded)
+            {
+                return;
+            }
+            
+            _isUpgraded = false;
+            isTemporaryUpgraded = false;
+            _cost.Downgrade();
+            
+            foreach (var effect in _upgradableEffects)
+            {
+                effect.Downgrade();
+            }
+        }
+        
     }
 }

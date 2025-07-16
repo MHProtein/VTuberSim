@@ -5,14 +5,14 @@ namespace VTuber.Character
 {
     public class VCardLibrary
     {
-        private List<VCardConfiguration> cards;
+        private List<VCard> cards;
         
         public VCardLibrary()
         {
-            cards = new List<VCardConfiguration>();
+            cards = new List<VCard>();
         }
 
-        public void AddCards(List<VCardConfiguration> cards)
+        public void AddCards(List<VCard> cards)
         {
             foreach (var card in cards)
             {
@@ -20,7 +20,7 @@ namespace VTuber.Character
             }
         }
         
-        public void AddCard(VCardConfiguration card)
+        public void AddCard(VCard card)
         {
             if (card != null)
             {
@@ -28,7 +28,7 @@ namespace VTuber.Character
             }
         }
         
-        public void RemoveCard(VCardConfiguration card)
+        public void RemoveCard(VCard card)
         {
             if (card != null && cards.Contains(card))
             {
@@ -38,15 +38,7 @@ namespace VTuber.Character
         
         public List<VCard> GetCards()
         {
-            List<VCard> cardList = new List<VCard>();
-            foreach (var cardConfig in cards)
-            {
-                if (cardConfig != null)
-                {
-                    cardList.Add(cardConfig.CreateCard());
-                }
-            }
-            return cardList;
+            return cards;
         }
         
     }

@@ -13,7 +13,7 @@ namespace VTuber.BattleSystem.Buff
         public VBuff buff;
         public int value;
         public int Id { get; private set; }
-        public int ConfigId => buff.ConfigId;
+        public uint ConfigId => buff.ConfigId;
 
         private VBattle _battle;
 

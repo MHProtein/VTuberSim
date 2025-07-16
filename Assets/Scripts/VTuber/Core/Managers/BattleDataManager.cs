@@ -9,21 +9,21 @@ namespace VTuber.Core.Managers
 {
     public class VBattleDataManager : VSingleton<VBattleDataManager>
     {
-        public Dictionary<int, VCardConfiguration> CardConfigurations => _cardConfigurations;
-        private Dictionary<int, VCardConfiguration> _cardConfigurations;
+        public Dictionary<uint, VCardConfiguration> CardConfigurations => _cardConfigurations;
+        private Dictionary<uint, VCardConfiguration> _cardConfigurations;
 
-        public Dictionary<int, VEffectConfiguration> EffectConfigurations => _effectConfigurations;
-        private Dictionary<int, VEffectConfiguration> _effectConfigurations;
+        public Dictionary<uint, VEffectConfiguration> EffectConfigurations => _effectConfigurations;
+        private Dictionary<uint, VEffectConfiguration> _effectConfigurations;
 
-        public Dictionary<int, VBuffConfiguration> BuffConfigurations => _buffConfigurations;
-        private Dictionary<int, VBuffConfiguration> _buffConfigurations;
+        public Dictionary<uint, VBuffConfiguration> BuffConfigurations => _buffConfigurations;
+        private Dictionary<uint, VBuffConfiguration> _buffConfigurations;
 
-        public Dictionary<int, VEffectCondition> Conditions => conditions;
-        private Dictionary<int, VEffectCondition> conditions;
+        public Dictionary<uint, VEffectCondition> Conditions => conditions;
+        private Dictionary<uint, VEffectCondition> conditions;
 
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
-            _cardConfigurations = new Dictionary<int, VCardConfiguration>();
+            _cardConfigurations = new Dictionary<uint, VCardConfiguration>();
 
             foreach (var cardConfig in cardConfigurations)
             {
@@ -37,7 +37,7 @@ namespace VTuber.Core.Managers
 
         public void SetEffectConfigurations(List<VEffectConfiguration> effectConfigurations)
         {
-            _effectConfigurations = new Dictionary<int, VEffectConfiguration>();
+            _effectConfigurations = new Dictionary<uint, VEffectConfiguration>();
 
             foreach (var effectConfig in effectConfigurations)
             {
@@ -50,7 +50,7 @@ namespace VTuber.Core.Managers
 
         public void SetBuffConfigurations(List<VBuffConfiguration> buffConfigurations)
         {
-            _buffConfigurations = new Dictionary<int, VBuffConfiguration>();
+            _buffConfigurations = new Dictionary<uint, VBuffConfiguration>();
 
             foreach (var buffConfig in buffConfigurations)
             {
@@ -63,7 +63,7 @@ namespace VTuber.Core.Managers
 
         public void SetConditions(List<VEffectCondition> newConditions)
         {
-            conditions = new Dictionary<int, VEffectCondition>();
+            conditions = new Dictionary<uint, VEffectCondition>();
 
             foreach (var condition in newConditions)
             {
@@ -74,7 +74,7 @@ namespace VTuber.Core.Managers
             }
         }
 
-        public VEffect CreateEffectByID(int effectID, string parameter, string upgradedParameter)
+        public VEffect CreateEffectByID(uint effectID, string parameter, string upgradedParameter)
         {
             if (_effectConfigurations.TryGetValue(effectID, out var effectConfig))
             {
@@ -84,7 +84,7 @@ namespace VTuber.Core.Managers
             return null;
         }
 
-        public VCard CreateCardByID(int cardID)
+        public VCard CreateCardByID(uint cardID)
         {
             if (_cardConfigurations.TryGetValue(cardID, out var cardConfig))
             {
@@ -94,7 +94,7 @@ namespace VTuber.Core.Managers
             return null;
         }
 
-        public VBuff CreateBuffByID(int buffID)
+        public VBuff CreateBuffByID(uint buffID)
         {
             if (_buffConfigurations.TryGetValue(buffID, out var buffConfig))
             {
@@ -104,7 +104,7 @@ namespace VTuber.Core.Managers
             return null;
         }
 
-        public VEffectCondition GetConditionByID(int conditionID)
+        public VEffectCondition GetConditionByID(uint conditionID)
         {
             return conditions.GetValueOrDefault(conditionID);
         }
