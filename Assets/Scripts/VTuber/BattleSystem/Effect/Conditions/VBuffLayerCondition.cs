@@ -4,6 +4,7 @@ using Spire.Xls;
 using UnityEditor.Sprites;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect.Conditions
@@ -23,9 +24,18 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (battle.BuffManager.TryGetBuff(buffId, out var buff))
             {
-                return Compare(buff.Value, targetValue);
+                bool result = Compare(buff.Value, targetValue);
+                if (result)
+                {
+                    VDebug.Log("Condition " + id + " passed: Buff with ID " + buffId + " has value " + buff.Value);
+                }
+                else
+                {
+                    VDebug.Log("Condition " + id + " failed: Buff with ID " + buffId + " has value " + buff.Value);
+                }
+                return result;
             }
-
+            VDebug.Log("Condition " + id + " failed: Buff with ID " + buffId + " not found in battle.");
             return false;
         }
     }

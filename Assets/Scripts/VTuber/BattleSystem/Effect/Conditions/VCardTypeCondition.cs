@@ -2,6 +2,7 @@
 using Spire.Xls;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -18,9 +19,19 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (!message.ContainsKey("Card"))
             {
+                VDebug.Log("Condition " + id + " failed: 'Card' key not found in message.");
                 return false; // Ensure the message contains a valid card
             }
-            return _targetValue.Equals(((VCard)message["Card"]).CardType);
+            bool result = _targetValue.Equals(((VCard)message["Card"]).CardType);
+            if (result)
+            {
+                VDebug.Log("Condition " + id + " passed: Card type matches " + _targetValue);
+            }
+            else
+            {
+                VDebug.Log("Condition " + id + " failed: Card type does not match " + _targetValue);
+            }
+            return result;
         }
     }
 }

@@ -9,23 +9,35 @@ namespace VTuber.Character.Attribute
 {
     public class VCharacterAttribute
     {
-        public bool IsConvertToBattleAttribute => _configuration.isConvertToBattleAttribute;
-        private VCharacterAttributeConfiguration _configuration;
+        protected VCharacterAttributeConfiguration _configuration;
         
         protected int _minValue;
         protected int _maxValue;
         protected VRaisingEventKey _eventKey;
         
-        public int Value { get; private set; }
+        public VValueModifier<float> GainRateModifier => gainRateModifier;
+        protected VValueModifier<float> gainRateModifier;
         
-        public VCharacterAttribute(VCharacterAttributeConfiguration configuration, int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
-            int maxValue = Int32.MaxValue, int minValue = 0)
+        public VValueModifier<int> GainPointsModifier => gainPointsModifier;
+        protected VValueModifier<int> gainPointsModifier;
+        
+        public int Value { get; protected set; }
+        
+        protected VCharacterAttributeManager _attributeManager;
+        
+        public VCharacterAttribute(VCharacterAttributeConfiguration configuration, 
+            int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
+            int maxValue = Int32.MaxValue, int minValue = 0, bool isPercentage = false)
         {
             _minValue = minValue;
             _maxValue = maxValue;
             _eventKey = eventKey;
-            _configuration = configuration;
-            Value = initialValue;
+            InitSetValue(initialValue);
+        }
+
+        public void SetAttributeManager(VCharacterAttributeManager attributeManager)
+        {
+            _attributeManager = attributeManager;
         }
         
         public string GetAttributeName()
@@ -35,17 +47,17 @@ namespace VTuber.Character.Attribute
         
         public string GetBattleAttributeName()
         {
-            return IsConvertToBattleAttribute ? _configuration.attributeName : "";
+            return isConvertToBattleAttribute ? _configuration.attributeName : "";
         }
 
         public virtual VBattleAttribute ConvertToBattleAttribute()
         {
-            if (!IsConvertToBattleAttribute)
+            if (!isConvertToBattleAttribute)
             {
                 return null;
             }
             
-            return new VBattleAttribute(Value, _configuration.isBattleAttributePercentage);
+            return new VBattleAttribute(Value, isBattleAttributePercentage);
         }
         
         public virtual void AddTo(int delta)
@@ -88,5 +100,28 @@ namespace VTuber.Character.Attribute
             VRaisingRootEventCenter.Instance.Raise(_eventKey, messageDict);
         }
         
+        protected int GetModifierIntValue(VValueModifier<int> modifier)
+        {
+            if (modifier.Modifiers.Count == 0)
+                return modifier.DefaultValue;
+            int total = modifier.DefaultValue;
+            foreach (var mod in modifier.Modifiers)
+            {
+                total += mod.Value;
+            }
+            return total;
+        }
+        
+        protected float GetModifierFloatValue(VValueModifier<float> modifier)
+        {
+            if (modifier.Modifiers.Count == 0)
+                return modifier.DefaultValue;
+            float total = modifier.DefaultValue;
+            foreach (var mod in modifier.Modifiers)
+            {
+                total += mod.Value;
+            }
+            return total;
+        }
     }
 }

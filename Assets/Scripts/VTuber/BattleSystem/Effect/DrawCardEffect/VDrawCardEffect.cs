@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -21,6 +22,7 @@ namespace VTuber.BattleSystem.Effect
                 { "IsFromCard", isFromCard },
                 { "ShouldPlayTwice", shouldPlayTwice }
             });
+            VDebug.Log($"Effect {_configuration.effectName} requested to draw {_drawCardCount.Value} cards.");
         }        
         
         public override void Upgrade()

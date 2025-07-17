@@ -40,7 +40,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
             _operatorType = Enum.Parse<VOperatorType>(row.Columns[VConditionHeaderIndex.OperatorType].Value);
             description = row.Columns[VConditionHeaderIndex.Description].Value;
         }
-        
+
         public abstract bool IsTrue(VBattle battle, Dictionary<string, object> message);
 
         protected bool Compare(int left, int right)

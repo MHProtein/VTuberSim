@@ -1,4 +1,5 @@
 ﻿using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Effect.BuffAddPercentageEffect
@@ -25,6 +26,7 @@ namespace VTuber.BattleSystem.Effect.BuffAddPercentageEffect
                     value *= (int)(layer * _configuration.multiplyByLayer);
             
                 battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_buffID), value, isFromCard, shouldApplyTwice);
+                VDebug.Log("Effect " + _configuration.effectName + " added " + value + " to buff with ID: " + _buffID + ". New value: " + buff.Value);
             }
         }
     }

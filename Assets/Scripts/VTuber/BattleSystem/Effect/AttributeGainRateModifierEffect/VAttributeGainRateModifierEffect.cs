@@ -46,6 +46,7 @@ namespace VTuber.BattleSystem.Effect
                 modifierID = attribute.GainRateModifier.AddModifier(rateValue);
                 _onBuffRemove = attribute.GainRateModifier.RemoveModifier;
                 _onBuffLayerChangeRate = attribute.GainRateModifier.ChangeModifier;
+                VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaRate.Value + " gain rate modifier with ID: " + modifierID);
             }
         }
 
@@ -57,6 +58,7 @@ namespace VTuber.BattleSystem.Effect
             float rateValue = _deltaRate.Value;
             rateValue *= layer * MultiplyByLayer;
             _onBuffLayerChangeRate(modifierID, rateValue);
+            VDebug.Log("Effect " + _configuration.effectName + " changed gain rate to " + rateValue + " for layer " + layer);
         }
 
         public override void OnBuffRemove()

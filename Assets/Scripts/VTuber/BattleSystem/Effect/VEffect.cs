@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -38,15 +40,20 @@ namespace VTuber.BattleSystem.Effect
         public bool CanApply(VBattle battle, Dictionary<string, object> message)
         {
             if (conditions == null || conditions.Count == 0)
+            {
+                VDebug.Log("Effect " + Name + " can be applied without conditions.");
                 return true;
-
+            }
+            
             foreach (var condition in conditions)
             {
                 if (!condition.IsTrue(battle, message))
                 {
+                    VDebug.Log("Effect " + Name + " cannot be applied due to condition: " + condition.id);
                     return false;
                 }
             }
+            VDebug.Log("Effect " + Name + " can be applied.");
             return true;
         }
         
