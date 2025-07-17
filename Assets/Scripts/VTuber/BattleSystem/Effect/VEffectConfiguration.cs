@@ -22,7 +22,6 @@ namespace VTuber.BattleSystem.Effect
         public const int Condition1 = 6;
         public const int Condition2 = 7;
         public const int MultiplyByLayer = 8;
-        public const int ApplyWhenBuffAdded = 9;
     }
     
     public class VEffectConfiguration
