@@ -8,6 +8,12 @@ namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VBattleStaminaAttribute : VBattleAttribute
     {
+        public VValueModifier<float> ConsumeRateModifier => consumeRateModifier;
+        protected VValueModifier<float> consumeRateModifier;
+        
+        public VValueModifier<int> ConsumePointsModifier => consumePointsModifier;
+        protected VValueModifier<int> consumePointsModifier;
+        
         public VBattleStaminaAttribute(int value, VBattleEventKey key, int maxValue = Int32.MaxValue, int minValue = 0)
             : base(value, false, key, maxValue, minValue)
         {
@@ -38,14 +44,13 @@ namespace VTuber.BattleSystem.BattleAttribute
             
             if (delta > 0)
             {
-                Value = Mathf.Clamp(delta + Value, _minValue, _maxValue);
+                base.AddTo(delta, isFromCard, shouldApplyTwice);
+                return;
             }
-            else
-            {
-                Value = Mathf.Clamp(CalculateCost(ref delta, Value), _minValue, _maxValue);
-                VDebug.Log($"Stamina consumed: {delta}, current value: {Value}, " +
-                           $"reduced rate: {GetModifierFloatValue(gainRateModifier)}, reduced points: {GetModifierIntValue(GainPointsModifier)}");
-            }
+            
+            Value = Mathf.Clamp(CalculateCost(ref delta, Value), _minValue, _maxValue);
+            VDebug.Log($"Stamina consumed: {delta}, current value: {Value}, " +
+                       $"reduced rate: {GetModifierFloatValue(consumeRateModifier)}, reduced points: {GetModifierIntValue(consumePointsModifier)}");
             
             if (delta != 0)
                 SendEvent(Value, delta, isFromCard);
@@ -53,7 +58,7 @@ namespace VTuber.BattleSystem.BattleAttribute
         
         public int CalculateCost(ref int delta, int value)
         {
-            delta = (int)(delta * (1.0f - GetModifierFloatValue(gainRateModifier))) + GetModifierIntValue(GainPointsModifier);
+            delta = (int)(delta * (1.0f - GetModifierFloatValue(consumeRateModifier))) + GetModifierIntValue(consumePointsModifier);
             
             if (delta > 0)
                 delta = 0;
