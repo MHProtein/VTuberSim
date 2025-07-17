@@ -1,0 +1,13 @@
+﻿ID,Name,Description,Type,WhenToApply,Condition,MultiplyByLayer,AttributeName,AttributeDelta,BuffID,BuffDelta,StaminaModifyType,StaminaDelta,DrawCount,CardPileType,CardCount
+0,DoublePlay,Play the next card twice,VDoublePlayEffect,,0,0,,,,,,,,,
+1,AddParams,Add {AttributeDelta} Parameters,VAddEffect,OnTurnResolution,,1,BAParameter,1,,,,,,,
+2,AddParams,Add {AttributeDelta} Parameters,VAddEffect,,,1,BAParameter,10,,,,,,,
+3,AddShield,Add {AttributeDelta} Shields,VAddEffect,,,1,BAShield,5,,,,,,,
+4,AddTurn,Add {AttributeDelta} Turns,VAddEffect,,,0,BATurn,2,,,,,,,
+5,Redraw,Redraw the rest hand pile,VRedrawEffect,,,0,,,,,,,,,
+6,ReduceStaminaCost,Reduce Stamina Cost by 2 Points,VStaminaCostModiferEffect,OnPreCardApply,,1,,,,,Points,1,,,
+7,AddBuff_0,AddParamsPerm_2,VBuffModifyEffect,,,0,,,0,5,,,,,
+8,AddBuff_1,AddParamsPersist_2,VBuffModifyEffect,,,0,,,1,5,,,,,
+9,AddBuff_2,ReduceStaminaPersist_2,VBuffModifyEffect,,,0,,,2,5,,,,,
+10,DrawCards_2,Draw 2 Cards,VDrawCardEffect,,,0,,,,,,,2,,
+11,PickCards,,VPickCardFromPileEffect,,,0,,,,,,,,DrawPile,2
