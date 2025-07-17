@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -26,12 +28,13 @@ namespace VTuber.BattleSystem.Buff
         public const int Name = 1;
         public const int BuffType = 2;
         public const int Stackable = 3;
-        public const int Effect1 = 4;
-        public const int E1Param = 5;
-        public const int Effect2 = 6;
-        public const int E2Param = 7;
-        public const int Effect3 = 8;
-        public const int E3Param = 9;
+        public const int Latency = 4;
+        public const int Effect1 = 5;
+        public const int E1Param = 6;
+        public const int Effect2 = 7;
+        public const int E2Param = 8;
+        public const int Effect3 = 9;
+        public const int E3Param = 10;
     }
     
     public class VBuffConfiguration
@@ -41,8 +44,9 @@ namespace VTuber.BattleSystem.Buff
         public Sprite icon;
         public BuffType buffType;
         public bool stackable = true;
+        public int latency = 0;
         
-        public List<VEffect> effects;
+        public List<VEffectItem> effectItems;
 
         public VBuffConfiguration(CellRange row)
         {
@@ -51,7 +55,8 @@ namespace VTuber.BattleSystem.Buff
             //icon = csv.GetField<string>("Icon");
             buffType = Enum.Parse<BuffType>(row.Columns[VBuffHeaderIndex.BuffType].Value);
             stackable =  Convert.ToInt32(row.Columns[VBuffHeaderIndex.Stackable].Value) == 1;
-            effects = new List<VEffect>();
+            effectItems = new List<VEffectItem>();
+            latency = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Latency].Value);
             for (int i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E3Param; i += 2)
             {               
                 var effectIDStr = row.Columns[i].Value;
@@ -59,17 +64,18 @@ namespace VTuber.BattleSystem.Buff
                     continue;
                 uint effect = Convert.ToUInt32(effectIDStr);
                 
-                if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effect, out var config))
+                effectItems.Add(new VEffectItem
                 {
-                    string parameter = row.Columns[i + 1].Value;
-                    effects.Add(config.CreateEffect(parameter, parameter));
-                }
+                    id = effect,
+                    parameter = row.Columns[i + 1].Value,
+                    upgradedParameter = row.Columns[i + 1].Value
+                });
             }
         }
 
         public VBuff CreateBuff()
         {
-            return new VBuff(this, effects);
+            return new VBuff(this, effectItems.Select(item => item.CreateEffect()).ToList());
         }
         
         public bool IsBuffPersistent()

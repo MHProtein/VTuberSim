@@ -1,6 +1,7 @@
 ﻿using System;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -22,23 +23,6 @@ namespace VTuber.BattleSystem.Effect
             _deltaRate = new VUpgradableValue<float>(Convert.ToSingle(parameter), Convert.ToSingle(upgradedParameter));
         }
 
-        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
-        {
-            if (applied)
-                return;
-            applied = true;
-            if(battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var atrribute))
-            {
-                float rateValue = _deltaRate.Value;
-                if(MultiplyByLayer > 0.0f)
-                    rateValue *= layer * MultiplyByLayer;
-                
-                modifierID = atrribute.GainRateModifier.AddModifier(rateValue);
-                _onBuffRemove = atrribute.GainRateModifier.RemoveModifier;
-                _onBuffLayerChangeRate = atrribute.GainRateModifier.ChangeModifier;
-            }
-        }
-
         public override void Upgrade()
         {
             base.Upgrade();
@@ -49,6 +33,20 @@ namespace VTuber.BattleSystem.Effect
         {
             base.Downgrade();
             _deltaRate.Downgrade();
+        }
+
+        public override void OnBuffAdded(VBattle battle, int layer)
+        {            
+            if(battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
+            {
+                float rateValue = _deltaRate.Value;
+                if(MultiplyByLayer > 0.0f)
+                    rateValue *= layer * MultiplyByLayer;
+                
+                modifierID = attribute.GainRateModifier.AddModifier(rateValue);
+                _onBuffRemove = attribute.GainRateModifier.RemoveModifier;
+                _onBuffLayerChangeRate = attribute.GainRateModifier.ChangeModifier;
+            }
         }
 
         public override void OnBuffLayerChange(int layer)
@@ -63,6 +61,11 @@ namespace VTuber.BattleSystem.Effect
 
         public override void OnBuffRemove()
         {
+            if (_onBuffRemove is null)
+            {
+                VDebug.LogError("OnBuffRemove is null for modifierID: " + modifierID + ", attribute: " + _attributeName + "检查属性名");
+                return;
+            }
             _onBuffRemove(modifierID);
         }
     }
