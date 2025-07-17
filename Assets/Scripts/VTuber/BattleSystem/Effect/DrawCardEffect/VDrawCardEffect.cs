@@ -22,7 +22,7 @@ namespace VTuber.BattleSystem.Effect
                 { "IsFromCard", isFromCard },
                 { "ShouldPlayTwice", shouldPlayTwice }
             });
-            VDebug.Log($"Effect {_configuration.effectName} requested to draw {_drawCardCount.Value} cards.");
+            VDebug.Log($"效果 {_configuration.effectName} 请求抽取 {_drawCardCount.Value} 张卡牌。");
         }        
         
         public override void Upgrade()

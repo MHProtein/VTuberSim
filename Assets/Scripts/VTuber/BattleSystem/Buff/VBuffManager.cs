@@ -30,11 +30,11 @@ namespace VTuber.BattleSystem.Buff
             buff.latency -= 1;
             if (buff.latency <= 0)
             {
-                VDebug.Log($"{buff.GetBuffName()} latency decremented to {buff.latency}");
+                VDebug.Log($"{buff.GetBuffName()} 延迟减少到 {buff.latency}");
                 return true;
             }
 
-            VDebug.Log($"{buff.GetBuffName()} latency decremented to {buff.latency}");
+            VDebug.Log($"{buff.GetBuffName()} 延迟减少到 {buff.latency}");
             return false;
         }
 
@@ -47,7 +47,7 @@ namespace VTuber.BattleSystem.Buff
             if (Value <= 0)
                 return true;
 
-            VDebug.Log($"{buff.GetBuffName()} duration decremented to {Value}");
+            VDebug.Log($"{buff.GetBuffName()} 持续时间减少到 {Value}");
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
@@ -70,7 +70,7 @@ namespace VTuber.BattleSystem.Buff
         public virtual bool Stack(int addValue, bool isFromCard, bool shouldPlayTwice)
         {
             value += addValue;
-            VDebug.Log(buff.GetBuffName() + " stacked to " + Value);
+            VDebug.Log(buff.GetBuffName() + " 叠加到 " + Value);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
@@ -88,7 +88,7 @@ namespace VTuber.BattleSystem.Buff
             
             if(value <= 0)
             {
-                VDebug.Log(buff.GetBuffName() + " value is zero or less, removing buff.");
+                VDebug.Log(buff.GetBuffName() + " 数值为零或更低，移除Buff。");
                 return true; // Indicates that the buff should be removed
             }
 
@@ -120,7 +120,7 @@ namespace VTuber.BattleSystem.Buff
                 return false;
             
             value -= cost;
-            VDebug.Log(buff.GetBuffName() + " cost applied, remaining value: " + Value);
+            VDebug.Log(buff.GetBuffName() + " 消耗已应用，剩余数值: " + Value);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
@@ -215,7 +215,7 @@ namespace VTuber.BattleSystem.Buff
 
             if(buff.latency > 0)
             {
-                VDebug.Log("Buff " + buff.GetBuffName() + " has latency" + buff.latency);
+                VDebug.Log("Buff " + buff.GetBuffName() + " 有延迟 " + buff.latency);
                 _buffsToBeAdded.Add(new VBuffItem(buff, value));
                 return;
             }
@@ -235,7 +235,7 @@ namespace VTuber.BattleSystem.Buff
                 _buffs.Add(buffItem);
                 buffItem.OnBuffAdded(_battle, _idDistributor++);
                 
-                VDebug.Log("Buff added: " + buff.GetBuffName() + ", Value: " + value);
+                VDebug.Log("Buff已添加: " + buff.GetBuffName() + ", 数值: " + value);
                 
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffAdded, new Dictionary<string, object>
                 {

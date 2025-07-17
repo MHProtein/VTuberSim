@@ -16,6 +16,20 @@ namespace VTuber.Character
         {
             Attributes.TryAdd(name, attribute);
         }
+
+        public bool TryGetAttributeValue(string name, out int value, out bool isPercentage)
+        {
+            if(Attributes.TryGetValue(name, out var attribute))
+            {
+                value = attribute.Value;
+                isPercentage = attribute.IsPercentage;
+                return true;
+            }
+
+            value = 0;
+            isPercentage = false;
+            return false;
+        }
         
     }
 }

@@ -24,7 +24,7 @@ namespace VTuber.BattleSystem.BattleAttribute
                 return;
             }
             Value = Mathf.Clamp(delta + Value, _minValue, _maxValue);
-            VDebug.Log($"{AttributeName} consumed: {delta}, current value: {Value})");
+            VDebug.Log($"{AttributeName} 消耗: {delta}, 当前数值: {Value})");
             
             if (delta != 0)
                 SendEvent(Value, delta, isFromCard);

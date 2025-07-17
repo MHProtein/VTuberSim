@@ -196,6 +196,7 @@ namespace VTuber.BattleSystem.Core
                 if (card == _handPile[i])
                 {
                     _handPile.RemoveAt(i);
+                    VDebug.Log($"已从手牌移除卡牌：{card.CardName}");
                     break;
                 }
             }
@@ -207,21 +208,28 @@ namespace VTuber.BattleSystem.Core
                 return;
             
             if(card.IsExhaust)
+            {
                 _exhaustPile.Add(card);
+                VDebug.Log($"卡牌已移入消耗堆：{card.CardName}");
+            }
             else
+            {
                 _discardPile.Add(card);
+                VDebug.Log($"卡牌已移入弃牌堆：{card.CardName}");
+            }
         }
         
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
             DrawCards(_handSize);
+            VDebug.Log($"回合开始，抽取 {_handSize} 张卡牌。");
         }
         
         private void DiscardToDraw()
         {
             _drawPile.AddRange(_discardPile);
             _discardPile.Clear();
-            
+            VDebug.Log($"弃牌堆已洗入抽牌堆。");
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnDiscardToDraw, null);
         }
     }

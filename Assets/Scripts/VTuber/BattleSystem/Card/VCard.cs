@@ -77,8 +77,8 @@ namespace VTuber.BattleSystem.Card
 
         public void Play()
         {
-            VDebug.Log("play card: " + CardName);
-            VDebug.Log("effects: " + _configuration.effects.Count);
+            VDebug.Log("卡牌打出: " + CardName);
+            VDebug.Log("效果: " + _configuration.effects.Count);
             Dictionary<string, object> message = new Dictionary<string, object>()
             {
                 { "Card", this },

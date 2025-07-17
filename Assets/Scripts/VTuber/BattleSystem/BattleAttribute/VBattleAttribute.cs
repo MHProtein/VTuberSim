@@ -110,8 +110,8 @@ namespace VTuber.BattleSystem.BattleAttribute
             int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * gainRateModifierValue);
             Value = Mathf.Clamp(finalDelta,
                 _minValue, _maxValue);
-            VDebug.Log("Adding (Delta:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta
-                       + " to " + AttributeName + ", new value: " + Value);
+            VDebug.Log("添加 (变化量:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta
+                       + " 到 " + AttributeName + "，新数值: " + Value);
             SendEvent(Value, Value - temp, isFromCard, shouldPlayTwice);
         }
         

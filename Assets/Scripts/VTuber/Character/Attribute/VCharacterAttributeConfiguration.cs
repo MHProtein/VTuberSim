@@ -1,10 +1,9 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
-using VTuber.Core.TypeSerialization;
 using VTuber.Core.TypeSerialization;
 namespace VTuber.Character.Attribute
 {
@@ -17,9 +16,6 @@ namespace VTuber.Character.Attribute
         
         [TextArea] public string description;
         
-        [Space(5)]
-        [Core.TypeSerialization.TypeFilter(typeof(VCharacterAttribute))] public SerializableType attribute;
-        
         public bool isPercentage = false;
         
         [Space(5)]
@@ -30,15 +26,8 @@ namespace VTuber.Character.Attribute
         public SerializableType battleAttribute;
         [StringToEnum("BattleAttributes")] public string battleAttributeName;
         public bool isBattleAttributePercentage = false;
-        
-        public VCharacterAttribute GetAttribute()
-        {
-            if (attribute == null)
-            {
-                throw new InvalidOperationException("Attribute type is not set.");
-            }
-
-            return (VCharacterAttribute)Activator.CreateInstance(attribute.GetType());
-        }
+        public VBattleEventKey battleEventKey = VBattleEventKey.Default;
+        public int minValue = 0;
+        public int maxValue = int.MaxValue;
     }
 }

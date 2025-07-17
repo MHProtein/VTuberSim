@@ -61,7 +61,7 @@ namespace VTuber.BattleSystem.Effect
                     modifierID = battle.BattleAttributeManager.ConsumeRateModifier.AddModifier(rateValue);
                     _onBuffRemove = battle.BattleAttributeManager.ConsumeRateModifier.RemoveModifier;
                     _onBuffLayerChangeRate = battle.BattleAttributeManager.ConsumeRateModifier.ChangeModifier;
-                    VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaRate.Value + " gain rate modifier with ID: " + modifierID);
+                    VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaRate.Value} 获取RateModifier，ID：{modifierID}");
                 
                     break;
                 case VStaminaModifiyType.Points:
@@ -72,7 +72,7 @@ namespace VTuber.BattleSystem.Effect
                     modifierID = battle.BattleAttributeManager.ConsumePointsModifier.AddModifier(pointsValue);
                     _onBuffRemove = battle.BattleAttributeManager.ConsumePointsModifier.RemoveModifier;
                     _onBuffLayerChangePoints = battle.BattleAttributeManager.ConsumePointsModifier.ChangeModifier;
-                    VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaPoints.Value + " gain points modifier with ID: " + modifierID);
+                    VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaPoints.Value} 获取PointsModifier，ID：{modifierID}");
                 
                     break;
             }
@@ -91,7 +91,7 @@ namespace VTuber.BattleSystem.Effect
                     float rateValue = _deltaRate.Value;
                     rateValue *= layer * MultiplyByLayer;
                     _onBuffLayerChangeRate(modifierID, rateValue);
-                    VDebug.Log("Effect " + _configuration.effectName + " changed gain rate to " + rateValue + " for layer " + layer);
+                    VDebug.Log($"效果 {_configuration.effectName} 修改了RateModifier为 {rateValue}，层数：{layer}");
                     break;
                 case VStaminaModifiyType.Points:
                     if (MultiplyByLayer < 0.0f)
@@ -99,7 +99,7 @@ namespace VTuber.BattleSystem.Effect
                     int pointsValue = _deltaPoints.Value;
                     pointsValue *= (int)(layer * MultiplyByLayer);
                     _onBuffLayerChangePoints(modifierID, pointsValue);
-                    VDebug.Log("Effect " + _configuration.effectName + " changed gain points to " + pointsValue + " for layer " + layer);
+                    VDebug.Log($"效果 {_configuration.effectName} 修改了PointsModifier为 {pointsValue}，层数：{layer}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

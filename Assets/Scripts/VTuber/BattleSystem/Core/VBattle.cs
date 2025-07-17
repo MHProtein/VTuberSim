@@ -235,7 +235,7 @@ namespace VTuber.BattleSystem.Core
         private void OnCardUsed(Dictionary<string, object> messagedict)
         {
             _playLeftAttribute.AddTo(-1, false);
-            VDebug.Log("Play Left: " + PlayLeft);
+            VDebug.Log("剩余可行动次数: " + PlayLeft);
             if (PlayLeft <= 0)
             {
                 EndTurn();
@@ -266,7 +266,7 @@ namespace VTuber.BattleSystem.Core
 
         public void EndTurn()
         {
-            Debug.Log("End Turn: " + TurnLeft);
+            Debug.Log("回合结束: " + TurnLeft);
             _turnAttribute.AddTo(-1, false);
             if (TurnLeft <= 0)
             {
@@ -293,7 +293,7 @@ namespace VTuber.BattleSystem.Core
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
-            VDebug.Log(messagedict is null);
+            VDebug.Log(messagedict is null ? "卡牌消息为空" : "卡牌消息有效");
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPreCardApply, messagedict);
 

@@ -30,7 +30,7 @@ namespace VTuber.BattleSystem.Effect
                 if (battle.BattleAttributeManager.TryGetAttribute("BAParameter", out var attribute))
                 {
                     attribute.AddTo(delta, isFromCard, shouldApplyTwice);
-                    VDebug.Log($"Effect{_configuration.effectName} added {delta} to BAParameter. New value: {attribute.Value}");
+                    VDebug.Log($"效果{_configuration.effectName} 为 BAParameter 增加了 {delta}。新数值: {attribute.Value}");
                 }
             }
         }

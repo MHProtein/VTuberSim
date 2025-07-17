@@ -20,17 +20,17 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (!message.ContainsKey("NewValue") || !message.ContainsKey("Delta"))
             {
-                VDebug.Log("Condition " + id + " failed: Required keys 'NewValue' or 'Delta' not found in message.");
+                VDebug.Log($"条件 {id} 未通过：消息中未找到 'NewValue' 或 'Delta' 键。");
                 return false;
             }
             bool result = Compare((int)message["NewValue"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
             if (result)
             {
-                VDebug.Log($"Condition {id} passed: Attribute has new value {(int)message["NewValue"]} and delta {(int)message["Delta"]}");
+                VDebug.Log($"条件 {id} 通过：属性新值为 {(int)message["NewValue"]}，变化量为 {(int)message["Delta"]}");
             }
             else
             {
-                VDebug.Log($"Condition {id} failed: Attribute has new value {(int)message["NewValue"]} and delta {(int)message["Delta"]}");
+                VDebug.Log($"条件 {id} 未通过：属性新值为 {(int)message["NewValue"]}，变化量为 {(int)message["Delta"]}");
             }
             return result;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
@@ -13,5 +14,13 @@ namespace VTuber.Character.Attributes
             : base(configuration, initialValue, eventKey, maxValue, minValue, isPercentage)
         {
         }
+        
+        // public override KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()
+        // {
+        //     _attributeManager
+        //     
+        //     return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
+        //         new VBattleMultiplierAttribute());
+        // }
     }
 }
