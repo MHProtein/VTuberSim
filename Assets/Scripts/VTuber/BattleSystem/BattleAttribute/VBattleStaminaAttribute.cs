@@ -8,8 +8,8 @@ namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VBattleStaminaAttribute : VBattleAttribute
     {
-        public VBattleStaminaAttribute(int value, int maxValue = Int32.MaxValue, int minValue = 0)
-            : base(value, false, VBattleEventKey.OnStaminaChange, maxValue, minValue)
+        public VBattleStaminaAttribute(int value, VBattleEventKey key, int maxValue = Int32.MaxValue, int minValue = 0)
+            : base(value, false, key, maxValue, minValue)
         {
             gainRateModifier = new VValueModifier<float>(0.0f);
         }

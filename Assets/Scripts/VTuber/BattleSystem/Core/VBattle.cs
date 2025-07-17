@@ -96,8 +96,8 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleMultiplierAttribute(500));
             
-            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, 100));
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false, VBattleEventKey.OnShieldChange));
+            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, VBattleEventKey.OnStaminaChange, 100));
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
