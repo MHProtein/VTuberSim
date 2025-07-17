@@ -24,11 +24,19 @@ namespace VTuber.BattleSystem.Core
          // //from memberships
          // public int MembershipCount { get; private set; }
 
+        public VValueModifier<float> ConsumeRateModifier => consumeRateModifier;
+        protected VValueModifier<float> consumeRateModifier;
+        
+        public VValueModifier<int> ConsumePointsModifier => consumePointsModifier;
+        protected VValueModifier<int> consumePointsModifier;
+        
         private Dictionary<string, VBattleAttribute> _battleAttributes;
         
         public VBattleAttributeManager(VCharacterAttributeManager characterAttributeManager)
         {
             _battleAttributes = new Dictionary<string, VBattleAttribute>();
+            consumePointsModifier = new VValueModifier<int>(0);
+            consumeRateModifier = new VValueModifier<float>(0.0f);
         }
         
         public void OnEnable()
@@ -82,12 +90,13 @@ namespace VTuber.BattleSystem.Core
 
         public void ApplyCost(int cost)
         {
+            int calculatedCost = CalculateCost(cost);
             var stamina = _battleAttributes["BAStamina"] as VBattleStaminaAttribute;
-            var shield = _battleAttributes["BAShield"];
+            var shield = _battleAttributes["BAShield"] as VBattleStaminaAttribute;
 
-            int costAfterShield = cost - shield.Value;
+            int costAfterShield = calculatedCost - shield.Value;
 
-            shield.AddTo(-cost, false);
+            shield.AddTo(-calculatedCost, false);
             if (costAfterShield <= 0)
                 return;
             
@@ -97,14 +106,24 @@ namespace VTuber.BattleSystem.Core
         public bool TestCost(int cost)
         {
             var stamina = _battleAttributes["BAStamina"] as VBattleStaminaAttribute;
-            var shield = _battleAttributes["BAShield"];
+            var shield = _battleAttributes["BAShield"] as VBattleStaminaAttribute;
             
-            int costAfterShield = cost - shield.Value;
+            int calculatedCost = CalculateCost(cost);
+            
+            int costAfterShield = calculatedCost - shield.Value;
             
             if (costAfterShield <= 0)
                 return true;
             
             return stamina.TestCost(-costAfterShield);
+        }
+        
+        public int CalculateCost(int delta)
+        {
+            delta = (int)(delta * (1.0f - VValueModifier<int>.GetModifierFloatValue(consumeRateModifier)))
+                    - VValueModifier<int>.GetModifierIntValue(consumePointsModifier);
+
+            return delta;
         }
     }
 }

@@ -45,6 +45,30 @@ namespace VTuber.BattleSystem.BattleAttribute
                 _modifiers[id] = newValue;
             }
         }
+        
+        public static int GetModifierIntValue(VValueModifier<int> modifier)
+        {
+            if (modifier.Modifiers.Count == 0)
+                return modifier.DefaultValue;
+            int total = modifier.DefaultValue;
+            foreach (var mod in modifier.Modifiers)
+            {
+                total += mod.Value;
+            }
+            return total;
+        }
+        
+        public static float GetModifierFloatValue(VValueModifier<float> modifier)
+        {
+            if (modifier.Modifiers.Count == 0)
+                return modifier.DefaultValue;
+            float total = modifier.DefaultValue;
+            foreach (var mod in modifier.Modifiers)
+            {
+                total += mod.Value;
+            }
+            return total;
+        }
     }
     
     //All the attributes treated as int type, if is percentage, it is multiplied by 100 and vice versa when used. 
@@ -81,8 +105,8 @@ namespace VTuber.BattleSystem.BattleAttribute
             if (delta == 0)
                 return;
             int temp = Value;
-            int gainPointsModifierValue = GetModifierIntValue(gainPointsModifier);
-            float gainRateModifierValue = GetModifierFloatValue(gainRateModifier);
+            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
+            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
             int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * gainRateModifierValue);
             Value = Mathf.Clamp(finalDelta,
                 _minValue, _maxValue);
@@ -133,30 +157,5 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             
         }
-        
-        protected int GetModifierIntValue(VValueModifier<int> modifier)
-        {
-            if (modifier.Modifiers.Count == 0)
-                return modifier.DefaultValue;
-            int total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value;
-            }
-            return total;
-        }
-        
-        protected float GetModifierFloatValue(VValueModifier<float> modifier)
-        {
-            if (modifier.Modifiers.Count == 0)
-                return modifier.DefaultValue;
-            float total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value;
-            }
-            return total;
-        }
-        
     }
 }

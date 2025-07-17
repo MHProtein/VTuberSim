@@ -1,7 +1,7 @@
 ﻿using System;
 using Spire.Xls;
 
-namespace VTuber.BattleSystem.Effect.ShieldStaminaModifierEffect
+namespace VTuber.BattleSystem.Effect
 {
     public class VShieldStaminaModifierEffectConfiguration : VEffectConfiguration
     {

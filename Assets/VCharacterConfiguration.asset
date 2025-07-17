@@ -20,8 +20,84 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
-  staminaInitialValue: 3
+    SerializationNodes:
+    - Name: pressureBuffs
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  staminaInitialValue: 100
   staminaMinValue: 0
-  staminaMaxValue: 6
+  staminaMaxValue: 200
   staminaConfiguration: {fileID: 0}
+  pressureInitialValue: 1
+  pressureMinValue: 1
+  pressureMaxValue: 5
+  pressureConfiguration: {fileID: 0}
+  singingAbilityInitialValue: 0
+  singingAbilityMinValue: 0
+  singingAbilityMaxValue: 0
+  singingAbilityConfiguration: {fileID: 0}
+  gamingAbilityInitialValue: 0
+  gamingAbilityMinValue: 0
+  gamingAbilityMaxValue: 0
+  gamingAbilityConfiguration: {fileID: 0}
+  chattingAbilityInitialValue: 0
+  chattingAbilityMinValue: 0
+  chattingAbilityMaxValue: 0
+  chattingAbilityConfiguration: {fileID: 0}
+  singingAbilityConversionRatioInitialValue: 0
+  singingAbilityConversionRatioMinValue: 0
+  singingAbilityConversionRatioMaxValue: 0
+  singingAbilityConversionRatioConfiguration: {fileID: 0}
+  gamingAbilityConversionRatioInitialValue: 0
+  gamingAbilityConversionRatioMinValue: 0
+  gamingAbilityConversionRatioMaxValue: 0
+  gamingAbilityConversionRatioConfiguration: {fileID: 0}
+  chattingAbilityConversionRatioInitialValue: 0
+  chattingAbilityConversionRatioMinValue: 0
+  chattingAbilityConversionRatioMaxValue: 0
+  chattingAbilityConversionRatioConfiguration: {fileID: 0}
+  singingAbilityGainEfficiencyInitialValue: 0
+  singingAbilityGainEfficiencyMinValue: 0
+  singingAbilityGainEfficiencyMaxValue: 0
+  singingAbilityGainEfficiencyConfiguration: {fileID: 0}
+  gamingAbilityGainEfficiencyInitialValue: 0
+  gamingAbilityGainEfficiencyMinValue: 0
+  gamingAbilityGainEfficiencyMaxValue: 0
+  gamingAbilityGainEfficiencyConfiguration: {fileID: 0}
+  chattingAbilityGainEfficiencyInitialValue: 0
+  chattingAbilityGainEfficiencyMinValue: 0
+  chattingAbilityGainEfficiencyMaxValue: 0
+  chattingAbilityGainEfficiencyConfiguration: {fileID: 0}
+  followerCountInitialValue: 0
+  followerCountMinValue: 0
+  followerCountMaxValue: 0
+  followerCountConfiguration: {fileID: 0}
+  membershipCountInitialValue: 0
+  membershipCountMinValue: 0
+  membershipCountMaxValue: 0
+  membershipCountConfiguration: {fileID: 0}
+  followerToViewerRatioInitialValue: 0
+  followerToViewerRatioMinValue: 0
+  followerToViewerRatioMaxValue: 0
+  followerToViewerRatioConfiguration: {fileID: 0}
+  moneyInitialValue: 0
+  moneyMinValue: 0
+  moneyMaxValue: 0
+  moneyConfiguration: {fileID: 0}
