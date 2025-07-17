@@ -1,6 +1,7 @@
 ﻿using System;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -44,6 +45,7 @@ namespace VTuber.BattleSystem.Effect
                 modifierID = attribute.GainPointsModifier.AddModifier((int)pointValue);
                 _onBuffRemove = attribute.GainPointsModifier.RemoveModifier;
                 _onBuffLayerChangePoints = attribute.GainPointsModifier.ChangeModifier;
+                VDebug.Log("Effect " + _configuration.effectName + " added" + _deltaPoints.Value + " gain points modifier with ID: " + modifierID);
             }
         }
 
@@ -55,11 +57,18 @@ namespace VTuber.BattleSystem.Effect
             float pointValue = _deltaPoints.Value;
             pointValue *= layer * MultiplyByLayer;
             _onBuffLayerChangePoints(modifierID, (int)pointValue);
+            VDebug.Log("Effect " + _configuration.effectName + " changed gain points to " + pointValue + " for layer " + layer);
         }
 
         public override void OnBuffRemove()
         {
+            if (_onBuffRemove is null)
+            {
+                VDebug.LogError("OnBuffRemove is null for modifierID: " + modifierID + ", attribute: " + _attributeName + "检查属性名");
+                return;
+            }
             _onBuffRemove(modifierID);
+            VDebug.Log("Effect " + _configuration.effectName + " removed gain points modifier with ID: " + modifierID);
         }
     }
 }

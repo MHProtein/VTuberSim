@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Spire.Xls;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -22,12 +23,26 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (!message.ContainsKey("NewValue") || !message.ContainsKey("Delta") || !message.ContainsKey("BuffId"))
             {
+                VDebug.Log("Condition " + id + " failed: Required keys not found in message.");
                 return false;
             }
-            if ((int)message["BuffId"] != _buffId)
-                return false;
 
-            return Compare((int)message["Value"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
+            if ((int)message["BuffId"] != _buffId)
+            {
+                VDebug.Log($"Condition {id} failed: Buff ID mismatch. Expected {_buffId}, got {(int)message["BuffId"]}");
+                return false;
+            }
+
+            bool result = Compare((int)message["Value"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
+            if (result)
+            {
+                VDebug.Log($"Condition {id} passed: Buff with ID {_buffId} has value {(int)message["Value"]} and delta {(int)message["Delta"]}");
+            }
+            else
+            {
+                VDebug.Log($"Condition {id} failed: Buff with ID {_buffId} has value {(int)message["Value"]} and delta {(int)message["Delta"]}");
+            }
+            return result;
         }
     }
 }

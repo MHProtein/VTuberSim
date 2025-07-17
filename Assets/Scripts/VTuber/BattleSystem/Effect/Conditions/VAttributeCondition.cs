@@ -2,6 +2,7 @@
 using Spire.Xls;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -22,6 +23,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
                 return Compare(attribute.Value, _targetValue);
             }
 
+            VDebug.Log("Condition " + id + " failed: Attribute " + _attributeName + " not found in battle.");
             return false;
         }
     }

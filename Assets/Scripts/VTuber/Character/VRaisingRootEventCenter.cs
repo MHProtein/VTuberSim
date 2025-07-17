@@ -7,6 +7,21 @@ namespace VTuber.Core.EventCenter
     {
         Default,
         
+        OnStaminaChanged,
+        OnPressureChanged,
+        OnSingingAbilityChanged,
+        OnGamingAbilityChanged,
+        OnChattingAbilityChanged,
+        OnSingingAbilityConversionRatioChanged,
+        OnGamingAbilityConversionRatioChanged,
+        OnChattingAbilityConversionRatioChanged,
+        OnSingingAbilityGainEfficiencyChanged,
+        OnGamingAbilityGainEfficiencyChanged,
+        OnChattingAbilityGainEfficiencyChanged,
+        OnFollowerCountChanged,
+        OnMemberCountChanged,
+        OnFollowerToViewerRatioChanged,
+        OnMoneyChanged,
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>
