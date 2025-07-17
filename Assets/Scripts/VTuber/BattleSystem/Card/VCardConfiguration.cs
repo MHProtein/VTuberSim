@@ -37,27 +37,23 @@ namespace VTuber.BattleSystem.Card
         public const int Cost = 7;
         public const int UpgradedCost = 8;
         public const int IsExhaust = 9;
-    
-        public const int Effect1 = 10;
-        public const int E1Param = 11;
-        public const int E1UpgradedParam = 12;
-    
-        public const int Effect2 = 13;
-        public const int E2Param = 14;
-        public const int E2UpgradedParam = 15;
-    
-        public const int Effect3 = 16;
-        public const int E3Param = 17;
-        public const int E3UpgradedParam = 18;
-    
-        public const int Effect4 = 19;
-        public const int E4Param = 20;
-        public const int E4UpgradedParam = 21;
-
-        public const int NewEffect1 = 22;
-        public const int NE1Param = 23;
-        public const int NewEffect2 = 24;
-        public const int NE2Param = 25;
+        public const int NotRepeatable = 10;
+        public const int Effect1 = 11;
+        public const int E1Param = 12;
+        public const int E1UpgradedParam = 13;
+        public const int Effect2 = 14;
+        public const int E2Param = 15;
+        public const int E2UpgradedParam = 16;
+        public const int Effect3 = 17;
+        public const int E3Param = 18;
+        public const int E3UpgradedParam = 19;
+        public const int Effect4 = 20;
+        public const int E4Param = 21;
+        public const int E4UpgradedParam = 22;
+        public const int NewEffect1 = 23;
+        public const int NE1Param = 24;
+        public const int NewEffect2 = 25;
+        public const int NE2Param = 26;
     }
 
     public struct VEffectItem
@@ -97,20 +93,20 @@ namespace VTuber.BattleSystem.Card
         public uint costBuffId;
         public int cost;
         public int upgradedCost;
-        public bool IsExhaust = false;
+        public bool isExhaust = false;
+        public bool notRepeatable = false;
 
         public List<VEffectItem> effects;
         public List<VEffectItem> newEffects;
         
 
         private static uint idDistributor = 0;
-
+        private bool spawned = false;
         public VCardConfiguration(CellRange row)
         {
             effects = new List<VEffectItem>();
             effects = new List<VEffectItem>();
             newEffects = new List<VEffectItem>();
-            
             
             id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value);
             cardName = row.Columns[VCardHeaderIndex.Name].Value;
@@ -125,8 +121,8 @@ namespace VTuber.BattleSystem.Card
 
             cost = Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value);
             upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value);
-            
-            IsExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
+            notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value) == 1;
+            isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
             
             //background = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Background"));
             //facade = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Facade"));
@@ -171,6 +167,9 @@ namespace VTuber.BattleSystem.Card
         
         public VCard CreateCard()
         {
+            if (spawned)
+                return null;
+            spawned = true;
             return new VCard(this, idDistributor++, effects, newEffects);
         }
     }
