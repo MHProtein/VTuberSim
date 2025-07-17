@@ -17,12 +17,14 @@ namespace VTuber.BattleSystem.Buff
         public uint ConfigId => _configuration.id;
         
         public bool IsPermanent => _configuration.IsBuffPermanent();
-        
+
+        public int latency;
         
         public VBuff(VBuffConfiguration configuration, List<VEffect> effects)
         {
             _configuration = configuration;
             _effects = effects;
+            latency = _configuration.latency;
         }
 
         public virtual bool IsStackable()
