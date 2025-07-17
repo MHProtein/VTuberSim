@@ -67,6 +67,7 @@ namespace VTuber.BattleSystem.Core
         public void AddAttribute(string name, VBattleAttribute attribute)
         {
             _battleAttributes.Add(name, attribute);
+            attribute.AttributeName = name;
             attribute.OnEnable();
         }
         
