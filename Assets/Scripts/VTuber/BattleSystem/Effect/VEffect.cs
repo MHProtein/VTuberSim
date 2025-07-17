@@ -8,6 +8,12 @@ namespace VTuber.BattleSystem.Effect
     public class VEffect
     {
         protected VEffectConfiguration _configuration;
+        public uint Id => _configuration.id;
+        public string Name => _configuration.effectName;
+        public string Description => _configuration.description;
+        //public string Icon => _configuration.icon;
+        //public string UpgradeIcon => _configuration.upgradeIcon;
+        
         public List<VEffectCondition> conditions;
         public VBattleEventKey whenToApply;
         public bool upgradable = false;

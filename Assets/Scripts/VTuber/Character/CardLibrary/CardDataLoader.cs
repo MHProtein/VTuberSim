@@ -13,11 +13,11 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Character
 {
-    public class BattleResourcesLoader
+    public class VBattleResourcesLoader
     {
         private readonly string _xlsxPath;
 
-        public BattleResourcesLoader(string xlsxPath)
+        public VBattleResourcesLoader(string xlsxPath)
         {
             _xlsxPath = xlsxPath;
         }
