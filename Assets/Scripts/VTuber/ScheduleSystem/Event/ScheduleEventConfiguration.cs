@@ -7,13 +7,7 @@ namespace VTuber.ScheduleSystem.Event
     public class ScheduleEventConfiguration : ScriptableObject
     {
         public string eventName;
-        
-        [Range(1, 3)]
-        public int duration = 1;
-        
-        public int Duration => duration;
-        
-        
+
         [TextArea]
         public string description;
 

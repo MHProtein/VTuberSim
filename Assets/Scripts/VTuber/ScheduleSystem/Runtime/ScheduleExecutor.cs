@@ -15,8 +15,7 @@ namespace VTuber.ScheduleSystem.Runtime
     {
         private WeeklySchedule _weeklySchedule;
         private PlayerStatus _playerStatus;
-        private readonly HashSet<ScheduleEvent> _executedEvents = new();
-        
+
         public ScheduleExecutor(WeeklySchedule schedule, PlayerStatus player)
         {
             _weeklySchedule = schedule;
@@ -37,22 +36,14 @@ namespace VTuber.ScheduleSystem.Runtime
         /// <summary>
         /// 执行指定天的三个阶段
         /// </summary>
-
-
         public void ExecuteDay(int dayIndex)
         {
-            _executedEvents.Clear();
-
             foreach (TimeOfDay time in System.Enum.GetValues(typeof(TimeOfDay)))
             {
-                
-                var evt = _weeklySchedule.GetEvent(dayIndex, time);
-                if (evt != null && !_executedEvents.Contains(evt))
-                {
-                    var phase = new PhaseData(dayIndex, time, evt);
-                    ExecutePhase(phase);
-                    _executedEvents.Add(evt);
-                }
+                var scheduleEvent = _weeklySchedule.GetEvent(dayIndex, time);
+                var phase = new PhaseData(dayIndex, time, scheduleEvent);
+
+                ExecutePhase(phase);
             }
         }
 
