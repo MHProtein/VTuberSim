@@ -25,6 +25,19 @@ namespace VTuber.BattleSystem.Buff
             this.value = value;
         }
 
+        public bool DecrementLatency()
+        {
+            buff.latency -= 1;
+            if (buff.latency <= 0)
+            {
+                VDebug.Log($"{buff.GetBuffName()} latency decremented to {buff.latency}");
+                return true;
+            }
+
+            VDebug.Log($"{buff.GetBuffName()} latency decremented to {buff.latency}");
+            return false;
+        }
+
         public bool DecrementDuration()
         {
             if (buff.IsPermanent)
@@ -48,17 +61,16 @@ namespace VTuber.BattleSystem.Buff
 
             foreach (var effect in buff.Effects)
             {
-                effect.OnTurnEnd();
                 effect.OnBuffLayerChange(value);
             }
             
             return false;
         }
 
-        public virtual void Stack(int addValue, bool isFromCard, bool shouldPlayTwice)
+        public virtual bool Stack(int addValue, bool isFromCard, bool shouldPlayTwice)
         {
             value += addValue;
-
+            VDebug.Log(buff.GetBuffName() + " stacked to " + Value);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
@@ -73,8 +85,16 @@ namespace VTuber.BattleSystem.Buff
             {
                 effect.OnBuffLayerChange(value);
             }
-        }
+            
+            if(value <= 0)
+            {
+                VDebug.Log(buff.GetBuffName() + " value is zero or less, removing buff.");
+                return true; // Indicates that the buff should be removed
+            }
 
+            return false;
+        }
+        
         public void OnBuffAdded(VBattle battle, uint id)
         {
             Id = id;
@@ -82,15 +102,8 @@ namespace VTuber.BattleSystem.Buff
 
             foreach (var effect in buff.Effects)
             {
-                if (effect.CanApply(_battle, null))
-                    effect.ApplyEffect(_battle, Value);
-                VBattleRootEventCenter.Instance.RegisterListener(effect.whenToApply, dict =>
-                {
-                    if (effect.CanApply(_battle, dict))
-                        effect.ApplyEffect(_battle, Value);
-                });
+                effect.OnBuffAdded(_battle, value);
             }
-            
         }
 
         public void OnBuffRemoved()
@@ -107,7 +120,7 @@ namespace VTuber.BattleSystem.Buff
                 return false;
             
             value -= cost;
-            
+            VDebug.Log(buff.GetBuffName() + " cost applied, remaining value: " + Value);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
@@ -135,6 +148,7 @@ namespace VTuber.BattleSystem.Buff
     public class VBuffManager
     {
         private readonly List<VBuffItem> _buffs = new List<VBuffItem>();
+        private readonly List<VBuffItem> _buffsToBeAdded = new List<VBuffItem>();
         private VBattle _battle;
         private uint _idDistributor = 0;
 
@@ -167,6 +181,20 @@ namespace VTuber.BattleSystem.Buff
             {
                 RemoveBuff(buffItem);
             }
+            
+            var buffsToAdd = new List<VBuffItem>();
+            foreach (var buff in _buffsToBeAdded)
+            {
+                if (buff.DecrementLatency())
+                {
+                    buffsToAdd.Add(buff);
+                }
+            }
+            foreach (var buffItem in buffsToAdd)
+            {
+                _buffsToBeAdded.Remove(buffItem);
+                AddBuff(buffItem.buff, buffItem.Value, false, false);
+            }
         }
 
         private void RemoveBuff(VBuffItem buffItem)
@@ -185,16 +213,30 @@ namespace VTuber.BattleSystem.Buff
             if (buff == null || string.IsNullOrEmpty(buff.GetBuffName()))
                 return;
 
+            if(buff.latency > 0)
+            {
+                VDebug.Log("Buff " + buff.GetBuffName() + " has latency" + buff.latency);
+                _buffsToBeAdded.Add(new VBuffItem(buff, value));
+                return;
+            }
+            
             var existingBuff = _buffs.Find(b => b.ConfigId == buff.ConfigId);
             if (existingBuff != null && buff.IsStackable())
             {
-                existingBuff.Stack(value, isFromCard, shouldPlayTwice);
+                if (existingBuff.Stack(value, isFromCard, shouldPlayTwice))
+                {
+                    RemoveBuff(existingBuff);
+                }
             }
             else
             {
+    
                 var buffItem = new VBuffItem(buff, value);
                 _buffs.Add(buffItem);
                 buffItem.OnBuffAdded(_battle, _idDistributor++);
+                
+                VDebug.Log("Buff added: " + buff.GetBuffName() + ", Value: " + value);
+                
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
                     { "Id", buffItem.Id },

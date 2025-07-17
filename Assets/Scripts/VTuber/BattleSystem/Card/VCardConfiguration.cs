@@ -60,11 +60,24 @@ namespace VTuber.BattleSystem.Card
         public const int NE2Param = 25;
     }
 
-    public struct VCardEffectItem
+    public struct VEffectItem
     {
         public uint id;
         public string parameter;
         public string upgradedParameter;
+        
+        public VEffect CreateEffect()
+        {
+            if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(id, out var config))
+            {
+                return config.CreateEffect(parameter, upgradedParameter);
+            }
+            else
+            {
+                VDebug.LogError($"Effect with ID {id} not found in configurations.");
+                return null;
+            }
+        }
     }
     
     public class VCardConfiguration
@@ -86,17 +99,17 @@ namespace VTuber.BattleSystem.Card
         public int upgradedCost;
         public bool IsExhaust = false;
 
-        public List<VCardEffectItem> effects;
-        public List<VCardEffectItem> newEffects;
+        public List<VEffectItem> effects;
+        public List<VEffectItem> newEffects;
         
 
         private static uint idDistributor = 0;
 
         public VCardConfiguration(CellRange row)
         {
-            effects = new List<VCardEffectItem>();
-            effects = new List<VCardEffectItem>();
-            newEffects = new List<VCardEffectItem>();
+            effects = new List<VEffectItem>();
+            effects = new List<VEffectItem>();
+            newEffects = new List<VEffectItem>();
             
             
             id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value);
@@ -129,7 +142,7 @@ namespace VTuber.BattleSystem.Card
                 {
                     string parameter = row.Columns[i + 1].Value;
                     string upgradedParameter = row.Columns[i + 2].Value;
-                    effects.Add(new VCardEffectItem(){
+                    effects.Add(new VEffectItem(){
                         id = effectID,
                         parameter = parameter,
                         upgradedParameter = upgradedParameter
@@ -147,7 +160,7 @@ namespace VTuber.BattleSystem.Card
                 if (VBattleDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
                 {
                     string parameter = row.Columns[i + 1].Value;
-                    newEffects.Add(new VCardEffectItem(){
+                    newEffects.Add(new VEffectItem(){
                         id = effectID,
                         parameter = parameter,
                         upgradedParameter = string.Empty

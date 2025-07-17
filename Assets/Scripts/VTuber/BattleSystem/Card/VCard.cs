@@ -56,7 +56,7 @@ namespace VTuber.BattleSystem.Card
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration, uint id, List<VCardEffectItem> effects, List<VCardEffectItem> newEffects)
+        public VCard(VCardConfiguration configuration, uint id, List<VEffectItem> effects, List<VEffectItem> newEffects)
         {
             _configuration = configuration;
             Id = id;
@@ -123,6 +123,5 @@ namespace VTuber.BattleSystem.Card
                 effect.Downgrade();
             }
         }
-        
     }
 }

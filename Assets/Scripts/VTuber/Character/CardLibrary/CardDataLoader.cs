@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using Sirenix.Utilities;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
@@ -44,10 +45,12 @@ namespace VTuber.Character
         {
             var sheet = Sheet(wb, "Cards");
             var list = new List<VCardConfiguration>();
-
+            
             for (int r = 1; r <= sheet.LastRow - 1; r++)
             {
                 var row = sheet.Rows[r];
+                if(row.Columns[VCardHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
                 var cfg = new VCardConfiguration(row);
                 list.Add(cfg);
             }
@@ -65,6 +68,8 @@ namespace VTuber.Character
             {
                 var row = sheet.Rows[r];
                 var typeName = row.Columns[VEffectHeaderIndex.Type].Value;
+                if(row.Columns[VEffectHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
                 var effectType = Type.GetType("VTuber.BattleSystem.Effect." + typeName + "Configuration");
                 if (effectType == null)
                 {
@@ -85,7 +90,10 @@ namespace VTuber.Character
 
             for (int r = 1; r <= sheet.LastRow - 1; r++)
             {
-                var cfg = new VBuffConfiguration(sheet.Rows[r]);
+                var row = sheet.Rows[r];
+                if(row.Columns[VBuffHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var cfg = new VBuffConfiguration(row);
                 list.Add(cfg);
             }
 
@@ -100,6 +108,8 @@ namespace VTuber.Character
             for (int r = 1; r <= sheet.LastRow - 1; r++)
             {
                 var row = sheet.Rows[r];
+                if(row.Columns[VConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
                 var typeName = row.Columns[VConditionHeaderIndex.Type].Value;
                 var condType = Type.GetType("VTuber.BattleSystem.Effect.Conditions." + typeName);
                 if (condType == null)
