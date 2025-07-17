@@ -108,5 +108,20 @@ namespace VTuber.Core.Managers
         {
             return conditions.GetValueOrDefault(conditionID);
         }
+        
+        public VEffectConfiguration GetEffectConfigurationByID(uint effectID)
+        {
+            return _effectConfigurations.GetValueOrDefault(effectID);
+        }
+        
+        public VCardConfiguration GetCardConfigurationByID(uint cardID)
+        {
+            return _cardConfigurations.GetValueOrDefault(cardID);
+        }
+
+        public VBuffConfiguration GetBuffConfigurationByID(uint buffID)
+        {
+            return _buffConfigurations.GetValueOrDefault(buffID);
+        }
     }
 }

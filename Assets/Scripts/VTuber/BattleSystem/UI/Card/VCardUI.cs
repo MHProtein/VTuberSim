@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -29,7 +30,21 @@ namespace VTuber.BattleSystem.UI
             
             name.text = card.CardName;
             description.text = card.Description;
-            cost.text = card.Cost.ToString();
+            foreach (var effect in card.Effects)
+            {
+                string effectDescription = effect.Name + ": " + effect.Description;
+                description.text += "\n" + effectDescription;
+            }
+
+            if (card.CostType == CostType.Buff)
+            {
+                var buff = VBattleDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId);
+                cost.text = buff.buffName + " x " + card.Cost.ToString();
+            }
+            else
+            {
+                cost.text = card.Cost.ToString();
+            }
             Card = card;
         }
 
