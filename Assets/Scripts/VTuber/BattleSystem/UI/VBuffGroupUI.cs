@@ -78,10 +78,15 @@ namespace VTuber.BattleSystem.UI
                 _shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
                 
                 buffUI.SetText((int)messagedict["Value"]);
-                Tween.PunchScale(buffUI.gameObject.transform, Vector3.one * 1.3f, 0.5f).OnComplete(OnMovedToSlot);
+                
+                if(_isFromCard || _shouldPlayTwice)
+                    Tween.PunchScale(buffUI.gameObject.transform, Vector3.one * 1.3f, 0.5f).OnComplete(OnSendEvents);
+                else
+                    Tween.PunchScale(buffUI.gameObject.transform, Vector3.one * 1.3f, 0.5f);
+                
                 return;
             }
-            OnMovedToSlot();
+            OnSendEvents();
         }
 
         private void OnBuffRemoved(Dictionary<string, object> messagedict)
@@ -105,11 +110,11 @@ namespace VTuber.BattleSystem.UI
             buffUI.SetText((int)messagedict["Value"]);
             _buffUIs.Add((uint)messagedict["Id"], buffUI);
 
-            Tween.Scale(buffUI.gameObject.transform, Vector3.one, 0.5f).OnComplete(OnMovedToSlot);
+            Tween.Scale(buffUI.gameObject.transform, Vector3.one, 0.5f).OnComplete(OnSendEvents);
             _buffUIToSetParent = buffUI;
         }
 
-        private void OnMovedToSlot()
+        private void OnSendEvents()
         {
             if (_shouldPlayTwice)
             {

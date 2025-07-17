@@ -10,7 +10,6 @@ namespace VTuber.BattleSystem.Effect
     public class VBuffModifyEffectConfiguration : VEffectConfiguration
     { 
         public uint buffID;
-            
 
         public VBuffModifyEffectConfiguration(CellRange row) : base(row)
         {

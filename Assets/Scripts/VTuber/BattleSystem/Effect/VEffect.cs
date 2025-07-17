@@ -8,13 +8,19 @@ namespace VTuber.BattleSystem.Effect
     public class VEffect
     {
         protected VEffectConfiguration _configuration;
+        public uint Id => _configuration.id;
+        public string Name => _configuration.effectName;
+        public string Description => _configuration.description;
+        //public string Icon => _configuration.icon;
+        //public string UpgradeIcon => _configuration.upgradeIcon;
+        
         public List<VEffectCondition> conditions;
         public VBattleEventKey whenToApply;
         public bool upgradable = false;
         protected bool _isUpgraded;
+        protected VBattle _battle;
+        protected int _layer = 0;
         public float MultiplyByLayer => _configuration.multiplyByLayer;
-
-        public int applyLatency;
         
         public VEffect(VEffectConfiguration configuration)
         {
@@ -31,8 +37,6 @@ namespace VTuber.BattleSystem.Effect
 
         public bool CanApply(VBattle battle, Dictionary<string, object> message)
         {
-            if (applyLatency > 0)
-                return false;
             if (conditions == null || conditions.Count == 0)
                 return true;
 
@@ -60,20 +64,27 @@ namespace VTuber.BattleSystem.Effect
             _isUpgraded = false;
         }
 
+        public void TryApply(Dictionary<string, object> dict)
+        {
+            if (CanApply(_battle, dict))
+                ApplyEffect(_battle, _layer);
+        }
+        
+        public virtual void OnBuffAdded(VBattle battle, int layer)
+        {
+            _battle = battle;
+            _layer = layer;
+            VBattleRootEventCenter.Instance.RegisterListener(whenToApply, TryApply);
+        }
+        
         public virtual void OnBuffLayerChange(int layer)
         {
-            
+            _layer = layer;
         }
         
         public virtual void OnBuffRemove()
         {
-            
+            VBattleRootEventCenter.Instance.RemoveListener(whenToApply, TryApply);
         }
-
-        public void OnTurnEnd()
-        {
-            applyLatency--;
-        }
-        
     }
 }
