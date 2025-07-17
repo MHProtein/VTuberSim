@@ -5,6 +5,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
@@ -49,6 +50,7 @@ namespace VTuber.BattleSystem.BattleAttribute
     //All the attributes treated as int type, if is percentage, it is multiplied by 100 and vice versa when used. 
     public class VBattleAttribute
     {
+        public string AttributeName;
         public int Value { get; protected set; }
         protected int _minValue;
         protected int _maxValue;
@@ -79,8 +81,13 @@ namespace VTuber.BattleSystem.BattleAttribute
             if (delta == 0)
                 return;
             int temp = Value;
-            Value = Mathf.Clamp((int)(Value + (delta + GetModifierIntValue(gainPointsModifier)) * GetModifierFloatValue(gainRateModifier)),
+            int gainPointsModifierValue = GetModifierIntValue(gainPointsModifier);
+            float gainRateModifierValue = GetModifierFloatValue(gainRateModifier);
+            int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * gainRateModifierValue);
+            Value = Mathf.Clamp(finalDelta,
                 _minValue, _maxValue);
+            VDebug.Log("Adding (Delta:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta
+                       + " to " + AttributeName + ", new value: " + Value);
             SendEvent(Value, Value - temp, isFromCard, shouldPlayTwice);
         }
         

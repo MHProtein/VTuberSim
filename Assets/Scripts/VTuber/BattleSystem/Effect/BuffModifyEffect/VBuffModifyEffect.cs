@@ -23,6 +23,7 @@ namespace VTuber.BattleSystem.Effect
                 value *= (int)(layer * MultiplyByLayer);
             
             battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
+            VDebug.Log("Effect " + _configuration.effectName + " added " + value + " to buff with ID: " + _configuration.buffID + ". New value: " + value);
         }
             
     }

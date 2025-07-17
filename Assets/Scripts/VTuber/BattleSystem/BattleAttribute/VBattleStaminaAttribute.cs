@@ -74,6 +74,5 @@ namespace VTuber.BattleSystem.BattleAttribute
 
             return CalculateCost(ref cost, Value) >= 0;
         }
-
     }
 }

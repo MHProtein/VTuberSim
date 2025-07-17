@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Spire.Xls;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -19,9 +20,19 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (!message.ContainsKey("NewValue") || !message.ContainsKey("Delta"))
             {
+                VDebug.Log("Condition " + id + " failed: Required keys 'NewValue' or 'Delta' not found in message.");
                 return false;
             }
-            return Compare((int)message["NewValue"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
+            bool result = Compare((int)message["NewValue"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
+            if (result)
+            {
+                VDebug.Log($"Condition {id} passed: Attribute has new value {(int)message["NewValue"]} and delta {(int)message["Delta"]}");
+            }
+            else
+            {
+                VDebug.Log($"Condition {id} failed: Attribute has new value {(int)message["NewValue"]} and delta {(int)message["Delta"]}");
+            }
+            return result;
         }
     }
 }
