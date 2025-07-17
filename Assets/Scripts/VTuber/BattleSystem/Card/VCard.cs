@@ -16,7 +16,7 @@ namespace VTuber.BattleSystem.Card
     {
         public uint Id { get; private set; }
         public string CardName => _configuration.cardName;
-        public bool IsExhaust => _configuration.IsExhaust;
+        public bool IsExhaust => _configuration.isExhaust;
         public string CardType => _configuration.cardType;
         public string Description => _configuration.description;
         public CostType CostType => _configuration.costType;

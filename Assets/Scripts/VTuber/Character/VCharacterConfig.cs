@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VTuber.Character.Attribute;
 using VTuber.Core.Foundation;
 using Sirenix.OdinInspector;
@@ -48,6 +49,11 @@ namespace VTuber.Character
         [LabelText("Config文件")]
         public VCharacterAttributeConfiguration pressureConfiguration;
 
+        [LabelText("压力Buff表")]
+        [DictionaryDrawerSettings(KeyLabel = "BuffID", ValueLabel = "Layer",
+            DisplayMode = DictionaryDisplayOptions.OneLine)]
+        public Dictionary<int, int> pressureBuffs = new Dictionary<int, int>();
+        
         // Singing Ability
         [HorizontalGroup("SingingGroup", Gap = 10)]
         [Header("歌力")]

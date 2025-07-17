@@ -28,7 +28,9 @@ namespace VTuber.BattleSystem.Core
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    cards.Add(cardConfig.CreateCard());
+                    var card = cardConfig.CreateCard();
+                    if(card is not null)
+                        cards.Add(card);
                 }
             }
 
