@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.Effect
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
             battle.RedrawRest();
-            VDebug.Log($"Effect {Configuration.effectName} applied. Redrawing rest of the cards.");
+            VDebug.Log($"Effect {_configuration.effectName} applied. Redrawing rest of the cards.");
         }
     }
 }

@@ -24,7 +24,9 @@ namespace VTuber.Character.Attribute
         public int Value { get; protected set; }
         
         protected VCharacterAttributeManager _attributeManager;
-        
+        public bool isConvertToBattleAttribute;
+        private bool isBattleAttributePercentage;
+
         public VCharacterAttribute(VCharacterAttributeConfiguration configuration, 
             int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
             int maxValue = Int32.MaxValue, int minValue = 0, bool isPercentage = false)
