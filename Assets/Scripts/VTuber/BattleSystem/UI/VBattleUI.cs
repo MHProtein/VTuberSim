@@ -27,7 +27,7 @@ namespace VTuber.BattleSystem.UI
         [Space(3)]
         [Header("PickCard Menu")]
         [SerializeField] private GameObject pickCardMenuScroll;
-        [SerializeField]private Transform pickCardContent;
+        [SerializeField] private Transform pickCardContent;
         private VPickCardMenu _pickCardMenu;
         
         [Space(3)]
