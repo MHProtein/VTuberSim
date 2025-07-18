@@ -11,15 +11,8 @@ namespace VTuber.Character.Attribute
     {
         protected VCharacterAttributeConfiguration _configuration;
         
-        protected int _minValue;
-        protected int _maxValue;
-        protected VRaisingEventKey _eventKey;
         
-        public VValueModifier<float> GainRateModifier => gainRateModifier;
-        protected VValueModifier<float> gainRateModifier;
-        
-        public VValueModifier<int> GainPointsModifier => gainPointsModifier;
-        protected VValueModifier<int> gainPointsModifier;
+        public string AttributeName { get; set; }
         
         public int Value { get; protected set; }
         
@@ -32,6 +25,16 @@ namespace VTuber.Character.Attribute
                                          _configuration.battleAttribute != null;
         public Type BattleAttributeType => _configuration.battleAttribute.TypeToSerialize;
 
+        protected int _minValue;
+        protected int _maxValue;
+        protected VRaisingEventKey _eventKey;
+        
+        public VValueModifier<float> GainRateModifier => gainRateModifier;
+        protected VValueModifier<float> gainRateModifier;
+        
+        public VValueModifier<int> GainPointsModifier => gainPointsModifier;
+        protected VValueModifier<int> gainPointsModifier;
+        
         public VCharacterAttribute(VCharacterAttributeConfiguration configuration, 
             int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
             int maxValue = Int32.MaxValue, int minValue = 0, bool isPercentage = false)
