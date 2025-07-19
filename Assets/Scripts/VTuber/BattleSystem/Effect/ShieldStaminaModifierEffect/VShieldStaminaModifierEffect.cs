@@ -73,7 +73,6 @@ namespace VTuber.BattleSystem.Effect
                     _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.RemoveModifier;
                     _onBuffLayerChangePoints = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.ChangeModifier;
                     VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaPoints.Value} 获取PointsModifier，ID：{modifierID}");
-                
                     break;
             }
         }

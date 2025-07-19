@@ -41,7 +41,7 @@ namespace VTuber.BattleSystem.Effect
         {
             if (conditions == null || conditions.Count == 0)
             {
-                VDebug.Log("效果 " + Name + " 可以无条件生效。");
+                VDebug.Log("效果 " + Name + " 无条件。");
                 return true;
             }
 
