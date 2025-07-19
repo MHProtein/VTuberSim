@@ -1,4 +1,5 @@
-﻿using Spire.Xls;
+﻿using System.Collections.Generic;
+using Spire.Xls;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -32,6 +33,11 @@ namespace VTuber.BattleSystem.Effect
                     attribute.AddTo(delta, isFromCard, shouldApplyTwice);
                     VDebug.Log($"效果{_configuration.effectName} 为 BAParameter 增加了 {delta}。新数值: {attribute.Value}");
                 }
+            }
+            else
+            {
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+                    new Dictionary<string, object>());
             }
         }
     }
