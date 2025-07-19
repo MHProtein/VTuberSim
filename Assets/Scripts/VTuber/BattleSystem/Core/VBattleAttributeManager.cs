@@ -29,27 +29,35 @@ namespace VTuber.BattleSystem.Core
             consumeRateModifier = new VValueModifier<float>(0.0f);
         }
         
-        public void ApplyCost(int cost)
+        public void ApplyCost(int cost, bool ignoreShield = false)
         {
             int calculatedCost = CalculateCost(cost);
+            
+            int costAfterShield = calculatedCost;
+            if (!ignoreShield)
+            {
+                costAfterShield = calculatedCost - _shieldAttribute.Value;
 
-            int costAfterShield = calculatedCost - _shieldAttribute.Value;
-
-            _shieldAttribute.AddTo(-calculatedCost, false);
-            if (costAfterShield <= 0)
-                return;
+                _shieldAttribute.AddTo(-calculatedCost, false);
+                if (costAfterShield <= 0)
+                    return;
+            }
             
             _staminaAttribute.AddTo(-costAfterShield, false);
         }
 
-        public bool TestCost(int cost)
+        public bool TestCost(int cost, bool ignoreShield = false)
         {
             int calculatedCost = CalculateCost(cost);
+
+            int costAfterShield = calculatedCost;
+            if (!ignoreShield)
+            {
+                costAfterShield = calculatedCost - _shieldAttribute.Value;
             
-            int costAfterShield = calculatedCost - _shieldAttribute.Value;
-            
-            if (costAfterShield <= 0)
-                return true;
+                if (costAfterShield <= 0)
+                    return true;
+            }
             
             return _staminaAttribute.TestCost(-costAfterShield);
         }

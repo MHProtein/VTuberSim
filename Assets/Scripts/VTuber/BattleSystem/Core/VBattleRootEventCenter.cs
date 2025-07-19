@@ -8,6 +8,7 @@ namespace VTuber.BattleSystem.Core
         Default,
         OnBattleBegin,
         OnTurnBegin,
+        OnTurnBeginBuffApply,
         OnTurnEndBuffApply,
         OnTurnResolution,
         OnTurnEnd,

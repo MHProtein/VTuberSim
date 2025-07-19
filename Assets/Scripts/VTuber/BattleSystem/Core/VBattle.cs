@@ -174,6 +174,9 @@ namespace VTuber.BattleSystem.Core
                 case CostType.Stamina:
                     card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                     break;
+                case CostType.TrueStamina:
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    break;
                 case CostType.Buff:
                     card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
                     break;
@@ -186,6 +189,7 @@ namespace VTuber.BattleSystem.Core
             {
                 if(card.CostType == CostType.Buff)
                     card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
+        
             }
         }
 
@@ -204,6 +208,8 @@ namespace VTuber.BattleSystem.Core
             {
                 if(card.CostType == CostType.Stamina)
                     card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                if(card.CostType == CostType.TrueStamina)
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
             }
         }
         
@@ -263,6 +269,11 @@ namespace VTuber.BattleSystem.Core
                 {"TurnLeft", TurnLeft},
                 {"HandSize", _configuration.maxHandSize}
             });
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft},
+                {"HandSize", _configuration.maxHandSize}
+            });
         }
 
         public void EndTurn()
@@ -302,6 +313,9 @@ namespace VTuber.BattleSystem.Core
             {
                 case CostType.Stamina:
                     _battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"]);
+                    break;
+                case CostType.TrueStamina:
+                    _battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"], true);
                     break;
                 case CostType.Buff:
                     _buffManager.ApplyCost((uint)messagedict["CostBuffId"], (int)messagedict["Cost"]);
