@@ -58,9 +58,9 @@ namespace VTuber.BattleSystem.Effect
                     if(MultiplyByLayer > 0.0f)
                         rateValue *= layer * MultiplyByLayer;
             
-                    modifierID = battle.BattleAttributeManager.ConsumeRateModifier.AddModifier(rateValue);
-                    _onBuffRemove = battle.BattleAttributeManager.ConsumeRateModifier.RemoveModifier;
-                    _onBuffLayerChangeRate = battle.BattleAttributeManager.ConsumeRateModifier.ChangeModifier;
+                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.AddModifier(rateValue);
+                    _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.RemoveModifier;
+                    _onBuffLayerChangeRate = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.ChangeModifier;
                     VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaRate.Value} 获取RateModifier，ID：{modifierID}");
                 
                     break;
@@ -69,9 +69,9 @@ namespace VTuber.BattleSystem.Effect
                     if(MultiplyByLayer > 0.0f)
                         pointsValue *= (int)(layer * MultiplyByLayer);
             
-                    modifierID = battle.BattleAttributeManager.ConsumePointsModifier.AddModifier(pointsValue);
-                    _onBuffRemove = battle.BattleAttributeManager.ConsumePointsModifier.RemoveModifier;
-                    _onBuffLayerChangePoints = battle.BattleAttributeManager.ConsumePointsModifier.ChangeModifier;
+                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.AddModifier(pointsValue);
+                    _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.RemoveModifier;
+                    _onBuffLayerChangePoints = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.ChangeModifier;
                     VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaPoints.Value} 获取PointsModifier，ID：{modifierID}");
                 
                     break;

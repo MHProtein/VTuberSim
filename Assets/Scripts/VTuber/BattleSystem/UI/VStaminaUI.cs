@@ -23,20 +23,19 @@ namespace VTuber.BattleSystem.UI
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            base.OnValueChanged(messagedict);
+            bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
+            bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
             int delta = messagedict["Delta"] as int ? ?? 0;
             staminaText.text = $"体力: {messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             
-            Tween.PunchScale(transform, Vector3.one * 0.5f, 0.5f).OnComplete(OnAnimationFinished);
+            _animationQueue.Enqueue(AnimationType.Punch, transform, () =>
+            {
+                RaiseEvents(isFromCard, shouldPlayTwice);
+                staminaText.faceColor = Color.white;
+            });
             staminaText.faceColor = delta > 0 ? Color.green : Color.red;
-        }
-
-        protected override void OnAnimationFinished()
-        {
-            base.OnAnimationFinished();
-            staminaText.faceColor = Color.white;
         }
     }
 }

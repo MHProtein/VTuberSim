@@ -9,8 +9,7 @@ namespace VTuber.BattleSystem.UI
     public class VStatUI : VUIBehaviour
     {
         protected VBattleEventKey key = VBattleEventKey.Default;
-        private bool isFromCard = false;
-        private bool shouldPlayTwice = false;
+        protected VAnimationQueue _animationQueue = new VAnimationQueue();
         
         protected override void OnEnable()
         {
@@ -27,11 +26,9 @@ namespace VTuber.BattleSystem.UI
         
         protected virtual void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-            shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
         }
 
-        protected virtual void OnAnimationFinished()
+        protected virtual void RaiseEvents( bool isFromCard, bool shouldPlayTwice)
         {
             if (shouldPlayTwice)
             {

@@ -23,7 +23,12 @@ namespace VTuber.Character.Attributes
             }
             
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
-                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, (int)(value * conversionRate * 100f)));
+                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType,
+                    (int)(value * conversionRate * 100f),
+                    _configuration.isBattleAttributePercentage,
+                    _configuration.battleEventKey,
+                    _configuration.maxValue,
+                    _configuration.minValue));
         }
     }
 }

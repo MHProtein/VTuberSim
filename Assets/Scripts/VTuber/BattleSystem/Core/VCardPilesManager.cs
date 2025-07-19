@@ -84,6 +84,9 @@ namespace VTuber.BattleSystem.Core
                 case VCardPileType.Exhaust:
                     pile = _exhaustPile;
                     break;
+                case VCardPileType.Deck:
+                    _handPile.AddRange(pickedCards);
+                    return;
             }
             
             RemoveCardsFromPile(pile, pickedCards);

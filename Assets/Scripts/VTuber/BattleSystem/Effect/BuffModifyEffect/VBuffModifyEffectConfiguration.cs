@@ -13,7 +13,6 @@ namespace VTuber.BattleSystem.Effect
 
         public VBuffModifyEffectConfiguration(CellRange row) : base(row)
         {
-            VDebug.Log(row.Columns[VEffectHeaderIndex.Parameter].Value);
             buffID = Convert.ToUInt32(row.Columns[VEffectHeaderIndex.Parameter].Value);
         }
 

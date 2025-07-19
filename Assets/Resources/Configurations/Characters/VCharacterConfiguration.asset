@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b1393968f147f79d506ac36817e430, type: 3}
+  m_Name: VCharacterConfiguration
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: pressureBuffs
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  staminaInitialValue: 100
+  staminaMinValue: 0
+  staminaMaxValue: 200
+  staminaConfiguration: {fileID: 11400000, guid: 0b8b1877b943de74184ef7428f6c6787, type: 2}
+  pressureInitialValue: 1
+  pressureMinValue: 1
+  pressureMaxValue: 5
+  pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
+  singingAbilityInitialValue: 200
+  singingAbilityMinValue: 0
+  singingAbilityMaxValue: -1
+  singingAbilityColor: {r: 0.7075472, g: 0.29703632, b: 0.30508563, a: 1}
+  singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
+  gamingAbilityInitialValue: 200
+  gamingAbilityMinValue: 0
+  gamingAbilityMaxValue: -1
+  gamingAbilityColor: {r: 0.8490566, g: 0.819914, b: 0.16420433, a: 1}
+  gamingAbilityConfiguration: {fileID: 11400000, guid: 9f3418b693f0bd74faf5ef1c80bcabc3, type: 2}
+  chattingAbilityInitialValue: 200
+  chattingAbilityMinValue: 0
+  chattingAbilityMaxValue: -1
+  chattingAbilityColor: {r: 0.14413491, g: 0.14413491, b: 0.745283, a: 1}
+  chattingAbilityConfiguration: {fileID: 11400000, guid: 47886f19849f4124695d0c1850eaf5a3, type: 2}
+  singingAbilityConversionRatioInitialValue: 1
+  singingAbilityConversionRatioMinValue: 0
+  singingAbilityConversionRatioMaxValue: -1
+  singingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: f1d5cae603766dc428a71c8a9e8459da, type: 2}
+  gamingAbilityConversionRatioInitialValue: 1
+  gamingAbilityConversionRatioMinValue: 0
+  gamingAbilityConversionRatioMaxValue: -1
+  gamingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: 8d3a6f23e1c9fb248bcdf4e3c097e2ed, type: 2}
+  chattingAbilityConversionRatioInitialValue: 1
+  chattingAbilityConversionRatioMinValue: 0
+  chattingAbilityConversionRatioMaxValue: -1
+  chattingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: 9c44347f16d4a6845bab07b4623f7f2e, type: 2}
+  singingAbilityGainEfficiencyInitialValue: 100
+  singingAbilityGainEfficiencyMinValue: 0
+  singingAbilityGainEfficiencyMaxValue: -1
+  singingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 0d92ba3c5867c5142a5408b59bbdb238, type: 2}
+  gamingAbilityGainEfficiencyInitialValue: 100
+  gamingAbilityGainEfficiencyMinValue: 0
+  gamingAbilityGainEfficiencyMaxValue: -1
+  gamingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: e4bca2514f94f2c48b494fbbbba6c54b, type: 2}
+  chattingAbilityGainEfficiencyInitialValue: 100
+  chattingAbilityGainEfficiencyMinValue: 0
+  chattingAbilityGainEfficiencyMaxValue: -1
+  chattingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 478411c7b94b699408da8eb08cbbc77a, type: 2}
+  followerCountInitialValue: 0
+  followerCountMinValue: 0
+  followerCountMaxValue: -1
+  followerCountConfiguration: {fileID: 11400000, guid: c8b885d17b6be9949a31e594be5ccccd, type: 2}
+  membershipCountInitialValue: 10
+  membershipCountMinValue: 0
+  membershipCountMaxValue: -1
+  membershipCountConfiguration: {fileID: 11400000, guid: 4cb43862c41bf544093f4dd19cc1a990, type: 2}
+  followerToViewerRatioInitialValue: 10
+  followerToViewerRatioMinValue: 0
+  followerToViewerRatioMaxValue: -1
+  followerToViewerRatioConfiguration: {fileID: 11400000, guid: a5f460326b6f9ed45b2015e071c4edbc, type: 2}
+  moneyInitialValue: 1000
+  moneyMinValue: 0
+  moneyMaxValue: -1
+  moneyConfiguration: {fileID: 11400000, guid: ef98052a793634040af651ed3bf119ee, type: 2}
