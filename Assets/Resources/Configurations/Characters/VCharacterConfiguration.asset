@@ -54,12 +54,12 @@ MonoBehaviour:
   singingAbilityMaxValue: -1
   singingAbilityColor: {r: 0.7075472, g: 0.29703632, b: 0.30508563, a: 1}
   singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
-  gamingAbilityInitialValue: 200
+  gamingAbilityInitialValue: 300
   gamingAbilityMinValue: 0
   gamingAbilityMaxValue: -1
   gamingAbilityColor: {r: 0.8490566, g: 0.819914, b: 0.16420433, a: 1}
   gamingAbilityConfiguration: {fileID: 11400000, guid: 9f3418b693f0bd74faf5ef1c80bcabc3, type: 2}
-  chattingAbilityInitialValue: 200
+  chattingAbilityInitialValue: 400
   chattingAbilityMinValue: 0
   chattingAbilityMaxValue: -1
   chattingAbilityColor: {r: 0.14413491, g: 0.14413491, b: 0.745283, a: 1}

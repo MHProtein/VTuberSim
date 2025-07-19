@@ -50,7 +50,7 @@ namespace VTuber.Character.Attributes
             }
             
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
-                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, (int)(Value * conversionRate * 100f), color));
+                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, Mathf.CeilToInt(Value * conversionRate * 100f), color));
         }
     }
 }

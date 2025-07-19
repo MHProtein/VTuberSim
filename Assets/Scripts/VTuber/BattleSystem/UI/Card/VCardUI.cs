@@ -30,6 +30,7 @@ namespace VTuber.BattleSystem.UI
             
             name.text = card.CardName;
             description.text = card.Description;
+            description.text += "\n" + card.CardType;
             // foreach (var effect in card.Effects)
             // {
             //     string effectDescription = effect.Name + ": " + effect.Description;

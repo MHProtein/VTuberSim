@@ -33,7 +33,7 @@ namespace VTuber.BattleSystem.Core
         {
             int calculatedCost = CalculateCost(cost);
 
-            int costAfterShield = calculatedCost - _staminaAttribute.Value;
+            int costAfterShield = calculatedCost - _shieldAttribute.Value;
 
             _shieldAttribute.AddTo(-calculatedCost, false);
             if (costAfterShield <= 0)
@@ -66,8 +66,10 @@ namespace VTuber.BattleSystem.Core
 
     public class VMultiplierManager
     {
+        public VBattleMultiplierAttribute Multiplier => _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
         private List<VBattleMultiplierAttribute> _multiplierAttributes;
         private List<int> multiplierSequence;
+        private int _currentTurnIndex = 0;
         public VMultiplierManager(int mainAttributeIndex, 
             int maxConsecutiveMultiplierCount, 
             VBattleMultiplierAttribute singingMultiplierAttribute, 
@@ -92,12 +94,22 @@ namespace VTuber.BattleSystem.Core
         
         public void OnEnable()
         {
-            
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
         }
-            
+
         public void OnDisable()
         {
-                
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
+        }
+        
+        private void OnTurnBegin(Dictionary<string, object> messagedict)
+        {
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnMultiplierChange, new Dictionary<string, object>()
+            {
+                { "NewValue", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].Value },
+                { "Color", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].color },
+            });
+            ++_currentTurnIndex;
         }
 
         private void GenerateMultiplierSequence(int maxTurn, int maxConsecutiveMultiplierCount, int mainAttributeIndex)
@@ -137,13 +149,6 @@ namespace VTuber.BattleSystem.Core
             if (multiplierSequence[^1] + multiplierSequence[^3] == 5)
                 multiplierSequence[^2] = 1;
             multiplierSequence = multiplierSequence.Select(x=> x - 1).ToList();
-            
-            string logString = "Multiplier Sequence: ";
-
-            foreach (var index in multiplierSequence)
-            {
-                logString += _multiplierAttributes[index].AttributeName + " => ";
-            }
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnMultiplierSequenceCalculated,
                 new Dictionary<string, object>()
@@ -185,6 +190,7 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributes.TryGetValue("BAChattingMultiplier", out var chatting) ? (VBattleMultiplierAttribute)chatting : null,
                 _battleAttributes.TryGetValue("BATurn", out var turnAttribute) ? (VBattleTurnAttribute)turnAttribute : null
             );
+            _multiplierManager.OnEnable();
         }
         
         public void ConvertFromCharacterAttributes(VCharacterAttributeManager characterAttributeManager)
@@ -210,11 +216,23 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
         }
 
+
+        
+        public void OnDisable()
+        {
+            foreach (var attribute in _battleAttributes)
+            {
+                attribute.Value.OnDisable();
+            }
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
+            _multiplierManager.OnDisable();
+        }
+
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
             if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
             {
-                float multiplier = _battleAttributes["BASingingMultiplier"].Value / 100f;
+                float multiplier = _multiplierManager.Multiplier.Value / 100f;
                 int delta = (int)messagedict["Delta"];
                 _battleAttributes["BAPopularity"].AddTo((int)(delta * multiplier), false);
             }
@@ -225,15 +243,6 @@ namespace VTuber.BattleSystem.Core
             return _battleAttributes.TryGetValue(name, out attribute);
         }
         
-        public void OnDisable()
-        {
-            foreach (var attribute in _battleAttributes)
-            {
-                attribute.Value.OnDisable();
-            }
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
-        }
-
         public void AddAttribute(string name, VBattleAttribute attribute)
         {
             _battleAttributes.Add(name, attribute);

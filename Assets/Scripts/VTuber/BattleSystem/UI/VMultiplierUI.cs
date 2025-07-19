@@ -15,6 +15,10 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private TMP_Text MultiplierText;
         [SerializeField] private Transform grid;
         [SerializeField] private GameObject colorPrefab;
+        [SerializeField] private Image arrow;
+
+        private float arrowHeight;
+        private float arrowWidth;
         
         protected override void Awake()
         {
@@ -22,6 +26,8 @@ namespace VTuber.BattleSystem.UI
 
             key = VBattleEventKey.OnMultiplierChange;
             SetFontStyle(MultiplierText, FontStyles.Bold);
+            // arrowHeight = arrow.rectTransform.rect.height;
+            // arrowWidth = arrow.rectTransform.rect.width;
         }
 
         protected override void OnEnable()
@@ -29,9 +35,7 @@ namespace VTuber.BattleSystem.UI
             base.OnEnable();
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnMultiplierSequenceCalculated, OnMultiplierSequenceCalculated);
         }
-
-
-
+        
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -41,28 +45,27 @@ namespace VTuber.BattleSystem.UI
         private void OnMultiplierSequenceCalculated(Dictionary<string, object> messagedict)
         {
             List<Color> colors = messagedict["Colors"] as List<Color>;
-            foreach (var color in colors)
-            {
+            if (colors is null)
+                return;
+            for (int i = 0; i < colors.Count; i++)
+            {       
                 GameObject colorObj = Instantiate(colorPrefab, grid);
-                colorObj.GetComponent<Image>().color = color;
+                colorObj.GetComponent<Image>().color = colors[i];
+                // if (i == 0)
+                // {
+                //     arrow.transform.SetParent(colorObj.transform);
+                //     arrow.transform.position = new Vector3(0, -arrowHeight, 0);
+                // }
             }
         }
         
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-            bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
-            int delta = messagedict["Delta"] as int ? ?? 0;
             MultiplierText.text = $"提升率: {messagedict["NewValue"] as int? ?? 0}%";
-            if(delta == 0)
-                return;
             
-            _animationQueue.Enqueue(AnimationType.Punch, transform, () =>
-            {
-                RaiseEvents(isFromCard, shouldPlayTwice);
-                MultiplierText.faceColor = Color.white;
-            });
-            MultiplierText.faceColor = delta > 0 ? Color.green : Color.red;
+            _animationQueue.Enqueue(AnimationType.Punch, MultiplierText.transform);
+            MultiplierText.faceColor = (Color)messagedict["Color"];
+            
         }
     }
 }
