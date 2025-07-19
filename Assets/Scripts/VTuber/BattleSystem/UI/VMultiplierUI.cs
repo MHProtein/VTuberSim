@@ -52,6 +52,8 @@ namespace VTuber.BattleSystem.UI
             
         }
 
+ 
+
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -59,11 +61,13 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
         }
-        
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
-            arrowIndex++;
-            arrow.transform.position = colorObjects[0].transform.position + new Vector3(0, -arrowHeight, 0);
+            Tween.Delay(0.1f, () =>
+            {
+                arrowIndex++;
+                arrow.transform.position = colorObjects[0].transform.position + new Vector3(0, -arrowHeight, 0);
+            });
         }
         
         private void OnMultiplierSequenceCalculated(Dictionary<string, object> messagedict)

@@ -27,21 +27,34 @@ namespace VTuber.BattleSystem.Buff
             this.value = value;
         }
 
-        public bool DecrementLatency()
+        public void DecrementLatency()
         {
             buff.latency -= 1;
             if (buff.latency <= 0)
+                Activate();
+            
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
-                VDebug.Log($"{buff.GetBuffName()} 延迟减少到 {buff.latency}");
-                return true;
-            }
-
+                { "Id", Id },
+                { "BuffId", buff.ConfigId},
+                { "Value", Value },
+                { "Delta", -1 },
+                { "Latency", buff.latency},
+                { "IsFromCard", false },
+                { "ShouldPlayTwice", false }
+            });
+            
             VDebug.Log($"{buff.GetBuffName()} 延迟减少到 {buff.latency}");
-            return false;
         }
 
         public bool DecrementDuration()
         {
+            if (buff.latency > 0)
+            {
+                DecrementLatency();
+                return false;
+            }
+            
             if (buff.IsPermanent)
                 return false;
 
@@ -64,6 +77,7 @@ namespace VTuber.BattleSystem.Buff
                 { "BuffId", buff.ConfigId},
                 { "Value", Value },
                 { "Delta", -1 },
+                { "Latency", buff.latency},
                 { "IsFromCard", false },
                 { "ShouldPlayTwice", false }
             });
@@ -86,6 +100,7 @@ namespace VTuber.BattleSystem.Buff
                 { "BuffId", buff.ConfigId},
                 { "Value", Value },
                 { "Delta", addValue},
+                { "Latency", buff.latency},
                 { "IsFromCard", isFromCard },
                 { "ShouldPlayTwice", shouldPlayTwice }
             });
@@ -109,6 +124,14 @@ namespace VTuber.BattleSystem.Buff
             Id = id;
             _battle = battle;
 
+            if(buff.latency > 0)
+                return;
+
+            Activate();
+        }
+
+        public void Activate()
+        {
             foreach (var effect in buff.Effects)
             {
                 effect.OnBuffAdded(_battle, value);
@@ -136,6 +159,7 @@ namespace VTuber.BattleSystem.Buff
                 { "BuffId", buff.ConfigId},
                 { "Value", Value },
                 { "Delta", cost},
+                { "Latency", buff.latency},
                 { "IsFromCard", false },
                 { "ShouldPlayTwice", false }
             });
@@ -157,7 +181,6 @@ namespace VTuber.BattleSystem.Buff
     public class VBuffManager
     {
         private readonly List<VBuffItem> _buffs = new List<VBuffItem>();
-        private readonly List<VBuffItem> _buffsToBeAdded = new List<VBuffItem>();
         private VBattle _battle;
         private uint _idDistributor = 0;
 
@@ -190,20 +213,6 @@ namespace VTuber.BattleSystem.Buff
             {
                 RemoveBuff(buffItem);
             }
-            
-            var buffsToAdd = new List<VBuffItem>();
-            foreach (var buff in _buffsToBeAdded)
-            {
-                if (buff.DecrementLatency())
-                {
-                    buffsToAdd.Add(buff);
-                }
-            }
-            foreach (var buffItem in buffsToAdd)
-            {
-                _buffsToBeAdded.Remove(buffItem);
-                AddBuff(buffItem.buff, buffItem.Value, false, false);
-            }
         }
 
         private void RemoveBuff(VBuffItem buffItem)
@@ -221,13 +230,6 @@ namespace VTuber.BattleSystem.Buff
         {
             if (buff == null || string.IsNullOrEmpty(buff.GetBuffName()))
                 return;
-
-            if(buff.latency > 0)
-            {
-                VDebug.Log("Buff " + buff.GetBuffName() + " 有延迟 " + buff.latency);
-                _buffsToBeAdded.Add(new VBuffItem(buff, value));
-                return;
-            }
             
             var existingBuff = _buffs.Find(b => b.ConfigId == buff.ConfigId);
             if (existingBuff != null && buff.IsStackable())
@@ -252,6 +254,7 @@ namespace VTuber.BattleSystem.Buff
                     { "BuffId", buff.ConfigId },
                     { "BuffName", buff.GetBuffName() }, 
                     { "IsPermanent", buff.IsPermanent },
+                    { "Latency", buff.latency},
                     { "Value", value},
                     { "IsFromCard",  isFromCard},
                     { "ShouldPlayTwice", shouldPlayTwice },

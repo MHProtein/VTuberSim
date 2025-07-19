@@ -23,12 +23,17 @@ namespace VTuber.BattleSystem.UI
             this.buffName = buffName;
         }
 
-        public void SetText(int value)
+        public void SetText(int value, int latency)
         {
+            if (latency > 0)
+            {
+                text.text = $"{buffName} 延迟: {latency}";
+                return;
+            }
             if (isPermanent)
-                text.text = $"{buffName} Layer: {value}";
+                text.text = $"{buffName} 层: {value}";
             else
-                text.text = $"{buffName} Duration: {value}";
+                text.text = $"{buffName} 回合: {value}";
         }
     }
 
@@ -65,20 +70,28 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBuffAdded(Dictionary<string, object> msg)
         {
-            bool isFromCard   = msg["IsFromCard"]   as bool? ?? false;
-            bool shouldTwice  = msg["ShouldPlayTwice"] as bool? ?? false;
-            bool isPermanent  = (bool)msg["IsPermanent"];
-            string buffName   = (string)msg["BuffName"];
-            int    value      = (int)msg["Value"];
             uint   id         = (uint)msg["Id"];
-
+            
+            if( _buffUIs.ContainsKey(id))
+            {
+                OnBuffValueUpdated(msg);
+                return;
+            }
+            
+            bool isFromCard = msg["IsFromCard"]   as bool? ?? false;
+            bool shouldTwice = msg["ShouldPlayTwice"] as bool? ?? false;
+            bool isPermanent = (bool)msg["IsPermanent"];
+            string buffName = (string)msg["BuffName"];
+            int value = (int)msg["Value"];
+            int latency = (int)msg["Latency"];
+            
             // instantiate
             var go = Instantiate(buffCellPrefab);
             go.transform.SetParent(transform);
             go.transform.localScale = Vector3.zero;
 
             var ui = new VBuffUI(go, isPermanent, buffName);
-            ui.SetText(value);
+            ui.SetText(value, latency);
             _buffUIs[id] = ui;
 
             // enqueue scale‑in then punch
@@ -91,7 +104,7 @@ namespace VTuber.BattleSystem.UI
             uint id = (uint)msg["Id"];
             if (_buffUIs.TryGetValue(id, out var ui))
             {
-                ui.SetText((int)msg["Value"]);
+                ui.SetText((int)msg["Value"], (int)msg["Latency"]);
                 // only punch on update
                 _animationQueue.Enqueue(AnimationType.Punch, ui.gameObject.transform,
                     () => RaiseEvents( msg["IsFromCard"]   as bool? ?? false,
