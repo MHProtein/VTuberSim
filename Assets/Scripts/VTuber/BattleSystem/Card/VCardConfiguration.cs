@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Card
     public enum CostType
     {
         Stamina,
+        TrueStamina,
         Buff,
     }
     
