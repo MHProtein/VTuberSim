@@ -103,11 +103,25 @@ namespace VTuber.BattleSystem.Core
         public void OnEnable()
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
         }
 
         public void OnDisable()
         {
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
+        }
+        
+        private void OnTurnChange(Dictionary<string, object> messagedict)
+        {
+            int delta = (int)messagedict["Delta"];
+            if (delta <= 0)
+                return;
+
+            for (int i = 0; i < delta; i++)
+            {
+                multiplierSequence.Add(multiplierSequence.Last());
+            }
         }
         
         private void OnTurnBegin(Dictionary<string, object> messagedict)

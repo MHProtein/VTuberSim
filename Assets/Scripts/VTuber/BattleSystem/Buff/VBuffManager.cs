@@ -57,12 +57,26 @@ namespace VTuber.BattleSystem.Buff
             
             if (buff.IsPermanent)
                 return false;
-
+            
+            
             if (isFirstTurn)
             {
                 isFirstTurn = false;
-                VDebug.Log("第一次执行Buff " + buff.GetBuffName() + " 的持续时间减少逻辑，跳过。");
-                return false;
+                bool shouldSkipDecrement = true;
+                foreach (var effect in buff.Effects)
+                {
+                    if (effect.TriggeredInFirstTurn)
+                    {
+                        shouldSkipDecrement = false;
+                        break;
+                    }
+                }
+
+                if (shouldSkipDecrement)
+                {
+                    VDebug.Log("第一次执行Buff " + buff.GetBuffName() + " 的持续时间减少逻辑，跳过。");
+                    return false;
+                }
             }
             
             value -= 1;

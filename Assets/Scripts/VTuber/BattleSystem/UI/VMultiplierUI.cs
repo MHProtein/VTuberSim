@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VMultiplierUI : VStatUI
+    public class vVMultiplierUI : VStatUI
     {
         
         [SerializeField] private TMP_Text MultiplierText;
@@ -23,8 +24,9 @@ namespace VTuber.BattleSystem.UI
         private Sequence textSequence;
         private Sequence arrowSequence;
         
-        private List<GameObject> colorObjects = new List<GameObject>();
+        private List<Image> colorObjects = new List<Image>();
         int arrowIndex = 0;
+        private float initSize = 0;
         
         protected override void Awake()
         {
@@ -49,18 +51,35 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnMultiplierSequenceCalculated, OnMultiplierSequenceCalculated);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
             
         }
-
- 
-
+        
         protected override void OnDisable()
         {
             base.OnDisable();
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnMultiplierSequenceCalculated, OnMultiplierSequenceCalculated);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
         }
+        
+        private void OnTurnChange(Dictionary<string, object> messagedict)
+        {
+            int delta = (int)messagedict["Delta"];
+            if (delta <= 0)
+                return;
+
+            for (int i = 0; i < delta; i++)
+            {
+                GameObject colorObj = Instantiate(colorPrefab, grid);
+                var image = colorObj.GetComponent<Image>();
+                image.color = colorObjects.Last().color;
+                colorObjects.Add(image);
+                //float scale = 
+            }
+        }
+        
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
             Tween.Delay(0.1f, () =>
@@ -78,8 +97,10 @@ namespace VTuber.BattleSystem.UI
             for (int i = 0; i < colors.Count; i++)
             {       
                 GameObject colorObj = Instantiate(colorPrefab, grid);
-                colorObjects.Add(colorObj);
-                colorObj.GetComponent<Image>().color = colors[i];
+                var image = colorObj.GetComponent<Image>();
+                image.color = colors[i];
+                colorObjects.Add(image);
+                initSize += image.rectTransform.rect.width;
             }
         }
         
