@@ -94,10 +94,11 @@ namespace VTuber.BattleSystem.Core
             
             _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
-            _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleMultiplierAttribute(500));
             
-            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, VBattleEventKey.OnStaminaChange, 100));
             _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
+            _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
+
+            _battleAttributeManager.InitializeInternalManagers();
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
@@ -171,7 +172,7 @@ namespace VTuber.BattleSystem.Core
             switch (card.CostType)
             {
                 case CostType.Stamina:
-                    card.SetPlayable(_battleAttributeManager.TestCost(card.Cost));
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                     break;
                 case CostType.Buff:
                     card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
@@ -202,7 +203,7 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Stamina)
-                    card.SetPlayable(_battleAttributeManager.TestCost(card.Cost));
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
             }
         }
         
@@ -300,7 +301,7 @@ namespace VTuber.BattleSystem.Core
             switch ((CostType)messagedict["CostType"])
             {
                 case CostType.Stamina:
-                    _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+                    _battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"]);
                     break;
                 case CostType.Buff:
                     _buffManager.ApplyCost((uint)messagedict["CostBuffId"], (int)messagedict["Cost"]);

@@ -39,6 +39,7 @@ namespace VTuber.Character.Attribute
             int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
             int maxValue = Int32.MaxValue, int minValue = 0, bool isPercentage = false)
         {
+            _configuration = configuration;
             _minValue = minValue;
             _maxValue = maxValue;
             _eventKey = eventKey;
@@ -69,8 +70,12 @@ namespace VTuber.Character.Attribute
             }
             
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
-                new VBattleAttribute(Value, IsBattleAttributePercentage,
-                    _configuration.battleEventKey, _configuration.maxValue, _configuration.minValue));
+                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType,
+                    Value,
+                    _configuration.isBattleAttributePercentage,
+                    _configuration.battleEventKey,
+                    _configuration.maxValue,
+                    _configuration.minValue));
         }
         
         public virtual void AddTo(int delta)

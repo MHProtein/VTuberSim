@@ -21,7 +21,7 @@ namespace VTuber.Character
                 new VStaminaAttribute(characterConfig.staminaConfiguration, 
                     characterConfig.staminaInitialValue, 
                     VRaisingEventKey.OnStaminaChanged, 
-                    characterConfig.staminaMaxValue, 
+                    characterConfig.staminaMaxValue == -1 ? int.MaxValue : characterConfig.staminaMaxValue,
                     characterConfig.staminaMinValue));
             
             AttributeManager.AddAttribute("CAPressure",
@@ -29,99 +29,102 @@ namespace VTuber.Character
                     characterConfig.pressureBuffs,
                     characterConfig.pressureInitialValue, 
                     VRaisingEventKey.OnPressureChanged, 
-                    characterConfig.pressureMaxValue, 
+                    characterConfig.pressureMaxValue == -1 ? int.MaxValue : characterConfig.pressureMaxValue,
                     characterConfig.pressureMinValue));
             
             AttributeManager.AddAttribute("CASingingAbility", 
-                new VCharacterAttribute(characterConfig.singingAbilityConfiguration,
+                new VAbilityAttribute(characterConfig.singingAbilityConfiguration,      
+                    characterConfig.singingAbilityColor,
                     characterConfig.singingAbilityInitialValue, 
                     VRaisingEventKey.OnSingingAbilityChanged, 
-                    characterConfig.singingAbilityMaxValue, 
+                    characterConfig.singingAbilityMaxValue == -1 ? int.MaxValue : characterConfig.singingAbilityMaxValue,
                     characterConfig.singingAbilityMinValue));
             
             AttributeManager.AddAttribute("CAGamingAbility", 
-                new VCharacterAttribute(characterConfig.gamingAbilityConfiguration,
+                new VAbilityAttribute(characterConfig.gamingAbilityConfiguration,
+                    characterConfig.gamingAbilityColor,
                     characterConfig.gamingAbilityInitialValue, 
                     VRaisingEventKey.OnGamingAbilityChanged, 
-                    characterConfig.gamingAbilityMaxValue, 
+                    characterConfig.gamingAbilityMaxValue == -1 ? int.MaxValue : characterConfig.gamingAbilityMaxValue,
                     characterConfig.gamingAbilityMinValue));
             
             AttributeManager.AddAttribute("CAChattingAbility",
-                new VCharacterAttribute(characterConfig.chattingAbilityConfiguration,
+                new VAbilityAttribute(characterConfig.chattingAbilityConfiguration,
+                    characterConfig.chattingAbilityColor,
                     characterConfig.chattingAbilityInitialValue, 
                     VRaisingEventKey.OnChattingAbilityChanged, 
-                    characterConfig.chattingAbilityMaxValue, 
+                    characterConfig.chattingAbilityMaxValue == -1 ? int.MaxValue : characterConfig.chattingAbilityMaxValue,
                     characterConfig.chattingAbilityMinValue));
             
             AttributeManager.AddAttribute("CASingingAbilityConversionRatio",
-                new VCharacterAttribute(characterConfig.singingAbilityConversionRatioConfiguration,
+                new VConversionRatioAttribute(characterConfig.singingAbilityConversionRatioConfiguration,
                     characterConfig.singingAbilityConversionRatioInitialValue,
                     VRaisingEventKey.OnSingingAbilityConversionRatioChanged,
-                    characterConfig.singingAbilityConversionRatioMaxValue,
+                    characterConfig.singingAbilityConversionRatioMaxValue == -1 ? int.MaxValue : characterConfig.singingAbilityConversionRatioMaxValue,
                     characterConfig.singingAbilityConversionRatioMinValue)
                 );
             
             AttributeManager.AddAttribute("CAGamingAbilityConversionRatio",
-                new VCharacterAttribute(characterConfig.gamingAbilityConversionRatioConfiguration,
+                new VConversionRatioAttribute(characterConfig.gamingAbilityConversionRatioConfiguration,
                     characterConfig.gamingAbilityConversionRatioInitialValue,
                     VRaisingEventKey.OnGamingAbilityConversionRatioChanged,
-                    characterConfig.gamingAbilityConversionRatioMaxValue,
+                    characterConfig.gamingAbilityConversionRatioMaxValue == -1 ? int.MaxValue : characterConfig.gamingAbilityConversionRatioMaxValue,
                     characterConfig.gamingAbilityConversionRatioMinValue));
                     
             AttributeManager.AddAttribute("CAChattingAbilityConversionRatio",
-                new VCharacterAttribute(characterConfig.chattingAbilityConversionRatioConfiguration,
+                new VConversionRatioAttribute(characterConfig.chattingAbilityConversionRatioConfiguration,
                     characterConfig.chattingAbilityConversionRatioInitialValue,
                     VRaisingEventKey.OnChattingAbilityConversionRatioChanged,
-                    characterConfig.chattingAbilityConversionRatioMaxValue,
+                    characterConfig.chattingAbilityConversionRatioMaxValue == -1 ? int.MaxValue : characterConfig.chattingAbilityConversionRatioMaxValue,
                     characterConfig.chattingAbilityConversionRatioMinValue));
             
             AttributeManager.AddAttribute("CASingingAbilityGainEfficiency",
-                new VCharacterAttribute(characterConfig.singingAbilityGainEfficiencyConfiguration,
+                new VAbilityGainEfficiencyAttribute(characterConfig.singingAbilityGainEfficiencyConfiguration,
                     characterConfig.singingAbilityGainEfficiencyInitialValue,
                     VRaisingEventKey.OnSingingAbilityGainEfficiencyChanged,
-                    characterConfig.singingAbilityGainEfficiencyMaxValue,
+                    characterConfig.singingAbilityGainEfficiencyMaxValue == -1 ? int.MaxValue : characterConfig.singingAbilityGainEfficiencyMaxValue,
                     characterConfig.singingAbilityGainEfficiencyMinValue));
             
             AttributeManager.AddAttribute("CAGamingAbilityGainEfficiency",
-                new VCharacterAttribute(characterConfig.gamingAbilityGainEfficiencyConfiguration,
+                new VAbilityGainEfficiencyAttribute(characterConfig.gamingAbilityGainEfficiencyConfiguration,
                     characterConfig.gamingAbilityGainEfficiencyInitialValue,
                     VRaisingEventKey.OnGamingAbilityGainEfficiencyChanged,
-                    characterConfig.gamingAbilityGainEfficiencyMaxValue,
+                    characterConfig.gamingAbilityGainEfficiencyMaxValue == -1 ? int.MaxValue : characterConfig.gamingAbilityGainEfficiencyMaxValue,
                     characterConfig.gamingAbilityGainEfficiencyMinValue));
             
             AttributeManager.AddAttribute("CAChattingAbilityGainEfficiency",
-                new VCharacterAttribute(characterConfig.chattingAbilityGainEfficiencyConfiguration,
+                new VAbilityGainEfficiencyAttribute(characterConfig.chattingAbilityGainEfficiencyConfiguration,
                     characterConfig.chattingAbilityGainEfficiencyInitialValue,
                     VRaisingEventKey.OnChattingAbilityGainEfficiencyChanged,
-                    characterConfig.chattingAbilityGainEfficiencyMaxValue,
+                    characterConfig.chattingAbilityGainEfficiencyMaxValue == -1 ? int.MaxValue : characterConfig.chattingAbilityGainEfficiencyMaxValue,
                     characterConfig.chattingAbilityGainEfficiencyMinValue));
             
             AttributeManager.AddAttribute("CAFollowerCount", 
-                new VCharacterAttribute(characterConfig.followerCountConfiguration,
+                new VFollowerCountAttribute(characterConfig.followerCountConfiguration,
                     characterConfig.followerCountInitialValue, 
                     VRaisingEventKey.OnFollowerCountChanged, 
-                    characterConfig.followerCountMaxValue, 
+                    characterConfig.followerCountMaxValue == -1 ? int.MaxValue : characterConfig.followerCountMaxValue,
                     characterConfig.followerCountMinValue));
             
             AttributeManager.AddAttribute("CAMembershipCount",
                 new VCharacterAttribute(characterConfig.membershipCountConfiguration,
                     characterConfig.membershipCountInitialValue, 
                     VRaisingEventKey.OnMemberCountChanged, 
-                    characterConfig.membershipCountMaxValue, 
+                    characterConfig.membershipCountMaxValue == -1 ? int.MaxValue : characterConfig.membershipCountMaxValue,
                     characterConfig.membershipCountMinValue));
             
             AttributeManager.AddAttribute("CAFollowerToViewerRatio",
-                new VCharacterAttribute(characterConfig.followerToViewerRatioConfiguration,
+                new VConversionRatioAttribute(characterConfig.followerToViewerRatioConfiguration,
                     characterConfig.followerToViewerRatioInitialValue, 
                     VRaisingEventKey.OnFollowerToViewerRatioChanged, 
-                    characterConfig.followerToViewerRatioMaxValue, 
+                    characterConfig.followerToViewerRatioMaxValue == -1 ? int.MaxValue : characterConfig.followerToViewerRatioMaxValue,
                     characterConfig.followerToViewerRatioMinValue));
             
             AttributeManager.AddAttribute("CAMoney",
-                new VCharacterAttribute(characterConfig.moneyConfiguration,
+                new VMoneyAttribute(characterConfig.moneyConfiguration,
                     characterConfig.moneyInitialValue, 
                     VRaisingEventKey.OnMoneyChanged, 
-                    characterConfig.moneyMaxValue, 
+                    characterConfig.moneyMaxValue == -1 ? int.MaxValue : characterConfig.moneyMaxValue,
                     characterConfig.moneyMinValue));
         }
         

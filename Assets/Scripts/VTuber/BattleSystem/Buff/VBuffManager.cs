@@ -18,6 +18,8 @@ namespace VTuber.BattleSystem.Buff
         public uint ConfigId => buff.ConfigId;
 
         private VBattle _battle;
+        
+        private bool isFirstTurn = true;
 
         public VBuffItem(VBuff buff, int value)
         {
@@ -43,6 +45,13 @@ namespace VTuber.BattleSystem.Buff
             if (buff.IsPermanent)
                 return false;
 
+            if (isFirstTurn)
+            {
+                isFirstTurn = false;
+                VDebug.Log("第一次执行Buff " + buff.GetBuffName() + " 的持续时间减少逻辑，跳过。");
+                return false;
+            }
+            
             value -= 1;
             if (Value <= 0)
                 return true;

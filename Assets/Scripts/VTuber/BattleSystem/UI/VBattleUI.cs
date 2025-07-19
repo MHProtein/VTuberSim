@@ -81,6 +81,11 @@ namespace VTuber.BattleSystem.UI
                 ui.selected = value;
             }
         }
+
+        public void PickCardDebug()
+        {
+            ShowPickCardMenu(VCardPileType.Deck, 3, false, false);
+        }
         
         public void ShowPickCardMenu(VCardPileType cardPileType, int count, bool isFromCard, bool shouldPlayTwice)
         {
@@ -96,6 +101,9 @@ namespace VTuber.BattleSystem.UI
                     break;
                 case VCardPileType.Exhaust:
                     cards = VBattle.Instance.CardPilesManager.ExhaustPile.ToList();
+                    break;
+                case VCardPileType.Deck:
+                    cards = VBattle.Instance.CardPilesManager.Deck.ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cardPileType), cardPileType, null);

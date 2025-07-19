@@ -20,9 +20,11 @@ namespace VTuber.BattleSystem.Card
     
     public enum VCardRarity
     {
+        Basic, //white
         Common, //blue
         Rare,  //purple
         Epic,  //gold
+        Special, //black
     }
     
     public class VCardHeaderIndex

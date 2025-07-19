@@ -4,16 +4,19 @@ using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.Character.Attributes
 {
     public class VAbilityAttribute : VCharacterAttribute
     {
-        public VAbilityAttribute(VCharacterAttributeConfiguration configuration, int initialValue, 
+        public readonly Color color;
+        public VAbilityAttribute(VCharacterAttributeConfiguration configuration, Color color, int initialValue, 
             VRaisingEventKey eventKey = VRaisingEventKey.Default, int maxValue = Int32.MaxValue, 
             int minValue = 0, bool isPercentage = false)
             : base(configuration, initialValue, eventKey, maxValue, minValue, isPercentage)
         {
+            this.color = color;
         }
 
         public void AddAbility(int delta, bool shouldMultiplyByEfficiency = false)
@@ -47,7 +50,7 @@ namespace VTuber.Character.Attributes
             }
             
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
-                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, (int)(value * conversionRate * 100f)));
+                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, (int)(Value * conversionRate * 100f), color));
         }
     }
 }

@@ -11,6 +11,7 @@ namespace VTuber.BattleSystem.Core
     {
         [SerializeField] private VBattle _battle;
         [SerializeField] private VBattleConfiguration _battleConfiguration;
+        [SerializeField] private VCharacterConfiguration _characterConfiguration;
         
         private VCardLibrary _cardLibrary;
         
@@ -19,7 +20,7 @@ namespace VTuber.BattleSystem.Core
             base.Awake();
 
             VBattleResourcesLoader loader = new VBattleResourcesLoader("Assets\\Resources\\Configurations\\NewCards.xlsx");
-            
+            VCharacter character = new VCharacter(_characterConfiguration);
             _cardLibrary = new VCardLibrary();
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
@@ -35,7 +36,7 @@ namespace VTuber.BattleSystem.Core
             }
 
             _cardLibrary.AddCards(cards);
-            _battle.InitializeBattle(null, _battleConfiguration, _cardLibrary);
+            _battle.InitializeBattle(character.AttributeManager, _battleConfiguration, _cardLibrary);
         }
 
         protected override void OnEnable()

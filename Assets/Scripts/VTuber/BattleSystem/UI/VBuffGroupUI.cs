@@ -37,17 +37,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private GameObject buffCellPrefab;
 
         private Dictionary<uint, VBuffUI> _buffUIs;
-        private Queue<BuffAnimationRequest> _animationQueue = new();
-        private bool _isAnimating = false;
-
-        private enum AnimationType { ScaleIn, Punch }
-        private class BuffAnimationRequest
-        {
-            public Transform Target;
-            public bool IsFromCard;
-            public bool ShouldPlayTwice;
-            public AnimationType Type;
-        }
+        private VAnimationQueue _animationQueue = new VAnimationQueue();
 
         protected override void Awake()
         {
@@ -92,8 +82,8 @@ namespace VTuber.BattleSystem.UI
             _buffUIs[id] = ui;
 
             // enqueue scale‑in then punch
-            Enqueue(AnimationType.ScaleIn, go.transform, isFromCard, shouldTwice);
-            Enqueue(AnimationType.Punch,   go.transform, isFromCard, shouldTwice);
+            _animationQueue.Enqueue(AnimationType.ScaleIn, go.transform, () => RaiseEvents(isFromCard, shouldTwice));
+            //_animationQueue.Enqueue(AnimationType.Punch, go.transform, () => RaiseEvents(isFromCard, shouldTwice));
         }
 
         private void OnBuffValueUpdated(Dictionary<string, object> msg)
@@ -103,9 +93,9 @@ namespace VTuber.BattleSystem.UI
             {
                 ui.SetText((int)msg["Value"]);
                 // only punch on update
-                Enqueue(AnimationType.Punch, ui.gameObject.transform,
-                        msg["IsFromCard"]   as bool? ?? false,
-                        msg["ShouldPlayTwice"] as bool? ?? false);
+                _animationQueue.Enqueue(AnimationType.Punch, ui.gameObject.transform,
+                    () => RaiseEvents( msg["IsFromCard"]   as bool? ?? false,
+                        msg["ShouldPlayTwice"] as bool? ?? false));
             }
             else
             {
@@ -122,46 +112,6 @@ namespace VTuber.BattleSystem.UI
                 Destroy(ui.gameObject);
                 _buffUIs.Remove(id);
             }
-        }
-
-        private void Enqueue(AnimationType type, Transform trg, bool isFromCard, bool shouldTwice)
-        {
-            _animationQueue.Enqueue(new BuffAnimationRequest {
-                Type          = type,
-                Target        = trg,
-                IsFromCard    = isFromCard,
-                ShouldPlayTwice = shouldTwice
-            });
-            ProcessQueue();
-        }
-
-        private void ProcessQueue()
-        {
-            if (_isAnimating || _animationQueue.Count == 0)
-                return;
-
-            var req = _animationQueue.Dequeue();
-            _isAnimating = true;
-
-            // pick tween based on type
-            Tween tween;
-            if (req.Type == AnimationType.ScaleIn)
-            {
-                tween = Tween.Scale(req.Target, Vector3.one, 0.5f);
-            }
-            else // Punch
-            {
-                tween = Tween.PunchScale(req.Target, Vector3.one * 1.3f, 0.5f);
-            }
-
-            tween.OnComplete(() =>
-            {
-                // after *every* animation step we still fire the same events
-                RaiseEvents(req.IsFromCard, req.ShouldPlayTwice);
-
-                _isAnimating = false;
-                ProcessQueue();
-            });
         }
 
         private void RaiseEvents(bool isFromCard, bool shouldPlayTwice)
