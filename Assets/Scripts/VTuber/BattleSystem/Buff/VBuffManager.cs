@@ -58,7 +58,6 @@ namespace VTuber.BattleSystem.Buff
             if (buff.IsPermanent)
                 return false;
             
-            
             if (isFirstTurn)
             {
                 isFirstTurn = false;
@@ -143,6 +142,7 @@ namespace VTuber.BattleSystem.Buff
 
             Activate();
         }
+
 
         public void Activate()
         {

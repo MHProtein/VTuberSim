@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
 using TMPro;
@@ -20,6 +21,9 @@ namespace VTuber.BattleSystem.UI
 
         private float arrowHeight;
         private float arrowWidth;
+
+        private float blockHeight;
+        private float blockWidth;
 
         private Sequence textSequence;
         private Sequence arrowSequence;
@@ -76,8 +80,24 @@ namespace VTuber.BattleSystem.UI
                 var image = colorObj.GetComponent<Image>();
                 image.color = colorObjects.Last().color;
                 colorObjects.Add(image);
-                //float scale = 
+                float scale = initSize / (colorObjects.Count * blockWidth);
+                if (!arrowSequence.isAlive)
+                {
+                    arrowSequence = Sequence.Create();
+                }
+                
+                arrowSequence.Chain(Tween.Scale(grid.transform, new Vector3(scale, 1, 1), 0.2f));
+
+
+                StartCoroutine(DelayMoveArrow());
             }
+        }
+
+        public IEnumerator DelayMoveArrow()
+        {
+            yield return new WaitForSeconds(0.2f);
+            arrowSequence.Chain(Tween.Position(arrow.transform, colorObjects[arrowIndex - 1].transform.position + 
+                                                                new Vector3(0, -arrowHeight, 0), 0.2f));
         }
         
         private void OnBattleBegin(Dictionary<string, object> messagedict)
@@ -86,6 +106,9 @@ namespace VTuber.BattleSystem.UI
             {
                 arrowIndex++;
                 arrow.transform.position = colorObjects[0].transform.position + new Vector3(0, -arrowHeight, 0);
+                initSize = colorObjects[0].rectTransform.rect.width * colorObjects.Count;
+                blockHeight = colorObjects[0].rectTransform.rect.height;
+                blockWidth = colorObjects[0].rectTransform.rect.width;
             });
         }
         
@@ -100,7 +123,6 @@ namespace VTuber.BattleSystem.UI
                 var image = colorObj.GetComponent<Image>();
                 image.color = colors[i];
                 colorObjects.Add(image);
-                initSize += image.rectTransform.rect.width;
             }
         }
         
