@@ -11,6 +11,20 @@ namespace VTuber.Character.Attribute
     {
         protected VCharacterAttributeConfiguration _configuration;
         
+        
+        public string AttributeName { get; set; }
+        
+        public int Value { get; protected set; }
+        
+        protected VCharacterAttributeManager _attributeManager;
+        public bool IsConvertToBattleAttribute => _configuration.isConvertToBattleAttribute;
+        public bool IsBattleAttributePercentage => _configuration.isBattleAttributePercentage;
+        public VBattleEventKey BattleEventKey => _configuration.battleEventKey;
+        public bool IsPercentage { get; protected set; }
+        public bool IsBattleAttribute => _configuration.isConvertToBattleAttribute && 
+                                         _configuration.battleAttribute != null;
+        public Type BattleAttributeType => _configuration.battleAttribute.TypeToSerialize;
+
         protected int _minValue;
         protected int _maxValue;
         protected VRaisingEventKey _eventKey;
@@ -21,12 +35,6 @@ namespace VTuber.Character.Attribute
         public VValueModifier<int> GainPointsModifier => gainPointsModifier;
         protected VValueModifier<int> gainPointsModifier;
         
-        public int Value { get; protected set; }
-        
-        protected VCharacterAttributeManager _attributeManager;
-        public bool isConvertToBattleAttribute;
-        private bool isBattleAttributePercentage;
-
         public VCharacterAttribute(VCharacterAttributeConfiguration configuration, 
             int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
             int maxValue = Int32.MaxValue, int minValue = 0, bool isPercentage = false)
@@ -34,6 +42,7 @@ namespace VTuber.Character.Attribute
             _minValue = minValue;
             _maxValue = maxValue;
             _eventKey = eventKey;
+            IsPercentage = isPercentage;
             InitSetValue(initialValue);
         }
 
@@ -49,17 +58,19 @@ namespace VTuber.Character.Attribute
         
         public string GetBattleAttributeName()
         {
-            return isConvertToBattleAttribute ? _configuration.attributeName : "";
+            return IsConvertToBattleAttribute ? _configuration.attributeName : "";
         }
 
-        public virtual VBattleAttribute ConvertToBattleAttribute()
+        public virtual KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()
         {
-            if (!isConvertToBattleAttribute)
+            if (!IsConvertToBattleAttribute)
             {
-                return null;
+                return new KeyValuePair<string, VBattleAttribute>("", null);
             }
             
-            return new VBattleAttribute(Value, isBattleAttributePercentage);
+            return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
+                new VBattleAttribute(Value, IsBattleAttributePercentage,
+                    _configuration.battleEventKey, _configuration.maxValue, _configuration.minValue));
         }
         
         public virtual void AddTo(int delta)

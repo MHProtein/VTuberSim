@@ -1,7 +1,7 @@
 ﻿using System;
 using Spire.Xls;
 
-namespace VTuber.BattleSystem.Effect.BuffAddPercentageEffect
+namespace VTuber.BattleSystem.Effect
 {
     public class VBuffAddPercentageEffectConfiguration : VEffectConfiguration
     { 

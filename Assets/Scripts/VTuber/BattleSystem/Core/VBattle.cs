@@ -96,8 +96,8 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleMultiplierAttribute(500));
             
-            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, 100));
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false, VBattleEventKey.OnShieldChange));
+            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, VBattleEventKey.OnStaminaChange, 100));
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
@@ -235,7 +235,7 @@ namespace VTuber.BattleSystem.Core
         private void OnCardUsed(Dictionary<string, object> messagedict)
         {
             _playLeftAttribute.AddTo(-1, false);
-            VDebug.Log("Play Left: " + PlayLeft);
+            VDebug.Log("剩余可行动次数: " + PlayLeft);
             if (PlayLeft <= 0)
             {
                 EndTurn();
@@ -266,7 +266,7 @@ namespace VTuber.BattleSystem.Core
 
         public void EndTurn()
         {
-            Debug.Log("End Turn: " + TurnLeft);
+            Debug.Log("回合结束: " + TurnLeft);
             _turnAttribute.AddTo(-1, false);
             if (TurnLeft <= 0)
             {
@@ -293,7 +293,7 @@ namespace VTuber.BattleSystem.Core
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
-            VDebug.Log(messagedict is null);
+            VDebug.Log(messagedict is null ? "卡牌消息为空" : "卡牌消息有效");
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPreCardApply, messagedict);
 

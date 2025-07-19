@@ -2,7 +2,7 @@
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
-namespace VTuber.BattleSystem.Effect.BuffAddPercentageEffect
+namespace VTuber.BattleSystem.Effect
 {
     public class VBuffAddPercentageEffect : VEffect
     {

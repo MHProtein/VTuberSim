@@ -23,24 +23,24 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (!message.ContainsKey("NewValue") || !message.ContainsKey("Delta") || !message.ContainsKey("BuffId"))
             {
-                VDebug.Log("Condition " + id + " failed: Required keys not found in message.");
+                VDebug.Log("条件 " + id + " 未通过：消息中缺少必要的Key。");
                 return false;
             }
 
             if ((int)message["BuffId"] != _buffId)
             {
-                VDebug.Log($"Condition {id} failed: Buff ID mismatch. Expected {_buffId}, got {(int)message["BuffId"]}");
+                VDebug.Log($"条件 {id} 未通过：Buff ID 不匹配。期望 {_buffId}，实际 {(int)message["BuffId"]}");
                 return false;
             }
 
             bool result = Compare((int)message["Value"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
             if (result)
             {
-                VDebug.Log($"Condition {id} passed: Buff with ID {_buffId} has value {(int)message["Value"]} and delta {(int)message["Delta"]}");
+                VDebug.Log($"条件 {id} 通过：Buff(ID: {_buffId}) 的数值为 {(int)message["Value"]}，变化量为 {(int)message["Delta"]}");
             }
             else
             {
-                VDebug.Log($"Condition {id} failed: Buff with ID {_buffId} has value {(int)message["Value"]} and delta {(int)message["Delta"]}");
+                VDebug.Log($"条件 {id} 未通过：Buff(ID: {_buffId}) 的数值为 {(int)message["Value"]}，变化量为 {(int)message["Delta"]}");
             }
             return result;
         }

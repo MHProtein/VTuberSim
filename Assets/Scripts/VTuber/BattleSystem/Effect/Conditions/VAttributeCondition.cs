@@ -23,7 +23,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
                 return Compare(attribute.Value, _targetValue);
             }
 
-            VDebug.Log("Condition " + id + " failed: Attribute " + _attributeName + " not found in battle.");
+            VDebug.Log($"条件 {id} 未通过：战斗中未找到属性 {_attributeName}。");
             return false;
         }
     }
