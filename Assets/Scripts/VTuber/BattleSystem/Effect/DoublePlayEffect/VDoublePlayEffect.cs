@@ -12,7 +12,7 @@ namespace VTuber.BattleSystem.Effect
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
             battle.NextCardPlayTwice();
-            VDebug.Log($"Effect {_configuration.effectName} applied: Next card will be played twice.");
+            VDebug.Log($"效果 {_configuration.effectName} 已应用：下一张卡牌将被打出两次。");
         }
     }
 }

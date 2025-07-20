@@ -27,15 +27,15 @@ namespace VTuber.BattleSystem.Effect.Conditions
                 bool result = Compare(buff.Value, targetValue);
                 if (result)
                 {
-                    VDebug.Log("Condition " + id + " passed: Buff with ID " + buffId + " has value " + buff.Value);
+                    VDebug.Log($"条件 {id} 通过：ID为 {buffId} 的Buff层数为 {buff.Value}");
                 }
                 else
                 {
-                    VDebug.Log("Condition " + id + " failed: Buff with ID " + buffId + " has value " + buff.Value);
+                    VDebug.Log($"条件 {id} 未通过：ID为 {buffId} 的Buff层数为 {buff.Value}");
                 }
                 return result;
             }
-            VDebug.Log("Condition " + id + " failed: Buff with ID " + buffId + " not found in battle.");
+            VDebug.Log($"条件 {id} 未通过：战斗中未找到ID为 {buffId} 的Buff。");
             return false;
         }
     }

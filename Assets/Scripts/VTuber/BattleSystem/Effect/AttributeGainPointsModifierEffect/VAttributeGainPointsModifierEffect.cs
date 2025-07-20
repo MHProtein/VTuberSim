@@ -45,7 +45,7 @@ namespace VTuber.BattleSystem.Effect
                 modifierID = attribute.GainPointsModifier.AddModifier((int)pointValue);
                 _onBuffRemove = attribute.GainPointsModifier.RemoveModifier;
                 _onBuffLayerChangePoints = attribute.GainPointsModifier.ChangeModifier;
-                VDebug.Log("Effect " + _configuration.effectName + " added" + _deltaPoints.Value + " gain points modifier with ID: " + modifierID);
+                VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + modifierID);
             }
         }
 
@@ -57,18 +57,18 @@ namespace VTuber.BattleSystem.Effect
             float pointValue = _deltaPoints.Value;
             pointValue *= layer * MultiplyByLayer;
             _onBuffLayerChangePoints(modifierID, (int)pointValue);
-            VDebug.Log("Effect " + _configuration.effectName + " changed gain points to " + pointValue + " for layer " + layer);
+            VDebug.Log("效果 " + _configuration.effectName + " 将额外获取点数修改为 " + pointValue + "，层数为 " + layer);
         }
 
         public override void OnBuffRemove()
         {
             if (_onBuffRemove is null)
             {
-                VDebug.LogError("OnBuffRemove is null for modifierID: " + modifierID + ", attribute: " + _attributeName + "检查属性名");
+                VDebug.LogError("OnBuffRemove 为 null，modifierID: " + modifierID + "，属性: " + _attributeName + "，请检查属性名");
                 return;
             }
             _onBuffRemove(modifierID);
-            VDebug.Log("Effect " + _configuration.effectName + " removed gain points modifier with ID: " + modifierID);
+            VDebug.Log("效果 " + _configuration.effectName + " 移除了获取Points Modifier，ID为: " + modifierID);
         }
     }
 }

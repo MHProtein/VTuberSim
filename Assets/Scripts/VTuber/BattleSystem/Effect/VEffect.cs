@@ -23,6 +23,7 @@ namespace VTuber.BattleSystem.Effect
         protected VBattle _battle;
         protected int _layer = 0;
         public float MultiplyByLayer => _configuration.multiplyByLayer;
+        public bool TriggeredInFirstTurn;
         
         public VEffect(VEffectConfiguration configuration)
         {
@@ -41,19 +42,19 @@ namespace VTuber.BattleSystem.Effect
         {
             if (conditions == null || conditions.Count == 0)
             {
-                VDebug.Log("Effect " + Name + " can be applied without conditions.");
+                VDebug.Log("效果 " + Name + " 无条件。");
                 return true;
             }
-            
+
             foreach (var condition in conditions)
             {
                 if (!condition.IsTrue(battle, message))
                 {
-                    VDebug.Log("Effect " + Name + " cannot be applied due to condition: " + condition.id);
+                    VDebug.Log("效果 " + Name + " 因条件未满足无法生效: " + condition.id);
                     return false;
                 }
             }
-            VDebug.Log("Effect " + Name + " can be applied.");
+            VDebug.Log("效果 " + Name + " 可以生效。");
             return true;
         }
         
@@ -74,7 +75,11 @@ namespace VTuber.BattleSystem.Effect
         public void TryApply(Dictionary<string, object> dict)
         {
             if (CanApply(_battle, dict))
+            {
+                if (!TriggeredInFirstTurn)
+                    TriggeredInFirstTurn = true;
                 ApplyEffect(_battle, _layer);
+            }
         }
         
         public virtual void OnBuffAdded(VBattle battle, int layer)

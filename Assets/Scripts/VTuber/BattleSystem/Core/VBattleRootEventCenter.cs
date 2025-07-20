@@ -8,6 +8,8 @@ namespace VTuber.BattleSystem.Core
         Default,
         OnBattleBegin,
         OnTurnBegin,
+        OnTurnBeginBuffApply,
+        OnTurnBeginLate,
         OnTurnEndBuffApply,
         OnTurnResolution,
         OnTurnEnd,
@@ -29,6 +31,9 @@ namespace VTuber.BattleSystem.Core
         OnPopularityChange,
         OnStaminaChange,
         OnShieldChange,
+        OnMembershipCountChange,
+        OnViewerCountChange,
+        OnRevenueChange,
         
         OnBuffAdded,
         OnBuffRemoved,
@@ -48,6 +53,9 @@ namespace VTuber.BattleSystem.Core
         OnRequestPickCardsFromPile,
         OnBeginPickCardsFromPile,
         OnCardsPickedFromPile,
+        
+        OnMultiplierSequenceCalculated,
+        
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

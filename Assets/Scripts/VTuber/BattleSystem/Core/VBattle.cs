@@ -52,7 +52,7 @@ namespace VTuber.BattleSystem.Core
         
         private List<VEffect> _playTwiceEffects;
         private Dictionary<string, object> _playTwiceMessageDict;
-
+        private VCharacterAttributeManager _characterAttributeManager;
         public void NextCardPlayTwice()
         {
             shouldNextCardPlayTwice = true;
@@ -68,8 +68,8 @@ namespace VTuber.BattleSystem.Core
         public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
         {
             _configuration = configuration;
-
-            _battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
+            _characterAttributeManager = characterAttributeManager;
+            _battleAttributeManager = new VBattleAttributeManager();
             _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
             //_battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false));
@@ -86,6 +86,7 @@ namespace VTuber.BattleSystem.Core
         {
             base.Start();
             
+            _battleAttributeManager.AttributesConversion(_characterAttributeManager);
             _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount);
             _playLeftAttribute = new VBattlePlayLeftAttribute(_configuration.defaultPlayPerTurn);
             
@@ -94,10 +95,11 @@ namespace VTuber.BattleSystem.Core
             
             _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
-            _battleAttributeManager.AddAttribute("BASingingMultiplier", new VBattleMultiplierAttribute(500));
             
-            _battleAttributeManager.AddAttribute("BAStamina", new VBattleStaminaAttribute(100, 100));
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false, VBattleEventKey.OnShieldChange));
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
+            _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
+
+            _battleAttributeManager.InitializeInternalManagers();
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
@@ -171,7 +173,10 @@ namespace VTuber.BattleSystem.Core
             switch (card.CostType)
             {
                 case CostType.Stamina:
-                    card.SetPlayable(_battleAttributeManager.TestCost(card.Cost));
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    break;
+                case CostType.TrueStamina:
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
                     break;
                 case CostType.Buff:
                     card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
@@ -202,7 +207,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Stamina)
-                    card.SetPlayable(_battleAttributeManager.TestCost(card.Cost));
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                if(card.CostType == CostType.TrueStamina)
+                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
             }
         }
         
@@ -235,7 +242,7 @@ namespace VTuber.BattleSystem.Core
         private void OnCardUsed(Dictionary<string, object> messagedict)
         {
             _playLeftAttribute.AddTo(-1, false);
-            VDebug.Log("Play Left: " + PlayLeft);
+            VDebug.Log("剩余可行动次数: " + PlayLeft);
             if (PlayLeft <= 0)
             {
                 EndTurn();
@@ -245,6 +252,8 @@ namespace VTuber.BattleSystem.Core
         
         private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
         {
+            if(TurnLeft <= 0)
+                return;
             StartCoroutine(DelayInitializeTurn((float)messagedict["DelaySeconds"]));
         }
         
@@ -262,45 +271,52 @@ namespace VTuber.BattleSystem.Core
                 {"TurnLeft", TurnLeft},
                 {"HandSize", _configuration.maxHandSize}
             });
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>
+            {
+            });
         }
 
         public void EndTurn()
         {
-            Debug.Log("End Turn: " + TurnLeft);
+            Debug.Log("回合结束: " + TurnLeft);
             _turnAttribute.AddTo(-1, false);
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft}
+            });
+                
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnResolution, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft}
+            });
+                
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEnd, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft}
+            });
+            
             if (TurnLeft <= 0)
             {
-                // End battle
-            }
-            else
-            {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
-                {
-                    {"TurnLeft", TurnLeft}
-                });
-                
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnResolution, new Dictionary<string, object>
-                {
-                    {"TurnLeft", TurnLeft}
-                });
-                
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEnd, new Dictionary<string, object>
-                {
-                    {"TurnLeft", TurnLeft}
-                });
+                //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
+                //     {
+                //     });
+                _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
             }
         }
         
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
-            VDebug.Log(messagedict is null);
+            VDebug.Log(messagedict is null ? "卡牌消息为空" : "卡牌消息有效");
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPreCardApply, messagedict);
 
             switch ((CostType)messagedict["CostType"])
             {
                 case CostType.Stamina:
-                    _battleAttributeManager.ApplyCost((int)messagedict["Cost"]);
+                    _battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"]);
+                    break;
+                case CostType.TrueStamina:
+                    _battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"], true);
                     break;
                 case CostType.Buff:
                     _buffManager.ApplyCost((uint)messagedict["CostBuffId"], (int)messagedict["Cost"]);

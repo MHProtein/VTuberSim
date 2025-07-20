@@ -34,6 +34,5 @@ namespace VTuber.Core.Foundation
             if (!IsDebugEnabled) return;
             Debug.LogError(message);
         }
-        
     }
 }

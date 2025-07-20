@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
+using VTuber.BattleSystem.Core;
 using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -57,6 +59,14 @@ namespace VTuber.Character.Attributes
                 return true;
 
             return CalculateCost(ref cost, Value) >= 0;
+            
         }
+
+        public override KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()
+        {
+            return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
+                new VBattleStaminaAttribute(Value, VBattleEventKey.OnStaminaChange, _configuration.maxValue, _configuration.minValue));
+        }
+
     }
 }

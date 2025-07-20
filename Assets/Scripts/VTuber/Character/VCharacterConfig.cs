@@ -4,6 +4,8 @@ using VTuber.Character.Attribute;
 using VTuber.Core.Foundation;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
+using VTuber.Character.Attributes;
 
 namespace VTuber.Character
 {
@@ -69,6 +71,10 @@ namespace VTuber.Character
         [Header("")]
         [LabelText("最大值")]
         public int singingAbilityMaxValue;
+        
+        [LabelText("歌力颜色")][ColorPalette] public Color singingAbilityColor;
+        
+        public List<VAbilityGainFromBattleRate> singingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -89,6 +95,10 @@ namespace VTuber.Character
         [Header("")]
         [LabelText("最大值")]
         public int gamingAbilityMaxValue;
+        
+        [LabelText("游戏力颜色")][ColorPalette] public Color gamingAbilityColor;
+
+        public List<VAbilityGainFromBattleRate> gamingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -109,6 +119,9 @@ namespace VTuber.Character
         [Header("")]
         [LabelText("最大值")]
         public int chattingAbilityMaxValue;
+        
+        [LabelText("杂谈力颜色")][ColorPalette] public Color chattingAbilityColor;
+        public List<VAbilityGainFromBattleRate> chattingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -116,7 +129,7 @@ namespace VTuber.Character
 
         // Singing Ability Conversion Ratio
         [HorizontalGroup("SingingRatioGroup", Gap = 10)]
-        [Header("歌力转化率")]
+        [Header("歌力转化率%")]
         [LabelText("初始值")]
         public int singingAbilityConversionRatioInitialValue;
 
@@ -136,7 +149,7 @@ namespace VTuber.Character
 
         // Gaming Ability Conversion Ratio
         [HorizontalGroup("GamingRatioGroup", Gap = 10)]
-        [Header("游戏力转化率")]
+        [Header("游戏力转化率%")]
         [LabelText("初始值")]
         public int gamingAbilityConversionRatioInitialValue;
 
@@ -156,7 +169,7 @@ namespace VTuber.Character
 
         // Chatting Ability Conversion Ratio
         [HorizontalGroup("ChattingRatioGroup", Gap = 10)]
-        [Header("杂谈力转化率")]
+        [Header("杂谈力转化率%")]
         [LabelText("初始值")]
         public int chattingAbilityConversionRatioInitialValue;
 
@@ -176,7 +189,7 @@ namespace VTuber.Character
 
         // Singing Gain Efficiency
         [HorizontalGroup("SingingEfficiencyGroup", Gap = 10)]
-        [Header("歌力获得效率")]
+        [Header("歌力获得效率%")]
         [LabelText("初始值")]
         public int singingAbilityGainEfficiencyInitialValue;
 
@@ -196,7 +209,7 @@ namespace VTuber.Character
 
         // Gaming Gain Efficiency
         [HorizontalGroup("GamingEfficiencyGroup", Gap = 10)]
-        [Header("游戏力获得效率")]
+        [Header("游戏力获得效率%")]
         [LabelText("初始值")]
         public int gamingAbilityGainEfficiencyInitialValue;
 
@@ -216,7 +229,7 @@ namespace VTuber.Character
 
         // Chatting Gain Efficiency
         [HorizontalGroup("ChattingEfficiencyGroup", Gap = 10)]
-        [Header("杂谈力获得效率")]
+        [Header("杂谈力获得效率%")]
         [LabelText("初始值")]
         public int chattingAbilityGainEfficiencyInitialValue;
 
@@ -276,7 +289,7 @@ namespace VTuber.Character
 
         // Follower-to-Viewer Ratio
         [HorizontalGroup("FollowerRatioGroup", Gap = 10)]
-        [Header("粉丝同接转化率")]
+        [Header("粉丝同接转化率%")]
         [LabelText("初始值")]
         public int followerToViewerRatioInitialValue;
 
@@ -313,6 +326,25 @@ namespace VTuber.Character
         [PropertySpace(10)]
         [LabelText("Config文件")]
         public VCharacterAttributeConfiguration moneyConfiguration;
-    }
+        
+        // Money
+        [HorizontalGroup("RevenueShareRateGroup", Gap = 10)]
+        [Header("直播分成率%")]
+        [LabelText("初始值")]
+        public int revenueShareRateInitialValue;
 
+        [HorizontalGroup("RevenueShareRateGroup")]
+        [Header("")]
+        [LabelText("最小值")]
+        public int revenueShareRateMinValue;
+
+        [HorizontalGroup("RevenueShareRateGroup")]
+        [Header("")]
+        [LabelText("最大值")]
+        public int revenueShareRateMaxValue;
+
+        [PropertySpace(10)]
+        [LabelText("Config文件")]
+        public VCharacterAttributeConfiguration revenueShareRateConfiguration;
+    }
 }

@@ -1,8 +1,9 @@
-﻿using VTuber.BattleSystem.Core;
+﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
-namespace VTuber.BattleSystem.Effect.BuffAddPercentageEffect
+namespace VTuber.BattleSystem.Effect
 {
     public class VBuffAddPercentageEffect : VEffect
     {
@@ -27,6 +28,11 @@ namespace VTuber.BattleSystem.Effect.BuffAddPercentageEffect
             
                 battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_buffID), value, isFromCard, shouldApplyTwice);
                 VDebug.Log("Effect " + _configuration.effectName + " added " + value + " to buff with ID: " + _buffID + ". New value: " + buff.Value);
+            }
+            else
+            {
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+                    new Dictionary<string, object>());
             }
         }
     }
