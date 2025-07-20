@@ -38,12 +38,12 @@ namespace VTuber.BattleSystem.Core
             {
                 costAfterShield = calculatedCost - _shieldAttribute.Value;
 
-                _shieldAttribute.AddTo(-calculatedCost, false);
+                _shieldAttribute.AddTo(-calculatedCost >= 0 ? 0 : -calculatedCost, false);
                 if (costAfterShield <= 0)
                     return;
             }
             
-            _staminaAttribute.AddTo(-costAfterShield, false);
+            _staminaAttribute.AddTo(-costAfterShield >= 0 ? 0 : -costAfterShield, false);
         }
 
         public bool TestCost(int cost, bool ignoreShield = false)
@@ -59,7 +59,7 @@ namespace VTuber.BattleSystem.Core
                     return true;
             }
             
-            return _staminaAttribute.TestCost(-costAfterShield);
+            return _staminaAttribute.TestCost(-costAfterShield >= 0 ? 0 : -costAfterShield);
         }
         
         public int CalculateCost(int delta)
@@ -131,6 +131,7 @@ namespace VTuber.BattleSystem.Core
                 { "NewValue", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].Value },
                 { "Color", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].color },
             });
+            VDebug.Log("_currentTurnIndex: " + _currentTurnIndex);
             ++_currentTurnIndex;
         }
 
@@ -192,9 +193,13 @@ namespace VTuber.BattleSystem.Core
         public VMultiplierManager MultiplierManager => _multiplierManager;
         private VMultiplierManager _multiplierManager;
         
-        public VBattleAttributeManager(VCharacterAttributeManager characterAttributeManager)
+        public VBattleAttributeManager()
         {
             _battleAttributes = new Dictionary<string, VBattleAttribute>();
+        }
+
+        public void AttributesConversion(VCharacterAttributeManager characterAttributeManager)
+        {
             ConvertFromCharacterAttributes(characterAttributeManager);
         }
 
@@ -225,16 +230,13 @@ namespace VTuber.BattleSystem.Core
                 if (battleAttribute.Value != null)
                 {
                     AddAttribute(battleAttribute.Key, battleAttribute.Value);
+                    battleAttribute.Value.OnEnable();
                 }
             }
         }
         
         public void OnEnable()
         {
-            foreach (var attribute in _battleAttributes)
-            {
-                attribute.Value.OnEnable();
-            }
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
         }
 

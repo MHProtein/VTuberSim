@@ -29,6 +29,6 @@ MonoBehaviour:
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   battleAttributeName: BAMembershipCount
   isBattleAttributePercentage: 0
-  battleEventKey: 22
+  battleEventKey: 24
   minValue: 0
   maxValue: 2147483647

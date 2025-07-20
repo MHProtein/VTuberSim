@@ -124,7 +124,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             SendEvent(Value, Value - temp, isFromCard, shouldPlayTwice);
         }
 
-        private void InitSetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
+        protected virtual void InitSetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
         {
             Value = Mathf.Clamp(value, _minValue, _maxValue);
             SendEvent(Value, value - Value, isFromCard, shouldPlayTwice);

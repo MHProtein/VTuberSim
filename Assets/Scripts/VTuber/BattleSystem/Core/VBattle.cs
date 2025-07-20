@@ -52,7 +52,7 @@ namespace VTuber.BattleSystem.Core
         
         private List<VEffect> _playTwiceEffects;
         private Dictionary<string, object> _playTwiceMessageDict;
-
+        private VCharacterAttributeManager _characterAttributeManager;
         public void NextCardPlayTwice()
         {
             shouldNextCardPlayTwice = true;
@@ -68,8 +68,8 @@ namespace VTuber.BattleSystem.Core
         public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
         {
             _configuration = configuration;
-
-            _battleAttributeManager = new VBattleAttributeManager(characterAttributeManager);
+            _characterAttributeManager = characterAttributeManager;
+            _battleAttributeManager = new VBattleAttributeManager();
             _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
             //_battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false));
@@ -86,6 +86,7 @@ namespace VTuber.BattleSystem.Core
         {
             base.Start();
             
+            _battleAttributeManager.AttributesConversion(_characterAttributeManager);
             _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount);
             _playLeftAttribute = new VBattlePlayLeftAttribute(_configuration.defaultPlayPerTurn);
             
