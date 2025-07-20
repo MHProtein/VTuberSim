@@ -94,8 +94,11 @@ namespace VTuber.BattleSystem.UI
             _buffUIs[id] = ui;
 
             // enqueue scale‑in then punch
-            _animationQueue.Enqueue(AnimationType.ScaleIn, go.transform, () => RaiseEvents(isFromCard, shouldTwice));
-            //_animationQueue.Enqueue(AnimationType.Punch, go.transform, () => RaiseEvents(isFromCard, shouldTwice));
+            _animationQueue.Enqueue(Tween.Scale(ui.gameObject.transform, Vector3.one, 0.4f).OnComplete((
+                () =>
+                {
+                    RaiseEvents(isFromCard, shouldTwice);
+                })));
         }
 
         private void OnBuffValueUpdated(Dictionary<string, object> msg)
@@ -105,9 +108,13 @@ namespace VTuber.BattleSystem.UI
             {
                 ui.SetText((int)msg["Value"], (int)msg["Latency"]);
                 // only punch on update
-                _animationQueue.Enqueue(AnimationType.Punch, ui.gameObject.transform,
-                    () => RaiseEvents( msg["IsFromCard"]   as bool? ?? false,
-                        msg["ShouldPlayTwice"] as bool? ?? false));
+                
+                _animationQueue.Enqueue(Tween.PunchScale(ui.gameObject.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
+                    () =>
+                    {
+                        RaiseEvents(msg["IsFromCard"] as bool? ?? false,
+                            msg["ShouldPlayTwice"] as bool? ?? false);
+                    })));
             }
             else
             {

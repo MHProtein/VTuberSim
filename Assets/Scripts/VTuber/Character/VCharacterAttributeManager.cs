@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character.Attribute;
 
 namespace VTuber.Character
@@ -31,6 +32,14 @@ namespace VTuber.Character
             value = 0;
             isPercentage = false;
             return false;
+        }
+        
+        public void ConvertToCharacterAttributes(Dictionary<string, VBattleAttribute> attributes)
+        {
+            foreach (var attribute in Attributes)
+            {
+                attribute.Value.ConvertToAttribute(attributes);
+            }
         }
     }
 }
