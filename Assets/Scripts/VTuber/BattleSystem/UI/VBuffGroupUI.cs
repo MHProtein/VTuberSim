@@ -53,24 +53,23 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            var ctr = VBattleRootEventCenter.Instance;
-            ctr.RegisterListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
-            ctr.RegisterListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
-            ctr.RegisterListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            var ctr = VBattleRootEventCenter.Instance;
-            ctr.RemoveListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
-            ctr.RemoveListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
-            ctr.RemoveListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
+        
 
         private void OnBuffAdded(Dictionary<string, object> msg)
         {
-            uint   id         = (uint)msg["Id"];
+            uint id = (uint)msg["Id"];
             
             if( _buffUIs.ContainsKey(id))
             {
