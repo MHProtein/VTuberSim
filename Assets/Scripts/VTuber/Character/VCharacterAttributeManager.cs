@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character.Attribute;
 
 namespace VTuber.Character
@@ -15,7 +16,30 @@ namespace VTuber.Character
         public void AddAttribute(string name, VCharacterAttribute attribute)
         {
             Attributes.TryAdd(name, attribute);
+            attribute.AttributeName = name;
+            attribute.SetAttributeManager(this);
+        }
+
+        public bool TryGetAttributeValue(string name, out int value, out bool isPercentage)
+        {
+            if(Attributes.TryGetValue(name, out var attribute))
+            {
+                value = attribute.Value;
+                isPercentage = attribute.IsPercentage;
+                return true;
+            }
+
+            value = 0;
+            isPercentage = false;
+            return false;
         }
         
+        public void ConvertToCharacterAttributes(Dictionary<string, VBattleAttribute> attributes)
+        {
+            foreach (var attribute in Attributes)
+            {
+                attribute.Value.ConvertToAttribute(attributes);
+            }
+        }
     }
 }

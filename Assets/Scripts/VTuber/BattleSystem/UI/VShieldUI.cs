@@ -24,20 +24,20 @@ namespace VTuber.BattleSystem.UI
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            base.OnValueChanged(messagedict);
+            bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
+            bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
             int delta = messagedict["Delta"] as int ? ?? 0;
-            shieldText.text = $"护盾: {messagedict["NewValue"] as int? ?? 0}";
+            shieldText.text = $"神采: {messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             
-            Tween.PunchScale(transform, Vector3.one * 0.5f, 0.5f).OnComplete(OnAnimationFinished);
+            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
+                () =>
+                {
+                    RaiseEvents(isFromCard, shouldPlayTwice);
+                    shieldText.faceColor = Color.white;
+                })));
             shieldText.faceColor = delta > 0 ? Color.green : Color.red;
-        }
-
-        protected override void OnAnimationFinished()
-        {
-            base.OnAnimationFinished();
-            shieldText.faceColor = Color.white;
         }
     }
 }

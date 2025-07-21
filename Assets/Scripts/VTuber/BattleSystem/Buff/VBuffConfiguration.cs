@@ -5,14 +5,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
-using VTuber.BattleSystem.Effect;
-using VTuber.Core.EventCenter;
-using VTuber.Core.Foundation;
-using VTuber.Core.Managers;
-using VTuber.Core.StringToEnum;
-using VTuber.Core.TypeSerialization;
 
 namespace VTuber.BattleSystem.Buff
 {

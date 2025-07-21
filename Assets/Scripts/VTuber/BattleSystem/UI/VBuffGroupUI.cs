@@ -8,7 +8,6 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-
     class VBuffUI
     {
         public TMP_Text text;
@@ -16,37 +15,34 @@ namespace VTuber.BattleSystem.UI
         public bool isPermanent;
         public string buffName;
 
-        public VBuffUI(GameObject gameObject, bool isPermanent, string buffName)
+        public VBuffUI(GameObject go, bool isPermanent, string buffName)
         {
-            this.gameObject = gameObject;
-            this.text = gameObject.GetComponentInChildren<TMP_Text>();
+            gameObject = go;
+            text = go.GetComponentInChildren<TMP_Text>();
             this.isPermanent = isPermanent;
             this.buffName = buffName;
         }
-        
-        public void SetText(int value)
+
+        public void SetText(int value, int latency)
         {
+            if (latency > 0)
+            {
+                text.text = $"{buffName} 延迟: {latency}";
+                return;
+            }
             if (isPermanent)
-            {
-                text.text = $"{buffName} Layer: {value}";
-            }
+                text.text = $"{buffName} 层: {value}";
             else
-            {
-                text.text = $"{buffName} Duration: {value}";
-            }
+                text.text = $"{buffName} 回合: {value}";
         }
     }
-    
+
     public class VBuffGroupUI : VUIBehaviour
     {
         [SerializeField] private GameObject buffCellPrefab;
 
         private Dictionary<uint, VBuffUI> _buffUIs;
-
-        private VBuffUI _buffUIToSetParent;
-        
-        private bool _isFromCard = false;
-        private bool _shouldPlayTwice = false;
+        private VAnimationQueue _animationQueue = new VAnimationQueue();
 
         protected override void Awake()
         {
@@ -61,7 +57,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
-        
+
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -69,70 +65,84 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
         }
+        
 
-        private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
+        private void OnBuffAdded(Dictionary<string, object> msg)
         {
-            if (_buffUIs.TryGetValue((uint)messagedict["Id"], out VBuffUI buffUI))
+            uint id = (uint)msg["Id"];
+            
+            if( _buffUIs.ContainsKey(id))
             {
-                _isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-                _shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
-                
-                buffUI.SetText((int)messagedict["Value"]);
-                
-                if(_isFromCard || _shouldPlayTwice)
-                    Tween.PunchScale(buffUI.gameObject.transform, Vector3.one * 1.3f, 0.5f).OnComplete(OnSendEvents);
-                else
-                    Tween.PunchScale(buffUI.gameObject.transform, Vector3.one * 1.3f, 0.5f);
-                
+                OnBuffValueUpdated(msg);
                 return;
             }
-            OnSendEvents();
+            
+            bool isFromCard = msg["IsFromCard"]   as bool? ?? false;
+            bool shouldTwice = msg["ShouldPlayTwice"] as bool? ?? false;
+            bool isPermanent = (bool)msg["IsPermanent"];
+            string buffName = (string)msg["BuffName"];
+            int value = (int)msg["Value"];
+            int latency = (int)msg["Latency"];
+            
+            // instantiate
+            var go = Instantiate(buffCellPrefab);
+            go.transform.SetParent(transform);
+            go.transform.localScale = Vector3.zero;
+
+            var ui = new VBuffUI(go, isPermanent, buffName);
+            ui.SetText(value, latency);
+            _buffUIs[id] = ui;
+
+            // enqueue scale‑in then punch
+            _animationQueue.Enqueue(Tween.Scale(ui.gameObject.transform, Vector3.one, 0.4f).OnComplete((
+                () =>
+                {
+                    RaiseEvents(isFromCard, shouldTwice);
+                })));
         }
 
-        private void OnBuffRemoved(Dictionary<string, object> messagedict)
+        private void OnBuffValueUpdated(Dictionary<string, object> msg)
         {
-            uint id = (uint)messagedict["Id"];
-            if (_buffUIs.TryGetValue((uint)messagedict["Id"], out VBuffUI buffUI))
+            uint id = (uint)msg["Id"];
+            if (_buffUIs.TryGetValue(id, out var ui))
             {
-                Destroy(buffUI.gameObject);
+                ui.SetText((int)msg["Value"], (int)msg["Latency"]);
+                // only punch on update
+                
+                _animationQueue.Enqueue(Tween.PunchScale(ui.gameObject.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
+                    () =>
+                    {
+                        RaiseEvents(msg["IsFromCard"] as bool? ?? false,
+                            msg["ShouldPlayTwice"] as bool? ?? false);
+                    })));
+            }
+            else
+            {
+                // fallback
+                RaiseEvents(false, false);
+            }
+        }
+
+        private void OnBuffRemoved(Dictionary<string, object> msg)
+        {
+            uint id = (uint)msg["Id"];
+            if (_buffUIs.TryGetValue(id, out var ui))
+            {
+                Destroy(ui.gameObject);
                 _buffUIs.Remove(id);
             }
         }
-        
-        private void OnBuffAdded(Dictionary<string, object> messagedict)
+
+        private void RaiseEvents(bool isFromCard, bool shouldPlayTwice)
         {
-            _isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-            _shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
-
-            VBuffUI buffUI = new VBuffUI(Instantiate<GameObject>(buffCellPrefab), (bool)messagedict["IsPermanent"], (string)messagedict["BuffName"]);
-            buffUI.gameObject.transform.SetParent(transform);
-            buffUI.gameObject.transform.localScale = Vector3.zero;
-            buffUI.SetText((int)messagedict["Value"]);
-            _buffUIs.Add((uint)messagedict["Id"], buffUI);
-
-            Tween.Scale(buffUI.gameObject.transform, Vector3.one, 0.5f).OnComplete(OnSendEvents);
-            _buffUIToSetParent = buffUI;
-        }
-
-        private void OnSendEvents()
-        {
-            if (_shouldPlayTwice)
+            if (shouldPlayTwice)
             {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime, new Dictionary<string ,object>()
-                {
-                    
-                });
-                _shouldPlayTwice = false;
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime, new Dictionary<string, object>());
                 return;
             }
-
-            if (_isFromCard)
+            if (isFromCard)
             {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>()
-                {
-                
-                });
-                _isFromCard = false;
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard, new Dictionary<string, object>());
             }
         }
     }

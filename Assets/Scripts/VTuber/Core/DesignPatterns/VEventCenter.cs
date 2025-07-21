@@ -36,7 +36,7 @@ namespace VTuber.Core.EventCenter
             {
                 if (_delegate == null)
                 {
-                    VDebug.LogWarning($"Event with key {key} has no listeners.");
+                    //VDebug.LogWarning($"Event with key {key} has no listeners.");
                     return false;
                 }
                 _delegate.DynamicInvoke(args);

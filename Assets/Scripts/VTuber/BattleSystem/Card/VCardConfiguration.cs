@@ -15,14 +15,17 @@ namespace VTuber.BattleSystem.Card
     public enum CostType
     {
         Stamina,
+        TrueStamina,
         Buff,
     }
     
     public enum VCardRarity
     {
+        Basic, //white
         Common, //blue
         Rare,  //purple
         Epic,  //gold
+        Special, //black
     }
     
     public class VCardHeaderIndex

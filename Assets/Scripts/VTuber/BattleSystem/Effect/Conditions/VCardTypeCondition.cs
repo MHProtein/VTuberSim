@@ -19,17 +19,17 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (!message.ContainsKey("Card"))
             {
-                VDebug.Log("Condition " + id + " failed: 'Card' key not found in message.");
-                return false; // Ensure the message contains a valid card
+                VDebug.Log($"条件 {id} 未通过：消息中未找到 'Card' 键。");
+                return false;
             }
             bool result = _targetValue.Equals(((VCard)message["Card"]).CardType);
             if (result)
             {
-                VDebug.Log("Condition " + id + " passed: Card type matches " + _targetValue);
+                VDebug.Log($"条件 {id} 通过：卡牌类型为 {_targetValue}");
             }
             else
             {
-                VDebug.Log("Condition " + id + " failed: Card type does not match " + _targetValue);
+                VDebug.Log($"条件 {id} 未通过：卡牌类型不为 {_targetValue}");
             }
             return result;
         }
