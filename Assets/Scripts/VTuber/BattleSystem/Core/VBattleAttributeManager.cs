@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Analytics;
 using VTuber.BattleSystem.BattleAttribute;
-using VTuber.BattleSystem.Buff;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
@@ -69,12 +66,11 @@ namespace VTuber.BattleSystem.Core
 
             return delta;
         }
-        
     }
 
     public class VMultiplierManager
     {
-        public VBattleMultiplierAttribute Multiplier => _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
+        public VBattleMultiplierAttribute Multiplier { get; private set; }
         private List<VBattleMultiplierAttribute> _multiplierAttributes;
         private List<int> multiplierSequence;
         private int _currentTurnIndex = 0;
@@ -131,8 +127,12 @@ namespace VTuber.BattleSystem.Core
                 { "NewValue", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].Value },
                 { "Color", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].color },
             });
-            VDebug.Log("_currentTurnIndex: " + _currentTurnIndex);
-            ++_currentTurnIndex;
+            Multiplier = _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
+            if (_currentTurnIndex <= multiplierSequence.Count - 1)
+            {
+                _currentTurnIndex++;
+                VDebug.Log("_currentTurnIndex: " + _currentTurnIndex);
+            }
         }
 
         private void GenerateMultiplierSequence(int maxTurn, int maxConsecutiveMultiplierCount, int mainAttributeIndex)
@@ -239,8 +239,6 @@ namespace VTuber.BattleSystem.Core
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
         }
-
-
         
         public void OnDisable()
         {
@@ -258,7 +256,8 @@ namespace VTuber.BattleSystem.Core
             {
                 float multiplier = _multiplierManager.Multiplier.Value / 100f;
                 int delta = (int)messagedict["Delta"];
-                _battleAttributes["BAPopularity"].AddTo((int)(delta * multiplier), false);
+                (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
+                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName);
             }
         }
 

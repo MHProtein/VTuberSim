@@ -53,16 +53,28 @@ MonoBehaviour:
   singingAbilityMinValue: 0
   singingAbilityMaxValue: -1
   singingAbilityColor: {r: 0.7075472, g: 0.29703632, b: 0.30508563, a: 1}
+  singingAbilityGainFromBattleRates:
+  - from: 0
+    to: -1
+    rate: 0.7
   singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
   gamingAbilityInitialValue: 300
   gamingAbilityMinValue: 0
   gamingAbilityMaxValue: -1
   gamingAbilityColor: {r: 0.8490566, g: 0.819914, b: 0.16420433, a: 1}
+  gamingAbilityGainFromBattleRates:
+  - from: 0
+    to: -1
+    rate: 0.7
   gamingAbilityConfiguration: {fileID: 11400000, guid: 9f3418b693f0bd74faf5ef1c80bcabc3, type: 2}
   chattingAbilityInitialValue: 400
   chattingAbilityMinValue: 0
   chattingAbilityMaxValue: -1
   chattingAbilityColor: {r: 0.14413491, g: 0.14413491, b: 0.745283, a: 1}
+  chattingAbilityGainFromBattleRates:
+  - from: 0
+    to: -1
+    rate: 0.7
   chattingAbilityConfiguration: {fileID: 11400000, guid: 47886f19849f4124695d0c1850eaf5a3, type: 2}
   singingAbilityConversionRatioInitialValue: 1
   singingAbilityConversionRatioMinValue: 0
@@ -104,3 +116,7 @@ MonoBehaviour:
   moneyMinValue: 0
   moneyMaxValue: -1
   moneyConfiguration: {fileID: 11400000, guid: ef98052a793634040af651ed3bf119ee, type: 2}
+  revenueShareRateInitialValue: 70
+  revenueShareRateMinValue: 0
+  revenueShareRateMaxValue: 100
+  revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}

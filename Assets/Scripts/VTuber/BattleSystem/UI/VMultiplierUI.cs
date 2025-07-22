@@ -25,11 +25,11 @@ namespace VTuber.BattleSystem.UI
         private float blockHeight;
         private float blockWidth;
 
-        private Sequence textSequence;
-        private Sequence arrowSequence;
+        private VAnimationQueue textSequence;
+        private VAnimationQueue arrowSequence;
         
         private List<Image> colorObjects = new List<Image>();
-        int arrowIndex = 0;
+        int arrowIndex = -1;
         private float initSize = 0;
         
         protected override void Awake()
@@ -40,8 +40,9 @@ namespace VTuber.BattleSystem.UI
             SetFontStyle(MultiplierText, FontStyles.Bold);
             arrowHeight = arrow.rectTransform.rect.height;
             arrowWidth = arrow.rectTransform.rect.width;
-            textSequence = Sequence.Create();
-            arrowSequence = Sequence.Create();
+
+            textSequence = new VAnimationQueue();
+            arrowSequence = new VAnimationQueue();
         }
 
         protected override void Start()
@@ -81,12 +82,8 @@ namespace VTuber.BattleSystem.UI
                 image.color = colorObjects.Last().color;
                 colorObjects.Add(image);
                 float scale = initSize / (colorObjects.Count * blockWidth);
-                if (!arrowSequence.isAlive)
-                {
-                    arrowSequence = Sequence.Create();
-                }
                 
-                arrowSequence.Chain(Tween.Scale(grid.transform, new Vector3(scale, 1, 1), 0.2f));
+                arrowSequence.Enqueue(Tween.Scale(grid.transform, new Vector3(scale, 1, 1), 0.2f));
 
 
                 StartCoroutine(DelayMoveArrow());
@@ -96,8 +93,8 @@ namespace VTuber.BattleSystem.UI
         public IEnumerator DelayMoveArrow()
         {
             yield return new WaitForSeconds(0.2f);
-            arrowSequence.Chain(Tween.Position(arrow.transform, colorObjects[arrowIndex - 1].transform.position + 
-                                                                new Vector3(0, -arrowHeight, 0), 0.2f));
+            arrowSequence.Enqueue(Tween.Position(arrow.transform, colorObjects[arrowIndex - 1].transform.position + 
+                                                                  new Vector3(0, -arrowHeight, 0), 0.2f));
         }
         
         private void OnBattleBegin(Dictionary<string, object> messagedict)
@@ -131,21 +128,13 @@ namespace VTuber.BattleSystem.UI
             MultiplierText.text = $"提升率: {messagedict["NewValue"] as int? ?? 0}%";
             MultiplierText.faceColor = (Color)messagedict["Color"];
             
-            if (!textSequence.isAlive)
-            {
-                textSequence = Sequence.Create();
-            }
-            textSequence.Chain(Tween.PunchScale(MultiplierText.transform, Vector3.one * 1.3f, 0.5f));
+            textSequence.Enqueue(Tween.PunchScale(MultiplierText.transform, Vector3.one * 1.3f, 0.5f));
         }
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
-            if (!arrowSequence.isAlive)
-            {
-                arrowSequence = Sequence.Create();
-            }
-            arrowSequence.Chain(Tween.Position(arrow.transform, colorObjects[arrowIndex].transform.position + 
-                                                                new Vector3(0, -arrowHeight, 0), 0.2f));
+            arrowSequence.Enqueue(Tween.Position(arrow.transform, colorObjects[arrowIndex].transform.position + 
+                                                                  new Vector3(0, -arrowHeight, 0), 0.2f));
             arrowIndex++;
         }
     }

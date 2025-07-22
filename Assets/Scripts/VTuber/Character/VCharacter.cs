@@ -33,15 +33,17 @@ namespace VTuber.Character
                     characterConfig.pressureMinValue));
             
             AttributeManager.AddAttribute("CASingingAbility", 
-                new VAbilityAttribute(characterConfig.singingAbilityConfiguration,      
+                new VAbilityAttribute(characterConfig.singingAbilityConfiguration,  
+                    characterConfig.singingAbilityGainFromBattleRates,    
                     characterConfig.singingAbilityColor,
                     characterConfig.singingAbilityInitialValue, 
                     VRaisingEventKey.OnSingingAbilityChanged, 
                     characterConfig.singingAbilityMaxValue == -1 ? int.MaxValue : characterConfig.singingAbilityMaxValue,
                     characterConfig.singingAbilityMinValue));
-            
-            AttributeManager.AddAttribute("CAGamingAbility", 
+
+            AttributeManager.AddAttribute("CAGamingAbility",
                 new VAbilityAttribute(characterConfig.gamingAbilityConfiguration,
+                    characterConfig.gamingAbilityGainFromBattleRates,
                     characterConfig.gamingAbilityColor,
                     characterConfig.gamingAbilityInitialValue, 
                     VRaisingEventKey.OnGamingAbilityChanged, 
@@ -50,6 +52,7 @@ namespace VTuber.Character
             
             AttributeManager.AddAttribute("CAChattingAbility",
                 new VAbilityAttribute(characterConfig.chattingAbilityConfiguration,
+                    characterConfig.chattingAbilityGainFromBattleRates,
                     characterConfig.chattingAbilityColor,
                     characterConfig.chattingAbilityInitialValue, 
                     VRaisingEventKey.OnChattingAbilityChanged, 
@@ -126,9 +129,14 @@ namespace VTuber.Character
                     VRaisingEventKey.OnMoneyChanged, 
                     characterConfig.moneyMaxValue == -1 ? int.MaxValue : characterConfig.moneyMaxValue,
                     characterConfig.moneyMinValue));
+            
+            AttributeManager.AddAttribute("CARevenueShareRate",
+                new VCharacterAttribute(characterConfig.revenueShareRateConfiguration,
+                    characterConfig.revenueShareRateInitialValue, 
+                    VRaisingEventKey.Default, 
+                    characterConfig.revenueShareRateMaxValue == -1 ? int.MaxValue : characterConfig.revenueShareRateMaxValue,
+                    characterConfig.revenueShareRateMinValue, true));
         }
-        
-        
     }
 }
 

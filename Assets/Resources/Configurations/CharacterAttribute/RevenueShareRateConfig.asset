@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 268ed807b0ee437a868b00aef23309a6, type: 3}
-  m_Name: MembershipCountConfig
+  m_Name: RevenueShareRateConfig
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,15 +21,15 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  attributeName: "\u8230\u957F\u6570"
-  description: "\u8230\u957F\u6570"
+  attributeName: "\u76F4\u64AD\u5206\u6210"
+  description: "\u76F4\u64AD\u5206\u6210"
   isConvertToBattleAttribute: 1
   battleAttribute:
     assemblyQualifiedName: VTuber.BattleSystem.BattleAttribute.VBattleAttribute,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  battleAttributeName: BAMembershipCount
-  isBattleAttributePercentage: 0
-  battleEventKey: 24
+  battleAttributeName: BARevenueShareRate
+  isBattleAttributePercentage: 1
+  battleEventKey: 0
   minValue: 0
-  maxValue: 2147483647
-  battleAttributeNameWhenConvertBack: BAMembershipCount
+  maxValue: 100
+  battleAttributeNameWhenConvertBack: BARevenueShareRate

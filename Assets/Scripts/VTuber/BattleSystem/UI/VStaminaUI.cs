@@ -30,11 +30,12 @@ namespace VTuber.BattleSystem.UI
             if(delta == 0)
                 return;
             
-            _animationQueue.Enqueue(AnimationType.Punch, transform, () =>
-            {
-                RaiseEvents(isFromCard, shouldPlayTwice);
-                staminaText.faceColor = Color.white;
-            });
+            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
+                () =>
+                {
+                    RaiseEvents(isFromCard, shouldPlayTwice);
+                    staminaText.faceColor = Color.white;
+                })));
             staminaText.faceColor = delta > 0 ? Color.green : Color.red;
         }
     }

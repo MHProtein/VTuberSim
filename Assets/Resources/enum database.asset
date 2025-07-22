@@ -46,7 +46,7 @@ MonoBehaviour:
       Data: 2|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 7
+      Data: 8
     - Name: 
       Entry: 1
       Data: CAStamina
@@ -69,6 +69,9 @@ MonoBehaviour:
       Entry: 1
       Data: CAMembershipCount
     - Name: 
+      Entry: 1
+      Data: CARevenueShareRate
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -88,7 +91,7 @@ MonoBehaviour:
       Data: 3|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 13
     - Name: 
       Entry: 1
       Data: BAPopularity
@@ -125,6 +128,9 @@ MonoBehaviour:
     - Name: 
       Entry: 1
       Data: BARevenue
+    - Name: 
+      Entry: 1
+      Data: BARevenueShareRate
     - Name: 
       Entry: 13
       Data: 

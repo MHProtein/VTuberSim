@@ -4,6 +4,7 @@ using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.Character.Attribute
 {
@@ -25,6 +26,8 @@ namespace VTuber.Character.Attribute
                                          _configuration.battleAttribute != null;
         public Type BattleAttributeType => _configuration.battleAttribute.TypeToSerialize;
 
+        public bool ShouldBattleAttributeConvertTo { get; private set; }
+
         protected int _minValue;
         protected int _maxValue;
         protected VRaisingEventKey _eventKey;
@@ -37,7 +40,7 @@ namespace VTuber.Character.Attribute
         
         public VCharacterAttribute(VCharacterAttributeConfiguration configuration, 
             int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
-            int maxValue = Int32.MaxValue, int minValue = 0, bool isPercentage = false)
+            int maxValue = Int32.MaxValue, int minValue = 0, bool isPercentage = false, bool shouldBattleAttributeConvertTo = true)
         {
             _configuration = configuration;
             _minValue = minValue;
@@ -45,6 +48,7 @@ namespace VTuber.Character.Attribute
             _eventKey = eventKey;
             IsPercentage = isPercentage;
             InitSetValue(initialValue);
+            ShouldBattleAttributeConvertTo = shouldBattleAttributeConvertTo;
         }
 
         public void SetAttributeManager(VCharacterAttributeManager attributeManager)
@@ -59,7 +63,7 @@ namespace VTuber.Character.Attribute
         
         public string GetBattleAttributeName()
         {
-            return IsConvertToBattleAttribute ? _configuration.attributeName : "";
+            return IsConvertToBattleAttribute ? _configuration.battleAttributeName : "";
         }
 
         public virtual KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()
@@ -76,6 +80,20 @@ namespace VTuber.Character.Attribute
                     _configuration.battleEventKey,
                     _configuration.maxValue,
                     _configuration.minValue));
+        }
+
+        public virtual void ConvertToAttribute(Dictionary<string, VBattleAttribute> battleAttributes)
+        {
+            if (!ShouldBattleAttributeConvertTo)
+                return;
+            
+            var battleAttribute = battleAttributes[_configuration.battleAttributeNameWhenConvertBack];
+            
+            SetValue(battleAttribute.Value);
+            
+            VDebug.Log("Converted to attribute: " + _configuration.battleAttributeNameWhenConvertBack + ", value: " + Value + 
+                       ", battle attribute value: " + battleAttribute.Value);
+            
         }
         
         public virtual void AddTo(int delta)

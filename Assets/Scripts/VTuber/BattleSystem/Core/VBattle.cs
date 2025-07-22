@@ -190,7 +190,6 @@ namespace VTuber.BattleSystem.Core
             {
                 if(card.CostType == CostType.Buff)
                     card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
-        
             }
         }
 
@@ -253,6 +252,8 @@ namespace VTuber.BattleSystem.Core
         
         private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
         {
+            if(TurnLeft <= 0)
+                return;
             StartCoroutine(DelayInitializeTurn((float)messagedict["DelaySeconds"]));
         }
         
@@ -272,8 +273,6 @@ namespace VTuber.BattleSystem.Core
             });
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>
             {
-                {"TurnLeft", TurnLeft},
-                {"HandSize", _configuration.maxHandSize}
             });
         }
 
@@ -281,26 +280,27 @@ namespace VTuber.BattleSystem.Core
         {
             Debug.Log("回合结束: " + TurnLeft);
             _turnAttribute.AddTo(-1, false);
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft}
+            });
+                
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnResolution, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft}
+            });
+                
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEnd, new Dictionary<string, object>
+            {
+                {"TurnLeft", TurnLeft}
+            });
+            
             if (TurnLeft <= 0)
             {
-                // End battle
-            }
-            else
-            {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
-                {
-                    {"TurnLeft", TurnLeft}
-                });
-                
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnResolution, new Dictionary<string, object>
-                {
-                    {"TurnLeft", TurnLeft}
-                });
-                
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEnd, new Dictionary<string, object>
-                {
-                    {"TurnLeft", TurnLeft}
-                });
+                //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
+                //     {
+                //     });
+                _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
             }
         }
         

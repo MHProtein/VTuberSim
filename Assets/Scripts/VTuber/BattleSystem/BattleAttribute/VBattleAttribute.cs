@@ -107,7 +107,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             int temp = Value;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * gainRateModifierValue);
+            int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * (gainRateModifierValue ));
             Value = Mathf.Clamp(finalDelta,
                 _minValue, _maxValue);
             VDebug.Log("添加 (变化量:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta

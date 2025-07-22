@@ -32,3 +32,4 @@ MonoBehaviour:
   battleEventKey: 0
   minValue: 0
   maxValue: 2147483647
+  battleAttributeNameWhenConvertBack: BARevenue

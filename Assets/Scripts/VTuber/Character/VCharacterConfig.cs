@@ -4,6 +4,8 @@ using VTuber.Character.Attribute;
 using VTuber.Core.Foundation;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
+using VTuber.Character.Attributes;
 
 namespace VTuber.Character
 {
@@ -71,6 +73,8 @@ namespace VTuber.Character
         public int singingAbilityMaxValue;
         
         [LabelText("歌力颜色")][ColorPalette] public Color singingAbilityColor;
+        
+        public List<VAbilityGainFromBattleRate> singingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -94,6 +98,8 @@ namespace VTuber.Character
         
         [LabelText("游戏力颜色")][ColorPalette] public Color gamingAbilityColor;
 
+        public List<VAbilityGainFromBattleRate> gamingAbilityGainFromBattleRates;
+
         [PropertySpace(10)]
         [LabelText("Config文件")]
         public VCharacterAttributeConfiguration gamingAbilityConfiguration;
@@ -115,6 +121,7 @@ namespace VTuber.Character
         public int chattingAbilityMaxValue;
         
         [LabelText("杂谈力颜色")][ColorPalette] public Color chattingAbilityColor;
+        public List<VAbilityGainFromBattleRate> chattingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -319,6 +326,25 @@ namespace VTuber.Character
         [PropertySpace(10)]
         [LabelText("Config文件")]
         public VCharacterAttributeConfiguration moneyConfiguration;
-    }
+        
+        // Money
+        [HorizontalGroup("RevenueShareRateGroup", Gap = 10)]
+        [Header("直播分成率%")]
+        [LabelText("初始值")]
+        public int revenueShareRateInitialValue;
 
+        [HorizontalGroup("RevenueShareRateGroup")]
+        [Header("")]
+        [LabelText("最小值")]
+        public int revenueShareRateMinValue;
+
+        [HorizontalGroup("RevenueShareRateGroup")]
+        [Header("")]
+        [LabelText("最大值")]
+        public int revenueShareRateMaxValue;
+
+        [PropertySpace(10)]
+        [LabelText("Config文件")]
+        public VCharacterAttributeConfiguration revenueShareRateConfiguration;
+    }
 }
