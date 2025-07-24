@@ -1,41 +1,70 @@
 using UnityEngine;
-namespace VTuber.Screenplay
+using System.Collections.Generic;
+
+[System.Serializable]
+public class GradeThreshold
 {
-    public class ScoreSystem : MonoBehaviour
+    public float minScore;  // 最小得分（包含）
+    public float maxScore;  // 最大得分（包含）
+    public string gradeName;  // 评级名称
+}
+
+public class ScoreSystem : MonoBehaviour
+{
+    [Header("评分输入")]
+    public float totalPowerPanel;
+    public int fanCount;
+    public int highestCaptainCount;
+    public float missionBonus;
+
+    [Header("评分系数")]
+    public float powerMultiplier = 1.0f;
+    public float fanMultiplier = 0.5f;
+    public float captainMultiplier = 2.0f;
+
+    [Header("评级设置")]
+    public List<GradeThreshold> gradeThresholds = new List<GradeThreshold>();
+
+    private float finalScore;
+    private string currentGrade;
+
+    void Start()
     {
-        // 输入数据
-        public float totalPowerPanel;       // 总面板
-        public int fanCount;                // 粉丝数
-        public int highestCaptainCount;     // 最高舰长数
-        public float missionBonus;          // 完成目标奖励（直接加分）
+        CalculateScore();
+        Debug.Log("最终得分为: " + finalScore);
+        Debug.Log("评级为: " + currentGrade);
+    }
 
-        // 系数设定（可在Inspector中设置）
-        public float powerMultiplier = 1.0f;
-        public float fanMultiplier = 0.5f;
-        public float captainMultiplier = 2.0f;
+    public void CalculateScore()
+    {
+        finalScore = totalPowerPanel * powerMultiplier
+                     + fanCount * fanMultiplier
+                     + highestCaptainCount * captainMultiplier
+                     + missionBonus;
 
-        // 最终得分
-        private float finalScore;
+        EvaluateGrade();
+    }
 
-        void Start()
+    private void EvaluateGrade()
+    {
+        currentGrade = "未评级";  // 默认值
+        foreach (var threshold in gradeThresholds)
         {
-            CalculateScore();
-            Debug.Log("最终得分为: " + finalScore);
-        }
-
-        public void CalculateScore()
-        {
-            finalScore = totalPowerPanel * powerMultiplier
-                         + fanCount * fanMultiplier
-                         + highestCaptainCount * captainMultiplier
-                         + missionBonus;
-        }
-
-        // 获取分数（可被UI或其他系统调用）
-        public float GetScore()
-        {
-            return finalScore;
+            if (finalScore >= threshold.minScore && finalScore <= threshold.maxScore)
+            {
+                currentGrade = threshold.gradeName;
+                break;
+            }
         }
     }
 
+    public float GetScore()
+    {
+        return finalScore;
+    }
+
+    public string GetGrade()
+    {
+        return currentGrade;
+    }
 }
