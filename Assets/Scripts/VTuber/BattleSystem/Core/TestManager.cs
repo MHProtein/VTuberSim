@@ -33,6 +33,7 @@ namespace VTuber.BattleSystem.Core
                 }
             }
             character.CardLibrary.AddCards(cards);
+            InitializeBattle();
         }
 
         protected override void OnEnable()
@@ -42,7 +43,7 @@ namespace VTuber.BattleSystem.Core
 
         public void InitializeBattle()
         {
-            battleRoot.SetActive(true);
+            //battleRoot.SetActive(true);
             _battle.InitializeBattle(character.AttributeManager, _battleConfiguration, character.CardLibrary);
         }
 

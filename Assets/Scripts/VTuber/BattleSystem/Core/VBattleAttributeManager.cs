@@ -257,7 +257,9 @@ namespace VTuber.BattleSystem.Core
                 float multiplier = _multiplierManager.Multiplier.Value / 100f;
                 int delta = (int)messagedict["Delta"];
                 (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName);
+                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName, 
+                        messagedict["IsFromCard"] as bool? ?? false,
+                        messagedict["ShouldPlayTwice"] as bool? ?? false);
             }
         }
 
