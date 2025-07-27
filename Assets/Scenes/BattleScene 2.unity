@@ -5944,7 +5944,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 944d7e67e6094991915755591d2f5960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleRoot: {fileID: 0}
+  battleRoot: {fileID: 2077296886}
   _battle: {fileID: 1464773855}
   _battleConfiguration: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}
   _characterConfiguration: {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
@@ -28236,6 +28236,7 @@ MonoBehaviour:
   cardMoveAfterPlayingTime: 0.2
   cardApplyTime: 0.2
   overlap: -0.331
+  cardUIPrefab: {fileID: 0}
   cardSize: {x: 300, y: 500}
 --- !u!95 &1955263079
 Animator:

@@ -219,6 +219,12 @@ namespace VTuber.BattleSystem.UI
 
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
+            if (cardToDispose is not null)
+            {
+                DisposeCard(cardToDispose);
+                cardToDispose = null;
+            }
+            
             var card = messagedict["Card"] as VCard;
             var cardUI = GetCardById(card.Id);
             
