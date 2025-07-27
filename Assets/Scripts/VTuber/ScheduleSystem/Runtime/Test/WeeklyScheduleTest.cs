@@ -20,7 +20,7 @@ public class ScheduleTestRunner : MonoBehaviour
         var weeklySchedule = new WeeklySchedule();
         
         
-        var longEvent = new ScheduleEvent(CreateConfig(ScheduleEventType.Live, 20, 10, 2));
+        var longEvent = new VScheduleEvent(CreateConfig(ScheduleEventType.Live, 20, 10, 2));
         
         
         if (weeklySchedule.CanScheduleEvent(0, TimeOfDay.Morning, 2))
@@ -68,9 +68,9 @@ public class ScheduleTestRunner : MonoBehaviour
         }
     }
 
-    private ScheduleEventConfiguration CreateConfig(ScheduleEventType type, int staminaCost, int skillExpBonus, int duration = 1)
+    private VScheduleEventConfiguration CreateConfig(ScheduleEventType type, int staminaCost, int skillExpBonus, int duration = 1)
     {
-        var config = ScriptableObject.CreateInstance<ScheduleEventConfiguration>();
+        var config = ScriptableObject.CreateInstance<VScheduleEventConfiguration>();
         config.eventName = type.ToString();
         config.type = type;
         config.staminaCost = staminaCost;

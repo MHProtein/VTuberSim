@@ -10,7 +10,7 @@ public class ScheduleTestRunnerUI : MonoBehaviour
 {
     public Transform eventButtonContainer;
     public GameObject eventButtonPrefab;
-    public List<ScheduleEventConfiguration> eventConfigs;
+    public List<VScheduleEventConfiguration> eventConfigs;
 
     private WeeklySchedule weeklySchedule;
     private PlayerStatus player;
@@ -35,7 +35,7 @@ public class ScheduleTestRunnerUI : MonoBehaviour
         }
     }
 
-    void OnEventButtonClicked(ScheduleEventConfiguration config)
+    void OnEventButtonClicked(VScheduleEventConfiguration config)
     {
         if (scheduleComplete)
         {
@@ -61,9 +61,9 @@ public class ScheduleTestRunnerUI : MonoBehaviour
         ExecuteSchedule();
     }
 
-    private bool TryScheduleEvent(ScheduleEventConfiguration config)
+    private bool TryScheduleEvent(VScheduleEventConfiguration config)
     {
-        var scheduleEvent = new ScheduleEvent(config);
+        var scheduleEvent = new VScheduleEvent(config);
 
         foreach (TimeOfDay time in System.Enum.GetValues(typeof(TimeOfDay)))
         {
