@@ -1,5 +1,5 @@
 ﻿using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Event;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.Phase
 {

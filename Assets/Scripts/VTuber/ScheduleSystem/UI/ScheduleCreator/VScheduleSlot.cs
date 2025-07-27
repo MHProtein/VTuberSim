@@ -29,6 +29,14 @@ namespace VTuber.ScheduleSystem.UI
             _item = null;
         }
 
+        public void ResetItem()
+        {
+            if (_item is null)
+                return;
+            
+            _item.Despawn();
+        }
+
         public void SetIndicator(int height, float offsetY)
         {
             if (height == 1)

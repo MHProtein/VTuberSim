@@ -8,7 +8,8 @@
     {
         Morning,
         Afternoon,
-        Evening
+        Evening,
+        End
     }
 
     /// <summary>

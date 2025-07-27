@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using VTuber.ScheduleSystem.Core;
 
-namespace VTuber.ScheduleSystem.Event
+namespace VTuber.ScheduleSystem.Events
 {
     [CreateAssetMenu(fileName = "ScheduleEventConfig", menuName = "VTuber/Schedule/Event")]
     public class VScheduleEventConfiguration : ScriptableObject
@@ -18,6 +18,8 @@ namespace VTuber.ScheduleSystem.Event
         public string description;
 
         public Sprite icon;
+        
+        public Color backgroundColor = Color.white;
 
         public ScheduleEventType type;
 

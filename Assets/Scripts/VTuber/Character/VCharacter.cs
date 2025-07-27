@@ -13,9 +13,20 @@ namespace VTuber.Character
 
         private VCharacterConfiguration _characterConfig;
         
+
+        public VCardLibrary CardLibrary => _cardLibrary;
+        private VCardLibrary _cardLibrary;
+        
         public VCharacter(VCharacterConfiguration characterConfig)
         {
+            _cardLibrary = new VCardLibrary();
+            InitializeAttributes(characterConfig);
+        }
+        
+        void InitializeAttributes(VCharacterConfiguration characterConfig)
+        {
             _characterConfig = characterConfig;
+            
             AttributeManager = new VCharacterAttributeManager();
             AttributeManager.AddAttribute("CAStamina",
                 new VStaminaAttribute(characterConfig.staminaConfiguration, 
