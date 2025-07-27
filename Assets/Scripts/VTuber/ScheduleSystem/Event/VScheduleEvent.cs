@@ -6,7 +6,7 @@ namespace VTuber.ScheduleSystem.Event
     /// <summary>
     /// 运行时事件类，由配置生成，包含执行逻辑
     /// </summary>
-    public class ScheduleEvent
+    public class VScheduleEvent
     {
         public string EventName => _config.eventName;
         public string Description => _config.description;
@@ -16,9 +16,9 @@ namespace VTuber.ScheduleSystem.Event
         //adding duration to meet event may last across 2 times period
         public int Duration => _config.duration;
         
-        private readonly ScheduleEventConfiguration _config;
+        private readonly VScheduleEventConfiguration _config;
 
-        public ScheduleEvent(ScheduleEventConfiguration config)
+        public VScheduleEvent(VScheduleEventConfiguration config)
         {
             _config = config;
         }

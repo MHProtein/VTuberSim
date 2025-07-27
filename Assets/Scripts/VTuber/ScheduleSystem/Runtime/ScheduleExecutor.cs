@@ -15,7 +15,7 @@ namespace VTuber.ScheduleSystem.Runtime
     {
         private WeeklySchedule _weeklySchedule;
         private PlayerStatus _playerStatus;
-        private readonly HashSet<ScheduleEvent> _executedEvents = new();
+        private readonly HashSet<VScheduleEvent> _executedEvents = new();
         
         public ScheduleExecutor(WeeklySchedule schedule, PlayerStatus player)
         {

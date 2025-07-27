@@ -13,10 +13,10 @@ public class ScheduleUIManager : MonoBehaviour
     public GameObject timeSlotPrefab;
     public Transform timeSlotGrid; // 7x3 GridParent
 
-    public List<ScheduleEventConfiguration> availableEvents;
+    public List<VScheduleEventConfiguration> availableEvents;
 
     private WeeklySchedule weeklySchedule;
-    private ScheduleEvent selectedEvent;
+    private VScheduleEvent selectedEvent;
 
     private void Start()
     {
@@ -49,9 +49,9 @@ public class ScheduleUIManager : MonoBehaviour
         }
     }
 
-    void OnEventSelected(ScheduleEventConfiguration config)
+    void OnEventSelected(VScheduleEventConfiguration config)
     {
-        selectedEvent = new ScheduleEvent(config);
+        selectedEvent = new VScheduleEvent(config);
     }
 
     void OnTimeSlotClicked(int dayIndex, TimeOfDay time)

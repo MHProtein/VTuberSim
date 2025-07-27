@@ -4,7 +4,7 @@ using VTuber.ScheduleSystem.Core;
 namespace VTuber.ScheduleSystem.Event
 {
     [CreateAssetMenu(fileName = "ScheduleEventConfig", menuName = "VTuber/Schedule/Event")]
-    public class ScheduleEventConfiguration : ScriptableObject
+    public class VScheduleEventConfiguration : ScriptableObject
     {
         public string eventName;
         
@@ -27,9 +27,9 @@ namespace VTuber.ScheduleSystem.Event
         public int moodBonus = 0;
         public int skillExpBonus = 0;
 
-        public ScheduleEvent CreateEvent()
+        public virtual VScheduleEvent CreateEvent()
         {
-            return new ScheduleEvent(this);
+            return new VScheduleEvent(this);
         }
     }
 }

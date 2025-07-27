@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
@@ -18,7 +19,7 @@ namespace VTuber.BattleSystem.Core
         protected override void Awake()
         {
             base.Awake();
-
+            
             VBattleResourcesLoader loader = new VBattleResourcesLoader("Assets\\Resources\\Configurations\\NewCards.xlsx");
             VCharacter character = new VCharacter(_characterConfiguration);
             _cardLibrary = new VCardLibrary();

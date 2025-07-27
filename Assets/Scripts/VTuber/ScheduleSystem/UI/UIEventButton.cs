@@ -7,10 +7,10 @@ public class UIEventButton : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
 
-    private ScheduleEventConfiguration _config;
-    private System.Action<ScheduleEventConfiguration> _onClick;
+    private VScheduleEventConfiguration _config;
+    private System.Action<VScheduleEventConfiguration> _onClick;
 
-    public void Setup(ScheduleEventConfiguration config, System.Action<ScheduleEventConfiguration> onClick)
+    public void Setup(VScheduleEventConfiguration config, System.Action<VScheduleEventConfiguration> onClick)
     {
         _config = config;
         _onClick = onClick;

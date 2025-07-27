@@ -44,7 +44,7 @@ namespace VTuber.ScheduleSystem.Schedule
             return _days;
         }
 
-        public void SetEvent(int dayIndex, TimeOfDay startTime, ScheduleEvent evt)
+        public void SetEvent(int dayIndex, TimeOfDay startTime, VScheduleEvent evt)
         {
             var duration = evt.Duration;
             var day = GetDay(dayIndex);
@@ -80,7 +80,7 @@ namespace VTuber.ScheduleSystem.Schedule
             return true;
         }
 
-        public ScheduleEvent GetEvent(int dayIndex, TimeOfDay timeOfDay)
+        public VScheduleEvent GetEvent(int dayIndex, TimeOfDay timeOfDay)
         {
             return GetDay(dayIndex).GetEvent(timeOfDay);
         }

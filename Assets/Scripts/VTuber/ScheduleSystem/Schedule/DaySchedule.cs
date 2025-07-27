@@ -9,7 +9,7 @@ namespace VTuber.ScheduleSystem.Schedule
     /// </summary>
     public class DaySchedule
     {
-        private readonly Dictionary<TimeOfDay, ScheduleEvent> _events = new();
+        private readonly Dictionary<TimeOfDay, VScheduleEvent> _events = new();
 
         public bool CanScheduleEvent(TimeOfDay startTime, int duration)
         {
@@ -23,18 +23,18 @@ namespace VTuber.ScheduleSystem.Schedule
         
         private class ScheduledSlot
         {
-            public ScheduleEvent Event;
+            public VScheduleEvent Event;
             public bool IsPrimarySlot; // 只在第一个时间段执行
         }
 
         private readonly Dictionary<TimeOfDay, ScheduledSlot> _slots = new();
 
-        public void SetEvent(TimeOfDay timeOfDay, ScheduleEvent evt, bool isPrimary)
+        public void SetEvent(TimeOfDay timeOfDay, VScheduleEvent evt, bool isPrimary)
         {
             _slots[timeOfDay] = new ScheduledSlot { Event = evt, IsPrimarySlot = isPrimary };
         }
 
-        public ScheduleEvent GetEvent(TimeOfDay timeOfDay)
+        public VScheduleEvent GetEvent(TimeOfDay timeOfDay)
         {
             if (_slots.TryGetValue(timeOfDay, out var slot))
                 return slot?.Event;
@@ -48,9 +48,9 @@ namespace VTuber.ScheduleSystem.Schedule
             return false;
         }
         
-        public Dictionary<TimeOfDay, ScheduleEvent> GetAllEvents()
+        public Dictionary<TimeOfDay, VScheduleEvent> GetAllEvents()
         {
-            return new Dictionary<TimeOfDay, ScheduleEvent>(_events);
+            return new Dictionary<TimeOfDay, VScheduleEvent>(_events);
         }
 
         private List<TimeOfDay> GetTimeSlots(TimeOfDay start, int duration)
