@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using VTuber.ScheduleSystem.Event;
+using VTuber.ScheduleSystem.Events;
 
 public class UIEventButton : MonoBehaviour
 {

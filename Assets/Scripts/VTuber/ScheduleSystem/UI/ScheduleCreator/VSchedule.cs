@@ -35,6 +35,18 @@ namespace VTuber.ScheduleSystem.UI
                 }
             }
         }
+
+        public void ResetSchedule()
+        {            
+            
+            for (int x = 0; x < slotSize.x; x++)
+            {
+                for (int y = 0; y < slotSize.y; y++)
+                {
+                    slots[y, x].ResetItem();
+                }
+            }
+        }
         
         public void ChangeIndicatorPosition(Vector2 position)
         {

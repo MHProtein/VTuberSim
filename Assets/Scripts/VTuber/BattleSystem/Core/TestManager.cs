@@ -1,28 +1,25 @@
 ﻿using System.Collections.Generic;
-using PrimeTween;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
     public class TestManager : VMonoBehaviour
     {
+        [SerializeField] private GameObject battleRoot;
         [SerializeField] private VBattle _battle;
         [SerializeField] private VBattleConfiguration _battleConfiguration;
         [SerializeField] private VCharacterConfiguration _characterConfiguration;
-        
-        private VCardLibrary _cardLibrary;
+        private VCharacter character;
         
         protected override void Awake()
         {
             base.Awake();
             
-            VBattleResourcesLoader loader = new VBattleResourcesLoader("Assets\\Resources\\Configurations\\NewCards.xlsx");
-            VCharacter character = new VCharacter(_characterConfiguration);
-            _cardLibrary = new VCardLibrary();
+            VBattleResourcesLoader loader = new VBattleResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+            character = new VCharacter(_characterConfiguration);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
 
@@ -35,20 +32,19 @@ namespace VTuber.BattleSystem.Core
                         cards.Add(card);
                 }
             }
-
-            _cardLibrary.AddCards(cards);
-            _battle.InitializeBattle(character.AttributeManager, _battleConfiguration, _cardLibrary);
+            character.CardLibrary.AddCards(cards);
+            InitializeBattle();
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
         }
 
-        private void OnTurnBegin(Dictionary<string, object> messagedict)
+        public void InitializeBattle()
         {
-            VDebug.Log("Turn Begin: " + messagedict["TurnLeft"]);
+            //battleRoot.SetActive(true);
+            _battle.InitializeBattle(character.AttributeManager, _battleConfiguration, character.CardLibrary);
         }
 
         protected override void Start()

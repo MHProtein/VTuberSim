@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using VTuber.Character;
 using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Event;
+using VTuber.ScheduleSystem.Events;
 using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.Schedule
@@ -11,11 +12,11 @@ namespace VTuber.ScheduleSystem.Schedule
     public class WeeklySchedule
     {
         private readonly List<DaySchedule> _days = new();
-
-        public WeeklySchedule()
+        private int _currentDayIndex = 0;
+        public WeeklySchedule(VCharacter character)
         {
             for (int i = 0; i < 7; i++)
-                _days.Add(new DaySchedule());
+                _days.Add(new DaySchedule(this, character));
         }
         
         private List<TimeOfDay> GetTimeRange(TimeOfDay start, int duration)
@@ -83,6 +84,18 @@ namespace VTuber.ScheduleSystem.Schedule
         public VScheduleEvent GetEvent(int dayIndex, TimeOfDay timeOfDay)
         {
             return GetDay(dayIndex).GetEvent(timeOfDay);
+        }
+
+        public void BeginExecution()
+        {
+            _currentDayIndex = 0;
+            _days[_currentDayIndex].Execute();
+        }
+
+        public void NextDay()
+        {
+            _currentDayIndex++;
+            _days[_currentDayIndex].Execute();
         }
     }
 }
