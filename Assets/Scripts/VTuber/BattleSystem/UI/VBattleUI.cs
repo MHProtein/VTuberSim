@@ -44,7 +44,7 @@ namespace VTuber.BattleSystem.UI
 
         private List<VCardUI> _displayingCards = new List<VCardUI>();
         private List<VHandCardUI> _handSlotsCards;
-        private GameObject cardUIPrefab;
+        [SerializeField] private GameObject cardUIPrefab;
         
         public Vector2 cardSize;
         private Vector2 _scaledCardSize;
@@ -167,7 +167,6 @@ namespace VTuber.BattleSystem.UI
         {
             base.Awake();
             
-            cardUIPrefab = Resources.Load<GameObject>("Prefabs/UI/Card");
             _handSlotsCards = new List<VHandCardUI>();
             _handSlotsSize = handSlotsContent.rect.size;
             cardToDispose = null;
