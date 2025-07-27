@@ -65,7 +65,8 @@ namespace VTuber.BattleSystem.Core
             shouldRedraw = true;
         }
         
-        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VBattleConfiguration configuration, VCardLibrary cardLibrary)
+        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
+            VBattleConfiguration configuration, VCardLibrary cardLibrary, int initialTurnCount)
         {
             _configuration = configuration;
             _characterAttributeManager = characterAttributeManager;
@@ -73,21 +74,13 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
             //_battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false));
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
             
-        }
-        
-        
-        protected override void Start()
-        {
-            base.Start();
+            _battleAttributeManager.OnEnable();
+            _cardPilesManager.OnEnable();
+            _buffManager.OnEnable();
             
             _battleAttributeManager.AttributesConversion(_characterAttributeManager);
-            _turnAttribute = new VBattleTurnAttribute(_configuration.maxTurnCount);
+            _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
             _playLeftAttribute = new VBattlePlayLeftAttribute(_configuration.defaultPlayPerTurn);
             
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
@@ -101,6 +94,7 @@ namespace VTuber.BattleSystem.Core
 
             _battleAttributeManager.InitializeInternalManagers();
             
+            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
@@ -108,13 +102,24 @@ namespace VTuber.BattleSystem.Core
             
             InitializeTurn();
         }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            
+        }
+        
+        
+        protected override void Start()
+        {
+            base.Start();
+            
+
+        }
         
         protected override void OnEnable()
         {
             base.OnEnable();
-            _battleAttributeManager.OnEnable();
-            _cardPilesManager.OnEnable();
-            _buffManager.OnEnable();
             
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
@@ -127,7 +132,6 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
-            
         }
 
         protected override void OnDisable()
@@ -301,6 +305,10 @@ namespace VTuber.BattleSystem.Core
                 //     {
                 //     });
                 _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
+                {
+                    {"TurnLeft", TurnLeft}
+                });
             }
         }
         

@@ -7,6 +7,8 @@ namespace VTuber.Core.EventCenter
     {
         Default,
         
+        OnStreamEventStart,
+        
         OnStaminaChanged,
         OnPressureChanged,
         OnSingingAbilityChanged,

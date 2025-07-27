@@ -108,11 +108,18 @@ namespace VTuber.ScheduleSystem.Schedule
             {
                 currentTimeOfDay = NextTimeOfDay();
             }
+        }
 
+        public void NextEvent()
+        {
             if (currentTimeOfDay == TimeOfDay.End)
             {
                 _weeklySchedule.NextDay();
+                return;
             }
+
+            Execute();
         }
+        
     }
 }

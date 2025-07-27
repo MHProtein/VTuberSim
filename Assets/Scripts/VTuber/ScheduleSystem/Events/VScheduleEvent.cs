@@ -54,5 +54,10 @@ namespace VTuber.ScheduleSystem.Events
 
             return false;
         }
+
+        public virtual void NextEvent()
+        {
+            _daySchedule.NextEvent();
+        }
     }
 }
