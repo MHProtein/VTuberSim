@@ -138,8 +138,9 @@ namespace VTuber.BattleSystem.UI
             if(arrowIndex >= colorObjects.Count)
                 return;
             
-            arrowSequence.Enqueue(Tween.Position(arrow.transform, colorObjects[arrowIndex].transform.position + 
-                                                                  new Vector3(0, -arrowHeight, 0), 0.2f));
+            arrowSequence.Enqueue(Tween.Position(arrow.transform,
+                colorObjects[arrowIndex].transform.position + 
+                new Vector3(0, -arrowHeight, 0), 0.2f));
         }
     }
 }
