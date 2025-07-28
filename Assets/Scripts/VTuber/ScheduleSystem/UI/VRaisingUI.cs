@@ -1,8 +1,9 @@
-﻿using PrimeTween;
+﻿using System;
+using System.Collections.Generic;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.UI
@@ -35,23 +36,46 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField]
         private Transform battleUI;
 
-        public void SwitchToScheduleCreation()
+        protected override void OnEnable()
+        {
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+        
+        private void OnNotifyEventDescriptionChange(Dictionary<string, object> messagedict)
+        {
+            eventNameUI.text = messagedict["Name"] as string;
+            eventDescriptionUI.text = messagedict["Description"] as string;
+        }
+
+        public void SwitchToScheduleCreation(Action onComplete = null)
         {
             executionUI.SetActive(false);
             scheduleCreationUI.SetActive(true);
-            Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f);
+            Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f).OnComplete(()=>
+            {
+                onComplete?.Invoke();
+            });
         }
 
-        public void SwitchToExecution()
+        public void SwitchToExecution(Action onComplete = null)
         {
             scheduleCreationUI.SetActive(false);
             executionUI.SetActive(true);
-            Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f);
+            Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f).OnComplete(()=>
+            {
+                onComplete?.Invoke();
+            });
         }
         
-        public void SwitchToPause()
+        public void SwitchToPause(Action onComplete = null)
         {
-            Tween.Scale(battleUI, Vector3.one * 0.75f, 0.3f);
+            Tween.Scale(battleUI, Vector3.one * 0.75f, 0.3f).OnComplete(() => onComplete?.Invoke());
         }
 
         public void SwitchToBattle()

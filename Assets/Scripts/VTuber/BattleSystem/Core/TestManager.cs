@@ -56,8 +56,8 @@ namespace VTuber.BattleSystem.Core
         {
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-
-
+            
+            
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
 
         }
@@ -76,14 +76,15 @@ namespace VTuber.BattleSystem.Core
             base.Start();
             VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToScheduleCreation();
         }
+        
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            battleRoot.SetActive(false);
+            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToPause((() => battleRoot.SetActive(false)));
             Tween.Delay(2.0f, () =>
             {
                 _currentEvent.NextEvent();
             });
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToPause();
+            isPaused = false;
         }
         
         private void OnStreamEventStart(Dictionary<string, object> messagedict)
@@ -124,6 +125,7 @@ namespace VTuber.BattleSystem.Core
                     if (slot.Item is not null)
                     {
                         var eventData = slot.Item.EventData;
+                        slot.Item.SetInteractive(false);
                         _weeklySchedule.SetEvent(x, (TimeOfDay)y, eventData.CreateEvent());
                         y += eventData.Duration;
                     }
@@ -133,9 +135,10 @@ namespace VTuber.BattleSystem.Core
                     }
                 }
             }
-            _weeklySchedule.BeginExecution();
-            VDebug.Log("");
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToExecution();
+            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToExecution(() =>
+            {
+                scheduleUI.ResetIndicatorPosition().OnComplete((() => _weeklySchedule.BeginExecution()));
+            });
         }
 
     }

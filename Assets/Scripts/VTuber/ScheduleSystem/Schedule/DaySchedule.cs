@@ -3,7 +3,10 @@ using System;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using System.Collections.Generic;
+using System.Numerics;
+using UnityEngine;
 using VTuber.Character;
+using VTuber.Core.EventCenter;
 
 namespace VTuber.ScheduleSystem.Schedule
 {
@@ -26,6 +29,7 @@ namespace VTuber.ScheduleSystem.Schedule
         private readonly Dictionary<TimeOfDay, ScheduledSlot> _slots = new();
         
         private TimeOfDay currentTimeOfDay;
+        private int _dayIndex = 0;
         
         public bool CanScheduleEvent(TimeOfDay startTime, int duration)
         {
@@ -37,11 +41,12 @@ namespace VTuber.ScheduleSystem.Schedule
             return true;
         }
 
-        public DaySchedule(VWeeklySchedule vWeeklySchedule, VCharacter character)
+        public DaySchedule(VWeeklySchedule vWeeklySchedule, VCharacter character, int index)
         {
             currentTimeOfDay = TimeOfDay.Morning;
             _character = character;
             _vWeeklySchedule = vWeeklySchedule;
+            _dayIndex = index;
         }
         
         public TimeOfDay NextTimeOfDay()
@@ -104,7 +109,15 @@ namespace VTuber.ScheduleSystem.Schedule
         public void Execute()
         {
             var e = _slots[currentTimeOfDay].Event;
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventExecuted, new Dictionary<string, object>()
+            {
+                {"Coordinate", new Vector2Int(_dayIndex, (int)currentTimeOfDay)},
+                {"Event", e}
+            });
+
             e.Execute(_character);
+            
             for(int i = 0; i < e.Duration; i++)
             {
                 currentTimeOfDay = NextTimeOfDay();
@@ -118,7 +131,7 @@ namespace VTuber.ScheduleSystem.Schedule
                 _vWeeklySchedule.NextDay();
                 return;
             }
-
+            
             Execute();
         }
         

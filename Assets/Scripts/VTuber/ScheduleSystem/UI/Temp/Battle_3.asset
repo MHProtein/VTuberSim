@@ -23,7 +23,7 @@ MonoBehaviour:
     SerializationNodes: []
   eventName: BattleEvent
   duration: 3
-  description: 
+  description: 'A 10 Turn Stream '
   icon: {fileID: 527271978, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
   backgroundColor: {r: 0.9716981, g: 0.811713, b: 0.21542363, a: 1}
   type: 0

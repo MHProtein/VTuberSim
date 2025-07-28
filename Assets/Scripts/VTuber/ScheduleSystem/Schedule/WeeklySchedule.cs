@@ -16,7 +16,7 @@ namespace VTuber.ScheduleSystem.Schedule
         public VWeeklySchedule(VCharacter character)
         {
             for (int i = 0; i < 7; i++)
-                _days.Add(new DaySchedule(this, character));
+                _days.Add(new DaySchedule(this, character, i));
         }
         
         private List<TimeOfDay> GetTimeRange(TimeOfDay start, int duration)
