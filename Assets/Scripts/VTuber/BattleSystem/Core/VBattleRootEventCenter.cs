@@ -14,6 +14,7 @@ namespace VTuber.BattleSystem.Core
         OnTurnResolution,
         OnTurnEnd,
         OnBattleEnd,
+        OnBattleEndNotify,
         
         OnDiscardToDraw,
         OnDrawCards,

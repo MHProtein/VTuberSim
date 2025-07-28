@@ -69,6 +69,12 @@ namespace VTuber.BattleSystem.BattleAttribute
             }
             return total;
         }
+
+        public void Reset()
+        {
+            _modifiers.Clear();
+        }
+        
     }
     
     //All the attributes treated as int type, if is percentage, it is multiplied by 100 and vice versa when used. 

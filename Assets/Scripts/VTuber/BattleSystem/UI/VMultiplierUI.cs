@@ -57,8 +57,9 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
-        
+
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -66,6 +67,17 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+        }
+        
+        private void OnBattleEnd(Dictionary<string, object> messagedict)
+        {
+            foreach (var colorObject in colorObjects)
+            {
+                Destroy(colorObject.gameObject);
+            }
+            colorObjects.Clear();
+            arrowIndex = -1;
         }
         
         private void OnTurnChange(Dictionary<string, object> messagedict)

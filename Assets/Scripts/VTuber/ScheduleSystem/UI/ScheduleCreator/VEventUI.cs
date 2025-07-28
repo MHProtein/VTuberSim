@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -15,7 +16,9 @@ namespace VTuber.ScheduleSystem.UI
         [HideInInspector] public Vector2 initOffset;
         private bool canSetParent;
         private bool isSelected;
-        private EventData _eventData;
+        
+        public VScheduleEventConfiguration EventData => _eventData;
+        private VScheduleEventConfiguration _eventData;
         
         private List<VScheduleSlot> parentBeforeDrag;
         private Vector2 _lastPosition;
@@ -47,21 +50,21 @@ namespace VTuber.ScheduleSystem.UI
         //     Tween.Scale(background.transform, new Vector3(1, eventData.height, 1), 0.3f);
         // }
 
-        public void InitializeDrag(EventData eventData, Vector2 initPosition)
+        public void InitializeDrag(VScheduleEventConfiguration eventData, Vector2 initPosition)
         {
             _eventData = eventData;
             icon.sprite = eventData.icon;
             background.color = eventData.backgroundColor;
             _initPosition = initPosition;
             icon.raycastTarget = false;
-            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
+            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
             isSelected = true;
             _isDragging = true;
             canSetParent = true;
             icon.transform.localScale = Vector3.zero;
             background.transform.localScale = Vector3.zero;
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
-            Tween.Scale(background.transform, new Vector3(1, eventData.height, 1), 0.3f);
+            Tween.Scale(background.transform, new Vector3(1, eventData.Duration, 1), 0.3f);
 
             transform.SetAsLastSibling();
         }
@@ -99,7 +102,7 @@ namespace VTuber.ScheduleSystem.UI
                 var slot = result.gameObject.GetComponent<VScheduleSlot>();
                 if (slot is not null)
                 {
-                    if(slot.FindPosition(_eventData.height, initOffset.y, out var parents, out var transformParent, out var position))
+                    if(slot.FindPosition(_eventData.Duration, initOffset.y, out var parents, out var transformParent, out var position))
                     {
                         SetNewParents(parents, transformParent, position);
                         return true;
@@ -115,7 +118,6 @@ namespace VTuber.ScheduleSystem.UI
             base.UpdateImpl();            
             if (isSelected)
             {
-                VDebug.Log(initOffset);
                 Vector3 mousePosition = Input.mousePosition  + (Vector3)initOffset;
                 transform.position = mousePosition;
                 
@@ -126,7 +128,7 @@ namespace VTuber.ScheduleSystem.UI
                     var slot = result.gameObject.GetComponent<VScheduleSlot>();
                     if (slot is not null)
                     {
-                        slot.SetIndicator(_eventData.height, initOffset.y);
+                        slot.SetIndicator(_eventData.Duration, initOffset.y);
                         break;
                     }
                 }

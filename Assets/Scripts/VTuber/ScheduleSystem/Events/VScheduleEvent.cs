@@ -16,7 +16,7 @@ namespace VTuber.ScheduleSystem.Events
         public Sprite Icon => _config.icon;
         public int StaminaCost => _config.staminaCost;
         //adding duration to meet event may last across 2 times period
-        public int Duration => _config.duration;
+        public int Duration => _config.Duration;
         
         protected readonly VScheduleEventConfiguration _config;
 

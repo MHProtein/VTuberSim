@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -17,13 +18,13 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image background;
         [SerializeField] private GameObject eventUIPrefab;
         
-        private EventData _data;
+        private VScheduleEventConfiguration _data;
         
         private bool spawnable;
         
         private VScheduleCreatorSlot slot;
         
-        public void Initialize(EventData data)
+        public void Initialize(VScheduleEventConfiguration data)
         {
             _data = data;
             icon.sprite = data.icon;

@@ -305,7 +305,20 @@ namespace VTuber.BattleSystem.Core
                 //     {
                 //     });
                 _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
+      
+                _buffManager.Clear();
+                _battleAttributeManager.Clear();
+                _cardPilesManager.DiscardPile.Clear();
+                _cardPilesManager.DrawPile.Clear();
+                _cardPilesManager.HandPile.Clear();
+                _cardPilesManager.Deck.Clear();
+                
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
+                {
+                    {"TurnLeft", TurnLeft}
+                });              
+                
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEndNotify, new Dictionary<string, object>
                 {
                     {"TurnLeft", TurnLeft}
                 });

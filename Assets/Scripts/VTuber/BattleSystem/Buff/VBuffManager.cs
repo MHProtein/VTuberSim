@@ -278,6 +278,10 @@ namespace VTuber.BattleSystem.Buff
         
         public void Clear()
         {
+            foreach (var buff in _buffs)
+            {
+                buff.OnBuffRemoved();
+            }
             _buffs.Clear();
         }
 

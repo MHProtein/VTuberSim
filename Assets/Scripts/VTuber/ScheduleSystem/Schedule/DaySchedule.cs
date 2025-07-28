@@ -15,7 +15,7 @@ namespace VTuber.ScheduleSystem.Schedule
         private readonly Dictionary<TimeOfDay, VScheduleEvent> _events = new();
         
         private VCharacter _character;
-        private WeeklySchedule _weeklySchedule;
+        private VWeeklySchedule _vWeeklySchedule;
         
         private class ScheduledSlot
         {
@@ -37,11 +37,11 @@ namespace VTuber.ScheduleSystem.Schedule
             return true;
         }
 
-        public DaySchedule(WeeklySchedule weeklySchedule, VCharacter character)
+        public DaySchedule(VWeeklySchedule vWeeklySchedule, VCharacter character)
         {
             currentTimeOfDay = TimeOfDay.Morning;
             _character = character;
-            _weeklySchedule = weeklySchedule;
+            _vWeeklySchedule = vWeeklySchedule;
         }
         
         public TimeOfDay NextTimeOfDay()
@@ -63,6 +63,7 @@ namespace VTuber.ScheduleSystem.Schedule
         {
             evt.SetDaySchedule(this);
             _slots[timeOfDay] = new ScheduledSlot { Event = evt, IsPrimarySlot = isPrimary };
+            _events[timeOfDay] = evt;
         }
 
         public VScheduleEvent GetEvent(TimeOfDay timeOfDay)
@@ -102,7 +103,7 @@ namespace VTuber.ScheduleSystem.Schedule
 
         public void Execute()
         {
-            var e = _events[currentTimeOfDay];
+            var e = _slots[currentTimeOfDay].Event;
             e.Execute(_character);
             for(int i = 0; i < e.Duration; i++)
             {
@@ -114,7 +115,7 @@ namespace VTuber.ScheduleSystem.Schedule
         {
             if (currentTimeOfDay == TimeOfDay.End)
             {
-                _weeklySchedule.NextDay();
+                _vWeeklySchedule.NextDay();
                 return;
             }
 

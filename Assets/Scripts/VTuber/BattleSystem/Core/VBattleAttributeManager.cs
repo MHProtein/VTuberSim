@@ -66,6 +66,13 @@ namespace VTuber.BattleSystem.Core
 
             return delta;
         }
+
+        public void Reset()
+        {
+            consumeRateModifier.Reset();
+            consumePointsModifier.Reset();
+        }
+        
     }
 
     public class VMultiplierManager
@@ -137,40 +144,50 @@ namespace VTuber.BattleSystem.Core
 
         private void GenerateMultiplierSequence(int maxTurn, int maxConsecutiveMultiplierCount, int mainAttributeIndex)
         {
-            int consecutiveMultiplierCount = 1;
-            for (int i = 1; i < maxTurn - 2; i++)
+            if (maxTurn < 3)
             {
-                int index = Random.Range(1, 4);
-                
-                if (index == multiplierSequence[i - 1])
-                    ++consecutiveMultiplierCount;
-                else
-                    consecutiveMultiplierCount = 1;
-                
-                if (consecutiveMultiplierCount >= maxConsecutiveMultiplierCount)
-                {
-                    while (index == multiplierSequence[i - 1] || 
-                           (i == multiplierSequence.Count - 3 && index == mainAttributeIndex))
-                    {
-                        index = Random.Range(1, 4);
-                    }
-                }
-                else if (i == multiplierSequence.Count - 3)
-                {
-                    while (index == mainAttributeIndex)
-                    {
-                        index = Random.Range(1, 4);
-                    }
-                }
-                
-                multiplierSequence[i] = index;
             }
-            if(multiplierSequence[^1] + multiplierSequence[^3] == 3)
-                multiplierSequence[^2] = 3;
-            if (multiplierSequence[^1] + multiplierSequence[^3] == 4)
-                multiplierSequence[^2] = 2;
-            if (multiplierSequence[^1] + multiplierSequence[^3] == 5)
-                multiplierSequence[^2] = 1;
+            if (maxTurn == 3)
+            {
+                multiplierSequence[^2] = Random.Range(1, 4);
+            }
+            else
+            {
+                int consecutiveMultiplierCount = 1;
+                for (int i = 1; i < maxTurn - 2; i++)
+                {
+                    int index = Random.Range(1, 4);
+                
+                    if (index == multiplierSequence[i - 1])
+                        ++consecutiveMultiplierCount;
+                    else
+                        consecutiveMultiplierCount = 1;
+                
+                    if (consecutiveMultiplierCount >= maxConsecutiveMultiplierCount)
+                    {
+                        while (index == multiplierSequence[i - 1] || (i == multiplierSequence.Count - 3 && index == mainAttributeIndex))
+                        {
+                            index = Random.Range(1, 4);
+                        }
+                    }
+                    else if (i == multiplierSequence.Count - 3)
+                    {
+                        while (index == mainAttributeIndex)
+                        {
+                            index = Random.Range(1, 4);
+                        }
+                    }
+                
+                    multiplierSequence[i] = index;
+                }
+                if(multiplierSequence[^1] + multiplierSequence[^3] == 3)
+                    multiplierSequence[^2] = 3;
+                if (multiplierSequence[^1] + multiplierSequence[^3] == 4)
+                    multiplierSequence[^2] = 2;
+                if (multiplierSequence[^1] + multiplierSequence[^3] == 5)
+                    multiplierSequence[^2] = 1;
+            }
+            
             multiplierSequence = multiplierSequence.Select(x=> x - 1).ToList();
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnMultiplierSequenceCalculated,
@@ -179,7 +196,15 @@ namespace VTuber.BattleSystem.Core
                     {"Colors", multiplierSequence.Select(index => _multiplierAttributes[index].color).ToList()},
                 });
         }
-        
+
+        public void Reset()
+        {
+            Multiplier = null;
+            multiplierSequence.Clear();
+            multiplierSequence = null;
+            _multiplierAttributes.Clear();
+            _multiplierAttributes = null;
+        }
     }
     
     public class VBattleAttributeManager
@@ -203,6 +228,13 @@ namespace VTuber.BattleSystem.Core
             ConvertFromCharacterAttributes(characterAttributeManager);
         }
 
+        public void Clear()
+        {
+            _battleAttributes.Clear();
+            _multiplierManager.Reset();
+            _staminaManager.Reset();
+        }
+        
         public void InitializeInternalManagers()
         {
             _staminaManager = new VStaminaManager(

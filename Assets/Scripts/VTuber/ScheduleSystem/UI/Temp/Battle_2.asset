@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f0dc4bc30394ccc9a866aa3678180d5, type: 3}
+  m_Name: Battle_2
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  eventName: BattleEvent
+  duration: 2
+  description: 
+  icon: {fileID: 399481705, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
+  backgroundColor: {r: 0.6208769, g: 0.9150943, b: 0.56545925, a: 1}
+  type: 0
+  staminaCost: 10
+  moodBonus: 0
+  skillExpBonus: 0
+  initialTurnCount: 5

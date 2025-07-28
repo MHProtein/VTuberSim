@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VSchedule : VScheduleTable
+    public class VScheduleUI : VScheduleTable
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject itemPrefab;

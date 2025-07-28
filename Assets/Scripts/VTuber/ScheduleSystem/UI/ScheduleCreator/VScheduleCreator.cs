@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -11,7 +12,7 @@ namespace VTuber.ScheduleSystem.UI
         protected VScheduleCreatorSlot[,] slots;
         protected List<EventData> items;
         
-        [SerializeField] private List<EventData> eventDatas;
+        [SerializeField] private List<VScheduleEventConfiguration> eventDatas;
 
         protected override void Awake()
         {
