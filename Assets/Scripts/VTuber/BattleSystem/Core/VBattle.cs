@@ -47,22 +47,22 @@ namespace VTuber.BattleSystem.Core
         
         private int MaxTurnCount => _configuration.maxTurnCount;
 
-        private bool shouldNextCardPlayTwice = false;
-        private bool shouldRedraw = false;
+        private bool _shouldNextCardPlayTwice = false;
+        private bool _shouldRedraw = false;
         
         private List<VEffect> _playTwiceEffects;
         private Dictionary<string, object> _playTwiceMessageDict;
         private VCharacterAttributeManager _characterAttributeManager;
         public void NextCardPlayTwice()
         {
-            shouldNextCardPlayTwice = true;
+            _shouldNextCardPlayTwice = true;
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>() { });
         }
         
         public void RedrawRest()
         {
-            shouldRedraw = true;
+            _shouldRedraw = true;
         }
         
         public void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
@@ -177,13 +177,13 @@ namespace VTuber.BattleSystem.Core
             switch (card.CostType)
             {
                 case CostType.Stamina:
-                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                     break;
                 case CostType.TrueStamina:
-                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
                     break;
                 case CostType.Buff:
-                    card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                     break;
             }
         }
@@ -193,7 +193,7 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Buff)
-                    card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
             }
         }
 
@@ -202,7 +202,7 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Buff)
-                    card.SetPlayable(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
             } 
         }
         
@@ -211,9 +211,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Stamina)
-                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                 if(card.CostType == CostType.TrueStamina)
-                    card.SetPlayable(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
             }
         }
         
@@ -224,7 +224,7 @@ namespace VTuber.BattleSystem.Core
         
         private void OnPlayTheSecondTime(Dictionary<string, object> messagedict)
         {
-            shouldNextCardPlayTwice = false;
+            _shouldNextCardPlayTwice = false;
             
             if(_playTwiceEffects is not null && _playTwiceMessageDict is not null)
                 ApplyCardEffects( _playTwiceEffects, _playTwiceMessageDict);
@@ -250,7 +250,7 @@ namespace VTuber.BattleSystem.Core
             if (PlayLeft <= 0)
             {
                 EndTurn();
-                if (shouldRedraw) shouldRedraw = false;
+                if (_shouldRedraw) _shouldRedraw = false;
             }
         }
         
@@ -330,7 +330,6 @@ namespace VTuber.BattleSystem.Core
             VDebug.Log(messagedict is null ? "卡牌消息为空" : "卡牌消息有效");
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPreCardApply, messagedict);
-
             switch ((CostType)messagedict["CostType"])
             {
                 case CostType.Stamina:
@@ -351,11 +350,11 @@ namespace VTuber.BattleSystem.Core
         {
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRedrawCards, new Dictionary<string, object>
             {
-                {"ShouldPlayTwice", shouldNextCardPlayTwice},
+                {"ShouldPlayTwice", _shouldNextCardPlayTwice},
             });
             
-            if (shouldNextCardPlayTwice)
-                shouldNextCardPlayTwice = false;
+            if (_shouldNextCardPlayTwice)
+                _shouldNextCardPlayTwice = false;
         }
 
         private void ApplyCardEffects(List<VEffect> effects, Dictionary<string, object> messagedict)
@@ -370,7 +369,7 @@ namespace VTuber.BattleSystem.Core
                 return;
             }
             
-            if (shouldNextCardPlayTwice)
+            if (_shouldNextCardPlayTwice)
             {
                 _playTwiceEffects = effects;
                 _playTwiceMessageDict = messagedict;
@@ -381,7 +380,7 @@ namespace VTuber.BattleSystem.Core
                 if (!effect.CanApply(this, messagedict))
                     continue;
                 effectApplied = true;
-                effect.ApplyEffect(this, 1, true, shouldNextCardPlayTwice);
+                effect.ApplyEffect(this, 1, true, _shouldNextCardPlayTwice);
             }
 
             if (!effectApplied)
@@ -394,9 +393,9 @@ namespace VTuber.BattleSystem.Core
                 return;
             }
             
-            if (shouldRedraw)
+            if (_shouldRedraw)
             {
-                shouldRedraw = false;
+                _shouldRedraw = false;
                 if (PlayLeft == 0)
                     return;
                 Redraw();

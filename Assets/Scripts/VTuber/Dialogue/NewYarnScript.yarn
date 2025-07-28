@@ -1,0 +1,13 @@
+﻿title: Start
+---
+Me: hi
+
+<<leap YarnBridge>>
+<<add_exp YarnBridge 50>>
+
+<<declare $msg = "" as string>>
+<<set $msg = say_message("Greeting")>>
+{$msg}
+
+-> Done
+===

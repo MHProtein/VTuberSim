@@ -255,7 +255,8 @@ namespace VTuber.BattleSystem.Buff
             }
             else
             {
-    
+                if (value <= 0)
+                    return;
                 var buffItem = new VBuffItem(buff, value);
                 _buffs.Add(buffItem);
                 buffItem.OnBuffAdded(_battle, _idDistributor++);
