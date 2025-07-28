@@ -20,7 +20,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             };
         }
         
-        public void AddPopularity(int delta, string abilityName = "")
+        public void AddPopularity(int delta, string abilityName = "", bool isFromCard = false, bool shouldPlayTwice = false)
         {
             if (delta == 0)
                 return;
@@ -34,7 +34,7 @@ namespace VTuber.BattleSystem.BattleAttribute
                 VDebug.LogError("Ability name not found in popularity attribute: " + abilityName);
             }
             
-            AddTo(delta, false, false);
+            AddTo(delta, isFromCard, shouldPlayTwice);
         }
         
     }

@@ -11,7 +11,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class vVMultiplierUI : VStatUI
+    public class VMultiplierUI : VStatUI
     {
         
         [SerializeField] private TMP_Text MultiplierText;
@@ -57,7 +57,6 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
-            
         }
         
         protected override void OnDisable()
@@ -93,8 +92,9 @@ namespace VTuber.BattleSystem.UI
         public IEnumerator DelayMoveArrow()
         {
             yield return new WaitForSeconds(0.2f);
-            arrowSequence.Enqueue(Tween.Position(arrow.transform, colorObjects[arrowIndex - 1].transform.position + 
-                                                                  new Vector3(0, -arrowHeight, 0), 0.2f));
+            arrowSequence.Enqueue(Tween.Position(arrow.transform, 
+                colorObjects[arrowIndex - 1].transform.position + 
+                new Vector3(0, -arrowHeight, 0), 0.2f));
         }
         
         private void OnBattleBegin(Dictionary<string, object> messagedict)
@@ -133,9 +133,13 @@ namespace VTuber.BattleSystem.UI
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
-            arrowSequence.Enqueue(Tween.Position(arrow.transform, colorObjects[arrowIndex].transform.position + 
-                                                                  new Vector3(0, -arrowHeight, 0), 0.2f));
             arrowIndex++;
+            if(arrowIndex >= colorObjects.Count)
+                return;
+            
+            arrowSequence.Enqueue(Tween.Position(arrow.transform,
+                colorObjects[arrowIndex].transform.position + 
+                new Vector3(0, -arrowHeight, 0), 0.2f));
         }
     }
 }

@@ -44,11 +44,13 @@ namespace VTuber.BattleSystem.UI
 
         private List<VCardUI> _displayingCards = new List<VCardUI>();
         private List<VHandCardUI> _handSlotsCards;
-        private GameObject cardUIPrefab;
+        [SerializeField] private GameObject cardUIPrefab;
         
         public Vector2 cardSize;
         private Vector2 _scaledCardSize;
         private Vector2 _handSlotsSize;
+        public bool IsCardApplying => _isCardApplying;
+        private bool _isCardApplying = false;
 
         private VHandCardUI cardToDispose;
 
@@ -167,7 +169,6 @@ namespace VTuber.BattleSystem.UI
         {
             base.Awake();
             
-            cardUIPrefab = Resources.Load<GameObject>("Prefabs/UI/Card");
             _handSlotsCards = new List<VHandCardUI>();
             _handSlotsSize = handSlotsContent.rect.size;
             cardToDispose = null;
@@ -181,7 +182,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRedrawCards, OnRedrawCards);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnEffectAnimationFinished);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnCardBeginDespose);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
         }
@@ -192,7 +193,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnDrawCards, OnDrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnEffectAnimationFinished);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnCardBeginDespose);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
         }        
@@ -209,17 +210,29 @@ namespace VTuber.BattleSystem.UI
             StartCoroutine(DrawCard(cards, (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]));
         }
         
-        private void OnEffectAnimationFinished(Dictionary<string, object> messagedict)
+        private void OnCardBeginDespose(Dictionary<string, object> messagedict)
         {
             if (cardToDispose is not null)
             {
+                _isCardApplying = false;
                 DisposeCard(cardToDispose);
                 cardToDispose = null;
+
+                foreach (var card in _handSlotsCards)
+                {
+                    card.OnCardStopApplying();
+                }
+                
             }
         }
 
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
+            _isCardApplying = true;
+            foreach (var handCardUI in _handSlotsCards)
+            {
+                handCardUI.SetInteractive(false);
+            }
             var card = messagedict["Card"] as VCard;
             var cardUI = GetCardById(card.Id);
             
@@ -231,11 +244,6 @@ namespace VTuber.BattleSystem.UI
             
             int index = cardUI.index;
             Rearrange(index);
-
-            foreach (var handSlotsCard in _handSlotsCards)
-            {
-                handSlotsCard.SetInteractive(false);
-            }
             
             StartCoroutine(DelayNotifyCardMovedToPlayPosition(cardMoveAfterPlayingTime + cardApplyTime, cardUI));
         }
@@ -589,7 +597,8 @@ namespace VTuber.BattleSystem.UI
         
         private void SetHandCardPositionRotation(VHandCardUI ui, float offset)
         {
-            ui.SetPosition(new Vector3(offset, 0.0f, 0.0f), drawCardToSlotTime, true);
+            ui.SetInteractive(false);
+            ui.SetPosition(new Vector3(offset, 0.0f, 0.0f), drawCardToSlotTime, true, () => ui.SetInteractive(!_isCardApplying));
         }
         
         public void UnselectCurrent()

@@ -1,7 +1,10 @@
 ﻿
+using System;
 using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Event;
+using VTuber.ScheduleSystem.Events;
 using System.Collections.Generic;
+using VTuber.Character;
+
 namespace VTuber.ScheduleSystem.Schedule
 {
     /// <summary>
@@ -9,8 +12,21 @@ namespace VTuber.ScheduleSystem.Schedule
     /// </summary>
     public class DaySchedule
     {
-        private readonly Dictionary<TimeOfDay, ScheduleEvent> _events = new();
+        private readonly Dictionary<TimeOfDay, VScheduleEvent> _events = new();
+        
+        private VCharacter _character;
+        private WeeklySchedule _weeklySchedule;
+        
+        private class ScheduledSlot
+        {
+            public VScheduleEvent Event;
+            public bool IsPrimarySlot; // 只在第一个时间段执行
+        }
 
+        private readonly Dictionary<TimeOfDay, ScheduledSlot> _slots = new();
+        
+        private TimeOfDay currentTimeOfDay;
+        
         public bool CanScheduleEvent(TimeOfDay startTime, int duration)
         {
             var times = GetTimeSlots(startTime, duration);
@@ -20,21 +36,36 @@ namespace VTuber.ScheduleSystem.Schedule
             }
             return true;
         }
-        
-        private class ScheduledSlot
+
+        public DaySchedule(WeeklySchedule weeklySchedule, VCharacter character)
         {
-            public ScheduleEvent Event;
-            public bool IsPrimarySlot; // 只在第一个时间段执行
+            currentTimeOfDay = TimeOfDay.Morning;
+            _character = character;
+            _weeklySchedule = weeklySchedule;
         }
-
-        private readonly Dictionary<TimeOfDay, ScheduledSlot> _slots = new();
-
-        public void SetEvent(TimeOfDay timeOfDay, ScheduleEvent evt, bool isPrimary)
+        
+        public TimeOfDay NextTimeOfDay()
         {
+            switch (currentTimeOfDay)
+            {
+                case TimeOfDay.Morning:
+                    return TimeOfDay.Afternoon;
+                case TimeOfDay.Afternoon:
+                    return TimeOfDay.Evening;
+                case TimeOfDay.Evening:
+                    return TimeOfDay.End;
+            }
+
+            return TimeOfDay.End;
+        }
+        
+        public void SetEvent(TimeOfDay timeOfDay, VScheduleEvent evt, bool isPrimary)
+        {
+            evt.SetDaySchedule(this);
             _slots[timeOfDay] = new ScheduledSlot { Event = evt, IsPrimarySlot = isPrimary };
         }
 
-        public ScheduleEvent GetEvent(TimeOfDay timeOfDay)
+        public VScheduleEvent GetEvent(TimeOfDay timeOfDay)
         {
             if (_slots.TryGetValue(timeOfDay, out var slot))
                 return slot?.Event;
@@ -48,9 +79,9 @@ namespace VTuber.ScheduleSystem.Schedule
             return false;
         }
         
-        public Dictionary<TimeOfDay, ScheduleEvent> GetAllEvents()
+        public Dictionary<TimeOfDay, VScheduleEvent> GetAllEvents()
         {
-            return new Dictionary<TimeOfDay, ScheduleEvent>(_events);
+            return new Dictionary<TimeOfDay, VScheduleEvent>(_events);
         }
 
         private List<TimeOfDay> GetTimeSlots(TimeOfDay start, int duration)
@@ -68,6 +99,20 @@ namespace VTuber.ScheduleSystem.Schedule
 
             return slots;
         }
-    }
 
+        public void Execute()
+        {
+            var e = _events[currentTimeOfDay];
+            e.Execute(_character);
+            for(int i = 0; i < e.Duration; i++)
+            {
+                currentTimeOfDay = NextTimeOfDay();
+            }
+
+            if (currentTimeOfDay == TimeOfDay.End)
+            {
+                _weeklySchedule.NextDay();
+            }
+        }
+    }
 }

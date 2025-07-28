@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
-using VTuber.ScheduleSystem.Event;
+using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Phase;
 using VTuber.Core.Foundation;
 
@@ -15,14 +15,14 @@ namespace VTuber.ScheduleSystem.Runtime
     {
         private WeeklySchedule _weeklySchedule;
         private PlayerStatus _playerStatus;
-        private readonly HashSet<ScheduleEvent> _executedEvents = new();
+        private readonly HashSet<VScheduleEvent> _executedEvents = new();
         
         public ScheduleExecutor(WeeklySchedule schedule, PlayerStatus player)
         {
             _weeklySchedule = schedule;
             _playerStatus = player;
         }
-
+        
         /// <summary>
         /// 执行一整周所有阶段安排
         /// </summary>
@@ -69,15 +69,15 @@ namespace VTuber.ScheduleSystem.Runtime
                 return;
             }
 
-            if (evt.CanExecute(_playerStatus))
-            {
-                evt.Execute(_playerStatus);
-                VDebug.Log($"已执行阶段事件：{phase}");
-            }
-            else
-            {
-                VDebug.LogWarning($"无法执行阶段事件（条件不符或体力不足）：{phase}");
-            }
+            // if (evt.CanExecute(_playerStatus))
+            // {
+            //     evt.Execute(_playerStatus);
+            //     VDebug.Log($"已执行阶段事件：{phase}");
+            // }
+            // else
+            // {
+            //     VDebug.LogWarning($"无法执行阶段事件（条件不符或体力不足）：{phase}");
+            // }
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Event;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.Phase
 {
@@ -10,13 +10,13 @@ namespace VTuber.ScheduleSystem.Phase
     {
         public int DayIndex { get; private set; }
         public TimeOfDay TimeOfDay { get; private set; }
-        public ScheduleEvent Event { get; private set; }
+        public VScheduleEvent Event { get; private set; }
 
-        public PhaseData(int dayIndex, TimeOfDay timeOfDay, ScheduleEvent scheduleEvent)
+        public PhaseData(int dayIndex, TimeOfDay timeOfDay, VScheduleEvent vScheduleEvent)
         {
             DayIndex = dayIndex;
             TimeOfDay = timeOfDay;
-            Event = scheduleEvent;
+            Event = vScheduleEvent;
         }
 
         public override string ToString()

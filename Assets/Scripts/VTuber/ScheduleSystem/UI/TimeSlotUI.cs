@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using VTuber.ScheduleSystem.Core;
 
+
+
 public class TimeSlotUI : MonoBehaviour
 {
     public Text slotLabel;

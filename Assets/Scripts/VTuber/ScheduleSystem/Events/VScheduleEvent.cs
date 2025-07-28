@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using VTuber.Character;
 using VTuber.ScheduleSystem.Core;
+using VTuber.ScheduleSystem.Schedule;
 
-namespace VTuber.ScheduleSystem.Event
+namespace VTuber.ScheduleSystem.Events
 {
     /// <summary>
     /// 运行时事件类，由配置生成，包含执行逻辑
     /// </summary>
-    public class ScheduleEvent
+    public class VScheduleEvent
     {
         public string EventName => _config.eventName;
         public string Description => _config.description;
@@ -16,26 +18,33 @@ namespace VTuber.ScheduleSystem.Event
         //adding duration to meet event may last across 2 times period
         public int Duration => _config.duration;
         
-        private readonly ScheduleEventConfiguration _config;
+        protected readonly VScheduleEventConfiguration _config;
 
-        public ScheduleEvent(ScheduleEventConfiguration config)
+        private DaySchedule _daySchedule;
+
+        public VScheduleEvent(VScheduleEventConfiguration config)
         {
             _config = config;
+        }
+        
+        public void SetDaySchedule(DaySchedule daySchedule)
+        {
+            _daySchedule = daySchedule;
         }
 
         /// <summary>
         /// 判断玩家状态是否允许执行
         /// </summary>
-        public bool CanExecute(PlayerStatus player)
+        public virtual bool CanExecute(VCharacter player)
         {
-            return player.Stamina >= _config.staminaCost;
+            return true;
         }
 
         /// <summary>
         /// 执行事件逻辑
         /// </summary>
 
-        public bool Execute(PlayerStatus player)
+        public virtual bool Execute(VCharacter player)
         {
             if (!CanExecute(player))
             {
@@ -43,10 +52,7 @@ namespace VTuber.ScheduleSystem.Event
                 return false;
             }
 
-            player.Stamina -= _config.staminaCost;
-            player.Experience += _config.skillExpBonus;
-
-            return true;
+            return false;
         }
     }
 }

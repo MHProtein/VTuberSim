@@ -23,7 +23,7 @@ namespace VTuber.BattleSystem.UI
             bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
             bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
             int delta = messagedict["Delta"] as int ? ?? 0;
-            viewerCountText.text = $"舰长数: {messagedict["NewValue"] as int? ?? 0}";
+            viewerCountText.text = $"{messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             
