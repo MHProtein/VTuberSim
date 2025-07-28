@@ -6,4 +6,5 @@ namespace VTuber.ScheduleSystem.Core
         public int Stamina;
         public int Experience;
     }
+    
 }
