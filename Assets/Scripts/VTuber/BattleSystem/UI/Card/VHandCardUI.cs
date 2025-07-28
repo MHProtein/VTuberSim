@@ -64,6 +64,7 @@ namespace VTuber.BattleSystem.UI
         private Vector3 _targetRotation;
         private bool _isScaling;
         private bool _isRotating;
+        private bool shouldWaitSetPlayable = false;
 
         public VHandCardUI(Vector3 targetRotation, bool isScaling)
         {
@@ -84,7 +85,8 @@ namespace VTuber.BattleSystem.UI
         
         public void ToHandSlot(Vector3 position, Vector3 rotation, Vector3 scale, float smoothTime)
         {
-            SetPosition(position, smoothTime, true, () => SetInteractive(true));
+            SetInteractive(false);
+            SetPosition(position, smoothTime, true, () => { SetInteractive(!battleUI.IsCardApplying); });
             SetRotation(rotation, smoothTime, true);
             SetScale(scale, smoothTime, true);
         }
@@ -108,6 +110,12 @@ namespace VTuber.BattleSystem.UI
             {
                 SetInteractive(false);
                 cardUI.background.color = Color.gray;
+                return;
+            }
+
+            if (battleUI.IsCardApplying)
+            {
+                shouldWaitSetPlayable = true;
                 return;
             }
             
@@ -303,6 +311,14 @@ namespace VTuber.BattleSystem.UI
             {
                 battleUI.UnselectCurrent();
                 Select();
+            }
+        }
+
+        public void OnCardStopApplying()
+        {
+            if (shouldWaitSetPlayable)
+            {
+                SetCardPlayble(true);
             }
         }
     }
