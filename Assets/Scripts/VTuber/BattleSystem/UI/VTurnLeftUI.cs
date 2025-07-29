@@ -25,7 +25,7 @@ namespace VTuber.BattleSystem.UI
             bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
             bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
             int delta = messagedict["Delta"] as int? ?? 0;
-            turnLeftText.text = $"{messagedict["NewValue"] as int? ?? 0}";
+            turnLeftText.text = $"剩余回合：{messagedict["NewValue"] as int? ?? 0}";
             if(delta == 0)
                 return;
             
