@@ -61,7 +61,7 @@ namespace VTuber.BattleSystem.Card
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration, uint id, List<VEffectItem> effects, List<VEffectItem> newEffects, uint conditionId)
+        public VCard(VCardConfiguration configuration, uint id, List<VEffectItem> effects, List<VEffectItem> newEffects, int conditionId)
         {
             _configuration = configuration;
             Id = id;
@@ -69,7 +69,9 @@ namespace VTuber.BattleSystem.Card
             _effects = new List<VEffect>();
             _newEffects = new List<VEffect>();
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
-            condition = VBattleDataManager.Instance.GetConditionByID(conditionId);
+            if(conditionId != -1)
+                condition = VBattleDataManager.Instance.GetConditionByID((uint)conditionId);
+            
             foreach (var effect in effects)
             {
                 _effects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
@@ -98,6 +100,8 @@ namespace VTuber.BattleSystem.Card
 
         public void TestCondition(VBattle battle)
         {
+            if (condition == null)
+                return;
             SetPlayable?.Invoke(condition.IsTrue(battle, null));
         }
 
