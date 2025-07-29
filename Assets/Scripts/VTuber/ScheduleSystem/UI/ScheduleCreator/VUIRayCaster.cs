@@ -9,10 +9,12 @@ namespace VTuber.ScheduleSystem.UI
     public class VScheduleUIHelper : VSingletonMonobehaviour<VScheduleUIHelper>
     {
         public RectTransform CanvasRect => canvasRect;
+        public RectTransform ScheduleUIRect => scheduleUIRect;
         [SerializeField] GraphicRaycaster m_Raycaster;
         PointerEventData m_PointerEventData;
         [SerializeField] EventSystem m_EventSystem;
         [SerializeField] RectTransform canvasRect;
+        [SerializeField] RectTransform scheduleUIRect;
 
         public List<RaycastResult> RaycastFromMouse()
         {

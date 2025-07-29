@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0865245f755d4da4bdbaa2e18555ebcb, type: 3}
-  m_Name: Data3 4
+  m_Script: {fileID: 11500000, guid: 3d71eb26e64c4244a950a6b929f1f1f0, type: 3}
+  m_Name: PhaseConfiguration
   m_EditorClassIdentifier: 
-  name: 
+  phaseName: 
+  timeOfDay: 0
+  autoExecute: 0
   description: 
-  icon: {fileID: 21300000, guid: b3a67fc6bd9f6405ba5785b99c7d830a, type: 3}
-  backgroundColor: {r: 0.54958504, g: 0.9811321, b: 0.4026344, a: 1}
-  height: 1

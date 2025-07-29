@@ -5,6 +5,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -21,6 +22,10 @@ namespace VTuber.BattleSystem.Card
         public string Description => _configuration.description;
         public CostType CostType => _configuration.costType;
         public uint CostBuffId => _configuration.costBuffId;
+
+        
+        public VEffectCondition Condition => condition;
+        private VEffectCondition condition;
         
         public int Cost => _cost.Value;
         private VUpgradableValue<int> _cost;
@@ -56,7 +61,7 @@ namespace VTuber.BattleSystem.Card
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration, uint id, List<VEffectItem> effects, List<VEffectItem> newEffects)
+        public VCard(VCardConfiguration configuration, uint id, List<VEffectItem> effects, List<VEffectItem> newEffects, uint conditionId)
         {
             _configuration = configuration;
             Id = id;
@@ -64,6 +69,7 @@ namespace VTuber.BattleSystem.Card
             _effects = new List<VEffect>();
             _newEffects = new List<VEffect>();
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
+            condition = VBattleDataManager.Instance.GetConditionByID(conditionId);
             foreach (var effect in effects)
             {
                 _effects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
@@ -88,6 +94,11 @@ namespace VTuber.BattleSystem.Card
                 { "CostBuffId", CostBuffId }
             };
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardPlayed, message);
+        }
+
+        public void TestCondition(VBattle battle)
+        {
+            SetPlayable?.Invoke(condition.IsTrue(battle, null));
         }
 
         public void Upgrade(bool isTemporary)
