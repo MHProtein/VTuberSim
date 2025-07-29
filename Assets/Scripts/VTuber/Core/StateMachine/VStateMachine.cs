@@ -36,7 +36,6 @@ namespace VTuber.Core.StateMachine
         public VBattle Battle => _battle;
         private VBattle _battle;
         
-        
         public VCharacter Character => _character;
         private VCharacter _character;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -35,6 +36,7 @@ namespace VTuber.ScheduleSystem.UI
         [Header("EventUI")] 
         [SerializeField]
         private Transform battleUI;
+        [SerializeField] private GameObject battlePausePanel;
 
         protected override void OnEnable()
         {
@@ -94,6 +96,13 @@ namespace VTuber.ScheduleSystem.UI
         
         public Tween SetBattleUIScale(float scale)
         {
+            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
+        }
+
+        public Tween SetBattlePause(bool paused)
+        {
+            battlePausePanel.SetActive(paused);
+            float scale = paused ? 0.75f : 1.0f;
             return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
         }
     }

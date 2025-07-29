@@ -20,7 +20,6 @@ namespace VTuber.ScheduleSystem.UI
         
         public VScheduleSlot[,] Slots => slots;
         protected VScheduleSlot[,] slots;
-        protected List<EventData> items;
 
         protected VAnimationQueue _animationQueue;
         

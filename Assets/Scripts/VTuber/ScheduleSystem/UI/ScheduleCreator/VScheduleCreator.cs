@@ -10,7 +10,6 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] protected GameObject itemPrefab;
         
         protected VScheduleCreatorSlot[,] slots;
-        protected List<EventData> items;
         
         [SerializeField] private List<VScheduleEventConfiguration> eventDatas;
 

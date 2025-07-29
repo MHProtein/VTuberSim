@@ -11,9 +11,8 @@ namespace VTuber.Core.StateMachine
     public abstract class VState
     {
         public VStateType StateType => stateType;
-        public bool ViewChangable = false;
         
-        [SerializeField] protected VStateType stateType;
+        protected VStateType stateType;
         
         protected VStateMachine stateMachine;
         
