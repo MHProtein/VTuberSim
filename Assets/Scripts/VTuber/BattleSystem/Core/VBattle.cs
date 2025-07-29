@@ -15,45 +15,45 @@ namespace VTuber.BattleSystem.Core
 {
     public class VBattle : VSingletonMonobehaviour<VBattle>
     {
-        [FormerlySerializedAs("_configuration")] [SerializeField] private VBattleConfiguration configuration;
+        [FormerlySerializedAs("_configuration")] [SerializeField] protected VBattleConfiguration configuration;
 
         #region Managers
 
         public VBattleAttributeManager BattleAttributeManager => _battleAttributeManager;
-        private VBattleAttributeManager _battleAttributeManager;
+        protected VBattleAttributeManager _battleAttributeManager;
         
         public VCardPilesManager CardPilesManager => _cardPilesManager;
-        private VCardPilesManager _cardPilesManager;
+        protected VCardPilesManager _cardPilesManager;
         
         public VBuffManager BuffManager => _buffManager;
-        private VBuffManager _buffManager;
+        protected VBuffManager _buffManager;
 
         #endregion
         
         #region Attributes
 
-        private VBattleTurnAttribute _turnAttribute;
+        protected VBattleTurnAttribute _turnAttribute;
 
-        private VBattlePlayLeftAttribute _playLeftAttribute;
+        protected VBattlePlayLeftAttribute _playLeftAttribute;
         // private VBattlePopularityAttribute _popularityAttribute;
         // private VBattleParameterAttribute _parameterAttribute;
         // private VBattleAttribute _shieldAttribute;
 
         #endregion
 
-        private int _currentPlayCountLeft = 0;
+        protected int _currentPlayCountLeft = 0;
         
         public int TurnLeft => _turnAttribute.Value;
         public int PlayLeft => _playLeftAttribute.Value;
         
-        private int MaxTurnCount => configuration.maxTurnCount;
+        protected int MaxTurnCount => configuration.maxTurnCount;
 
-        private bool _shouldNextCardPlayTwice = false;
-        private bool _shouldRedraw = false;
+        protected bool _shouldNextCardPlayTwice = false;
+        protected bool _shouldRedraw = false;
         
-        private List<VEffect> _playTwiceEffects;
-        private Dictionary<string, object> _playTwiceMessageDict;
-        private VCharacterAttributeManager _characterAttributeManager;
+        protected List<VEffect> _playTwiceEffects;
+        protected Dictionary<string, object> _playTwiceMessageDict;
+        protected VCharacterAttributeManager _characterAttributeManager;
         public void NextCardPlayTwice()
         {
             _shouldNextCardPlayTwice = true;
@@ -66,7 +66,7 @@ namespace VTuber.BattleSystem.Core
             _shouldRedraw = true;
         }
         
-        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
+        public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
         {
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager();
