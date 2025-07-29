@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
@@ -14,7 +15,7 @@ namespace VTuber.BattleSystem.Core
 {
     public class VBattle : VSingletonMonobehaviour<VBattle>
     {
-        private VBattleConfiguration _configuration;
+        [FormerlySerializedAs("_configuration")] [SerializeField] private VBattleConfiguration configuration;
 
         #region Managers
 
@@ -45,7 +46,7 @@ namespace VTuber.BattleSystem.Core
         public int TurnLeft => _turnAttribute.Value;
         public int PlayLeft => _playLeftAttribute.Value;
         
-        private int MaxTurnCount => _configuration.maxTurnCount;
+        private int MaxTurnCount => configuration.maxTurnCount;
 
         private bool _shouldNextCardPlayTwice = false;
         private bool _shouldRedraw = false;
@@ -65,13 +66,11 @@ namespace VTuber.BattleSystem.Core
             _shouldRedraw = true;
         }
         
-        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
-            VBattleConfiguration configuration, VCardLibrary cardLibrary, int initialTurnCount)
+        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
         {
-            _configuration = configuration;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager();
-            _cardPilesManager = new VCardPilesManager(_configuration.handSize, _configuration.maxHandSize, cardLibrary); 
+            _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
             //_battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false));
             
@@ -81,7 +80,7 @@ namespace VTuber.BattleSystem.Core
             
             _battleAttributeManager.AttributesConversion(_characterAttributeManager);
             _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
-            _playLeftAttribute = new VBattlePlayLeftAttribute(_configuration.defaultPlayPerTurn);
+            _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
             
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
@@ -157,9 +156,9 @@ namespace VTuber.BattleSystem.Core
         private void OnRequestPickCardsFromPile(Dictionary<string, object> messagedict)
         {
             int cardCount = (int)messagedict["CardCount"];
-            if(_cardPilesManager.HandPile.Count + cardCount > _configuration.maxHandSize)
+            if(_cardPilesManager.HandPile.Count + cardCount > configuration.maxHandSize)
             {
-                cardCount = _configuration.maxHandSize - _cardPilesManager.HandPile.Count;
+                cardCount = configuration.maxHandSize - _cardPilesManager.HandPile.Count;
             }
 
             if (cardCount <= 0)
@@ -273,7 +272,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
-                {"HandSize", _configuration.maxHandSize}
+                {"HandSize", configuration.maxHandSize}
             });
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>
             {

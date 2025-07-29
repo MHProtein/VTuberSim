@@ -1,7 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using VTuber.BattleSystem.Core;
+using VTuber.Character;
+using VTuber.ScheduleSystem.Schedule;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
@@ -21,33 +24,66 @@ namespace VTuber.Core.StateMachine
         public VState LastState => lastState;
         private VState lastState;
 
-        public VStateMachine()
+        public VScheduleUI ScheduleUI => _scheduleUI;
+        private VScheduleUI _scheduleUI;
+        
+        public VWeeklySchedule WeeklySchedule => _weeklySchedule;
+        private VWeeklySchedule _weeklySchedule; 
+        
+        public GameObject BattleRoot => _battleRoot;
+        private GameObject _battleRoot;
+        
+        public VBattle Battle => _battle;
+        private VBattle _battle;
+        
+        
+        public VCharacter Character => _character;
+        private VCharacter _character;
+
+        public VStateMachine(VScheduleUI scheduleUI, VWeeklySchedule weeklySchedule, GameObject battleRoot, VBattle battle, VCharacter character)
         {
+            _scheduleUI = scheduleUI;
+            _weeklySchedule = weeklySchedule;
+            _battleRoot = battleRoot;
+            _battle = battle;
+            _character = character;
             IsInitialized = true;
             preRegisterStates.ForEach(state => RegisterState(state));
         }
-
+        
         public bool RegisterState(VState state)
         {
             if (state == null)
                 return false;
             if (!IsInitialized)
                 return false;
-            if (RegisteredStateList.Exists(s => s.StateName == state.StateName))
+            if (RegisteredStateList.Exists(s => s.StateType == state.StateType))
                 return false;
             
             RegisteredStateList.Add(state);
             state.Register(this);
             return false;
         }
-
-        public bool UnRegisterState(string stateName)
+        
+        public void UnregisterAll()
         {
-            if (string.IsNullOrEmpty(stateName))
-                return false;
+            if (!IsInitialized)
+                return;
+            
+            foreach (var state in RegisteredStateList)
+            {
+                state.Unregister();
+            }
+            RegisteredStateList.Clear();
+            currentState = null;
+            lastState = null;
+        }
+
+        public bool UnRegisterState(VStateType vStateType)
+        {
             if (!IsInitialized)
                 return false;
-            var state = RegisteredStateList.Find(s => s.StateName == stateName);
+            var state = RegisteredStateList.Find(s => s.StateType == vStateType);
             if (state is null)
                 return false;
 
@@ -56,11 +92,9 @@ namespace VTuber.Core.StateMachine
             return false;
         }
 
-        public bool SwitchState(string targetStateName, params object[] args)
+        public bool SwitchState(VStateType vStateType, params object[] args)
         {
-            if (string.IsNullOrEmpty(targetStateName))
-                return false;
-            var state = RegisteredStateList.Find(s => s.StateName == targetStateName);
+            var state = RegisteredStateList.Find(s => s.StateType == vStateType);
             if (state is null)
                 return false;
             
@@ -68,7 +102,7 @@ namespace VTuber.Core.StateMachine
                 currentState.Exit(state);
             lastState = currentState;
             currentState = state;
-            currentState.Enter(args);
+            currentState.Enter(lastState, args);
             
             return false;
         }

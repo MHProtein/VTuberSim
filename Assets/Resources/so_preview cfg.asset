@@ -32,3 +32,8 @@ MonoBehaviour:
     - name: CharacterConfig
       path: 
       so: {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
+  - key: 
+    value:
+    - name: BattleConfig
+      path: 
+      so: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}

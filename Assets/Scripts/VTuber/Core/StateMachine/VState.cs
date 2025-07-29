@@ -2,12 +2,18 @@
 
 namespace VTuber.Core.StateMachine
 {
+    public enum VStateType
+    {
+        ScheduleCreation,
+        Execution,
+        Pause,
+    }
     public abstract class VState
     {
-        public string StateName { get => stateName; set => stateName = value; }
+        public VStateType StateType => stateType;
         public bool ViewChangable = false;
         
-        [SerializeField] protected string stateName;
+        [SerializeField] protected VStateType stateType;
         
         protected VStateMachine stateMachine;
         
@@ -18,8 +24,8 @@ namespace VTuber.Core.StateMachine
         
         public virtual void Unregister() { }
         
-        public virtual void Enter(params object[] enterParams) { }
-
+        public virtual void Enter(VState state, params object[] enterParams) { }
+        
         public virtual void Exit(VState nextState)
         {
             

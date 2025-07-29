@@ -53,6 +53,26 @@ namespace VTuber.ScheduleSystem.UI
             eventDescriptionUI.text = messagedict["Description"] as string;
         }
 
+        public void SetExecutionUIActive(bool active)
+        {
+            executionUI.SetActive(active);
+        }
+        
+        public void SetCreationUIActive(bool active)
+        {
+            scheduleCreationUI.SetActive(active);
+        }
+        
+        public Tween SetScheduleUIPositionToCreation()
+        {
+            return Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f);
+        }
+        
+        public Tween SetScheduleUIPositionToExecution()
+        {
+            return Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f);
+        }
+        
         public void SwitchToScheduleCreation(Action onComplete = null)
         {
             executionUI.SetActive(false);
@@ -65,7 +85,6 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToExecution(Action onComplete = null)
         {
-            scheduleCreationUI.SetActive(false);
             executionUI.SetActive(true);
             Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f).OnComplete(()=>
             {
@@ -73,14 +92,9 @@ namespace VTuber.ScheduleSystem.UI
             });
         }
         
-        public void SwitchToPause(Action onComplete = null)
+        public Tween SetBattleUIScale(float scale)
         {
-            Tween.Scale(battleUI, Vector3.one * 0.75f, 0.3f).OnComplete(() => onComplete?.Invoke());
-        }
-
-        public void SwitchToBattle()
-        {
-            Tween.Scale(battleUI, Vector3.one * 1.0f, 0.3f);
+            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
         }
     }
 }

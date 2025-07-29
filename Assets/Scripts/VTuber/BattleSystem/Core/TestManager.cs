@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using PrimeTween;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.StateMachine;
 using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
 
@@ -28,8 +26,7 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private VBattleConfiguration _battleConfiguration;
         [SerializeField] private VCharacterConfiguration _characterConfiguration;
         private VCharacter character;
-        private VStreamEvent _currentEvent;
-        private bool isPaused;
+        private VStateMachine _stateMachine;
         
         protected override void Awake()
         {
@@ -50,68 +47,39 @@ namespace VTuber.BattleSystem.Core
                 }
             }
             character.CardLibrary.AddCards(cards);
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule, battleRoot, battle, character);
+            _stateMachine.RegisterState(new VScheduleCreationState());
+            _stateMachine.RegisterState(new VExecutionState());
+            _stateMachine.RegisterState(new VPauseState());
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            
-            
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
 
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            
-            
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
         
         protected override void Start()
         {
             base.Start();
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToScheduleCreation();
-        }
-        
-        private void OnBattleEnd(Dictionary<string, object> messagedict)
-        {
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToPause((() => battleRoot.SetActive(false)));
-            Tween.Delay(2.0f, () =>
-            {
-                _currentEvent.NextEvent();
-            });
-            isPaused = false;
-        }
-        
-        private void OnStreamEventStart(Dictionary<string, object> messagedict)
-        {
-            _currentEvent = messagedict["Event"] as VStreamEvent;
-            InitializeBattle();
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToBattle();
+            _stateMachine.SwitchState(VStateType.ScheduleCreation);
         }
 
         public void Pause()
         {
-            if (isPaused)
+            if (_stateMachine.CurrentState.StateType == VStateType.Pause)
             {
-                isPaused = false;
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToBattle();
+                _stateMachine.SwitchState(VStateType.Execution);
             }
-            else
+            else if (_stateMachine.CurrentState.StateType == VStateType.Execution)
             {
-                isPaused = true;
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToPause();
+                _stateMachine.SwitchState(VStateType.Pause);
             }
-        }
-
-        public void InitializeBattle()
-        {
-            battleRoot.SetActive(true);
-            battle.InitializeBattle(character.AttributeManager, _battleConfiguration, character.CardLibrary, _currentEvent.InitialTurnCount);
         }
 
         public void ConvertToSchedule()
@@ -135,11 +103,8 @@ namespace VTuber.BattleSystem.Core
                     }
                 }
             }
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SwitchToExecution(() =>
-            {
-                scheduleUI.ResetIndicatorPosition().OnComplete((() => _weeklySchedule.BeginExecution()));
-            });
+            
+            _stateMachine.SwitchState(VStateType.Execution);
         }
-
     }
 }
