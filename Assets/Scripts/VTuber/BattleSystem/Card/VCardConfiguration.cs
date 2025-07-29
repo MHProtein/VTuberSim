@@ -131,7 +131,7 @@ namespace VTuber.BattleSystem.Card
             isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
             
             var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
-            if(conditionStr.IsNullOrWhitespace())
+            if(!conditionStr.IsNullOrWhitespace())
             {
                 conditionId = Convert.ToInt32(conditionStr);
             }
