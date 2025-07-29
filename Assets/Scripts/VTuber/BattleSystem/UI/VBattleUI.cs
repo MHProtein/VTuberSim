@@ -270,7 +270,6 @@ namespace VTuber.BattleSystem.UI
 
         private void RedrawCards(bool shouldPlayTwice)
         {
-            
             int redrawCount = _handSlotsCards.Count;
             DisposeAllCards();
             StartCoroutine(DelayDrawCards(cardToDisposeTime, redrawCount, shouldPlayTwice));
@@ -293,6 +292,7 @@ namespace VTuber.BattleSystem.UI
             else
             {
                 DisposeCard(cardToDispose);
+                _isCardApplying = false;
                 cardToDispose = null;
             }
         }
