@@ -9,14 +9,14 @@ namespace VTuber.ScheduleSystem.UI
     {
         public VEventUI Item => _item;
         public Vector2Int Coordination => _coordination;
-        private VSchedule _schedule;
+        private VScheduleUI _scheduleUI;
         private Vector2Int _coordination;
         private VEventUI _item;
 
-        public void Initialize(Vector2Int coordination, VSchedule schedule)
+        public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI)
         {
             _coordination = coordination;
-            _schedule = schedule;
+            _scheduleUI = scheduleUI;
         }
 
         public void SetItem(VEventUI item)
@@ -41,34 +41,34 @@ namespace VTuber.ScheduleSystem.UI
         {
             if (height == 1)
             {
-                _schedule.ChangeIndicatorScale(1.0f);
-                _schedule.ChangeIndicatorPosition(transform.position);
+                _scheduleUI.ChangeIndicatorScale(1.0f);
+                _scheduleUI.ChangeIndicatorPosition(transform.position);
                 if (_item is not null)
                 {
-                    _schedule.ChangeIndicatorColor(Color.red);
+                    _scheduleUI.ChangeIndicatorColor(Color.red);
                     return;
                 }
 
-                _schedule.ChangeIndicatorColor(Color.black);
+                _scheduleUI.ChangeIndicatorColor(Color.black);
                 return;
             }
 
             if (height == 2)
             {
-                _schedule.ChangeIndicatorScale(2.0f);
+                _scheduleUI.ChangeIndicatorScale(2.0f);
                 if (_coordination.y == 0)
                 {
-                    var position = (_schedule.Slots[0, _coordination.x].transform.position +
-                                    _schedule.Slots[1, _coordination.x].transform.position) / 2f;
-                    _schedule.ChangeIndicatorPosition(position);
-                    if (_schedule.Slots[1, _coordination.x].Item is null
+                    var position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
+                                    _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
+                    _scheduleUI.ChangeIndicatorPosition(position);
+                    if (_scheduleUI.Slots[1, _coordination.x].Item is null
                         && _item is null)
                     {
-                        _schedule.ChangeIndicatorColor(Color.black);
+                        _scheduleUI.ChangeIndicatorColor(Color.black);
                         return;
                     }
 
-                    _schedule.ChangeIndicatorColor(Color.red);
+                    _scheduleUI.ChangeIndicatorColor(Color.red);
                     return;
                 }
 
@@ -76,80 +76,80 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     if (offsetY > 0.0f)
                     {
-                        if (_schedule.Slots[0, _coordination.x].Item is null && _item is null)
+                        if (_scheduleUI.Slots[0, _coordination.x].Item is null && _item is null)
                         {
-                            var position = (_schedule.Slots[0, _coordination.x].transform.position +
-                                            _schedule.Slots[1, _coordination.x].transform.position) / 2f;
-                            _schedule.ChangeIndicatorColor(Color.black);
-                            _schedule.ChangeIndicatorPosition(position);
+                            var position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
+                                            _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
+                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
-                        if (_schedule.Slots[2, _coordination.x].Item is null && _item is null)
+                        if (_scheduleUI.Slots[2, _coordination.x].Item is null && _item is null)
                         {
-                            var position = (_schedule.Slots[1, _coordination.x].transform.position +
-                                            _schedule.Slots[2, _coordination.x].transform.position) / 2f;
-                            _schedule.ChangeIndicatorColor(Color.black);
-                            _schedule.ChangeIndicatorPosition(position);
+                            var position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
+                                            _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
+                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
                     }
                     else
                     {
-                        if (_schedule.Slots[2, _coordination.x].Item is null && _item is null)
+                        if (_scheduleUI.Slots[2, _coordination.x].Item is null && _item is null)
                         {
-                            var position = (_schedule.Slots[1, _coordination.x].transform.position +
-                                            _schedule.Slots[2, _coordination.x].transform.position) / 2f;
-                            _schedule.ChangeIndicatorColor(Color.black);
-                            _schedule.ChangeIndicatorPosition(position);
+                            var position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
+                                            _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
+                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
 
-                        if (_schedule.Slots[0, _coordination.x].Item is null && _item is null)
+                        if (_scheduleUI.Slots[0, _coordination.x].Item is null && _item is null)
                         {
-                            var position = (_schedule.Slots[0, _coordination.x].transform.position +
-                                            _schedule.Slots[1, _coordination.x].transform.position) / 2f;
-                            _schedule.ChangeIndicatorColor(Color.black);
-                            _schedule.ChangeIndicatorPosition(position);
+                            var position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
+                                            _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
+                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
                     }
 
-                    _schedule.ChangeIndicatorColor(Color.red);
-                    _schedule.ChangeIndicatorPosition(transform.position);
-                    _schedule.ChangeIndicatorScale(2.0f);
+                    _scheduleUI.ChangeIndicatorColor(Color.red);
+                    _scheduleUI.ChangeIndicatorPosition(transform.position);
+                    _scheduleUI.ChangeIndicatorScale(2.0f);
                 }
 
                 if (_coordination.y == 2)
                 {
-                    var position = (_schedule.Slots[1, _coordination.x].transform.position +
-                                    _schedule.Slots[2, _coordination.x].transform.position) / 2f;
-                    _schedule.ChangeIndicatorPosition(position);
-                    if (_schedule.Slots[1, _coordination.x].Item is null && _item is null)
+                    var position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
+                                    _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
+                    _scheduleUI.ChangeIndicatorPosition(position);
+                    if (_scheduleUI.Slots[1, _coordination.x].Item is null && _item is null)
                     {
-                        _schedule.ChangeIndicatorColor(Color.black);
+                        _scheduleUI.ChangeIndicatorColor(Color.black);
                         return;
                     }
 
-                    _schedule.ChangeIndicatorColor(Color.red);
+                    _scheduleUI.ChangeIndicatorColor(Color.red);
                     return;
                 }
             }
 
             if (height == 3)
             {
-                _schedule.ChangeIndicatorScale(3.0f);
-                var position = _schedule.Slots[1, _coordination.x].transform.position;
-                _schedule.ChangeIndicatorPosition(position);
+                _scheduleUI.ChangeIndicatorScale(3.0f);
+                var position = _scheduleUI.Slots[1, _coordination.x].transform.position;
+                _scheduleUI.ChangeIndicatorPosition(position);
                 for (int y = 0; y < 3; y++)
                 {
-                    if (_schedule.Slots[y, _coordination.x]._item is not null)
+                    if (_scheduleUI.Slots[y, _coordination.x]._item is not null)
                     {
-                        _schedule.ChangeIndicatorColor(Color.red);
+                        _scheduleUI.ChangeIndicatorColor(Color.red);
                         return;
                     }
                 }
 
-                _schedule.ChangeIndicatorColor(Color.black);
+                _scheduleUI.ChangeIndicatorColor(Color.black);
             }
         }
 
@@ -181,16 +181,16 @@ namespace VTuber.ScheduleSystem.UI
             {
                 if (_coordination.y == 0)
                 {
-                    if (_schedule.Slots[1, _coordination.x].Item is null)
+                    if (_scheduleUI.Slots[1, _coordination.x].Item is null)
                     {
                         parents = new List<VScheduleSlot>()
                         {
-                            _schedule.Slots[0, _coordination.x],
-                            _schedule.Slots[1, _coordination.x]
+                            _scheduleUI.Slots[0, _coordination.x],
+                            _scheduleUI.Slots[1, _coordination.x]
                         };
-                        transformParent = _schedule.Slots[1, _coordination.x].transform;
-                        position = (_schedule.Slots[0, _coordination.x].transform.position +
-                                    _schedule.Slots[1, _coordination.x].transform.position) / 2f;
+                        transformParent = _scheduleUI.Slots[1, _coordination.x].transform;
+                        position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
+                                    _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
                         return true;
                     }
 
@@ -201,56 +201,56 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     if (offsetY > 0.0f)
                     {
-                        if (_schedule.Slots[0, _coordination.x].Item is null)
+                        if (_scheduleUI.Slots[0, _coordination.x].Item is null)
                         {
                             parents = new List<VScheduleSlot>()
                             {
-                                _schedule.Slots[0, _coordination.x],
-                                _schedule.Slots[1, _coordination.x]
+                                _scheduleUI.Slots[0, _coordination.x],
+                                _scheduleUI.Slots[1, _coordination.x]
                             };
-                            transformParent = _schedule.Slots[1, _coordination.x].transform;
-                            position = (_schedule.Slots[0, _coordination.x].transform.position +
-                                        _schedule.Slots[1, _coordination.x].transform.position) / 2f;
+                            transformParent = _scheduleUI.Slots[1, _coordination.x].transform;
+                            position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
+                                        _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
                             return true;
                         }
 
-                        if (_schedule.Slots[2, _coordination.x].Item is null)
+                        if (_scheduleUI.Slots[2, _coordination.x].Item is null)
                         {
                             parents = new List<VScheduleSlot>()
                             {
-                                _schedule.Slots[1, _coordination.x],
-                                _schedule.Slots[2, _coordination.x]
+                                _scheduleUI.Slots[1, _coordination.x],
+                                _scheduleUI.Slots[2, _coordination.x]
                             };
-                            transformParent = _schedule.Slots[2, _coordination.x].transform;
-                            position = (_schedule.Slots[1, _coordination.x].transform.position +
-                                        _schedule.Slots[2, _coordination.x].transform.position) / 2f;
+                            transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
+                            position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
+                                        _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                             return true;
                         }
                     }
                     else
                     {
-                        if (_schedule.Slots[2, _coordination.x].Item is null)
+                        if (_scheduleUI.Slots[2, _coordination.x].Item is null)
                         {
                             parents = new List<VScheduleSlot>()
                             {
-                                _schedule.Slots[1, _coordination.x],
-                                _schedule.Slots[2, _coordination.x]
+                                _scheduleUI.Slots[1, _coordination.x],
+                                _scheduleUI.Slots[2, _coordination.x]
                             };
-                            transformParent = _schedule.Slots[2, _coordination.x].transform;
-                            position = (_schedule.Slots[1, _coordination.x].transform.position +
-                                        _schedule.Slots[2, _coordination.x].transform.position) / 2f;
+                            transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
+                            position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
+                                        _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                             return true;
                         }
-                        if (_schedule.Slots[0, _coordination.x].Item is null)
+                        if (_scheduleUI.Slots[0, _coordination.x].Item is null)
                         {
                             parents = new List<VScheduleSlot>()
                             {
-                                _schedule.Slots[0, _coordination.x],
-                                _schedule.Slots[1, _coordination.x]
+                                _scheduleUI.Slots[0, _coordination.x],
+                                _scheduleUI.Slots[1, _coordination.x]
                             };
-                            transformParent = _schedule.Slots[1, _coordination.x].transform;
-                            position = (_schedule.Slots[0, _coordination.x].transform.position +
-                                        _schedule.Slots[1, _coordination.x].transform.position) / 2f;
+                            transformParent = _scheduleUI.Slots[1, _coordination.x].transform;
+                            position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
+                                        _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
                             return true;
                         }
                     }
@@ -258,16 +258,16 @@ namespace VTuber.ScheduleSystem.UI
 
                 if (_coordination.y == 2)
                 {
-                    if (_schedule.Slots[1, _coordination.x].Item is null)
+                    if (_scheduleUI.Slots[1, _coordination.x].Item is null)
                     {
                         parents = new List<VScheduleSlot>()
                         {
-                            _schedule.Slots[1, _coordination.x],
-                            _schedule.Slots[2, _coordination.x]
+                            _scheduleUI.Slots[1, _coordination.x],
+                            _scheduleUI.Slots[2, _coordination.x]
                         };
-                        transformParent = _schedule.Slots[2, _coordination.x].transform;
-                        position = (_schedule.Slots[1, _coordination.x].transform.position +
-                                    _schedule.Slots[2, _coordination.x].transform.position) / 2f;
+                        transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
+                        position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
+                                    _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                         return true;
                     }
                 }
@@ -279,7 +279,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 for (int y = 0; y < 3; y++)
                 {
-                    if (_schedule.Slots[y, _coordination.x]._item is not null)
+                    if (_scheduleUI.Slots[y, _coordination.x]._item is not null)
                     {
                         return false;
                     }
@@ -287,12 +287,12 @@ namespace VTuber.ScheduleSystem.UI
 
                 parents = new List<VScheduleSlot>()
                 {
-                    _schedule.Slots[0, _coordination.x],
-                    _schedule.Slots[1, _coordination.x],
-                    _schedule.Slots[2, _coordination.x]
+                    _scheduleUI.Slots[0, _coordination.x],
+                    _scheduleUI.Slots[1, _coordination.x],
+                    _scheduleUI.Slots[2, _coordination.x]
                 };
-                transformParent = _schedule.Slots[2, _coordination.x].transform;
-                position = _schedule.Slots[1, _coordination.x].transform.position;
+                transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
+                position = _scheduleUI.Slots[1, _coordination.x].transform.position;
                 return true;
             }
 

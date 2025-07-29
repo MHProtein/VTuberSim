@@ -6,10 +6,10 @@
     /// 
     public enum TimeOfDay
     {
-        Morning,
-        Afternoon,
-        Evening,
-        End
+        Morning = 0,
+        Afternoon = 1,
+        Evening = 2,
+        End = 3
     }
 
     /// <summary>

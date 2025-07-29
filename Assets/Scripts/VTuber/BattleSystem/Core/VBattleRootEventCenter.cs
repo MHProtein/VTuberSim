@@ -13,6 +13,8 @@ namespace VTuber.BattleSystem.Core
         OnTurnEndBuffApply,
         OnTurnResolution,
         OnTurnEnd,
+        OnBattleEnd,
+        OnBattleEndNotify,
         
         OnDiscardToDraw,
         OnDrawCards,
@@ -24,6 +26,7 @@ namespace VTuber.BattleSystem.Core
         OnCardDisposed,
         OnTurnEndCardDisposed,
         
+        OnAttributeValueChange,
         OnPlayLeftChange,
         OnTurnChange,
         OnParameterChange,

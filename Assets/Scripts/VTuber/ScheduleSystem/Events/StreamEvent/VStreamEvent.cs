@@ -1,4 +1,6 @@
-﻿using VTuber.Character;
+﻿using System.Collections.Generic;
+using VTuber.Character;
+using VTuber.Core.EventCenter;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.ScheduleSystem.Events
@@ -14,7 +16,13 @@ namespace VTuber.ScheduleSystem.Events
 
         public override bool Execute(VCharacter player)
         {
-            return false;
+            if (!CanExecute(player))
+                return false;
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStreamEventStart, new Dictionary<string, object>()
+            {
+                {"Event", this}
+            });
+            return true;
         }
     }
 }

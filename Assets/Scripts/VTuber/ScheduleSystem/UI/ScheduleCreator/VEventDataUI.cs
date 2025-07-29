@@ -5,7 +5,9 @@ using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -17,13 +19,13 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image background;
         [SerializeField] private GameObject eventUIPrefab;
         
-        private EventData _data;
+        private VScheduleEventConfiguration _data;
         
         private bool spawnable;
         
         private VScheduleCreatorSlot slot;
         
-        public void Initialize(EventData data)
+        public void Initialize(VScheduleEventConfiguration data)
         {
             _data = data;
             icon.sprite = data.icon;
@@ -33,6 +35,13 @@ namespace VTuber.ScheduleSystem.UI
         public void OnPointerEnter(PointerEventData eventData)
         {
             spawnable = true;
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
+                new Dictionary<string, object>()
+                {
+                    {"Name", _data.eventName},
+                    {"Description", _data.description}
+                });
+            background.color = Color.white;
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -43,6 +52,7 @@ namespace VTuber.ScheduleSystem.UI
         public void OnPointerExit(PointerEventData eventData)
         {
             spawnable = false;
+            background.color = _data.backgroundColor;
         }
 
         public void OnBeginDrag(PointerEventData eventData)

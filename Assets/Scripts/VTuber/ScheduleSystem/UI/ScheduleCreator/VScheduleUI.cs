@@ -4,10 +4,13 @@ using PrimeTween;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using VTuber.BattleSystem.UI;
+using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VSchedule : VScheduleTable
+    public class VScheduleUI : VUIBehaviour
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject itemPrefab;
@@ -17,14 +20,15 @@ namespace VTuber.ScheduleSystem.UI
         
         public VScheduleSlot[,] Slots => slots;
         protected VScheduleSlot[,] slots;
-        protected List<EventData> items;
-    
+
+        protected VAnimationQueue _animationQueue;
+        
         protected override void Awake()
         {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             slots = new VScheduleSlot[slotSize.y, slotSize.x];
             var slotList = GetComponentsInChildren<VScheduleSlot>();
-            
+            _animationQueue = new VAnimationQueue();
             int i = 0; 
             for (int y = 0; y < slotSize.y; y++)
             {
@@ -34,6 +38,25 @@ namespace VTuber.ScheduleSystem.UI
                     slots[y, x].Initialize(new Vector2Int(x, y), this);
                 }
             }
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
+        }
+        
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
+        }
+        
+        private void OnEventExecuted(Dictionary<string, object> messagedict)
+        {
+            Vector2Int coordinate = (Vector2Int)messagedict["Coordinate"];
+            ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
+            ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.EventData.Duration);
         }
 
         public void ResetSchedule()
@@ -63,6 +86,12 @@ namespace VTuber.ScheduleSystem.UI
             indicatorLeft.color = color;
             indicatorRight.color = color;
         }
+
+        public Tween ResetIndicatorPosition()
+        {
+            return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
+        }
+        
     }
 }
 

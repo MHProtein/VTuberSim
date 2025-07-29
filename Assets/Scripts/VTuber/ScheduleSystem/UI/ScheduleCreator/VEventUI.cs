@@ -3,7 +3,9 @@ using PrimeTween;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -13,9 +15,11 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
         [HideInInspector] public Vector2 initOffset;
-        private bool canSetParent;
-        private bool isSelected;
-        private EventData _eventData;
+        private bool _isSelected;
+        private bool _interactable;
+        
+        public VScheduleEventConfiguration EventData => _eventData;
+        private VScheduleEventConfiguration _eventData;
         
         private List<VScheduleSlot> parentBeforeDrag;
         private Vector2 _lastPosition;
@@ -23,12 +27,12 @@ namespace VTuber.ScheduleSystem.UI
         private List<VScheduleSlot> parentSlots;
 
         private Vector2 _initPosition;
-        private bool _isDragging = false;
         
         protected override void Awake()
         {
             parentSlots = new List<VScheduleSlot>();
             parentBeforeDrag = new List<VScheduleSlot>();
+            _interactable = true;
         }
 
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
@@ -47,21 +51,24 @@ namespace VTuber.ScheduleSystem.UI
         //     Tween.Scale(background.transform, new Vector3(1, eventData.height, 1), 0.3f);
         // }
 
-        public void InitializeDrag(EventData eventData, Vector2 initPosition)
+        public void SetInteractive(bool interactable)
+        {
+            _interactable = interactable;
+        }
+
+        public void InitializeDrag(VScheduleEventConfiguration eventData, Vector2 initPosition)
         {
             _eventData = eventData;
             icon.sprite = eventData.icon;
             background.color = eventData.backgroundColor;
             _initPosition = initPosition;
             icon.raycastTarget = false;
-            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
-            isSelected = true;
-            _isDragging = true;
-            canSetParent = true;
+            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
+            _isSelected = true;
             icon.transform.localScale = Vector3.zero;
             background.transform.localScale = Vector3.zero;
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
-            Tween.Scale(background.transform, new Vector3(1, eventData.height, 1), 0.3f);
+            Tween.Scale(background.transform, new Vector3(1, eventData.Duration, 1), 0.3f);
 
             transform.SetAsLastSibling();
         }
@@ -89,6 +96,7 @@ namespace VTuber.ScheduleSystem.UI
                 parent.SetItem(this);
             }
             Tween.Position(transform, position, 0.2f);
+            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
             //transform.position = position;
         }
         
@@ -99,7 +107,7 @@ namespace VTuber.ScheduleSystem.UI
                 var slot = result.gameObject.GetComponent<VScheduleSlot>();
                 if (slot is not null)
                 {
-                    if(slot.FindPosition(_eventData.height, initOffset.y, out var parents, out var transformParent, out var position))
+                    if(slot.FindPosition(_eventData.Duration, initOffset.y, out var parents, out var transformParent, out var position))
                     {
                         SetNewParents(parents, transformParent, position);
                         return true;
@@ -112,10 +120,11 @@ namespace VTuber.ScheduleSystem.UI
 
         protected override void UpdateImpl()
         {
+            if (!_interactable)
+                return;
             base.UpdateImpl();            
-            if (isSelected)
+            if (_isSelected)
             {
-                VDebug.Log(initOffset);
                 Vector3 mousePosition = Input.mousePosition  + (Vector3)initOffset;
                 transform.position = mousePosition;
                 
@@ -126,23 +135,21 @@ namespace VTuber.ScheduleSystem.UI
                     var slot = result.gameObject.GetComponent<VScheduleSlot>();
                     if (slot is not null)
                     {
-                        slot.SetIndicator(_eventData.height, initOffset.y);
+                        slot.SetIndicator(_eventData.Duration, initOffset.y);
                         break;
                     }
                 }
             }
 
-            if (isSelected && Input.GetMouseButtonUp(0))
+            if (_isSelected && Input.GetMouseButtonUp(0))
             {
-                isSelected = false;
+                _isSelected = false;
                 icon.raycastTarget = true;
-                canSetParent = false;
                 var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
                 if (TryPlaceEvent(results))
                 {
                     icon.raycastTarget = true;
-                    canSetParent = false;
-                    isSelected = false;
+                    _isSelected = false;
                     return;
                 }
                 
@@ -181,20 +188,26 @@ namespace VTuber.ScheduleSystem.UI
         
         public void OnPointerEnter(PointerEventData eventData)
         {            
-
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
+                new Dictionary<string, object>()
+                {
+                    {"Name", _eventData.eventName},
+                    {"Description", _eventData.description}
+                });
         }
 
         public void OnPointerDown(PointerEventData eventData)
-        {           
-            if (!isSelected && eventData.button
+        {
+            if (!_interactable)
+                return;
+            if (!_isSelected && eventData.button
                         == PointerEventData.InputButton.Left)
             {
                 icon.raycastTarget = false;
                 parentBeforeDrag = parentSlots;
                 transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
                 initOffset = transform.position - Input.mousePosition;
-                isSelected = true;
-                canSetParent = true;
+                _isSelected = true;
                 
                 foreach (var parent in parentSlots)
                 {
@@ -227,32 +240,6 @@ namespace VTuber.ScheduleSystem.UI
         public void OnEndDrag(PointerEventData eventData)
         {
             Debug.Log("EndDrag");
-            // if (TryPlaceEvent())
-            // {
-            //     icon.raycastTarget = true;
-            //     canSetParent = false;
-            //     isSelected = false;
-            // }
-            // else
-            // {
-            //     if (parentBeforeDrag.Count == 0)
-            //     {
-            //         SetParentBeforeDrag();
-            //     }
-            //     else
-            //     {
-            //         foreach (var slot in parentSlots)
-            //         {
-            //             slot.RemoveItem();
-            //         }
-            //         Tween.Scale(transform, Vector3.zero, 0.28f);
-            //         Tween.Position(transform, _initPosition, 0.3f)
-            //             .OnComplete(() =>
-            //             {
-            //                 Destroy(gameObject);
-            //             });
-            //     }
-            // }
         }
     }
 }
