@@ -152,6 +152,9 @@ namespace VTuber.BattleSystem.BattleAttribute
                 {"ShouldPlayTwice", shouldPlayTwice }
             };
             VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
+            
+            messageDict.Add("AttributeName", AttributeName);
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnAttributeValueChange, messageDict);
         }
 
         public virtual void OnEnable()

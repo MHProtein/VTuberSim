@@ -51,6 +51,7 @@ namespace VTuber.BattleSystem.Core
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());
+            _stateMachine.RegisterState(new VScheduleModifyState());
         }
 
         protected override void OnEnable()
@@ -68,6 +69,11 @@ namespace VTuber.BattleSystem.Core
         {
             base.Start();
             _stateMachine.SwitchState(VStateType.ScheduleCreation);
+        }
+        
+        public void ModifySchedule()
+        {
+            _stateMachine.SwitchState(VStateType.ScheduleModify);
         }
 
         public void Pause()
@@ -103,8 +109,16 @@ namespace VTuber.BattleSystem.Core
                     }
                 }
             }
-            
-            _stateMachine.SwitchState(VStateType.Execution);
+
+            if (_stateMachine.CurrentState.StateType == VStateType.ScheduleCreation)
+            {
+                _stateMachine.SwitchState(VStateType.Execution);
+                
+            }
+            else if (_stateMachine.CurrentState.StateType == VStateType.ScheduleModify)
+            {
+                _stateMachine.SwitchState(VStateType.Pause);
+            }
         }
     }
 }

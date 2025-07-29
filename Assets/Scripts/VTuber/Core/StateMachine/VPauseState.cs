@@ -13,13 +13,15 @@ namespace VTuber.Core.StateMachine
         public override void Enter(VState state, params object[] enterParams)
         {
             base.Enter(state, enterParams);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetBattlePause(true);
+            if(state.StateType == VStateType.Execution)
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetBattlePause(true);
         }
         
         public override void Exit(VState nextState)
         {
             base.Exit(nextState);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetBattlePause(false);
+            if(nextState.StateType == VStateType.Execution)
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetBattlePause(false);
         }
     }
 }

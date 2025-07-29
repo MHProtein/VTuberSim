@@ -26,6 +26,7 @@ namespace VTuber.BattleSystem.Core
         OnCardDisposed,
         OnTurnEndCardDisposed,
         
+        OnAttributeValueChange,
         OnPlayLeftChange,
         OnTurnChange,
         OnParameterChange,

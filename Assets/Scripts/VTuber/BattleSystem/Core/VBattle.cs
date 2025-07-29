@@ -131,6 +131,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
         }
 
         protected override void OnDisable()
@@ -151,6 +152,15 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnSkipTurnClicked, OnSkipTurnClicked);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
+        }
+        
+        private void OnAttributeValueChange(Dictionary<string, object> messagedict)
+        {
+            foreach (var card in _cardPilesManager.HandPile)
+            {
+                card.TestCondition(this);
+            }
         }
         
         private void OnRequestPickCardsFromPile(Dictionary<string, object> messagedict)
@@ -185,6 +195,7 @@ namespace VTuber.BattleSystem.Core
                     card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                     break;
             }
+            card.TestCondition(this);
         }
         
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
@@ -193,6 +204,7 @@ namespace VTuber.BattleSystem.Core
             {
                 if(card.CostType == CostType.Buff)
                     card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                card.TestCondition(this);
             }
         }
 
@@ -202,6 +214,7 @@ namespace VTuber.BattleSystem.Core
             {
                 if(card.CostType == CostType.Buff)
                     card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                card.TestCondition(this);
             } 
         }
         
