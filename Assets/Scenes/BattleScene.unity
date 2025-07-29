@@ -24775,7 +24775,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -452}
+  m_AnchoredPosition: {x: 0, y: -347}
   m_SizeDelta: {x: -1008.14, y: -971}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!43 &1680233801
@@ -28167,7 +28167,7 @@ MonoBehaviour:
   cardApplyTime: 0.2
   overlap: -0.331
   cardUIPrefab: {fileID: 3892113020135790413, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
-  cardSize: {x: 300, y: 500}
+  cardSize: {x: 280, y: 421.71}
 --- !u!95 &1955263079
 Animator:
   serializedVersion: 5
