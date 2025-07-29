@@ -83,6 +83,15 @@ namespace VTuber.Character
             VBattleDataManager.Instance.SetEffectConfigurations(list);
         }
 
+
+
+        // void apply(int effectID, string, )
+        // {
+        //     effectID.apply()
+        // }
+        
+        
+
         private void LoadBuffs(Workbook wb)
         {
             var sheet = Sheet(wb, "Buffs");
