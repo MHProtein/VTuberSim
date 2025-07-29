@@ -69,6 +69,12 @@ namespace VTuber.BattleSystem.BattleAttribute
             }
             return total;
         }
+
+        public void Reset()
+        {
+            _modifiers.Clear();
+        }
+        
     }
     
     //All the attributes treated as int type, if is percentage, it is multiplied by 100 and vice versa when used. 
@@ -146,6 +152,9 @@ namespace VTuber.BattleSystem.BattleAttribute
                 {"ShouldPlayTwice", shouldPlayTwice }
             };
             VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
+            
+            messageDict.Add("AttributeName", AttributeName);
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnAttributeValueChange, messageDict);
         }
 
         public virtual void OnEnable()

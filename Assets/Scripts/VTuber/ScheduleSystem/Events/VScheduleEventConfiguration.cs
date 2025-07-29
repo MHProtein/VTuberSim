@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
+using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.ScheduleSystem.Events
 {
     [CreateAssetMenu(fileName = "ScheduleEventConfig", menuName = "VTuber/Schedule/Event")]
-    public class VScheduleEventConfiguration : ScriptableObject
+    public class VScheduleEventConfiguration : VScriptableObject
     {
         public string eventName;
         
         [Range(1, 3)]
-        public int duration = 1;
+        [SerializeField]private int duration = 1;
         
         public int Duration => duration;
         

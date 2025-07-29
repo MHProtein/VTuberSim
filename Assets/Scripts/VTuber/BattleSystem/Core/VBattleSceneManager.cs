@@ -6,11 +6,11 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class TestManager : VMonoBehaviour
+    public class VBattleSceneManager : VMonoBehaviour
+
     {
         [SerializeField] private GameObject battleRoot;
         [SerializeField] private VBattle _battle;
-        [SerializeField] private VBattleConfiguration _battleConfiguration;
         [SerializeField] private VCharacterConfiguration _characterConfiguration;
         private VCharacter character;
         
@@ -44,7 +44,7 @@ namespace VTuber.BattleSystem.Core
         public void InitializeBattle()
         {
             //battleRoot.SetActive(true);
-            _battle.InitializeBattle(character.AttributeManager, _battleConfiguration, character.CardLibrary);
+            _battle.InitializeBattle(character.AttributeManager, character.CardLibrary, 10);
         }
 
         protected override void Start()

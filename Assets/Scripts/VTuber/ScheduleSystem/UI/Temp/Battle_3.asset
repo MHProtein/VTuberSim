@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec66bdb3fca43db99ebce2e448e9841, type: 3}
-  m_Name: so_preview cfg
+  m_Script: {fileID: 11500000, guid: 9f0dc4bc30394ccc9a866aa3678180d5, type: 3}
+  m_Name: Battle_3
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,19 +21,13 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  displayDatas:
-  - key: Tools
-    value:
-    - name: EnumDatabase
-      path: 
-      so: {fileID: 11400000, guid: d3f0a9e886756b64b8bec297f2f59c9c, type: 2}
-  - key: 
-    value:
-    - name: CharacterConfig
-      path: 
-      so: {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
-  - key: 
-    value:
-    - name: BattleConfig
-      path: 
-      so: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}
+  eventName: BattleEvent
+  duration: 3
+  description: 'A 10 Turn Stream '
+  icon: {fileID: 527271978, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
+  backgroundColor: {r: 0.9716981, g: 0.811713, b: 0.21542363, a: 1}
+  type: 0
+  staminaCost: 10
+  moodBonus: 0
+  skillExpBonus: 0
+  initialTurnCount: 10

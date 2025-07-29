@@ -41,22 +41,23 @@ namespace VTuber.BattleSystem.Card
         public const int UpgradedCost = 8;
         public const int IsExhaust = 9;
         public const int NotRepeatable = 10;
-        public const int Effect1 = 11;
-        public const int E1Param = 12;
-        public const int E1UpgradedParam = 13;
-        public const int Effect2 = 14;
-        public const int E2Param = 15;
-        public const int E2UpgradedParam = 16;
-        public const int Effect3 = 17;
-        public const int E3Param = 18;
-        public const int E3UpgradedParam = 19;
-        public const int Effect4 = 20;
-        public const int E4Param = 21;
-        public const int E4UpgradedParam = 22;
-        public const int NewEffect1 = 23;
-        public const int NE1Param = 24;
-        public const int NewEffect2 = 25;
-        public const int NE2Param = 26;
+        public const int Condition = 11;
+        public const int Effect1 = 12;
+        public const int E1Param = 13;
+        public const int E1UpgradedParam = 14;
+        public const int Effect2 = 15;
+        public const int E2Param = 16;
+        public const int E2UpgradedParam = 17;
+        public const int Effect3 = 18;
+        public const int E3Param = 19;
+        public const int E3UpgradedParam = 20;
+        public const int Effect4 = 21;
+        public const int E4Param = 22;
+        public const int E4UpgradedParam = 23;
+        public const int NewEffect1 = 24;
+        public const int NE1Param = 25;
+        public const int NewEffect2 = 26;
+        public const int NE2Param = 27;
     }
 
     public struct VEffectItem
@@ -101,6 +102,8 @@ namespace VTuber.BattleSystem.Card
 
         public List<VEffectItem> effects;
         public List<VEffectItem> newEffects;
+
+        public int conditionId;
         
 
         private static uint idDistributor = 0;
@@ -126,6 +129,16 @@ namespace VTuber.BattleSystem.Card
             upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value);
             notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value) == 1;
             isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
+            
+            var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
+            if(conditionStr.IsNullOrWhitespace())
+            {
+                conditionId = Convert.ToInt32(conditionStr);
+            }
+            else
+            {
+                conditionId = -1;
+            }
             
             //background = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Background"));
             //facade = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Facade"));
@@ -173,7 +186,7 @@ namespace VTuber.BattleSystem.Card
             if (spawned)
                 return null;
             spawned = true;
-            return new VCard(this, idDistributor++, effects, newEffects);
+            return new VCard(this, idDistributor++, effects, newEffects, conditionId);
         }
     }
 }

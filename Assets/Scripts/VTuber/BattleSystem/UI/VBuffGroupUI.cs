@@ -56,6 +56,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
 
         protected override void OnDisable()
@@ -64,9 +65,18 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
         
-
+        private void OnBattleEnd(Dictionary<string, object> messagedict)
+        {
+            foreach (var ui in _buffUIs)
+            {
+                Destroy(ui.Value.gameObject);
+            }
+            _buffUIs.Clear();
+        }
+        
         private void OnBuffAdded(Dictionary<string, object> msg)
         {
             uint id = (uint)msg["Id"];

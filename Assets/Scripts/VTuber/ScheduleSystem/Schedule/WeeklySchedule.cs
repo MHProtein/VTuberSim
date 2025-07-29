@@ -9,14 +9,14 @@ namespace VTuber.ScheduleSystem.Schedule
     /// <summary>
     /// 一整周的安排，包含 7 天
     /// </summary>
-    public class WeeklySchedule
+    public class VWeeklySchedule
     {
         private readonly List<DaySchedule> _days = new();
         private int _currentDayIndex = 0;
-        public WeeklySchedule(VCharacter character)
+        public VWeeklySchedule(VCharacter character)
         {
             for (int i = 0; i < 7; i++)
-                _days.Add(new DaySchedule(this, character));
+                _days.Add(new DaySchedule(this, character, i));
         }
         
         private List<TimeOfDay> GetTimeRange(TimeOfDay start, int duration)
@@ -61,7 +61,6 @@ namespace VTuber.ScheduleSystem.Schedule
         {
             var timeValues = (TimeOfDay[])System.Enum.GetValues(typeof(TimeOfDay));
 
-            // 超出当天时间段数量，直接非法
             if ((int)startTime + duration > timeValues.Length)
             {
                 VDebug.Log($"<color=red>无法安排：day{dayIndex}，startTime {startTime}，duration 超出时间范围</color>");
