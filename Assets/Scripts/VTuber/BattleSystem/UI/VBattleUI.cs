@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PrimeTween;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace VTuber.BattleSystem.UI
 {
     public class VBattleUI : VUIBehaviour
     {
+        [SerializeField] private GameObject battleRoot;
         [SerializeField] private Transform cardPileContent;
         [FormerlySerializedAs("scrollView")] [SerializeField] private GameObject cardPileScrollView;
         [SerializeField] private Transform discardPileTransform;
@@ -53,6 +55,11 @@ namespace VTuber.BattleSystem.UI
         private bool _isCardApplying = false;
 
         private VHandCardUI cardToDispose;
+        
+        
+        [SerializeField]
+        private Transform battleUI;
+        [SerializeField] private GameObject battlePausePanel;
 
         public void Rearrange(int index)
         {
@@ -74,6 +81,11 @@ namespace VTuber.BattleSystem.UI
             cardUI.SetCard(card);
             
             return cardUI;
+        }
+        
+        public Tween SetBattleUIScale(float scale)
+        {
+            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
         }
         
         public void Selected(bool value)
@@ -145,7 +157,7 @@ namespace VTuber.BattleSystem.UI
             ShowCardScroll(VBattle.Instance.CardPilesManager.Deck, cardPileContent);
         }
 
-        public void ShowExaustPile()
+        public void ShowExhaustPile()
         {
             cardPileScrollView.SetActive(true);
             ShowCardScroll(VBattle.Instance.CardPilesManager.ExhaustPile, cardPileContent);
@@ -165,6 +177,13 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnSkipTurnClicked, new Dictionary<string, object>());
         }
         
+        public Tween SetBattlePause(bool paused)
+        {
+            battlePausePanel.SetActive(paused);
+            float scale = paused ? 0.75f : 1.0f;
+            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
+        }
+        
         protected override void Awake()
         {
             base.Awake();
@@ -178,6 +197,9 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattlePause, OnBattlePause);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnDrawCards, OnDrawCards);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
@@ -190,6 +212,8 @@ namespace VTuber.BattleSystem.UI
         protected override void OnDisable()
         {
             base.OnDisable();
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattlePause, OnBattlePause);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnDrawCards, OnDrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
@@ -197,6 +221,21 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
         }        
+        
+        private void OnBattleEnd(Dictionary<string, object> messagedict)
+        {
+            SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
+        }
+
+        private void OnBattlePause(Dictionary<string, object> messagedict)
+        {
+            SetBattlePause((bool)messagedict["Paused"]);
+        }
+
+        private void OnBattleBegin(Dictionary<string, object> messagedict)
+        {
+            SetBattleUIScale(1.0f);
+        }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)
         {

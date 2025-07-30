@@ -29,14 +29,16 @@ namespace VTuber.ScheduleSystem.UI
         [Space(3)] 
         [Header("ExecutionUI")] 
         [SerializeField] private GameObject executionUI;
+        [SerializeField] private TMP_Text pauseText;
 
         [SerializeField] private Transform executionSchedulePosition;
 
+        
         [Space(3)] 
-        [Header("EventUI")] 
-        [SerializeField]
-        private Transform battleUI;
-        [SerializeField] private GameObject battlePausePanel;
+        [Header("PauseUI")] 
+        [SerializeField] private GameObject pauseUI;
+
+        [SerializeField] private Transform pauseSchedulePosition;
 
         protected override void OnEnable()
         {
@@ -47,6 +49,11 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+        
+        public void SetPauseText(bool shouldPause)
+        {
+            pauseText.text = shouldPause ? "Pause After This" : "Pause Schedule";
         }
         
         private void OnNotifyEventDescriptionChange(Dictionary<string, object> messagedict)
@@ -65,6 +72,11 @@ namespace VTuber.ScheduleSystem.UI
             scheduleCreationUI.SetActive(active);
         }
         
+        public void SetPauseUIActive(bool active)
+        {
+            pauseUI.SetActive(active);
+        }
+        
         public Tween SetScheduleUIPositionToCreation()
         {
             return Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f);
@@ -73,6 +85,11 @@ namespace VTuber.ScheduleSystem.UI
         public Tween SetScheduleUIPositionToExecution()
         {
             return Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f);
+        }
+        
+        public Tween SetScheduleUIPositionToPause()
+        {
+            return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f);
         }
         
         public void SwitchToScheduleCreation(Action onComplete = null)
@@ -92,18 +109,6 @@ namespace VTuber.ScheduleSystem.UI
             {
                 onComplete?.Invoke();
             });
-        }
-        
-        public Tween SetBattleUIScale(float scale)
-        {
-            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
-        }
-
-        public Tween SetBattlePause(bool paused)
-        {
-            battlePausePanel.SetActive(paused);
-            float scale = paused ? 0.75f : 1.0f;
-            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
         }
     }
 }

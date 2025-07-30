@@ -40,6 +40,58 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
+        public void SwitchToCreation()
+        {
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {
+                    if (slots[y, x].Item != null)
+                    {
+                        
+                        Destroy(slots[y, x].Item.gameObject);
+                    }
+                }
+            }
+        }
+        
+        public void SwitchToModify()
+        {
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {    
+                    if (slots[y, x].Item != null)
+                    {
+                        if (slots[y, x].Item.Event.IsExecuted)
+                        {
+                            slots[y, x].Item.SetInteractive(false);
+                            slots[y, x].Item.SetColorGrey();
+                        }
+                        else
+                        {
+                            slots[y, x].Item.SetInteractive(true);
+                        }
+                    }
+                }
+            }
+        }
+        
+        public void SwitchToExecution()
+        {
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {    
+                    if (slots[y, x].Item != null)
+                    {
+                        slots[y, x].Item.SetInteractive(false);
+                        slots[y, x].Item.SetColorOriginal();
+                    }
+                }
+            }
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -56,7 +108,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             Vector2Int coordinate = (Vector2Int)messagedict["Coordinate"];
             ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
-            ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.EventData.Duration);
+            ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
         }
 
         public void ResetSchedule()
