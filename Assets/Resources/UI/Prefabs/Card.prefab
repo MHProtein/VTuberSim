@@ -384,11 +384,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2078c8f7d4a41768f95171d0b4c6341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgrounds:
+  - {fileID: 704551722, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 378316953, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: -1430061287, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 1005424078, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  descriptionSprites:
+  - {fileID: -2131800093, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 67448161, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 768585009, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: -1231823965, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  nameSprites:
+  - {fileID: -1353027083, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 835556186, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: -1614966485, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 1657068253, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  typeSprites:
+  - {fileID: 1838974846, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: -1831982610, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 961522852, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  - {fileID: 2001677321, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
   background: {fileID: 5418081280116854409}
-  facade: {fileID: 492576563808840563}
+  icon: {fileID: 492576563808840563}
+  descriptionImage: {fileID: 9155409624160156474}
+  nameImage: {fileID: 1597430812531397724}
+  typeImage: {fileID: 2039202165101778702}
   name: {fileID: 3601492734164757646}
   description: {fileID: 3844727032169294534}
   cost: {fileID: 4540963570463774130}
+  typeText: {fileID: 917523294627215125}
 --- !u!1 &4360240044549308165
 GameObject:
   m_ObjectHideFlags: 0
