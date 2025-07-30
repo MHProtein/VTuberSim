@@ -7,10 +7,9 @@ using Sirenix.Utilities.Editor;
 using UnityEditor;
 using UnityEngine;
 using VTuber.Core.Foundation;
-using VTuber.Editor.Attributes;
 using VTuber.Editor.Utils;
 
-namespace Editor.VTuber.CustomEditors
+namespace Editor.VTuber.SOCreator
 {
         
     public class SOCreator : OdinMenuEditorWindow

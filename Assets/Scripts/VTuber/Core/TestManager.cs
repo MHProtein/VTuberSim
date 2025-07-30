@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using PrimeTween;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.StateMachine;
 using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
 
@@ -28,15 +25,15 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private VBattle battle;
         [SerializeField] private VBattleConfiguration _battleConfiguration;
         [SerializeField] private VCharacterConfiguration _characterConfiguration;
-        private VCharacter character;
+        private VCharacter _character;
+        private VStateMachine _stateMachine;
         
-        private VStreamEvent _currentEvent;
         protected override void Awake()
         {
             base.Awake();
             VBattleResourcesLoader loader = new VBattleResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
-            character = new VCharacter(_characterConfiguration);
-            _weeklySchedule = new VWeeklySchedule(character);
+            _character = new VCharacter(_characterConfiguration);
+            _weeklySchedule = new VWeeklySchedule(_character);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
 
@@ -49,56 +46,33 @@ namespace VTuber.BattleSystem.Core
                         cards.Add(card);
                 }
             }
-            character.CardLibrary.AddCards(cards);
+            _character.CardLibrary.AddCards(cards);
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule, battleRoot, battle, _character);
+            _stateMachine.RegisterState(new VScheduleCreationState());
+            _stateMachine.RegisterState(new VExecutionState());
+            _stateMachine.RegisterState(new VPauseState());
+            _stateMachine.RegisterState(new VScheduleModifyState());
         }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
-
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
-        }
-        
-        private void OnBattleEnd(Dictionary<string, object> messagedict)
-        {
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
-            Tween.Delay(2.0f, () =>
-            {
-                _currentEvent.NextEvent();
-            });
-        }
-        
-        public void InitializeBattle()
-        {
-            battleRoot.SetActive(true);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetBattleUIScale(1.0f);
-            battle.InitializeBattle(character.AttributeManager,
-                character.CardLibrary,
-                _currentEvent.InitialTurnCount);
-        }
-        
-        private void OnStreamEventStart(Dictionary<string, object> messagedict)
-        {
-            _currentEvent = messagedict["Event"] as VStreamEvent;
-            InitializeBattle();
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetBattleUIScale(1.0f);
-        }      
         
         protected override void Start()
         {
             base.Start();
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation();
+            _stateMachine.SwitchState(VStateType.ScheduleCreation);
+        }
+        
+        public void ModifySchedule()
+        {
+            _stateMachine.SwitchState(VStateType.ScheduleModify);
+        }
+
+        public void PauseSchedule()
+        {
+            _stateMachine.PauseSchedule();
+        }
+
+        public void ContinueSchedule()
+        {
+            _stateMachine.ContinueSchedule();
         }
 
         public void ConvertToSchedule()
@@ -111,10 +85,10 @@ namespace VTuber.BattleSystem.Core
                     var slot = slots[y, x];
                     if (slot.Item is not null)
                     {
-                        var eventData = slot.Item.EventData;
+                        var evt = slot.Item.Event;
                         slot.Item.SetInteractive(false);
-                        _weeklySchedule.SetEvent(x, (TimeOfDay)y, eventData.CreateEvent());
-                        y += eventData.Duration;
+                        _weeklySchedule.SetEvent(x, (TimeOfDay)y, evt);
+                        y += evt.Duration;
                     }
                     else
                     {
@@ -123,12 +97,15 @@ namespace VTuber.BattleSystem.Core
                 }
             }
 
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(false);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(true);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
+            if (_stateMachine.CurrentState.StateType == VStateType.ScheduleCreation)
             {
-                scheduleUI.ResetIndicatorPosition().OnComplete(() => _weeklySchedule.BeginExecution());
-            });
+                _stateMachine.SwitchState(VStateType.Execution);
+                
+            }
+            else if (_stateMachine.CurrentState.StateType == VStateType.ScheduleModify)
+            {
+                _stateMachine.SwitchState(VStateType.Pause);
+            }
         }
     }
 }

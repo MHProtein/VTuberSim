@@ -20,6 +20,8 @@ namespace VTuber.ScheduleSystem.Events
         
         protected readonly VScheduleEventConfiguration _config;
 
+        public bool IsExecuted { get; protected set; } = false;
+        
         private DaySchedule _daySchedule;
 
         public VScheduleEvent(VScheduleEventConfiguration config)

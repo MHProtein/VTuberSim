@@ -54,6 +54,7 @@ namespace VTuber.BattleSystem.Core
         protected List<VEffect> _playTwiceEffects;
         protected Dictionary<string, object> _playTwiceMessageDict;
         protected VCharacterAttributeManager _characterAttributeManager;
+        protected bool paused = false;
         public void NextCardPlayTwice()
         {
             _shouldNextCardPlayTwice = true;
@@ -64,6 +65,17 @@ namespace VTuber.BattleSystem.Core
         public void RedrawRest()
         {
             _shouldRedraw = true;
+        }
+
+        public void Pause()
+        {
+            paused = !paused;
+
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattlePause, new Dictionary<string, object>
+            {
+                {"Paused", paused}
+            });
+            
         }
         
         public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
@@ -93,27 +105,12 @@ namespace VTuber.BattleSystem.Core
 
             _battleAttributeManager.InitializeInternalManagers();
             
-            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
             });
             
             InitializeTurn();
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            
-        }
-        
-        
-        protected override void Start()
-        {
-            base.Start();
-            
-
         }
         
         protected override void OnEnable()

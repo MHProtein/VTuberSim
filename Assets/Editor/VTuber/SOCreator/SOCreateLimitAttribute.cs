@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VTuber.Editor.Attributes
+namespace Editor.VTuber.SOCreator
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class SOCreateLimitAttribute : Attribute
