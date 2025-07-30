@@ -34,6 +34,7 @@ namespace VTuber.BattleSystem.UI
         public int index;
 
         private bool _inspectable;
+        private bool _isPlayable = true;
 
         [Header("Inspection")] 
         private Vector3 _inspectionScale;
@@ -104,11 +105,11 @@ namespace VTuber.BattleSystem.UI
                 Destroy(gameObject);
         }
         
-        public void SetCardPlayble(bool isPlayable)
+        public void SetCardPlayable(bool isPlayable)
         {
             if (!isPlayable)
             {
-                SetInteractive(false);
+                _isPlayable = false;
                 cardUI.background.color = Color.gray;
                 return;
             }
@@ -119,7 +120,7 @@ namespace VTuber.BattleSystem.UI
                 return;
             }
             
-            SetInteractive(true);
+            _isPlayable = true;
             cardUI.background.color = Color.white;
         }
         
@@ -234,7 +235,7 @@ namespace VTuber.BattleSystem.UI
         
         private void Inspect()
         {
-            if (!_inspectable)
+            if (!_inspectable || !_isPlayable)
                 return;
 
             var pos = new Vector3(_originalPosition.x, inspectionY, _originalPosition.z);
@@ -300,7 +301,7 @@ namespace VTuber.BattleSystem.UI
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!_inspectable)
+            if (!_inspectable || !_isPlayable)
                 return;
             if (eventData.button == PointerEventData.InputButton.Left && !selected)
                 Select();
@@ -318,7 +319,7 @@ namespace VTuber.BattleSystem.UI
         {
             if (shouldWaitSetPlayable)
             {
-                SetCardPlayble(true);
+                SetCardPlayable(true);
             }
         }
     }

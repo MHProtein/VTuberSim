@@ -55,6 +55,8 @@ namespace VTuber.BattleSystem.UI
         private bool _isCardApplying = false;
 
         private VHandCardUI cardToDispose;
+
+        private Coroutine _drawCardCoroutine;
         
         
         [SerializeField]
@@ -246,7 +248,9 @@ namespace VTuber.BattleSystem.UI
         {
             pickCardMenuScroll.SetActive(false);
             var cards = messagedict["PickedCards"] as List<VCard>;
-            StartCoroutine(DrawCard(cards, (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]));
+            _drawCardCoroutine = StartCoroutine(DrawCard(cards, 
+                (bool)messagedict["IsFromCard"], 
+                (bool)messagedict["ShouldPlayTwice"]));
         }
         
         private void OnCardBeginDespose(Dictionary<string, object> messagedict)
@@ -408,10 +412,11 @@ namespace VTuber.BattleSystem.UI
             List<VCard> cards = messageDict["Cards"] as List<VCard>;
             if (cards == null)
                 return;
-            
-            StartCoroutine(DrawCard(cards, (bool)messageDict["IsFromCard"], (bool)messageDict["ShouldPlayTwice"]));
+            _drawCardCoroutine = StartCoroutine
+                (DrawCard(cards, (bool)messageDict["IsFromCard"], 
+                    (bool)messageDict["ShouldPlayTwice"]));
         }
-
+        
         private IEnumerator DrawCard(IEnumerable<VCard> cards, bool isFromCard, bool shouldPlayTwice)
         {
             arrangingHandSlots = true;
@@ -427,7 +432,7 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.index = _handSlotsCards.Count;
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
-                card.SetPlayable = handCardUI.SetCardPlayble;
+                card.SetPlayable = handCardUI.SetCardPlayable;
                 handCardUI.cardUI = cardUI;
                 handCardUI.ToHandSlot(position, rotation, Vector3.one, drawCardToSlotTime);
                 SetHandCardPositionRotation(handCardUI, position.x);
