@@ -49,6 +49,29 @@ namespace VTuber.Dialogue
             }
 
             return $"[Unknown message key: {key}]";
+            
+            
+        public VCharacter currentCharacter;
+
+        [YarnCommand("add_stamina")]
+        public void AddStamina(int amount)
+        {
+            if (currentCharacter.AttributeManager.TryGetAttribute("CAStamina", out var stamina))
+            {
+                stamina.AddValue(amount);
+                Debug.Log($"角色体力增加：{amount}");
+            }
+        }
+
+        [YarnCommand("set_pressure")]
+        public void SetPressure(int value)
+        {
+            if (currentCharacter.AttributeManager.TryGetAttribute("CAPressure", out var pressure))
+            {
+                pressure.SetValue(value);
+                Debug.Log($"角色压力设置为：{value}");
+            }
+        }
         }
     }
 
