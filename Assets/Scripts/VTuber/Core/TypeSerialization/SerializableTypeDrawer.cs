@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 namespace VTuber.Core.TypeSerialization
 {
     [CustomPropertyDrawer(typeof(SerializableType))]
@@ -67,3 +69,5 @@ namespace VTuber.Core.TypeSerialization
         }
     }
 }
+
+#endif

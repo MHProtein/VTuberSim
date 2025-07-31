@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Character;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
@@ -42,6 +43,10 @@ namespace VTuber.Core.StateMachine
         
         public bool ShouldPauseSchedule => shouldPauseSchedule;
         protected bool shouldPauseSchedule = false;
+        
+        public int WeekCount => _weekCount;
+        private int _weekCount = 0;
+        
 
         public VStateMachine(VScheduleUI scheduleUI, VWeeklySchedule weeklySchedule, GameObject battleRoot, VBattle battle, VCharacter character)
         {
@@ -52,6 +57,21 @@ namespace VTuber.Core.StateMachine
             _character = character;
             IsInitialized = true;
             preRegisterStates.ForEach(state => RegisterState(state));
+        }
+
+        public void OnEnable()
+        {
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnScheduleExecuted, OnScheduleExecuted);
+        }
+
+        public void OnDisable()
+        {
+            UnregisterAll();
+        }
+        
+        private void OnScheduleExecuted(Dictionary<string, object> messagedict)
+        {
+            NextSchedule();
         }
         
         public void PauseSchedule()
@@ -134,5 +154,13 @@ namespace VTuber.Core.StateMachine
             currentState.Update();
         }
 
+        public void NextSchedule()
+        {
+            _weeklySchedule.Reset();
+            ScheduleUI.ResetSchedule();
+            _weekCount++;
+            SwitchState(VStateType.ScheduleCreation);
+            VRaisingUI.Instance.UpdateWeekCount(_weekCount + 1);
+        }
     }
 }

@@ -29,12 +29,20 @@ namespace VTuber.ScheduleSystem.UI
             _item = null;
         }
 
-        public void ResetItem()
+        public void DespawnItem()
         {
             if (_item is null)
                 return;
             
             _item.Despawn();
+        }
+        
+        public void DestroyItem()
+        {
+            if (_item is null)
+                return;
+            Destroy(_item.gameObject);
+            _item = null;
         }
 
         public void SetIndicator(int height, float offsetY)

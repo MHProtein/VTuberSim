@@ -129,11 +129,17 @@ namespace VTuber.ScheduleSystem.Schedule
             if (currentTimeOfDay == TimeOfDay.End)
             {
                 _vWeeklySchedule.NextDay();
-                return;
             }
             
             Execute();
+            return;
         }
-        
+
+        public void Reset()
+        {
+            _events.Clear();
+            _slots.Clear();
+            currentTimeOfDay = TimeOfDay.Morning;
+        }
     }
 }
