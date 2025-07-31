@@ -8,7 +8,7 @@ namespace VTuber.BattleSystem.Core.RaisingEffect
         public string effectName;
         public string description;
         
-        public VRaisingEffect CreateEffect()
+        public virtual VRaisingEffect CreateEffect()
         {
             return new VRaisingEffect(this);
         }

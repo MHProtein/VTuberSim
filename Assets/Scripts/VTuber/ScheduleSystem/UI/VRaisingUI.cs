@@ -11,6 +11,8 @@ namespace VTuber.ScheduleSystem.UI
 {
     public class VRaisingUI : VSingletonMonobehaviour<VRaisingUI>
     {
+        [SerializeField] private TMP_Text weekCountText;
+        
         [Header("Schedule")] [SerializeField] private Transform _scheduleUI;
         
         [Space(3)]
@@ -90,6 +92,12 @@ namespace VTuber.ScheduleSystem.UI
         public Tween SetScheduleUIPositionToPause()
         {
             return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f);
+        }
+        
+        public Tween UpdateWeekCount(int weekCount)
+        {
+            weekCountText.text = $"周数：{weekCount}";
+            return Tween.PunchScale(weekCountText.transform, Vector3.one * 1.3f, 0.3f);
         }
         
         public void SwitchToScheduleCreation(Action onComplete = null)

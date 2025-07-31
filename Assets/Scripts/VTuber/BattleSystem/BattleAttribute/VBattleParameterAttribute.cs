@@ -8,7 +8,8 @@ namespace VTuber.BattleSystem.BattleAttribute
     {
         public VBattleParameterAttribute(int value) : base(value, false, VBattleEventKey.OnParameterChange)
         {
-            
+            gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
+            gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
         }
 
         public override void OnEnable()

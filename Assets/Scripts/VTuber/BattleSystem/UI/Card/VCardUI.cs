@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
@@ -24,21 +25,30 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private List<Sprite> descriptionSprites;
         [SerializeField] private List<Sprite> nameSprites;
         [SerializeField] private List<Sprite> typeSprites;
+
+        [SerializeField] private Sprite singingSprite;
+        [SerializeField] private Sprite gamingSprite;
+        [SerializeField] private Sprite chattingSprite;
         
+        [SerializeField] private Color singingColor;
+        [SerializeField] private Color gamingColor;
+        [SerializeField] private Color chattingColor;
         
         [SerializeField] public Image background;
         [SerializeField] public Image icon;
         [SerializeField] public Image descriptionImage;
         [SerializeField] public Image nameImage;
         [SerializeField] public Image typeImage;
+        [SerializeField] public Image popularityImage;
         
         [FormerlySerializedAs("Name")] [SerializeField] public TMP_Text name;
         [FormerlySerializedAs("Description")] [SerializeField] public TMP_Text description;
         [SerializeField] public TMP_Text cost;
         [SerializeField] public TMP_Text typeText;
+        [SerializeField] public TMP_Text popularityText;
         
         public VCard Card { get; private set; }
-        
+
         public void SetCard(VCard card)
         {
             background.sprite = backgrounds[(int)card.Rarity];
@@ -77,6 +87,25 @@ namespace VTuber.BattleSystem.UI
         public void SetBackgroundColor(Color color)
         {
             background.color = color;
+        }
+
+        public void SetPopularityImage(string multiplier)
+        {
+            if (multiplier.Equals("BASingingMultiplier"))
+            {
+                popularityImage.sprite = singingSprite;
+                popularityText.color = singingColor;
+            }
+            else if (multiplier.Equals("BAGamingMultiplier"))
+            {
+                popularityImage.sprite = gamingSprite;
+                popularityText.color = gamingColor;
+            }
+            else if (multiplier.Equals("BAChattingMultiplier"))
+            {
+                popularityImage.sprite = chattingSprite;
+                popularityText.color = chattingColor;
+            }
         }
     }
 }

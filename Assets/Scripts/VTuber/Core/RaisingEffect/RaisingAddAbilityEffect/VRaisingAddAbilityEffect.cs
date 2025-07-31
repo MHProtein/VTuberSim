@@ -24,7 +24,6 @@ namespace VTuber.BattleSystem.Core.RaisingEffect.RaisingAddAbilityEffect
                 {
                     abilityAttribute.AddAbility(value, shouldIgnoreEfficiency);
                 }
-                
             }
         }
     }

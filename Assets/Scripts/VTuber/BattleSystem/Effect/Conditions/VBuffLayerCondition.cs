@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Spire.Xls;
-using UnityEditor.Sprites;
-using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
-using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {

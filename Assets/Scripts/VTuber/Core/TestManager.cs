@@ -53,7 +53,19 @@ namespace VTuber.BattleSystem.Core
             _stateMachine.RegisterState(new VPauseState());
             _stateMachine.RegisterState(new VScheduleModifyState());
         }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            _stateMachine.OnEnable();
+        }
         
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            _stateMachine.OnDisable();
+        }
+
         protected override void Start()
         {
             base.Start();

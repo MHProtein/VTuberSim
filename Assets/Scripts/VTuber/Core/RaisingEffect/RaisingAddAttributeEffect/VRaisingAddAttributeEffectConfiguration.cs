@@ -2,6 +2,9 @@
 {
     public class VRaisingAddAttributeEffectConfiguration : VRaisingEffectConfiguration
     {
-        
+        public override VRaisingEffect CreateEffect()
+        {
+            return new VRaisingAddAttributeEffect(this);
+        }
     }
 }

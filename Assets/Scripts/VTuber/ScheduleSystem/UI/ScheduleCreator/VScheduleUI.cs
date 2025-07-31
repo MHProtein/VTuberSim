@@ -113,12 +113,22 @@ namespace VTuber.ScheduleSystem.UI
 
         public void ResetSchedule()
         {            
-            
             for (int x = 0; x < slotSize.x; x++)
             {
                 for (int y = 0; y < slotSize.y; y++)
                 {
-                    slots[y, x].ResetItem();
+                    slots[y, x].DespawnItem();
+                }
+            }
+        }
+        
+        public void DestroyAllItems()
+        {
+            for (int x = 0; x < slotSize.x; x++)
+            {
+                for (int y = 0; y < slotSize.y; y++)
+                {
+                    slots[y, x].DestroyItem();
                 }
             }
         }
@@ -143,7 +153,6 @@ namespace VTuber.ScheduleSystem.UI
         {
             return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
         }
-        
     }
 }
 

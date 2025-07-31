@@ -432,7 +432,8 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.index = _handSlotsCards.Count;
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
-                card.SetPlayable = handCardUI.SetCardPlayable;
+                card.setPlayable = handCardUI.SetCardPlayable;
+                card.setPopularityPreview = handCardUI.SetPopularityPreview;
                 handCardUI.cardUI = cardUI;
                 handCardUI.ToHandSlot(position, rotation, Vector3.one, drawCardToSlotTime);
                 SetHandCardPositionRotation(handCardUI, position.x);

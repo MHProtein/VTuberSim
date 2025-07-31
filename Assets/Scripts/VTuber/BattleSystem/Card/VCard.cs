@@ -58,7 +58,8 @@ namespace VTuber.BattleSystem.Card
         }
         public VCardRarity Rarity => _configuration.rarity;
         
-        public Action<bool> SetPlayable;
+        public Action<bool> setPlayable;
+        public Action<bool, int, int> setPopularityPreview;
         
         private readonly VCardConfiguration _configuration;
         
@@ -103,9 +104,31 @@ namespace VTuber.BattleSystem.Card
         {
             if (condition == null)
                 return;
-            SetPlayable?.Invoke(condition.IsTrue(battle, null));
+            setPlayable?.Invoke(condition.IsTrue(battle, null));
         }
 
+        public void PreviewPopularity(VBattle battle, bool firstTime)
+        {
+            int originalValue = 0;
+            int finalValue = 0;
+            foreach (var effect in _effects)
+            {
+                if(effect is IVValuePreview preview)
+                {
+                    if (effect is VAddEffect addEffect)
+                    {
+                        if(addEffect.AttributeName != "BAParameter")
+                            continue;
+                    }
+
+                    int value = preview.GetValue(battle);
+                    originalValue += value;
+                    finalValue += battle.BattleAttributeManager.PreviewPopularityChange(value);
+                }
+            }
+            setPopularityPreview?.Invoke(firstTime, originalValue, finalValue);
+        }
+        
         public void Upgrade(bool isTemporary)
         {
             if (_isUpgraded)

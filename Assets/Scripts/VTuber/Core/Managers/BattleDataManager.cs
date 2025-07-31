@@ -21,8 +21,6 @@ namespace VTuber.Core.Managers
         public Dictionary<uint, VEffectCondition> Conditions => conditions;
         private Dictionary<uint, VEffectCondition> conditions;
         
-
-        
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
             _cardConfigurations = new Dictionary<uint, VCardConfiguration>();
