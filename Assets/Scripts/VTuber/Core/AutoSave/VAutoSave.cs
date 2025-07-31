@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using VTuber.Core.Foundation;
@@ -27,3 +29,4 @@ namespace VTuber.Core.AutoSave
     
     }
 }
+#endif

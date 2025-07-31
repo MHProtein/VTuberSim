@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -34,6 +35,7 @@ namespace VTuber.BattleSystem.UI
         public int index;
 
         private bool _inspectable;
+        private bool _isPlayable = true;
 
         [Header("Inspection")] 
         private Vector3 _inspectionScale;
@@ -65,6 +67,8 @@ namespace VTuber.BattleSystem.UI
         private bool _isScaling;
         private bool _isRotating;
         private bool shouldWaitSetPlayable = false;
+        
+        private VAnimationQueue _popularityPreviewAnimationQueue;
 
         public VHandCardUI(Vector3 targetRotation, bool isScaling)
         {
@@ -81,6 +85,7 @@ namespace VTuber.BattleSystem.UI
             _originalSiblingIndex = transform.GetSiblingIndex();
             message = new Dictionary<string, object>();
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
+            _popularityPreviewAnimationQueue = new VAnimationQueue();
         }
         
         public void ToHandSlot(Vector3 position, Vector3 rotation, Vector3 scale, float smoothTime)
@@ -104,11 +109,11 @@ namespace VTuber.BattleSystem.UI
                 Destroy(gameObject);
         }
         
-        public void SetCardPlayble(bool isPlayable)
+        public void SetCardPlayable(bool isPlayable)
         {
             if (!isPlayable)
             {
-                SetInteractive(false);
+                _isPlayable = false;
                 cardUI.background.color = Color.gray;
                 return;
             }
@@ -119,7 +124,7 @@ namespace VTuber.BattleSystem.UI
                 return;
             }
             
-            SetInteractive(true);
+            _isPlayable = true;
             cardUI.background.color = Color.white;
         }
         
@@ -182,7 +187,6 @@ namespace VTuber.BattleSystem.UI
 
         private void Update()
         {
-            CardMovement();
             DetectDeselect();
         }
         
@@ -191,34 +195,6 @@ namespace VTuber.BattleSystem.UI
             Deselect();
             SetInteractive(false);
             card.Play();
-        }
-        
-        private void CardMovement()
-        {
-            // if (_isMoving)
-            // {
-            //
-            //     if (Mathf.Abs(transform.localPosition.x - _targetPosition.x) < 0.1f
-            //         && Mathf.Abs(transform.localPosition.y - _targetPosition.y) < 0.01f)
-            //     {
-            //         _isMoving = false;
-            //     }
-            // }
-            //
-            // if (_isScaling)
-            // {
-            //     transform.localScale = Vector3.SmoothDamp(transform.localScale, _targetScale, ref _scaleVelocity, _scaleSmoothTime);
-            //     if (Mathf.Abs(transform.localScale.x - _targetScale.x) < 0.01f
-            //         && Mathf.Abs(transform.localScale.y - _targetScale.y) < 0.01f)
-            //         _isScaling = false;
-            // }
-            //
-            // if (_isRotating)
-            // {
-            //     _deltaTime += Time.deltaTime;
-            //     if (Mathf.Abs(transform.localEulerAngles.z - _targetRotation.z) < 0.01f)
-            //         _isRotating = false;
-            // }
         }
         
         private void DetectDeselect()
@@ -234,7 +210,7 @@ namespace VTuber.BattleSystem.UI
         
         private void Inspect()
         {
-            if (!_inspectable)
+            if (!_inspectable || !_isPlayable)
                 return;
 
             var pos = new Vector3(_originalPosition.x, inspectionY, _originalPosition.z);
@@ -300,7 +276,7 @@ namespace VTuber.BattleSystem.UI
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!_inspectable)
+            if (!_inspectable || !_isPlayable)
                 return;
             if (eventData.button == PointerEventData.InputButton.Left && !selected)
                 Select();
@@ -318,7 +294,41 @@ namespace VTuber.BattleSystem.UI
         {
             if (shouldWaitSetPlayable)
             {
-                SetCardPlayble(true);
+                SetCardPlayable(true);
+            }
+        }
+
+        public void SetPopularityPreview(bool isFirstTime, int originalValue, int finalValue)
+        {
+            if (originalValue == 0)
+            {
+                cardUI.popularityText.gameObject.SetActive(false);
+                cardUI.popularityImage.gameObject.SetActive(false);
+                return;
+            }
+
+            if (isFirstTime)
+            {
+                cardUI.popularityText.gameObject.SetActive(true);
+                cardUI.popularityImage.gameObject.SetActive(true);
+                cardUI.SetPopularityImage(
+                    VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
+                cardUI.popularityText.text = originalValue.ToString();
+                VDebug.Log(VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
+                _popularityPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.popularityText.transform, Vector3.one, 0.5f).OnComplete(
+                    () =>
+                    {
+                        cardUI.popularityText.text = finalValue.ToString();
+                        if(finalValue != originalValue)
+                            Tween.PunchScale(cardUI.popularityText.transform, Vector3.one * 1.3f, 0.3f);
+                    }));
+            }
+            else
+            {
+                if (cardUI.popularityText.text == finalValue.ToString())
+                    return;
+                cardUI.popularityText.text = finalValue.ToString();
+                _popularityPreviewAnimationQueue.Enqueue(Tween.PunchScale(cardUI.popularityText.transform, Vector3.one * 1.3f, 0.3f));
             }
         }
     }

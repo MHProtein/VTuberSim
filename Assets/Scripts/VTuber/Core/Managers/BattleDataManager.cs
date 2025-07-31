@@ -20,7 +20,7 @@ namespace VTuber.Core.Managers
 
         public Dictionary<uint, VEffectCondition> Conditions => conditions;
         private Dictionary<uint, VEffectCondition> conditions;
-
+        
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
             _cardConfigurations = new Dictionary<uint, VCardConfiguration>();
@@ -104,6 +104,11 @@ namespace VTuber.Core.Managers
             return null;
         }
 
+        public List<VCardConfiguration> GetAllCardConfigurations()
+        {
+            return new List<VCardConfiguration>(_cardConfigurations.Values);
+        }
+        
         public VEffectCondition GetConditionByID(uint conditionID)
         {
             return conditions.GetValueOrDefault(conditionID);

@@ -20,9 +20,11 @@ namespace VTuber.Character.Attribute
         [Header("Battle Attribute")]
         public bool isConvertToBattleAttribute = true;
         [ShowIf("isConvertToBattleAttribute")]
+        
         [ShowIf("isConvertToBattleAttribute")][Core.TypeSerialization.TypeFilter(typeof(VBattleAttribute))] 
         public SerializableType battleAttribute;
         [ShowIf("isConvertToBattleAttribute")][StringToEnum("BattleAttributes")] public string battleAttributeName;
+        
         [ShowIf("isConvertToBattleAttribute")] public bool isBattleAttributePercentage = false;
         [ShowIf("isConvertToBattleAttribute")] public VBattleEventKey battleEventKey = VBattleEventKey.Default;
         [ShowIf("isConvertToBattleAttribute")] public int minValue = 0;

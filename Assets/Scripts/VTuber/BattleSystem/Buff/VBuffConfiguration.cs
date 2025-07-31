@@ -28,6 +28,10 @@ namespace VTuber.BattleSystem.Buff
         public const int E2Param = 8;
         public const int Effect3 = 9;
         public const int E3Param = 10;
+        public const int Effect4 = 11;
+        public const int E4Param = 12;
+        public const int Effect5 = 13;
+        public const int E5Param = 14;
     }
     
     public class VBuffConfiguration
@@ -50,7 +54,7 @@ namespace VTuber.BattleSystem.Buff
             stackable =  Convert.ToInt32(row.Columns[VBuffHeaderIndex.Stackable].Value) == 1;
             effectItems = new List<VEffectItem>();
             latency = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Latency].Value);
-            for (int i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E3Param; i += 2)
+            for (int i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E5Param; i += 2)
             {               
                 var effectIDStr = row.Columns[i].Value;
                 if(effectIDStr.IsNullOrWhitespace())

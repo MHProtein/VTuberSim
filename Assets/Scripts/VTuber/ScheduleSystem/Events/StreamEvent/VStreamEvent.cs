@@ -22,6 +22,7 @@ namespace VTuber.ScheduleSystem.Events
             {
                 {"Event", this}
             });
+            IsExecuted = true;
             return true;
         }
     }

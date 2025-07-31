@@ -105,7 +105,7 @@ namespace VTuber.BattleSystem.UI
         {
             yield return new WaitForSeconds(0.2f);
             arrowSequence.Enqueue(Tween.Position(arrow.transform, 
-                colorObjects[arrowIndex - 1].transform.position + 
+                colorObjects[arrowIndex].transform.position + 
                 new Vector3(0, -arrowHeight, 0), 0.2f));
         }
         

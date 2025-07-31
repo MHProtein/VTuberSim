@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Core
         OnTurnEnd,
         OnBattleEnd,
         OnBattleEndNotify,
+        OnBattlePause,
         
         OnDiscardToDraw,
         OnDrawCards,
@@ -37,6 +38,8 @@ namespace VTuber.BattleSystem.Core
         OnMembershipCountChange,
         OnViewerCountChange,
         OnRevenueChange,
+        
+        OnParameterPopularityModifierChanged,
         
         OnBuffAdded,
         OnBuffRemoved,
@@ -64,6 +67,11 @@ namespace VTuber.BattleSystem.Core
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);
     public class VBattleRootEventCenter : VEventCenter<VBattleRootEventCenter, VBattleEventKey, FunctionWithADict>
     {
-        
+        public override bool Raise(VBattleEventKey key, params object[] args)
+        {
+            if (key == VBattleEventKey.Default)
+                return false;
+            return base.Raise(key, args);
+        }
     }
 }

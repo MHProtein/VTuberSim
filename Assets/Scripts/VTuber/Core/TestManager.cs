@@ -25,15 +25,15 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private VBattle battle;
         [SerializeField] private VBattleConfiguration _battleConfiguration;
         [SerializeField] private VCharacterConfiguration _characterConfiguration;
-        private VCharacter character;
+        private VCharacter _character;
         private VStateMachine _stateMachine;
         
         protected override void Awake()
         {
             base.Awake();
             VBattleResourcesLoader loader = new VBattleResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
-            character = new VCharacter(_characterConfiguration);
-            _weeklySchedule = new VWeeklySchedule(character);
+            _character = new VCharacter(_characterConfiguration);
+            _weeklySchedule = new VWeeklySchedule(_character);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
 
@@ -46,8 +46,8 @@ namespace VTuber.BattleSystem.Core
                         cards.Add(card);
                 }
             }
-            character.CardLibrary.AddCards(cards);
-            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule, battleRoot, battle, character);
+            _character.CardLibrary.AddCards(cards);
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule, battleRoot, battle, _character);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());
@@ -57,14 +57,15 @@ namespace VTuber.BattleSystem.Core
         protected override void OnEnable()
         {
             base.OnEnable();
-
+            _stateMachine.OnEnable();
         }
-
+        
         protected override void OnDisable()
         {
             base.OnDisable();
+            _stateMachine.OnDisable();
         }
-        
+
         protected override void Start()
         {
             base.Start();
@@ -76,16 +77,14 @@ namespace VTuber.BattleSystem.Core
             _stateMachine.SwitchState(VStateType.ScheduleModify);
         }
 
-        public void Pause()
+        public void PauseSchedule()
         {
-            if (_stateMachine.CurrentState.StateType == VStateType.Pause)
-            {
-                _stateMachine.SwitchState(VStateType.Execution);
-            }
-            else if (_stateMachine.CurrentState.StateType == VStateType.Execution)
-            {
-                _stateMachine.SwitchState(VStateType.Pause);
-            }
+            _stateMachine.PauseSchedule();
+        }
+
+        public void ContinueSchedule()
+        {
+            _stateMachine.ContinueSchedule();
         }
 
         public void ConvertToSchedule()
@@ -98,10 +97,10 @@ namespace VTuber.BattleSystem.Core
                     var slot = slots[y, x];
                     if (slot.Item is not null)
                     {
-                        var eventData = slot.Item.EventData;
+                        var evt = slot.Item.Event;
                         slot.Item.SetInteractive(false);
-                        _weeklySchedule.SetEvent(x, (TimeOfDay)y, eventData.CreateEvent());
-                        y += eventData.Duration;
+                        _weeklySchedule.SetEvent(x, (TimeOfDay)y, evt);
+                        y += evt.Duration;
                     }
                     else
                     {

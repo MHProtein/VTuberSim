@@ -15,45 +15,46 @@ namespace VTuber.BattleSystem.Core
 {
     public class VBattle : VSingletonMonobehaviour<VBattle>
     {
-        [FormerlySerializedAs("_configuration")] [SerializeField] private VBattleConfiguration configuration;
+        [FormerlySerializedAs("_configuration")] [SerializeField] protected VBattleConfiguration configuration;
 
         #region Managers
 
         public VBattleAttributeManager BattleAttributeManager => _battleAttributeManager;
-        private VBattleAttributeManager _battleAttributeManager;
+        protected VBattleAttributeManager _battleAttributeManager;
         
         public VCardPilesManager CardPilesManager => _cardPilesManager;
-        private VCardPilesManager _cardPilesManager;
+        protected VCardPilesManager _cardPilesManager;
         
         public VBuffManager BuffManager => _buffManager;
-        private VBuffManager _buffManager;
+        protected VBuffManager _buffManager;
 
         #endregion
         
         #region Attributes
 
-        private VBattleTurnAttribute _turnAttribute;
+        protected VBattleTurnAttribute _turnAttribute;
 
-        private VBattlePlayLeftAttribute _playLeftAttribute;
+        protected VBattlePlayLeftAttribute _playLeftAttribute;
         // private VBattlePopularityAttribute _popularityAttribute;
         // private VBattleParameterAttribute _parameterAttribute;
         // private VBattleAttribute _shieldAttribute;
 
         #endregion
 
-        private int _currentPlayCountLeft = 0;
+        protected int _currentPlayCountLeft = 0;
         
         public int TurnLeft => _turnAttribute.Value;
         public int PlayLeft => _playLeftAttribute.Value;
         
-        private int MaxTurnCount => configuration.maxTurnCount;
+        protected int MaxTurnCount => configuration.maxTurnCount;
 
-        private bool _shouldNextCardPlayTwice = false;
-        private bool _shouldRedraw = false;
+        protected bool _shouldNextCardPlayTwice = false;
+        protected bool _shouldRedraw = false;
         
-        private List<VEffect> _playTwiceEffects;
-        private Dictionary<string, object> _playTwiceMessageDict;
-        private VCharacterAttributeManager _characterAttributeManager;
+        protected List<VEffect> _playTwiceEffects;
+        protected Dictionary<string, object> _playTwiceMessageDict;
+        protected VCharacterAttributeManager _characterAttributeManager;
+        protected bool paused = false;
         public void NextCardPlayTwice()
         {
             _shouldNextCardPlayTwice = true;
@@ -65,8 +66,19 @@ namespace VTuber.BattleSystem.Core
         {
             _shouldRedraw = true;
         }
+
+        public void Pause()
+        {
+            paused = !paused;
+
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattlePause, new Dictionary<string, object>
+            {
+                {"Paused", paused}
+            });
+            
+        }
         
-        public void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
+        public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
         {
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager();
@@ -93,27 +105,12 @@ namespace VTuber.BattleSystem.Core
 
             _battleAttributeManager.InitializeInternalManagers();
             
-            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
             });
             
             InitializeTurn();
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            
-        }
-        
-        
-        protected override void Start()
-        {
-            base.Start();
-            
-
         }
         
         protected override void OnEnable()
@@ -132,6 +129,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
         }
 
         protected override void OnDisable()
@@ -153,6 +151,16 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
+        }
+        
+        
+        private void OnParameterPopularityModifierChanged(Dictionary<string, object> messagedict)
+        {
+            foreach (var card in _cardPilesManager.HandPile)
+            {
+                card.PreviewPopularity(this, false);
+            }
         }
         
         private void OnAttributeValueChange(Dictionary<string, object> messagedict)
@@ -162,6 +170,7 @@ namespace VTuber.BattleSystem.Core
                 card.TestCondition(this);
             }
         }
+        
         
         private void OnRequestPickCardsFromPile(Dictionary<string, object> messagedict)
         {
@@ -186,16 +195,17 @@ namespace VTuber.BattleSystem.Core
             switch (card.CostType)
             {
                 case CostType.Stamina:
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                     break;
                 case CostType.TrueStamina:
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
                     break;
                 case CostType.Buff:
-                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                     break;
             }
             card.TestCondition(this);
+            card.PreviewPopularity(this, true);
         }
         
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
@@ -203,8 +213,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Buff)
-                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
+                card.PreviewPopularity(this, false);
             }
         }
 
@@ -213,8 +224,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Buff)
-                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
+                card.PreviewPopularity(this, false);
             } 
         }
         
@@ -223,9 +235,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Stamina)
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                 if(card.CostType == CostType.TrueStamina)
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
             }
         }
         
@@ -286,6 +298,7 @@ namespace VTuber.BattleSystem.Core
             {
                 {"TurnLeft", TurnLeft},
                 {"HandSize", configuration.maxHandSize}
+                
             });
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>
             {

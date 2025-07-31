@@ -16,6 +16,7 @@ namespace VTuber.BattleSystem.Card
     public class VCard
     {
         public uint Id { get; private set; }
+        public uint configID => _configuration.id;
         public string CardName => _configuration.cardName;
         public bool IsExhaust => _configuration.isExhaust;
         public string CardType => _configuration.cardType;
@@ -57,11 +58,12 @@ namespace VTuber.BattleSystem.Card
         }
         public VCardRarity Rarity => _configuration.rarity;
         
-        public Action<bool> SetPlayable;
+        public Action<bool> setPlayable;
+        public Action<bool, int, int> setPopularityPreview;
         
         private readonly VCardConfiguration _configuration;
         
-        public VCard(VCardConfiguration configuration, uint id, List<VEffectItem> effects, List<VEffectItem> newEffects, uint conditionId)
+        public VCard(VCardConfiguration configuration, uint id, List<VEffectItem> effects, List<VEffectItem> newEffects, int conditionId)
         {
             _configuration = configuration;
             Id = id;
@@ -69,7 +71,9 @@ namespace VTuber.BattleSystem.Card
             _effects = new List<VEffect>();
             _newEffects = new List<VEffect>();
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
-            condition = VBattleDataManager.Instance.GetConditionByID(conditionId);
+            if(conditionId != -1)
+                condition = VBattleDataManager.Instance.GetConditionByID((uint)conditionId);
+            
             foreach (var effect in effects)
             {
                 _effects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
@@ -98,9 +102,33 @@ namespace VTuber.BattleSystem.Card
 
         public void TestCondition(VBattle battle)
         {
-            SetPlayable?.Invoke(condition.IsTrue(battle, null));
+            if (condition == null)
+                return;
+            setPlayable?.Invoke(condition.IsTrue(battle, null));
         }
 
+        public void PreviewPopularity(VBattle battle, bool firstTime)
+        {
+            int originalValue = 0;
+            int finalValue = 0;
+            foreach (var effect in _effects)
+            {
+                if(effect is IVValuePreview preview)
+                {
+                    if (effect is VAddEffect addEffect)
+                    {
+                        if(addEffect.AttributeName != "BAParameter")
+                            continue;
+                    }
+
+                    int value = preview.GetValue(battle);
+                    originalValue += value;
+                    finalValue += battle.BattleAttributeManager.PreviewPopularityChange(value);
+                }
+            }
+            setPopularityPreview?.Invoke(firstTime, originalValue, finalValue);
+        }
+        
         public void Upgrade(bool isTemporary)
         {
             if (_isUpgraded)

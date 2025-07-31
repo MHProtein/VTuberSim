@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VTuber.Character;
+using VTuber.Core.EventCenter;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.Core.Foundation;
@@ -94,7 +95,24 @@ namespace VTuber.ScheduleSystem.Schedule
         public void NextDay()
         {
             _currentDayIndex++;
+            if (_currentDayIndex >= _days.Count)
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleExecuted,
+                    new Dictionary<string, object>());
+                return;
+            }
+            
             _days[_currentDayIndex].Execute();
         }
+
+        public void Reset()
+        {
+            foreach (var day in _days)
+            {
+                day.Reset();
+            }
+            _currentDayIndex = 0;
+        }
+        
     }
 }

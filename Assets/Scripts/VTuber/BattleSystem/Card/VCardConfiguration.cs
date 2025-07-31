@@ -103,7 +103,7 @@ namespace VTuber.BattleSystem.Card
         public List<VEffectItem> effects;
         public List<VEffectItem> newEffects;
 
-        public uint conditionId;
+        public int conditionId;
         
 
         private static uint idDistributor = 0;
@@ -129,7 +129,16 @@ namespace VTuber.BattleSystem.Card
             upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value);
             notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value) == 1;
             isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
-            conditionId = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Condition].Value);
+            
+            var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
+            if(!conditionStr.IsNullOrWhitespace())
+            {
+                conditionId = Convert.ToInt32(conditionStr);
+            }
+            else
+            {
+                conditionId = -1;
+            }
             
             //background = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Background"));
             //facade = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Facade"));

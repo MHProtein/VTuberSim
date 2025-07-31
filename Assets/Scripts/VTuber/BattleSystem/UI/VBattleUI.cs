@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PrimeTween;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace VTuber.BattleSystem.UI
 {
     public class VBattleUI : VUIBehaviour
     {
+        [SerializeField] private GameObject battleRoot;
         [SerializeField] private Transform cardPileContent;
         [FormerlySerializedAs("scrollView")] [SerializeField] private GameObject cardPileScrollView;
         [SerializeField] private Transform discardPileTransform;
@@ -54,6 +56,13 @@ namespace VTuber.BattleSystem.UI
 
         private VHandCardUI cardToDispose;
 
+        private Coroutine _drawCardCoroutine;
+        
+        
+        [SerializeField]
+        private Transform battleUI;
+        [SerializeField] private GameObject battlePausePanel;
+
         public void Rearrange(int index)
         {
             if (_handSlotsCards.Count == 0)
@@ -74,6 +83,11 @@ namespace VTuber.BattleSystem.UI
             cardUI.SetCard(card);
             
             return cardUI;
+        }
+        
+        public Tween SetBattleUIScale(float scale)
+        {
+            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
         }
         
         public void Selected(bool value)
@@ -145,7 +159,7 @@ namespace VTuber.BattleSystem.UI
             ShowCardScroll(VBattle.Instance.CardPilesManager.Deck, cardPileContent);
         }
 
-        public void ShowExaustPile()
+        public void ShowExhaustPile()
         {
             cardPileScrollView.SetActive(true);
             ShowCardScroll(VBattle.Instance.CardPilesManager.ExhaustPile, cardPileContent);
@@ -165,6 +179,13 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnSkipTurnClicked, new Dictionary<string, object>());
         }
         
+        public Tween SetBattlePause(bool paused)
+        {
+            battlePausePanel.SetActive(paused);
+            float scale = paused ? 0.75f : 1.0f;
+            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
+        }
+        
         protected override void Awake()
         {
             base.Awake();
@@ -178,6 +199,9 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattlePause, OnBattlePause);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnDrawCards, OnDrawCards);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
@@ -190,6 +214,8 @@ namespace VTuber.BattleSystem.UI
         protected override void OnDisable()
         {
             base.OnDisable();
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattlePause, OnBattlePause);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnDrawCards, OnDrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
@@ -197,6 +223,21 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
         }        
+        
+        private void OnBattleEnd(Dictionary<string, object> messagedict)
+        {
+            SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
+        }
+
+        private void OnBattlePause(Dictionary<string, object> messagedict)
+        {
+            SetBattlePause((bool)messagedict["Paused"]);
+        }
+
+        private void OnBattleBegin(Dictionary<string, object> messagedict)
+        {
+            SetBattleUIScale(1.0f);
+        }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)
         {
@@ -207,7 +248,9 @@ namespace VTuber.BattleSystem.UI
         {
             pickCardMenuScroll.SetActive(false);
             var cards = messagedict["PickedCards"] as List<VCard>;
-            StartCoroutine(DrawCard(cards, (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]));
+            _drawCardCoroutine = StartCoroutine(DrawCard(cards, 
+                (bool)messagedict["IsFromCard"], 
+                (bool)messagedict["ShouldPlayTwice"]));
         }
         
         private void OnCardBeginDespose(Dictionary<string, object> messagedict)
@@ -270,7 +313,6 @@ namespace VTuber.BattleSystem.UI
 
         private void RedrawCards(bool shouldPlayTwice)
         {
-            
             int redrawCount = _handSlotsCards.Count;
             DisposeAllCards();
             StartCoroutine(DelayDrawCards(cardToDisposeTime, redrawCount, shouldPlayTwice));
@@ -293,6 +335,7 @@ namespace VTuber.BattleSystem.UI
             else
             {
                 DisposeCard(cardToDispose);
+                _isCardApplying = false;
                 cardToDispose = null;
             }
         }
@@ -369,10 +412,11 @@ namespace VTuber.BattleSystem.UI
             List<VCard> cards = messageDict["Cards"] as List<VCard>;
             if (cards == null)
                 return;
-            
-            StartCoroutine(DrawCard(cards, (bool)messageDict["IsFromCard"], (bool)messageDict["ShouldPlayTwice"]));
+            _drawCardCoroutine = StartCoroutine
+                (DrawCard(cards, (bool)messageDict["IsFromCard"], 
+                    (bool)messageDict["ShouldPlayTwice"]));
         }
-
+        
         private IEnumerator DrawCard(IEnumerable<VCard> cards, bool isFromCard, bool shouldPlayTwice)
         {
             arrangingHandSlots = true;
@@ -388,7 +432,8 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.index = _handSlotsCards.Count;
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
-                card.SetPlayable = handCardUI.SetCardPlayble;
+                card.setPlayable = handCardUI.SetCardPlayable;
+                card.setPopularityPreview = handCardUI.SetPopularityPreview;
                 handCardUI.cardUI = cardUI;
                 handCardUI.ToHandSlot(position, rotation, Vector3.one, drawCardToSlotTime);
                 SetHandCardPositionRotation(handCardUI, position.x);

@@ -18,6 +18,8 @@ namespace VTuber.BattleSystem.BattleAttribute
                 { "BAGamingMultiplier", 0 },
                 { "BAChattingMultiplier", 0 },
             };
+            gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
+            gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
         }
         
         public void AddPopularity(int delta, string abilityName = "", bool isFromCard = false, bool shouldPlayTwice = false)
@@ -36,6 +38,5 @@ namespace VTuber.BattleSystem.BattleAttribute
             
             AddTo(delta, isFromCard, shouldPlayTwice);
         }
-        
     }
 }

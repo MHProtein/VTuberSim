@@ -3073,7 +3073,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1709913159291209759}
         m_TargetAssemblyTypeName: VTuber.BattleSystem.UI.VBattleUI, Assembly-CSharp
-        m_MethodName: ShowExaustPile
+        m_MethodName: ShowExhaustPile
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

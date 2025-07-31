@@ -140,6 +140,7 @@ namespace VTuber.BattleSystem.Core
                 _currentTurnIndex++;
                 VDebug.Log("_currentTurnIndex: " + _currentTurnIndex);
             }
+            VDebug.Log(Multiplier.AttributeName + " Value : " + Multiplier.Value);
         }
 
         private void GenerateMultiplierSequence(int maxTurn, int maxConsecutiveMultiplierCount, int mainAttributeIndex)
@@ -289,10 +290,23 @@ namespace VTuber.BattleSystem.Core
                 float multiplier = _multiplierManager.Multiplier.Value / 100f;
                 int delta = (int)messagedict["Delta"];
                 (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName, 
+                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName,
                         messagedict["IsFromCard"] as bool? ?? false,
                         messagedict["ShouldPlayTwice"] as bool? ?? false);
             }
+        }
+
+        public int PreviewPopularityChange(int delta)
+        {
+            if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
+            {
+                float multiplier = _multiplierManager.Multiplier.Value / 100f;
+                var popularity = _battleAttributes["BAPopularity"] as VBattlePopularityAttribute;
+                int parameterDelta = parameter.PreviewAddTo(delta);
+                return popularity.PreviewAddTo((int)(parameterDelta * multiplier));
+            }
+
+            return 0;
         }
 
         public bool TryGetAttribute(string name, out VBattleAttribute attribute)
