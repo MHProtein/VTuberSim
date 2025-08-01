@@ -488,7 +488,7 @@ GameObject:
   - component: {fileID: 942119070}
   - component: {fileID: 942119069}
   m_Layer: 0
-  m_Name: YarnBridge
+  m_Name: YarnBridge1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -506,7 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cee2db4227104cfa869568f55505051f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStatus: {fileID: 2063496255}
+  _characterConfiguration: {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
 --- !u!4 &942119070
 Transform:
   m_ObjectHideFlags: 0

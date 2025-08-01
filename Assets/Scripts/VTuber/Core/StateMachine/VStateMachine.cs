@@ -5,6 +5,7 @@ using VTuber.BattleSystem.Core;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
 
@@ -38,6 +39,12 @@ namespace VTuber.Core.StateMachine
         public VBattle Battle => _battle;
         private VBattle _battle;
         
+        public GameObject EventSystemRoot => _eventSystemRoot;
+        private GameObject _eventSystemRoot;
+        
+        public VEvent EventSystem => _eventSystem;
+        private VEvent _eventSystem;
+        
         public VCharacter Character => _character;
         private VCharacter _character;
         
@@ -48,12 +55,18 @@ namespace VTuber.Core.StateMachine
         private int _weekCount = 0;
         
 
-        public VStateMachine(VScheduleUI scheduleUI, VWeeklySchedule weeklySchedule, GameObject battleRoot, VBattle battle, VCharacter character)
+        public VStateMachine(VScheduleUI scheduleUI,
+            VWeeklySchedule weeklySchedule,
+            GameObject battleRoot, VBattle battle,
+            GameObject eventSystemRoot, VEvent eventSystem,
+            VCharacter character)
         {
             _scheduleUI = scheduleUI;
             _weeklySchedule = weeklySchedule;
             _battleRoot = battleRoot;
             _battle = battle;
+            _eventSystemRoot = eventSystemRoot;
+            _eventSystem = eventSystem;
             _character = character;
             IsInitialized = true;
             preRegisterStates.ForEach(state => RegisterState(state));

@@ -46,7 +46,7 @@ MonoBehaviour:
       Data: 2|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 16
     - Name: 
       Entry: 1
       Data: CAStamina
@@ -55,19 +55,43 @@ MonoBehaviour:
       Data: CAPressure
     - Name: 
       Entry: 1
-      Data: CASingingPower
+      Data: CASingingAbility
     - Name: 
       Entry: 1
-      Data: CAGamingPower
+      Data: CAGamingAbility
     - Name: 
       Entry: 1
-      Data: CAChattingPower
+      Data: CAChattingAbility
     - Name: 
       Entry: 1
-      Data: CAFanCount
+      Data: CASingingAbilityConversionRatio
+    - Name: 
+      Entry: 1
+      Data: CAGamingAbilityConversionRatio
+    - Name: 
+      Entry: 1
+      Data: CAChattingAbilityConversionRatio
+    - Name: 
+      Entry: 1
+      Data: CASingingAbilityGainEfficiency
+    - Name: 
+      Entry: 1
+      Data: CAGamingAbilityGainEfficiency
+    - Name: 
+      Entry: 1
+      Data: CAChattingAbilityGainEfficiency
+    - Name: 
+      Entry: 1
+      Data: CAFollowerCount
     - Name: 
       Entry: 1
       Data: CAMembershipCount
+    - Name: 
+      Entry: 1
+      Data: CAFollowerToViewerRatio
+    - Name: 
+      Entry: 1
+      Data: CAMoney
     - Name: 
       Entry: 1
       Data: CARevenueShareRate

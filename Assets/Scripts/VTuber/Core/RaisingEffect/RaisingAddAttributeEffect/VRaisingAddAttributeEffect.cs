@@ -1,24 +1,27 @@
 ﻿using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.RaisingEffect;
 
-namespace VTuber.BattleSystem.Core.RaisingEffect.VRaisingAddAttributeEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddAttributeEffect : VRaisingEffect
     {
-        public string attributeName;
-        public int value;
-        public VRaisingAddAttributeEffect(VRaisingEffectConfiguration configuration) : base(configuration)
+        private readonly string _attributeName;
+        private readonly int _value;
+        public VRaisingAddAttributeEffect(VRaisingAddAttributeEffectConfiguration configuration, int value) : base(configuration)
         {
             
+            _attributeName = configuration.AbilityName;
+            _value = value;
         }
 
         public override void ApplyEffect(VCharacter character)
         {
             base.ApplyEffect(character);
-            if(character.AttributeManager.TryGetAttribute(attributeName, out var attribute))
+            if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
-                attribute.AddTo(value);
-                VDebug.Log("Added " + value + " To " + attributeName);
+                attribute.AddTo(_value);
+                VDebug.Log("Added " + _value + " To " + _attributeName);
             }
         }
     }

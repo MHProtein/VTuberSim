@@ -1,14 +1,14 @@
-﻿title: Start
+﻿title: Node
 position: -24,-1
 ---
-Me: 你好！
-He: Fuck You Too!
+Me: Ayyyyy!
+He: Yoooooo!
 
 
--> Option1 
+-> Option4 
     <<ApplyEffect Event 0 50>>
--> Option2
+-> Option5
     <<ApplyEffect Event 0 30>>
--> Option3
+-> Option6
     <<ApplyEffect Event 0 20>>
 ===

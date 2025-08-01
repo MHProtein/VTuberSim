@@ -10,7 +10,7 @@ namespace VTuber.Core.StateMachine
 {
     public class VExecutionState : VState
     {
-        private VStreamEvent _currentEvent;
+        private VScheduleEvent _currentEvent;
 
         public VExecutionState()
         {
@@ -22,15 +22,19 @@ namespace VTuber.Core.StateMachine
             base.Register(vStateMachine);
             
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventStart, OnEventStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
-        
+
         public override void Unregister()
         {
             base.Unregister();
             
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventStart, OnEventStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
@@ -45,7 +49,19 @@ namespace VTuber.Core.StateMachine
             {
                 NextEvent(2.0f);
             }
-            
+        }
+        
+        private void OnEventEnd(Dictionary<string, object> messagedict)
+        {
+            stateMachine.EventSystemRoot.SetActive(false);
+            if (stateMachine.ShouldPauseSchedule)
+            {
+                stateMachine.SwitchState(VStateType.Pause);
+            }
+            else
+            {
+                NextEvent(2.0f);
+            }
         }
 
         private void NextEvent(float delay)
@@ -56,18 +72,31 @@ namespace VTuber.Core.StateMachine
             });
         }
         
-        public void InitializeBattle()
+        public void InitializeBattle(int initialTurnCount)
         {
             stateMachine.BattleRoot.SetActive(true);
             stateMachine.Battle.InitializeBattle(stateMachine.Character.AttributeManager,
                 stateMachine.Character.CardLibrary,
-                _currentEvent.InitialTurnCount);
+                initialTurnCount);
+        }
+        
+        public void InitializeEvent(string node)
+        {
+            stateMachine.EventSystemRoot.SetActive(true);
+            stateMachine.EventSystem.InitializeEvent(stateMachine.Character, node);
+        }
+        
+        private void OnEventStart(Dictionary<string, object> messagedict)
+        {
+            _currentEvent = messagedict["Event"] as VScheduleEvent;
+            VDebug.Log((string)messagedict["DialogueNode"]);
+            InitializeEvent((string)messagedict["DialogueNode"]);
         }
         
         private void OnStreamEventStart(Dictionary<string, object> messagedict)
         {
-            _currentEvent = messagedict["Event"] as VStreamEvent;
-            InitializeBattle();
+            _currentEvent = messagedict["Event"] as VScheduleEvent;
+            InitializeBattle((_currentEvent as VStreamEvent).InitialTurnCount);
         }      
         
         public override void Enter(VState state, params object[] enterParams)

@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using Yarn.Unity;
 using System.Collections.Generic;
+using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Events;
+
 namespace VTuber.Dialogue
 {
     public class YarnScheduleEvent : VScheduleEvent
@@ -42,17 +45,7 @@ namespace VTuber.Dialogue
 
         private void ApplyRewards()
         {
-            // 示例：根据配置影响角色属性
-            if (AttributeManager.TryGetAttribute("CAStamina", out var staminaAttr))
-            {
-                staminaAttr.AddValue(-_config.staminaCost);
-            }
-
-            if (_config.moodBonus != 0 && AttributeManager.TryGetAttribute("CAMood", out var moodAttr))
-            {
-                moodAttr.AddValue(_config.moodBonus);
-            }
-
             Debug.Log("奖励已应用");
         }
     }
+}

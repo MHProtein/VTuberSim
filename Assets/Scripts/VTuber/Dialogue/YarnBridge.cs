@@ -1,12 +1,37 @@
 using UnityEngine;
 using Yarn.Unity;
 using System.Collections.Generic;
+using VTuber.BattleSystem.Card;
+using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
+
 namespace VTuber.Dialogue
 {
     public class YarnBridge : VMonoBehaviour
     {
-        public PlayerStatus playerStatus;
+
+        [SerializeField] private VCharacterConfiguration _characterConfiguration;
+        private VCharacter _character;
+        protected override void Awake()
+        {
+            base.Awake();            
+            VResourcesLoader loader = new VResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+            _character = new VCharacter(_characterConfiguration);
+            var cardConfigs = loader.Load();
+            List<VCard> cards = new List<VCard>();
+
+            foreach (var cardConfig in cardConfigs)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    var card = cardConfig.CreateCard();
+                    if(card is not null)
+                        cards.Add(card);
+                }
+            }
+            _character.CardLibrary.AddCards(cards);
+        }
 
         private Dictionary<string, string> messageDictionary = new Dictionary<string, string>
         {
@@ -14,24 +39,13 @@ namespace VTuber.Dialogue
             { "Farewell", "Goodbye, traveler." }
         };
 
-        [YarnCommand("add_exp")]
-        public void AddExperienceCommand(string expString)
-        {
-            Debug.Log($"starting add_exp!");
-            if (int.TryParse(expString, out int exp))
-            {
-                playerStatus.AddExperience(exp);
-            }
-            else
-            {
-                Debug.LogWarning($"Invalid EXP value: {expString}");
-            }
-        }
+
+        
         [YarnCommand("leap")]
         public void Leap() {
             Debug.Log($"{name} is leaping!");
         }
-        
+
         [YarnFunction("say_message")]
         public static string GetMessage(string key)
         {
@@ -49,33 +63,31 @@ namespace VTuber.Dialogue
             }
 
             return $"[Unknown message key: {key}]";
-            
-            
+        }
+
         public VCharacter currentCharacter;
 
         [YarnCommand("add_stamina")]
         public void AddStamina(int amount)
         {
-            if (currentCharacter.AttributeManager.TryGetAttribute("CAStamina", out var stamina))
-            {
-                stamina.AddValue(amount);
-                Debug.Log($"角色体力增加：{amount}");
-            }
+        //     if (currentCharacter.AttributeManager.TryGetAttribute("CAStamina", out var stamina))
+        //     {
+        //         stamina.AddValue(amount);
+        //         Debug.Log($"角色体力增加：{amount}");
+        //     }
+            VDebug.Log("addstamina"+amount);
         }
 
         [YarnCommand("set_pressure")]
         public void SetPressure(int value)
         {
-            if (currentCharacter.AttributeManager.TryGetAttribute("CAPressure", out var pressure))
-            {
-                pressure.SetValue(value);
-                Debug.Log($"角色压力设置为：{value}");
-            }
+        //     if (currentCharacter.AttributeManager.TryGetAttribute("CAPressure", out var pressure))
+        //     {
+        //         pressure.SetValue(value);
+        //         Debug.Log($"角色压力设置为：{value}");
+        //     }
+        VDebug.Log("pressure");
         }
-        }
+        
     }
-
-
-
-
 }

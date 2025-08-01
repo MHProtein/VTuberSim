@@ -1,15 +1,14 @@
-﻿using System.Linq;
-using VTuber.Character;
-using VTuber.Core.Foundation;
-using VTuber.Core.Managers;
+﻿using VTuber.Character;
 
-namespace VTuber.BattleSystem.Core.RaisingEffect
+namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingReplaceCardEffect : VRaisingDeleteCardEffect
+    public class VRaisingReplaceCardEffect : VRaisingEffect
     {
-        public VRaisingReplaceCardEffect(VRaisingEffectConfiguration configuration) : base(configuration)
+        
+        private VCardCondition _condition;
+        public VRaisingReplaceCardEffect(VRaisingReplaceCardEffectConfiguration configuration) : base(configuration)
         {
-            
+            _condition = configuration.Condition;
         }
 
         public override void ApplyEffect(VCharacter character)

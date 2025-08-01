@@ -1,6 +1,6 @@
 ﻿using VTuber.Character;
 
-namespace VTuber.BattleSystem.Core.RaisingEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingEffect
     {

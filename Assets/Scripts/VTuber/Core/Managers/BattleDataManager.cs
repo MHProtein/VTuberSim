@@ -4,10 +4,11 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
+using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Core.Managers
 {
-    public class VBattleDataManager : VSingleton<VBattleDataManager>
+    public class VResourcesManager : VSingleton<VResourcesManager>
     {
         public Dictionary<uint, VCardConfiguration> CardConfigurations => _cardConfigurations;
         private Dictionary<uint, VCardConfiguration> _cardConfigurations;
@@ -18,8 +19,14 @@ namespace VTuber.Core.Managers
         public Dictionary<uint, VBuffConfiguration> BuffConfigurations => _buffConfigurations;
         private Dictionary<uint, VBuffConfiguration> _buffConfigurations;
 
-        public Dictionary<uint, VEffectCondition> Conditions => conditions;
-        private Dictionary<uint, VEffectCondition> conditions;
+        public Dictionary<uint, VEffectCondition> Conditions => _conditions;
+        private Dictionary<uint, VEffectCondition> _conditions;
+        
+        public Dictionary<uint, VRaisingEffectConfiguration> RaisingEffects => _raisingEffects;
+        private Dictionary<uint, VRaisingEffectConfiguration> _raisingEffects;
+        
+        public Dictionary<uint, VCardCondition> CardConditions => _cardConditions;
+        private Dictionary<uint, VCardCondition> _cardConditions;
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -63,13 +70,39 @@ namespace VTuber.Core.Managers
 
         public void SetConditions(List<VEffectCondition> newConditions)
         {
-            conditions = new Dictionary<uint, VEffectCondition>();
+            _conditions = new Dictionary<uint, VEffectCondition>();
 
             foreach (var condition in newConditions)
             {
                 if (condition != null)
                 {
-                    conditions[condition.id] = condition;
+                    _conditions[condition.id] = condition;
+                }
+            }
+        }
+        
+        public void SetRaisingEffectConfigurations(List<VRaisingEffectConfiguration> effectConfigurations)
+        {
+            _raisingEffects = new Dictionary<uint, VRaisingEffectConfiguration>();
+
+            foreach (var effectConfig in effectConfigurations)
+            {
+                if (effectConfig != null)
+                {
+                    _raisingEffects[effectConfig.id] = effectConfig;
+                }
+            }
+        }
+        
+        public void SetCardConditions(List<VCardCondition> newConditions)
+        {
+            _cardConditions = new Dictionary<uint, VCardCondition>();
+
+            foreach (var condition in newConditions)
+            {
+                if (condition != null)
+                {
+                    _cardConditions[condition.ID] = condition;
                 }
             }
         }
@@ -104,6 +137,15 @@ namespace VTuber.Core.Managers
             return null;
         }
 
+        public VRaisingEffect CreateRaisingEffectByID(uint effectID, string parameter)
+        {
+            if (_raisingEffects.TryGetValue(effectID, out var effectConfig))
+            {
+                return effectConfig.CreateEffect(parameter);
+            }
+            return null;
+        }
+        
         public List<VCardConfiguration> GetAllCardConfigurations()
         {
             return new List<VCardConfiguration>(_cardConfigurations.Values);
@@ -111,7 +153,7 @@ namespace VTuber.Core.Managers
         
         public VEffectCondition GetConditionByID(uint conditionID)
         {
-            return conditions.GetValueOrDefault(conditionID);
+            return _conditions.GetValueOrDefault(conditionID);
         }
         
         public VEffectConfiguration GetEffectConfigurationByID(uint effectID)
@@ -127,6 +169,11 @@ namespace VTuber.Core.Managers
         public VBuffConfiguration GetBuffConfigurationByID(uint buffID)
         {
             return _buffConfigurations.GetValueOrDefault(buffID);
+        }
+
+        public VCardCondition GetCardConditionByID(uint conditionID)
+        {
+            return _cardConditions.GetValueOrDefault(conditionID);
         }
     }
 }

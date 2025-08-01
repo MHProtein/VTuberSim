@@ -1,14 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Spire.Xls;
 using VTuber.BattleSystem.Card;
 
-namespace VTuber.BattleSystem.Core.RaisingEffect
+namespace VTuber.Core.RaisingEffect
 {
+    public class VCardConditionHeaderIndex
+    {
+        public const int Id = 0;
+        public const int Type = 1;
+        public const int Condition = 2;
+    }
+    
     public abstract class VCardCondition
     {
-        public string Type;
-        public VCardRarity Rarity;
-		public List<uint> cardPool;
+        public uint ID => id;
+        private uint id;
 
+        public VCardCondition(CellRange row)
+        {
+            id = Convert.ToUInt32(row.Columns[VCardConditionHeaderIndex.Id].Value);
+        }
+        
         public abstract bool IsTrue(VCard card);
         public abstract bool IsTrue(VCardConfiguration cardConfig);
     }

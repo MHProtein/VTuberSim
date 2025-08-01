@@ -10,14 +10,15 @@ using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Character
 {
-    public class VBattleResourcesLoader
+    public class VResourcesLoader
     {
         private readonly string _xlsxPath;
 
-        public VBattleResourcesLoader(string xlsxPath)
+        public VResourcesLoader(string xlsxPath)
         {
             _xlsxPath = xlsxPath;
         }
@@ -30,6 +31,8 @@ namespace VTuber.Character
             LoadConditions(workbook);
             LoadEffects(workbook);
             LoadBuffs(workbook);
+            LoadRaisingEffects(workbook);
+            LoadCardConditions(workbook);
             return LoadCards(workbook);
         }
 
@@ -55,7 +58,7 @@ namespace VTuber.Character
                 list.Add(cfg);
             }
 
-            VBattleDataManager.Instance.SetCardConfigurations(list);
+            VResourcesManager.Instance.SetCardConfigurations(list);
             return list;
         }
 
@@ -80,7 +83,7 @@ namespace VTuber.Character
                 list.Add(effect);
             }
 
-            VBattleDataManager.Instance.SetEffectConfigurations(list);
+            VResourcesManager.Instance.SetEffectConfigurations(list);
         }
 
 
@@ -106,7 +109,7 @@ namespace VTuber.Character
                 list.Add(cfg);
             }
 
-            VBattleDataManager.Instance.SetBuffConfigurations(list);
+            VResourcesManager.Instance.SetBuffConfigurations(list);
         }
 
         private void LoadConditions(Workbook wb)
@@ -130,7 +133,56 @@ namespace VTuber.Character
                 list.Add(cond);
             }
 
-            VBattleDataManager.Instance.SetConditions(list);
+            VResourcesManager.Instance.SetConditions(list);
         }
+
+        public void LoadRaisingEffects(Workbook wb)
+        {
+            var sheet = Sheet(wb, "RaisingEffects");
+            var list = new List<VRaisingEffectConfiguration>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VRaisingEffectHeaderIndex.Type].Value;
+                if(row.Columns[VRaisingEffectHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var effectType = Type.GetType("VTuber.Core.RaisingEffect." + typeName + "Configuration");
+                if (effectType == null)
+                {
+                    VDebug.LogError($"Raising Effect type {typeName} not found.");
+                    continue;
+                }
+                var effect = (VRaisingEffectConfiguration)Activator.CreateInstance(effectType, row);
+                list.Add(effect);
+            }
+
+            VResourcesManager.Instance.SetRaisingEffectConfigurations(list);
+        }
+        
+        public void LoadCardConditions(Workbook wb)
+        {
+            var sheet = Sheet(wb, "CardConditions");
+            var list = new List<VCardCondition>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VCardConditionHeaderIndex.Type].Value;
+                if(row.Columns[VCardConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var conditionType = Type.GetType("VTuber.Core.RaisingEffect." + typeName);
+                if (conditionType == null)
+                {
+                    VDebug.LogError($"Card Condition type {typeName} not found.");
+                    continue;
+                }
+                var condition = (VCardCondition)Activator.CreateInstance(conditionType, row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetCardConditions(list);
+        }
+        
     }
 }
