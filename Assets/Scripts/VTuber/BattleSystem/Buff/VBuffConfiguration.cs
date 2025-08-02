@@ -34,6 +34,7 @@ namespace VTuber.BattleSystem.Buff
         public const int E5Param = 14;
     }
     
+    //Buff 的配置数据通过 VBuffConfiguration 存储，并延迟用于创建实例
     public class VBuffConfiguration
     {
         public uint id;
@@ -63,6 +64,7 @@ namespace VTuber.BattleSystem.Buff
                     continue;
                 uint effect = Convert.ToUInt32(effectIDStr);
                 
+                //每个 Buff 可绑定多个效果，通过 VEffectItem 创建出 VEffect
                 effectItems.Add(new VEffectItem
                 {
                     id = effect,
