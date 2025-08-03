@@ -55,6 +55,7 @@ namespace VTuber.BattleSystem.Core
         protected Dictionary<string, object> _playTwiceMessageDict;
         protected VCharacterAttributeManager _characterAttributeManager;
         protected bool paused = false;
+        protected int _targetPopularity;
         public void NextCardPlayTwice()
         {
             _shouldNextCardPlayTwice = true;
@@ -78,8 +79,10 @@ namespace VTuber.BattleSystem.Core
             
         }
         
-        public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
+        public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
+            VCardLibrary cardLibrary, int initialTurnCount, int targetPopularity, int initialViewers)
         {
+            _targetPopularity = targetPopularity;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager();
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
@@ -105,9 +108,15 @@ namespace VTuber.BattleSystem.Core
 
             _battleAttributeManager.InitializeInternalManagers();
             
+            if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+            {
+                viewerCountAttribute.AddTo(initialViewers, false);
+            }
+            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
+                {"TargetPopularity", targetPopularity},
             });
             
             InitializeTurn();
@@ -326,17 +335,18 @@ namespace VTuber.BattleSystem.Core
             
             if (TurnLeft <= 0)
             {
-                //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
-                //     {
-                //     });
+                bool isTargetMet = _battleAttributeManager.TryGetAttribute("BAPopularity", out var popularityAttribute) && 
+                                   popularityAttribute.Value >= _targetPopularity;
+                
                 _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
-      
+                
                 _buffManager.Clear();
                 _battleAttributeManager.Clear();
                 _cardPilesManager.DiscardPile.Clear();
                 _cardPilesManager.DrawPile.Clear();
                 _cardPilesManager.HandPile.Clear();
                 _cardPilesManager.Deck.Clear();
+                
                 
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
                 {
@@ -345,7 +355,8 @@ namespace VTuber.BattleSystem.Core
                 
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEndNotify, new Dictionary<string, object>
                 {
-                    {"TurnLeft", TurnLeft}
+                    {"TurnLeft", TurnLeft},
+                    {"IsTargetMet", isTargetMet}
                 });
             }
         }

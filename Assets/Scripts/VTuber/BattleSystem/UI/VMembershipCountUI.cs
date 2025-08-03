@@ -6,7 +6,7 @@ using PrimeTween;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VMembershipCountUI : VStatUI
+    public class VBattleMembershipCountUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text viewerCountText;
 

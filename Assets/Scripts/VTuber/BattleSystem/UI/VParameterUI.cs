@@ -9,7 +9,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VParameterUI : VStatUI
+    public class VBattleParameterUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text ParameterText;
         

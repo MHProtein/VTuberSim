@@ -6,7 +6,7 @@ using VTuber.BattleSystem.Core;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VRevenueUI : VStatUI
+    public class VBattleRevenueUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text viewerCountText;
 

@@ -3,9 +3,11 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.StateMachine;
 using VTuber.Dialogue.UI;
+using VTuber.EventSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
@@ -32,7 +34,7 @@ namespace VTuber.BattleSystem.Core
         [Space(5)]
         [Header("EventSystem")]
         [SerializeField] private GameObject eventSystemRoot;
-        [SerializeField] private VEvent eventSystem;
+        [FormerlySerializedAs("eventSystem")] [SerializeField] private VEventSystem eventSystemSystem;
         private VCharacter _character;
         private VStateMachine _stateMachine;
         
@@ -57,7 +59,7 @@ namespace VTuber.BattleSystem.Core
 
             _character.CardLibrary.AddCards(cards);
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
-                battleRoot, battle, eventSystemRoot, eventSystem,
+                battleRoot, battle, eventSystemRoot, eventSystemSystem,
                 _character);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
@@ -69,6 +71,7 @@ namespace VTuber.BattleSystem.Core
         {
             base.OnEnable();
             _stateMachine.OnEnable();
+            
         }
         
         protected override void OnDisable()

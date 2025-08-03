@@ -112,6 +112,12 @@ namespace VTuber.ScheduleSystem.UI
             ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
         }
 
+        public Tween MoveIndicator(Vector2Int coordinate)
+        {
+            ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
+            return ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
+        }
+
         public void ResetSchedule()
         {            
             for (int x = 0; x < slotSize.x; x++)
@@ -139,9 +145,9 @@ namespace VTuber.ScheduleSystem.UI
             Tween.Position(indicator, position, 0.2f);
         }
         
-        public void ChangeIndicatorScale(float scale)
+        public Tween ChangeIndicatorScale(float scale)
         {
-            Tween.ScaleY(indicator,scale, 0.2f);
+            return Tween.ScaleY(indicator,scale, 0.2f);
         }
         
         public void ChangeIndicatorColor(Color color)

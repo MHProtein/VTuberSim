@@ -9,7 +9,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VPopularityUI : VStatUI
+    public class VBattlePopularityUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text popularityText;
 

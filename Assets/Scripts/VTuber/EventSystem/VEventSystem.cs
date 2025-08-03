@@ -1,16 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using Yarn.Unity;
-using Yarn.Unity.Editor;
 
-namespace VTuber.ScheduleSystem.Core
+namespace VTuber.EventSystem
 {
-    public class VEvent : VMonoBehaviour
+    public class VEventSystem : VMonoBehaviour
     {
         private VCharacter _character;
         
@@ -19,6 +17,7 @@ namespace VTuber.ScheduleSystem.Core
         public void InitializeEvent(VCharacter character, string node)
         {
             _character = character;
+            VDebug.Log(node);
             dialogueRunner.StartDialogue(node);
         }
         
@@ -33,6 +32,5 @@ namespace VTuber.ScheduleSystem.Core
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, new Dictionary<string, object>());
         }
-        
     }
 }

@@ -9,7 +9,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VShieldUI : VStatUI
+    public class VBattleShieldUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text shieldText;
 

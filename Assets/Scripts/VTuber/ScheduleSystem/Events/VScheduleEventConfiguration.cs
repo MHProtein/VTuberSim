@@ -62,5 +62,10 @@ namespace VTuber.ScheduleSystem.Events
         {
             return new VScheduleEvent(this);
         }
+
+        public void SetDuration(int duration)
+        {
+            this._duration = duration;
+        }
     }
 }

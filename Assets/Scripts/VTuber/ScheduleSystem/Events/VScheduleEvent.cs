@@ -24,18 +24,27 @@ namespace VTuber.ScheduleSystem.Events
         
         protected readonly VScheduleEventConfiguration _config;
 
+        public Vector2Int Coordinate { get; protected set; } = new Vector2Int(-1, -1);
+        
         public bool IsExecuted { get; protected set; } = false;
         
-        private DaySchedule _daySchedule;
+        public DaySchedule DaySchedule => _daySchedule;
+        protected DaySchedule _daySchedule;
 
         public VScheduleEvent(VScheduleEventConfiguration config)
         {
             _config = config;
         }
         
-        public void SetDaySchedule(DaySchedule daySchedule)
+        public void SetDaySchedule(DaySchedule daySchedule, Vector2Int position)
         {
             _daySchedule = daySchedule;
+            Coordinate = position;
+        }
+        
+        public void SetDuration(int duration)
+        {
+            _config.SetDuration(duration);
         }
 
         /// <summary>
@@ -54,17 +63,13 @@ namespace VTuber.ScheduleSystem.Events
         {
             if (!CanExecute(player))
                 return false;
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStreamEventStart, new Dictionary<string, object>()
-            {
-                {"Event", this}
-            });
             IsExecuted = true;
             return true;
         }
 
-        public virtual void NextEvent()
+        public virtual VScheduleEvent GetNextEvent()
         {
-            _daySchedule.NextEvent();
+            return _daySchedule.NextEvent();
         }
     }
 }

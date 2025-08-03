@@ -31,6 +31,10 @@ namespace VTuber.Core.EventCenter
         OnMemberCountChanged,
         OnFollowerToViewerRatioChanged,
         OnMoneyChanged,
+        
+        OnSkipEvent,
+        OnSwitchToModifySchedule,
+        
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>

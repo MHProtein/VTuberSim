@@ -9,7 +9,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VStaminaUI : VStatUI
+    public class VBattleStaminaUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text staminaText;
         

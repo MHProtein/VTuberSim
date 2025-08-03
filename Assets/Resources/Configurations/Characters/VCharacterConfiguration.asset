@@ -43,7 +43,7 @@ MonoBehaviour:
       Data: 
   staminaInitialValue: 100
   staminaMinValue: 0
-  staminaMaxValue: 200
+  staminaMaxValue: 100
   staminaConfiguration: {fileID: 11400000, guid: 0b8b1877b943de74184ef7428f6c6787, type: 2}
   pressureInitialValue: 1
   pressureMinValue: 1

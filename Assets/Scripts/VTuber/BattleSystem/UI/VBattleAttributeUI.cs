@@ -6,7 +6,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VStatUI : VUIBehaviour
+    public class VBattleAttributeUI : VUIBehaviour
     {
         protected VBattleEventKey key = VBattleEventKey.Default;
         protected VAnimationQueue _animationQueue = new VAnimationQueue();
@@ -28,7 +28,7 @@ namespace VTuber.BattleSystem.UI
         {
         }
 
-        protected virtual void RaiseEvents( bool isFromCard, bool shouldPlayTwice)
+        protected virtual void RaiseEvents(bool isFromCard, bool shouldPlayTwice)
         {
             if (shouldPlayTwice)
             {

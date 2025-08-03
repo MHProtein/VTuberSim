@@ -11,7 +11,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VMultiplierUI : VStatUI
+    public class VBattleMultiplierUI : VBattleAttributeUI
     {
         
         [SerializeField] private TMP_Text MultiplierText;
