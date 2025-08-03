@@ -8,11 +8,14 @@ namespace VTuber.Character
     public class VCharacter
     {
         public string Name { get; set; }
+
+        public uint FillingEventIDDuration1 => _characterConfig.fillingEventIDDuration1;
+        public uint FillingEventIDDuration2 => _characterConfig.fillingEventIDDuration2;
+        public uint FillingEventIDDuration3 => _characterConfig.fillingEventIDDuration3;
         
         public VCharacterAttributeManager AttributeManager { get; private set; }
 
         private VCharacterConfiguration _characterConfig;
-        
 
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;

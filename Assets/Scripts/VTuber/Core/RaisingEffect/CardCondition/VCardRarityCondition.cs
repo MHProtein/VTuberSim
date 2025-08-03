@@ -1,10 +1,17 @@
-﻿using VTuber.BattleSystem.Card;
+﻿using System;
+using Spire.Xls;
+using VTuber.BattleSystem.Card;
 
-namespace VTuber.BattleSystem.Core.RaisingEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VCardRarityCondition : VCardCondition
     {
         private VCardRarity _cardRarity;
+
+        public VCardRarityCondition(CellRange row) : base(row)
+        {
+            _cardRarity = Enum.Parse<VCardRarity>(row.Columns[VCardConditionHeaderIndex.Condition].Value);
+        }
 
         public override bool IsTrue(VCard card)
         {

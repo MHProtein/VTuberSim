@@ -5,9 +5,11 @@ using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.StateMachine;
+using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using Yarn.Unity;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -16,6 +18,7 @@ namespace VTuber.BattleSystem.Core
         [FormerlySerializedAs("schedule")]
         [Header("Schedule")] 
         [SerializeField] private VScheduleUI scheduleUI;
+        [SerializeField] private VScheduleCreator scheduleCreator;
 
         private VWeeklySchedule _weeklySchedule; 
         
@@ -25,13 +28,18 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private VBattle battle;
         [SerializeField] private VBattleConfiguration _battleConfiguration;
         [SerializeField] private VCharacterConfiguration _characterConfiguration;
+        
+        [Space(5)]
+        [Header("EventSystem")]
+        [SerializeField] private GameObject eventSystemRoot;
+        [SerializeField] private VEvent eventSystem;
         private VCharacter _character;
         private VStateMachine _stateMachine;
         
         protected override void Awake()
         {
             base.Awake();
-            VBattleResourcesLoader loader = new VBattleResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+            VResourcesLoader loader = new VResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
             _character = new VCharacter(_characterConfiguration);
             _weeklySchedule = new VWeeklySchedule(_character);
             var cardConfigs = loader.Load();
@@ -46,8 +54,11 @@ namespace VTuber.BattleSystem.Core
                         cards.Add(card);
                 }
             }
+
             _character.CardLibrary.AddCards(cards);
-            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule, battleRoot, battle, _character);
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
+                battleRoot, battle, eventSystemRoot, eventSystem,
+                _character);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());
@@ -89,6 +100,10 @@ namespace VTuber.BattleSystem.Core
 
         public void ConvertToSchedule()
         {
+            scheduleUI.CompleteSchedule(_character.FillingEventIDDuration1,
+                _character.FillingEventIDDuration2,
+                _character.FillingEventIDDuration3);
+            
             var slots = scheduleUI.Slots;
             for (int x = 0; x < slots.GetLength(1); x++)
             {

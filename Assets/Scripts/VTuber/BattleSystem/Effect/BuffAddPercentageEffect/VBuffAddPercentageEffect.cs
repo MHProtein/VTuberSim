@@ -26,7 +26,7 @@ namespace VTuber.BattleSystem.Effect
                 if (_configuration.multiplyByLayer > 0.0f)
                     value *= (int)(layer * _configuration.multiplyByLayer);
                 value = value == 0 ? (_percentage.Value > 0.0f ? 1 : -1) : value;
-                battle.BuffManager.AddBuff(VBattleDataManager.Instance.CreateBuffByID(_buffID), value, isFromCard, shouldApplyTwice);
+                battle.BuffManager.AddBuff(VResourcesManager.Instance.CreateBuffByID(_buffID), value, isFromCard, shouldApplyTwice);
                 VDebug.Log("Effect " + _configuration.effectName + " added " + value + " to buff with ID: " + _buffID + ". New value: " + buff.Value);
             }
             else

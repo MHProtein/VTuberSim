@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
+using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
+using Random = UnityEngine.Random;
 
-namespace VTuber.BattleSystem.Core.RaisingEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingDeleteCardEffect : VRaisingEffect
     {
         private VCardCondition _condition;
-        public VRaisingDeleteCardEffect(VRaisingEffectConfiguration configuration) : base(configuration)
+        public VRaisingDeleteCardEffect(VRaisingDeleteCardEffectConfiguration configuration) : base(configuration)
         {
-            
+            _condition = configuration.Condition;
         }
 
         public override void ApplyEffect(VCharacter character)

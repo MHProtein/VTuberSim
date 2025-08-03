@@ -1,8 +1,23 @@
-﻿namespace VTuber.BattleSystem.Core.RaisingEffect
+﻿using System;
+using Spire.Xls;
+using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
+
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingReplaceCardEffectConfiguration : VRaisingEffectConfiguration
     {
-        public override VRaisingEffect CreateEffect()
+        public VCardCondition Condition => _condition;
+        private VCardCondition _condition;
+        public VRaisingReplaceCardEffectConfiguration(CellRange row) : base(row)
+        {
+            
+            _condition =
+                VResourcesManager.Instance.GetCardConditionByID(
+                    Convert.ToUInt32(row.Columns[VRaisingEffectHeaderIndex.Condition].Value));
+        }
+
+        public override VRaisingEffect CreateEffect(string parameter)
         {
             return new VRaisingReplaceCardEffect(this);
         }

@@ -7,9 +7,12 @@ namespace VTuber.Core.EventCenter
     {
         Default,
         
+        OnEventStart,
         OnStreamEventStart,
         OnEventExecuted,
         OnScheduleExecuted,
+        
+        OnEventEnd,
         
         OnNotifyEventDescriptionChange,
         

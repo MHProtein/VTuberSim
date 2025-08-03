@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Events;
+using Yarn.Unity;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -12,6 +14,7 @@ namespace VTuber.ScheduleSystem.UI
         protected VScheduleCreatorSlot[,] slots;
         
         [SerializeField] private List<VScheduleEventConfiguration> eventDatas;
+        public GameObject eventUIPrefab;
 
         protected override void Awake()
         {
@@ -45,7 +48,7 @@ namespace VTuber.ScheduleSystem.UI
         protected override void Start()
         {
             base.Start();
-            foreach (var eventData in eventDatas)
+            foreach (var eventData in VResourcesManager.Instance.GetAllEventConfigurations())
             {
                 var slot = GetAvailableSlot();
                 var eventObj = Instantiate(itemPrefab, slot.transform);

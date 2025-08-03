@@ -72,16 +72,16 @@ namespace VTuber.BattleSystem.Card
             _newEffects = new List<VEffect>();
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
             if(conditionId != -1)
-                condition = VBattleDataManager.Instance.GetConditionByID((uint)conditionId);
+                condition = VResourcesManager.Instance.GetConditionByID((uint)conditionId);
             
             foreach (var effect in effects)
             {
-                _effects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
+                _effects.Add(VResourcesManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
             }
             
             foreach (var effect in newEffects)
             {
-                _newEffects.Add(VBattleDataManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.upgradedParameter));
+                _newEffects.Add(VResourcesManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.upgradedParameter));
             }
         }
 

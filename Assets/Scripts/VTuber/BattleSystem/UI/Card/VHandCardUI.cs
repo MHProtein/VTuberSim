@@ -314,7 +314,6 @@ namespace VTuber.BattleSystem.UI
                 cardUI.SetPopularityImage(
                     VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
                 cardUI.popularityText.text = originalValue.ToString();
-                VDebug.Log(VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
                 _popularityPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.popularityText.transform, Vector3.one, 0.5f).OnComplete(
                     () =>
                     {
