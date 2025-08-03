@@ -17,7 +17,7 @@
     /// </summary>
     public enum ScheduleEventType
     {
-        Live,
+        Stream,
         Practice,
         Assist,
         Recovery

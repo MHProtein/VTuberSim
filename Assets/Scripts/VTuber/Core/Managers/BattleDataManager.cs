@@ -5,6 +5,8 @@ using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.ScheduleSystem.Events;
+using VTuber.ScheduleSystem.Events.DialogueEvent;
 
 namespace VTuber.Core.Managers
 {
@@ -27,6 +29,13 @@ namespace VTuber.Core.Managers
         
         public Dictionary<uint, VCardCondition> CardConditions => _cardConditions;
         private Dictionary<uint, VCardCondition> _cardConditions;
+        
+        public Dictionary<uint, VDialogueEventConfiguration> DialogueEventConfigs => _dialogueEventConfigs;
+        private Dictionary<uint, VDialogueEventConfiguration> _dialogueEventConfigs;
+        
+        
+        public Dictionary<uint, VStreamEventConfiguration> StreamEventConfigs => _streamEventConfigs;
+        private Dictionary<uint, VStreamEventConfiguration> _streamEventConfigs;
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -106,6 +115,32 @@ namespace VTuber.Core.Managers
                 }
             }
         }
+        
+        public void SetDialogueEventConfigurations(List<VDialogueEventConfiguration> dialogueEventConfigs)
+        {
+            _dialogueEventConfigs = new Dictionary<uint, VDialogueEventConfiguration>();
+
+            foreach (var eventConfig in dialogueEventConfigs)
+            {
+                if (eventConfig != null)
+                {
+                    _dialogueEventConfigs[eventConfig.id] = eventConfig;
+                }
+            }
+        }
+        
+        public void SetStreamEventConfigurations(List<VStreamEventConfiguration> streamEventConfigs)
+        {
+            _streamEventConfigs = new Dictionary<uint, VStreamEventConfiguration>();
+
+            foreach (var eventConfig in streamEventConfigs)
+            {
+                if (eventConfig != null)
+                {
+                    _streamEventConfigs[eventConfig.id] = eventConfig;
+                }
+            }
+        }
 
         public VEffect CreateEffectByID(uint effectID, string parameter, string upgradedParameter)
         {
@@ -146,9 +181,35 @@ namespace VTuber.Core.Managers
             return null;
         }
         
+        public VStreamEvent CreateStreamEventByID(uint eventID)
+        {
+            if (_streamEventConfigs.TryGetValue(eventID, out var eventConfig))
+            {
+                return eventConfig.CreateEvent() as VStreamEvent;
+            }
+            return null;
+        }
+        
+        public VDialogueEvent CreateDialogueEventByID(uint eventID)
+        {
+            if (_dialogueEventConfigs.TryGetValue(eventID, out var eventConfig))
+            {
+                return eventConfig.CreateEvent() as VDialogueEvent;
+            }
+            return null;
+        }
+        
         public List<VCardConfiguration> GetAllCardConfigurations()
         {
             return new List<VCardConfiguration>(_cardConfigurations.Values);
+        }
+        
+        public List<VScheduleEventConfiguration> GetAllEventConfigurations()
+        {
+            var allEvents = new List<VScheduleEventConfiguration>();
+            allEvents.AddRange(_dialogueEventConfigs.Values);
+            allEvents.AddRange(_streamEventConfigs.Values);
+            return allEvents;
         }
         
         public VEffectCondition GetConditionByID(uint conditionID)
@@ -175,5 +236,16 @@ namespace VTuber.Core.Managers
         {
             return _cardConditions.GetValueOrDefault(conditionID);
         }
+        
+        public VDialogueEventConfiguration GetDialogueEventConfigurationByID(uint eventID)
+        {
+            return _dialogueEventConfigs.GetValueOrDefault(eventID);
+        }
+        
+        public VStreamEventConfiguration GetStreamEventConfigurationByID(uint eventID)
+        {
+            return _streamEventConfigs.GetValueOrDefault(eventID);
+        }
+        
     }
 }

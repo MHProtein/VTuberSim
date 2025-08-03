@@ -9,6 +9,7 @@ using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using Yarn.Unity;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -17,6 +18,7 @@ namespace VTuber.BattleSystem.Core
         [FormerlySerializedAs("schedule")]
         [Header("Schedule")] 
         [SerializeField] private VScheduleUI scheduleUI;
+        [SerializeField] private VScheduleCreator scheduleCreator;
 
         private VWeeklySchedule _weeklySchedule; 
         
@@ -52,6 +54,7 @@ namespace VTuber.BattleSystem.Core
                         cards.Add(card);
                 }
             }
+
             _character.CardLibrary.AddCards(cards);
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystem,
@@ -97,6 +100,10 @@ namespace VTuber.BattleSystem.Core
 
         public void ConvertToSchedule()
         {
+            scheduleUI.CompleteSchedule(_character.FillingEventIDDuration1,
+                _character.FillingEventIDDuration2,
+                _character.FillingEventIDDuration3);
+            
             var slots = scheduleUI.Slots;
             for (int x = 0; x < slots.GetLength(1); x++)
             {

@@ -11,6 +11,8 @@ using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.ScheduleSystem.Events;
+using VTuber.ScheduleSystem.Events.DialogueEvent;
 
 namespace VTuber.Character
 {
@@ -33,6 +35,8 @@ namespace VTuber.Character
             LoadBuffs(workbook);
             LoadRaisingEffects(workbook);
             LoadCardConditions(workbook);
+            LoadDialogueEvents(workbook);
+            LoadStreamEvents(workbook);
             return LoadCards(workbook);
         }
 
@@ -182,6 +186,40 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetCardConditions(list);
+        }
+
+        public void LoadDialogueEvents(Workbook wb)
+        {
+            var sheet = Sheet(wb, "DialogueEvents");
+            var list = new List<VDialogueEventConfiguration>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                if(row.Columns[VCardConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue;
+                var condition = new VDialogueEventConfiguration(row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetDialogueEventConfigurations(list);
+        }
+        
+        public void LoadStreamEvents(Workbook wb)
+        {
+            var sheet = Sheet(wb, "StreamEvents");
+            var list = new List<VStreamEventConfiguration>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                if(row.Columns[VCardConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue;
+                var condition = new VStreamEventConfiguration(row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetStreamEventConfigurations(list);
         }
         
     }

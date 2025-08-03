@@ -1749,7 +1749,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 944d7e67e6094991915755591d2f5960, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   scheduleUI: {fileID: 4800499513803145797}
+  scheduleCreator: {fileID: 9180115723338920156}
   battleRoot: {fileID: 8730473305854889312}
   battle: {fileID: 8697063738930296821}
   _battleConfiguration: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}
@@ -2895,6 +2905,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 572a368020974ed6948295d132780da0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   dialogueRunner: {fileID: 8309902628761367870}
 --- !u!1 &914477719
 GameObject:
@@ -3085,6 +3104,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea775db9653a457e899b52a62915fc85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   m_Raycaster: {fileID: 963543460}
   m_EventSystem: {fileID: 30655021}
   canvasRect: {fileID: 963543464}
@@ -3417,8 +3445,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1370900052}
   - {fileID: 1706758802}
+  - {fileID: 1370900052}
   - {fileID: 695283901}
   - {fileID: 1706294309}
   - {fileID: 1433093025}
@@ -3442,8 +3470,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d5d652d2da4dedb3476b8d8b2937f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weekCountText: {fileID: 0}
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  weekCountText: {fileID: 1787199646}
   _scheduleUI: {fileID: 1370900052}
+  _icons:
+    m_keys:
+    - Practice
+    - Recovery
+    - Stream
+    m_values:
+    - {fileID: 91500968, guid: b53d4b8d2c82d154682b6c59192abe95, type: 3}
+    - {fileID: -1487505022, guid: b53d4b8d2c82d154682b6c59192abe95, type: 3}
+    - {fileID: 2126007384, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
+  eventUIPrefab: {fileID: 1328888101914423096, guid: 2e229b23f5c424c42ab5ffd3bc7d727c, type: 3}
   scheduleCreationUI: {fileID: 1706758801}
   eventNameUI: {fileID: 1396912219}
   eventDescriptionUI: {fileID: 1109780480}
@@ -15268,7 +15315,7 @@ MonoBehaviour:
   - {fileID: 8020628926005130372}
   - {fileID: 3859336322479853829}
   autoStart: 0
-  startNode: Start
+  startNode: 
   runSelectedOptionAsLine: 0
   onNodeStart:
     m_PersistentCalls:
@@ -15589,6 +15636,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b3ebd591d54be6841ffc2617544a09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   configuration: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}
 --- !u!224 &8719545776915889603
 RectTransform:
@@ -15881,12 +15937,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slotSize: {x: 7, y: 3}
   itemPrefab: {fileID: 1328888101914423096, guid: 984e5b3ca7709a140b66d069b86fb39c, type: 3}
-  eventDatas:
-  - {fileID: 11400000, guid: a9715f1da2164ca4ca1d689992158455, type: 2}
-  - {fileID: 11400000, guid: 748a9ff5d3ad7c34f8af5f84377aafd0, type: 2}
-  - {fileID: 11400000, guid: dfff545f026c7d743bcd159a053c4387, type: 2}
-  - {fileID: 11400000, guid: acd8b69c06baf1f4694d15b3a897abaa, type: 2}
-  - {fileID: 11400000, guid: dec2d747ea2dc144aa6e06defd3d0923, type: 2}
+  eventUIPrefab: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

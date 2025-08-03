@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using Yarn.Unity;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -14,6 +15,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Text weekCountText;
         
         [Header("Schedule")] [SerializeField] private Transform _scheduleUI;
+        [SerializeField] private SerializableDictionary<string, Sprite> _icons;
+        [SerializeField] private GameObject eventUIPrefab;
         
         [Space(3)]
         [Header("ScheduleCreation")] 
@@ -117,6 +120,24 @@ namespace VTuber.ScheduleSystem.UI
             {
                 onComplete?.Invoke();
             });
+        }
+        
+        public VEventUI CreateEventUI(Transform parent)
+        {
+            var eventUI = Instantiate(eventUIPrefab, parent);
+            var eventUIComponent = eventUI.GetComponent<VEventUI>();
+            return eventUIComponent;
+        }
+
+        public Sprite GetIcon(string iconName)
+        {
+            if (_icons.TryGetValue(iconName, out var icon))
+            {
+                return icon;
+            }
+
+            Debug.LogWarning($"Icon with name {iconName} not found.");
+            return null;
         }
     }
 }

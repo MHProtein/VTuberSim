@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -152,6 +153,52 @@ namespace VTuber.ScheduleSystem.UI
         public Tween ResetIndicatorPosition()
         {
             return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
+        }
+
+        public void CompleteSchedule(uint size1Id, uint size2Id, uint size3Id)
+        {
+            for (int x = 0; x < slotSize.x; x++)
+            {
+                int emptyCount = 0;
+                for (int y = 0; y < slotSize.y; y++)
+                {
+                    if(slots[y, x].Item == null)
+                    {
+                        emptyCount++;
+                    }
+                    else
+                    {
+                        if (emptyCount > 0)
+                        {
+                            var yy = y - emptyCount;
+                            VEventUI eventUIObject = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
+                            uint eventId = 0; 
+                            if(emptyCount == 1)
+                                eventId = size1Id;
+                            else if(emptyCount == 2)
+                                eventId = size2Id;
+                            var eventData = VResourcesManager.Instance.GetDialogueEventConfigurationByID(eventId);
+                            eventUIObject.Initialize(eventData, slots[yy, x]);
+                            
+                            emptyCount = 0;
+                        }
+                    }
+                }
+                if (emptyCount > 0)
+                {
+                    var yy = 3 - emptyCount;
+                    VEventUI eventUIObject = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
+                    uint eventId = 0; 
+                    if(emptyCount == 1)
+                        eventId = size1Id;
+                    else if(emptyCount == 2)
+                        eventId = size2Id;
+                    else if(emptyCount == 3)
+                        eventId = size3Id;
+                    var eventData = VResourcesManager.Instance.GetDialogueEventConfigurationByID(eventId);
+                    eventUIObject.Initialize(eventData, slots[yy, x]);
+                }
+            }
         }
     }
 }

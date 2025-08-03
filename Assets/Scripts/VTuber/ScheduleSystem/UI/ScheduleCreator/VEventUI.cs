@@ -70,10 +70,28 @@ namespace VTuber.ScheduleSystem.UI
             _interactable = interactable;
         }
 
-        public void InitializeDrag(VScheduleEventConfiguration eventData, Vector2 initPosition)
+        public void Initialize(VScheduleEventConfiguration eventData, VScheduleSlot slot)
         {
             _event = eventData.CreateEvent();
-            icon.sprite = eventData.icon;
+            icon.sprite = VRaisingUI.Instance.GetIcon(eventData.icon);
+            background.color = eventData.backgroundColor;
+            _bgColor = eventData.backgroundColor;
+            icon.transform.localScale = Vector3.zero;
+            background.transform.localScale = Vector3.zero;
+            Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
+            Tween.Scale(background.transform, new Vector3(1, eventData.Duration, 1), 0.3f);
+
+            if(slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
+            {
+                SetNewParents(parents, transformParent, position, false);
+            }
+        }
+
+        public void InitializeDrag(VScheduleEventConfiguration eventData,
+            Vector2 initPosition)
+        {
+            _event = eventData.CreateEvent();
+            icon.sprite = VRaisingUI.Instance.GetIcon(eventData.icon);
             background.color = eventData.backgroundColor;
             _bgColor = eventData.backgroundColor;
             _initPosition = initPosition;
@@ -100,7 +118,7 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
         
-        public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position)
+        public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position, bool shouldTween)
         {
             parentBeforeDrag = parentSlots;
             parentSlots = parents;
@@ -110,7 +128,12 @@ namespace VTuber.ScheduleSystem.UI
             {
                 parent.SetItem(this);
             }
-            Tween.Position(transform, position, 0.2f);
+            if(shouldTween)
+                Tween.Position(transform, position, 0.2f);
+            else
+            {
+                transform.position = position;
+            }
             transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
             //transform.position = position;
         }
@@ -124,7 +147,7 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     if(slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
                     {
-                        SetNewParents(parents, transformParent, position);
+                        SetNewParents(parents, transformParent, position, true);
                         return true;
                     }
                 }

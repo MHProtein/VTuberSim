@@ -1,0 +1,45 @@
+﻿title: AddSinging
+position: -24,-1
+---
+Me: AddSinging!
+He: Yoooooo!
+
+
+-> AddSinging50 
+    <<ApplyEffect Event 0 50>>
+-> AddSinging30 
+    <<ApplyEffect Event 0 30>>
+-> AddSinging20 
+    <<ApplyEffect Event 0 20>>
+===
+
+title: AddGaming
+position: -24,-1
+---
+Me: AddGaming!
+He: Let's Gooooooo!
+
+
+-> AddGaming50 
+    <<ApplyEffect Event 1 50>>
+-> AddGaming30 
+    <<ApplyEffect Event 1 30>>
+-> AddGaming20 
+    <<ApplyEffect Event 1 20>>
+===
+
+
+title: AddChatting
+position: -24,-1
+---
+Me: AddSinging!
+He: Ayyyyyyyyy!
+
+
+-> AddChatting50 
+    <<ApplyEffect Event 2 50>>
+-> AddChatting30 
+    <<ApplyEffect Event 2 30>>
+-> AddChatting0 
+    <<ApplyEffect Event 2 20>>
+===

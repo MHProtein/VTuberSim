@@ -15,8 +15,10 @@ namespace VTuber.ScheduleSystem.Events
         public string EventName => _config.eventName;
         public string Description => _config.description;
         public ScheduleEventType Type => _config.type;
-        public Sprite Icon => _config.icon;
-        public int StaminaCost => _config.staminaCost;
+        public string Icon => _config.icon;
+        
+        public VEventCostType CostType => _config.costType;
+        public int Cost => _config.cost;
         //adding duration to meet event may last across 2 times period
         public int Duration => _config.Duration;
         

@@ -41,6 +41,7 @@ namespace VTuber.Core.StateMachine
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            
             if (stateMachine.ShouldPauseSchedule)
             {
                 stateMachine.SwitchState(VStateType.Pause);
@@ -97,7 +98,7 @@ namespace VTuber.Core.StateMachine
         {
             _currentEvent = messagedict["Event"] as VScheduleEvent;
             InitializeBattle((_currentEvent as VStreamEvent).InitialTurnCount);
-        }      
+        }
         
         public override void Enter(VState state, params object[] enterParams)
         {

@@ -107,7 +107,7 @@ namespace VTuber.ScheduleSystem.Schedule
         }
 
         public void Execute()
-        {
+        { 
             var e = _slots[currentTimeOfDay].Event;
 
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventExecuted, new Dictionary<string, object>()
@@ -129,10 +129,10 @@ namespace VTuber.ScheduleSystem.Schedule
             if (currentTimeOfDay == TimeOfDay.End)
             {
                 _vWeeklySchedule.NextDay();
+                return;
             }
             
             Execute();
-            return;
         }
 
         public void Reset()

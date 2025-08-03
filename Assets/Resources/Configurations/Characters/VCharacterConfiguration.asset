@@ -70,7 +70,7 @@ MonoBehaviour:
   chattingAbilityInitialValue: 400
   chattingAbilityMinValue: 0
   chattingAbilityMaxValue: -1
-  chattingAbilityColor: {r: 1, g: 0.69803923, b: 0, a: 1}
+  chattingAbilityColor: {r: 0.776, g: 0.651, b: 0.349, a: 1}
   chattingAbilityGainFromBattleRates:
   - from: 0
     to: -1
@@ -120,3 +120,6 @@ MonoBehaviour:
   revenueShareRateMinValue: 0
   revenueShareRateMaxValue: 100
   revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
+  fillingEventIDDuration1: 3
+  fillingEventIDDuration2: 4
+  fillingEventIDDuration3: 5
