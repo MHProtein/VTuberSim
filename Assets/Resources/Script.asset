@@ -21,12 +21,20 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _phases:
+  phases:
   - phaseName: Phase1
-    description: 
+    description: asdfasdf
+    startEventWeekIndex: 0
+    startEventDayIndex: 0
+    startEventTimeOfDay: 0
+    startEventID: 0
+    endEventWeekIndex: 0
+    endEventDayIndex: 0
+    endEventTimeOfDay: 0
+    endEventIDs: 
     specialEventData:
     - weekIndex: 0
-      dayIndex: 5
+      dayIndex: 2
       timeOfDay: 0
       eventType: 0
-      eventID: 2
+      eventID: 0

@@ -108,8 +108,14 @@ namespace VTuber.Core.StateMachine
             {
                 stateMachine.ScheduleUI.MoveIndicator(e.Coordinate).OnComplete(() =>
                 {
-                    e.Execute(stateMachine.Character);
                     stateMachine.Character.ApplyCost(e);
+                    e.Execute(stateMachine.Character);
+                    
+                    VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventExecuted, new Dictionary<string, object>
+                    {
+                        { "Event", e },
+                        { "Coordinate", e.Coordinate }
+                    });
                 });
             }
             else

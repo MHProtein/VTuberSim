@@ -105,13 +105,14 @@ namespace VTuber.ScheduleSystem.Schedule
             return _days[_currentDayIndex].GetNextEvent();
         }
 
-        public void Reset()
+        public void Reset(bool resetIndices)
         {
             foreach (var day in _days)
             {
-                day.Reset();
+                day.Reset(resetIndices);
             }
-            _currentDayIndex = 0;
+            if(resetIndices)
+                _currentDayIndex = 0;
         }
         
     }

@@ -29,6 +29,9 @@ namespace VTuber.ScheduleSystem.UI
         private Vector2 _initPosition;
         
         private Color _bgColor;
+
+        public bool IsFixed => _isFixed;
+        private bool _isFixed = false;
         
         protected override void Awake()
         {
@@ -56,13 +59,18 @@ namespace VTuber.ScheduleSystem.UI
         public void SetColorGrey()
         {
             background.color = Color.grey;
-            icon.color = Color.grey;
         }
         
         public void SetColorOriginal()
         {
             background.color = _bgColor;
             icon.color = Color.white;
+        }
+        
+        public void SetFixed(bool isFixed)
+        {
+            _isFixed = isFixed;
+            _interactable = isFixed;
         }
         
         public void SetInteractive(bool interactable)
@@ -236,7 +244,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!_interactable)
+            if (!_interactable || _isFixed)
                 return;
             if (!_isSelected && eventData.button
                         == PointerEventData.InputButton.Left)

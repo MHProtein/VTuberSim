@@ -30,9 +30,11 @@ namespace VTuber.Core.Managers
         public Dictionary<uint, VCardCondition> CardConditions => _cardConditions;
         private Dictionary<uint, VCardCondition> _cardConditions;
         
+        public Dictionary<uint, VPhaseEndingCondition> PhaseEndingConditions => _phaseEndingConditions;
+        private Dictionary<uint, VPhaseEndingCondition> _phaseEndingConditions;
+        
         public Dictionary<uint, VDialogueEventConfiguration> DialogueEventConfigs => _dialogueEventConfigs;
         private Dictionary<uint, VDialogueEventConfiguration> _dialogueEventConfigs;
-        
         
         public Dictionary<uint, VStreamEventConfiguration> StreamEventConfigs => _streamEventConfigs;
         private Dictionary<uint, VStreamEventConfiguration> _streamEventConfigs;
@@ -112,6 +114,19 @@ namespace VTuber.Core.Managers
                 if (condition != null)
                 {
                     _cardConditions[condition.ID] = condition;
+                }
+            }
+        }
+        
+        public void SetPhaseEndingConditions(List<VPhaseEndingCondition> newConditions)
+        {
+            _phaseEndingConditions = new Dictionary<uint, VPhaseEndingCondition>();
+
+            foreach (var condition in newConditions)
+            {
+                if (condition != null)
+                {
+                    _phaseEndingConditions[condition.id] = condition;
                 }
             }
         }

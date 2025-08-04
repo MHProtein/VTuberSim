@@ -175,7 +175,7 @@ namespace VTuber.Core.StateMachine
 
         public void NextSchedule()
         {
-            _weeklySchedule.Reset();
+            _weeklySchedule.Reset(true);
             ScheduleUI.ResetSchedule();
             _weekIndex++;
             SwitchState(VStateType.ScheduleCreation);

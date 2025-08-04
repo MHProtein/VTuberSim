@@ -34,6 +34,7 @@ namespace VTuber.Character
             LoadEffects(workbook);
             LoadBuffs(workbook);
             LoadCardConditions(workbook);
+            LoadPhaseEndingCondition(workbook);
             LoadRaisingEffects(workbook);
             LoadDialogueEvents(workbook);
             LoadStreamEvents(workbook);
@@ -77,7 +78,7 @@ namespace VTuber.Character
                 var typeName = row.Columns[VEffectHeaderIndex.Type].Value;
                 if(row.Columns[VEffectHeaderIndex.Id].Value.IsNullOrWhitespace())
                     continue; 
-                var effectType = Type.GetType("VTuber.BattleSystem.Effect." + typeName + "Configuration");
+                var effectType = Type.GetType("VTuber.BattleSystem.Effect." + typeName.Trim() + "Configuration");
                 if (effectType == null)
                 {
                     VDebug.LogError($"Effect type {typeName} not found.");
@@ -127,7 +128,7 @@ namespace VTuber.Character
                 if(row.Columns[VConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
                     continue; 
                 var typeName = row.Columns[VConditionHeaderIndex.Type].Value;
-                var condType = Type.GetType("VTuber.BattleSystem.Effect.Conditions." + typeName);
+                var condType = Type.GetType("VTuber.BattleSystem.Effect.Conditions." + typeName.Trim());
                 if (condType == null)
                 {
                     VDebug.LogError($"Condition type {typeName} not found.");
@@ -151,7 +152,7 @@ namespace VTuber.Character
                 var typeName = row.Columns[VRaisingEffectHeaderIndex.Type].Value;
                 if(row.Columns[VRaisingEffectHeaderIndex.Id].Value.IsNullOrWhitespace())
                     continue; 
-                var effectType = Type.GetType("VTuber.Core.RaisingEffect." + typeName + "Configuration");
+                var effectType = Type.GetType("VTuber.Core.RaisingEffect." + typeName.Trim() + "Configuration");
                 if (effectType == null)
                 {
                     VDebug.LogError($"Raising Effect type {typeName} not found.");
@@ -175,7 +176,7 @@ namespace VTuber.Character
                 var typeName = row.Columns[VCardConditionHeaderIndex.Type].Value;
                 if(row.Columns[VCardConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
                     continue; 
-                var conditionType = Type.GetType("VTuber.Core.RaisingEffect." + typeName);
+                var conditionType = Type.GetType("VTuber.Core.RaisingEffect." + typeName.Trim());
                 if (conditionType == null)
                 {
                     VDebug.LogError($"Card Condition type {typeName} not found.");
@@ -186,6 +187,30 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetCardConditions(list);
+        }
+
+        public void LoadPhaseEndingCondition(Workbook wb)
+        {
+            var sheet = Sheet(wb, "PhaseEndingConditions");
+            var list = new List<VPhaseEndingCondition>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VPhaseEndingConditionHeaderIndex.Type].Value;
+                if(row.Columns[VPhaseEndingConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var conditionType = Type.GetType("VTuber.ScheduleSystem.Events." + typeName.Trim());
+                if (conditionType == null)
+                {
+                    VDebug.LogError($"Card Condition type {typeName} not found.");
+                    continue;
+                }
+                var condition = (VPhaseEndingCondition)Activator.CreateInstance(conditionType, row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetPhaseEndingConditions(list);
         }
 
         public void LoadDialogueEvents(Workbook wb)

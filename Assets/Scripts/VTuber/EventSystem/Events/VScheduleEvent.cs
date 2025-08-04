@@ -12,6 +12,7 @@ namespace VTuber.ScheduleSystem.Events
     /// </summary>
     public class VScheduleEvent
     {
+        public uint EventID => _config.id;
         public string EventName => _config.eventName;
         public string Description => _config.description;
         public ScheduleEventType Type => _config.type;
@@ -70,6 +71,12 @@ namespace VTuber.ScheduleSystem.Events
         public virtual VScheduleEvent GetNextEvent()
         {
             return _daySchedule.NextEvent();
+        }
+
+        public void Reset()
+        {
+            _daySchedule = null;
+            Coordinate = new Vector2Int(-1, -1);
         }
     }
 }

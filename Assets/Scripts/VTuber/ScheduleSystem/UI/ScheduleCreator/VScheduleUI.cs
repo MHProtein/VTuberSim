@@ -46,18 +46,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToCreation(VScript script, int weekIndex)
         {
-            for (int y = 0; y < slotSize.y; y++)
-            {
-                for (int x = 0; x < slotSize.x; x++)
-                {
-                    if (slots[y, x].Item != null)
-                    {
-                        
-                        Destroy(slots[y, x].Item.gameObject);
-                    }
-                }
-            }
-            
+            DestroyAllItems();
             var specialEvents = script.GetSpecialEvents(weekIndex);
 
             foreach (var specialEvent in specialEvents)
@@ -73,7 +62,7 @@ namespace VTuber.ScheduleSystem.UI
                 }
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
                 ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.dayIndex]);
-                ui.SetInteractive(false);
+                ui.SetFixed(true);
             }
         }
         
@@ -145,7 +134,10 @@ namespace VTuber.ScheduleSystem.UI
             {
                 for (int y = 0; y < slotSize.y; y++)
                 {
-                    slots[y, x].DespawnItem();
+                    if (slots[y, x].Item is null)
+                        continue;
+                    if(!slots[y, x].Item.Event.IsExecuted && !slots[y, x].Item.IsFixed)
+                        slots[y, x].DespawnItem();
                 }
             }
         }

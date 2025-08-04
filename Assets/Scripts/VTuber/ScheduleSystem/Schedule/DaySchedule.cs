@@ -57,7 +57,7 @@ namespace VTuber.ScheduleSystem.Schedule
         
         public void SetEvent(TimeOfDay timeOfDay, VScheduleEvent evt, bool isPrimary)
         {
-            if (evt.Coordinate.x == -1)
+            if (evt.DaySchedule is null)
             {
                 evt.SetDaySchedule(this, new Vector2Int(_dayIndex, (int)timeOfDay));
                 _events.Add(evt);
@@ -114,12 +114,19 @@ namespace VTuber.ScheduleSystem.Schedule
             return GetNextEvent();
         }
 
-        public void Reset()
+        public void Reset(bool resetIndices)
         {
+            foreach (var e in _events)
+            {
+                e.Reset();
+            }
             _events.Clear();
             _slots.Clear();
-            currentTimeOfDay = TimeOfDay.Morning;
-            eventIndex = 0;
+            if (resetIndices)
+            {
+                currentTimeOfDay = TimeOfDay.Morning;
+                eventIndex = 0;
+            }
         }
     }
 }

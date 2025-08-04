@@ -21,11 +21,22 @@ namespace VTuber.Character
 
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;
+        private List<uint> _completedEventIDs = new List<uint>();
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
             InitializeAttributes(characterConfig);
+        }
+        
+        public void OnEnable()
+        {
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
+        }
+
+        public void OnDisable()
+        {
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
         }
         
         void InitializeAttributes(VCharacterConfiguration characterConfig)
@@ -163,6 +174,18 @@ namespace VTuber.Character
         {
             AttributeManager.ApplyCost(e);
         }
+        
+        private void OnEventExecuted(Dictionary<string, object> messagedict)
+        {
+            var e = messagedict["Event"] as VScheduleEvent;
+            _completedEventIDs.Add(e.EventID);
+        }
+        
+        public bool HasCompletedEvent(uint eventID)
+        {
+            return _completedEventIDs.Contains(eventID);
+        }
+        
     }
 }
 
