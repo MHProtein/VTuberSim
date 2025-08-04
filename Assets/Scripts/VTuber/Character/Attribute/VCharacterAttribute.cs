@@ -49,6 +49,8 @@ namespace VTuber.Character.Attribute
             IsPercentage = isPercentage;
             InitSetValue(initialValue);
             ShouldBattleAttributeConvertTo = shouldBattleAttributeConvertTo;
+            gainPointsModifier = new VValueModifier<int>(0);
+            gainRateModifier = new VValueModifier<float>(1.0f);
         }
 
         public void SetAttributeManager(VCharacterAttributeManager attributeManager)
@@ -93,7 +95,6 @@ namespace VTuber.Character.Attribute
             
             VDebug.Log("Converted to attribute: " + _configuration.battleAttributeNameWhenConvertBack + ", value: " + Value + 
                        ", battle attribute value: " + battleAttribute.Value);
-            
         }
         
         public virtual void AddTo(int delta)
@@ -101,9 +102,30 @@ namespace VTuber.Character.Attribute
             if (delta == 0)
                 return;
             int temp = Value;
-            Value = Mathf.Clamp(Value + delta, _minValue, _maxValue);
+            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
+            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
+            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue));
+            if(delta < 0 && finalDelta > 0)
+                finalDelta = 0;
+            Value = Mathf.Clamp(Value + finalDelta,
+                _minValue, _maxValue);
+            VDebug.Log("添加 (变化量:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta
+                       + " 到 " + AttributeName + "，新数值: " + Value);
             SendEvent(Value, Value - temp);
         }
+        
+        public int PreviewAddTo(int delta)
+        {
+            if (delta == 0)
+                return Value;
+            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
+            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
+            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue));
+            if(delta < 0 && finalDelta > 0)
+                finalDelta = 0;
+            return Value + finalDelta;
+        }
+
         
         public virtual void MultiplyWith(int delta)
         {         

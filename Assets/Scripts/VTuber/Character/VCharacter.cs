@@ -1,18 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
 {
     public class VCharacter
     {
         public string Name { get; set; }
+
+        public uint FillingEventIDDuration1 => _characterConfig.fillingEventIDDuration1;
+        public uint FillingEventIDDuration2 => _characterConfig.fillingEventIDDuration2;
+        public uint FillingEventIDDuration3 => _characterConfig.fillingEventIDDuration3;
         
         public VCharacterAttributeManager AttributeManager { get; private set; }
 
         private VCharacterConfiguration _characterConfig;
-        
 
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;
@@ -147,6 +152,16 @@ namespace VTuber.Character
                     VRaisingEventKey.Default, 
                     characterConfig.revenueShareRateMaxValue == -1 ? int.MaxValue : characterConfig.revenueShareRateMaxValue,
                     characterConfig.revenueShareRateMinValue, true));
+        }
+
+        public bool TestCost(VScheduleEvent e)
+        {
+            return AttributeManager.TestCost(e);
+        }
+
+        public void ApplyCost(VScheduleEvent e)
+        {
+            AttributeManager.ApplyCost(e);
         }
     }
 }

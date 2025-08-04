@@ -1,30 +1,32 @@
 ﻿using VTuber.Character;
 using VTuber.Character.Attributes;
 using VTuber.Core.Foundation;
+using VTuber.Core.RaisingEffect;
 
-namespace VTuber.BattleSystem.Core.RaisingEffect.RaisingAddAbilityEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddAbilityEffect : VRaisingEffect
     {
-        public string attributeName;
-        public int value;
-        public bool shouldIgnoreEfficiency;
-        public VRaisingAddAbilityEffect(VRaisingEffectConfiguration configuration) : base(configuration)
+        private readonly string _attributeName;
+        private readonly int _value;
+        private readonly bool _shouldUseEfficiency;
+        public VRaisingAddAbilityEffect(VRaisingAddAbilityEffectConfiguration configuration, int value) : base(configuration)
         {
-            
+            _attributeName = configuration.AbilityName;
+            _shouldUseEfficiency = configuration.ShouldUseEfficiency;
+            _value = value;
         }
 
         public override void ApplyEffect(VCharacter character)
         {
             base.ApplyEffect(character);
-            if(character.AttributeManager.TryGetAttribute(attributeName, out var attribute))
+            if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
                 var abilityAttribute = attribute as VAbilityAttribute;
                 if (abilityAttribute is not null)
                 {
-                    abilityAttribute.AddAbility(value, shouldIgnoreEfficiency);
+                    abilityAttribute.AddAbility(_value, _shouldUseEfficiency);
                 }
-                
             }
         }
     }

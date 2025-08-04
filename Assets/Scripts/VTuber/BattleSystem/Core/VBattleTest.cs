@@ -7,8 +7,8 @@ namespace VTuber.BattleSystem.Core
 {
     public class VBattleTest : VBattle
     {
-        public override void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary,
-            int initialTurnCount)
+        public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
+            VCardLibrary cardLibrary, int initialTurnCount, int targetPopularity, int initialViewers)
         {    
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager();

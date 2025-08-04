@@ -4,9 +4,13 @@ using PrimeTween;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
+using VTuber.ScheduleSystem.Core;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -40,7 +44,7 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
-        public void SwitchToCreation()
+        public void SwitchToCreation(VScript script, int weekIndex)
         {
             for (int y = 0; y < slotSize.y; y++)
             {
@@ -52,6 +56,24 @@ namespace VTuber.ScheduleSystem.UI
                         Destroy(slots[y, x].Item.gameObject);
                     }
                 }
+            }
+            
+            var specialEvents = script.GetSpecialEvents(weekIndex);
+
+            foreach (var specialEvent in specialEvents)
+            {
+                VScheduleEventConfiguration e;
+                if (specialEvent.eventType == ScheduleEventType.Stream)
+                {
+                    e = VResourcesManager.Instance.GetStreamEventConfigurationByID(specialEvent.eventID);
+                }
+                else
+                {
+                    e = VResourcesManager.Instance.GetDialogueEventConfigurationByID(specialEvent.eventID);
+                }
+                var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
+                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.dayIndex]);
+                ui.SetInteractive(false);
             }
         }
         
@@ -111,14 +133,30 @@ namespace VTuber.ScheduleSystem.UI
             ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
         }
 
+        public Tween MoveIndicator(Vector2Int coordinate)
+        {
+            ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
+            return ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
+        }
+
         public void ResetSchedule()
         {            
-            
             for (int x = 0; x < slotSize.x; x++)
             {
                 for (int y = 0; y < slotSize.y; y++)
                 {
-                    slots[y, x].ResetItem();
+                    slots[y, x].DespawnItem();
+                }
+            }
+        }
+        
+        public void DestroyAllItems()
+        {
+            for (int x = 0; x < slotSize.x; x++)
+            {
+                for (int y = 0; y < slotSize.y; y++)
+                {
+                    slots[y, x].DestroyItem();
                 }
             }
         }
@@ -128,9 +166,9 @@ namespace VTuber.ScheduleSystem.UI
             Tween.Position(indicator, position, 0.2f);
         }
         
-        public void ChangeIndicatorScale(float scale)
+        public Tween ChangeIndicatorScale(float scale)
         {
-            Tween.ScaleY(indicator,scale, 0.2f);
+            return Tween.ScaleY(indicator,scale, 0.2f);
         }
         
         public void ChangeIndicatorColor(Color color)
@@ -143,7 +181,52 @@ namespace VTuber.ScheduleSystem.UI
         {
             return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
         }
-        
+
+        public void CompleteSchedule(uint size1Id, uint size2Id, uint size3Id)
+        {
+            for (int x = 0; x < slotSize.x; x++)
+            {
+                int emptyCount = 0;
+                for (int y = 0; y < slotSize.y; y++)
+                {
+                    if(slots[y, x].Item == null)
+                    {
+                        emptyCount++;
+                    }
+                    else
+                    {
+                        if (emptyCount > 0)
+                        {
+                            var yy = y - emptyCount;
+                            VEventUI eventUIObject = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
+                            uint eventId = 0; 
+                            if(emptyCount == 1)
+                                eventId = size1Id;
+                            else if(emptyCount == 2)
+                                eventId = size2Id;
+                            var eventData = VResourcesManager.Instance.GetDialogueEventConfigurationByID(eventId);
+                            eventUIObject.Initialize(eventData, slots[yy, x]);
+                            
+                            emptyCount = 0;
+                        }
+                    }
+                }
+                if (emptyCount > 0)
+                {
+                    var yy = 3 - emptyCount;
+                    VEventUI eventUIObject = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
+                    uint eventId = 0; 
+                    if(emptyCount == 1)
+                        eventId = size1Id;
+                    else if(emptyCount == 2)
+                        eventId = size2Id;
+                    else if(emptyCount == 3)
+                        eventId = size3Id;
+                    var eventData = VResourcesManager.Instance.GetDialogueEventConfigurationByID(eventId);
+                    eventUIObject.Initialize(eventData, slots[yy, x]);
+                }
+            }
+        }
     }
 }
 

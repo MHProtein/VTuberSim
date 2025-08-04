@@ -12,7 +12,7 @@ namespace VTuber.ScheduleSystem.UI
         public RectTransform ScheduleUIRect => scheduleUIRect;
         [SerializeField] GraphicRaycaster m_Raycaster;
         PointerEventData m_PointerEventData;
-        [SerializeField] EventSystem m_EventSystem;
+        [SerializeField] UnityEngine.EventSystems.EventSystem m_EventSystem;
         [SerializeField] RectTransform canvasRect;
         [SerializeField] RectTransform scheduleUIRect;
 

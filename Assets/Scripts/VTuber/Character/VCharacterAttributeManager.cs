@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character.Attribute;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
 {
@@ -44,6 +45,39 @@ namespace VTuber.Character
             foreach (var attribute in Attributes)
             {
                 attribute.Value.ConvertToAttribute(attributes);
+            }
+        }
+
+        public bool TestCost(VScheduleEvent e)
+        {
+            switch (e.CostType)
+            {
+                case VEventCostType.Stamina:
+                    return TryGetAttribute("CAStamina", out var stamina) && stamina.PreviewAddTo(-e.Cost) >= 0;
+                case VEventCostType.Money:
+                    return TryGetAttribute("CAMoney", out var money) && money.PreviewAddTo(-e.Cost) >= 0;
+            }
+
+            return false;
+        }
+
+        public void ApplyCost(VScheduleEvent e)
+        {
+            switch (e.CostType)
+            {
+                case VEventCostType.Stamina:
+                    if (TryGetAttribute("CAStamina", out var stamina))
+                    {
+                        stamina.AddTo(-e.Cost);
+                    }
+
+                    break;
+                case VEventCostType.Money:
+                    if (TryGetAttribute("CAMoney", out var money))
+                    {
+                        money.AddTo(-e.Cost);
+                    }
+                    break;
             }
         }
     }

@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VTuber.BattleSystem.Card;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using Yarn.Unity;
 
 namespace VTuber.ScheduleSystem.UI
 {
     public class VRaisingUI : VSingletonMonobehaviour<VRaisingUI>
     {
+        [SerializeField] private TMP_Text weekCountText;
+        
         [Header("Schedule")] [SerializeField] private Transform _scheduleUI;
+        [SerializeField] private SerializableDictionary<string, Sprite> _icons;
+        [SerializeField] private GameObject eventUIPrefab;
         
         [Space(3)]
         [Header("ScheduleCreation")] 
@@ -39,6 +46,12 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private GameObject pauseUI;
 
         [SerializeField] private Transform pauseSchedulePosition;
+        
+        [Space(3)] 
+        [Header("CardLibraryUI")] 
+        [SerializeField] private GameObject cardLibraryUIObject;
+
+        [SerializeField] private VCardLibraryUI cardLibraryUI;
 
         protected override void OnEnable()
         {
@@ -49,6 +62,18 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+
+        public void InitializeCardLibraryUI(List<VCard> cards)
+        {
+            cardLibraryUIObject.SetActive(true);
+            cardLibraryUI.Initialize(cards);
+        }
+        
+        public void CloseCardLibraryUI()
+        {
+            cardLibraryUI.Close();
+            cardLibraryUIObject.SetActive(false);
         }
         
         public void SetPauseText(bool shouldPause)
@@ -92,6 +117,12 @@ namespace VTuber.ScheduleSystem.UI
             return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f);
         }
         
+        public Tween UpdateWeekCount(int weekCount)
+        {
+            weekCountText.text = $"周数：{weekCount}";
+            return Tween.PunchScale(weekCountText.transform, Vector3.one * 1.3f, 0.3f);
+        }
+        
         public void SwitchToScheduleCreation(Action onComplete = null)
         {
             executionUI.SetActive(false);
@@ -109,6 +140,24 @@ namespace VTuber.ScheduleSystem.UI
             {
                 onComplete?.Invoke();
             });
+        }
+        
+        public VEventUI CreateEventUI(Transform parent)
+        {
+            var eventUI = Instantiate(eventUIPrefab, parent);
+            var eventUIComponent = eventUI.GetComponent<VEventUI>();
+            return eventUIComponent;
+        }
+
+        public Sprite GetIcon(string iconName)
+        {
+            if (_icons.TryGetValue(iconName, out var icon))
+            {
+                return icon;
+            }
+
+            Debug.LogWarning($"Icon with name {iconName} not found.");
+            return null;
         }
     }
 }

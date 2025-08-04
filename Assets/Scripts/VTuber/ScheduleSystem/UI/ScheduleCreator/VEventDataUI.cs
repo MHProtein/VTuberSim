@@ -28,7 +28,7 @@ namespace VTuber.ScheduleSystem.UI
         public void Initialize(VScheduleEventConfiguration data)
         {
             _data = data;
-            icon.sprite = data.icon;
+            icon.sprite = VRaisingUI.Instance.GetIcon(data.icon);;
             background.color = data.backgroundColor;
         }
         
@@ -60,9 +60,8 @@ namespace VTuber.ScheduleSystem.UI
             VDebug.Log("Begin Drag");
             if (!spawnable)
                 return;
-            
-            GameObject eventUIObject = Instantiate(eventUIPrefab, VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
-            eventUIObject.GetComponent<VEventUI>().InitializeDrag(_data, transform.position);
+            VEventUI eventUIObject = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
+            eventUIObject.InitializeDrag(_data, transform.position);
         }
 
         public void OnPointerUp(PointerEventData eventData)

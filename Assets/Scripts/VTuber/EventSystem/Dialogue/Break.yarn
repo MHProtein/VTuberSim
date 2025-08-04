@@ -1,0 +1,31 @@
+﻿title: Nap
+position: -24,-1
+---
+Me: Nap
+He: Zzzzzzzz
+
+-> Add 10 Stamina
+    <<ApplyEffect Event 3 10>>
+===
+
+title: Break
+position: -24,-1
+---
+Me: Break!
+He: Hell Yeahh!
+
+-> Add 20 Stamina
+    <<ApplyEffect Event 3 20>>
+===
+
+title: DayOff
+position: -24,-1
+---
+Me: DayOff!!!
+He: Fuck Yeahhhhhhh!!
+
+-> Add 30 Stamina
+    <<ApplyEffect Event 3 30>>
+-> Add Random M Card
+    <<ApplyEffect Event 8 200000>>
+===

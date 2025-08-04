@@ -18,7 +18,7 @@ namespace VTuber.BattleSystem.Core
         {
             base.Awake();
             
-            VBattleResourcesLoader loader = new VBattleResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+            VResourcesLoader loader = new VResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
             character = new VCharacter(_characterConfiguration);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
@@ -44,7 +44,7 @@ namespace VTuber.BattleSystem.Core
         public void InitializeBattle()
         {
             //battleRoot.SetActive(true);
-            _battle.InitializeBattle(character.AttributeManager, character.CardLibrary, 10);
+            _battle.InitializeBattle(character.AttributeManager, character.CardLibrary, 10, 0, 0);
         }
 
         protected override void Start()

@@ -15,7 +15,7 @@ namespace VTuber.ScheduleSystem.Schedule
     /// </summary>
     public class DaySchedule
     {
-        private readonly Dictionary<TimeOfDay, VScheduleEvent> _events = new();
+        private readonly List<VScheduleEvent> _events = new();
         
         private VCharacter _character;
         private VWeeklySchedule _vWeeklySchedule;
@@ -30,16 +30,7 @@ namespace VTuber.ScheduleSystem.Schedule
         
         private TimeOfDay currentTimeOfDay;
         private int _dayIndex = 0;
-        
-        public bool CanScheduleEvent(TimeOfDay startTime, int duration)
-        {
-            var times = GetTimeSlots(startTime, duration);
-            foreach (var t in times)
-            {
-                if (_events.ContainsKey(t)) return false;
-            }
-            return true;
-        }
+        private int eventIndex = 0;
 
         public DaySchedule(VWeeklySchedule vWeeklySchedule, VCharacter character, int index)
         {
@@ -66,9 +57,11 @@ namespace VTuber.ScheduleSystem.Schedule
         
         public void SetEvent(TimeOfDay timeOfDay, VScheduleEvent evt, bool isPrimary)
         {
-            evt.SetDaySchedule(this);
-            _slots[timeOfDay] = new ScheduledSlot { Event = evt, IsPrimarySlot = isPrimary };
-            _events[timeOfDay] = evt;
+            if (evt.Coordinate.x == -1)
+            {
+                evt.SetDaySchedule(this, new Vector2Int(_dayIndex, (int)timeOfDay));
+                _events.Add(evt);
+            }
         }
 
         public VScheduleEvent GetEvent(TimeOfDay timeOfDay)
@@ -77,17 +70,10 @@ namespace VTuber.ScheduleSystem.Schedule
                 return slot?.Event;
             return null;
         }
-
-        public bool IsPrimary(TimeOfDay timeOfDay)
-        {
-            if (_slots.TryGetValue(timeOfDay, out var slot))
-                return slot?.IsPrimarySlot ?? false;
-            return false;
-        }
         
-        public Dictionary<TimeOfDay, VScheduleEvent> GetAllEvents()
+        public List<VScheduleEvent> GetAllEvents()
         {
-            return new Dictionary<TimeOfDay, VScheduleEvent>(_events);
+            return _events;
         }
 
         private List<TimeOfDay> GetTimeSlots(TimeOfDay start, int duration)
@@ -106,34 +92,34 @@ namespace VTuber.ScheduleSystem.Schedule
             return slots;
         }
 
-        public void Execute()
+        public VScheduleEvent GetNextEvent()
         {
-            var e = _slots[currentTimeOfDay].Event;
+            var e = _events[eventIndex];
 
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventExecuted, new Dictionary<string, object>()
-            {
-                {"Coordinate", new Vector2Int(_dayIndex, (int)currentTimeOfDay)},
-                {"Event", e}
-            });
-
-            e.Execute(_character);
-            
-            for(int i = 0; i < e.Duration; i++)
-            {
-                currentTimeOfDay = NextTimeOfDay();
-            }
+            return e;
         }
 
-        public void NextEvent()
+        public void OnEventExecuted(VScheduleEvent e)
         {
-            if (currentTimeOfDay == TimeOfDay.End)
-            {
-                _vWeeklySchedule.NextDay();
-                return;
-            }
-            
-            Execute();
+            eventIndex++;
         }
-        
+
+        public VScheduleEvent NextEvent()
+        {
+            if (eventIndex > _events.Count - 1)
+            {
+                return _vWeeklySchedule.NextDay();
+            }
+
+            return GetNextEvent();
+        }
+
+        public void Reset()
+        {
+            _events.Clear();
+            _slots.Clear();
+            currentTimeOfDay = TimeOfDay.Morning;
+            eventIndex = 0;
+        }
     }
 }

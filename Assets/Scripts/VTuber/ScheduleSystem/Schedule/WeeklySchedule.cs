@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VTuber.Character;
+using VTuber.Core.EventCenter;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.Core.Foundation;
@@ -85,16 +86,33 @@ namespace VTuber.ScheduleSystem.Schedule
             return GetDay(dayIndex).GetEvent(timeOfDay);
         }
 
-        public void BeginExecution()
+        public VScheduleEvent BeginExecution()
         {
             _currentDayIndex = 0;
-            _days[_currentDayIndex].Execute();
+            return _days[_currentDayIndex].GetNextEvent();
         }
 
-        public void NextDay()
+        public VScheduleEvent NextDay()
         {
             _currentDayIndex++;
-            _days[_currentDayIndex].Execute();
+            if (_currentDayIndex >= _days.Count)
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleExecuted,
+                    new Dictionary<string, object>());
+                return null;
+            }
+            
+            return _days[_currentDayIndex].GetNextEvent();
         }
+
+        public void Reset()
+        {
+            foreach (var day in _days)
+            {
+                day.Reset();
+            }
+            _currentDayIndex = 0;
+        }
+        
     }
 }

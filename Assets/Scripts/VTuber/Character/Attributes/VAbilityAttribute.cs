@@ -34,7 +34,7 @@ namespace VTuber.Character.Attributes
             _abilityGainFromBattleRates = abilityGainFromBattleRates;
         }
 
-        public void AddAbility(int delta, bool shouldMultiplyByEfficiency = false)
+        public void AddAbility(int delta, bool shouldMultiplyByEfficiency)
         {
             if (delta == 0)
                 return;
@@ -52,6 +52,7 @@ namespace VTuber.Character.Attributes
             }
 
             Value = Mathf.Clamp(delta + Value, _minValue, _maxValue);
+            VDebug.Log($"Added {delta} to {AttributeName}, new value: {Value}");
             SendEvent(Value, delta);
         }
         

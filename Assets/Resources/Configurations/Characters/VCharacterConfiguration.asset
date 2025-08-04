@@ -43,7 +43,7 @@ MonoBehaviour:
       Data: 
   staminaInitialValue: 100
   staminaMinValue: 0
-  staminaMaxValue: 200
+  staminaMaxValue: 100
   staminaConfiguration: {fileID: 11400000, guid: 0b8b1877b943de74184ef7428f6c6787, type: 2}
   pressureInitialValue: 1
   pressureMinValue: 1
@@ -52,7 +52,7 @@ MonoBehaviour:
   singingAbilityInitialValue: 200
   singingAbilityMinValue: 0
   singingAbilityMaxValue: -1
-  singingAbilityColor: {r: 0.7075472, g: 0.29703632, b: 0.30508563, a: 1}
+  singingAbilityColor: {r: 1, g: 0.12941177, b: 0.37647063, a: 1}
   singingAbilityGainFromBattleRates:
   - from: 0
     to: -1
@@ -61,7 +61,7 @@ MonoBehaviour:
   gamingAbilityInitialValue: 300
   gamingAbilityMinValue: 0
   gamingAbilityMaxValue: -1
-  gamingAbilityColor: {r: 0.8490566, g: 0.819914, b: 0.16420433, a: 1}
+  gamingAbilityColor: {r: 0.29411766, g: 0.34509805, b: 1, a: 1}
   gamingAbilityGainFromBattleRates:
   - from: 0
     to: -1
@@ -70,7 +70,7 @@ MonoBehaviour:
   chattingAbilityInitialValue: 400
   chattingAbilityMinValue: 0
   chattingAbilityMaxValue: -1
-  chattingAbilityColor: {r: 0.14413491, g: 0.14413491, b: 0.745283, a: 1}
+  chattingAbilityColor: {r: 0.776, g: 0.651, b: 0.349, a: 1}
   chattingAbilityGainFromBattleRates:
   - from: 0
     to: -1
@@ -120,3 +120,6 @@ MonoBehaviour:
   revenueShareRateMinValue: 0
   revenueShareRateMaxValue: 100
   revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
+  fillingEventIDDuration1: 3
+  fillingEventIDDuration2: 4
+  fillingEventIDDuration3: 5

@@ -11,7 +11,8 @@ namespace VTuber.Character
 {
     public class VCharacterConfiguration : VScriptableObject
     {
-        // Stamina
+        #region AttributeConfigs
+        
         [HorizontalGroup("StaminaGroup", Gap = 10)]
         [Header("体力")]
         [LabelText("初始值")]
@@ -346,5 +347,13 @@ namespace VTuber.Character
         [PropertySpace(10)]
         [LabelText("Config文件")]
         public VCharacterAttributeConfiguration revenueShareRateConfiguration;
+
+        #endregion
+        
+        [FormerlySerializedAs("fillingEventIDSize1")]
+        [Header("补充事件")]
+        [SerializeField] [LabelText("补充事件(大小1)")] public uint fillingEventIDDuration1 = 0;
+        [FormerlySerializedAs("fillingEventIDSize2")] [SerializeField] [LabelText("补充事件(大小2)")] public uint fillingEventIDDuration2 = 0;
+        [FormerlySerializedAs("fillingEventIDSize3")] [SerializeField] [LabelText("补充事件(大小3)")] public uint fillingEventIDDuration3 = 0;
     }
 }

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.EventSystem;
+using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
 
@@ -37,21 +41,56 @@ namespace VTuber.Core.StateMachine
         public VBattle Battle => _battle;
         private VBattle _battle;
         
+        public GameObject EventSystemRoot => _eventSystemRoot;
+        private GameObject _eventSystemRoot;
+        
+        public VEventSystem EventSystemSystem => _eventSystemSystem;
+        private VEventSystem _eventSystemSystem;
+        
         public VCharacter Character => _character;
         private VCharacter _character;
         
         public bool ShouldPauseSchedule => shouldPauseSchedule;
         protected bool shouldPauseSchedule = false;
+        
+        public int WeekIndex => _weekIndex;
+        private int _weekIndex = 0;
 
-        public VStateMachine(VScheduleUI scheduleUI, VWeeklySchedule weeklySchedule, GameObject battleRoot, VBattle battle, VCharacter character)
+        public VScript Script => _script;
+        private VScript _script;
+        
+
+        public VStateMachine(VScheduleUI scheduleUI,
+            VWeeklySchedule weeklySchedule,
+            GameObject battleRoot, VBattle battle,
+            GameObject eventSystemRoot, VEventSystem eventSystemSystem,
+            VCharacter character, VScript script)
         {
             _scheduleUI = scheduleUI;
             _weeklySchedule = weeklySchedule;
             _battleRoot = battleRoot;
             _battle = battle;
+            _eventSystemRoot = eventSystemRoot;
+            _eventSystemSystem = eventSystemSystem;
             _character = character;
+            _script = script;
             IsInitialized = true;
             preRegisterStates.ForEach(state => RegisterState(state));
+        }
+
+        public void OnEnable()
+        {
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnScheduleExecuted, OnScheduleExecuted);
+        }
+
+        public void OnDisable()
+        {
+            UnregisterAll();
+        }
+        
+        private void OnScheduleExecuted(Dictionary<string, object> messagedict)
+        {
+            NextSchedule();
         }
         
         public void PauseSchedule()
@@ -134,5 +173,13 @@ namespace VTuber.Core.StateMachine
             currentState.Update();
         }
 
+        public void NextSchedule()
+        {
+            _weeklySchedule.Reset();
+            ScheduleUI.ResetSchedule();
+            _weekIndex++;
+            SwitchState(VStateType.ScheduleCreation);
+            VRaisingUI.Instance.UpdateWeekCount(_weekIndex + 1);
+        }
     }
 }

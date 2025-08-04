@@ -55,6 +55,7 @@ namespace VTuber.BattleSystem.Core
         protected Dictionary<string, object> _playTwiceMessageDict;
         protected VCharacterAttributeManager _characterAttributeManager;
         protected bool paused = false;
+        protected int _targetPopularity;
         public void NextCardPlayTwice()
         {
             _shouldNextCardPlayTwice = true;
@@ -78,8 +79,10 @@ namespace VTuber.BattleSystem.Core
             
         }
         
-        public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager, VCardLibrary cardLibrary, int initialTurnCount)
+        public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
+            VCardLibrary cardLibrary, int initialTurnCount, int targetPopularity, int initialViewers)
         {
+            _targetPopularity = targetPopularity;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager();
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
@@ -105,9 +108,15 @@ namespace VTuber.BattleSystem.Core
 
             _battleAttributeManager.InitializeInternalManagers();
             
+            if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+            {
+                viewerCountAttribute.AddTo(initialViewers, false);
+            }
+            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
+                {"TargetPopularity", targetPopularity},
             });
             
             InitializeTurn();
@@ -129,6 +138,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
         }
 
         protected override void OnDisable()
@@ -150,6 +160,16 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardMovedToHandSlot, OnCardMovedToHandSlot);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRequestPickCardsFromPile, OnRequestPickCardsFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
+        }
+        
+        
+        private void OnParameterPopularityModifierChanged(Dictionary<string, object> messagedict)
+        {
+            foreach (var card in _cardPilesManager.HandPile)
+            {
+                card.PreviewPopularity(this, false);
+            }
         }
         
         private void OnAttributeValueChange(Dictionary<string, object> messagedict)
@@ -159,6 +179,7 @@ namespace VTuber.BattleSystem.Core
                 card.TestCondition(this);
             }
         }
+        
         
         private void OnRequestPickCardsFromPile(Dictionary<string, object> messagedict)
         {
@@ -183,16 +204,17 @@ namespace VTuber.BattleSystem.Core
             switch (card.CostType)
             {
                 case CostType.Stamina:
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                     break;
                 case CostType.TrueStamina:
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
                     break;
                 case CostType.Buff:
-                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                     break;
             }
             card.TestCondition(this);
+            card.PreviewPopularity(this, true);
         }
         
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
@@ -200,8 +222,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Buff)
-                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
+                card.PreviewPopularity(this, false);
             }
         }
 
@@ -210,8 +233,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Buff)
-                    card.SetPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
+                card.PreviewPopularity(this, false);
             } 
         }
         
@@ -220,9 +244,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Stamina)
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
                 if(card.CostType == CostType.TrueStamina)
-                    card.SetPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
             }
         }
         
@@ -283,6 +307,7 @@ namespace VTuber.BattleSystem.Core
             {
                 {"TurnLeft", TurnLeft},
                 {"HandSize", configuration.maxHandSize}
+                
             });
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>
             {
@@ -310,17 +335,18 @@ namespace VTuber.BattleSystem.Core
             
             if (TurnLeft <= 0)
             {
-                //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
-                //     {
-                //     });
+                bool isTargetMet = _battleAttributeManager.TryGetAttribute("BAPopularity", out var popularityAttribute) && 
+                                   popularityAttribute.Value >= _targetPopularity;
+                
                 _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
-      
+                
                 _buffManager.Clear();
                 _battleAttributeManager.Clear();
                 _cardPilesManager.DiscardPile.Clear();
                 _cardPilesManager.DrawPile.Clear();
                 _cardPilesManager.HandPile.Clear();
                 _cardPilesManager.Deck.Clear();
+                
                 
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
                 {
@@ -329,7 +355,8 @@ namespace VTuber.BattleSystem.Core
                 
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEndNotify, new Dictionary<string, object>
                 {
-                    {"TurnLeft", TurnLeft}
+                    {"TurnLeft", TurnLeft},
+                    {"IsTargetMet", isTargetMet}
                 });
             }
         }

@@ -39,6 +39,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardMoveAfterPlayingTime = 0.2f;
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
+
         
         private float curve = 0.0f;
         
@@ -62,6 +63,15 @@ namespace VTuber.BattleSystem.UI
         [SerializeField]
         private Transform battleUI;
         [SerializeField] private GameObject battlePausePanel;
+        
+        
+        [Space(3)]
+        [SerializeField] private TMP_Text targetPopularity;
+        
+        public void SetTargetPopularity(int targetPopularity)
+        {
+            this.targetPopularity.text = $"目标热度: {targetPopularity}";
+        }
 
         public void Rearrange(int index)
         {
@@ -237,6 +247,7 @@ namespace VTuber.BattleSystem.UI
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
             SetBattleUIScale(1.0f);
+            SetTargetPopularity(messagedict["TargetPopularity"] as int? ?? 0);
         }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)
@@ -432,7 +443,8 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.index = _handSlotsCards.Count;
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
-                card.SetPlayable = handCardUI.SetCardPlayable;
+                card.setPlayable = handCardUI.SetCardPlayable;
+                card.setPopularityPreview = handCardUI.SetPopularityPreview;
                 handCardUI.cardUI = cardUI;
                 handCardUI.ToHandSlot(position, rotation, Vector3.one, drawCardToSlotTime);
                 SetHandCardPositionRotation(handCardUI, position.x);

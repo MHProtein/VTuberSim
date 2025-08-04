@@ -19,14 +19,22 @@ namespace VTuber.BattleSystem.BattleAttribute
         public Dictionary<uint, T> Modifiers => _modifiers;
         private Dictionary<uint, T> _modifiers = new Dictionary<uint, T>();
 
+        private VBattleEventKey _eventKey = VBattleEventKey.Default;
+        
         public VValueModifier(T defaultValue)
         {
             this._defaultValue = defaultValue;
         }
         
+        public void SetEventKey(VBattleEventKey eventKey)
+        {
+            _eventKey = eventKey;
+        }
+        
         public uint AddModifier(T modifier)
         {
             _modifiers.Add(_idDistributor++, modifier);
+            SendEvent();
             return _idDistributor - 1;
         }
         
@@ -36,6 +44,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             {
                 _modifiers.Remove(id);
             }
+            SendEvent();
         }
         
         public void ChangeModifier(uint id, T newValue)
@@ -44,6 +53,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             {
                 _modifiers[id] = newValue;
             }
+            SendEvent();
         }
         
         public static int GetModifierIntValue(VValueModifier<int> modifier)
@@ -73,6 +83,12 @@ namespace VTuber.BattleSystem.BattleAttribute
         public void Reset()
         {
             _modifiers.Clear();
+            SendEvent();
+        }
+        
+        public void SendEvent()
+        {
+            VBattleRootEventCenter.Instance.Raise(_eventKey, new Dictionary<string, object>());
         }
         
     }
@@ -113,12 +129,26 @@ namespace VTuber.BattleSystem.BattleAttribute
             int temp = Value;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * (gainRateModifierValue ));
-            Value = Mathf.Clamp(finalDelta,
+            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue ));
+            if(delta < 0 && finalDelta > 0)
+                finalDelta = 0;
+            Value = Mathf.Clamp(finalDelta + Value,
                 _minValue, _maxValue);
             VDebug.Log("添加 (变化量:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta
                        + " 到 " + AttributeName + "，新数值: " + Value);
             SendEvent(Value, Value - temp, isFromCard, shouldPlayTwice);
+        }
+        
+        public int PreviewAddTo(int delta)
+        {
+            if (delta == 0)
+                return Value;
+            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
+            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
+            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue));
+            if(delta < 0 && finalDelta > 0)
+                finalDelta = 0;
+            return Value + finalDelta;
         }
         
         public virtual void MultiplyWith(int delta, bool isFromCard, bool shouldPlayTwice = false)
