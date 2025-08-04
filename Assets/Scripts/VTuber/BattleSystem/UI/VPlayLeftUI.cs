@@ -8,7 +8,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VPlayLeftUI : VStatUI
+    public class VBattlePlayLeftUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text PlayLeftText;
         

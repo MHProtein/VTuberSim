@@ -8,8 +8,8 @@ namespace VTuber.Core.RaisingEffect
     public class VCardConditionHeaderIndex
     {
         public const int Id = 0;
-        public const int Type = 1;
-        public const int Condition = 2;
+        public const int Type = 3;
+        public const int Condition = 4;
     }
     
     public abstract class VCardCondition

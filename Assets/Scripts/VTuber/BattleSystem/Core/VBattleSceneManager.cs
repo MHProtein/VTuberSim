@@ -44,7 +44,7 @@ namespace VTuber.BattleSystem.Core
         public void InitializeBattle()
         {
             //battleRoot.SetActive(true);
-            _battle.InitializeBattle(character.AttributeManager, character.CardLibrary, 10);
+            _battle.InitializeBattle(character.AttributeManager, character.CardLibrary, 10, 0, 0);
         }
 
         protected override void Start()

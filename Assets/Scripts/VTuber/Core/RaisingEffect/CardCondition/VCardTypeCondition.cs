@@ -14,6 +14,8 @@ namespace VTuber.Core.RaisingEffect
 
         public override bool IsTrue(VCard card)
         {
+            if (card is null)
+                return false;
             return card.CardType == _cardType;
         }
 

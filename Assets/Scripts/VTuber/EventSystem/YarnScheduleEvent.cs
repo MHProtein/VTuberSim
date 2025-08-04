@@ -40,7 +40,7 @@ namespace VTuber.Dialogue
             _dialogueRunner.onDialogueComplete.RemoveListener(OnDialogueComplete);
             ApplyRewards(); // 可选：对角色加属性、扣体力等
             IsExecuted = true;
-            NextEvent();
+            GetNextEvent();
         }
 
         private void ApplyRewards()

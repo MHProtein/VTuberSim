@@ -1,0 +1,9 @@
+title: StreamSuccess
+position: -24,-1
+---
+He: BOTSSSSS!
+You: $$$$^_^$$$$
+
+-> Add 200000 $$$
+    <<ApplyEffect Event 5 200000>>
+===

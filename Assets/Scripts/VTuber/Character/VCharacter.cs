@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
 {
@@ -150,6 +152,16 @@ namespace VTuber.Character
                     VRaisingEventKey.Default, 
                     characterConfig.revenueShareRateMaxValue == -1 ? int.MaxValue : characterConfig.revenueShareRateMaxValue,
                     characterConfig.revenueShareRateMinValue, true));
+        }
+
+        public bool TestCost(VScheduleEvent e)
+        {
+            return AttributeManager.TestCost(e);
+        }
+
+        public void ApplyCost(VScheduleEvent e)
+        {
+            AttributeManager.ApplyCost(e);
         }
     }
 }

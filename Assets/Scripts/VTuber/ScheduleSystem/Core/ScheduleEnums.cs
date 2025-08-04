@@ -19,7 +19,7 @@
     {
         Stream,
         Practice,
-        Assist,
+        Coop,
         Recovery
     }
 

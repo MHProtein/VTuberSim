@@ -129,8 +129,10 @@ namespace VTuber.BattleSystem.BattleAttribute
             int temp = Value;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * (gainRateModifierValue ));
-            Value = Mathf.Clamp(finalDelta,
+            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue ));
+            if(delta < 0 && finalDelta > 0)
+                finalDelta = 0;
+            Value = Mathf.Clamp(finalDelta + Value,
                 _minValue, _maxValue);
             VDebug.Log("添加 (变化量:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta
                        + " 到 " + AttributeName + "，新数值: " + Value);
@@ -143,8 +145,10 @@ namespace VTuber.BattleSystem.BattleAttribute
                 return Value;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)(Value + (delta + gainPointsModifierValue) * (gainRateModifierValue));
-            return Mathf.Clamp(finalDelta, _minValue, _maxValue);
+            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue));
+            if(delta < 0 && finalDelta > 0)
+                finalDelta = 0;
+            return Value + finalDelta;
         }
         
         public virtual void MultiplyWith(int delta, bool isFromCard, bool shouldPlayTwice = false)

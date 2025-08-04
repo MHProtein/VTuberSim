@@ -19,13 +19,14 @@ namespace VTuber.Core.RaisingEffect
         {
             base.ApplyEffect(character);
             var configs = VSingleton<VResourcesManager>.Instance.GetAllCardConfigurations().
-                Where(configuration => _condition.IsTrue(configuration.CreateCard())).ToList();
+                Where(configuration => _condition.IsTrue(configuration)).ToList();
             
             if(configs.Count == 0)
                 return;
             
             var randomIndex = UnityEngine.Random.Range(0, configs.Count);
             character.CardLibrary.AddCard(configs[randomIndex].CreateCard());
+            VDebug.Log("Added random card: " + configs[randomIndex].cardName);
         }
     }
 }

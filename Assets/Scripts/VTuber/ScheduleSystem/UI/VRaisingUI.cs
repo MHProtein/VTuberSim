@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VTuber.BattleSystem.Card;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using Yarn.Unity;
@@ -44,6 +46,12 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private GameObject pauseUI;
 
         [SerializeField] private Transform pauseSchedulePosition;
+        
+        [Space(3)] 
+        [Header("CardLibraryUI")] 
+        [SerializeField] private GameObject cardLibraryUIObject;
+
+        [SerializeField] private VCardLibraryUI cardLibraryUI;
 
         protected override void OnEnable()
         {
@@ -54,6 +62,18 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+
+        public void InitializeCardLibraryUI(List<VCard> cards)
+        {
+            cardLibraryUIObject.SetActive(true);
+            cardLibraryUI.Initialize(cards);
+        }
+        
+        public void CloseCardLibraryUI()
+        {
+            cardLibraryUI.Close();
+            cardLibraryUIObject.SetActive(false);
         }
         
         public void SetPauseText(bool shouldPause)

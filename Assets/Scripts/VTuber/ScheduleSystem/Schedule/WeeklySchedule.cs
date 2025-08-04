@@ -86,23 +86,23 @@ namespace VTuber.ScheduleSystem.Schedule
             return GetDay(dayIndex).GetEvent(timeOfDay);
         }
 
-        public void BeginExecution()
+        public VScheduleEvent BeginExecution()
         {
             _currentDayIndex = 0;
-            _days[_currentDayIndex].Execute();
+            return _days[_currentDayIndex].GetNextEvent();
         }
 
-        public void NextDay()
+        public VScheduleEvent NextDay()
         {
             _currentDayIndex++;
             if (_currentDayIndex >= _days.Count)
             {
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleExecuted,
                     new Dictionary<string, object>());
-                return;
+                return null;
             }
             
-            _days[_currentDayIndex].Execute();
+            return _days[_currentDayIndex].GetNextEvent();
         }
 
         public void Reset()

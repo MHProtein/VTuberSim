@@ -16,8 +16,11 @@ namespace VTuber.Core.StateMachine
         {
             base.Enter(state, enterParams);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation();
-            stateMachine.ScheduleUI.SwitchToCreation();
+            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete((() =>
+            {
+                
+                stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Script, stateMachine.WeekIndex);
+            }));
         }
 
         public override void Exit(VState nextState)
