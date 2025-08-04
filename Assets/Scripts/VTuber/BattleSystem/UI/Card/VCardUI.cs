@@ -11,6 +11,7 @@ using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.UI
 {
+    
     public class VCardUI : VUIBehaviour
     {
         /*
@@ -21,18 +22,18 @@ namespace VTuber.BattleSystem.UI
          * 5 - Special
          */
         [Header("Card Resources")]
-        [SerializeField] private List<Sprite> backgrounds;
-        [SerializeField] private List<Sprite> descriptionSprites;
-        [SerializeField] private List<Sprite> nameSprites;
-        [SerializeField] private List<Sprite> typeSprites;
+        [SerializeField] protected List<Sprite> backgrounds;
+        [SerializeField] protected List<Sprite> descriptionSprites;
+        [SerializeField] protected List<Sprite> nameSprites;
+        [SerializeField] protected List<Sprite> typeSprites;
 
-        [SerializeField] private Sprite singingSprite;
-        [SerializeField] private Sprite gamingSprite;
-        [SerializeField] private Sprite chattingSprite;
+        [SerializeField] protected Sprite singingSprite;
+        [SerializeField] protected Sprite gamingSprite;
+        [SerializeField] protected Sprite chattingSprite;
         
-        [SerializeField] private Color singingColor;
-        [SerializeField] private Color gamingColor;
-        [SerializeField] private Color chattingColor;
+        [SerializeField] protected Color singingColor;
+        [SerializeField] protected Color gamingColor;
+        [SerializeField] protected Color chattingColor;
         
         [SerializeField] public Image background;
         [SerializeField] public Image icon;

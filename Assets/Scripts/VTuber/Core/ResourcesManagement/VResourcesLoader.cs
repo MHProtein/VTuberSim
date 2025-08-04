@@ -33,8 +33,8 @@ namespace VTuber.Character
             LoadConditions(workbook);
             LoadEffects(workbook);
             LoadBuffs(workbook);
-            LoadRaisingEffects(workbook);
             LoadCardConditions(workbook);
+            LoadRaisingEffects(workbook);
             LoadDialogueEvents(workbook);
             LoadStreamEvents(workbook);
             return LoadCards(workbook);

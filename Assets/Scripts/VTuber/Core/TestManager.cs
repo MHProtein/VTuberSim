@@ -2,21 +2,20 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.StateMachine;
-using VTuber.Dialogue.UI;
 using VTuber.EventSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
-using Yarn.Unity;
 
 namespace VTuber.BattleSystem.Core
 {
     public class TestManager : VMonoBehaviour
     {
+        [SerializeField] private VScript script;
         [FormerlySerializedAs("schedule")]
         [Header("Schedule")] 
         [SerializeField] private VScheduleUI scheduleUI;
@@ -60,7 +59,7 @@ namespace VTuber.BattleSystem.Core
             _character.CardLibrary.AddCards(cards);
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character);
+                _character, script);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());
@@ -99,6 +98,21 @@ namespace VTuber.BattleSystem.Core
         public void ContinueSchedule()
         {
             _stateMachine.ContinueSchedule();
+        }
+
+        public void InitializeCardLibraryUI()
+        {
+            VRaisingUI.Instance.InitializeCardLibraryUI(_character.CardLibrary.GetCards());
+        }
+        
+        public void CloseCardLibraryUI()
+        {
+            VRaisingUI.Instance.CloseCardLibraryUI();
+        }
+
+        public void ExitGame()
+        {
+            Application.Quit();
         }
 
         public void ConvertToSchedule()

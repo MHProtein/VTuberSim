@@ -4,10 +4,13 @@ using PrimeTween;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.ScheduleSystem.Core;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -41,7 +44,7 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
-        public void SwitchToCreation()
+        public void SwitchToCreation(VScript script, int weekIndex)
         {
             for (int y = 0; y < slotSize.y; y++)
             {
@@ -53,6 +56,24 @@ namespace VTuber.ScheduleSystem.UI
                         Destroy(slots[y, x].Item.gameObject);
                     }
                 }
+            }
+            
+            var specialEvents = script.GetSpecialEvents(weekIndex);
+
+            foreach (var specialEvent in specialEvents)
+            {
+                VScheduleEventConfiguration e;
+                if (specialEvent.eventType == ScheduleEventType.Stream)
+                {
+                    e = VResourcesManager.Instance.GetStreamEventConfigurationByID(specialEvent.eventID);
+                }
+                else
+                {
+                    e = VResourcesManager.Instance.GetDialogueEventConfigurationByID(specialEvent.eventID);
+                }
+                var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
+                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.dayIndex]);
+                ui.SetInteractive(false);
             }
         }
         

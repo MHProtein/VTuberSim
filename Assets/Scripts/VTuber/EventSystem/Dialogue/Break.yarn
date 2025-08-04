@@ -26,4 +26,6 @@ He: Fuck Yeahhhhhhh!!
 
 -> Add 30 Stamina
     <<ApplyEffect Event 3 30>>
+-> Add Random M Card
+    <<ApplyEffect Event 8 200000>>
 ===
