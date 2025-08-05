@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using VTuber.Character;
-using VTuber.Core.EventCenter;
+﻿using VTuber.Character;
 
 namespace VTuber.Core.RaisingEffect.PickPhaseEndingEffect
 {
@@ -14,7 +12,6 @@ namespace VTuber.Core.RaisingEffect.PickPhaseEndingEffect
         public override void ApplyEffect(VCharacter character)
         {
             base.ApplyEffect(character);
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSelectPhaseEndingBegin, new Dictionary<string, object>());
         }
     }
 }

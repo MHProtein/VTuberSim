@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using VTuber.Character;
-using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Core;
-using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.BattleSystem.Core.ScriptSystem
 {
@@ -15,10 +12,8 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         public int weekIndex;
         public int dayIndex;
         public TimeOfDay timeOfDay;
-        public VScheduleEventType eventType;
+        public ScheduleEventType eventType;
         public uint eventID;
-        public VPhase phase;
-        public bool isPhaseStart;
     }
     [Serializable]
     public class VPhase
@@ -26,78 +21,42 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         [SerializeField] public string phaseName;
         [SerializeField] public string description;
         
+        [HorizontalGroup("开始事件", Gap = 10)]
         [Header("开始事件")]
         [LabelText("周")]
         public int startEventWeekIndex;
 
+        [HorizontalGroup("开始事件")]
+        [Header("")]
+        [LabelText("天")]
+        public int startEventDayIndex;
         
+        [HorizontalGroup("开始事件")]
         [Header("")]
         [LabelText("时间段")]
-        [SerializeField] public VScheduleEventType startEventType;
+        public TimeOfDay startEventTimeOfDay;
         [SerializeField] public uint startEventID;
         
         [HorizontalGroup("结束事件", Gap = 10)]
         [Header("结束事件")]
         [LabelText("周")]
         public int endEventWeekIndex;
+
+        [HorizontalGroup("结束事件")]
+        [Header("")]
+        [LabelText("天")]
+        public int endEventDayIndex;
+        
+        [HorizontalGroup("结束事件")]
+        [Header("")]
+        [LabelText("时间段")]
+        public TimeOfDay endEventTimeOfDay;
         
         [LabelText("结束事件ID")][SerializeField] List<uint> endEventIDs = new List<uint>();
         
+        
         [LabelText("特殊事件")]
-        [SerializeField] private List<VSpecialEventData> specialEventData;
+        [SerializeField] public List<VSpecialEventData> specialEventData;
 
-        private uint _endEventID;
-        
-        public List<VSpecialEventData> GetSpecialEventData()
-        {
-            var list = new List<VSpecialEventData>();
-
-            list.AddRange(specialEventData);
-            
-            var endingEvent = new VSpecialEventData
-            {
-                weekIndex = startEventWeekIndex,
-                dayIndex = 6,
-                timeOfDay = TimeOfDay.Morning,
-                eventType = VScheduleEventType.Stream,
-                eventID = _endEventID,
-                phase = this,
-            };
-            list.Add(endingEvent);
-            
-            return list;
-        }
-
-        public bool IsInPhase(int weekIndex)
-        {
-            if (weekIndex >= startEventWeekIndex && weekIndex <= endEventWeekIndex)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public VScheduleEvent GetStartEvent()
-        {
-            return VResourcesManager.Instance.CreateDialogueEventByID(startEventID);
-        }
-        
-        public void SetEndingEventID(uint id)
-        {
-            _endEventID = id;
-        }
-        
-        public List<KeyValuePair<VStreamEvent, List<bool>>> GetPhaseEndingEvents(VCharacter character)
-        {
-            List<KeyValuePair<VStreamEvent, List<bool>>> events = new List<KeyValuePair<VStreamEvent, List<bool>>>();
-            foreach (var id in endEventIDs)
-            {
-                var e = VResourcesManager.Instance.CreateStreamEventByID(id);
-                events.Add(new KeyValuePair<VStreamEvent, List<bool>>(e, e.CanExecuteAsPhaseEnding(character)));
-            }
-
-            return events;
-        }
     }
 }

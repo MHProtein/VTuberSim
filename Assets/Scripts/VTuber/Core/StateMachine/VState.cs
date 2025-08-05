@@ -7,8 +7,7 @@ namespace VTuber.Core.StateMachine
         ScheduleCreation,
         Execution,
         Pause,
-        ScheduleModify,
-        PhaseStart,
+        ScheduleModify
     }
     public abstract class VState
     {

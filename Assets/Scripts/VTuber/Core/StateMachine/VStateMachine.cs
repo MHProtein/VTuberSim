@@ -16,6 +16,9 @@ namespace VTuber.Core.StateMachine
     public class VStateMachine
     {
         public bool IsInitialized { get; private set; }
+        public VState DefaultState => defaultState;
+        [SerializeField] private VState defaultState;
+        [SerializeField] private List<VState> preRegisterStates = new List<VState>();
         
         private List<VState> RegisteredStateList => _registeredStateList;
         private List<VState> _registeredStateList = new List<VState>();
@@ -72,6 +75,7 @@ namespace VTuber.Core.StateMachine
             _character = character;
             _script = script;
             IsInitialized = true;
+            preRegisterStates.ForEach(state => RegisterState(state));
         }
 
         public void OnEnable()

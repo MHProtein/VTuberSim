@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.ScheduleSystem.Core;
@@ -16,9 +15,8 @@ namespace VTuber.ScheduleSystem.Events
         public uint EventID => _config.id;
         public string EventName => _config.eventName;
         public string Description => _config.description;
-        public VScheduleEventType Type => _config.type;
+        public ScheduleEventType Type => _config.type;
         public string Icon => _config.icon;
-        public Color BackgroundColor => _config.backgroundColor;
         
         public VEventCostType CostType => _config.costType;
         public int Cost => _config.cost;
@@ -32,10 +30,6 @@ namespace VTuber.ScheduleSystem.Events
         public bool IsExecuted { get; protected set; } = false;
         
         public DaySchedule DaySchedule => _daySchedule;
-        public VPhase Phase { get; set; }
-        public bool IsPhaseStart { get; set; } = false;
-        public bool IsPhaseEndingEvent { get; protected set; } = false;
-
         protected DaySchedule _daySchedule;
 
         public VScheduleEvent(VScheduleEventConfiguration config)

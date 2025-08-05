@@ -15,7 +15,7 @@
     /// <summary>
     /// 可安排的事件类型
     /// </summary>
-    public enum VScheduleEventType
+    public enum ScheduleEventType
     {
         Stream,
         Practice,

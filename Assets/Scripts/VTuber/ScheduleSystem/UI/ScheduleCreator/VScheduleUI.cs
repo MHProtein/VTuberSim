@@ -51,17 +51,15 @@ namespace VTuber.ScheduleSystem.UI
 
             foreach (var specialEvent in specialEvents)
             {
-                VScheduleEvent e;
-                if (specialEvent.eventType == VScheduleEventType.Stream)
+                VScheduleEventConfiguration e;
+                if (specialEvent.eventType == ScheduleEventType.Stream)
                 {
-                    e = VResourcesManager.Instance.CreateStreamEventByID(specialEvent.eventID);
+                    e = VResourcesManager.Instance.GetStreamEventConfigurationByID(specialEvent.eventID);
                 }
                 else
                 {
-                    e = VResourcesManager.Instance.CreateDialogueEventByID(specialEvent.eventID);
+                    e = VResourcesManager.Instance.GetDialogueEventConfigurationByID(specialEvent.eventID);
                 }
-                e.Phase = specialEvent.phase;
-                e.IsPhaseStart = specialEvent.isPhaseStart;
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
                 ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.dayIndex]);
                 ui.SetFixed(true);
@@ -198,8 +196,8 @@ namespace VTuber.ScheduleSystem.UI
                                 eventId = size1Id;
                             else if(emptyCount == 2)
                                 eventId = size2Id;
-                            var e = VResourcesManager.Instance.CreateDialogueEventByID(eventId);
-                            eventUIObject.Initialize(e, slots[yy, x]);
+                            var eventData = VResourcesManager.Instance.GetDialogueEventConfigurationByID(eventId);
+                            eventUIObject.Initialize(eventData, slots[yy, x]);
                             
                             emptyCount = 0;
                         }
@@ -216,8 +214,8 @@ namespace VTuber.ScheduleSystem.UI
                         eventId = size2Id;
                     else if(emptyCount == 3)
                         eventId = size3Id;
-                    var e = VResourcesManager.Instance.CreateDialogueEventByID(eventId);
-                    eventUIObject.Initialize(e, slots[yy, x]);
+                    var eventData = VResourcesManager.Instance.GetDialogueEventConfigurationByID(eventId);
+                    eventUIObject.Initialize(eventData, slots[yy, x]);
                 }
             }
         }

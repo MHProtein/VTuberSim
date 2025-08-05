@@ -34,9 +34,7 @@ namespace VTuber.Core.EventCenter
         
         OnSkipEvent,
         OnSwitchToModifySchedule,
-
-        OnSelectPhaseEndingBegin,
-        OnPhaseEndingSelected
+        
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>
