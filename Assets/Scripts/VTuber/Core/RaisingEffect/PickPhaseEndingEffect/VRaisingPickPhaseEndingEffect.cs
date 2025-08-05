@@ -1,6 +1,6 @@
 ﻿using VTuber.Character;
 
-namespace VTuber.Core.RaisingEffect.PickPhaseEndingEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingPickPhaseEndingEffect : VRaisingEffect
     {
