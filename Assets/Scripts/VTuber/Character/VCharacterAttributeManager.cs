@@ -23,7 +23,7 @@ namespace VTuber.Character
         
         public bool TryGetAttribute(string name, out VCharacterAttribute attribute)
         {
-            return Attributes.TryGetValue(name, out attribute);
+            return Attributes.TryGetValue(name.Trim(), out attribute);
         }
 
         public bool TryGetAttributeValue(string name, out int value, out bool isPercentage)

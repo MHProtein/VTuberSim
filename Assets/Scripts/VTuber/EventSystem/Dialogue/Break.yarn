@@ -29,5 +29,5 @@ He: Fuck Yeahhhhhhh!!
 -> Add Random M Card
     <<ApplyEffect Event 8 200000>>
 -> Delete Random Rare Card
-    <<ApplyEffect Event 9 200000>>
+    <<ApplyEffect Event 10 200000>>
 ===

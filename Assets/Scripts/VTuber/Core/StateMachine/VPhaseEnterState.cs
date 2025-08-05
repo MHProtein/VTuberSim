@@ -7,7 +7,12 @@ namespace VTuber.Core.StateMachine
 {
     public class VPhaseStartState : VState
     {
-        public void InitializeEvent(VDialogueEvent e)
+        public VPhaseStartState()
+        {
+            stateType = VStateType.PhaseStart;
+        }
+
+    public void InitializeEvent(VDialogueEvent e)
         {
             stateMachine.EventSystemRoot.SetActive(true);
             stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, e);
@@ -25,6 +30,7 @@ namespace VTuber.Core.StateMachine
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
+            stateMachine.EventSystemRoot.SetActive(false);
             stateMachine.SwitchState(VStateType.ScheduleCreation);
         }
 

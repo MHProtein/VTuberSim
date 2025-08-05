@@ -311,7 +311,7 @@ namespace VTuber.BattleSystem.Core
 
         public bool TryGetAttribute(string name, out VBattleAttribute attribute)
         {
-            return _battleAttributes.TryGetValue(name, out attribute);
+            return _battleAttributes.TryGetValue(name.Trim(), out attribute);
         }
         
         public void AddAttribute(string name, VBattleAttribute attribute)

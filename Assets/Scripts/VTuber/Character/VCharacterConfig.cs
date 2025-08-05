@@ -350,6 +350,9 @@ namespace VTuber.Character
 
         #endregion
         
+        [Header("基础卡牌")] 
+        [SerializeField] public List<uint> cardIDs;
+        
         [FormerlySerializedAs("fillingEventIDSize1")]
         [Header("补充事件")]
         [SerializeField] [LabelText("补充事件(大小1)")] public uint fillingEventIDDuration1 = 0;

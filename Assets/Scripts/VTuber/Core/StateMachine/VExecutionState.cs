@@ -25,34 +25,6 @@ namespace VTuber.Core.StateMachine
             stateType = VStateType.Execution;
         }
         
-        public override void Register(VStateMachine vStateMachine)
-        {
-            base.Register(vStateMachine);
-            
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventStart, OnEventStart);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
-            
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
-        }
-
-        public override void Unregister()
-        {
-            base.Unregister();
-            
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventStart, OnEventStart);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
-            
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
-        }
-        
-
-        
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
         {
             shouldSwitchToModifySchedule = true;
@@ -86,6 +58,7 @@ namespace VTuber.Core.StateMachine
             {
                 NextEvent();
             }
+            stateMachine.Script.OnEventExecuted(_currentEvent);
         }
 
         private void NextEvent()
@@ -118,7 +91,6 @@ namespace VTuber.Core.StateMachine
                         { "Event", e },
                         { "Coordinate", e.Coordinate }
                     });
-                    stateMachine.Script.OnEventExecuted(e);
                 });
             }
             else
@@ -164,6 +136,14 @@ namespace VTuber.Core.StateMachine
         {
             base.Enter(state, enterParams);
             
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventStart, OnEventStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
+            
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(true);
             stateMachine.ScheduleUI.SwitchToExecution();
             if (state.StateType == VStateType.ScheduleCreation)
@@ -187,6 +167,15 @@ namespace VTuber.Core.StateMachine
         public override void Exit(VState nextState)
         {
             base.Exit(nextState);
+            
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventStart, OnEventStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
+            
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(false);
         }
     }

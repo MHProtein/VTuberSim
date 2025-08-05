@@ -34,7 +34,7 @@ namespace VTuber.ScheduleSystem.Events
         public DaySchedule DaySchedule => _daySchedule;
         public VPhase Phase { get; set; }
         public bool IsPhaseStart { get; set; } = false;
-        public bool IsPhaseEndingEvent { get; protected set; } = false;
+        public bool IsPhaseEndingEvent { get; set; } = false;
 
         protected DaySchedule _daySchedule;
 

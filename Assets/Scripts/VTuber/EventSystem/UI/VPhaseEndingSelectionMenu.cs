@@ -43,7 +43,7 @@ namespace VTuber.EventSystem.UI
             _selectedOption.E.Phase.SetEndingEventID(_selectedOption.E.EventID);
             foreach (var option in _options)
             {
-                Destroy(option);
+                Destroy(option.gameObject);
             }
             _options.Clear();
             _selectedOption = null;

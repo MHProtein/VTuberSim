@@ -78,17 +78,22 @@ namespace VTuber.ScheduleSystem.UI
             List<VCardUI> uis = new List<VCardUI>();
             string type = _typeDropdown.options[_typeDropdown.value].text;
             uis.AddRange(type == "All" ? _cardUIs : _cardUIs.Where((ui => ui.Card.CardType == type)));
-            VCardRarity rarity = Enum.Parse<VCardRarity>(_rarityDropdown.options[_rarityDropdown.value].text);
+            string rarityStr = _rarityDropdown.options[_rarityDropdown.value].text;
+            if (!rarityStr.Equals("All"))
+            {
+                VCardRarity rarity = Enum.Parse<VCardRarity>(rarityStr);
+                uis = uis.Where((ui => ui.Card.Rarity == rarity)).ToList();
+            }
+            UpdateDisplayingCards(uis);
+        }
+        
+        private void UpdateDisplayingCards(List<VCardUI> newCards)
+        {
             foreach (var cardUI in _displayingCardUIs)
             {
                 cardUI.transform.SetParent(null);
             }
-            _displayingCardUIs = uis.Where((ui => ui.Card.Rarity == rarity)).ToList();
-            UpdateDisplayingCards();
-        }
-        
-        private void UpdateDisplayingCards()
-        {
+            _displayingCardUIs = newCards;
             foreach (var cardUI in _displayingCardUIs)
             {
                 cardUI.transform.SetParent(grid);

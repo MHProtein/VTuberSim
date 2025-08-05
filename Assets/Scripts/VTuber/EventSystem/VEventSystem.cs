@@ -21,6 +21,7 @@ namespace VTuber.EventSystem
         public void InitializeEvent(VCharacter character, VDialogueEvent e)
         {
             _character = character;
+            _currentEvent = e;
             VDebug.Log(e.dialogueNode);
             dialogueRunner.StartDialogue(e.dialogueNode);
         }

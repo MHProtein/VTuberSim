@@ -1,4 +1,5 @@
-﻿using Spire.Xls;
+﻿using System;
+using Spire.Xls;
 using VTuber.Character;
 using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Core;
@@ -48,11 +49,12 @@ namespace VTuber.ScheduleSystem.Events
         public VPhaseEndingEventCondition(CellRange row) : base(row)
         {
             eventId =  uint.Parse(row.Columns[VPhaseEndingConditionHeaderIndex.NameOrID].Value);
+            eventType = Enum.Parse<VScheduleEventType>(row.Columns[VPhaseEndingConditionHeaderIndex.Parameter].Value);
         }
         
         public override bool IsConditionMet(VCharacter character)
         {
-            return character.HasCompletedEvent(eventId);
+            return character.HasCompletedEvent(eventType, eventId);
         }
 
         public override string GetDescription()

@@ -2,6 +2,7 @@
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine.Serialization;
+using VTuber.Core.Managers;
 
 namespace VTuber.ScheduleSystem.Events
 {
@@ -45,6 +46,10 @@ namespace VTuber.ScheduleSystem.Events
                         {
                             phaseEndingConditions.Clear();
                             break;
+                        }
+                        else
+                        {
+                            phaseEndingConditions.Add(VResourcesManager.Instance.GetPhaseEndingConditionByID((uint)conditionID));
                         }
                     }
                 }

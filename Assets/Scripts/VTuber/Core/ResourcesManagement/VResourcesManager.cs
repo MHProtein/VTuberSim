@@ -262,5 +262,10 @@ namespace VTuber.Core.Managers
             return _streamEventConfigs.GetValueOrDefault(eventID);
         }
         
+        public VPhaseEndingCondition GetPhaseEndingConditionByID(uint conditionID)
+        {
+            return _phaseEndingConditions.GetValueOrDefault(conditionID);
+        }
+        
     }
 }

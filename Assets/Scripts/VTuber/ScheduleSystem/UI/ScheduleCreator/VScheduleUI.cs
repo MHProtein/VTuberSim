@@ -9,6 +9,7 @@ using VTuber.BattleSystem.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.ScriptSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 

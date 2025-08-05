@@ -29,11 +29,11 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         [Header("开始事件")]
         [LabelText("周")]
         public int startEventWeekIndex;
-
         
         [Header("")]
-        [LabelText("时间段")]
+        [LabelText("开始事件类型")]
         [SerializeField] public VScheduleEventType startEventType;
+        [LabelText("开始事件ID")]
         [SerializeField] public uint startEventID;
         
         [HorizontalGroup("结束事件", Gap = 10)]
@@ -47,6 +47,8 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         [SerializeField] private List<VSpecialEventData> specialEventData;
 
         private uint _endEventID;
+
+        public VPhase nextPhase;
         
         public List<VSpecialEventData> GetSpecialEventData()
         {
@@ -80,7 +82,9 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
 
         public VScheduleEvent GetStartEvent()
         {
-            return VResourcesManager.Instance.CreateDialogueEventByID(startEventID);
+            var e = VResourcesManager.Instance.CreateDialogueEventByID(startEventID);
+            e.Phase = this;
+            return e;
         }
         
         public void SetEndingEventID(uint id)
@@ -94,6 +98,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
             foreach (var id in endEventIDs)
             {
                 var e = VResourcesManager.Instance.CreateStreamEventByID(id);
+                e.Phase = this;
                 events.Add(new KeyValuePair<VStreamEvent, List<bool>>(e, e.CanExecuteAsPhaseEnding(character)));
             }
 

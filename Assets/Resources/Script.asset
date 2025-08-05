@@ -21,20 +21,56 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  cardIDs: 
+  eventIDs: 
+  abilityCoefficient: 1
+  followerCoefficient: 1
+  membershipCoefficient: 1
+  scoreLevels: []
   phases:
   - phaseName: Phase1
     description: asdfasdf
     startEventWeekIndex: 0
-    startEventDayIndex: 0
-    startEventTimeOfDay: 0
-    startEventID: 0
+    startEventType: 1
+    startEventID: 9
     endEventWeekIndex: 0
-    endEventDayIndex: 0
-    endEventTimeOfDay: 0
-    endEventIDs: 
+    endEventIDs: 030000000400000005000000
     specialEventData:
     - weekIndex: 0
       dayIndex: 2
       timeOfDay: 0
       eventType: 0
       eventID: 0
+      phase:
+        phaseName: 
+        description: 
+        startEventWeekIndex: 0
+        startEventType: 0
+        startEventID: 0
+        endEventWeekIndex: 0
+        endEventIDs: 
+        specialEventData: []
+      isPhaseStart: 0
+  - phaseName: Phase2
+    description: 
+    startEventWeekIndex: 1
+    startEventType: 1
+    startEventID: 10
+    endEventWeekIndex: 1
+    endEventIDs: 060000000700000008000000
+    specialEventData:
+    - weekIndex: 0
+      dayIndex: 2
+      timeOfDay: 0
+      eventType: 0
+      eventID: 0
+      phase:
+        phaseName: 
+        description: 
+        startEventWeekIndex: 0
+        startEventType: 0
+        startEventID: 0
+        endEventWeekIndex: 0
+        endEventIDs: 
+        specialEventData: []
+      isPhaseStart: 0

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
@@ -174,8 +176,19 @@ namespace VTuber.Core.StateMachine
             _weeklySchedule.Reset(true);
             ScheduleUI.ResetSchedule();
             _weekIndex++;
-            SwitchState(VStateType.ScheduleCreation);
             VRaisingUI.Instance.UpdateWeekCount(_weekIndex + 1);
+            var e = _script.NextWeek(_weekIndex);
+            if (e is not null)
+            {
+                Tween.Delay(0.1f, () =>
+                {
+                    SwitchState(VStateType.PhaseStart, e);
+                });
+            }
+            else
+            {
+                SwitchState(VStateType.ScheduleCreation);
+            }
         }
     }
 }

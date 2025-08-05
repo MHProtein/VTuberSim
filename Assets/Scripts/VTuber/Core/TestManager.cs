@@ -6,6 +6,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
 using VTuber.ScheduleSystem.Core;

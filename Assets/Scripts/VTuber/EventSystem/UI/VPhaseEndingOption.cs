@@ -35,16 +35,16 @@ namespace VTuber.Dialogue.UI
                 text.text = streamEvent.PhaseEndingConditions[i].GetDescription();
                 if (conditionsMet[i])
                 {
-                    text.faceColor = Color.green;
+                    text.color = Color.green;
                 }
                 else
                 {
-                    text.faceColor = Color.red;
+                    text.color = Color.red;
                     _selectable = false;
                 }
                 conditionDescriptions.Add(text);
             }
-            if(_selectable)
+            if(!_selectable)
                 backgroundImage.color = Color.grey;
         }
 

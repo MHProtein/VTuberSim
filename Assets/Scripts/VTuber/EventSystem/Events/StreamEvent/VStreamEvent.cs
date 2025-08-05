@@ -69,6 +69,7 @@ namespace VTuber.ScheduleSystem.Events
                 e = VResourcesManager.Instance.CreateDialogueEventByID(FailureEvent);
             }
 
+            e.IsPhaseEndingEvent = IsPhaseEndingEvent;
             e.SetDaySchedule(_daySchedule, Coordinate);
             return e;
         }
