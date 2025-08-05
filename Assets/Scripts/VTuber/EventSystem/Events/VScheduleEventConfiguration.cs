@@ -38,7 +38,7 @@ namespace VTuber.ScheduleSystem.Events
         
         public Color backgroundColor = Color.white;
 
-        public ScheduleEventType type;
+        public VScheduleEventType type;
 
         public VEventCostType costType;
         public int cost;
@@ -48,7 +48,7 @@ namespace VTuber.ScheduleSystem.Events
             id = uint.Parse(row.Columns[VEventHeaderIndex.Id].Value);
             eventName = row.Columns[VEventHeaderIndex.Name].Value;
             description = row.Columns[VEventHeaderIndex.Description].Value;
-            type = Enum.Parse<ScheduleEventType>(row.Columns[VEventHeaderIndex.Type].Value);
+            type = Enum.Parse<VScheduleEventType>(row.Columns[VEventHeaderIndex.Type].Value);
             _duration = int.Parse(row.Columns[VEventHeaderIndex.Duration].Value);
             costType = Enum.Parse<VEventCostType>(row.Columns[VEventHeaderIndex.CostType].Value);
             cost = int.Parse(row.Columns[VEventHeaderIndex.Cost].Value);

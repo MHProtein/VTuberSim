@@ -61,7 +61,7 @@ namespace VTuber.ScheduleSystem.UI
             if (!spawnable)
                 return;
             VEventUI eventUIObject = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
-            eventUIObject.InitializeDrag(_data, transform.position);
+            eventUIObject.InitializeDrag(_data.CreateEvent(), transform.position);
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -81,7 +81,7 @@ namespace VTuber.ScheduleSystem.UI
         //         }
         //     }
             GameObject eventUIObject = Instantiate(eventUIPrefab, VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
-            eventUIObject.GetComponent<VEventUI>().InitializeDrag(_data, transform.position);
+            eventUIObject.GetComponent<VEventUI>().InitializeDrag(_data.CreateEvent(), transform.position);
         }
 
         public void OnDrag(PointerEventData eventData)

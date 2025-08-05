@@ -1,5 +1,7 @@
 ﻿using Spire.Xls;
 using VTuber.Character;
+using VTuber.Core.Managers;
+using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.ScheduleSystem.Events
 {
@@ -32,10 +34,16 @@ namespace VTuber.ScheduleSystem.Events
             }
             return false;
         }
+
+        public override string GetDescription()
+        {
+            return $" {attributeName} 大于 {requiredValue}";
+        }
     }
     
-    public class VPhaseEndingEventCondition : VPhaseEndingCondition
+    public  class VPhaseEndingEventCondition : VPhaseEndingCondition
     {
+        public VScheduleEventType eventType;
         public uint eventId;
         public VPhaseEndingEventCondition(CellRange row) : base(row)
         {
@@ -46,9 +54,24 @@ namespace VTuber.ScheduleSystem.Events
         {
             return character.HasCompletedEvent(eventId);
         }
+
+        public override string GetDescription()
+        {
+            VScheduleEventConfiguration eventConfiguration;
+            if(eventType == VScheduleEventType.Stream)
+            {
+                eventConfiguration = VResourcesManager.Instance.GetStreamEventConfigurationByID(eventId);
+            }
+            else
+            {
+                eventConfiguration = VResourcesManager.Instance.GetDialogueEventConfigurationByID(eventId);
+            }
+
+            return $"完成 {eventConfiguration.eventName} 事件";
+        }
     }
     
-    public class VPhaseEndingCondition
+    public abstract class VPhaseEndingCondition
     {
         public uint id;
 
@@ -61,5 +84,8 @@ namespace VTuber.ScheduleSystem.Events
             // Default implementation, can be overridden by derived classes
             return false;
         }
+
+        public abstract string GetDescription();
+
     }
 }

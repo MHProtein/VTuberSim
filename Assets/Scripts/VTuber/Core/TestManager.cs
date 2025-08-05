@@ -70,6 +70,7 @@ namespace VTuber.BattleSystem.Core
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());
             _stateMachine.RegisterState(new VScheduleModifyState());
+            _stateMachine.RegisterState(new VPhaseStartState());
         }
 
         protected override void OnEnable()
@@ -89,7 +90,7 @@ namespace VTuber.BattleSystem.Core
         protected override void Start()
         {
             base.Start();
-            _stateMachine.SwitchState(VStateType.ScheduleCreation);
+            _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
         }
         
         public void ModifySchedule()
