@@ -5,20 +5,24 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Events;
+using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
+    public class EventExcutioner
+    {
+        
+    }
+    
     public class VExecutionState : VState
     {
         private VScheduleEvent _currentEvent;
         private bool shouldSwitchToModifySchedule = false;
-        private List<VScheduleEvent> history;
-        private VScheduleEvent skipToEvent;
+        private VScheduleEvent _skipToEvent;
         public VExecutionState()
         {
             stateType = VStateType.Execution;
-            history = new List<VScheduleEvent>();
         }
         
         public override void Register(VStateMachine vStateMachine)
@@ -34,8 +38,6 @@ namespace VTuber.Core.StateMachine
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
 
-
-
         public override void Unregister()
         {
             base.Unregister();
@@ -49,6 +51,8 @@ namespace VTuber.Core.StateMachine
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
         
+
+        
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
         {
             shouldSwitchToModifySchedule = true;
@@ -60,7 +64,6 @@ namespace VTuber.Core.StateMachine
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            history.Add(_currentEvent);
             VDebug.Log((bool)messagedict["IsTargetMet"]);
             var resultEvent = (_currentEvent as VStreamEvent).GetResultEvent((bool)messagedict["IsTargetMet"]);
             resultEvent.Execute(stateMachine.Character);
@@ -68,7 +71,6 @@ namespace VTuber.Core.StateMachine
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
-            history.Add(_currentEvent);
             stateMachine.EventSystemRoot.SetActive(false);
             if (shouldSwitchToModifySchedule)
             {
@@ -116,6 +118,7 @@ namespace VTuber.Core.StateMachine
                         { "Event", e },
                         { "Coordinate", e.Coordinate }
                     });
+                    stateMachine.Script.OnEventExecuted(e);
                 });
             }
             else
@@ -138,16 +141,16 @@ namespace VTuber.Core.StateMachine
                 initialTurnCount, targetPopularity, initialViewers);
         }
         
-        public void InitializeEvent(string node)
+        public void InitializeEvent(VDialogueEvent e)
         {
             stateMachine.EventSystemRoot.SetActive(true);
-            stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, node);
+            stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, e);
         }
         
         private void OnEventStart(Dictionary<string, object> messagedict)
         {
             _currentEvent = messagedict["Event"] as VScheduleEvent;
-            InitializeEvent((string)messagedict["DialogueNode"]);
+            InitializeEvent(_currentEvent as VDialogueEvent);
         }
         
         private void OnStreamEventStart(Dictionary<string, object> messagedict)
