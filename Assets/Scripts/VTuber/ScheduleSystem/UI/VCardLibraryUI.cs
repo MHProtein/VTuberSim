@@ -19,34 +19,61 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Toggle _isUpgraded;
         [SerializeField] private Transform grid;
 
-        private List<VCardUI> _cardUIs; 
-        private List<VCardUI> _displayingCardUIs;
+        [SerializeField] private Button confirmButton;
+        [SerializeField] private Button returnButton;
+
+        private List<VSelectCardCardUI> _cardUIs; 
+        private List<VSelectCardCardUI> _displayingCardUIs;
         
+        private VSelectCardCardUI _selectedCardUI;
+
+        private Action<VCard> _confirmAction;
 
         protected override void Awake()
         {
             base.Awake();
-            
+            confirmButton.interactable = false;
             _typeDropdown.onValueChanged.AddListener(OnTypeChanged);
             _rarityDropdown.onValueChanged.AddListener(OnRarityChanged);
             _isUpgraded.onValueChanged.AddListener(OnIsUpgradedChanged);
             
-            _cardUIs = new List<VCardUI>();
-            _displayingCardUIs = new List<VCardUI>();
+            _cardUIs = new List<VSelectCardCardUI>();
+            _displayingCardUIs = new List<VSelectCardCardUI>();
+            confirmButton.onClick.AddListener(Confirm);
         }
-        
-        public void Initialize(List<VCard> cards)
+
+        private void Confirm()
         {
+            _confirmAction?.Invoke(_selectedCardUI.Card);
+            Return();
+        }
+
+        public void Return()
+        {
+            foreach (var cardUI in _cardUIs)
+            {
+                Destroy(cardUI.gameObject);
+            }
+            _cardUIs.Clear();
+            _displayingCardUIs.Clear();
+            _selectedCardUI = null;
+        }
+
+        public void Initialize(List<VCard> cards, bool select, Action<VCard> confirmAction)
+        {
+            confirmButton.gameObject.SetActive(select);
+            returnButton.gameObject.SetActive(!select);
+            _confirmAction = confirmAction;
             foreach (var card in cards)
             {
                 var item = Instantiate(cardPrefab, grid);
-                var cardItem = item.GetComponent<VCardUI>();
-                if (cardItem != null)
-                {
-                    cardItem.SetCard(card);
-                    _cardUIs.Add(cardItem);
-                    _displayingCardUIs.Add(cardItem);
-                }
+                var cardItem = item.AddComponent<VSelectCardCardUI>();
+                var cardUI = cardItem.GetComponent<VCardUI>();
+                cardUI.SetCard(card);
+                
+                cardItem.Initialize(cardUI, this, select);
+                _cardUIs.Add(cardItem);
+                _displayingCardUIs.Add(cardItem);
             }
         }
         
@@ -75,7 +102,7 @@ namespace VTuber.ScheduleSystem.UI
 
         private void OnValueChanged()
         {
-            List<VCardUI> uis = new List<VCardUI>();
+            List<VSelectCardCardUI> uis = new List<VSelectCardCardUI>();
             string type = _typeDropdown.options[_typeDropdown.value].text;
             uis.AddRange(type == "All" ? _cardUIs : _cardUIs.Where((ui => ui.Card.CardType == type)));
             string rarityStr = _rarityDropdown.options[_rarityDropdown.value].text;
@@ -87,7 +114,7 @@ namespace VTuber.ScheduleSystem.UI
             UpdateDisplayingCards(uis);
         }
         
-        private void UpdateDisplayingCards(List<VCardUI> newCards)
+        private void UpdateDisplayingCards(List<VSelectCardCardUI> newCards)
         {
             foreach (var cardUI in _displayingCardUIs)
             {
@@ -105,6 +132,16 @@ namespace VTuber.ScheduleSystem.UI
             Debug.Log($"Is Upgraded: {value}");
         }
 
+        public void Select(VSelectCardCardUI cardUI)
+        {
+            confirmButton.interactable = true;
+            if (_selectedCardUI != null && _selectedCardUI == cardUI)
+                return;
+            
+            if(_selectedCardUI is not null)
+                _selectedCardUI.UnSelect();
+            _selectedCardUI = cardUI;
+        }
 
     }
 }

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -30,12 +32,19 @@ namespace VTuber.EventSystem
         {
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSelectPhaseEndingBegin, OnPickPhaseEndingBegin);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
         }
-        
+
         protected override void OnDisable()
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSelectPhaseEndingBegin, OnPickPhaseEndingBegin);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
+        }
+        
+        private void OnBeginSelectCard(Dictionary<string, object> messagedict)
+        {
+            VEventSystemUI.Instance.OpenCardLibrary(_character.CardLibrary.GetCards(), true, messagedict["Action"] as Action<VCard>);
         }
         
         private void OnPickPhaseEndingBegin(Dictionary<string, object> messagedict)

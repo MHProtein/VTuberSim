@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Card;
+using VTuber.Core.Foundation;
 
 namespace VTuber.Character
 {
@@ -40,6 +41,15 @@ namespace VTuber.Character
         {
             return cards;
         }
-        
+
+        public void ReplaceCard(VCard cardToReplace, VCard selectedCard)
+        {
+            if (cardToReplace != null && selectedCard != null)
+            {
+                int index = cards.IndexOf(selectedCard);
+                cards[index] = cardToReplace;
+                VDebug.Log("Card replaced: " + selectedCard.CardName + " with " + cardToReplace.CardName);
+            }
+        }
     }
 }
