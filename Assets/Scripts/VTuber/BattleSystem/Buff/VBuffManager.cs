@@ -26,8 +26,7 @@ namespace VTuber.BattleSystem.Buff
             this.buff = buff;
             this.value = value;
         }
-        
-        // 每回合减少延迟计数
+
         public void DecrementLatency()
         {
             buff.latency -= 1;
@@ -47,8 +46,7 @@ namespace VTuber.BattleSystem.Buff
             
             VDebug.Log($"{buff.GetBuffName()} 延迟减少到 {buff.latency}");
         }
-        
-        // 减少持续时间，返回 true 表示应该移除该 Buff
+
         public bool DecrementDuration()
         {
             if (buff.latency > 0)
@@ -63,7 +61,6 @@ namespace VTuber.BattleSystem.Buff
             if (isFirstTurn)
             {
                 isFirstTurn = false;
-                // 如果该Buff没有在第一回合生效的效果，则跳过首次递减
                 bool shouldSkipDecrement = true;
                 foreach (var effect in buff.Effects)
                 {
@@ -87,7 +84,6 @@ namespace VTuber.BattleSystem.Buff
 
             VDebug.Log($"{buff.GetBuffName()} 持续时间减少到 {Value}");
 
-            // 广播数值变化事件
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffValueUpdated, new Dictionary<string, object>
             {
                 { "Id", Id },
@@ -98,8 +94,7 @@ namespace VTuber.BattleSystem.Buff
                 { "IsFromCard", false },
                 { "ShouldPlayTwice", false }
             });
-            
-            // 通知效果层数变化
+
             foreach (var effect in buff.Effects)
             {
                 effect.OnBuffLayerChange(value);
@@ -108,7 +103,6 @@ namespace VTuber.BattleSystem.Buff
             return false;
         }
 
-        // 叠加Buff层数，返回 true 表示需要移除
         public virtual bool Stack(int addValue, bool isFromCard, bool shouldPlayTwice)
         {
             value += addValue;
