@@ -78,17 +78,11 @@ namespace VTuber.Core.StateMachine
 
         public void OnEnable()
         {
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnScheduleExecuted, OnScheduleExecuted);
         }
 
         public void OnDisable()
         {
             UnregisterAll();
-        }
-        
-        private void OnScheduleExecuted(Dictionary<string, object> messagedict)
-        {
-            NextSchedule();
         }
         
         public void PauseSchedule()
@@ -103,6 +97,11 @@ namespace VTuber.Core.StateMachine
                 shouldPauseSchedule = true;
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseText(true);
             }
+        }
+
+        public void SetShouldPauseSchedule(bool value)
+        {
+            shouldPauseSchedule = value;
         }
         
         public void ContinueSchedule()
@@ -173,8 +172,13 @@ namespace VTuber.Core.StateMachine
 
         public void NextSchedule()
         {
+            VDebug.Log("<color=green>Next Schedule</color>");
             _weeklySchedule.Reset(true);
             ScheduleUI.ResetSchedule();
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleEnd, new Dictionary<string, object>()
+            {
+                { "WeekIndex", _weekIndex },
+            });
             _weekIndex++;
             VRaisingUI.Instance.UpdateWeekCount(_weekIndex + 1);
             var e = _script.NextWeek(_weekIndex);

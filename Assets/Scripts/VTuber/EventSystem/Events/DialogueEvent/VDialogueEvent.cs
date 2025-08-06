@@ -23,7 +23,6 @@ namespace VTuber.ScheduleSystem.Events.DialogueEvent
                 {"Event", this},
                 {"DialogueNode", dialogueNode}
             });
-            _daySchedule.OnEventExecuted(this);
             IsExecuted = true;
             return true;
         }

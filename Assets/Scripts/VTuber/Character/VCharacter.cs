@@ -37,12 +37,12 @@ namespace VTuber.Character
         
         public void OnEnable()
         {
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
         }
 
         public void OnDisable()
         {
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
         }
         
         void InitializeAttributes(VCharacterConfiguration characterConfig)

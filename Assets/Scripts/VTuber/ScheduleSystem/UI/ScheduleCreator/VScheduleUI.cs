@@ -109,13 +109,13 @@ namespace VTuber.ScheduleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
         }
         
         protected override void OnDisable()
         {
             base.OnDisable();
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventExecuted, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
         }
         
         private void OnEventExecuted(Dictionary<string, object> messagedict)

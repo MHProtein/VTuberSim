@@ -12,12 +12,12 @@ namespace VTuber.ScheduleSystem.Schedule
     /// </summary>
     public class VWeeklySchedule
     {
-        private readonly List<DaySchedule> _days = new();
+        private readonly List<VDaySchedule> _days = new();
         private int _currentDayIndex = 0;
         public VWeeklySchedule(VCharacter character)
         {
             for (int i = 0; i < 7; i++)
-                _days.Add(new DaySchedule(this, character, i));
+                _days.Add(new VDaySchedule(this, character, i));
         }
         
         private List<TimeOfDay> GetTimeRange(TimeOfDay start, int duration)
@@ -34,14 +34,14 @@ namespace VTuber.ScheduleSystem.Schedule
             return times;
         }
         
-        public DaySchedule GetDay(int index)
+        public VDaySchedule GetDay(int index)
         {
             if (index < 0 || index >= 7)
                 throw new System.IndexOutOfRangeException("WeeklySchedule: index must be between 0 and 6.");
             return _days[index];
         }
 
-        public List<DaySchedule> GetAllDays()
+        public List<VDaySchedule> GetAllDays()
         {
             return _days;
         }
@@ -92,19 +92,6 @@ namespace VTuber.ScheduleSystem.Schedule
             return _days[_currentDayIndex].GetNextEvent();
         }
 
-        public VScheduleEvent NextDay()
-        {
-            _currentDayIndex++;
-            if (_currentDayIndex >= _days.Count)
-            {
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleExecuted,
-                    new Dictionary<string, object>());
-                return null;
-            }
-            
-            return _days[_currentDayIndex].GetNextEvent();
-        }
-
         public void Reset(bool resetIndices)
         {
             foreach (var day in _days)
@@ -114,6 +101,23 @@ namespace VTuber.ScheduleSystem.Schedule
             if(resetIndices)
                 _currentDayIndex = 0;
         }
-        
+
+        public void NextDay()
+        {
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnDayEnd,
+                new Dictionary<string, object>()
+                {
+                    { "DayIndex", _currentDayIndex },
+                });
+            VDebug.Log("<color=green>Day " + _currentDayIndex + " ended.</color>");
+            _currentDayIndex++;
+        }
+
+        public VScheduleEvent NextEvent()
+        {
+            if (_currentDayIndex >= _days.Count)
+                return null;
+            return _days[_currentDayIndex].GetNextEvent();
+        }
     }
 }

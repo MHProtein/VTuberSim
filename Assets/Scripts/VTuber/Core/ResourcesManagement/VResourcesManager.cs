@@ -5,6 +5,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 
@@ -266,6 +267,15 @@ namespace VTuber.Core.Managers
         {
             return _phaseEndingConditions.GetValueOrDefault(conditionID);
         }
-        
+
+        public VScheduleEvent CreateEvent(VScheduleEventType eventType, uint id)
+        {
+            if (eventType == VScheduleEventType.Stream)
+            {
+                return CreateStreamEventByID(id);
+            }
+
+            return CreateDialogueEventByID(id);
+        }
     }
 }

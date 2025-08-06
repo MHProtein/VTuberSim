@@ -183,9 +183,9 @@ namespace VTuber.BattleSystem.Card
         
         public VCard CreateCard()
         {
-            if (spawned)
-                return null;
-            spawned = true;
+        //     if (spawned)
+        //         return null;
+        //     spawned = true;
             return new VCard(this, idDistributor++, effects, newEffects, conditionId);
         }
     }

@@ -7,18 +7,19 @@ using System.Numerics;
 using UnityEngine;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.Schedule
 {
     /// <summary>
     /// 表示一天中的三段时间安排
     /// </summary>
-    public class DaySchedule
+    public class VDaySchedule
     {
         private readonly List<VScheduleEvent> _events = new();
         
         private VCharacter _character;
-        private VWeeklySchedule _vWeeklySchedule;
+        private VWeeklySchedule _weeklySchedule;
         
         private class ScheduledSlot
         {
@@ -32,11 +33,11 @@ namespace VTuber.ScheduleSystem.Schedule
         private int _dayIndex = 0;
         private int eventIndex = 0;
 
-        public DaySchedule(VWeeklySchedule vWeeklySchedule, VCharacter character, int index)
+        public VDaySchedule(VWeeklySchedule weeklySchedule, VCharacter character, int index)
         {
             currentTimeOfDay = TimeOfDay.Morning;
             _character = character;
-            _vWeeklySchedule = vWeeklySchedule;
+            _weeklySchedule = weeklySchedule;
             _dayIndex = index;
         }
         
@@ -102,16 +103,11 @@ namespace VTuber.ScheduleSystem.Schedule
         public void OnEventExecuted(VScheduleEvent e)
         {
             eventIndex++;
-        }
-
-        public VScheduleEvent NextEvent()
-        {
-            if (eventIndex > _events.Count - 1)
-            {
-                return _vWeeklySchedule.NextDay();
+            VDebug.Log("Day: " + _dayIndex + " eventIndex: " + eventIndex);
+            if(eventIndex >= _events.Count)
+            { 
+                _weeklySchedule.NextDay();
             }
-
-            return GetNextEvent();
         }
 
         public void Reset(bool resetIndices)

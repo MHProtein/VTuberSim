@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
@@ -11,7 +10,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VCardLibraryUI : VUIBehaviour
+    public class VCardLibraryUI : VUIBehaviour, ISelectableCardMenu
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private TMP_Dropdown _typeDropdown;
@@ -142,6 +141,5 @@ namespace VTuber.ScheduleSystem.UI
                 _selectedCardUI.UnSelect();
             _selectedCardUI = cardUI;
         }
-
     }
 }

@@ -14,6 +14,9 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private VPhaseEndingSelectionMenu phaseEndingSelectionMenu;
         [SerializeField] private GameObject endingOptionPrefab;
         [SerializeField] private VCardLibraryUI cardLibraryUI;
+        [SerializeField] private VSelectFrom3Menu selectFrom3Menu;
+        
+        
         public void InitializePhaseEndingSelectionMenu(List<KeyValuePair<VStreamEvent, List<bool>>> endings)
         {
             phaseEndingSelectionMenu.gameObject.SetActive(true);
@@ -34,6 +37,17 @@ namespace VTuber.Dialogue.UI
         public void CloseCardLibrary()
         {
             cardLibraryUI.gameObject.SetActive(false);
+        }
+        
+        public void OpenSelectFrom3Menu(List<VCard> cards, Action<VCard> confirmAction)
+        {
+            selectFrom3Menu.gameObject.SetActive(true);
+            selectFrom3Menu.Initialize(cards, confirmAction);
+        }
+        
+        public void CloseSelectFrom3Menu()
+        {
+            selectFrom3Menu.gameObject.SetActive(false);
         }
     }
 }

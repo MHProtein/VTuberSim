@@ -4,6 +4,7 @@ using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
@@ -36,26 +37,40 @@ namespace VTuber.Core.StateMachine
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            VDebug.Log((bool)messagedict["IsTargetMet"]);
-            var resultEvent = (_currentEvent as VStreamEvent).GetResultEvent((bool)messagedict["IsTargetMet"]);
-            resultEvent.Execute(stateMachine.Character);
+            stateMachine.BattleRoot.SetActive(false);
+            (_currentEvent as VStreamEvent).SetResultEvent((bool)messagedict["IsTargetMet"]);
+
+            if (_currentEvent.FollowUpEvent is not null)
+            {
+                _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
+            }
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.EventSystemRoot.SetActive(false);
+            
+            if (_currentEvent.FollowUpEvent is not null)
+            {
+                _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
+                return;
+            }
+            
             if (shouldSwitchToModifySchedule)
             {
                 shouldSwitchToModifySchedule = false;
                 stateMachine.SwitchState(VStateType.ScheduleModify);
                 return;
             }
+            
             if (stateMachine.ShouldPauseSchedule)
             {
+                _currentEvent.AdvanceTime();
                 stateMachine.SwitchState(VStateType.Pause);
             }
             else
             {
+                _currentEvent.AdvanceTime();
                 NextEvent();
             }
             stateMachine.Script.OnEventExecuted(_currentEvent);
@@ -63,7 +78,12 @@ namespace VTuber.Core.StateMachine
 
         private void NextEvent()
         {
-            var e = _currentEvent.GetNextEvent();
+            var e = stateMachine.WeeklySchedule.NextEvent();
+            if (e is null)
+            {
+                stateMachine.NextSchedule();
+                return;
+            }
             ExecuteEvent(e);
         }
 
@@ -86,7 +106,7 @@ namespace VTuber.Core.StateMachine
                     stateMachine.Character.ApplyCost(e);
                     e.Execute(stateMachine.Character);
                     
-                    VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventExecuted, new Dictionary<string, object>
+                    VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventBeginExecute, new Dictionary<string, object>
                     {
                         { "Event", e },
                         { "Coordinate", e.Coordinate }
@@ -130,6 +150,11 @@ namespace VTuber.Core.StateMachine
             _currentEvent = messagedict["Event"] as VScheduleEvent;
             var streamEvent = _currentEvent as VStreamEvent;
             InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers);
+        }
+
+        private void AddEventToCurrentEvent(VScheduleEventType eventType, uint id)
+        {
+            _currentEvent.AddFollowUpEvent(eventType, id);
         }
         
         public override void Enter(VState state, params object[] enterParams)

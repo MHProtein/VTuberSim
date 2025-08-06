@@ -3,6 +3,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 
@@ -31,22 +32,30 @@ namespace VTuber.ScheduleSystem.Events
         
         public bool IsExecuted { get; protected set; } = false;
         
-        public DaySchedule DaySchedule => _daySchedule;
+        public VDaySchedule DaySchedule => _daySchedule;
         public VPhase Phase { get; set; }
         public bool IsPhaseStart { get; set; } = false;
         public bool IsPhaseEndingEvent { get; set; } = false;
 
-        protected DaySchedule _daySchedule;
+        protected VDaySchedule _daySchedule;
+
+        public VScheduleEvent FollowUpEvent => _followUpEvent;
+        private VScheduleEvent _followUpEvent;
 
         public VScheduleEvent(VScheduleEventConfiguration config)
         {
             _config = config;
         }
         
-        public void SetDaySchedule(DaySchedule daySchedule, Vector2Int position)
+        public void SetDaySchedule(VDaySchedule daySchedule, Vector2Int position)
         {
             _daySchedule = daySchedule;
             Coordinate = position;
+        }
+        
+        public void SetFollowUpEvent(VScheduleEvent followUpEvent)
+        {
+            _followUpEvent = followUpEvent;
         }
         
         public void SetDuration(int duration)
@@ -74,15 +83,32 @@ namespace VTuber.ScheduleSystem.Events
             return true;
         }
 
-        public virtual VScheduleEvent GetNextEvent()
-        {
-            return _daySchedule.NextEvent();
-        }
-
         public void Reset()
         {
             _daySchedule = null;
             Coordinate = new Vector2Int(-1, -1);
+        }
+
+        public void AdvanceTime()
+        {
+            _daySchedule.OnEventExecuted(this);
+        }
+
+        public void AddFollowUpEvent(VScheduleEventType eventType, uint id)
+        {
+            if (_followUpEvent is null)
+            {
+                _followUpEvent = VResourcesManager.Instance.CreateEvent(eventType, id);
+            }
+            else
+            {
+                var followUp = _followUpEvent;
+                while (followUp._followUpEvent is not null)
+                {
+                    followUp = followUp.FollowUpEvent;
+                }
+                followUp._followUpEvent = VResourcesManager.Instance.CreateEvent(eventType, id);
+            }
         }
     }
 }
