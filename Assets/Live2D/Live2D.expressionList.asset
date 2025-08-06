@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f401bb1c5c52514eba33c0c2ffdc8ff, type: 3}
+  m_Name: Live2D.expressionList
+  m_EditorClassIdentifier: 
+  CubismExpressionObjects:
+  - {fileID: 11400000, guid: e5c1c07f769ee184e9566dad5dc4502c, type: 2}
+  - {fileID: 11400000, guid: 963cbedef8fedce4d9f0d995e7b87da5, type: 2}
+  - {fileID: 11400000, guid: 6ad693edda7c7d641b2f23ea71d0d499, type: 2}
+  - {fileID: 11400000, guid: 269a5f7ed2d241b49913265c50a93338, type: 2}
+  - {fileID: 11400000, guid: d70851fceaba4ce4d8b393c7b9f2d693, type: 2}
+  - {fileID: 11400000, guid: a96f27aacfe39d242955eb01b6eb2fba, type: 2}
+  - {fileID: 11400000, guid: 9ec50986e2554fc49b9cc12c8144f87b, type: 2}
+  - {fileID: 11400000, guid: 990b7b2b47309f5428b5ed01c4be81b7, type: 2}

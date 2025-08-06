@@ -29,7 +29,7 @@ MonoBehaviour:
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   battleAttributeName: BAStamina
   isBattleAttributePercentage: 0
-  battleEventKey: 20
+  battleEventKey: 26
   minValue: 0
   maxValue: 2147483647
   battleAttributeNameWhenConvertBack: BAStamina

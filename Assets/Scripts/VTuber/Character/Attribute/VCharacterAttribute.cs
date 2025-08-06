@@ -47,7 +47,7 @@ namespace VTuber.Character.Attribute
             _maxValue = maxValue;
             _eventKey = eventKey;
             IsPercentage = isPercentage;
-            InitSetValue(initialValue);
+            SetValue(initialValue);
             ShouldBattleAttributeConvertTo = shouldBattleAttributeConvertTo;
             gainPointsModifier = new VValueModifier<int>(0);
             gainRateModifier = new VValueModifier<float>(1.0f);
@@ -135,12 +135,6 @@ namespace VTuber.Character.Attribute
             Value = Mathf.Clamp(Value * delta, _minValue, _maxValue);
             SendEvent(Value, Value - temp);
         }
-
-        private void InitSetValue(int value)
-        {
-            Value = Mathf.Clamp(value, _minValue, _maxValue);
-            SendEvent(Value, value - Value);
-        }
         
         protected virtual void SetValue(int value)
         {
@@ -158,28 +152,5 @@ namespace VTuber.Character.Attribute
             VRaisingRootEventCenter.Instance.Raise(_eventKey, messageDict);
         }
         
-        protected int GetModifierIntValue(VValueModifier<int> modifier)
-        {
-            if (modifier.Modifiers.Count == 0)
-                return modifier.DefaultValue;
-            int total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value;
-            }
-            return total;
-        }
-        
-        protected float GetModifierFloatValue(VValueModifier<float> modifier)
-        {
-            if (modifier.Modifiers.Count == 0)
-                return modifier.DefaultValue;
-            float total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value;
-            }
-            return total;
-        }
     }
 }

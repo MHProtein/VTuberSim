@@ -28,4 +28,11 @@ He: Fuck Yeahhhhhhh!!
     <<ApplyEffect Event 3 30>>
 -> Add Random M Card
     <<ApplyEffect Event 8 200000>>
+-> Delete Random Rare Card
+    <<ApplyEffect Event 10 200000>>
+-> Replace Card
+    <<ApplyEffect Event 11 200000>>
+-> Select From 3
+    <<ApplyEffect Event 12 200000>>
+Me: Zzzzzzzz
 ===

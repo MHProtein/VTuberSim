@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
 using VTuber.ScheduleSystem.Core;
@@ -15,7 +17,8 @@ namespace VTuber.BattleSystem.Core
 {
     public class TestManager : VMonoBehaviour
     {
-        [SerializeField] private VScript script;
+        [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
+        
         [FormerlySerializedAs("schedule")]
         [Header("Schedule")] 
         [SerializeField] private VScheduleUI scheduleUI;
@@ -34,13 +37,17 @@ namespace VTuber.BattleSystem.Core
         [Header("EventSystem")]
         [SerializeField] private GameObject eventSystemRoot;
         [FormerlySerializedAs("eventSystem")] [SerializeField] private VEventSystem eventSystemSystem;
+        
         private VCharacter _character;
         private VStateMachine _stateMachine;
+        private VScript _script;
         
         protected override void Awake()
+        
         {
             base.Awake();
-            VResourcesLoader loader = new VResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+            VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/NewCards.xlsx"));
+            _script = new VScript(scriptConfiguration);
             _character = new VCharacter(_characterConfiguration);
             _weeklySchedule = new VWeeklySchedule(_character);
             var cardConfigs = loader.Load();
@@ -59,30 +66,32 @@ namespace VTuber.BattleSystem.Core
             _character.CardLibrary.AddCards(cards);
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character, script);
+                _character, _script);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());
             _stateMachine.RegisterState(new VScheduleModifyState());
+            _stateMachine.RegisterState(new VPhaseStartState());
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
             _stateMachine.OnEnable();
-            
+            _character.OnEnable();
         }
         
         protected override void OnDisable()
         {
             base.OnDisable();
             _stateMachine.OnDisable();
+            _character.OnDisable();
         }
 
         protected override void Start()
         {
             base.Start();
-            _stateMachine.SwitchState(VStateType.ScheduleCreation);
+            _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
         }
         
         public void ModifySchedule()
@@ -122,6 +131,7 @@ namespace VTuber.BattleSystem.Core
                 _character.FillingEventIDDuration3);
             
             var slots = scheduleUI.Slots;
+            _weeklySchedule.Reset(false);
             for (int x = 0; x < slots.GetLength(1); x++)
             {
                 for (int y = 0; y < slots.GetLength(0);)

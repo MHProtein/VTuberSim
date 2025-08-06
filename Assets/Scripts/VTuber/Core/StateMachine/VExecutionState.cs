@@ -4,49 +4,26 @@ using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
+using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
+    public class EventExcutioner
+    {
+        
+    }
+    
     public class VExecutionState : VState
     {
         private VScheduleEvent _currentEvent;
         private bool shouldSwitchToModifySchedule = false;
-        private List<VScheduleEvent> history;
-        private VScheduleEvent skipToEvent;
+        private VScheduleEvent _skipToEvent;
         public VExecutionState()
         {
             stateType = VStateType.Execution;
-            history = new List<VScheduleEvent>();
-        }
-        
-        public override void Register(VStateMachine vStateMachine)
-        {
-            base.Register(vStateMachine);
-            
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventStart, OnEventStart);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
-            
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
-        }
-
-
-
-        public override void Unregister()
-        {
-            base.Unregister();
-            
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventStart, OnEventStart);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
-            
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
         
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
@@ -60,35 +37,53 @@ namespace VTuber.Core.StateMachine
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            history.Add(_currentEvent);
-            VDebug.Log((bool)messagedict["IsTargetMet"]);
-            var resultEvent = (_currentEvent as VStreamEvent).GetResultEvent((bool)messagedict["IsTargetMet"]);
-            resultEvent.Execute(stateMachine.Character);
+            stateMachine.BattleRoot.SetActive(false);
+            (_currentEvent as VStreamEvent).SetResultEvent((bool)messagedict["IsTargetMet"]);
+
+            if (_currentEvent.FollowUpEvent is not null)
+            {
+                _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
+            }
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
-            history.Add(_currentEvent);
             stateMachine.EventSystemRoot.SetActive(false);
+            
+            if (_currentEvent.FollowUpEvent is not null)
+            {
+                _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
+                return;
+            }
+            
             if (shouldSwitchToModifySchedule)
             {
                 shouldSwitchToModifySchedule = false;
                 stateMachine.SwitchState(VStateType.ScheduleModify);
                 return;
             }
+            
             if (stateMachine.ShouldPauseSchedule)
             {
+                _currentEvent.AdvanceTime();
                 stateMachine.SwitchState(VStateType.Pause);
             }
             else
             {
+                _currentEvent.AdvanceTime();
                 NextEvent();
             }
+            stateMachine.Script.OnEventExecuted(_currentEvent);
         }
 
         private void NextEvent()
         {
-            var e = _currentEvent.GetNextEvent();
+            var e = stateMachine.WeeklySchedule.NextEvent();
+            if (e is null)
+            {
+                stateMachine.NextSchedule();
+                return;
+            }
             ExecuteEvent(e);
         }
 
@@ -108,8 +103,14 @@ namespace VTuber.Core.StateMachine
             {
                 stateMachine.ScheduleUI.MoveIndicator(e.Coordinate).OnComplete(() =>
                 {
-                    e.Execute(stateMachine.Character);
                     stateMachine.Character.ApplyCost(e);
+                    e.Execute(stateMachine.Character);
+                    
+                    VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventBeginExecute, new Dictionary<string, object>
+                    {
+                        { "Event", e },
+                        { "Coordinate", e.Coordinate }
+                    });
                 });
             }
             else
@@ -132,16 +133,16 @@ namespace VTuber.Core.StateMachine
                 initialTurnCount, targetPopularity, initialViewers);
         }
         
-        public void InitializeEvent(string node)
+        public void InitializeEvent(VDialogueEvent e)
         {
             stateMachine.EventSystemRoot.SetActive(true);
-            stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, node);
+            stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, e);
         }
         
         private void OnEventStart(Dictionary<string, object> messagedict)
         {
             _currentEvent = messagedict["Event"] as VScheduleEvent;
-            InitializeEvent((string)messagedict["DialogueNode"]);
+            InitializeEvent(_currentEvent as VDialogueEvent);
         }
         
         private void OnStreamEventStart(Dictionary<string, object> messagedict)
@@ -150,10 +151,23 @@ namespace VTuber.Core.StateMachine
             var streamEvent = _currentEvent as VStreamEvent;
             InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers);
         }
+
+        private void AddEventToCurrentEvent(VScheduleEventType eventType, uint id)
+        {
+            _currentEvent.AddFollowUpEvent(eventType, id);
+        }
         
         public override void Enter(VState state, params object[] enterParams)
         {
             base.Enter(state, enterParams);
+            
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventStart, OnEventStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
             
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(true);
             stateMachine.ScheduleUI.SwitchToExecution();
@@ -178,6 +192,15 @@ namespace VTuber.Core.StateMachine
         public override void Exit(VState nextState)
         {
             base.Exit(nextState);
+            
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventStart, OnEventStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
+            
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(false);
         }
     }

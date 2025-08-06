@@ -1,0 +1,23 @@
+title: PhaseStart
+position: -24,-1
+---
+He: PhaseStart!
+You: $$$$^_^$$$$
+
+-> Select Phase Ending Event
+    <<ApplyEffect Event 9 200000>>
+
+You: Let's GOOOOOO!
+===
+
+title: PhaseStart2
+position: -24,-1
+---
+He: PhaseStart2!
+You: Ayyyyyyy!
+
+-> Select Phase Ending Event
+    <<ApplyEffect Event 9 200000>>
+
+You: Let's GOOOOOO!
+===

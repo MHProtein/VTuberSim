@@ -29,6 +29,9 @@ namespace VTuber.ScheduleSystem.UI
         private Vector2 _initPosition;
         
         private Color _bgColor;
+
+        public bool IsFixed => _isFixed;
+        private bool _isFixed = false;
         
         protected override void Awake()
         {
@@ -56,7 +59,6 @@ namespace VTuber.ScheduleSystem.UI
         public void SetColorGrey()
         {
             background.color = Color.grey;
-            icon.color = Color.grey;
         }
         
         public void SetColorOriginal()
@@ -65,21 +67,28 @@ namespace VTuber.ScheduleSystem.UI
             icon.color = Color.white;
         }
         
+        public void SetFixed(bool isFixed)
+        {
+            _isFixed = isFixed;
+            _interactable = isFixed;
+        }
+        
         public void SetInteractive(bool interactable)
         {
             _interactable = interactable;
         }
 
-        public void Initialize(VScheduleEventConfiguration eventData, VScheduleSlot slot)
+        public void Initialize(VScheduleEvent e, VScheduleSlot slot)
         {
-            _event = eventData.CreateEvent();
-            icon.sprite = VRaisingUI.Instance.GetIcon(eventData.icon);
-            background.color = eventData.backgroundColor;
-            _bgColor = eventData.backgroundColor;
+            
+            _event = e;
+            icon.sprite = VRaisingUI.Instance.GetIcon(e.Icon);
+            background.color = e.BackgroundColor;
+            _bgColor = background.color;
             icon.transform.localScale = Vector3.zero;
             background.transform.localScale = Vector3.zero;
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
-            Tween.Scale(background.transform, new Vector3(1, eventData.Duration, 1), 0.3f);
+            Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
 
             if(slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
             {
@@ -87,13 +96,12 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
-        public void InitializeDrag(VScheduleEventConfiguration eventData,
-            Vector2 initPosition)
+        public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
-            _event = eventData.CreateEvent();
-            icon.sprite = VRaisingUI.Instance.GetIcon(eventData.icon);
-            background.color = eventData.backgroundColor;
-            _bgColor = eventData.backgroundColor;
+            _event = e;
+            icon.sprite = VRaisingUI.Instance.GetIcon(e.Icon);
+            background.color = e.BackgroundColor;
+            _bgColor = background.color;
             _initPosition = initPosition;
             icon.raycastTarget = false;
             transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
@@ -101,7 +109,7 @@ namespace VTuber.ScheduleSystem.UI
             icon.transform.localScale = Vector3.zero;
             background.transform.localScale = Vector3.zero;
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
-            Tween.Scale(background.transform, new Vector3(1, eventData.Duration, 1), 0.3f);
+            Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
 
             transform.SetAsLastSibling();
         }
@@ -236,7 +244,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!_interactable)
+            if (!_interactable || _isFixed)
                 return;
             if (!_isSelected && eventData.button
                         == PointerEventData.InputButton.Left)

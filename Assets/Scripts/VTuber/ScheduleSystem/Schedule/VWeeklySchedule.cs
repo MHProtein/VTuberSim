@@ -1,0 +1,123 @@
+﻿using System.Collections.Generic;
+using VTuber.Character;
+using VTuber.Core.EventCenter;
+using VTuber.ScheduleSystem.Core;
+using VTuber.ScheduleSystem.Events;
+using VTuber.Core.Foundation;
+
+namespace VTuber.ScheduleSystem.Schedule
+{
+    /// <summary>
+    /// 一整周的安排，包含 7 天
+    /// </summary>
+    public class VWeeklySchedule
+    {
+        private readonly List<VDaySchedule> _days = new();
+        private int _currentDayIndex = 0;
+        public VWeeklySchedule(VCharacter character)
+        {
+            for (int i = 0; i < 7; i++)
+                _days.Add(new VDaySchedule(this, character, i));
+        }
+        
+        private List<TimeOfDay> GetTimeRange(TimeOfDay start, int duration)
+        {
+            var times = new List<TimeOfDay>();
+            var values = (TimeOfDay[])System.Enum.GetValues(typeof(TimeOfDay));
+            int startIndex = (int)start;
+
+            for (int i = 0; i < duration && startIndex + i < values.Length; i++)
+            {
+                times.Add(values[startIndex + i]);
+            }
+
+            return times;
+        }
+        
+        public VDaySchedule GetDay(int index)
+        {
+            if (index < 0 || index >= 7)
+                throw new System.IndexOutOfRangeException("WeeklySchedule: index must be between 0 and 6.");
+            return _days[index];
+        }
+
+        public List<VDaySchedule> GetAllDays()
+        {
+            return _days;
+        }
+
+        public void SetEvent(int dayIndex, TimeOfDay startTime, VScheduleEvent evt)
+        {
+            var duration = evt.Duration;
+            var day = GetDay(dayIndex);
+            var times = GetTimeRange(startTime, duration);
+
+            foreach (var time in times)
+            {
+                day.SetEvent(time, evt, time == startTime);
+            }
+        }
+        
+        public bool CanScheduleEvent(int dayIndex, TimeOfDay startTime, int duration)
+        {
+            var timeValues = (TimeOfDay[])System.Enum.GetValues(typeof(TimeOfDay));
+
+            if ((int)startTime + duration > timeValues.Length)
+            {
+                VDebug.Log($"<color=red>无法安排：day{dayIndex}，startTime {startTime}，duration 超出时间范围</color>");
+                return false;
+            }
+
+            var day = GetDay(dayIndex);
+            foreach (var time in GetTimeRange(startTime, duration))
+            {
+                if (day.GetEvent(time) != null)
+                {
+                    VDebug.Log($"<color=red>无法安排：day{dayIndex}，startTime {startTime}，时间段 {time} 已被占用</color>");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public VScheduleEvent GetEvent(int dayIndex, TimeOfDay timeOfDay)
+        {
+            return GetDay(dayIndex).GetEvent(timeOfDay);
+        }
+
+        public VScheduleEvent BeginExecution()
+        {
+            _currentDayIndex = 0;
+            return _days[_currentDayIndex].GetNextEvent();
+        }
+
+        public void Reset(bool resetIndices)
+        {
+            foreach (var day in _days)
+            {
+                day.Reset(resetIndices);
+            }
+            if(resetIndices)
+                _currentDayIndex = 0;
+        }
+
+        public void NextDay()
+        {
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnDayEnd,
+                new Dictionary<string, object>()
+                {
+                    { "DayIndex", _currentDayIndex },
+                });
+            VDebug.Log("<color=green>Day " + _currentDayIndex + " ended.</color>");
+            _currentDayIndex++;
+        }
+
+        public VScheduleEvent NextEvent()
+        {
+            if (_currentDayIndex >= _days.Count)
+                return null;
+            return _days[_currentDayIndex].GetNextEvent();
+        }
+    }
+}

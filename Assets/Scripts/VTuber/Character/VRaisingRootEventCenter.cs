@@ -5,36 +5,46 @@ namespace VTuber.Core.EventCenter
 {
     public enum VRaisingEventKey
     {
-        Default,
+        Default = 0,
         
-        OnEventStart,
-        OnStreamEventStart,
-        OnEventExecuted,
-        OnScheduleExecuted,
+        OnEventStart = 1,
+        OnStreamEventStart = 2,
+        OnEventBeginExecute = 3,
+        OnEventEnd = 4,
         
-        OnEventEnd,
+        OnNotifyEventDescriptionChange = 5,
         
-        OnNotifyEventDescriptionChange,
+        OnStaminaChanged = 6,
+        OnPressureChanged = 7,
+        OnSingingAbilityChanged = 8,
+        OnGamingAbilityChanged = 9,
+        OnChattingAbilityChanged = 10,
+        OnSingingAbilityConversionRatioChanged = 11,
+        OnGamingAbilityConversionRatioChanged = 12,
+        OnChattingAbilityConversionRatioChanged = 13,
+        OnSingingAbilityGainEfficiencyChanged = 14,
+        OnGamingAbilityGainEfficiencyChanged = 15,
+        OnChattingAbilityGainEfficiencyChanged = 16,
+        OnFollowerCountChanged = 17,
+        OnMemberCountChanged = 18,
+        OnFollowerToViewerRatioChanged = 19,
+        OnMoneyChanged = 20,
         
-        OnStaminaChanged,
-        OnPressureChanged,
-        OnSingingAbilityChanged,
-        OnGamingAbilityChanged,
-        OnChattingAbilityChanged,
-        OnSingingAbilityConversionRatioChanged,
-        OnGamingAbilityConversionRatioChanged,
-        OnChattingAbilityConversionRatioChanged,
-        OnSingingAbilityGainEfficiencyChanged,
-        OnGamingAbilityGainEfficiencyChanged,
-        OnChattingAbilityGainEfficiencyChanged,
-        OnFollowerCountChanged,
-        OnMemberCountChanged,
-        OnFollowerToViewerRatioChanged,
-        OnMoneyChanged,
+        OnSkipEvent = 21,
+        OnSwitchToModifySchedule = 22,
+
+        OnSelectPhaseEndingBegin = 23,
+        OnPhaseEndingSelected = 24,
         
-        OnSkipEvent,
-        OnSwitchToModifySchedule,
+        OnBeginSelectCard = 25,
+        OnBeginSelectCardFrom3 = 28,
         
+        OnDayEnd = 26,
+        OnScheduleEnd = 27,
+        
+        OnCardAdded = 29,
+        OnCardRemoved = 30,
+        OnCardReplaced = 31, 
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>

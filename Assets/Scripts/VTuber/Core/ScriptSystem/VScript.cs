@@ -1,53 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using VTuber.Core.Foundation;
-using VTuber.Core.Managers;
-using VTuber.ScheduleSystem.Core;
+using VTuber.BattleSystem.Core.ScriptSystem;
+using VTuber.Character;
+using VTuber.Character.Attributes;
 using VTuber.ScheduleSystem.Events;
 
-namespace VTuber.BattleSystem.Core.ScriptSystem
+namespace VTuber.Core.ScriptSystem
 {
-    [Serializable]
-    public class VSpecialEventData
+    public struct VScoreResult
     {
-        public int weekIndex;
-        public int dayIndex;
-        public TimeOfDay timeOfDay;
-        public ScheduleEventType eventType;
-        public uint eventID;
-    }
-    [Serializable]
-    public class VPhase
-    {
-        [SerializeField] public string phaseName;
-        [SerializeField] public string description;
-        [SerializeField] public List<VSpecialEventData> specialEventData;
-
+        public int score;
+        public string scoreLevelName;
     }
     
-    public class VScript : VScriptableObject
+    public class VScript
     {
-        public List<VPhase> _phases;
+        private List<VPhase> Phases => _configuration.phases;
+        private VScriptConfiguration _configuration;
+        
+        public VPhase CurrentPhase => _currentPhase;
+        private VPhase _currentPhase;
+
+        public VScript(VScriptConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public VScheduleEvent BeginScript()
+        {
+            _currentPhase = Phases[0];
+            _currentPhase.nextPhase = Phases.Count > 1 ? Phases[1] : null;
+            return _currentPhase.GetStartEvent();
+        }
         
         public List<VSpecialEventData> GetSpecialEvents(int weekIndex)
         {
             List<VSpecialEventData> events = new List<VSpecialEventData>();
-            foreach (var phase in _phases)
+            foreach (var phase in Phases)
             {
-                if (phase.specialEventData != null)
-                {
-                    foreach (var eventData in phase.specialEventData)
-                    {
-                        if (eventData.weekIndex == weekIndex)
-                        {
-                            events.Add(eventData);
-                        }
-                    }
-                }
+                if(phase.IsInPhase(weekIndex))
+                    events.AddRange(phase.GetSpecialEventData());
             }
             return events;
+        }
+
+        public void OnEventExecuted(VScheduleEvent e)
+        {
+        }
+
+        public VScheduleEvent NextWeek(int weekIndex)
+        {
+            if (_currentPhase.nextPhase.IsInPhase(weekIndex))
+            {
+                _currentPhase = _currentPhase.nextPhase;
+                return _currentPhase.GetStartEvent();
+            }
+
+            return null;
+        }
+
+        public VScoreResult CalculateScore(VCharacter character)
+        {
+            int singingAbility = character.AttributeManager.Attributes["CASingingAbility"].Value;
+            int gamingAbility = character.AttributeManager.Attributes["CAGamingAbility"].Value;
+            int chattingAbility = character.AttributeManager.Attributes["CAChattingAbility"].Value;
+            int follower = character.AttributeManager.Attributes["CAFollowerCount"].Value;
+            int highestMembershipCount = (character.AttributeManager.Attributes["CAMembershipCount"] as VMembershipCountAttribute).highestValue;
+
+            int score = Mathf.CeilToInt((singingAbility + gamingAbility + chattingAbility) * _configuration.abilityCoefficient +
+                        follower * _configuration.followerCoefficient
+                        + highestMembershipCount * _configuration.membershipCoefficient);
+            
+            var scoreLevel = _configuration.scoreLevels.Find(level => score >= level.low && score <= level.high);
+            return new VScoreResult
+            {
+                score = score,
+                scoreLevelName = scoreLevel.name
+            };
         }
     }
 }
