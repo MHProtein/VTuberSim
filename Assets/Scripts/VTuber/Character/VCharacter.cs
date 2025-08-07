@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
+using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
@@ -21,11 +22,27 @@ namespace VTuber.Character
 
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;
+        private Dictionary<VScheduleEventType, List<uint>> _completedEventIDs;
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
             InitializeAttributes(characterConfig);
+            _completedEventIDs = new Dictionary<VScheduleEventType, List<uint>>();
+            _completedEventIDs[VScheduleEventType.Stream] = new List<uint>();
+            _completedEventIDs[VScheduleEventType.Recovery] = new List<uint>();
+            _completedEventIDs[VScheduleEventType.Practice] = new List<uint>();
+            _completedEventIDs[VScheduleEventType.Coop] = new List<uint>();
+        }
+        
+        public void OnEnable()
+        {
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+        }
+
+        public void OnDisable()
+        {
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
         }
         
         void InitializeAttributes(VCharacterConfiguration characterConfig)
@@ -163,6 +180,18 @@ namespace VTuber.Character
         {
             AttributeManager.ApplyCost(e);
         }
+        
+        private void OnEventExecuted(Dictionary<string, object> messagedict)
+        {
+            var e = messagedict["Event"] as VScheduleEvent;
+            _completedEventIDs[e.Type].Add(e.EventID);
+        }
+        
+        public bool HasCompletedEvent(VScheduleEventType type, uint eventID)
+        {
+            return _completedEventIDs[type].Contains(eventID);
+        }
+        
     }
 }
 

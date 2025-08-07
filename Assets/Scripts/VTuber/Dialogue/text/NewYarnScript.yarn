@@ -1,0 +1,25 @@
+﻿title: Start
+---
+/// Whether Capsley like you or not. This starts true, but may change.
+<<declare $capsley_likes_you = true as bool>>
+/// The player's name. The player chooses this. It starts empty.
+<<declare $player_name = "" as string>>
+
+Capsley: Hello, I am Mr Capsley.
+Capsley: Who are you then?
+
+-> I'm Capsule, but my friends call me "Tic Tac". No idea why...
+    <<set $player_name to "Tic Tac">>
+-> The name's Triquandle.
+    <<set $player_name to "Triquandle">>
+-> Pyramid. Why - who wants to know?
+    <<set $player_name to "Pyramid">>
+    <<set $capsley_likes_you to false>>
+
+<<if $capsley_likes_you>>
+    Capsley: Nice to meet you {$player_name}!
+<<else>>
+    Capsley: No need to be so rude...
+    Capsley: Maybe you should be called Grumpy {$player_name}.
+<<endif>>
+===

@@ -6,9 +6,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
+using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using Yarn.Unity;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -67,7 +69,7 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeCardLibraryUI(List<VCard> cards)
         {
             cardLibraryUIObject.SetActive(true);
-            cardLibraryUI.Initialize(cards);
+            cardLibraryUI.Initialize(cards, false, null);
         }
         
         public void CloseCardLibraryUI()

@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using UnityEngine;
+using VTuber.BattleSystem.Core.ScriptSystem;
+using VTuber.Core.Foundation;
+
+namespace VTuber.Core.ScriptSystem
+{
+    [Serializable]
+    public struct VScoreLevel
+    {
+        [HorizontalGroup("ScoreLevel", Gap = 10)]
+        public int low;
+        [HorizontalGroup("ScoreLevel", Gap = 10)]
+        public int high;
+        [HorizontalGroup("ScoreLevel", Gap = 10)]
+        public string name;
+        
+    }
+    public class VScriptConfiguration : VScriptableObject
+    {
+        [Header("基础卡牌")] 
+        [SerializeField] public List<uint> cardIDs;
+        
+        [Space(5)]
+        [Header("初始事件")] 
+        [SerializeField] public List<uint> eventIDs;
+            
+        [Space(5)]
+        [Header("评分")]
+        [SerializeField] public float abilityCoefficient = 1f;
+        [SerializeField] public float followerCoefficient = 1f;
+        [SerializeField] public float membershipCoefficient = 1f;
+
+        [SerializeField] public List<VScoreLevel> scoreLevels;
+        
+        [Space(5)]
+        [Header("阶段")]
+        [SerializeField] public List<VPhase> phases;
+    }
+}

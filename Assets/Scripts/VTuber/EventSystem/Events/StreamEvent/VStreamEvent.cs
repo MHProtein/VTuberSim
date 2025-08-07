@@ -14,6 +14,7 @@ namespace VTuber.ScheduleSystem.Events
         public int InitialViewers { get; private set; } = 0;
         public uint SuccessEvent { get; private set; } = 0;
         public uint FailureEvent { get; private set; } = 0;
+        public List<VPhaseEndingCondition> PhaseEndingConditions { get; private set; } = new List<VPhaseEndingCondition>();
         
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
         {
@@ -22,6 +23,26 @@ namespace VTuber.ScheduleSystem.Events
             InitialViewers = config.initialViewers;
             SuccessEvent = config.successEvent;
             FailureEvent = config.failureEvent;
+            PhaseEndingConditions = config.phaseEndingConditions;
+            IsPhaseEndingEvent = config.isPhaseEndingEvent;
+        }
+
+        public List<bool> CanExecuteAsPhaseEnding(VCharacter character)
+        {
+            List<bool> conditionsMet = new List<bool>();
+            if (!IsPhaseEndingEvent)
+                return null;
+            if (PhaseEndingConditions.Count == 0)
+                return new List<bool>() { true };
+            if (!IsExecuted)
+            {
+                foreach (var condition in PhaseEndingConditions)
+                { 
+                    conditionsMet.Add(condition.IsConditionMet(character));
+                }
+            }
+
+            return conditionsMet;
         }
 
         public override bool Execute(VCharacter player)
@@ -35,9 +56,10 @@ namespace VTuber.ScheduleSystem.Events
             IsExecuted = true;
             return true;
         }
-        
-        public VScheduleEvent GetResultEvent(bool isSuccess)
+
+        public void SetResultEvent(bool isSuccess)
         {
+            
             VDialogueEvent e;
             if (isSuccess)
             {
@@ -48,9 +70,9 @@ namespace VTuber.ScheduleSystem.Events
                 e = VResourcesManager.Instance.CreateDialogueEventByID(FailureEvent);
             }
 
+            e.IsPhaseEndingEvent = IsPhaseEndingEvent;
             e.SetDaySchedule(_daySchedule, Coordinate);
-            return e;
+            SetFollowUpEvent(e);
         }
-        
     }
 }

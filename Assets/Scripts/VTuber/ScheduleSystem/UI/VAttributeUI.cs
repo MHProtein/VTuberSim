@@ -20,6 +20,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.OnEnable();
 
+            VDebug.Log(name + " " + key);
             VRaisingRootEventCenter.Instance.RegisterListener(key, OnValueChanged);
         }
         

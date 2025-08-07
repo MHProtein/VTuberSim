@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
@@ -16,9 +18,6 @@ namespace VTuber.Core.StateMachine
     public class VStateMachine
     {
         public bool IsInitialized { get; private set; }
-        public VState DefaultState => defaultState;
-        [SerializeField] private VState defaultState;
-        [SerializeField] private List<VState> preRegisterStates = new List<VState>();
         
         private List<VState> RegisteredStateList => _registeredStateList;
         private List<VState> _registeredStateList = new List<VState>();
@@ -75,22 +74,15 @@ namespace VTuber.Core.StateMachine
             _character = character;
             _script = script;
             IsInitialized = true;
-            preRegisterStates.ForEach(state => RegisterState(state));
         }
 
         public void OnEnable()
         {
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnScheduleExecuted, OnScheduleExecuted);
         }
 
         public void OnDisable()
         {
             UnregisterAll();
-        }
-        
-        private void OnScheduleExecuted(Dictionary<string, object> messagedict)
-        {
-            NextSchedule();
         }
         
         public void PauseSchedule()
@@ -105,6 +97,11 @@ namespace VTuber.Core.StateMachine
                 shouldPauseSchedule = true;
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseText(true);
             }
+        }
+
+        public void SetShouldPauseSchedule(bool value)
+        {
+            shouldPauseSchedule = value;
         }
         
         public void ContinueSchedule()
@@ -175,11 +172,27 @@ namespace VTuber.Core.StateMachine
 
         public void NextSchedule()
         {
-            _weeklySchedule.Reset();
+            VDebug.Log("<color=green>Next Schedule</color>");
+            _weeklySchedule.Reset(true);
             ScheduleUI.ResetSchedule();
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleEnd, new Dictionary<string, object>()
+            {
+                { "WeekIndex", _weekIndex },
+            });
             _weekIndex++;
-            SwitchState(VStateType.ScheduleCreation);
             VRaisingUI.Instance.UpdateWeekCount(_weekIndex + 1);
+            var e = _script.NextWeek(_weekIndex);
+            if (e is not null)
+            {
+                Tween.Delay(0.1f, () =>
+                {
+                    SwitchState(VStateType.PhaseStart, e);
+                });
+            }
+            else
+            {
+                SwitchState(VStateType.ScheduleCreation);
+            }
         }
     }
 }
