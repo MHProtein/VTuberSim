@@ -13,6 +13,7 @@ namespace VTuber.BattleSystem.Effect
         public VBuffModifyEffect(VBuffModifyEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             _configuration = configuration;
+            VDebug.Log(configuration.id + " " + parameter + " " + upgradedParameter);
             _addValue = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
         }
 

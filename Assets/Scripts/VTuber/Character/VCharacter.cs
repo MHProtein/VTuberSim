@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
+using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
@@ -23,10 +24,14 @@ namespace VTuber.Character
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;
         private Dictionary<VScheduleEventType, List<uint>> _completedEventIDs;
+
+        public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
+        private VRaisingRelicManager _raisingRelicManager;
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
+            _raisingRelicManager = new VRaisingRelicManager(this);
             InitializeAttributes(characterConfig);
             _completedEventIDs = new Dictionary<VScheduleEventType, List<uint>>();
             _completedEventIDs[VScheduleEventType.Stream] = new List<uint>();

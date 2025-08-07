@@ -9,7 +9,7 @@ namespace VTuber.Core.RaisingEffect
             
         }
 
-        public override VRaisingEffect CreateEffect(string parameter)
+        public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
             return new VRaisingPickPhaseEndingEffect(this);
         }

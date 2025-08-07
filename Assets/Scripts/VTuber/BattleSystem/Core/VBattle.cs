@@ -10,6 +10,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Relic;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -27,6 +28,9 @@ namespace VTuber.BattleSystem.Core
         
         public VBuffManager BuffManager => _buffManager;
         protected VBuffManager _buffManager;
+
+        public VBattleRelicManager BattleRelicManager => _battleRelicManager;
+        private VBattleRelicManager _battleRelicManager;
 
         #endregion
         
@@ -56,6 +60,7 @@ namespace VTuber.BattleSystem.Core
         protected VCharacterAttributeManager _characterAttributeManager;
         protected bool paused = false;
         protected int _targetPopularity;
+        
         public void NextCardPlayTwice()
         {
             _shouldNextCardPlayTwice = true;
@@ -87,6 +92,7 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager = new VBattleAttributeManager();
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
+            //_battleRelicManager = new VBattleRelicManager(this, relics);
             //_battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false));
             
             _battleAttributeManager.OnEnable();

@@ -11,8 +11,10 @@ using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.Relic;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
+using VCardHeaderIndex = VTuber.BattleSystem.Card.VCardHeaderIndex;
 
 namespace VTuber.Character
 {
@@ -38,6 +40,8 @@ namespace VTuber.Character
             LoadRaisingEffects(workbook);
             LoadDialogueEvents(workbook);
             LoadStreamEvents(workbook);
+            LoadRelicConditions(workbook);
+            LoadRelics(workbook);
             return LoadCards(workbook);
         }
 
@@ -245,6 +249,55 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetStreamEventConfigurations(list);
+        }
+        
+        public void LoadRelicConditions(Workbook wb)
+        {
+            var sheet = Sheet(wb, "RaisingRelicConditions");
+            
+            var list = new List<VRaisingRelicCondition>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VRaisingRelicConditionHeaderIndex.Type].Value;
+                if(row.Columns[VRaisingRelicConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var conditionType = Type.GetType("VTuber.Relic." + typeName.Trim());
+                if (conditionType == null)
+                {
+                    VDebug.LogError($"Card Condition type {typeName} not found.");
+                    continue;
+                }
+                var condition = (VRaisingRelicCondition)Activator.CreateInstance(conditionType, row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetRelicConditions(list);
+        }
+        
+        public void LoadRelics(Workbook wb)
+        {
+            var sheet = Sheet(wb, "Relics");
+            var list = new List<VRelicConfiguration>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VRelicHeaderIndex.Type].Value;
+                if(row.Columns[VRelicHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var type = Type.GetType("VTuber.Relic." + typeName.Trim());
+                if (type == null)
+                {
+                    VDebug.LogError($"Card Condition type {typeName} not found.");
+                    continue;
+                }
+                var relic = (VRelicConfiguration)Activator.CreateInstance(type, row);
+                list.Add(relic);
+            }
+
+            VResourcesManager.Instance.SetRelics(list);
         }
         
     }

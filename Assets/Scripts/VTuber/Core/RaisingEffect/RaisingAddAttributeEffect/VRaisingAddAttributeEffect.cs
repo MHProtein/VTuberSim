@@ -1,4 +1,5 @@
-﻿using VTuber.Character;
+﻿using VTuber.BattleSystem.Effect;
+using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
 
@@ -7,12 +8,12 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingAddAttributeEffect : VRaisingEffect
     {
         private readonly string _attributeName;
-        private readonly int _value;
-        public VRaisingAddAttributeEffect(VRaisingAddAttributeEffectConfiguration configuration, int value) : base(configuration)
+        private readonly VUpgradableValue<int> _value;
+        public VRaisingAddAttributeEffect(VRaisingAddAttributeEffectConfiguration configuration, int value, int upgradedValue) : base(configuration)
         {
             
             _attributeName = configuration.AbilityName;
-            _value = value;
+            _value = new VUpgradableValue<int>(value, upgradedValue);
         }
 
         public override void ApplyEffect(VCharacter character)
@@ -20,9 +21,21 @@ namespace VTuber.Core.RaisingEffect
             base.ApplyEffect(character);
             if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
-                attribute.AddTo(_value);
+                attribute.AddTo(_value.Value);
                 VDebug.Log("Added " + _value + " To " + _attributeName);
             }
+        }
+        
+        public override void Upgrade()
+        {
+            base.Upgrade();
+            _value.Upgrade();
+        }
+
+        public override void DownGrade()
+        {
+            base.DownGrade();
+            _value.Downgrade();
         }
     }
 }

@@ -9,7 +9,7 @@ He: Zzzzzzzz
 ===
 
 title: Break
-position: -24,-1
+position: -34,184
 ---
 Me: Break!
 He: Hell Yeahh!
@@ -19,12 +19,12 @@ He: Hell Yeahh!
 ===
 
 title: DayOff
-position: -24,-1
+position: 15,-193
 ---
 Me: DayOff!!!
 He: Fuck Yeahhhhhhh!!
 
--> Add 30 Stamina
+-> Add 30 Stamina 
     <<ApplyEffect Event 3 30>>
 -> Add Random M Card
     <<ApplyEffect Event 8 200000>>

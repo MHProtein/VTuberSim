@@ -13,10 +13,11 @@ namespace VTuber.Core.RaisingEffect
             _abilityName = row.Columns[VRaisingEffectHeaderIndex.Param].Value;
         }
 
-        public override VRaisingEffect CreateEffect(string parameter)
+        public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
             int value = Convert.ToInt32(parameter);
-            return new VRaisingAddAttributeEffect(this, value);
+            int upgradedValue = Convert.ToInt32(parameter);
+            return new VRaisingAddAttributeEffect(this, value, upgradedValue);
         }
     }
 }

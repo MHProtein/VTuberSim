@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.Effect
         {
             _configuration = configuration;
             
-            _addValue = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
+            _addValue = new VUpgradableValue<int>(int.Parse(parameter), int.Parse(upgradedParameter));
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
