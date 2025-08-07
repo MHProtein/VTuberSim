@@ -67,7 +67,7 @@ namespace VTuber.EventSystem
         [YarnCommand("ApplyEffect")]
         public void ApplyEffect(uint id, string value)
         {
-            var effect = VResourcesManager.Instance.CreateRaisingEffectByID(id, value);
+            var effect = VResourcesManager.Instance.CreateRaisingEffectByID(id, value, value);
             effect.ApplyEffect(_character);
         }
 

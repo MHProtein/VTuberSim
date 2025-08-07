@@ -17,7 +17,7 @@ namespace VTuber.Core.RaisingEffect
                     Convert.ToUInt32(row.Columns[VRaisingEffectHeaderIndex.Condition].Value));
         }
 
-        public override VRaisingEffect CreateEffect(string parameter)
+        public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
             return new VRaisingReplaceCardEffect(this);
         }

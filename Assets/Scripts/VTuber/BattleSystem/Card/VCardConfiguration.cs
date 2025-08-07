@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Card
@@ -78,6 +79,19 @@ namespace VTuber.BattleSystem.Card
                 return null;
             }
         }
+
+        public VRaisingEffect CreateRaisingEffect()
+        {
+            if (VResourcesManager.Instance.RaisingEffects.TryGetValue(id, out var config))
+            {
+                return config.CreateEffect(parameter, upgradedParameter);
+            }
+            else
+            {
+                VDebug.LogError($"Effect with ID {id} not found in configurations.");
+                return null;
+            }
+        }
     }
     
     public class VCardConfiguration
@@ -114,23 +128,23 @@ namespace VTuber.BattleSystem.Card
             effects = new List<VEffectItem>();
             newEffects = new List<VEffectItem>();
             
-            id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value);
-            cardName = row.Columns[VCardHeaderIndex.Name].Value;
-            description = row.Columns[VCardHeaderIndex.Description].Value;
-            rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value);
-            cardType = row.Columns[VCardHeaderIndex.Type].Value;
+            id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value.Trim());
+            cardName = row.Columns[VCardHeaderIndex.Name].Value.Trim();
+            description = row.Columns[VCardHeaderIndex.Description].Value.Trim();
+            rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value.Trim());
+            cardType = row.Columns[VCardHeaderIndex.Type].Value.Trim();
             
-            costType = Enum.Parse<CostType>(row.Columns[VCardHeaderIndex.CostType].Value);
+            costType = Enum.Parse<CostType>(row.Columns[VCardHeaderIndex.CostType].Value.Trim());
             
             if(costType == CostType.Buff)
-                costBuffId = Convert.ToUInt32(row.Columns[VCardHeaderIndex.CostBuffID].Value);
+                costBuffId = Convert.ToUInt32(row.Columns[VCardHeaderIndex.CostBuffID].Value.Trim());
 
-            cost = Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value);
-            upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value);
-            notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value) == 1;
-            isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
+            cost = Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value.Trim());
+            upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value.Trim());
+            notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value.Trim()) == 1;
+            isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value.Trim()) == 1;
             
-            var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
+            var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value.Trim();
             if(!conditionStr.IsNullOrWhitespace())
             {
                 conditionId = Convert.ToInt32(conditionStr);
@@ -145,7 +159,7 @@ namespace VTuber.BattleSystem.Card
             
             for (int i = VCardHeaderIndex.Effect1; i < VCardHeaderIndex.E4UpgradedParam; i += 3)
             {
-                var effectIDStr = row.Columns[i].Value;
+                var effectIDStr = row.Columns[i].Value.Trim();
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
                 uint effectID = Convert.ToUInt32(effectIDStr);
@@ -164,7 +178,7 @@ namespace VTuber.BattleSystem.Card
             
             for (int i = VCardHeaderIndex.NewEffect1; i < VCardHeaderIndex.NE2Param; i += 2)
             {
-                var effectIDStr = row.Columns[i].Value;
+                var effectIDStr = row.Columns[i].Value.Trim();
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
                 uint effectID = Convert.ToUInt32(effectIDStr);
@@ -175,7 +189,7 @@ namespace VTuber.BattleSystem.Card
                     newEffects.Add(new VEffectItem(){
                         id = effectID,
                         parameter = parameter,
-                        upgradedParameter = string.Empty
+                        upgradedParameter = parameter
                     });
                 }
             }

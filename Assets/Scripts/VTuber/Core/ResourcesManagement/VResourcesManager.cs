@@ -5,6 +5,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
@@ -39,6 +40,12 @@ namespace VTuber.Core.Managers
         
         public Dictionary<uint, VStreamEventConfiguration> StreamEventConfigs => _streamEventConfigs;
         private Dictionary<uint, VStreamEventConfiguration> _streamEventConfigs;
+        
+        public Dictionary<uint, VRaisingRelicCondition> RaisingRelicConditions => _raisingRelicConditions;
+        private Dictionary<uint, VRaisingRelicCondition> _raisingRelicConditions;
+        
+        public Dictionary<uint, VRelicConfiguration> Relics => _relics;
+        private Dictionary<uint, VRelicConfiguration> _relics;
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -157,6 +164,42 @@ namespace VTuber.Core.Managers
                 }
             }
         }
+        
+        public void SetRelicConditions(List<VRaisingRelicCondition> relicConditions)
+        {
+            _raisingRelicConditions = new Dictionary<uint, VRaisingRelicCondition>();
+
+            foreach (var condition in relicConditions)
+            {
+                if (condition != null)
+                {
+                    _raisingRelicConditions[condition.Id] = condition;
+                }
+            }
+        }
+
+        public void SetRelics(List<VRelicConfiguration> relics)
+        {
+            _relics = new Dictionary<uint, VRelicConfiguration>();
+
+            foreach (var relic in relics)
+            {
+                if (relic != null)
+                {
+                    _relics[relic.id] = relic;
+                }
+            }
+        }
+
+        public VRelic CreateRelicByID(uint id)
+        {
+            if (_relics.TryGetValue(id, out var relicConfiguration))
+            {
+                return relicConfiguration.CreateRelic();
+            }
+
+            return null;
+        }
 
         public VEffect CreateEffectByID(uint effectID, string parameter, string upgradedParameter)
         {
@@ -188,11 +231,11 @@ namespace VTuber.Core.Managers
             return null;
         }
 
-        public VRaisingEffect CreateRaisingEffectByID(uint effectID, string parameter)
+        public VRaisingEffect CreateRaisingEffectByID(uint effectID, string parameter, string upgradedParameter)
         {
             if (_raisingEffects.TryGetValue(effectID, out var effectConfig))
             {
-                return effectConfig.CreateEffect(parameter);
+                return effectConfig.CreateEffect(parameter, upgradedParameter);
             }
             return null;
         }
@@ -268,6 +311,12 @@ namespace VTuber.Core.Managers
             return _phaseEndingConditions.GetValueOrDefault(conditionID);
         }
 
+        
+        public VRaisingRelicCondition GetRaisingRelicCondition(uint conditionID)
+        {
+            return _raisingRelicConditions.GetValueOrDefault(conditionID);
+        }
+        
         public VScheduleEvent CreateEvent(VScheduleEventType eventType, uint id)
         {
             if (eventType == VScheduleEventType.Stream)

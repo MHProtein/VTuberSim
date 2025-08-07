@@ -28,7 +28,7 @@ namespace VTuber.Core.RaisingEffect
             description = row.Columns[VRaisingEffectHeaderIndex.Description].Value;
         }
         
-        public virtual VRaisingEffect CreateEffect(string parameter)
+        public virtual VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
             return new VRaisingEffect(this);
         }

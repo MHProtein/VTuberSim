@@ -1,4 +1,6 @@
-﻿using VTuber.Character;
+﻿using System.Collections.Generic;
+using VTuber.Character;
+using VTuber.Core.EventCenter;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -14,10 +16,22 @@ namespace VTuber.Core.RaisingEffect
         {
             _configuration = configuration;
         }
+
             
         public virtual void ApplyEffect(VCharacter character)
         {
             
         }
+
+        public virtual void Upgrade()
+        {
+            
+        }
+
+        public virtual void DownGrade()
+        {
+            
+        }
+        
     }
 }

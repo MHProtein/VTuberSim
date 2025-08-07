@@ -18,10 +18,11 @@ namespace VTuber.Core.RaisingEffect
             _shouldUseEfficiency = Convert.ToInt32(row.Columns[VRaisingEffectHeaderIndex.Condition].Value) == 1;
         }
 
-        public override VRaisingEffect CreateEffect(string parameter)
+        public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
             int value = Convert.ToInt32(parameter);
-            return new VRaisingAddAbilityEffect(this, value);
+            int upgradedValue = Convert.ToInt32(parameter);
+            return new VRaisingAddAbilityEffect(this, value, upgradedValue);
         }
     }
 }

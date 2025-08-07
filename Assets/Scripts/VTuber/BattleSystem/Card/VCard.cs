@@ -76,6 +76,8 @@ namespace VTuber.BattleSystem.Card
             
             foreach (var effect in effects)
             {
+                VDebug.Log("cardId : " + configID);
+                VDebug.Log("effect : " + effect.id);
                 _effects.Add(VResourcesManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
             }
             

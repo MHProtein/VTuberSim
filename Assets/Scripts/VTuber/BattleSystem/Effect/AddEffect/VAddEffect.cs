@@ -1,5 +1,4 @@
 ﻿using System;
-using Sirenix.Utilities;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
@@ -15,19 +14,7 @@ namespace VTuber.BattleSystem.Effect
         {
             _configuration = configuration;
             
-            if (!int.TryParse(parameter, out int x))
-            {
-            }
-
-            try
-            {
-
-                _addValue = new VUpgradableValue<int>(Convert.ToInt32(parameter.Trim()), Convert.ToInt32(upgradedParameter.Trim()));
-            }
-            catch(Exception e)
-            {
-                Debug.Log(configuration.id);
-            }
+            _addValue = new VUpgradableValue<int>(int.Parse(parameter), int.Parse(upgradedParameter));
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
