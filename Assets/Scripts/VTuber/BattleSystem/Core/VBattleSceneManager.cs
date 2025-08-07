@@ -3,6 +3,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Relic;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -44,7 +45,8 @@ namespace VTuber.BattleSystem.Core
         public void InitializeBattle()
         {
             //battleRoot.SetActive(true);
-            _battle.InitializeBattle(character.AttributeManager, character.CardLibrary, 10, 0, 0);
+            _battle.InitializeBattle(character.AttributeManager,
+                character.CardLibrary, 10, 0, 0, new List<VBattleRelic>());
         }
 
         protected override void Start()
