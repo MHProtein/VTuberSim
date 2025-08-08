@@ -37,6 +37,11 @@ namespace VTuber.Core.StateMachine
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
+                new Dictionary<string, object>()
+                {
+                    {"Event", _currentEvent}
+                });
             stateMachine.BattleRoot.SetActive(false);
             (_currentEvent as VStreamEvent).SetResultEvent((bool)messagedict["IsTargetMet"]);
 
@@ -130,7 +135,8 @@ namespace VTuber.Core.StateMachine
             stateMachine.BattleRoot.SetActive(true);
             stateMachine.Battle.InitializeBattle(stateMachine.Character.AttributeManager,
                 stateMachine.Character.CardLibrary,
-                initialTurnCount, targetPopularity, initialViewers);
+                initialTurnCount, targetPopularity, initialViewers,
+                stateMachine.Character.CharacterRelicManager.GetBattleRelics());
         }
         
         public void InitializeEvent(VDialogueEvent e)

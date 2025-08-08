@@ -9,6 +9,24 @@ using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
 {
+    public class VCharacterRelicManager
+    {
+        public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
+        private VRaisingRelicManager _raisingRelicManager;
+        
+        private List<VBattleRelic> _battleRelics;
+
+        public VCharacterRelicManager(VCharacter character)
+        {
+            _raisingRelicManager = new VRaisingRelicManager(character);
+        }
+
+        public List<VBattleRelic> GetBattleRelics()
+        {
+            return _battleRelics;
+        }
+    }
+    
     public class VCharacter
     {
         public string Name { get; set; }
@@ -25,14 +43,14 @@ namespace VTuber.Character
         private VCardLibrary _cardLibrary;
         private Dictionary<VScheduleEventType, List<uint>> _completedEventIDs;
 
-        public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
-        private VRaisingRelicManager _raisingRelicManager;
+        public VCharacterRelicManager CharacterRelicManager => _characterRelicManager;
+        private VCharacterRelicManager _characterRelicManager;
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
-            _raisingRelicManager = new VRaisingRelicManager(this);
             InitializeAttributes(characterConfig);
+            _characterRelicManager = new VCharacterRelicManager(this);
             _completedEventIDs = new Dictionary<VScheduleEventType, List<uint>>();
             _completedEventIDs[VScheduleEventType.Stream] = new List<uint>();
             _completedEventIDs[VScheduleEventType.Recovery] = new List<uint>();

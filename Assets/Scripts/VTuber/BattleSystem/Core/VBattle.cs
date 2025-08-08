@@ -85,15 +85,14 @@ namespace VTuber.BattleSystem.Core
         }
         
         public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
-            VCardLibrary cardLibrary, int initialTurnCount, int targetPopularity, int initialViewers)
+            VCardLibrary cardLibrary, int initialTurnCount, int targetPopularity, int initialViewers, List<VBattleRelic> relics)
         {
             _targetPopularity = targetPopularity;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager();
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
-            //_battleRelicManager = new VBattleRelicManager(this, relics);
-            //_battleAttributeManager.AddAttribute("BAShield", new VBattleAttribute(0, false));
+            _battleRelicManager = new VBattleRelicManager(this, relics);
             
             _battleAttributeManager.OnEnable();
             _cardPilesManager.OnEnable();

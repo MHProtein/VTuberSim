@@ -73,7 +73,11 @@ namespace VTuber.EventSystem
 
         public void OnDialogueComplete()
         {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, new Dictionary<string, object>());
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
+                new Dictionary<string, object>()
+                {
+                    {"Event", _currentEvent}
+                });
             _currentEvent = null;
         }
     }
