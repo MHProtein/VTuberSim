@@ -48,7 +48,9 @@ namespace VTuber.BattleSystem.Core
         protected override void Awake()
         {
             base.Awake();
-            VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/NewCards.xlsx"));
+            VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"));
             _script = new VScript(scriptConfiguration);
             
             _character = new VCharacter(_characterConfiguration);

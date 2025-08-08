@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
@@ -19,7 +20,9 @@ namespace VTuber.BattleSystem.Core
         {
             base.Awake();
             
-            VResourcesLoader loader = new VResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+            VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"));
             character = new VCharacter(_characterConfiguration);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
