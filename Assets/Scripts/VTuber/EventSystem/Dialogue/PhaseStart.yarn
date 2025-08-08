@@ -5,7 +5,7 @@ He: PhaseStart!
 You: $$$$^_^$$$$
 
 -> Select Phase Ending Event
-    <<ApplyEffect Event 9 200000>>
+    <<ApplyEffect Event 19 200000>>
 
 You: Let's GOOOOOO!
 ===
@@ -17,7 +17,7 @@ He: PhaseStart2!
 You: Ayyyyyyy!
 
 -> Select Phase Ending Event
-    <<ApplyEffect Event 9 200000>>
+    <<ApplyEffect Event 19 200000>>
 
 You: Let's GOOOOOO!
 ===
