@@ -5,12 +5,8 @@ Me: AddSinging!
 He: Yoooooo!
 
 
--> AddSinging50 
-    <<ApplyEffect Event 0 50>>
--> AddSinging30 
-    <<ApplyEffect Event 0 30>>
--> AddSinging20 
-    <<ApplyEffect Event 0 20>>
+-> 歌力+40
+    <<ApplyEffect Event 0 40>>
 ===
 
 title: AddGaming
@@ -20,26 +16,19 @@ Me: AddGaming!
 He: Let's Gooooooo!
 
 
--> AddGaming50 
-    <<ApplyEffect Event 1 50>>
--> AddGaming30 
-    <<ApplyEffect Event 1 30>>
--> AddGaming20 
-    <<ApplyEffect Event 1 20>>
+
+-> 游戏力+40
+    <<ApplyEffect Event 1 40>>
+
 ===
 
 
 title: AddChatting
 position: -24,-1
 ---
-Me: AddSinging!
-He: Ayyyyyyyyy!
+Me:练习下对话吧
+:与群友聊天中
 
-
--> AddChatting50 
-    <<ApplyEffect Event 2 50>>
--> AddChatting30 
-    <<ApplyEffect Event 2 30>>
--> AddChatting0 
-    <<ApplyEffect Event 2 20>>
+-> 杂谈力+40
+    <<ApplyEffect Event 2 40>>
 ===
