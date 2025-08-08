@@ -301,9 +301,8 @@ namespace VTuber.BattleSystem.Core
             if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
             {
                 float multiplier = _multiplierManager.Multiplier.Value / 100f;
-                var popularity = _battleAttributes["BAPopularity"] as VBattlePopularityAttribute;
-                int parameterDelta = parameter.PreviewAddTo(delta);
-                return popularity.PreviewAddTo((int)(parameterDelta * multiplier));
+                int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
+                return (int)(parameterDelta * multiplier);
             }
 
             return 0;

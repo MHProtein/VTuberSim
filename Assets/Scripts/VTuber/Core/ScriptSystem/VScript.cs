@@ -21,6 +21,9 @@ namespace VTuber.Core.ScriptSystem
         public VPhase CurrentPhase => _currentPhase;
         private VPhase _currentPhase;
 
+        public List<uint> EventList => _configuration.eventIDs;
+        public List<uint> StreamEventList => _configuration.streamEventIDs;
+
         public VScript(VScriptConfiguration configuration)
         {
             _configuration = configuration;

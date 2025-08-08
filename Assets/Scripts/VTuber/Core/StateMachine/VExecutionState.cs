@@ -11,11 +11,6 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
-    public class EventExcutioner
-    {
-        
-    }
-    
     public class VExecutionState : VState
     {
         private VScheduleEvent _currentEvent;
@@ -37,18 +32,13 @@ namespace VTuber.Core.StateMachine
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            stateMachine.BattleRoot.SetActive(false);
+            (_currentEvent as VStreamEvent).SetResultEvent((bool)messagedict["IsTargetMet"]);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
                 new Dictionary<string, object>()
                 {
                     {"Event", _currentEvent}
                 });
-            stateMachine.BattleRoot.SetActive(false);
-            (_currentEvent as VStreamEvent).SetResultEvent((bool)messagedict["IsTargetMet"]);
-
-            if (_currentEvent.FollowUpEvent is not null)
-            {
-                _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
-            }
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)

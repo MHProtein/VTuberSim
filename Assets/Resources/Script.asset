@@ -22,7 +22,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   cardIDs: 
-  eventIDs: 
+  eventIDs: 000000000100000002000000030000000400000005000000
+  streamEventIDs: 000000000100000002000000
   abilityCoefficient: 1
   followerCoefficient: 1
   membershipCoefficient: 1

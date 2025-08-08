@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
 using VTuber.ScheduleSystem.Core;
+using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
 
@@ -43,11 +46,11 @@ namespace VTuber.BattleSystem.Core
         private VScript _script;
         
         protected override void Awake()
-        
         {
             base.Awake();
             VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/NewCards.xlsx"));
             _script = new VScript(scriptConfiguration);
+            
             _character = new VCharacter(_characterConfiguration);
             _weeklySchedule = new VWeeklySchedule(_character);
             var cardConfigs = loader.Load();
@@ -62,8 +65,8 @@ namespace VTuber.BattleSystem.Core
                         cards.Add(card);
                 }
             }
-
             _character.CardLibrary.AddCards(cards);
+
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
                 _character, _script);
@@ -91,6 +94,13 @@ namespace VTuber.BattleSystem.Core
         protected override void Start()
         {
             base.Start();
+            
+            List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
+            eventConfigs.AddRange(_script.EventList.Select((id => VResourcesManager.Instance.GetDialogueEventConfigurationByID(id))));
+            eventConfigs.AddRange(_script.StreamEventList.Select((id => VResourcesManager.Instance.GetStreamEventConfigurationByID(id))));
+            
+            scheduleCreator.InitializeCreator(eventConfigs);
+            
             _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
         }
         

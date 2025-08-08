@@ -287,7 +287,7 @@ namespace VTuber.Character
                 var typeName = row.Columns[VRelicHeaderIndex.Type].Value;
                 if(row.Columns[VRelicHeaderIndex.Id].Value.IsNullOrWhitespace())
                     continue; 
-                var type = Type.GetType("VTuber.Relic." + typeName.Trim());
+                var type = Type.GetType("VTuber.Relic." + typeName.Trim() + "Configuration");
                 if (type == null)
                 {
                     VDebug.LogError($"Card Condition type {typeName} not found.");

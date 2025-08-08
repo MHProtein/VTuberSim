@@ -119,13 +119,14 @@ namespace VTuber.BattleSystem.Card
                 {
                     if (effect is VAddEffect addEffect)
                     {
-                        if(addEffect.AttributeName != "BAParameter")
-                            continue;
+                        if (addEffect.AttributeName == "BAParameter")
+                        {
+                            int value = preview.GetValue(battle);
+                            originalValue += value;
+                            finalValue += battle.BattleAttributeManager.PreviewPopularityChange(value);
+                            
+                        }
                     }
-
-                    int value = preview.GetValue(battle);
-                    originalValue += value;
-                    finalValue += battle.BattleAttributeManager.PreviewPopularityChange(value);
                 }
             }
             setPopularityPreview?.Invoke(firstTime, originalValue, finalValue);
