@@ -26,6 +26,9 @@ namespace VTuber.Core.ScriptSystem
         [Space(5)]
         [Header("初始事件")] 
         [SerializeField] public List<uint> eventIDs;
+        [Space(5)]
+        [Header("初始直播事件")] 
+        [SerializeField] public List<uint> streamEventIDs;
             
         [Space(5)]
         [Header("评分")]

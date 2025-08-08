@@ -62,6 +62,9 @@ namespace VTuber.BattleSystem.Core
         
         OnMultiplierSequenceCalculated,
         
+        OnRelicAdded,
+        OnRelicRemoved,
+        OnRelicValueChanged,
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

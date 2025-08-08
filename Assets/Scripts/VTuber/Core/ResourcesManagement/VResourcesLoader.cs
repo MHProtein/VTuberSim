@@ -20,36 +20,44 @@ namespace VTuber.Character
 {
     public class VResourcesLoader
     {
-        private readonly string _xlsxPath;
+        private readonly string _cardPath;
+        private readonly string _raisingPath;
+        private readonly string _relicsPath;
 
-        public VResourcesLoader(string xlsxPath)
+        public VResourcesLoader(string cardPath, string raisingPath, string relicsPath)
         {
-            _xlsxPath = xlsxPath;
+            _cardPath = cardPath;
+            _raisingPath = raisingPath;
+            _relicsPath = relicsPath;
         }
 
         public List<VCardConfiguration> Load()
         {
-            var workbook = new Workbook();
-            workbook.LoadFromFile(_xlsxPath);
+            var cardWb = new Workbook();
+            var raisingWb = new Workbook();
+            var relicsWb = new Workbook();
+            cardWb.LoadFromFile(_cardPath);
+            raisingWb.LoadFromFile(_raisingPath);
+            relicsWb.LoadFromFile(_relicsPath);
 
-            LoadConditions(workbook);
-            LoadEffects(workbook);
-            LoadBuffs(workbook);
-            LoadCardConditions(workbook);
-            LoadPhaseEndingCondition(workbook);
-            LoadRaisingEffects(workbook);
-            LoadDialogueEvents(workbook);
-            LoadStreamEvents(workbook);
-            LoadRelicConditions(workbook);
-            LoadRelics(workbook);
-            return LoadCards(workbook);
+            LoadConditions(cardWb);
+            LoadEffects(cardWb);
+            LoadBuffs(cardWb);
+            LoadCardConditions(raisingWb);
+            LoadPhaseEndingCondition(raisingWb);
+            LoadRaisingEffects(raisingWb);
+            LoadDialogueEvents(raisingWb);
+            LoadStreamEvents(raisingWb);
+            LoadRelicConditions(relicsWb);
+            LoadRelics(relicsWb);
+            return LoadCards(cardWb);
         }
 
         private Worksheet Sheet(Workbook wb, string name)
         {
             var sheet = wb.Worksheets[name];
             if (sheet == null)
-                throw new FileNotFoundException($"Worksheet '{name}' not found in {_xlsxPath}");
+                throw new FileNotFoundException($"Worksheet '{name}' not found in {_cardPath}");
             return sheet;
         }
 
@@ -287,7 +295,7 @@ namespace VTuber.Character
                 var typeName = row.Columns[VRelicHeaderIndex.Type].Value;
                 if(row.Columns[VRelicHeaderIndex.Id].Value.IsNullOrWhitespace())
                     continue; 
-                var type = Type.GetType("VTuber.Relic." + typeName.Trim());
+                var type = Type.GetType("VTuber.Relic." + typeName.Trim() + "Configuration");
                 if (type == null)
                 {
                     VDebug.LogError($"Card Condition type {typeName} not found.");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
@@ -12,18 +13,33 @@ namespace VTuber.Character
     public class VCharacterRelicManager
     {
         public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
-        private VRaisingRelicManager _raisingRelicManager;
+        private readonly VRaisingRelicManager _raisingRelicManager;
         
         private List<VBattleRelic> _battleRelics;
 
         public VCharacterRelicManager(VCharacter character)
         {
+            _battleRelics = new List<VBattleRelic>();
             _raisingRelicManager = new VRaisingRelicManager(character);
         }
 
         public List<VBattleRelic> GetBattleRelics()
         {
             return _battleRelics;
+        }
+
+        public void AddRelic(VRelic relic)
+        {
+            if (relic is VBattleRelic battleRelic)
+            {
+                _battleRelics.Add(battleRelic);
+            }
+            else
+            {
+                _raisingRelicManager.AddRelic(relic as VRaisingRelic);
+            }
+            VDebug.Log("Added Relic " + relic.GetRelicName());
+            
         }
     }
     

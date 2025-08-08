@@ -9,6 +9,8 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
 namespace VTuber.Relic
@@ -36,26 +38,31 @@ namespace VTuber.Relic
     
     public class VBattleRelicConfiguration : VRelicConfiguration
     {
-        public List<VEffectItem> effectItems;
-        public VEffectCondition condition;
-        public VBattleEventKey whenToApply;
+        public readonly List<VEffectItem> effectItems;
+        public readonly VEffectCondition condition;
+        public readonly VBattleEventKey whenToApply;
         public VBattleRelicConfiguration(CellRange row) : base(row)
         {
-            string conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
             whenToApply = Enum.Parse<VBattleEventKey>(row.Columns[VRelicHeaderIndex.WhenToApply].Value.Trim());
+            string conditionStr = row.Columns[VRelicHeaderIndex.Condition].Value;
             if (!string.IsNullOrEmpty(conditionStr))
             {
                 condition = VResourcesManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr));
             }
+            else
+            {
+                condition = null;
+            }
 
             effectItems = new List<VEffectItem>();
-            for (int i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3Param; i += 2)
+            for (int i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3UpgradedParam; i += 3)
             {
                 var effectIDStr = row.Columns[i].Value;
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
                 uint effect = Convert.ToUInt32(effectIDStr);
                 
+                VDebug.Log(row.Columns[i + 1].Value + " "+ row.Columns[i + 2].Value);
                 effectItems.Add(new VEffectItem
                 {
                     id = effect,
@@ -64,23 +71,30 @@ namespace VTuber.Relic
                 });
             }
         }
+
+        public override VRelic CreateRelic()
+        {
+            return new VBattleRelic(this);
+        }
     }
     
     public class VRaisingRelicConfiguration : VRelicConfiguration
     {
-        public List<VEffectItem> effectItems;
-        public VRaisingRelicCondition condition;
+        public readonly List<VEffectItem> effectItems;
+        public readonly VRaisingRelicCondition condition;
+        public readonly VRaisingEventKey whenToApply;
         public VRaisingRelicConfiguration(CellRange row) : base(row)
         {
             effectItems = new List<VEffectItem>();
             
             string conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
+            whenToApply = Enum.Parse<VRaisingEventKey>(row.Columns[VRelicHeaderIndex.WhenToApply].Value.Trim());
             if (!string.IsNullOrEmpty(conditionStr))
             {
                 condition = VResourcesManager.Instance.GetRaisingRelicCondition(Convert.ToUInt32(conditionStr));
             }
             
-            for (int i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3Param; i += 2)
+            for (int i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3UpgradedParam; i += 3)
             {               
                 var effectIDStr = row.Columns[i].Value;
                 if(effectIDStr.IsNullOrWhitespace())
@@ -98,7 +112,7 @@ namespace VTuber.Relic
 
         public override VRelic CreateRelic()
         {
-            return new VRelic(this);
+            return new VRaisingRelic(this);
         }
     }
     
