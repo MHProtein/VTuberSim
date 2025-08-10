@@ -23,9 +23,6 @@ namespace VTuber.Relic
 
         public void AddRelic(VBattleRelic relic)
         {
-            if (relic == null)
-                return;
-
             relics.Add(relic);
             relic.Initialize(idDistributor++, this);
             relic.OnRelicAdded();

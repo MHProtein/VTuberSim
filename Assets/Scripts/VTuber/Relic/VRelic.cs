@@ -45,14 +45,6 @@ namespace VTuber.Relic
         {
             base.OnRelicRemoved();
             VBattleRootEventCenter.Instance.RemoveListener(whenToApply, OnEventRaised);
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicRemoved,
-                new Dictionary<string, object>()
-                {
-                    { "Id", _id },
-                    { "IsPermanent", IsPermanent },
-                    { "Value", Layer },
-                    { "RelicName", GetRelicName() }
-                });
         }
 
         public bool CanApply(VBattle battle, Dictionary<string, object> message)
@@ -70,11 +62,20 @@ namespace VTuber.Relic
                 {
                     effect.ApplyEffect(_manager.Battle);
                 }
-
-                if (!IsPermanent)
+                layer--;
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicValueChanged,
+                    new Dictionary<string, object>()
+                    {
+                        { "Id", _id },
+                        { "IsPermanent", IsPermanent },
+                        { "Value", Layer },
+                        { "RelicName", GetRelicName() }
+                    });
+                
+                if (layer <= 0) 
                 {
-                    layer--;
-                    VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicValueChanged,
+                    _manager.Remove(this);
+                    VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicRemoved,
                         new Dictionary<string, object>()
                         {
                             { "Id", _id },
@@ -82,11 +83,6 @@ namespace VTuber.Relic
                             { "Value", Layer },
                             { "RelicName", GetRelicName() }
                         });
-                
-                    if (layer <= 0)
-                    {
-                        _manager.Remove(this);
-                    }
                 }
             }
         }
@@ -100,7 +96,6 @@ namespace VTuber.Relic
 
     public class VRaisingRelic : VRelic
     {
-        private uint _id;
         public List<VRaisingEffect> Effects => _effects;
         private List<VRaisingEffect> _effects;
         private VRaisingRelicManager _manager;
@@ -119,34 +114,16 @@ namespace VTuber.Relic
         {
             base.OnRelicAdded();
             VRaisingRootEventCenter.Instance.RegisterListener(whenToApply, OnEventRaised);
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRelicAdded,
-                new Dictionary<string, object>()
-                {
-                    { "Id", _id },
-                    { "IsPermanent", IsPermanent },
-                    { "Value", Layer },
-                    { "RelicName", GetRelicName() }
-                });
         }
 
         public override void OnRelicRemoved()
         {
             base.OnRelicRemoved();
             VRaisingRootEventCenter.Instance.RemoveListener(whenToApply, OnEventRaised);
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRelicRemoved,
-                new Dictionary<string, object>()
-                {
-                    { "Id", _id },
-                    { "IsPermanent", IsPermanent },
-                    { "Value", Layer },
-                    { "RelicName", GetRelicName() }
-                });
         }
         
         public bool CanApply(Dictionary<string, object> message)
         {
-            if (relicCondition is null)
-                return true;
             return relicCondition.IsTrue(_manager.Character, message);
         }
         
@@ -156,31 +133,13 @@ namespace VTuber.Relic
             {
                 foreach (var effect in _effects)
                     effect.ApplyEffect(_manager.Character);
-                if (!IsPermanent)
-                {
-                    layer--;
                 
-                    VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRelicValueChanged,
-                        new Dictionary<string, object>()
-                        {
-                            { "Id", _id },
-                            { "IsPermanent", IsPermanent },
-                            { "Value", Layer },
-                            { "RelicName", GetRelicName() }
-                        });
-                    
-                    if (layer <= 0)
-                    {
-                        _manager.Remove(this);
-                    }
+                layer--;
+                if (layer <= 0)
+                {
+                    _manager.Remove(this);
                 }
             }
-        }
-        
-        public void Initialize(uint id, VRaisingRelicManager manager)
-        {
-            _id = id;
-            _manager = manager;
         }
     }
     

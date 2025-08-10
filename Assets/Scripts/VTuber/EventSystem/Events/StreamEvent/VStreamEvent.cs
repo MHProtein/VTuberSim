@@ -59,6 +59,7 @@ namespace VTuber.ScheduleSystem.Events
 
         public void SetResultEvent(bool isSuccess)
         {
+            
             VDialogueEvent e;
             if (isSuccess)
             {
@@ -69,12 +70,9 @@ namespace VTuber.ScheduleSystem.Events
                 e = VResourcesManager.Instance.CreateDialogueEventByID(FailureEvent);
             }
 
-            e.isFollowUp = true;
             e.IsPhaseEndingEvent = IsPhaseEndingEvent;
             e.SetDaySchedule(_daySchedule, Coordinate);
-            var temp = FollowUpEvent;
-            _followUpEvent = e;
-            _followUpEvent.SetFollowUpEvent(temp);
+            SetFollowUpEvent(e);
         }
     }
 }
