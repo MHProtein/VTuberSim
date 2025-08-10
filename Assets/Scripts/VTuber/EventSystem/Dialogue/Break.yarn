@@ -16,7 +16,7 @@ Me: 饿饿，去吃个拉面吧。
     <<ApplyEffect Event 3 60>>
 -> 地狱拉面     体力+40，从卡组删除一张卡牌
     <<ApplyEffect Event 3 40>>
-    <<ApplyEffect Event 21>>
+    <<ApplyEffect Event 23>>
 -> 酱油拉面     体力+40，随机获得一个消耗品
     <<ApplyEffect Event 3 40>>
 ===
@@ -39,5 +39,7 @@ He: Fuck Yeahhhhhhh!!
     <<ApplyEffect Event 12 200000>>
 -> Add Relic 0
     <<ApplyEffect Event 20 200000>>
+-> Add Relic 1
+    <<ApplyEffect Event 21 200000>>
 Me: Zzzzzzzz
 ===
