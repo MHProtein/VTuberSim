@@ -7,6 +7,7 @@ namespace VTuber.Relic
     {
         public List<VRaisingRelic> Relics => _relics;
         private readonly List<VRaisingRelic> _relics = new List<VRaisingRelic>();
+        public uint idDistributor = 0;
 
         public VCharacter Character { get; }
 
@@ -21,6 +22,8 @@ namespace VTuber.Relic
                 return;
 
             _relics.Add(relic);
+            relic.Initialize(idDistributor++, this);
+            relic.OnRelicAdded();
         }
 
         public void Remove(VRaisingRelic relic)
@@ -32,5 +35,4 @@ namespace VTuber.Relic
             }
         }
     }
-
 }

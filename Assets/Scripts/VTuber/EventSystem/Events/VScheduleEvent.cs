@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
@@ -40,7 +41,9 @@ namespace VTuber.ScheduleSystem.Events
         protected VDaySchedule _daySchedule;
 
         public VScheduleEvent FollowUpEvent => _followUpEvent;
-        private VScheduleEvent _followUpEvent;
+        protected VScheduleEvent _followUpEvent;
+
+        public bool isFollowUp = false;
 
         public VScheduleEvent(VScheduleEventConfiguration config)
         {
@@ -91,7 +94,8 @@ namespace VTuber.ScheduleSystem.Events
 
         public void AdvanceTime()
         {
-            _daySchedule.OnEventExecuted(this);
+            if(_daySchedule is not null)
+                _daySchedule.OnEventExecuted(this);
         }
 
         public void AddFollowUpEvent(VScheduleEventType eventType, uint id)
@@ -99,6 +103,8 @@ namespace VTuber.ScheduleSystem.Events
             if (_followUpEvent is null)
             {
                 _followUpEvent = VResourcesManager.Instance.CreateEvent(eventType, id);
+                _followUpEvent._daySchedule = _daySchedule;
+                _followUpEvent.isFollowUp = true;
             }
             else
             {
@@ -108,6 +114,8 @@ namespace VTuber.ScheduleSystem.Events
                     followUp = followUp.FollowUpEvent;
                 }
                 followUp._followUpEvent = VResourcesManager.Instance.CreateEvent(eventType, id);
+                followUp._followUpEvent._daySchedule = followUp._daySchedule;
+                followUp._followUpEvent.isFollowUp = true;
             }
         }
     }

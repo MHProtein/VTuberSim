@@ -32,8 +32,6 @@ namespace VTuber.Relic
                     return (message["Event"] as VScheduleEvent).EventID == uint.Parse(targetValue.Trim());
                 case VEventConditionType.Type:
                     return (message["Event"] as VScheduleEvent).Type == Enum.Parse<VScheduleEventType>(targetValue.Trim());
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
 
             return false;
