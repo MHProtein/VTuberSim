@@ -1,8 +1,8 @@
 ﻿title: AddSinging
-position: -24,-1
+position: -183,-79
 ---
-Me: AddSinging!
-He: Yoooooo!
+Me: 练习下唱歌吧
+:少女练歌中...
 
 
 -> 歌力+40
@@ -10,11 +10,10 @@ He: Yoooooo!
 ===
 
 title: AddGaming
-position: -24,-1
+position: -184,-235
 ---
-Me: AddGaming!
-He: Let's Gooooooo!
-
+Me:上号练练枪吧
+:死斗练枪中...
 
 
 -> 游戏力+40
@@ -24,10 +23,10 @@ He: Let's Gooooooo!
 
 
 title: AddChatting
-position: -24,-1
+position: -184,75
 ---
-Me:练习下对话吧
-:与群友聊天中
+Me:群友又在聊什么鬼东西？
+:与群友聊天中...
 
 -> 杂谈力+40
     <<ApplyEffect Event 2 40>>

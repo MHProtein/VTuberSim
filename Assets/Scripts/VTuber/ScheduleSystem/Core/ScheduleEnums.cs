@@ -20,7 +20,8 @@
         Stream,
         Practice,
         Coop,
-        Recovery
+        Recovery,
+        Wrok
     }
 
     /// <summary>
