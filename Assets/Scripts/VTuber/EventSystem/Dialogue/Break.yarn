@@ -1,21 +1,24 @@
 ﻿title: Nap
 position: -24,-1
 ---
-Me: Nap
-He: Zzzzzzzz
+Me:稍微睡会吧
 
--> Add 10 Stamina
-    <<ApplyEffect Event 3 10>>
+-> 体力+25
+    <<ApplyEffect Event 3 25>>
 ===
 
-title: Break
+title: Out
 position: -34,184
 ---
-Me: Break!
-He: Hell Yeahh!
+Me: 饿饿，去吃个拉面吧。
 
--> Add 20 Stamina
-    <<ApplyEffect Event 3 20>>
+-> 豚骨拉面     体力+60
+    <<ApplyEffect Event 3 60>>
+-> 地狱拉面     体力+40，从卡组删除一张卡牌
+    <<ApplyEffect Event 3 40>>
+    <<ApplyEffect Event 21>>
+-> 酱油拉面     体力+40，随机获得一个消耗品
+    <<ApplyEffect Event 3 40>>
 ===
 
 title: DayOff
@@ -35,6 +38,6 @@ He: Fuck Yeahhhhhhh!!
 -> Select From 3
     <<ApplyEffect Event 12 200000>>
 -> Add Relic 0
-    <<ApplyEffect Event 13 200000>>
+    <<ApplyEffect Event 20 200000>>
 Me: Zzzzzzzz
 ===
