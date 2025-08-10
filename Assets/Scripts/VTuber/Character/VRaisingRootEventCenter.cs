@@ -6,14 +6,14 @@ namespace VTuber.Core.EventCenter
     public enum VRaisingEventKey
     {
         Default = 0,
-        
+
         OnEventStart = 1,
         OnStreamEventStart = 2,
         OnEventBeginExecute = 3,
         OnEventEnd = 4,
-        
+
         OnNotifyEventDescriptionChange = 5,
-        
+
         OnStaminaChanged = 6,
         OnPressureChanged = 7,
         OnSingingAbilityChanged = 8,
@@ -29,22 +29,29 @@ namespace VTuber.Core.EventCenter
         OnMemberCountChanged = 18,
         OnFollowerToViewerRatioChanged = 19,
         OnMoneyChanged = 20,
-        
+
         OnSkipEvent = 21,
         OnSwitchToModifySchedule = 22,
 
         OnSelectPhaseEndingBegin = 23,
         OnPhaseEndingSelected = 24,
-        
+
         OnBeginSelectCard = 25,
         OnBeginSelectCardFrom3 = 28,
-        
+
         OnDayEnd = 26,
         OnScheduleEnd = 27,
-        
+
         OnCardAdded = 29,
         OnCardRemoved = 30,
-        OnCardReplaced = 31, 
+        OnCardReplaced = 31,
+
+        OnRelicAdded = 32,
+        OnRelicRemoved = 33,
+        OnRelicValueChanged = 34,
+        OnBattleEnd = 35,
+        
+        OnAddFollowUpEvent = 36,
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>
