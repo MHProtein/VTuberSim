@@ -19,7 +19,7 @@ He: Hell Yeahh!
 ===
 
 title: DayOff
-position: 15,-193
+position: -23,-141
 ---
 Me: DayOff!!!
 He: Fuck Yeahhhhhhh!!
@@ -35,6 +35,8 @@ He: Fuck Yeahhhhhhh!!
 -> Select From 3
     <<ApplyEffect Event 12 200000>>
 -> Add Relic 0
-    <<ApplyEffect Event 13 200000>>
+    <<ApplyEffect Event 20 200000>>
+-> Add Relic 1
+    <<ApplyEffect Event 21 200000>>
 Me: Zzzzzzzz
 ===

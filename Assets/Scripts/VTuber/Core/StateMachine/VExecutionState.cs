@@ -16,9 +16,12 @@ namespace VTuber.Core.StateMachine
         private VScheduleEvent _currentEvent;
         private bool shouldSwitchToModifySchedule = false;
         private VScheduleEvent _skipToEvent;
+        private Queue<VScheduleEvent> _dayEndEvents;
+        
         public VExecutionState()
         {
             stateType = VStateType.Execution;
+            _dayEndEvents = new Queue<VScheduleEvent>();
         }
         
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
@@ -47,7 +50,10 @@ namespace VTuber.Core.StateMachine
             
             if (_currentEvent.FollowUpEvent is not null)
             {
-                _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
+                Tween.Delay(0.2f, () =>
+                {
+                    _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
+                });
                 return;
             }
             
@@ -57,18 +63,25 @@ namespace VTuber.Core.StateMachine
                 stateMachine.SwitchState(VStateType.ScheduleModify);
                 return;
             }
-            
+
+            var temp = _currentEvent;
+            _currentEvent = null;
+            temp.AdvanceTime();
+            if (_dayEndEvents.Count != 0)
+            {
+                var e = _dayEndEvents.Dequeue();
+                ExecuteEvent(e);
+                return;
+            }
+
             if (stateMachine.ShouldPauseSchedule)
             {
-                _currentEvent.AdvanceTime();
                 stateMachine.SwitchState(VStateType.Pause);
             }
             else
             {
-                _currentEvent.AdvanceTime();
                 NextEvent();
             }
-            stateMachine.Script.OnEventExecuted(_currentEvent);
         }
 
         private void NextEvent()
@@ -150,7 +163,16 @@ namespace VTuber.Core.StateMachine
 
         private void AddEventToCurrentEvent(VScheduleEventType eventType, uint id)
         {
-            _currentEvent.AddFollowUpEvent(eventType, id);
+            if(_currentEvent is null)
+                _dayEndEvents.Enqueue(VResourcesManager.Instance.CreateEvent(eventType, id));
+            else
+                _currentEvent.AddFollowUpEvent(eventType, id);
+        }
+        
+        
+        private void OnAddFollowUpEvent(Dictionary<string, object> messagedict)
+        {
+            AddEventToCurrentEvent((VScheduleEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
         }
         
         public override void Enter(VState state, params object[] enterParams)
@@ -162,6 +184,7 @@ namespace VTuber.Core.StateMachine
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnAddFollowUpEvent, OnAddFollowUpEvent);
             
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
             
@@ -194,6 +217,7 @@ namespace VTuber.Core.StateMachine
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnAddFollowUpEvent, OnAddFollowUpEvent);
             
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
             

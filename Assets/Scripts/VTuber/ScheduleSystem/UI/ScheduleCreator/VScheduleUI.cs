@@ -22,18 +22,19 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] protected Transform indicator;
         [SerializeField] protected Image indicatorLeft;
         [SerializeField] protected Image indicatorRight;
+        private Vector2Int _currentIndicatorCoord = Vector2Int.zero;
         
         public VScheduleSlot[,] Slots => slots;
         protected VScheduleSlot[,] slots;
 
-        protected VAnimationQueue _animationQueue;
+        protected VAnimationQueue animationQueue;
         
         protected override void Awake()
         {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             slots = new VScheduleSlot[slotSize.y, slotSize.x];
             var slotList = GetComponentsInChildren<VScheduleSlot>();
-            _animationQueue = new VAnimationQueue();
+            animationQueue = new VAnimationQueue();
             int i = 0; 
             for (int y = 0; y < slotSize.y; y++)
             {
@@ -121,13 +122,18 @@ namespace VTuber.ScheduleSystem.UI
         private void OnEventExecuted(Dictionary<string, object> messagedict)
         {
             Vector2Int coordinate = (Vector2Int)messagedict["Coordinate"];
+            if (coordinate.x == -1)
+                return;
             ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
             ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
         }
 
         public Tween MoveIndicator(Vector2Int coordinate)
         {
+            if (coordinate.x == -1)
+                return ChangeIndicatorPosition(slots[_currentIndicatorCoord.y, _currentIndicatorCoord.x].Item.transform.position);
             ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
+            _currentIndicatorCoord = coordinate;
             return ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
         }
 
@@ -156,9 +162,9 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
         
-        public void ChangeIndicatorPosition(Vector2 position)
+        public Tween ChangeIndicatorPosition(Vector2 position)
         {
-            Tween.Position(indicator, position, 0.2f);
+            return Tween.Position(indicator, position, 0.2f);
         }
         
         public Tween ChangeIndicatorScale(float scale)
