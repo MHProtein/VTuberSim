@@ -40,6 +40,7 @@ namespace VTuber.Core.EventCenter
         OnBeginSelectCardFrom3 = 28,
 
         OnDayEnd = 26,
+        OnWeekEnd = 36,
         OnScheduleEnd = 27,
 
         OnCardAdded = 29,
@@ -49,9 +50,8 @@ namespace VTuber.Core.EventCenter
         OnRelicAdded = 32,
         OnRelicRemoved = 33,
         OnRelicValueChanged = 34,
-        OnBattleEnd = 35,
         
-        OnAddFollowUpEvent = 36,
+        OnAddFollowUpEvent = 35,
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>

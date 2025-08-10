@@ -51,7 +51,6 @@ namespace VTuber.BattleSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicAdded, OnBuffAdded);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicRemoved, OnBuffRemoved);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicValueChanged, OnBuffValueUpdated);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBattleEnd, OnBattleEnd);
         }
 
         protected override void OnDisable()
@@ -60,7 +59,6 @@ namespace VTuber.BattleSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicAdded, OnBuffAdded);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicRemoved, OnBuffRemoved);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicValueChanged, OnBuffValueUpdated);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBattleEnd, OnBattleEnd);
         }
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
