@@ -18,7 +18,7 @@ namespace VTuber.ScheduleSystem.UI
         private Vector2Int _coordination;
         private VEventUI _item;
         private List<VRaisingEffect> _coopEventEffects;
-        private List<VEventType> _coopEventtypes;
+        private List<VEventType> _coopEventTypes;
 
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private Image pfp;
@@ -36,11 +36,12 @@ namespace VTuber.ScheduleSystem.UI
             IsCoopEventSlot = true;
             pfp.sprite = eventItem.pfp;
             _coopEventEffects = eventItem.e.effects;
-            _coopEventtypes = eventItem.e.eventTypes;
-            for (int i = 0; i < eventIcons.Count; i++)
+            _coopEventTypes = eventItem.e.eventTypes;
+            for (int i = 0; i < eventItem.e.eventTypes.Count; i++)
             {
                 eventIcons[i].gameObject.SetActive(true);
-                eventIcons[i].sprite = VRaisingUI.Instance.GetIcon(eventItem.e.eventTypes[i].ToString());
+                string x = eventItem.e.eventTypes[i].ToString();
+                eventIcons[i].sprite = VRaisingUI.Instance.GetIcon(x);
             }
         }
         
@@ -50,7 +51,7 @@ namespace VTuber.ScheduleSystem.UI
             IsCoopEventSlot = false;
             foreach (var icon in eventIcons)
             {
-                icon.gameObject.SetActive(true);
+                icon.gameObject.SetActive(false);
             }
         }
 

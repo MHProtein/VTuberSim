@@ -8,6 +8,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
@@ -23,12 +24,14 @@ namespace VTuber.Character
         private readonly string _cardPath;
         private readonly string _raisingPath;
         private readonly string _relicsPath;
+        private readonly string _coopPath;
 
-        public VResourcesLoader(string cardPath, string raisingPath, string relicsPath)
+        public VResourcesLoader(string cardPath, string raisingPath, string relicsPath, string coopPath)
         {
             _cardPath = cardPath;
             _raisingPath = raisingPath;
             _relicsPath = relicsPath;
+            _coopPath = coopPath;
         }
 
         public List<VCardConfiguration> Load()
@@ -36,9 +39,11 @@ namespace VTuber.Character
             var cardWb = new Workbook();
             var raisingWb = new Workbook();
             var relicsWb = new Workbook();
+            var coopWb = new Workbook();
             cardWb.LoadFromFile(_cardPath);
             raisingWb.LoadFromFile(_raisingPath);
             relicsWb.LoadFromFile(_relicsPath);
+            coopWb.LoadFromFile(_coopPath);
 
             LoadConditions(cardWb);
             LoadEffects(cardWb);
@@ -50,6 +55,7 @@ namespace VTuber.Character
             LoadStreamEvents(raisingWb);
             LoadRelicConditions(relicsWb);
             LoadRelics(relicsWb);
+            LoadCoopEvents(coopWb);
             return LoadCards(cardWb);
         }
 
@@ -102,15 +108,6 @@ namespace VTuber.Character
 
             VResourcesManager.Instance.SetEffectConfigurations(list);
         }
-
-
-
-        // void apply(int effectID, string, )
-        // {
-        //     effectID.apply()
-        // }
-        
-        
 
         private void LoadBuffs(Workbook wb)
         {
@@ -306,6 +303,25 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetRelics(list);
+        }
+
+        public void LoadCoopEvents(Workbook wb)
+        {
+            var sheet = Sheet(wb, "CoopEvents");
+            var list = new List<VCoopEvent>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VRelicHeaderIndex.Type].Value;
+                if(row.Columns[VCoopEventHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var coopEvent = new VCoopEvent(row);
+                list.Add(coopEvent);
+            }
+
+            VResourcesManager.Instance.SetCoopEvents(list);
+            
         }
         
     }

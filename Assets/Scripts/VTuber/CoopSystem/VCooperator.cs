@@ -1,17 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Sirenix.Utilities;
+using Spire.Xls;
 using UnityEngine;
+using VTuber.BattleSystem.Card;
+using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.ScheduleSystem.Core;
+using Random = UnityEngine.Random;
 
 namespace VTuber.CoopSystem
 {
+    public class VCoopEventHeaderIndex
+    {  
+        public const int Id = 0;
+        public const int Name = 1;
+        public const int Description = 2;
+        public const int Probability = 3;
+        public const int UnlockLevel = 4;
+        public const int EventTypes = 5;
+        public const int Effect1 = 6;
+        public const int E1Param = 7;
+        public const int Effect2 = 8;
+        public const int E2Param = 9;
+        public const int Effect3 = 10;
+        public const int E3Param = 11;
+    }
+    
     public class VCoopEvent
     {
+        public uint id;
         public int unlockLevel;
         public float probability;
         public List<VRaisingEffect> effects;
         public List<VEventType> eventTypes;
+
+        public VCoopEvent(CellRange row)
+        {
+            id = uint.Parse(row.Columns[VCoopEventHeaderIndex.Id].Value);
+            unlockLevel = int.Parse(row.Columns[VCoopEventHeaderIndex.UnlockLevel].Value);
+            probability = float.Parse(row.Columns[VCoopEventHeaderIndex.Probability].Value);
+            
+            effects = new List<VRaisingEffect>();
+            for (int i = VCoopEventHeaderIndex.Effect1; i <= VCoopEventHeaderIndex.E3Param; i += 2)
+            {               
+                var effectIDStr = row.Columns[i].Value;
+                if(effectIDStr.IsNullOrWhitespace())
+                    continue;
+                effects.Add(VResourcesManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr),
+                    row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
+            }
+            
+            eventTypes = new List<VEventType>();
+            foreach (var type in row.Columns[VCoopEventHeaderIndex.EventTypes].Value.Split(','))
+            {
+                eventTypes.Add(Enum.Parse<VEventType>(type.Trim()));
+            }
+        }
     }
 
     public struct VCoopEventItem
@@ -37,6 +83,7 @@ namespace VTuber.CoopSystem
         {
             _currentLevelIndex = 0;
             this.configuration = configuration;
+            _coopEvents = this.configuration.CoopEvents.Select(@event => VResourcesManager.Instance.GetCoopEventByID(@event)).ToList();
         }
         
         public List<VCoopEventItem> GenerateCoopEventPositions(List<Vector2Int> occupiedPositions)
@@ -56,7 +103,8 @@ namespace VTuber.CoopSystem
                 events.Add(new VCoopEventItem()
                 {
                     e = e,
-                    position = position
+                    position = position,
+                    pfp = configuration.Icon
                 });
             }
 

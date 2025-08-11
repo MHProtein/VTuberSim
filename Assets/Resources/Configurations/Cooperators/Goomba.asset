@@ -29,8 +29,8 @@ MonoBehaviour:
   - from: 0
     to: 10000
     levelName: 0
-  minEvents: 0
-  maxEvents: 0
+  minEvents: 5
+  maxEvents: 10
   _dayTimeProbabilities:
   - 0.33
   - 0.33
@@ -43,3 +43,4 @@ MonoBehaviour:
   - 0.14
   - 0.14
   - 0.14
+  _coopEvents: 0000000001000000
