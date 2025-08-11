@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
+using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Relic;
@@ -62,9 +63,13 @@ namespace VTuber.Character
         public VCharacterRelicManager CharacterRelicManager => _characterRelicManager;
         private VCharacterRelicManager _characterRelicManager;
         
+        public VCooperatorManager CooperatorManager => _cooperatorManager;
+        private VCooperatorManager _cooperatorManager;
+        
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
+            _cooperatorManager = new VCooperatorManager();
             InitializeAttributes(characterConfig);
             _characterRelicManager = new VCharacterRelicManager(this);
             _completedEventIDs = new Dictionary<VScheduleEventType, List<uint>>();

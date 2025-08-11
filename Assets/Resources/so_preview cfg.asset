@@ -42,3 +42,8 @@ MonoBehaviour:
     - name: Script
       path: 
       so: {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
+  - key: Cooperators
+    value:
+    - name: Goomba
+      path: 
+      so: {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}

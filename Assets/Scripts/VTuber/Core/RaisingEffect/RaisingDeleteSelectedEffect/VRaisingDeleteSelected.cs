@@ -20,11 +20,11 @@ namespace VTuber.Core.RaisingEffect
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>()
             {
-                {"Action", new Action<VCard>(ReplaceCard)}
+                {"Action", new Action<VCard>(DeleteCard)}
             });
         }
         
-        public void ReplaceCard(VCard selectedCard)
+        public void DeleteCard(VCard selectedCard)
         {
             _character.CardLibrary.RemoveCard(selectedCard);
             

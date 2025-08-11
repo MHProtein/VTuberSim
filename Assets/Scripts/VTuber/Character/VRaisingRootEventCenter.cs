@@ -52,6 +52,11 @@ namespace VTuber.Core.EventCenter
         OnRelicValueChanged = 34,
         
         OnAddFollowUpEvent = 35,
+        OnBeginEnding = 37,
+        
+        OnCooperatorAdded = 38,
+        OnCooperatorRemoved = 39,
+        OnCooperatorValueUpdated = 40,
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>

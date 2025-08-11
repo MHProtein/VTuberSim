@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
+using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
@@ -20,6 +21,7 @@ namespace VTuber.BattleSystem.Core
 {
     public class TestManager : VMonoBehaviour
     {
+        [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
         [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
         
         [FormerlySerializedAs("schedule")]
@@ -57,7 +59,7 @@ namespace VTuber.BattleSystem.Core
             _weeklySchedule = new VWeeklySchedule(_character);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
-
+            
             foreach (var cardConfig in cardConfigs)
             {
                 for (int i = 0; i < 2; i++)
@@ -69,6 +71,10 @@ namespace VTuber.BattleSystem.Core
             }
             _character.CardLibrary.AddCards(cards);
 
+            foreach (var configuration in cooperatorConfigurations)
+            {
+                _character.CooperatorManager.AddCooperator(configuration);
+            }
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
                 _character, _script);
