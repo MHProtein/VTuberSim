@@ -16,10 +16,10 @@ namespace VTuber.Core.StateMachine
         {
             base.Enter(state, enterParams);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
+
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete((() =>
             {
-                
-                stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Script, stateMachine.WeekIndex);
+                stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script, stateMachine.WeekIndex);
             }));
         }
 

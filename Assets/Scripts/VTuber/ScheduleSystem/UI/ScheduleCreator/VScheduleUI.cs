@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.UI;
+using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -46,11 +47,15 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
-        public void SwitchToCreation(VScript script, int weekIndex)
+        public void SwitchToCreation(VCharacter character, VScript script, int weekIndex)
         {
+            foreach (var slot in slots)
+            {
+                slot.RemoveCoopEvent();
+            }
             DestroyAllItems();
             var specialEvents = script.GetSpecialEvents(weekIndex);
-
+            List<Vector2Int> occupiedPositions = new List<Vector2Int>();
             foreach (var specialEvent in specialEvents)
             {
                 VScheduleEvent e;
@@ -67,6 +72,13 @@ namespace VTuber.ScheduleSystem.UI
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
                 ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.dayIndex]);
                 ui.SetFixed(true);
+                occupiedPositions.Add(ui.Event.Coordinate);
+            }
+            
+            var coopEvents = character.CooperatorManager.GetCoopEvents(occupiedPositions);
+            foreach (var coopEvent in coopEvents)
+            {
+                slots[coopEvent.position.y, coopEvent.position.x].SetCoopEvent(coopEvent);
             }
         }
         

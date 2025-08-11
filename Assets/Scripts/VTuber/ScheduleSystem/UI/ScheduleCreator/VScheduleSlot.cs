@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
+using VTuber.Core.RaisingEffect;
+using VTuber.ScheduleSystem.Core;
 
 
 namespace VTuber.ScheduleSystem.UI
@@ -8,15 +12,46 @@ namespace VTuber.ScheduleSystem.UI
     public class VScheduleSlot : VUIBehaviour
     {
         public VEventUI Item => _item;
+        public bool IsCoopEventSlot {get; private set;}
         public Vector2Int Coordination => _coordination;
         private VScheduleUI _scheduleUI;
         private Vector2Int _coordination;
         private VEventUI _item;
+        private List<VRaisingEffect> _coopEventEffects;
+        private List<VScheduleEventType> _coopEventtypes;
+
+        [SerializeField] private GameObject coopEventGameObject;
+        [SerializeField] private Image pfp;
+        [SerializeField] private List<Image> eventIcons;
 
         public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI)
         {
             _coordination = coordination;
             _scheduleUI = scheduleUI;
+        }
+
+        public void SetCoopEvent(VCoopEventItem eventItem)
+        {
+            coopEventGameObject.SetActive(true);
+            IsCoopEventSlot = true;
+            pfp.sprite = eventItem.pfp;
+            _coopEventEffects = eventItem.e.effects;
+            _coopEventtypes = eventItem.e.eventTypes;
+            for (int i = 0; i < eventIcons.Count; i++)
+            {
+                eventIcons[i].gameObject.SetActive(true);
+                eventIcons[i].sprite = VRaisingUI.Instance.GetIcon(eventItem.e.eventTypes[i].ToString());
+            }
+        }
+        
+        public void RemoveCoopEvent()
+        {
+            coopEventGameObject.SetActive(false);
+            IsCoopEventSlot = false;
+            foreach (var icon in eventIcons)
+            {
+                icon.gameObject.SetActive(true);
+            }
         }
 
         public void SetItem(VEventUI item)

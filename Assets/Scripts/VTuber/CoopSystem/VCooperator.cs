@@ -10,15 +10,14 @@ namespace VTuber.CoopSystem
     {
         public int unlockLevel;
         public float probability;
-        public VScheduleEventType eventType;
         public List<VRaisingEffect> effects;
-        public List<>
-        
+        public List<VScheduleEventType> eventTypes;
     }
 
     public struct VCoopEventItem
     {
         public VCoopEvent e;
+        public Sprite pfp;
         public Vector2Int position;
     }
     
@@ -89,11 +88,12 @@ namespace VTuber.CoopSystem
         public int GetDay()
         {
             var dayProbabilities = configuration.DayProbabilities;
+            float probabilitySum = dayProbabilities.Sum();
             float probability = Random.Range(0, 1f);
             float totalProbability = 0;
             for (int i = 0; i < dayProbabilities.Count; i++)
             {
-                totalProbability += dayProbabilities[i];
+                totalProbability += dayProbabilities[i] / probabilitySum;
                 if (probability <= totalProbability)
                 {
                     return i;
@@ -105,11 +105,12 @@ namespace VTuber.CoopSystem
         public int GetTime()
         {
             var timeProbabilities = configuration.DayTimeProbabilities;
+            float probabilitySum = timeProbabilities.Sum();
             float probability = Random.Range(0, 1f);
             float totalProbability = 0;
             for (int i = 0; i < timeProbabilities.Count; i++)
             {
-                totalProbability += timeProbabilities[i];
+                totalProbability += timeProbabilities[i] / probabilitySum;
                 if (probability <= totalProbability)
                 {
                     return i;
