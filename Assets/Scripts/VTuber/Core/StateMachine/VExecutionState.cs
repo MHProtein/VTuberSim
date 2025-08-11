@@ -17,6 +17,7 @@ namespace VTuber.Core.StateMachine
         private bool shouldSwitchToModifySchedule = false;
         private VScheduleEvent _skipToEvent;
         private Queue<VScheduleEvent> _dayEndEvents;
+        private bool _shouldEndGame = false;
         
         public VExecutionState()
         {
@@ -55,6 +56,12 @@ namespace VTuber.Core.StateMachine
                     _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
                 });
                 return;
+            }
+
+            if (_shouldEndGame)
+            {
+                _shouldEndGame = false;
+                stateMachine.Script.CalculateScore(stateMachine.Character);
             }
             
             if (shouldSwitchToModifySchedule)
@@ -161,7 +168,7 @@ namespace VTuber.Core.StateMachine
             InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers);
         }
 
-        private void AddEventToCurrentEvent(VScheduleEventType eventType, uint id)
+        private void AddEventToCurrentEvent(VEventType eventType, uint id)
         {
             if(_currentEvent is null)
                 _dayEndEvents.Enqueue(VResourcesManager.Instance.CreateEvent(eventType, id));
@@ -172,7 +179,13 @@ namespace VTuber.Core.StateMachine
         
         private void OnAddFollowUpEvent(Dictionary<string, object> messagedict)
         {
-            AddEventToCurrentEvent((VScheduleEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
+            AddEventToCurrentEvent((VEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
+        }
+        
+        
+        private void OnBeginEnding(Dictionary<string, object> messagedict)
+        {
+            _shouldEndGame = true;
         }
         
         public override void Enter(VState state, params object[] enterParams)
@@ -185,6 +198,7 @@ namespace VTuber.Core.StateMachine
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnAddFollowUpEvent, OnAddFollowUpEvent);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginEnding, OnBeginEnding);
             
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
             
@@ -217,7 +231,7 @@ namespace VTuber.Core.StateMachine
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnAddFollowUpEvent, OnAddFollowUpEvent);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginEnding, OnBeginEnding);
             
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
             

@@ -18,7 +18,7 @@ namespace VTuber.ScheduleSystem.Events
         public uint EventID => _config.id;
         public string EventName => _config.eventName;
         public string Description => _config.description;
-        public VScheduleEventType Type => _config.type;
+        public VEventType Type => _config.type;
         public string Icon => _config.icon;
         public Color BackgroundColor => _config.backgroundColor;
         
@@ -98,7 +98,7 @@ namespace VTuber.ScheduleSystem.Events
                 _daySchedule.OnEventExecuted(this);
         }
 
-        public void AddFollowUpEvent(VScheduleEventType eventType, uint id)
+        public void AddFollowUpEvent(VEventType eventType, uint id)
         {
             if (_followUpEvent is null)
             {

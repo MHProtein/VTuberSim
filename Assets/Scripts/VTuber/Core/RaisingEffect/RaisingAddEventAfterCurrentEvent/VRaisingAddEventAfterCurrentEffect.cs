@@ -7,7 +7,7 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddEventAfterCurrentEffect : VRaisingEffect
     {
-        private VScheduleEventType _eventType;
+        private VEventType _eventType;
         private uint eventId;
         public VRaisingAddEventAfterCurrentEffect(VRaisingAddEventAfterCurrentEffectConfiguration configuration, string parameter) : base(configuration)
         {

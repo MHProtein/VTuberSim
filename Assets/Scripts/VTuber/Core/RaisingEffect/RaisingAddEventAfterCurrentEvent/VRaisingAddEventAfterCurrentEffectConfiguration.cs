@@ -8,10 +8,10 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddEventAfterCurrentEffectConfiguration : VRaisingEffectConfiguration
     {
-        public VScheduleEventType eventType;
+        public VEventType eventType;
         public VRaisingAddEventAfterCurrentEffectConfiguration(CellRange row) : base(row)
         {
-            eventType = Enum.Parse<VScheduleEventType>(row.Columns[VRaisingEffectHeaderIndex.Param].Value.Trim());
+            eventType = Enum.Parse<VEventType>(row.Columns[VRaisingEffectHeaderIndex.Param].Value.Trim());
         }
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)

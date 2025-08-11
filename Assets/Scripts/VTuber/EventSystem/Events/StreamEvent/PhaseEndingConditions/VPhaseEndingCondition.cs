@@ -44,12 +44,12 @@ namespace VTuber.ScheduleSystem.Events
     
     public  class VPhaseEndingEventCondition : VPhaseEndingCondition
     {
-        public VScheduleEventType eventType;
+        public VEventType eventType;
         public uint eventId;
         public VPhaseEndingEventCondition(CellRange row) : base(row)
         {
             eventId =  uint.Parse(row.Columns[VPhaseEndingConditionHeaderIndex.NameOrID].Value);
-            eventType = Enum.Parse<VScheduleEventType>(row.Columns[VPhaseEndingConditionHeaderIndex.Parameter].Value);
+            eventType = Enum.Parse<VEventType>(row.Columns[VPhaseEndingConditionHeaderIndex.Parameter].Value);
         }
         
         public override bool IsConditionMet(VCharacter character)
@@ -60,7 +60,7 @@ namespace VTuber.ScheduleSystem.Events
         public override string GetDescription()
         {
             VScheduleEventConfiguration eventConfiguration;
-            if(eventType == VScheduleEventType.Stream)
+            if(eventType == VEventType.Stream)
             {
                 eventConfiguration = VResourcesManager.Instance.GetStreamEventConfigurationByID(eventId);
             }
