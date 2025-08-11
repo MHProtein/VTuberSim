@@ -1,9 +1,9 @@
 title: StreamFail
 position: -24,-1
 ---
-He: Nobody watches your dumb steam lmao
-You: SYBAU You Dumb FUCK!!
+Me:对不起大家...今天状态不是很好就先下播了，我们下次再见。
 
--> Add 1 Pressure
+
+ 压力+1
     <<ApplyEffect Event 4 1>>
 ===
