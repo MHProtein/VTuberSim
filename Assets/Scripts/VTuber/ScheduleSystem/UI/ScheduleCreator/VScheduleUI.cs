@@ -59,7 +59,7 @@ namespace VTuber.ScheduleSystem.UI
             foreach (var specialEvent in specialEvents)
             {
                 VScheduleEvent e;
-                if (specialEvent.eventType == VScheduleEventType.Stream)
+                if (specialEvent.eventType == VEventType.Stream)
                 {
                     e = VResourcesManager.Instance.CreateStreamEventByID(specialEvent.eventID);
                 }

@@ -168,7 +168,7 @@ namespace VTuber.Core.StateMachine
             InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers);
         }
 
-        private void AddEventToCurrentEvent(VScheduleEventType eventType, uint id)
+        private void AddEventToCurrentEvent(VEventType eventType, uint id)
         {
             if(_currentEvent is null)
                 _dayEndEvents.Enqueue(VResourcesManager.Instance.CreateEvent(eventType, id));
@@ -179,7 +179,7 @@ namespace VTuber.Core.StateMachine
         
         private void OnAddFollowUpEvent(Dictionary<string, object> messagedict)
         {
-            AddEventToCurrentEvent((VScheduleEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
+            AddEventToCurrentEvent((VEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
         }
         
         

@@ -317,9 +317,9 @@ namespace VTuber.Core.Managers
             return _raisingRelicConditions.GetValueOrDefault(conditionID);
         }
         
-        public VScheduleEvent CreateEvent(VScheduleEventType eventType, uint id)
+        public VScheduleEvent CreateEvent(VEventType eventType, uint id)
         {
-            if (eventType == VScheduleEventType.Stream)
+            if (eventType == VEventType.Stream)
             {
                 return CreateStreamEventByID(id);
             }

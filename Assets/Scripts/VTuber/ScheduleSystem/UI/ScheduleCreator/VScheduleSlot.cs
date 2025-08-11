@@ -18,7 +18,7 @@ namespace VTuber.ScheduleSystem.UI
         private Vector2Int _coordination;
         private VEventUI _item;
         private List<VRaisingEffect> _coopEventEffects;
-        private List<VScheduleEventType> _coopEventtypes;
+        private List<VEventType> _coopEventtypes;
 
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private Image pfp;

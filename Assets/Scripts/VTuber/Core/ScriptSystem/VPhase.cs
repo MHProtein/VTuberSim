@@ -15,7 +15,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         public int weekIndex;
         public int dayIndex;
         public TimeOfDay timeOfDay;
-        public VScheduleEventType eventType;
+        public VEventType eventType;
         public uint eventID;
         public VPhase phase;
         public bool isPhaseStart;
@@ -32,7 +32,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         
         [Header("")]
         [LabelText("开始事件类型")]
-        [SerializeField] public VScheduleEventType startEventType;
+        [SerializeField] public VEventType startEventType;
         [LabelText("开始事件ID")]
         [SerializeField] public uint startEventID;
         
@@ -61,7 +61,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
                 weekIndex = startEventWeekIndex,
                 dayIndex = 6,
                 timeOfDay = TimeOfDay.Morning,
-                eventType = VScheduleEventType.Stream,
+                eventType = VEventType.Stream,
                 eventID = _endEventID,
                 phase = this,
             };

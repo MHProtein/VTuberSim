@@ -11,7 +11,7 @@ namespace VTuber.CoopSystem
         public int unlockLevel;
         public float probability;
         public List<VRaisingEffect> effects;
-        public List<VScheduleEventType> eventTypes;
+        public List<VEventType> eventTypes;
     }
 
     public struct VCoopEventItem

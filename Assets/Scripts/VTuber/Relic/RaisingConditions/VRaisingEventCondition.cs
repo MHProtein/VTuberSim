@@ -31,7 +31,7 @@ namespace VTuber.Relic
                 case VEventConditionType.ID:
                     return (message["Event"] as VScheduleEvent).EventID == uint.Parse(targetValue.Trim());
                 case VEventConditionType.Type:
-                    return (message["Event"] as VScheduleEvent).Type == Enum.Parse<VScheduleEventType>(targetValue.Trim());
+                    return (message["Event"] as VScheduleEvent).Type == Enum.Parse<VEventType>(targetValue.Trim());
             }
 
             return false;

@@ -58,7 +58,7 @@ namespace VTuber.Character
 
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;
-        private Dictionary<VScheduleEventType, List<uint>> _completedEventIDs;
+        private Dictionary<VEventType, List<uint>> _completedEventIDs;
 
         public VCharacterRelicManager CharacterRelicManager => _characterRelicManager;
         private VCharacterRelicManager _characterRelicManager;
@@ -72,11 +72,11 @@ namespace VTuber.Character
             _cooperatorManager = new VCooperatorManager();
             InitializeAttributes(characterConfig);
             _characterRelicManager = new VCharacterRelicManager(this);
-            _completedEventIDs = new Dictionary<VScheduleEventType, List<uint>>();
-            _completedEventIDs[VScheduleEventType.Stream] = new List<uint>();
-            _completedEventIDs[VScheduleEventType.Recovery] = new List<uint>();
-            _completedEventIDs[VScheduleEventType.Practice] = new List<uint>();
-            _completedEventIDs[VScheduleEventType.Coop] = new List<uint>();
+            _completedEventIDs = new Dictionary<VEventType, List<uint>>();
+            _completedEventIDs[VEventType.Stream] = new List<uint>();
+            _completedEventIDs[VEventType.Recovery] = new List<uint>();
+            _completedEventIDs[VEventType.Practice] = new List<uint>();
+            _completedEventIDs[VEventType.Coop] = new List<uint>();
         }
         
         public void OnEnable()
@@ -231,7 +231,7 @@ namespace VTuber.Character
             _completedEventIDs[e.Type].Add(e.EventID);
         }
         
-        public bool HasCompletedEvent(VScheduleEventType type, uint eventID)
+        public bool HasCompletedEvent(VEventType type, uint eventID)
         {
             return _completedEventIDs[type].Contains(eventID);
         }
