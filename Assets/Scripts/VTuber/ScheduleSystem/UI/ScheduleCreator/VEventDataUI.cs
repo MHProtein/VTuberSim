@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PrimeTween;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -18,6 +19,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
         [SerializeField] private GameObject eventUIPrefab;
+        [SerializeField] private TMP_Text duration;
+        [SerializeField] private TMP_Text costText;
         
         private VScheduleEventConfiguration _data;
         
@@ -30,6 +33,8 @@ namespace VTuber.ScheduleSystem.UI
             _data = data;
             icon.sprite = VRaisingUI.Instance.GetIcon(data.icon);;
             background.color = data.backgroundColor;
+            duration.text = data.Duration.ToString();
+            costText.text = data.cost.ToString();
         }
         
         public void OnPointerEnter(PointerEventData eventData)

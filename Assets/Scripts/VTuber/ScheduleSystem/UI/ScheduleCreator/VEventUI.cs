@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PrimeTween;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -80,7 +81,6 @@ namespace VTuber.ScheduleSystem.UI
 
         public void Initialize(VScheduleEvent e, VScheduleSlot slot)
         {
-            
             _event = e;
             icon.sprite = VRaisingUI.Instance.GetIcon(e.Icon);
             background.color = e.BackgroundColor;

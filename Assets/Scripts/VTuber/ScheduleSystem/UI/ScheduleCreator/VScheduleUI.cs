@@ -55,7 +55,6 @@ namespace VTuber.ScheduleSystem.UI
             }
             DestroyAllItems();
             var specialEvents = script.GetSpecialEvents(weekIndex);
-            List<Vector2Int> occupiedPositions = new List<Vector2Int>();
             foreach (var specialEvent in specialEvents)
             {
                 VScheduleEvent e;
@@ -72,7 +71,15 @@ namespace VTuber.ScheduleSystem.UI
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
                 ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.dayIndex]);
                 ui.SetFixed(true);
-                occupiedPositions.Add(ui.Event.Coordinate);
+            }
+            
+            List<Vector2Int> occupiedPositions = new List<Vector2Int>();
+            foreach (var slot in slots)
+            {
+                if (slot.Item != null)
+                {
+                    occupiedPositions.Add(slot.Coordination);
+                }
             }
             
             var coopEvents = character.CooperatorManager.GetCoopEvents(occupiedPositions);

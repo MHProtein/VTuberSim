@@ -22,7 +22,8 @@ namespace VTuber.BattleSystem.Core
             
             VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
                 Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"));
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             character = new VCharacter(_characterConfiguration);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();

@@ -3,6 +3,7 @@ using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
 using VTuber.Relic;
@@ -46,6 +47,9 @@ namespace VTuber.Core.Managers
         
         public Dictionary<uint, VRelicConfiguration> Relics => _relics;
         private Dictionary<uint, VRelicConfiguration> _relics;
+        
+        public Dictionary<uint, VCoopEvent> CoopEvents => _coopEvents;
+        private Dictionary<uint, VCoopEvent> _coopEvents;
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -191,6 +195,19 @@ namespace VTuber.Core.Managers
             }
         }
 
+        public void SetCoopEvents(List<VCoopEvent> coopEvents)
+        {
+            _coopEvents = new Dictionary<uint, VCoopEvent>();
+
+            foreach (var coopEvent in coopEvents)
+            {
+                if (coopEvent != null)
+                {
+                    _coopEvents[coopEvent.id] = coopEvent;
+                }
+            }
+        }
+
         public VRelic CreateRelicByID(uint id)
         {
             if (_relics.TryGetValue(id, out var relicConfiguration))
@@ -315,6 +332,11 @@ namespace VTuber.Core.Managers
         public VRaisingRelicCondition GetRaisingRelicCondition(uint conditionID)
         {
             return _raisingRelicConditions.GetValueOrDefault(conditionID);
+        }
+        
+        public VCoopEvent GetCoopEventByID(uint eventID)
+        {
+            return _coopEvents.GetValueOrDefault(eventID);
         }
         
         public VScheduleEvent CreateEvent(VEventType eventType, uint id)

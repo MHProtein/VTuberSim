@@ -52,7 +52,8 @@ namespace VTuber.BattleSystem.Core
             base.Awake();
             VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
                 Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"));
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             _script = new VScript(scriptConfiguration);
             
             _character = new VCharacter(_characterConfiguration);

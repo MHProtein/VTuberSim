@@ -31,6 +31,7 @@ namespace VTuber.CoopSystem
         public int MaxEvents => maxEvents;
         public List<float> DayTimeProbabilities => _dayTimeProbabilities;
         public List<float> DayProbabilities => _dayProbabilities;
+        public List<uint> CoopEvents => _coopEvents;
         
         [Header("协助者")]
         [SerializeField] private uint id;
@@ -42,10 +43,12 @@ namespace VTuber.CoopSystem
         [Header("帮助事件")]
         [HorizontalGroup("MinMaxEvents")]
         [SerializeField] private int minEvents;
+        [Header("")]
         [HorizontalGroup("MinMaxEvents")]
         [SerializeField] private int maxEvents;
         [SerializeField] private List<float> _dayTimeProbabilities;
         [SerializeField] private List<float> _dayProbabilities;
+        [SerializeField] private List<uint> _coopEvents;
 
         protected override void Awake()
         {
