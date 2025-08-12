@@ -4,7 +4,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 
-namespace VTuber.Core.RaisingEffect.RaisingEndingEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingEndingEffect : VRaisingEffect
     {

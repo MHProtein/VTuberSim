@@ -4,5 +4,5 @@ position: -24,-1
 Me: GOOMMBBBBBAAAAAAAAAAAAAAAAAAAAA!!!
 
 -> Upgrade
-    <<ApplyEffect Event 26 50>>
+    <<ApplyEffect Event 31 50>>
 ===

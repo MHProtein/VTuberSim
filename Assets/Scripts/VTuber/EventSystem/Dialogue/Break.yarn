@@ -42,6 +42,6 @@ He: Fuck Yeahhhhhhh!!
 -> Add Relic 1
     <<ApplyEffect Event 21 200000>>
 -> Add Goomba CoopValue 60
-    <<ApplyEffect Event 25 60>>
+    <<ApplyEffect Event 30 60>>
 Me: Zzzzzzzz
 ===

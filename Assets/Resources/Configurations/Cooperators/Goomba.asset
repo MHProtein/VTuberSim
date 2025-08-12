@@ -30,12 +30,12 @@ MonoBehaviour:
     to: 50
     levelName: 0
     eventType: 1
-    upgradeEventID: 17
+    upgradeEventID: 24
   - from: 51
     to: 100
     levelName: 1
     eventType: 1
-    upgradeEventID: 17
+    upgradeEventID: 24
   minEvents: 5
   maxEvents: 10
   _dayTimeProbabilities:
