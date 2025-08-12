@@ -9,7 +9,7 @@ namespace VTuber.EventSystem.Events
         public int requiredValue;
         public VDayPlacingCondition(CellRange row) : base(row)
         {
-            requiredValue = int.Parse(row.Columns[VPlacingConditionHeaderIndex.TargetValue].Value.Trim());
+            requiredValue = int.Parse(row.Columns[VPlacingConditionHeaderIndex.TargetValue].Value.Trim()) - 1;
         }
 
         public override bool IsTrue(VCharacter character, VScheduleSlot slot)

@@ -8,12 +8,12 @@ namespace VTuber.ScheduleSystem.Events
 {
     public class VStreamEventHeaderIndex
     {
-        public const int TurnCount = 9;
-        public const int Target = 10;
-        public const int InitialViewers = 11;
-        public const uint SuccessEvent = 12;
-        public const uint FailEvent = 13;
-        public const int PhaseEndingConditions = 14;
+        public const int TurnCount = 10;
+        public const int Target = 11;
+        public const int InitialViewers = 12;
+        public const uint SuccessEvent = 13;
+        public const uint FailEvent = 14;
+        public const int PhaseEndingConditions = 15;
     }
     public class VStreamEventConfiguration : VScheduleEventConfiguration
     {

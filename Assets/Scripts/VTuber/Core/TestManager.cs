@@ -7,6 +7,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.CoopSystem;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
@@ -19,7 +20,7 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class TestManager : VMonoBehaviour
+    public class VGameManager : VMonoBehaviour
     {
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
         [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
@@ -72,6 +73,10 @@ namespace VTuber.BattleSystem.Core
             }
             _character.CardLibrary.AddCards(cards);
 
+            
+            scheduleUI.Initialize(_character);
+            
+            
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
                 _character, _script);
@@ -170,6 +175,8 @@ namespace VTuber.BattleSystem.Core
                     }
                 }
             }
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnFinishScheduleCreationOrModification, new Dictionary<string, object>());
 
             if (_stateMachine.CurrentState.StateType == VStateType.ScheduleCreation)
             {

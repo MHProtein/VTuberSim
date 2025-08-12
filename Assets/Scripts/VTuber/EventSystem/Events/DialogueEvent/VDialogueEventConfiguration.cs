@@ -4,7 +4,7 @@ namespace VTuber.ScheduleSystem.Events.DialogueEvent
 {
     public class VStreamEventHeaderIndex
     {
-        public const int DialogueNode = 9;
+        public const int DialogueNode = 10;
     }
     public class VDialogueEventConfiguration : VScheduleEventConfiguration
     {

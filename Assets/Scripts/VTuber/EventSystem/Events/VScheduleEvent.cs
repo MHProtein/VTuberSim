@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VTuber.BattleSystem.Core.ScriptSystem;
@@ -38,6 +39,7 @@ namespace VTuber.ScheduleSystem.Events
         
         public VDaySchedule DaySchedule => _daySchedule;
         public VPhase Phase { get; set; }
+        public bool IsSpecialEvent { get; set; } = false;
         public bool IsPhaseStart { get; set; } = false;
         public bool IsPhaseEndingEvent { get; set; } = false;
 
@@ -147,10 +149,11 @@ namespace VTuber.ScheduleSystem.Events
 
         public void ExecuteCoopEvents(VCharacter character)
         {
-            foreach (var effect in CoopEffects.Values)
-            {
-                effect.ForEach(x => x.ApplyEffect(character));
-            }
+            if(CoopEffects is not null && character is not null)
+                foreach (var effect in CoopEffects.Values)
+                {
+                    effect?.ForEach(x => x.ApplyEffect(character));
+                }
         }
     }
 }

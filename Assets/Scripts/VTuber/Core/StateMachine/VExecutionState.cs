@@ -62,6 +62,7 @@ namespace VTuber.Core.StateMachine
             {
                 _shouldEndGame = false;
                 stateMachine.Script.CalculateScore(stateMachine.Character);
+                return;
             }
             
             if (shouldSwitchToModifySchedule)

@@ -89,6 +89,7 @@ namespace VTuber.ScheduleSystem.Schedule
         public VScheduleEvent BeginExecution()
         {
             _currentDayIndex = 0;
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnWeekStart, new Dictionary<string, object>());
             return _days[_currentDayIndex].GetNextEvent();
         }
 

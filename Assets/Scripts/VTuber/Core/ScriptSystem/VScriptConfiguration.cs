@@ -32,9 +32,9 @@ namespace VTuber.Core.ScriptSystem
             
         [Space(5)]
         [Header("评分")]
-        [SerializeField] public float abilityCoefficient = 1f;
-        [SerializeField] public float followerCoefficient = 1f;
-        [SerializeField] public float membershipCoefficient = 1f;
+        [SerializeField] [LabelText("总面板系数")] public float abilityCoefficient = 1f;
+        [SerializeField] [LabelText("粉丝数系数")] public float followerCoefficient = 1f;
+        [SerializeField] [LabelText("最高舰长数系数")]public float membershipCoefficient = 1f;
 
         [SerializeField] public List<VScoreLevel> scoreLevels;
         

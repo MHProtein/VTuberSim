@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.CoopSystem
 {
@@ -13,6 +14,8 @@ namespace VTuber.CoopSystem
         [HorizontalGroup] public int from;
         [HorizontalGroup] public int to;
         [HorizontalGroup] public string levelName;
+        public VEventType eventType;
+        public uint upgradeEventID;
 
         public bool InLevel(int value)
         {

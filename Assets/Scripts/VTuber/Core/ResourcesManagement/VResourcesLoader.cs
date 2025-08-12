@@ -12,6 +12,7 @@ using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.EventSystem.Events;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
@@ -50,6 +51,7 @@ namespace VTuber.Character
             LoadBuffs(cardWb);
             LoadCardConditions(raisingWb);
             LoadPhaseEndingCondition(raisingWb);
+            LoadPlacingConditions(raisingWb);
             LoadRaisingEffects(raisingWb);
             LoadDialogueEvents(raisingWb);
             LoadStreamEvents(raisingWb);
@@ -196,6 +198,30 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetCardConditions(list);
+        }
+
+        public void LoadPlacingConditions(Workbook wb)
+        {
+            var sheet = Sheet(wb, "PlacingConditions");
+            var list = new List<VPlacingCondition>();
+            
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VPlacingConditionHeaderIndex.Type].Value;
+                if(row.Columns[VPlacingConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var conditionType = Type.GetType("VTuber.EventSystem.Events." + typeName.Trim());
+                if (conditionType == null)
+                {
+                    VDebug.LogError($"Placing Condition type {typeName} not found.");
+                    continue;
+                }
+                var condition = (VPlacingCondition)Activator.CreateInstance(conditionType, row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetPlacingConditon(list);
         }
 
         public void LoadPhaseEndingCondition(Workbook wb)

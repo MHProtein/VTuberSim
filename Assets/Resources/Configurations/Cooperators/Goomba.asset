@@ -27,12 +27,19 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 8ec4206d21daf764aad0fee832d1cbc6, type: 3}
   _coopLevels:
   - from: 0
-    to: 10000
+    to: 50
     levelName: 0
+    eventType: 1
+    upgradeEventID: 17
+  - from: 51
+    to: 100
+    levelName: 1
+    eventType: 1
+    upgradeEventID: 17
   minEvents: 5
   maxEvents: 10
   _dayTimeProbabilities:
-  - 0.33
+  - 0
   - 0.33
   - 0.33
   _dayProbabilities:

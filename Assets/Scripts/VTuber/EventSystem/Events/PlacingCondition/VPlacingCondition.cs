@@ -9,7 +9,8 @@ namespace VTuber.EventSystem.Events
         public const int Id = 0;
         public const int Name = 1;
         public const int Description = 2;
-        public const int TargetValue = 3;
+        public const int Type = 3;
+        public const int TargetValue = 4;
     }
     public abstract class VPlacingCondition
     {
