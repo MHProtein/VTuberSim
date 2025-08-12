@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Spire.Xls;
 using UnityEngine;
 using VTuber.Core.Foundation;
+using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.ScheduleSystem.Events
@@ -42,7 +44,7 @@ namespace VTuber.ScheduleSystem.Events
 
         public VEventCostType costType;
         public int cost;
-
+        public List<uint> placingConditions;
         public VScheduleEventConfiguration(CellRange row)
         {
             id = uint.Parse(row.Columns[VEventHeaderIndex.Id].Value);

@@ -13,11 +13,12 @@ namespace VTuber.EventSystem.Events
     }
     public abstract class VPlacingCondition
     {
+        public uint Id { get; private set; }
         public abstract bool IsTrue(VCharacter character, VScheduleSlot slot);
         
         public VPlacingCondition(CellRange row)
         {
-            
+            Id = uint.Parse(row.Columns[VPlacingConditionHeaderIndex.Id].Value);
         }
         
     }

@@ -6,6 +6,7 @@ using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
@@ -47,6 +48,9 @@ namespace VTuber.ScheduleSystem.Events
 
         public Dictionary<VScheduleSlot, List<VRaisingEffect>> CoopEffects => _coopEffects;
         private Dictionary<VScheduleSlot, List<VRaisingEffect>> _coopEffects;
+        
+        public List<VPlacingCondition> PlacingConditions => _placingConditions;
+        private List<VPlacingCondition> _placingConditions;
 
         public bool isFollowUp = false;
         
@@ -54,6 +58,12 @@ namespace VTuber.ScheduleSystem.Events
         {
             _config = config;
             _coopEffects = new Dictionary<VScheduleSlot, List<VRaisingEffect>>();
+
+            _placingConditions = new List<VPlacingCondition>();
+            foreach (var conditionId in config.placingConditions)
+            {
+                _placingConditions.Add(VResourcesManager.Instance.GetPlacingCondtionByID(conditionId));
+            }
         }
         
         public void SetCoopEffects(VScheduleSlot slot, List<VRaisingEffect> coopEffects)

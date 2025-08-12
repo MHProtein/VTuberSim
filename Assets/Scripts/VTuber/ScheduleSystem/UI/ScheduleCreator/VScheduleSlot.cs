@@ -62,7 +62,7 @@ namespace VTuber.ScheduleSystem.UI
         public void SetItem(VEventUI item)
         {
             _item = item;
-            if (IsCoopEventSlot && _coopEventTypes.Contains(item.Event.Type))
+            if (IsCoopEventSlot && (_coopEventTypes.Contains(item.Event.Type) || _coopEventTypes.Count == 0))
             {
                 checkmark.gameObject.SetActive(true);
                 item.Event.SetCoopEffects(this, _coopEventEffects);

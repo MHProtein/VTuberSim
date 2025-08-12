@@ -6,6 +6,7 @@ using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.EventSystem.Events;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
@@ -50,6 +51,9 @@ namespace VTuber.Core.Managers
         
         public Dictionary<uint, VCoopEvent> CoopEvents => _coopEvents;
         private Dictionary<uint, VCoopEvent> _coopEvents;
+        
+        public Dictionary<uint, VPlacingCondition> PlacingConditions => _placingConditions;
+        private Dictionary<uint, VPlacingCondition> _placingConditions;
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -208,6 +212,19 @@ namespace VTuber.Core.Managers
             }
         }
 
+        public void SetPlacingConditon(List<VPlacingCondition> conditions)
+        {
+            _placingConditions = new Dictionary<uint, VPlacingCondition>();
+
+            foreach (var condition in conditions)
+            {
+                if (condition != null)
+                {
+                    _placingConditions[condition.Id] = condition;
+                }
+            }
+        }
+
         public VRelic CreateRelicByID(uint id)
         {
             if (_relics.TryGetValue(id, out var relicConfiguration))
@@ -347,6 +364,11 @@ namespace VTuber.Core.Managers
             }
 
             return CreateDialogueEventByID(id);
+        }
+
+        public VPlacingCondition GetPlacingCondtionByID(uint conditionId)
+        {
+            return _placingConditions.GetValueOrDefault(conditionId);
         }
     }
 }
