@@ -6,3 +6,14 @@ Me: 谢谢大家，那今天的直播就到这里啦，我们下次直播见哦�
 -> 金钱+50，
     <<ApplyEffect Event 5 50>>
 ===
+title: SingSuccess
+position: -24,-1
+---
+Me: 今天唱的真开心呢，大家下次也要来听我唱歌哦。
+
+粉丝+200，金钱+50，舰长+1，歌力+20，获得一张卡
+    <<ApplyEffect Event 15 200>>
+    <<ApplyEffect Event 5 50>>
+    <<ApplyEffect Event 16 1>>
+    <<ApplyEffect Event 0 20>>
+===
