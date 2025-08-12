@@ -13,6 +13,9 @@ namespace VTuber.ScheduleSystem.UI
     {
         public VEventUI Item => _item;
         public bool IsCoopEventSlot {get; private set;}
+        /// <summary>
+        /// X=Day, Y=TimeOfDay
+        /// </summary>
         public Vector2Int Coordination => _coordination;
         private VScheduleUI _scheduleUI;
         private Vector2Int _coordination;
@@ -21,9 +24,10 @@ namespace VTuber.ScheduleSystem.UI
         private List<VEventType> _coopEventTypes;
 
         [SerializeField] private GameObject coopEventGameObject;
+        [SerializeField] private Image checkmark;
         [SerializeField] private Image pfp;
         [SerializeField] private List<Image> eventIcons;
-
+        
         public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI)
         {
             _coordination = coordination;
@@ -58,10 +62,19 @@ namespace VTuber.ScheduleSystem.UI
         public void SetItem(VEventUI item)
         {
             _item = item;
+            if (IsCoopEventSlot && _coopEventTypes.Contains(item.Event.Type))
+            {
+                checkmark.gameObject.SetActive(true);
+                item.Event.SetCoopEffects(this, _coopEventEffects);
+            }
         }
 
         public void RemoveItem()
         {
+            checkmark.gameObject.SetActive(false);
+            
+            if (_item is not null && _item.Event is not null)
+                _item.Event.RemoveCoopEffects(this);
             _item = null;
         }
 
@@ -93,7 +106,7 @@ namespace VTuber.ScheduleSystem.UI
                     return;
                 }
 
-                _scheduleUI.ChangeIndicatorColor(Color.black);
+                _scheduleUI.ChangeIndicatorColor(Color.green);
                 return;
             }
 
@@ -108,7 +121,7 @@ namespace VTuber.ScheduleSystem.UI
                     if (_scheduleUI.Slots[1, _coordination.x].Item is null
                         && _item is null)
                     {
-                        _scheduleUI.ChangeIndicatorColor(Color.black);
+                        _scheduleUI.ChangeIndicatorColor(Color.green);
                         return;
                     }
 
@@ -124,7 +137,7 @@ namespace VTuber.ScheduleSystem.UI
                         {
                             var position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
                                             _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
-                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorColor(Color.green);
                             _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
@@ -132,7 +145,7 @@ namespace VTuber.ScheduleSystem.UI
                         {
                             var position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
                                             _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
-                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorColor(Color.green);
                             _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
@@ -143,7 +156,7 @@ namespace VTuber.ScheduleSystem.UI
                         {
                             var position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
                                             _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
-                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorColor(Color.green);
                             _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
@@ -152,7 +165,7 @@ namespace VTuber.ScheduleSystem.UI
                         {
                             var position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
                                             _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
-                            _scheduleUI.ChangeIndicatorColor(Color.black);
+                            _scheduleUI.ChangeIndicatorColor(Color.green);
                             _scheduleUI.ChangeIndicatorPosition(position);
                             return;
                         }
@@ -170,7 +183,7 @@ namespace VTuber.ScheduleSystem.UI
                     _scheduleUI.ChangeIndicatorPosition(position);
                     if (_scheduleUI.Slots[1, _coordination.x].Item is null && _item is null)
                     {
-                        _scheduleUI.ChangeIndicatorColor(Color.black);
+                        _scheduleUI.ChangeIndicatorColor(Color.green);
                         return;
                     }
 
@@ -193,7 +206,7 @@ namespace VTuber.ScheduleSystem.UI
                     }
                 }
 
-                _scheduleUI.ChangeIndicatorColor(Color.black);
+                _scheduleUI.ChangeIndicatorColor(Color.green);
             }
         }
 

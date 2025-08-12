@@ -124,6 +124,7 @@ namespace VTuber.ScheduleSystem.UI
                     }
                 }
             }
+            ChangeIndicatorColor(Color.yellow);
         }
 
         protected override void OnEnable()
@@ -157,7 +158,7 @@ namespace VTuber.ScheduleSystem.UI
         }
 
         public void ResetSchedule()
-        {            
+        {
             for (int x = 0; x < slotSize.x; x++)
             {
                 for (int y = 0; y < slotSize.y; y++)

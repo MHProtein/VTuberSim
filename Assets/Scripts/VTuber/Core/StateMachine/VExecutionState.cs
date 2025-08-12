@@ -48,7 +48,7 @@ namespace VTuber.Core.StateMachine
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.EventSystemRoot.SetActive(false);
-            
+            _currentEvent.ExecuteCoopEvents(stateMachine.Character);
             if (_currentEvent.FollowUpEvent is not null)
             {
                 Tween.Delay(0.2f, () =>

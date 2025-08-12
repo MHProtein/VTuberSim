@@ -50,6 +50,7 @@ namespace VTuber.CoopSystem.UI
 
         private void OnCooperatorAdded(Dictionary<string, object> messagedict)
         {
+            VDebug.Log("OnCooperatorAdded");;
             var cooperator = messagedict["Cooperator"] as VCooperator;
             GameObject cooperatorGo = Instantiate(cooperatorPrefab, transform);
             var ui = cooperatorGo.GetComponent<VCooperatorUI>();

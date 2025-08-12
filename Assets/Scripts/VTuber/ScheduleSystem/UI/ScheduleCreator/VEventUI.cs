@@ -125,7 +125,7 @@ namespace VTuber.ScheduleSystem.UI
                 parent.SetItem(this);
             }
         }
-        
+
         public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position, bool shouldTween)
         {
             parentBeforeDrag = parentSlots;

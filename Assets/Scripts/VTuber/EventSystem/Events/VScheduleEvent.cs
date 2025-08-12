@@ -5,8 +5,10 @@ using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.Events
 {
@@ -43,11 +45,25 @@ namespace VTuber.ScheduleSystem.Events
         public VScheduleEvent FollowUpEvent => _followUpEvent;
         protected VScheduleEvent _followUpEvent;
 
-        public bool isFollowUp = false;
+        public Dictionary<VScheduleSlot, List<VRaisingEffect>> CoopEffects => _coopEffects;
+        private Dictionary<VScheduleSlot, List<VRaisingEffect>> _coopEffects;
 
+        public bool isFollowUp = false;
+        
         public VScheduleEvent(VScheduleEventConfiguration config)
         {
             _config = config;
+            _coopEffects = new Dictionary<VScheduleSlot, List<VRaisingEffect>>();
+        }
+        
+        public void SetCoopEffects(VScheduleSlot slot, List<VRaisingEffect> coopEffects)
+        {
+            _coopEffects[slot] = coopEffects;
+        }
+        
+        public void RemoveCoopEffects(VScheduleSlot slot)
+        {
+            _coopEffects[slot] = null;
         }
         
         public void SetDaySchedule(VDaySchedule daySchedule, Vector2Int position)
@@ -116,6 +132,14 @@ namespace VTuber.ScheduleSystem.Events
                 followUp._followUpEvent = VResourcesManager.Instance.CreateEvent(eventType, id);
                 followUp._followUpEvent._daySchedule = followUp._daySchedule;
                 followUp._followUpEvent.isFollowUp = true;
+            }
+        }
+
+        public void ExecuteCoopEvents(VCharacter character)
+        {
+            foreach (var effect in CoopEffects.Values)
+            {
+                effect.ForEach(x => x.ApplyEffect(character));
             }
         }
     }

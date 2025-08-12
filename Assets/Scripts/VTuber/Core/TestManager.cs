@@ -72,10 +72,6 @@ namespace VTuber.BattleSystem.Core
             }
             _character.CardLibrary.AddCards(cards);
 
-            foreach (var configuration in cooperatorConfigurations)
-            {
-                _character.CooperatorManager.AddCooperator(configuration);
-            }
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
                 _character, _script);
@@ -111,6 +107,11 @@ namespace VTuber.BattleSystem.Core
             scheduleCreator.InitializeCreator(eventConfigs);
             
             _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
+            
+            foreach (var configuration in cooperatorConfigurations)
+            {
+                _character.CooperatorManager.AddCooperator(configuration);
+            }
         }
         
         public void ModifySchedule()
