@@ -21,20 +21,20 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  cardIDs: 
-  eventIDs: 000000000100000002000000030000000400000005000000
+  cardIDs: 0000000000000000010000000100000003000000
+  eventIDs: 0000000001000000020000000300000004000000050000000b0000000c0000000d000000
   streamEventIDs: 000000000100000002000000
   abilityCoefficient: 1
   followerCoefficient: 1
   membershipCoefficient: 1
   scoreLevels: []
   phases:
-  - phaseName: Phase1
-    description: asdfasdf
-    startEventWeekIndex: 0
+  - phaseName: "\u7B2C\u4E00\u9636\u6BB5"
+    description: "\u7B2C\u4E00\u9636\u6BB5"
+    startEventWeekIndex: 1
     startEventType: 1
     startEventID: 9
-    endEventWeekIndex: 0
+    endEventWeekIndex: 4
     endEventIDs: 030000000400000005000000
     specialEventData:
     - weekIndex: 0
@@ -52,12 +52,12 @@ MonoBehaviour:
         endEventIDs: 
         specialEventData: []
       isPhaseStart: 0
-  - phaseName: Phase2
-    description: 
-    startEventWeekIndex: 1
+  - phaseName: "\u7B2C\u4E8C\u9636\u6BB5"
+    description: "\u7B2C\u4E8C\u9636\u6BB5"
+    startEventWeekIndex: 5
     startEventType: 1
     startEventID: 10
-    endEventWeekIndex: 1
+    endEventWeekIndex: 8
     endEventIDs: 060000000700000008000000
     specialEventData:
     - weekIndex: 0
@@ -75,3 +75,19 @@ MonoBehaviour:
         endEventIDs: 
         specialEventData: []
       isPhaseStart: 0
+  - phaseName: "\u7B2C\u4E09\u9636\u6BB5"
+    description: "\u7B2C\u4E09\u9636\u6BB5"
+    startEventWeekIndex: 9
+    startEventType: 0
+    startEventID: 0
+    endEventWeekIndex: 12
+    endEventIDs: 
+    specialEventData: []
+  - phaseName: "\u6700\u540E\u9636\u6BB5"
+    description: "\u6700\u540E\u9636\u6BB5"
+    startEventWeekIndex: 13
+    startEventType: 0
+    startEventID: 0
+    endEventWeekIndex: 16
+    endEventIDs: 
+    specialEventData: []
