@@ -95,7 +95,8 @@ namespace VTuber.BattleSystem.Core
         }
         
         public virtual void InitializeBattle(VCharacterAttributeManager characterAttributeManager,
-            VCardLibrary cardLibrary, int initialTurnCount, int targetPopularity, int initialViewers, List<VBattleRelic> relics)
+            VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts,
+            int targetPopularity, int initialViewers, List<VBattleRelic> relics)
         {
             cardTypeHistory = new Dictionary<string, int>();
             _targetPopularity = targetPopularity;
@@ -122,7 +123,7 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
             _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
 
-            _battleAttributeManager.InitializeInternalManagers();
+            _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
             
             if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
             {

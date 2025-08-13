@@ -141,12 +141,14 @@ namespace VTuber.Core.StateMachine
             }
         }
         
-        public void InitializeBattle(int initialTurnCount, int targetPopularity, int initialViewers)
+        public void InitializeBattle(int initialTurnCount, int targetPopularity, int initialViewers,
+            int mainAttributeIndex, List<int> abilityTurnCounts)
         {
             stateMachine.BattleRoot.SetActive(true);
             stateMachine.Battle.InitializeBattle(stateMachine.Character.AttributeManager,
                 stateMachine.Character.CardLibrary,
-                initialTurnCount, targetPopularity, initialViewers,
+                initialTurnCount, mainAttributeIndex, abilityTurnCounts,
+                targetPopularity, initialViewers,
                 stateMachine.Character.CharacterRelicManager.GetBattleRelics());
         }
         
@@ -166,7 +168,8 @@ namespace VTuber.Core.StateMachine
         {
             _currentEvent = messagedict["Event"] as VScheduleEvent;
             var streamEvent = _currentEvent as VStreamEvent;
-            InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers);
+            InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers,
+                streamEvent.MainAttributeIndex, streamEvent.AbilityTurnCounts);
         }
 
         private void AddEventToCurrentEvent(VEventType eventType, uint id)

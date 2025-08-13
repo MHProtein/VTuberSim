@@ -50,7 +50,7 @@ namespace VTuber.BattleSystem.Core
         {
             //battleRoot.SetActive(true);
             _battle.InitializeBattle(character.AttributeManager,
-                character.CardLibrary, 10, 0, 0, new List<VBattleRelic>());
+                character.CardLibrary, 10, 0, new List<int> {2, 6, 2}, 0, 0, new List<VBattleRelic>());
         }
 
         protected override void Start()

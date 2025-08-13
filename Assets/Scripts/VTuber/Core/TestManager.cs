@@ -22,6 +22,7 @@ namespace VTuber.BattleSystem.Core
 {
     public class VGameManager : VMonoBehaviour
     {
+        [SerializeField] private bool dev;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
         [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
         
@@ -51,10 +52,21 @@ namespace VTuber.BattleSystem.Core
         protected override void Awake()
         {
             base.Awake();
-            VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
+            VResourcesLoader loader;
+            if (dev)
+            {
+                loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Raising.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Relics.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Coop.xlsx"));
+            }
+            else
+            {
+                loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
+            }
             _script = new VScript(scriptConfiguration);
             
             _character = new VCharacter(_characterConfiguration);

@@ -14,6 +14,11 @@ namespace VTuber.ScheduleSystem.Events
         public int InitialViewers { get; private set; } = 0;
         public uint SuccessEvent { get; private set; } = 0;
         public uint FailureEvent { get; private set; } = 0;
+        
+        public int MainAttributeIndex { get; private set; }
+        
+        public List<int> AbilityTurnCounts { get; private set; }
+        
         public List<VPhaseEndingCondition> PhaseEndingConditions { get; private set; } = new List<VPhaseEndingCondition>();
         
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
@@ -21,6 +26,8 @@ namespace VTuber.ScheduleSystem.Events
             InitialTurnCount = config.initialTurnCount;
             TargetPopularity = config.targetPopularity;
             InitialViewers = config.initialViewers;
+            MainAttributeIndex = config.mainAttributeIndex;
+            AbilityTurnCounts = config.abilityTurnCounts;
             SuccessEvent = config.successEvent;
             FailureEvent = config.failureEvent;
             PhaseEndingConditions = config.phaseEndingConditions;

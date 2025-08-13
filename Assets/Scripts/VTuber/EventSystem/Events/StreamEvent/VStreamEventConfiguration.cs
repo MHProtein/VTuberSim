@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine.Serialization;
@@ -11,10 +12,13 @@ namespace VTuber.ScheduleSystem.Events
         public const int TurnCount = 10;
         public const int Target = 11;
         public const int InitialViewers = 12;
-        public const uint SuccessEvent = 13;
-        public const uint FailEvent = 14;
-        public const int PhaseEndingConditions = 15;
+        public const int MainAbility = 13;
+        public const int AbilityTurns = 14;
+        public const uint SuccessEvent = 15;
+        public const uint FailEvent = 16;
+        public const int PhaseEndingConditions = 17;
     }
+    
     public class VStreamEventConfiguration : VScheduleEventConfiguration
     {
         public int initialTurnCount;
@@ -23,6 +27,8 @@ namespace VTuber.ScheduleSystem.Events
         public uint successEvent;
         public uint failureEvent;
         public bool isPhaseEndingEvent = false;
+        public int mainAttributeIndex;
+        public List<int> abilityTurnCounts;
         public List<VPhaseEndingCondition> phaseEndingConditions;
 
         public VStreamEventConfiguration(CellRange row) : base(row)
@@ -30,6 +36,11 @@ namespace VTuber.ScheduleSystem.Events
             initialTurnCount = int.Parse(row.Columns[VStreamEventHeaderIndex.TurnCount].Value);
             targetPopularity = int.Parse(row.Columns[VStreamEventHeaderIndex.Target].Value);
             initialViewers = int.Parse(row.Columns[VStreamEventHeaderIndex.InitialViewers].Value);
+            
+            mainAttributeIndex = int.Parse(row.Columns[VStreamEventHeaderIndex.MainAbility].Value);
+            string abilityTurnsStr = row.Columns[VStreamEventHeaderIndex.AbilityTurns].Value;
+            abilityTurnCounts = abilityTurnsStr.Split(',').Select(int.Parse).ToList();
+            
             successEvent = uint.Parse(row.Columns[VStreamEventHeaderIndex.SuccessEvent].Value);
             failureEvent = uint.Parse(row.Columns[VStreamEventHeaderIndex.FailEvent].Value);
             phaseEndingConditions = new List<VPhaseEndingCondition>();

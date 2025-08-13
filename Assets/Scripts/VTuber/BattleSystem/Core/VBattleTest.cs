@@ -16,31 +16,30 @@ namespace VTuber.BattleSystem.Core
             _buffManager = new VBuffManager(this);
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
-            _battleAttributeManager.AttributesConversion(_characterAttributeManager);
-            _turnAttribute = new VBattleTurnAttribute(10);
-            _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
-            
-            _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
-            _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
-            
-            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
-            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
-            
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
-            _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
-
-            _battleAttributeManager.InitializeInternalManagers();
-            
-            
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
-            {
-                {"TurnLeft", TurnLeft},
-            });
-            
-            InitializeTurn();
+        //     _battleAttributeManager.AttributesConversion(_characterAttributeManager);
+        //     _turnAttribute = new VBattleTurnAttribute(10);
+        //     _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
+        //     
+        //     _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
+        //     _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
+        //     
+        //     _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+        //     _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
+        //     
+        //     _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
+        //     _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
+        //
+        //     _battleAttributeManager.InitializeInternalManagers(1, new List<int> {2, 6, 2});
+        //     
+        //     
+        //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
+        //     {
+        //         {"TurnLeft", TurnLeft},
+        //     });
+        //     
+        //     InitializeTurn();
         }
 
         protected override void OnEnable()
