@@ -20,12 +20,11 @@ namespace VTuber.BattleSystem.Card
         public string CardName => _configuration.cardName;
         public bool IsExhaust => _configuration.isExhaust;
         public string CardType => _configuration.cardType;
-        public string Description => _configuration.description;
+   
         public string LiveType => _configuration.liveType;
         public List<string> Tags => _configuration.tags;
         public CostType CostType => _configuration.costType;
         public uint CostBuffId => _configuration.costBuffId;
-
         
         public VEffectCondition Condition => condition;
         private VEffectCondition condition;
@@ -80,13 +79,31 @@ namespace VTuber.BattleSystem.Card
             {
                 VDebug.Log("cardId : " + configID);
                 VDebug.Log("effect : " + effect.id);
-                _effects.Add(VResourcesManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.parameter));
+                _effects.Add(effect.CreateEffect());
             }
             
             foreach (var effect in newEffects)
             {
-                _newEffects.Add(VResourcesManager.Instance.CreateEffectByID(effect.id, effect.parameter, effect.upgradedParameter));
+                _newEffects.Add(effect.CreateEffect());
             }
+        }
+        
+        public string GetDescription()
+        {
+            string des = _configuration.description; 
+            if(des.Contains("X1"))
+                des = des.Replace("X1", _effects[0].GetValue());
+            if (des.Contains("X2"))
+                des = des.Replace("X2", _effects[1].GetValue());
+            if (des.Contains("X3"))
+                des = des.Replace("X3", _effects[2].GetValue());
+            if (des.Contains("X4"))
+                des = des.Replace("X4", _effects[3].GetValue());
+            if (des.Contains("NX1"))
+                des = des.Replace("NX1", _newEffects[0].GetValue());
+            if (des.Contains("NX2"))
+                des = des.Replace("NX2", _newEffects[1].GetValue());
+            return des;
         }
 
         public void Play()

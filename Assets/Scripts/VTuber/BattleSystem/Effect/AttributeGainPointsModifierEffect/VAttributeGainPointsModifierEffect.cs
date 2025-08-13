@@ -70,5 +70,9 @@ namespace VTuber.BattleSystem.Effect
             _onBuffRemove(modifierID);
             VDebug.Log("效果 " + _configuration.effectName + " 移除了获取Points Modifier，ID为: " + modifierID);
         }
+        public override string GetValue()
+        {
+            return _deltaPoints.Value.ToString();
+        }
     }
 }

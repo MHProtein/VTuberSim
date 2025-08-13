@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
@@ -39,14 +40,30 @@ namespace VTuber.BattleSystem.Effect
 
         public override void Upgrade()
         {
-            base.Upgrade();
-            _deltaRate.Upgrade();
+            base.Upgrade();        
+            switch (_modifiyType)
+            {
+                case VStaminaModifiyType.Rate:
+                    _deltaRate.Upgrade();
+                    break;
+                case VStaminaModifiyType.Points:
+                    _deltaPoints.Upgrade();
+                    break;
+            }
         }
         
         public override void Downgrade()
         {
             base.Downgrade();
-            _deltaRate.Downgrade();
+            switch (_modifiyType)
+            {
+                case VStaminaModifiyType.Rate:
+                    _deltaRate.Downgrade();
+                    break;
+                case VStaminaModifiyType.Points:
+                    _deltaPoints.Downgrade();
+                    break;
+            }
         }
 
         public override void OnBuffAdded(VBattle battle, int layer)
@@ -109,6 +126,19 @@ namespace VTuber.BattleSystem.Effect
         public override void OnBuffRemove()
         {
             _onBuffRemove(modifierID);
+        }
+        
+        public override string GetValue()
+        {
+            switch (_modifiyType)
+            {
+                case VStaminaModifiyType.Rate:
+                    return (int)(_deltaRate.Value * 100) + "%";
+                case VStaminaModifiyType.Points:
+                    return _deltaPoints.Value.ToString();
+            }
+
+            return "";
         }
     }
 }

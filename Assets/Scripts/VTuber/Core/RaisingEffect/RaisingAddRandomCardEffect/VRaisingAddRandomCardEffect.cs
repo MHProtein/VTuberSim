@@ -17,7 +17,6 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
             var configs = VSingleton<VResourcesManager>.Instance.GetAllCardConfigurations().
                 Where(configuration => _condition.IsTrue(configuration)).ToList();
             
@@ -27,6 +26,15 @@ namespace VTuber.Core.RaisingEffect
             var randomIndex = UnityEngine.Random.Range(0, configs.Count);
             character.CardLibrary.AddCard(configs[randomIndex].CreateCard());
             VDebug.Log("Added random card: " + configs[randomIndex].cardName);
+        }
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
         }
     }
 }

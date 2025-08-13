@@ -13,8 +13,15 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
             character.CharacterRelicManager.AddRelic(VResourcesManager.Instance.CreateRelicByID(_relicId));
+        }
+
+        public override void Upgrade()
+        {
+        }
+
+        public override void DownGrade()
+        {
         }
     }
 }

@@ -20,7 +20,6 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
             List<VCard> cards = character.CardLibrary.GetCards().
                 Where(card => _condition.IsTrue(card)).ToList();
 
@@ -29,6 +28,15 @@ namespace VTuber.Core.RaisingEffect
             int index = Random.Range(0, cards.Count);
             character.CardLibrary.RemoveCard(cards[index]);
             VDebug.Log("Deleted card: " + cards[index].CardName);
+        }
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
         }
     }
 }

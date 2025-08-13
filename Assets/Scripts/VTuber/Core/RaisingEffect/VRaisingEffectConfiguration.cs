@@ -15,7 +15,7 @@ namespace VTuber.Core.RaisingEffect
         public const int Param = 5;
     }
     
-    public class VRaisingEffectConfiguration
+    public abstract class VRaisingEffectConfiguration
     {
         public uint id;
         public string effectName;
@@ -27,11 +27,7 @@ namespace VTuber.Core.RaisingEffect
             effectName = row.Columns[VRaisingEffectHeaderIndex.Name].Value;
             description = row.Columns[VRaisingEffectHeaderIndex.Description].Value;
         }
-        
-        public virtual VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
-        {
-            return new VRaisingEffect(this);
-        }
-        
+
+        public abstract VRaisingEffect CreateEffect(string parameter, string upgradedParameter);
     }
 }

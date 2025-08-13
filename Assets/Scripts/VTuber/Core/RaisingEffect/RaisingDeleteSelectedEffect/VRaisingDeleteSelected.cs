@@ -23,7 +23,16 @@ namespace VTuber.Core.RaisingEffect
                 {"Action", new Action<VCard>(DeleteCard)}
             });
         }
-        
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
+        }
+
         public void DeleteCard(VCard selectedCard)
         {
             _character.CardLibrary.RemoveCard(selectedCard);

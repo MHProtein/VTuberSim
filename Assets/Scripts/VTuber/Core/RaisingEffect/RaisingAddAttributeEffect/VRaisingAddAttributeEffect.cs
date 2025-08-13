@@ -18,7 +18,6 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
             if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
                 attribute.AddTo(_value.Value);
@@ -28,13 +27,11 @@ namespace VTuber.Core.RaisingEffect
         
         public override void Upgrade()
         {
-            base.Upgrade();
             _value.Upgrade();
         }
 
         public override void DownGrade()
         {
-            base.DownGrade();
             _value.Downgrade();
         }
     }

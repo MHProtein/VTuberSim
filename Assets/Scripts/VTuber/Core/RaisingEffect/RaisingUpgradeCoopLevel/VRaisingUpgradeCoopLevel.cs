@@ -12,9 +12,16 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
             character.CooperatorManager.GetCooperator(cooperatorID).UpgradeLevel();
         }
-        
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
+        }
     }
 }
