@@ -24,8 +24,8 @@ namespace VTuber.ScheduleSystem.Events
         public int initialTurnCount;
         public int targetPopularity;
         public int initialViewers;
-        public uint successEvent;
-        public uint failureEvent;
+        public int successEvent;
+        public int failureEvent;
         public bool isPhaseEndingEvent = false;
         public int mainAttributeIndex;
         public List<int> abilityTurnCounts;
@@ -40,9 +40,11 @@ namespace VTuber.ScheduleSystem.Events
             mainAttributeIndex = int.Parse(row.Columns[VStreamEventHeaderIndex.MainAbility].Value);
             string abilityTurnsStr = row.Columns[VStreamEventHeaderIndex.AbilityTurns].Value;
             abilityTurnCounts = abilityTurnsStr.Split(',').Select(int.Parse).ToList();
-            
-            successEvent = uint.Parse(row.Columns[VStreamEventHeaderIndex.SuccessEvent].Value);
-            failureEvent = uint.Parse(row.Columns[VStreamEventHeaderIndex.FailEvent].Value);
+
+            var successEventStr = row.Columns[VStreamEventHeaderIndex.SuccessEvent].Value;
+            var failureEventStr = row.Columns[VStreamEventHeaderIndex.FailEvent].Value;
+            successEvent = successEventStr.IsNullOrWhitespace() ? -1 : int.Parse(successEventStr);
+            failureEvent = failureEventStr.IsNullOrWhitespace() ? -1 : int.Parse(failureEventStr);
             phaseEndingConditions = new List<VPhaseEndingCondition>();
             string phaseEndingConditionsStr = row.Columns[VStreamEventHeaderIndex.PhaseEndingConditions].Value;
             if (!phaseEndingConditionsStr.IsNullOrWhitespace())

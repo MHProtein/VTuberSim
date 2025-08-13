@@ -12,8 +12,8 @@ namespace VTuber.ScheduleSystem.Events
         public int InitialTurnCount { get; private set; }
         public int TargetPopularity { get; private set; } = 0;
         public int InitialViewers { get; private set; } = 0;
-        public uint SuccessEvent { get; private set; } = 0;
-        public uint FailureEvent { get; private set; } = 0;
+        public int SuccessEvent { get; private set; } = 0;
+        public int FailureEvent { get; private set; } = 0;
         
         public int MainAttributeIndex { get; private set; }
         
@@ -69,11 +69,15 @@ namespace VTuber.ScheduleSystem.Events
             VDialogueEvent e;
             if (isSuccess)
             {
-                e = VResourcesManager.Instance.CreateDialogueEventByID(SuccessEvent);
+                if (SuccessEvent == -1)
+                    return;
+                e = VResourcesManager.Instance.CreateDialogueEventByID((uint)SuccessEvent);
             }
             else
             {
-                e = VResourcesManager.Instance.CreateDialogueEventByID(FailureEvent);
+                if (FailureEvent == -1)
+                    return;
+                e = VResourcesManager.Instance.CreateDialogueEventByID((uint)FailureEvent);
             }
 
             e.isFollowUp = true;
