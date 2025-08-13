@@ -67,13 +67,17 @@ namespace VTuber.EventSystem
         [YarnCommand("ApplyEffect")]
         public void ApplyEffect(uint id, string value)
         {
-            var effect = VResourcesManager.Instance.CreateRaisingEffectByID(id, value);
+            var effect = VResourcesManager.Instance.CreateRaisingEffectByID(id, value, value);
             effect.ApplyEffect(_character);
         }
 
         public void OnDialogueComplete()
         {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, new Dictionary<string, object>());
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
+                new Dictionary<string, object>()
+                {
+                    {"Event", _currentEvent}
+                });
             _currentEvent = null;
         }
     }

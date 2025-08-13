@@ -12,8 +12,13 @@ namespace VTuber.ScheduleSystem.Events
         public int InitialTurnCount { get; private set; }
         public int TargetPopularity { get; private set; } = 0;
         public int InitialViewers { get; private set; } = 0;
-        public uint SuccessEvent { get; private set; } = 0;
-        public uint FailureEvent { get; private set; } = 0;
+        public int SuccessEvent { get; private set; } = 0;
+        public int FailureEvent { get; private set; } = 0;
+        
+        public int MainAttributeIndex { get; private set; }
+        
+        public List<int> AbilityTurnCounts { get; private set; }
+        
         public List<VPhaseEndingCondition> PhaseEndingConditions { get; private set; } = new List<VPhaseEndingCondition>();
         
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
@@ -21,6 +26,8 @@ namespace VTuber.ScheduleSystem.Events
             InitialTurnCount = config.initialTurnCount;
             TargetPopularity = config.targetPopularity;
             InitialViewers = config.initialViewers;
+            MainAttributeIndex = config.mainAttributeIndex;
+            AbilityTurnCounts = config.abilityTurnCounts;
             SuccessEvent = config.successEvent;
             FailureEvent = config.failureEvent;
             PhaseEndingConditions = config.phaseEndingConditions;
@@ -59,20 +66,26 @@ namespace VTuber.ScheduleSystem.Events
 
         public void SetResultEvent(bool isSuccess)
         {
-            
             VDialogueEvent e;
             if (isSuccess)
             {
-                e = VResourcesManager.Instance.CreateDialogueEventByID(SuccessEvent);
+                if (SuccessEvent == -1)
+                    return;
+                e = VResourcesManager.Instance.CreateDialogueEventByID((uint)SuccessEvent);
             }
             else
             {
-                e = VResourcesManager.Instance.CreateDialogueEventByID(FailureEvent);
+                if (FailureEvent == -1)
+                    return;
+                e = VResourcesManager.Instance.CreateDialogueEventByID((uint)FailureEvent);
             }
 
+            e.isFollowUp = true;
             e.IsPhaseEndingEvent = IsPhaseEndingEvent;
             e.SetDaySchedule(_daySchedule, Coordinate);
-            SetFollowUpEvent(e);
+            var temp = FollowUpEvent;
+            _followUpEvent = e;
+            _followUpEvent.SetFollowUpEvent(temp);
         }
     }
 }

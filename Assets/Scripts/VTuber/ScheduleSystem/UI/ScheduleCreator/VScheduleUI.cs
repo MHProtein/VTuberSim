@@ -6,10 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.UI;
+using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
+using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
@@ -22,18 +24,20 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] protected Transform indicator;
         [SerializeField] protected Image indicatorLeft;
         [SerializeField] protected Image indicatorRight;
+        private Vector2Int _currentIndicatorCoord = Vector2Int.zero;
+        private VCharacter _character;
         
         public VScheduleSlot[,] Slots => slots;
         protected VScheduleSlot[,] slots;
 
-        protected VAnimationQueue _animationQueue;
+        protected VAnimationQueue animationQueue;
         
         protected override void Awake()
         {
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             slots = new VScheduleSlot[slotSize.y, slotSize.x];
             var slotList = GetComponentsInChildren<VScheduleSlot>();
-            _animationQueue = new VAnimationQueue();
+            animationQueue = new VAnimationQueue();
             int i = 0; 
             for (int y = 0; y < slotSize.y; y++)
             {
@@ -44,16 +48,73 @@ namespace VTuber.ScheduleSystem.UI
                 }
             }
         }
-
-        public void SwitchToCreation(VScript script, int weekIndex)
+        
+        protected override void OnEnable()
         {
+            base.OnEnable();
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
+        }
+        
+        private void OnEventUIPlaced(Dictionary<string, object> messagedict)
+        {
+            foreach (var slot in slots)
+            {
+                slot.SetPlaceable(false, false);
+            }
+        }
+
+        private void OnEventUISelected(Dictionary<string, object> messagedict)
+        {
+            var e = messagedict["Event"] as VScheduleEvent;
+            List<VPlacingCondition> attributeConditions = e.PlacingConditions.FindAll(c => c is VAttributePlacingCondition);
+            foreach (var condition in attributeConditions)
+            {
+                if (!condition.IsTrue(_character, null))
+                {
+                    return;
+                }
+            }
+            foreach (var slot in slots)
+            {
+                bool isPlaceable = true;
+                foreach (var condition in e.PlacingConditions)
+                {
+                    if (condition is not VAttributePlacingCondition)
+                    {
+                        if (!condition.IsTrue(_character, slot))
+                        {
+                            isPlaceable = false;
+                            break;
+                        }
+                    }
+                }
+                slot.SetPlaceable(isPlaceable, isPlaceable);
+            }
+        }
+
+        public void SwitchToCreation(VCharacter character, VScript script, int weekIndex)
+        {
+            foreach (var slot in slots)
+            {
+                slot.RemoveCoopEvent();
+                slot.SetPlaceable(true, false);
+            }
             DestroyAllItems();
             var specialEvents = script.GetSpecialEvents(weekIndex);
-
             foreach (var specialEvent in specialEvents)
             {
                 VScheduleEvent e;
-                if (specialEvent.eventType == VScheduleEventType.Stream)
+                if (specialEvent.eventType == VEventType.Stream)
                 {
                     e = VResourcesManager.Instance.CreateStreamEventByID(specialEvent.eventID);
                 }
@@ -63,9 +124,29 @@ namespace VTuber.ScheduleSystem.UI
                 }
                 e.Phase = specialEvent.phase;
                 e.IsPhaseStart = specialEvent.isPhaseStart;
+                e.IsSpecialEvent = true;
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
-                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.dayIndex]);
+                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex]);
                 ui.SetFixed(true);
+            }
+            foreach (var slot in slots)
+            {
+                slot.SetPlaceable(false, false);
+            }
+            
+            List<Vector2Int> occupiedPositions = new List<Vector2Int>();
+            foreach (var slot in slots)
+            {
+                if (slot.Item != null)
+                {
+                    occupiedPositions.Add(slot.Coordination);
+                }
+            }
+            
+            var coopEvents = character.CooperatorManager.GetCoopEvents(occupiedPositions);
+            foreach (var coopEvent in coopEvents)
+            {
+                slots[coopEvent.position.y, coopEvent.position.x].SetCoopEvent(coopEvent);
             }
         }
         
@@ -104,35 +185,34 @@ namespace VTuber.ScheduleSystem.UI
                     }
                 }
             }
+            ChangeIndicatorColor(Color.yellow);
         }
 
-        protected override void OnEnable()
+        public void Initialize(VCharacter character)
         {
-            base.OnEnable();
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
-        }
-        
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+            _character = character;
         }
         
         private void OnEventExecuted(Dictionary<string, object> messagedict)
         {
             Vector2Int coordinate = (Vector2Int)messagedict["Coordinate"];
+            if (coordinate.x == -1)
+                return;
             ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
             ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
         }
 
         public Tween MoveIndicator(Vector2Int coordinate)
         {
+            if (coordinate.x == -1)
+                return ChangeIndicatorPosition(slots[_currentIndicatorCoord.y, _currentIndicatorCoord.x].Item.transform.position);
             ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
+            _currentIndicatorCoord = coordinate;
             return ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
         }
 
         public void ResetSchedule()
-        {            
+        {
             for (int x = 0; x < slotSize.x; x++)
             {
                 for (int y = 0; y < slotSize.y; y++)
@@ -156,9 +236,9 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
         
-        public void ChangeIndicatorPosition(Vector2 position)
+        public Tween ChangeIndicatorPosition(Vector2 position)
         {
-            Tween.Position(indicator, position, 0.2f);
+            return Tween.Position(indicator, position, 0.2f);
         }
         
         public Tween ChangeIndicatorScale(float scale)
@@ -179,6 +259,10 @@ namespace VTuber.ScheduleSystem.UI
 
         public void CompleteSchedule(uint size1Id, uint size2Id, uint size3Id)
         {
+            foreach (var slot in slots)
+            {
+                slot.SetPlaceable(true, false);
+            }
             for (int x = 0; x < slotSize.x; x++)
             {
                 int emptyCount = 0;
@@ -200,6 +284,7 @@ namespace VTuber.ScheduleSystem.UI
                             else if(emptyCount == 2)
                                 eventId = size2Id;
                             var e = VResourcesManager.Instance.CreateDialogueEventByID(eventId);
+                            e.IsSpecialEvent = true;
                             eventUIObject.Initialize(e, slots[yy, x]);
                             
                             emptyCount = 0;
@@ -218,8 +303,13 @@ namespace VTuber.ScheduleSystem.UI
                     else if(emptyCount == 3)
                         eventId = size3Id;
                     var e = VResourcesManager.Instance.CreateDialogueEventByID(eventId);
+                    e.IsSpecialEvent = true;
                     eventUIObject.Initialize(e, slots[yy, x]);
                 }
+            }
+            foreach (var slot in slots)
+            {
+                slot.SetPlaceable(false, false);
             }
         }
     }

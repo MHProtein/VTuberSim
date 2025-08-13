@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Card
@@ -33,31 +34,35 @@ namespace VTuber.BattleSystem.Card
         public const int Id = 0;
         public const int Name = 1;
         public const int Description = 2;
-        public const int Rarity = 3;
-        public const int Type = 4;
-        public const int CostType = 5;
-        public const int CostBuffID = 6;
-        public const int Cost = 7;
-        public const int UpgradedCost = 8;
-        public const int IsExhaust = 9;
-        public const int NotRepeatable = 10;
-        public const int Condition = 11;
-        public const int Effect1 = 12;
-        public const int E1Param = 13;
-        public const int E1UpgradedParam = 14;
-        public const int Effect2 = 15;
-        public const int E2Param = 16;
-        public const int E2UpgradedParam = 17;
-        public const int Effect3 = 18;
-        public const int E3Param = 19;
-        public const int E3UpgradedParam = 20;
-        public const int Effect4 = 21;
-        public const int E4Param = 22;
-        public const int E4UpgradedParam = 23;
-        public const int NewEffect1 = 24;
-        public const int NE1Param = 25;
-        public const int NewEffect2 = 26;
-        public const int NE2Param = 27;
+        public const int DescriptionInGame = 3;
+        public const int Rarity = 4;
+        public const int Type = 5;
+        public const int LiveType = 6;
+        public const int Tag1 = 7;
+        public const int Tag2 = 8;
+        public const int CostType = 9;
+        public const int CostBuffID = 10;
+        public const int Cost = 11;
+        public const int UpgradedCost = 12;
+        public const int IsExhaust = 13;
+        public const int NotRepeatable = 14;
+        public const int Condition = 15;
+        public const int Effect1 = 16;
+        public const int E1Param = 17;
+        public const int E1UpgradedParam = 18;
+        public const int Effect2 = 19;
+        public const int E2Param = 20;
+        public const int E2UpgradedParam = 21;
+        public const int Effect3 = 22;
+        public const int E3Param = 23;
+        public const int E3UpgradedParam = 24;
+        public const int Effect4 = 25;
+        public const int E4Param = 26;
+        public const int E4UpgradedParam = 27;
+        public const int NewEffect1 = 28;
+        public const int NE1Param = 29;
+        public const int NewEffect2 = 30;
+        public const int NE2Param = 31;
     }
 
     public struct VEffectItem
@@ -78,13 +83,29 @@ namespace VTuber.BattleSystem.Card
                 return null;
             }
         }
+
+        public VRaisingEffect CreateRaisingEffect()
+        {
+            if (VResourcesManager.Instance.RaisingEffects.TryGetValue(id, out var config))
+            {
+                return config.CreateEffect(parameter, upgradedParameter);
+            }
+            else
+            {
+                VDebug.LogError($"Effect with ID {id} not found in configurations.");
+                return null;
+            }
+        }
     }
     
     public class VCardConfiguration
     {
         public uint id;
         public string cardName;
+
         public string description;
+        public string liveType;
+        public List<string> tags;
         
         public string cardType;
         
@@ -114,23 +135,30 @@ namespace VTuber.BattleSystem.Card
             effects = new List<VEffectItem>();
             newEffects = new List<VEffectItem>();
             
-            id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value);
-            cardName = row.Columns[VCardHeaderIndex.Name].Value;
-            description = row.Columns[VCardHeaderIndex.Description].Value;
-            rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value);
-            cardType = row.Columns[VCardHeaderIndex.Type].Value;
+            id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value.Trim());
+            cardName = row.Columns[VCardHeaderIndex.Name].Value.Trim();
+            description = row.Columns[VCardHeaderIndex.DescriptionInGame].Value.Trim();
+            rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value.Trim());
+            cardType = row.Columns[VCardHeaderIndex.Type].Value.Trim();
             
-            costType = Enum.Parse<CostType>(row.Columns[VCardHeaderIndex.CostType].Value);
+            liveType = row.Columns[VCardHeaderIndex.LiveType].Value.Trim();
+            tags = new List<string>
+            {
+                row.Columns[VCardHeaderIndex.Tag1].Value.Trim(),
+                row.Columns[VCardHeaderIndex.Tag2].Value.Trim(),
+            };
+            
+            costType = Enum.Parse<CostType>(row.Columns[VCardHeaderIndex.CostType].Value.Trim());
             
             if(costType == CostType.Buff)
-                costBuffId = Convert.ToUInt32(row.Columns[VCardHeaderIndex.CostBuffID].Value);
+                costBuffId = Convert.ToUInt32(row.Columns[VCardHeaderIndex.CostBuffID].Value.Trim());
 
-            cost = Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value);
-            upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value);
-            notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value) == 1;
-            isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value) == 1;
+            cost = Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value.Trim());
+            upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value.Trim());
+            notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value.Trim()) == 1;
+            isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value.Trim()) == 1;
             
-            var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
+            var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value.Trim();
             if(!conditionStr.IsNullOrWhitespace())
             {
                 conditionId = Convert.ToInt32(conditionStr);
@@ -145,7 +173,7 @@ namespace VTuber.BattleSystem.Card
             
             for (int i = VCardHeaderIndex.Effect1; i < VCardHeaderIndex.E4UpgradedParam; i += 3)
             {
-                var effectIDStr = row.Columns[i].Value;
+                var effectIDStr = row.Columns[i].Value.Trim();
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
                 uint effectID = Convert.ToUInt32(effectIDStr);
@@ -164,7 +192,7 @@ namespace VTuber.BattleSystem.Card
             
             for (int i = VCardHeaderIndex.NewEffect1; i < VCardHeaderIndex.NE2Param; i += 2)
             {
-                var effectIDStr = row.Columns[i].Value;
+                var effectIDStr = row.Columns[i].Value.Trim();
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
                 uint effectID = Convert.ToUInt32(effectIDStr);
@@ -175,7 +203,7 @@ namespace VTuber.BattleSystem.Card
                     newEffects.Add(new VEffectItem(){
                         id = effectID,
                         parameter = parameter,
-                        upgradedParameter = string.Empty
+                        upgradedParameter = parameter
                     });
                 }
             }

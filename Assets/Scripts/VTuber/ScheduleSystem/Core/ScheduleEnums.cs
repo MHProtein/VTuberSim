@@ -15,12 +15,13 @@
     /// <summary>
     /// 可安排的事件类型
     /// </summary>
-    public enum VScheduleEventType
+    public enum VEventType
     {
         Stream,
         Practice,
         Coop,
-        Recovery
+        Recovery,
+        Work
     }
 
     /// <summary>

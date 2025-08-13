@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
@@ -69,6 +70,11 @@ namespace VTuber.BattleSystem.Effect
                 return;
             }
             _onBuffRemove(modifierID);
+        }
+        
+        public override string GetValue()
+        {
+            return (int)(_deltaRate.Value * 100) + "%";
         }
     }
 }

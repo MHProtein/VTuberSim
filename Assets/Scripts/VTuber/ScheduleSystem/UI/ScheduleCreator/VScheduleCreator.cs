@@ -14,8 +14,6 @@ namespace VTuber.ScheduleSystem.UI
         protected VScheduleCreatorSlot[,] slots;
         
         [SerializeField] private List<VScheduleEventConfiguration> eventDatas;
-        public GameObject eventUIPrefab;
-
         protected override void Awake()
         {
             slots = new VScheduleCreatorSlot[slotSize.y, slotSize.x];
@@ -47,15 +45,22 @@ namespace VTuber.ScheduleSystem.UI
         
         protected override void Start()
         {
-            base.Start();
-            foreach (var eventData in VResourcesManager.Instance.GetAllEventConfigurations())
+            base.Start(); 
+            foreach (var eventData in eventDatas)
             {
                 var slot = GetAvailableSlot();
                 var eventObj = Instantiate(itemPrefab, slot.transform);
+                eventObj.transform.localPosition = Vector3.zero;
                 var eventUI = eventObj.GetComponent<VEventDataUI>();
                 eventUI.Initialize(eventData);
                 slot.SetItem(eventUI);
             }
         }
+
+        public void InitializeCreator(List<VScheduleEventConfiguration> configurations)
+        {
+            eventDatas = configurations;
+        }
+        
     }
 }

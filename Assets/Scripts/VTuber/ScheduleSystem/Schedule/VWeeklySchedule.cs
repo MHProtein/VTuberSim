@@ -89,6 +89,7 @@ namespace VTuber.ScheduleSystem.Schedule
         public VScheduleEvent BeginExecution()
         {
             _currentDayIndex = 0;
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnWeekStart, new Dictionary<string, object>());
             return _days[_currentDayIndex].GetNextEvent();
         }
 
@@ -109,6 +110,14 @@ namespace VTuber.ScheduleSystem.Schedule
                 {
                     { "DayIndex", _currentDayIndex },
                 });
+            if (_currentDayIndex == 6)
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnWeekEnd,
+                    new Dictionary<string, object>()
+                    {
+                        { "DayIndex", _currentDayIndex },
+                    });
+            }
             VDebug.Log("<color=green>Day " + _currentDayIndex + " ended.</color>");
             _currentDayIndex++;
         }

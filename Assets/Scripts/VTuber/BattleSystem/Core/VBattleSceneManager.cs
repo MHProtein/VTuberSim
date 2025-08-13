@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Relic;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -18,7 +20,10 @@ namespace VTuber.BattleSystem.Core
         {
             base.Awake();
             
-            VResourcesLoader loader = new VResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+            VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
+                Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             character = new VCharacter(_characterConfiguration);
             var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
@@ -44,7 +49,8 @@ namespace VTuber.BattleSystem.Core
         public void InitializeBattle()
         {
             //battleRoot.SetActive(true);
-            _battle.InitializeBattle(character.AttributeManager, character.CardLibrary, 10, 0, 0);
+            _battle.InitializeBattle(character.AttributeManager,
+                character.CardLibrary, 10, 0, new List<int> {2, 6, 2}, 0, 0, new List<VBattleRelic>());
         }
 
         protected override void Start()

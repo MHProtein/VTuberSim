@@ -3,6 +3,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Character.Attributes;
+using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Core.ScriptSystem
@@ -20,6 +21,9 @@ namespace VTuber.Core.ScriptSystem
         
         public VPhase CurrentPhase => _currentPhase;
         private VPhase _currentPhase;
+
+        public List<uint> EventList => _configuration.eventIDs;
+        public List<uint> StreamEventList => _configuration.streamEventIDs;
 
         public VScript(VScriptConfiguration configuration)
         {
@@ -39,13 +43,9 @@ namespace VTuber.Core.ScriptSystem
             foreach (var phase in Phases)
             {
                 if(phase.IsInPhase(weekIndex))
-                    events.AddRange(phase.GetSpecialEventData());
+                    events.AddRange(phase.GetSpecialEventData(weekIndex));
             }
             return events;
-        }
-
-        public void OnEventExecuted(VScheduleEvent e)
-        {
         }
 
         public VScheduleEvent NextWeek(int weekIndex)
@@ -72,6 +72,13 @@ namespace VTuber.Core.ScriptSystem
                         + highestMembershipCount * _configuration.membershipCoefficient);
             
             var scoreLevel = _configuration.scoreLevels.Find(level => score >= level.low && score <= level.high);
+            VDebug.Log("歌力： " + singingAbility);
+            VDebug.Log("游戏力： " + gamingAbility);
+            VDebug.Log("杂谈力： " + chattingAbility);
+            VDebug.Log("关注人数： " + follower);
+            VDebug.Log("最高舰长数： " + highestMembershipCount);
+            VDebug.Log("分数： " + score);
+            VDebug.Log("等级： " + scoreLevel);
             return new VScoreResult
             {
                 score = score,

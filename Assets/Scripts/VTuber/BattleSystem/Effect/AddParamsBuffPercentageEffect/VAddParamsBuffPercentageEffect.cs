@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using Spire.Xls;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
@@ -6,7 +7,7 @@ using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Effect
 {
-    public class VAddParamsBuffPercentageEffect : VEffect, IVValuePreview
+    public class VAddParamsBuffPercentageEffect : VEffect
     {        
         private readonly uint _buffID;
         private readonly VUpgradableValue<float> _percentage;
@@ -15,6 +16,18 @@ namespace VTuber.BattleSystem.Effect
         {
             _buffID = buffID;
             _percentage = new VUpgradableValue<float>(percentage, upgradedPercentage);
+        }
+        
+        public override void Upgrade()
+        {
+            base.Upgrade();
+            _percentage.Upgrade();
+        }
+        
+        public override void Downgrade()
+        {
+            base.Downgrade();
+            _percentage.Downgrade();
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
@@ -41,14 +54,9 @@ namespace VTuber.BattleSystem.Effect
             }
         }
 
-        public int GetValue(VBattle battle)
+        public override string GetValue()
         {
-            if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
-            {
-                return (int)((_percentage.Value) * buff.Value);
-            }
-
-            return 0;
+            return (int)(_percentage.Value * 100) + "%";
         }
     }
 }

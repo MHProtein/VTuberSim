@@ -1,0 +1,26 @@
+title: Work1
+position: -183,-79
+---
+Me: 找份工作赚点米吧...
+:
+
+->搬砖 金钱+60，体力-10
+    <<ApplyEffect Event 5 60>>
+    <<ApplyEffect Event 0 40>>
+-> 金钱+30，获得一张卡牌，体力-10
+    <<ApplyEffect Event 5 30>>
+->游戏代肝 金钱+100，体力-15
+    <<ApplyEffect Event 5 100>>
+===
+title: Edit
+position: -183,-79
+---
+Me: 昨天的直播有一段挺有趣的。
+Me:现在把他切出来吧。
+:剪辑切片中...
+-> 粉丝+100，金钱+15
+    <<ApplyEffect Event 15 100>>
+    <<ApplyEffect Event 23>>
+
+
+===

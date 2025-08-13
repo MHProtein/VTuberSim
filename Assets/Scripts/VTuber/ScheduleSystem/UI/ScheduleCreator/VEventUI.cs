@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PrimeTween;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -80,7 +81,6 @@ namespace VTuber.ScheduleSystem.UI
 
         public void Initialize(VScheduleEvent e, VScheduleSlot slot)
         {
-            
             _event = e;
             icon.sprite = VRaisingUI.Instance.GetIcon(e.Icon);
             background.color = e.BackgroundColor;
@@ -89,7 +89,7 @@ namespace VTuber.ScheduleSystem.UI
             background.transform.localScale = Vector3.zero;
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
             Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
-
+            
             if(slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
             {
                 SetNewParents(parents, transformParent, position, false);
@@ -112,6 +112,11 @@ namespace VTuber.ScheduleSystem.UI
             Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
 
             transform.SetAsLastSibling();
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>()
+            {
+                { "Event", _event }
+            });
         }
         
         public void SetParentBeforeDrag()
@@ -124,8 +129,13 @@ namespace VTuber.ScheduleSystem.UI
             {
                 parent.SetItem(this);
             }
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+            {
+                { "Event", _event }
+            });
         }
-        
+
         public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position, bool shouldTween)
         {
             parentBeforeDrag = parentSlots;
@@ -144,6 +154,11 @@ namespace VTuber.ScheduleSystem.UI
             }
             transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
             //transform.position = position;
+            if(!_event.IsSpecialEvent)
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+                {
+                    { "Event", _event }
+                });
         }
         
         public bool TryPlaceEvent(List<RaycastResult> results)
@@ -230,6 +245,11 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     Destroy(gameObject);
                 });
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+            {
+                { "Event", _event }
+            });
         }
         
         public void OnPointerEnter(PointerEventData eventData)
@@ -260,6 +280,11 @@ namespace VTuber.ScheduleSystem.UI
                     parent.RemoveItem();
                 }
                 transform.SetAsLastSibling();
+                
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>()
+                {
+                    { "Event", _event }
+                });
             }
         }
         

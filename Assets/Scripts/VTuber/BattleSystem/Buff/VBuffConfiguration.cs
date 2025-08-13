@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.Buff
         Permanent,
         Persistent,
     }
-    
+
     public class VBuffHeaderIndex
     {
         public const int Id = 0;
@@ -34,6 +34,7 @@ namespace VTuber.BattleSystem.Buff
         public const int E5Param = 14;
     }
     
+    //Buff 的配置数据通过 VBuffConfiguration 存储，并延迟用于创建实例
     public class VBuffConfiguration
     {
         public uint id;
@@ -44,7 +45,8 @@ namespace VTuber.BattleSystem.Buff
         public int latency = 0;
         
         public List<VEffectItem> effectItems;
-
+            
+        // 解析表格数据构建配置
         public VBuffConfiguration(CellRange row)
         {
             id = Convert.ToUInt32(row.Columns[VBuffHeaderIndex.Id].Value);
@@ -54,6 +56,7 @@ namespace VTuber.BattleSystem.Buff
             stackable =  Convert.ToInt32(row.Columns[VBuffHeaderIndex.Stackable].Value) == 1;
             effectItems = new List<VEffectItem>();
             latency = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Latency].Value);
+            // 每两个字段为一组：EffectID + 参数
             for (int i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E5Param; i += 2)
             {               
                 var effectIDStr = row.Columns[i].Value;
@@ -61,6 +64,7 @@ namespace VTuber.BattleSystem.Buff
                     continue;
                 uint effect = Convert.ToUInt32(effectIDStr);
                 
+                //每个 Buff 可绑定多个效果，通过 VEffectItem 创建出 VEffect
                 effectItems.Add(new VEffectItem
                 {
                     id = effect,
@@ -69,7 +73,7 @@ namespace VTuber.BattleSystem.Buff
                 });
             }
         }
-
+        // 创建Buff实例
         public VBuff CreateBuff()
         {
             return new VBuff(this, effectItems.Select(item => item.CreateEffect()).ToList());

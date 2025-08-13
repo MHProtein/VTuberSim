@@ -6,9 +6,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
+using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using Yarn.Unity;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {

@@ -10,7 +10,6 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingReplaceCardEffect : VRaisingEffect
     {
-        
         private VCardCondition _condition;
         private VCharacter _character;
         private VCard cardToReplace;
@@ -35,7 +34,16 @@ namespace VTuber.Core.RaisingEffect
                 {"Action", new Action<VCard>(ReplaceCard)}
             });
         }
-        
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
+        }
+
         public void ReplaceCard(VCard selectedCard)
         {
             _character.CardLibrary.ReplaceCard(cardToReplace, selectedCard);

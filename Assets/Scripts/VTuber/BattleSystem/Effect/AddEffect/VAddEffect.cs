@@ -5,7 +5,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
-    public class VAddEffect : VEffect, IVValuePreview
+    public class VAddEffect : VEffect
     {
         public string AttributeName => _configuration.attributeName;
         private VUpgradableValue<int> _addValue;
@@ -14,7 +14,7 @@ namespace VTuber.BattleSystem.Effect
         {
             _configuration = configuration;
             
-            _addValue = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
+            _addValue = new VUpgradableValue<int>(int.Parse(parameter), int.Parse(upgradedParameter));
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
@@ -29,9 +29,21 @@ namespace VTuber.BattleSystem.Effect
             }
         }
 
-        public int GetValue(VBattle battle)
+        public override void Upgrade()
         {
-            return _addValue.Value;
+            base.Upgrade();
+            _addValue.Upgrade();
+        }
+        
+        public override void Downgrade()
+        {
+            base.Downgrade();
+            _addValue.Downgrade();
+        }
+
+        public override string GetValue()
+        {
+            return _addValue.Value.ToString();
         }
     }
 }

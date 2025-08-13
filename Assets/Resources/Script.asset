@@ -22,7 +22,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   cardIDs: 
-  eventIDs: 
+  eventIDs: 000000000100000002000000030000000400000005000000
+  streamEventIDs: 000000000100000002000000
   abilityCoefficient: 1
   followerCoefficient: 1
   membershipCoefficient: 1
@@ -30,15 +31,13 @@ MonoBehaviour:
   phases:
   - phaseName: Phase1
     description: asdfasdf
-    startEventWeekIndex: 0
-    startEventType: 1
+    startEventWeekIndex: 1
+    startEventType: 3
     startEventID: 9
-    endEventWeekIndex: 0
+    endEventWeekIndex: 1
     endEventIDs: 030000000400000005000000
     specialEventData:
-    - weekIndex: 0
-      dayIndex: 2
-      timeOfDay: 0
+    - timeOfDay: 0
       eventType: 0
       eventID: 0
       phase:
@@ -53,15 +52,13 @@ MonoBehaviour:
       isPhaseStart: 0
   - phaseName: Phase2
     description: 
-    startEventWeekIndex: 1
+    startEventWeekIndex: 2
     startEventType: 1
     startEventID: 10
-    endEventWeekIndex: 1
+    endEventWeekIndex: 2
     endEventIDs: 060000000700000008000000
     specialEventData:
-    - weekIndex: 0
-      dayIndex: 2
-      timeOfDay: 0
+    - timeOfDay: 0
       eventType: 0
       eventID: 0
       phase:

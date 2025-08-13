@@ -246,6 +246,11 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
+            foreach (var card in _handSlotsCards)
+            {
+                Destroy(card.gameObject);
+            }
+            _handSlotsCards.Clear();
             SetBattleUIScale(1.0f);
             SetTargetPopularity(messagedict["TargetPopularity"] as int? ?? 0);
         }

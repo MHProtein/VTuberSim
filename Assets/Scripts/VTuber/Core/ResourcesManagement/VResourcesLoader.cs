@@ -8,44 +8,64 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.EventSystem.Events;
+using VTuber.Relic;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
+using VCardHeaderIndex = VTuber.BattleSystem.Card.VCardHeaderIndex;
 
 namespace VTuber.Character
 {
     public class VResourcesLoader
     {
-        private readonly string _xlsxPath;
+        private readonly string _cardPath;
+        private readonly string _raisingPath;
+        private readonly string _relicsPath;
+        private readonly string _coopPath;
 
-        public VResourcesLoader(string xlsxPath)
+        public VResourcesLoader(string cardPath, string raisingPath, string relicsPath, string coopPath)
         {
-            _xlsxPath = xlsxPath;
+            _cardPath = cardPath;
+            _raisingPath = raisingPath;
+            _relicsPath = relicsPath;
+            _coopPath = coopPath;
         }
 
         public List<VCardConfiguration> Load()
         {
-            var workbook = new Workbook();
-            workbook.LoadFromFile(_xlsxPath);
+            var cardWb = new Workbook();
+            var raisingWb = new Workbook();
+            var relicsWb = new Workbook();
+            var coopWb = new Workbook();
+            cardWb.LoadFromFile(_cardPath);
+            raisingWb.LoadFromFile(_raisingPath);
+            relicsWb.LoadFromFile(_relicsPath);
+            coopWb.LoadFromFile(_coopPath);
 
-            LoadConditions(workbook);
-            LoadEffects(workbook);
-            LoadBuffs(workbook);
-            LoadCardConditions(workbook);
-            LoadPhaseEndingCondition(workbook);
-            LoadRaisingEffects(workbook);
-            LoadDialogueEvents(workbook);
-            LoadStreamEvents(workbook);
-            return LoadCards(workbook);
+            LoadConditions(cardWb);
+            LoadEffects(cardWb);
+            LoadBuffs(cardWb);
+            LoadCardConditions(raisingWb);
+            LoadPhaseEndingCondition(raisingWb);
+            LoadPlacingConditions(raisingWb);
+            LoadRaisingEffects(raisingWb);
+            LoadDialogueEvents(raisingWb);
+            LoadStreamEvents(raisingWb);
+            LoadRelicConditions(relicsWb);
+            LoadRelics(relicsWb);
+            LoadCoopEvents(coopWb);
+            return LoadCards(cardWb);
         }
 
         private Worksheet Sheet(Workbook wb, string name)
         {
             var sheet = wb.Worksheets[name];
             if (sheet == null)
-                throw new FileNotFoundException($"Worksheet '{name}' not found in {_xlsxPath}");
+                throw new FileNotFoundException($"Worksheet '{name}' not found in {_cardPath}");
             return sheet;
         }
 
@@ -90,15 +110,6 @@ namespace VTuber.Character
 
             VResourcesManager.Instance.SetEffectConfigurations(list);
         }
-
-
-
-        // void apply(int effectID, string, )
-        // {
-        //     effectID.apply()
-        // }
-        
-        
 
         private void LoadBuffs(Workbook wb)
         {
@@ -189,6 +200,30 @@ namespace VTuber.Character
             VResourcesManager.Instance.SetCardConditions(list);
         }
 
+        public void LoadPlacingConditions(Workbook wb)
+        {
+            var sheet = Sheet(wb, "PlacingConditions");
+            var list = new List<VPlacingCondition>();
+            
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VPlacingConditionHeaderIndex.Type].Value;
+                if(row.Columns[VPlacingConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var conditionType = Type.GetType("VTuber.EventSystem.Events." + typeName.Trim());
+                if (conditionType == null)
+                {
+                    VDebug.LogError($"Placing Condition type {typeName} not found.");
+                    continue;
+                }
+                var condition = (VPlacingCondition)Activator.CreateInstance(conditionType, row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetPlacingConditon(list);
+        }
+
         public void LoadPhaseEndingCondition(Workbook wb)
         {
             var sheet = Sheet(wb, "PhaseEndingConditions");
@@ -245,6 +280,74 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetStreamEventConfigurations(list);
+        }
+        
+        public void LoadRelicConditions(Workbook wb)
+        {
+            var sheet = Sheet(wb, "RaisingRelicConditions");
+            
+            var list = new List<VRaisingRelicCondition>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VRaisingRelicConditionHeaderIndex.Type].Value;
+                if(row.Columns[VRaisingRelicConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var conditionType = Type.GetType("VTuber.Relic." + typeName.Trim());
+                if (conditionType == null)
+                {
+                    VDebug.LogError($"Card Condition type {typeName} not found.");
+                    continue;
+                }
+                var condition = (VRaisingRelicCondition)Activator.CreateInstance(conditionType, row);
+                list.Add(condition);
+            }
+
+            VResourcesManager.Instance.SetRelicConditions(list);
+        }
+        
+        public void LoadRelics(Workbook wb)
+        {
+            var sheet = Sheet(wb, "Relics");
+            var list = new List<VRelicConfiguration>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VRelicHeaderIndex.Type].Value;
+                if(row.Columns[VRelicHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var type = Type.GetType("VTuber.Relic." + typeName.Trim() + "Configuration");
+                if (type == null)
+                {
+                    VDebug.LogError($"Card Condition type {typeName} not found.");
+                    continue;
+                }
+                var relic = (VRelicConfiguration)Activator.CreateInstance(type, row);
+                list.Add(relic);
+            }
+
+            VResourcesManager.Instance.SetRelics(list);
+        }
+
+        public void LoadCoopEvents(Workbook wb)
+        {
+            var sheet = Sheet(wb, "CoopEvents");
+            var list = new List<VCoopEvent>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VRelicHeaderIndex.Type].Value;
+                if(row.Columns[VCoopEventHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var coopEvent = new VCoopEvent(row);
+                list.Add(coopEvent);
+            }
+
+            VResourcesManager.Instance.SetCoopEvents(list);
+            
         }
         
     }

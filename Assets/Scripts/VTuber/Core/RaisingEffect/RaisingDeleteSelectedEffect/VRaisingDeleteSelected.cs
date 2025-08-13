@@ -5,13 +5,13 @@ using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 
-namespace VTuber.Core.RaisingEffect.RaisingDeleteSelectedEffect
+namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingDeleteSelected : VRaisingEffect
     {
         private VCardCondition _condition;
         private VCharacter _character;
-        public VRaisingDeleteSelected(RaisingDeleteSelectedConfiguration configuration) : base(configuration)
+        public VRaisingDeleteSelected(VRaisingDeleteSelectedConfiguration configuration) : base(configuration)
         {
             _condition = configuration.Condition;
         }
@@ -20,11 +20,20 @@ namespace VTuber.Core.RaisingEffect.RaisingDeleteSelectedEffect
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>()
             {
-                {"Action", new Action<VCard>(ReplaceCard)}
+                {"Action", new Action<VCard>(DeleteCard)}
             });
         }
-        
-        public void ReplaceCard(VCard selectedCard)
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
+        }
+
+        public void DeleteCard(VCard selectedCard)
         {
             _character.CardLibrary.RemoveCard(selectedCard);
             

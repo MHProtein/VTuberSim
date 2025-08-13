@@ -1,8 +1,10 @@
-﻿using VTuber.Character;
+﻿using System.Collections.Generic;
+using VTuber.Character;
+using VTuber.Core.EventCenter;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingEffect
+    public abstract class VRaisingEffect
     {
         protected VRaisingEffectConfiguration _configuration;
         
@@ -14,10 +16,13 @@ namespace VTuber.Core.RaisingEffect
         {
             _configuration = configuration;
         }
-            
-        public virtual void ApplyEffect(VCharacter character)
-        {
-            
-        }
+
+
+        public abstract void ApplyEffect(VCharacter character);
+
+        public abstract void Upgrade();
+
+        public abstract void DownGrade();
+
     }
 }

@@ -2,12 +2,48 @@
 using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
+using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
+using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
 {
+    public class VCharacterRelicManager
+    {
+        public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
+        private readonly VRaisingRelicManager _raisingRelicManager;
+        
+        private List<VBattleRelic> _battleRelics;
+
+        public VCharacterRelicManager(VCharacter character)
+        {
+            _battleRelics = new List<VBattleRelic>();
+            _raisingRelicManager = new VRaisingRelicManager(character);
+        }
+
+        public List<VBattleRelic> GetBattleRelics()
+        {
+            return _battleRelics;
+        }
+
+        public void AddRelic(VRelic relic)
+        {
+            if (relic is VBattleRelic battleRelic)
+            {
+                _battleRelics.Add(battleRelic);
+            }
+            else
+            {
+                _raisingRelicManager.AddRelic(relic as VRaisingRelic);
+            }
+            VDebug.Log("Added Relic " + relic.GetRelicName());
+            
+        }
+    }
+    
     public class VCharacter
     {
         public string Name { get; set; }
@@ -22,17 +58,25 @@ namespace VTuber.Character
 
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;
-        private Dictionary<VScheduleEventType, List<uint>> _completedEventIDs;
+        private Dictionary<VEventType, List<uint>> _completedEventIDs;
+
+        public VCharacterRelicManager CharacterRelicManager => _characterRelicManager;
+        private VCharacterRelicManager _characterRelicManager;
+        
+        public VCooperatorManager CooperatorManager => _cooperatorManager;
+        private VCooperatorManager _cooperatorManager;
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
+            _cooperatorManager = new VCooperatorManager();
             InitializeAttributes(characterConfig);
-            _completedEventIDs = new Dictionary<VScheduleEventType, List<uint>>();
-            _completedEventIDs[VScheduleEventType.Stream] = new List<uint>();
-            _completedEventIDs[VScheduleEventType.Recovery] = new List<uint>();
-            _completedEventIDs[VScheduleEventType.Practice] = new List<uint>();
-            _completedEventIDs[VScheduleEventType.Coop] = new List<uint>();
+            _characterRelicManager = new VCharacterRelicManager(this);
+            _completedEventIDs = new Dictionary<VEventType, List<uint>>();
+            _completedEventIDs[VEventType.Stream] = new List<uint>();
+            _completedEventIDs[VEventType.Recovery] = new List<uint>();
+            _completedEventIDs[VEventType.Practice] = new List<uint>();
+            _completedEventIDs[VEventType.Coop] = new List<uint>();
         }
         
         public void OnEnable()
@@ -143,8 +187,8 @@ namespace VTuber.Character
                     characterConfig.followerCountMinValue));
             
             AttributeManager.AddAttribute("CAMembershipCount",
-                new VCharacterAttribute(characterConfig.membershipCountConfiguration,
-                    characterConfig.membershipCountInitialValue, 
+                new VMembershipCountAttribute(characterConfig.membershipCountConfiguration,
+                    characterConfig.membershipCountInitialValue, characterConfig.membershipBuffs,
                     VRaisingEventKey.OnMemberCountChanged, 
                     characterConfig.membershipCountMaxValue == -1 ? int.MaxValue : characterConfig.membershipCountMaxValue,
                     characterConfig.membershipCountMinValue));
@@ -187,7 +231,7 @@ namespace VTuber.Character
             _completedEventIDs[e.Type].Add(e.EventID);
         }
         
-        public bool HasCompletedEvent(VScheduleEventType type, uint eventID)
+        public bool HasCompletedEvent(VEventType type, uint eventID)
         {
             return _completedEventIDs[type].Contains(eventID);
         }
