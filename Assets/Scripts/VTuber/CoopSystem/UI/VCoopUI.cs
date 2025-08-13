@@ -23,6 +23,8 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnCooperatorAdded, OnCooperatorAdded);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnCooperatorRemoved, OnCooperatorRemoved);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnCooperatorValueUpdated, OnCooperatorValueUpdated);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSetCoopUpgradeEvent, OnSetCoopUpgradeEvent);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnFinishScheduleCreationOrModification, OnFinishScheduleCreationOrModification);
         }
 
         protected override void OnDisable()
@@ -31,8 +33,32 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnCooperatorAdded, OnCooperatorAdded);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnCooperatorRemoved, OnCooperatorRemoved);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnCooperatorValueUpdated, OnCooperatorValueUpdated);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSetCoopUpgradeEvent, OnSetCoopUpgradeEvent);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnFinishScheduleCreationOrModification, OnFinishScheduleCreationOrModification);
+        }
+        
+        
+        private void OnFinishScheduleCreationOrModification(Dictionary<string, object> messagedict)
+        {
+            foreach (var ui in uis)
+            {
+                ui.ClearUpgradeEvent();
+            }
+        }
+        
+        private void OnSetCoopUpgradeEvent(Dictionary<string, object> messagedict)
+        {
+            var cooperator = messagedict["Cooperator"] as VCooperator;
+            var ui = uis.Find(x => x.Id == cooperator.Id);
+            ui.SetUpgradeEvent(cooperator.UpgradeEvent);
         }
 
+/* <<<<<<<<<<<<<<  ✨ Windsurf Command ⭐ >>>>>>>>>>>>>>>> */
+        /// <summary>
+        /// Handles the event when a cooperator is removed from the cooperator manager.
+        /// </summary>
+        /// <param name="messagedict">The dictionary containing the removed cooperator.</param>
+/* <<<<<<<<<<  13f9513c-050d-4730-ace0-091df801c24b  >>>>>>>>>>> */
         private void OnCooperatorRemoved(Dictionary<string, object> messagedict)
         {
             var cooperator = messagedict["Cooperator"] as VCooperator;
@@ -50,6 +76,7 @@ namespace VTuber.CoopSystem.UI
 
         private void OnCooperatorAdded(Dictionary<string, object> messagedict)
         {
+            VDebug.Log("OnCooperatorAdded");;
             var cooperator = messagedict["Cooperator"] as VCooperator;
             GameObject cooperatorGo = Instantiate(cooperatorPrefab, transform);
             var ui = cooperatorGo.GetComponent<VCooperatorUI>();

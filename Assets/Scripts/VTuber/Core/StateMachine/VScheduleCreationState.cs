@@ -1,4 +1,5 @@
-﻿using VTuber.BattleSystem.Core;
+﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.UI;
@@ -20,6 +21,7 @@ namespace VTuber.Core.StateMachine
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete((() =>
             {
                 stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script, stateMachine.WeekIndex);
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToScheduleCreation, new Dictionary<string, object>());
             }));
         }
 

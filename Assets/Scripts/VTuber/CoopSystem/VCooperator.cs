@@ -5,9 +5,12 @@ using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
+using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.ScheduleSystem.Core;
+using VTuber.ScheduleSystem.Events;
 using Random = UnityEngine.Random;
 
 namespace VTuber.CoopSystem
@@ -33,7 +36,7 @@ namespace VTuber.CoopSystem
         public uint id;
         public int unlockLevel;
         public float probability;
-        public List<VRaisingEffect> effects;
+        public List<VRaisingEffect>  effects;
         public List<VEventType> eventTypes;
 
         public VCoopEvent(CellRange row)
@@ -78,6 +81,11 @@ namespace VTuber.CoopSystem
         private int _currentLevelIndex;
         private int _coopValue;
         private List<VCoopEvent> _coopEvents;
+
+        private bool _hasExecutedUpgradeEventThisWeek;
+        
+        public VScheduleEvent UpgradeEvent => _upgradeEvent;
+        private VScheduleEvent _upgradeEvent;
         
         public VCooperator(VCooperatorConfiguration configuration)
         {
@@ -85,6 +93,84 @@ namespace VTuber.CoopSystem
             this.configuration = configuration;
             _coopEvents = this.configuration.CoopEvents.Select(@event => VResourcesManager.Instance.GetCoopEventByID(@event)).ToList();
         }
+
+        public void OnEnable()
+        {
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnWeekStart, OnWeekStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreation);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+        }
+
+        public void OnDisable()
+        {
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnWeekStart, OnWeekStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreation);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+        }
+        
+        private void OnSwitchToScheduleCreation(Dictionary<string, object> messagedict)
+        { 
+            _hasExecutedUpgradeEventThisWeek = false;
+            if (_upgradeEvent != null)
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSetCoopUpgradeEvent, new Dictionary<string, object>()
+                {
+                    {"Cooperator", this},
+                });
+            }
+        }
+
+        private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
+        {
+            if (!_hasExecutedUpgradeEventThisWeek && _upgradeEvent != null)
+            {      
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSetCoopUpgradeEvent, new Dictionary<string, object>()
+                {
+                    {"Cooperator", this},
+                });
+            }
+        }
+        
+        private void OnWeekStart(Dictionary<string, object> messagedict)
+        {
+        }
+        
+        private void OnEventEnd(Dictionary<string, object> messagedict)
+        {
+            if (messagedict["Event"] == _upgradeEvent)
+            {
+                _hasExecutedUpgradeEventThisWeek = true;
+                _upgradeEvent = null;
+            }
+        }
+        
+        public void AddCoopValue(int value)
+        {
+            _coopValue += value;
+            VDebug.Log("CoopValue: " + _coopValue);
+            if (_coopValue - CurrentCoopLevel.to >= 0)
+            {
+                if (CurrentCoopLevel.eventType == VEventType.Stream)
+                    _upgradeEvent = VResourcesManager.Instance.CreateStreamEventByID(CurrentCoopLevel.upgradeEventID);
+                else
+                    _upgradeEvent = VResourcesManager.Instance.CreateDialogueEventByID(CurrentCoopLevel.upgradeEventID);
+            }
+        }
+        
+        public void UpgradeLevel()
+        {
+            _currentLevelIndex = Mathf.Clamp(_currentLevelIndex + 1, 0, configuration.CoopLevels.Count - 1);
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCooperatorValueUpdated, new Dictionary<string, object>()
+            {
+                {"Cooperator", this},
+                {"Level", _currentLevelIndex}
+            });
+        }
+
+        #region CoopEventGeneration
         
         public List<VCoopEventItem> GenerateCoopEventPositions(List<Vector2Int> occupiedPositions)
         {
@@ -166,5 +252,7 @@ namespace VTuber.CoopSystem
             }
             return timeProbabilities.Count - 1;
         }
+        
+        #endregion
     }
 }

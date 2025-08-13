@@ -7,6 +7,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.CoopSystem;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
@@ -19,8 +20,9 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class TestManager : VMonoBehaviour
+    public class VGameManager : VMonoBehaviour
     {
+        [SerializeField] private bool dev;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
         [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
         
@@ -50,10 +52,21 @@ namespace VTuber.BattleSystem.Core
         protected override void Awake()
         {
             base.Awake();
-            VResourcesLoader loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
-                Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
+            VResourcesLoader loader;
+            if (dev)
+            {
+                loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Raising.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Relics.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Coop.xlsx"));
+            }
+            else
+            {
+                loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
+                    Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
+            }
             _script = new VScript(scriptConfiguration);
             
             _character = new VCharacter(_characterConfiguration);
@@ -72,10 +85,10 @@ namespace VTuber.BattleSystem.Core
             }
             _character.CardLibrary.AddCards(cards);
 
-            foreach (var configuration in cooperatorConfigurations)
-            {
-                _character.CooperatorManager.AddCooperator(configuration);
-            }
+            
+            scheduleUI.Initialize(_character);
+            
+            
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
                 _character, _script);
@@ -111,6 +124,11 @@ namespace VTuber.BattleSystem.Core
             scheduleCreator.InitializeCreator(eventConfigs);
             
             _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
+            
+            foreach (var configuration in cooperatorConfigurations)
+            {
+                _character.CooperatorManager.AddCooperator(configuration);
+            }
         }
         
         public void ModifySchedule()
@@ -169,6 +187,8 @@ namespace VTuber.BattleSystem.Core
                     }
                 }
             }
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnFinishScheduleCreationOrModification, new Dictionary<string, object>());
 
             if (_stateMachine.CurrentState.StateType == VStateType.ScheduleCreation)
             {

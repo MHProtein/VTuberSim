@@ -12,14 +12,26 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
     [Serializable]
     public class VSpecialEventData
     {
-        public int weekIndex;
-        public int dayIndex;
+        public int WeekIndex => weekIndex - 1;
+        protected int weekIndex;
+        
+        public int DayIndex => dayIndex - 1;
+        protected int dayIndex;
+        
         public TimeOfDay timeOfDay;
         public VEventType eventType;
         public uint eventID;
         public VPhase phase;
         public bool isPhaseStart;
+        
+        public void SetWeekDay(int weekIndex, int dayIndex)
+        {
+            this.weekIndex = weekIndex;
+            this.dayIndex = dayIndex;
+        }
+        
     }
+    
     [Serializable]
     public class VPhase
     {
@@ -50,21 +62,28 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
 
         public VPhase nextPhase;
         
-        public List<VSpecialEventData> GetSpecialEventData()
+        public List<VSpecialEventData> GetSpecialEventData(int weekIndex)
         {
             var list = new List<VSpecialEventData>();
 
-            list.AddRange(specialEventData);
+            foreach (var e in specialEventData)
+            {
+                if (e.WeekIndex == weekIndex)
+                {
+                    list.Add(e);
+                }
+            }
+
+            if(weekIndex != endEventWeekIndex - 1) return list;
             
             var endingEvent = new VSpecialEventData
             {
-                weekIndex = startEventWeekIndex,
-                dayIndex = 6,
                 timeOfDay = TimeOfDay.Morning,
                 eventType = VEventType.Stream,
                 eventID = _endEventID,
                 phase = this,
             };
+            endingEvent.SetWeekDay(endEventWeekIndex - 1, 7);
             list.Add(endingEvent);
             
             return list;
@@ -72,7 +91,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
 
         public bool IsInPhase(int weekIndex)
         {
-            if (weekIndex >= startEventWeekIndex && weekIndex <= endEventWeekIndex)
+            if (weekIndex >= startEventWeekIndex - 1 && weekIndex <= endEventWeekIndex - 1)
             {
                 return true;
             }

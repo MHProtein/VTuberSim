@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine.Serialization;
@@ -8,21 +9,26 @@ namespace VTuber.ScheduleSystem.Events
 {
     public class VStreamEventHeaderIndex
     {
-        public const int TurnCount = 9;
-        public const int Target = 10;
-        public const int InitialViewers = 11;
-        public const uint SuccessEvent = 12;
-        public const uint FailEvent = 13;
-        public const int PhaseEndingConditions = 14;
+        public const int TurnCount = 10;
+        public const int Target = 11;
+        public const int InitialViewers = 12;
+        public const int MainAbility = 13;
+        public const int AbilityTurns = 14;
+        public const uint SuccessEvent = 15;
+        public const uint FailEvent = 16;
+        public const int PhaseEndingConditions = 17;
     }
+    
     public class VStreamEventConfiguration : VScheduleEventConfiguration
     {
         public int initialTurnCount;
         public int targetPopularity;
         public int initialViewers;
-        public uint successEvent;
-        public uint failureEvent;
+        public int successEvent;
+        public int failureEvent;
         public bool isPhaseEndingEvent = false;
+        public int mainAttributeIndex;
+        public List<int> abilityTurnCounts;
         public List<VPhaseEndingCondition> phaseEndingConditions;
 
         public VStreamEventConfiguration(CellRange row) : base(row)
@@ -30,8 +36,15 @@ namespace VTuber.ScheduleSystem.Events
             initialTurnCount = int.Parse(row.Columns[VStreamEventHeaderIndex.TurnCount].Value);
             targetPopularity = int.Parse(row.Columns[VStreamEventHeaderIndex.Target].Value);
             initialViewers = int.Parse(row.Columns[VStreamEventHeaderIndex.InitialViewers].Value);
-            successEvent = uint.Parse(row.Columns[VStreamEventHeaderIndex.SuccessEvent].Value);
-            failureEvent = uint.Parse(row.Columns[VStreamEventHeaderIndex.FailEvent].Value);
+            
+            mainAttributeIndex = int.Parse(row.Columns[VStreamEventHeaderIndex.MainAbility].Value);
+            string abilityTurnsStr = row.Columns[VStreamEventHeaderIndex.AbilityTurns].Value;
+            abilityTurnCounts = abilityTurnsStr.Split(',').Select(int.Parse).ToList();
+
+            var successEventStr = row.Columns[VStreamEventHeaderIndex.SuccessEvent].Value;
+            var failureEventStr = row.Columns[VStreamEventHeaderIndex.FailEvent].Value;
+            successEvent = successEventStr.IsNullOrWhitespace() ? -1 : int.Parse(successEventStr);
+            failureEvent = failureEventStr.IsNullOrWhitespace() ? -1 : int.Parse(failureEventStr);
             phaseEndingConditions = new List<VPhaseEndingCondition>();
             string phaseEndingConditionsStr = row.Columns[VStreamEventHeaderIndex.PhaseEndingConditions].Value;
             if (!phaseEndingConditionsStr.IsNullOrWhitespace())

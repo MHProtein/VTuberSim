@@ -43,7 +43,7 @@ namespace VTuber.Core.ScriptSystem
             foreach (var phase in Phases)
             {
                 if(phase.IsInPhase(weekIndex))
-                    events.AddRange(phase.GetSpecialEventData());
+                    events.AddRange(phase.GetSpecialEventData(weekIndex));
             }
             return events;
         }

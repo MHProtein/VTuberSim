@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using VTuber.BattleSystem.Core;
 
 namespace VTuber.Core.EventCenter
@@ -57,6 +58,18 @@ namespace VTuber.Core.EventCenter
         OnCooperatorAdded = 38,
         OnCooperatorRemoved = 39,
         OnCooperatorValueUpdated = 40,
+        
+        OnEventUISelected = 41,
+        OnEventUIPlaced = 42,
+        
+        OnWeekStart = 43,
+        OnDayStart = 44,
+        
+        OnSwitchToScheduleCreation = 45,
+        OnSwitchToScheduleExecution = 46,
+        OnFinishScheduleCreationOrModification = 47,
+        
+        OnSetCoopUpgradeEvent = 48
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>

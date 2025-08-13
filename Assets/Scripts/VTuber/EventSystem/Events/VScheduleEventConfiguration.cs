@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
 using VTuber.Core.Foundation;
+using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.ScheduleSystem.Events
@@ -23,6 +27,7 @@ namespace VTuber.ScheduleSystem.Events
         public const int Cost = 6;
         public const int Icon = 7;
         public const int BackGroundColor = 8;
+        public const int PlacingCondition = 9;
     }
     
     public class VScheduleEventConfiguration
@@ -42,7 +47,7 @@ namespace VTuber.ScheduleSystem.Events
 
         public VEventCostType costType;
         public int cost;
-
+        public List<uint> placingConditions;
         public VScheduleEventConfiguration(CellRange row)
         {
             id = uint.Parse(row.Columns[VEventHeaderIndex.Id].Value);
@@ -53,6 +58,14 @@ namespace VTuber.ScheduleSystem.Events
             costType = Enum.Parse<VEventCostType>(row.Columns[VEventHeaderIndex.CostType].Value);
             cost = int.Parse(row.Columns[VEventHeaderIndex.Cost].Value);
             icon = row.Columns[VEventHeaderIndex.Icon].Value;
+            
+            string placingConditionsStr = row.Columns[VEventHeaderIndex.PlacingCondition].Value;
+            if (!placingConditionsStr.IsNullOrWhitespace())
+                placingConditions = placingConditionsStr.Split(',').Select(x => uint.Parse(x.Trim())).ToList();
+            else
+            {
+                placingConditions = new List<uint>();
+            }
             
             ColorUtility.TryParseHtmlString(row.Columns[VEventHeaderIndex.BackGroundColor].Value, 
                 out backgroundColor);
