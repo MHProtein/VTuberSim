@@ -187,8 +187,8 @@ namespace VTuber.Character
                     characterConfig.followerCountMinValue));
             
             AttributeManager.AddAttribute("CAMembershipCount",
-                new VCharacterAttribute(characterConfig.membershipCountConfiguration,
-                    characterConfig.membershipCountInitialValue, 
+                new VMembershipCountAttribute(characterConfig.membershipCountConfiguration,
+                    characterConfig.membershipCountInitialValue, characterConfig.membershipBuffs,
                     VRaisingEventKey.OnMemberCountChanged, 
                     characterConfig.membershipCountMaxValue == -1 ? int.MaxValue : characterConfig.membershipCountMaxValue,
                     characterConfig.membershipCountMinValue));

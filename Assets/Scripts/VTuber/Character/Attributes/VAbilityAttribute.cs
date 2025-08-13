@@ -10,22 +10,29 @@ using VTuber.Core.Foundation;
 namespace VTuber.Character.Attributes
 {
     [Serializable]
-    public struct VAbilityGainFromBattleRate
+    public struct VRangeValueMap<T>
     {
         [HorizontalGroup]
         public int from;
         [HorizontalGroup]
         public int to;
         [HorizontalGroup]
-        public float rate;
+        public T value;
+        
+        public bool IsInRange(int v)
+        {
+            if(to == -1)
+                return v >= from;
+            return v >= from && v <= to;
+        }
     }
     
     public class VAbilityAttribute : VCharacterAttribute
     {
         public readonly Color color;
-        private List<VAbilityGainFromBattleRate> _abilityGainFromBattleRates;
+        private List<VRangeValueMap<float>> _abilityGainFromBattleRates;
         public VAbilityAttribute(VCharacterAttributeConfiguration configuration, 
-            List<VAbilityGainFromBattleRate> abilityGainFromBattleRates, Color color, int initialValue, 
+            List<VRangeValueMap<float>> abilityGainFromBattleRates, Color color, int initialValue, 
             VRaisingEventKey eventKey = VRaisingEventKey.Default, int maxValue = Int32.MaxValue, 
             int minValue = 0, bool isPercentage = false)
             : base(configuration, initialValue, eventKey, maxValue, minValue, isPercentage)
@@ -84,7 +91,7 @@ namespace VTuber.Character.Attributes
                     
                     if(score >= rateItem.from && score <= to)
                     {
-                        int abilityGain = (int)(rateItem.rate * score);
+                        int abilityGain = (int)(rateItem.value * score);
                         AddAbility(abilityGain, false);
                         VDebug.Log($"Converted {score} to ability gain: {abilityGain}, now total: {Value}");
                         return;

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.BattleAttribute;
+using VTuber.BattleSystem.Buff;
 using VTuber.Character.Attribute;
+using VTuber.Character.Attributes;
 using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
@@ -79,6 +81,22 @@ namespace VTuber.Character
                     }
                     break;
             }
+        }
+
+        public List<VBuff> GetBuffs()
+        {
+            List<VBuff> buffs = new List<VBuff>();
+            if(TryGetAttribute("CAPressure", out var pressure))
+            {
+                buffs.Add((pressure as VPressureAttribute).GetBuff());
+            }
+
+            if (TryGetAttribute("CAMembershipCount", out var membership))
+            {
+                buffs.Add((membership as VMembershipCountAttribute).GetBuff());
+            }
+
+            return buffs;
         }
     }
 }

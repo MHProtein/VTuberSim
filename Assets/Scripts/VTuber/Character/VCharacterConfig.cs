@@ -48,14 +48,14 @@ namespace VTuber.Character
         [LabelText("最大值")]
         public int pressureMaxValue;
 
-        [PropertySpace(10)]
-        [LabelText("Config文件")]
-        public VCharacterAttributeConfiguration pressureConfiguration;
-
         [LabelText("压力Buff表")]
         [DictionaryDrawerSettings(KeyLabel = "BuffID", ValueLabel = "Layer",
             DisplayMode = DictionaryDisplayOptions.OneLine)]
-        public Dictionary<int, int> pressureBuffs = new Dictionary<int, int>();
+        public List<int> pressureBuffs = new List<int>();
+        
+        [PropertySpace(10)]
+        [LabelText("Config文件")]
+        public VCharacterAttributeConfiguration pressureConfiguration;
         
         // Singing Ability
         [HorizontalGroup("SingingGroup", Gap = 10)]
@@ -75,7 +75,7 @@ namespace VTuber.Character
         
         [LabelText("歌力颜色")][ColorPalette] public Color singingAbilityColor;
         
-        public List<VAbilityGainFromBattleRate> singingAbilityGainFromBattleRates;
+        public List<VRangeValueMap<float>> singingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -99,7 +99,7 @@ namespace VTuber.Character
         
         [LabelText("游戏力颜色")][ColorPalette] public Color gamingAbilityColor;
 
-        public List<VAbilityGainFromBattleRate> gamingAbilityGainFromBattleRates;
+        public List<VRangeValueMap<float>> gamingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -122,7 +122,7 @@ namespace VTuber.Character
         public int chattingAbilityMaxValue;
         
         [LabelText("杂谈力颜色")][ColorPalette] public Color chattingAbilityColor;
-        public List<VAbilityGainFromBattleRate> chattingAbilityGainFromBattleRates;
+        public List<VRangeValueMap<float>> chattingAbilityGainFromBattleRates;
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
@@ -283,6 +283,9 @@ namespace VTuber.Character
         [Header("")]
         [LabelText("最大值")]
         public int membershipCountMaxValue;
+        
+        [LabelText("舰长Buff表")]
+        public List<VRangeValueMap<uint>> membershipBuffs = new List<VRangeValueMap<uint>>();
 
         [PropertySpace(10)]
         [LabelText("Config文件")]
