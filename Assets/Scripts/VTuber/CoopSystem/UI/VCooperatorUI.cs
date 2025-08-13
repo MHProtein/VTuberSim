@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.UI;
 
@@ -16,6 +17,8 @@ namespace VTuber.CoopSystem.UI
         [SerializeField] private TMP_Text coopLevel;
         [SerializeField] private VScheduleSlot upgradeEventScheduleSlot;
         [SerializeField] private GameObject upgradeEventUIPrefab;
+        [SerializeField] protected GameObject itemDataPrefab;
+        [SerializeField] protected VScheduleCreatorSlot creatorSlot;
         
         private VEventUI _upgradeEventUI;
         
@@ -25,6 +28,17 @@ namespace VTuber.CoopSystem.UI
             pfp.sprite = cooperator.configuration.Icon;
             cooperatorName.text = cooperator.configuration.Name;
             coopLevel.text = cooperator.CurrentCoopLevel.levelName;
+            SetBaseCoopEvent(VResourcesManager.Instance.GetAllEventConfigurations()
+                .Find(x => x.id == cooperator.configuration.BaseCoopEvent));
+        }
+
+        public void SetBaseCoopEvent(VScheduleEventConfiguration eventData)
+        {
+            var eventObj = Instantiate(itemDataPrefab, creatorSlot.transform);
+            eventObj.transform.localPosition = Vector3.zero;
+            var eventUI = eventObj.GetComponent<VEventDataUI>();
+            eventUI.Initialize(eventData);
+            creatorSlot.SetItem(eventUI);
         }
 
         public void UpdateValue(VCooperator cooperator)
