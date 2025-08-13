@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingReplaceCardEffect : VRaisingEffect
+    public class VRaisingReplaceCardEffect : VRaisingCardEffect
     {
         private VCardCondition _condition;
         private VCharacter _character;
@@ -21,13 +21,7 @@ namespace VTuber.Core.RaisingEffect
         public override void ApplyEffect(VCharacter character)
         {
             _character = character;
-            List<VCard> cards = character.CardLibrary.GetCards().
-                Where(card => _condition.IsTrue(card)).ToList();
-            
-            if (cards.Count == 0)
-                return;
-            int index = Random.Range(0, cards.Count);
-            cardToReplace = cards[index];
+            cardToReplace = GetRandomCards(1, _condition).FirstOrDefault();
 
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>()
             {

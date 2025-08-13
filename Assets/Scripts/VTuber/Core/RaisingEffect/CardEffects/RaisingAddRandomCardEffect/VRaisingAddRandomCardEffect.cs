@@ -7,7 +7,7 @@ using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingAddRandomCardEffect : VRaisingEffect
+    public class VRaisingAddRandomCardEffect : VRaisingCardEffect
     {
         private VCardCondition _condition;
         public VRaisingAddRandomCardEffect(VRaisingAddRandomCardEffectConfiguration configuration) : base(configuration)
@@ -17,15 +17,10 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            var configs = VSingleton<VResourcesManager>.Instance.GetAllCardConfigurations().
-                Where(configuration => _condition.IsTrue(configuration)).ToList();
+            var card = GetRandomCards(1, _condition).FirstOrDefault();
             
-            if(configs.Count == 0)
-                return;
-            
-            var randomIndex = UnityEngine.Random.Range(0, configs.Count);
-            character.CardLibrary.AddCard(configs[randomIndex].CreateCard());
-            VDebug.Log("Added random card: " + configs[randomIndex].cardName);
+            character.CardLibrary.AddCard(card);
+            VDebug.Log("Added random card: " + card.CardName);
         }
 
         public override void Upgrade()

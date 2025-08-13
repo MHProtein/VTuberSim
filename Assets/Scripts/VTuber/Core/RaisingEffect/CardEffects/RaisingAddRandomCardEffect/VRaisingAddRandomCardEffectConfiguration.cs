@@ -1,26 +1,24 @@
 ﻿using System;
 using Spire.Xls;
 using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingAddSelectedFrom3EffectConfiguration : VRaisingEffectConfiguration
+    public class VRaisingAddRandomCardEffectConfiguration : VRaisingCardEffectConfiguration
     {
+        private readonly VCardCondition _condition;
         public VCardCondition Condition => _condition;
-        private VCardCondition _condition;
-        
-        public VRaisingAddSelectedFrom3EffectConfiguration(CellRange row) : base(row)
+        public VRaisingAddRandomCardEffectConfiguration(CellRange row) : base(row)
         {
-            
             _condition =
                 VResourcesManager.Instance.GetCardConditionByID(
                     Convert.ToUInt32(row.Columns[VRaisingEffectHeaderIndex.Condition].Value));
         }
 
-
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            return new VRaisingAddSelectedFrom3Effect(this);
+            return new VRaisingAddRandomCardEffect(this);
         }
     }
 }
