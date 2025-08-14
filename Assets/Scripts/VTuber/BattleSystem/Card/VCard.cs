@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.Utilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
@@ -99,10 +100,15 @@ namespace VTuber.BattleSystem.Card
                 des = des.Replace("X3", _effects[2].GetValue());
             if (des.Contains("X4"))
                 des = des.Replace("X4", _effects[3].GetValue());
-            if (des.Contains("NX1"))
-                des = des.Replace("NX1", _newEffects[0].GetValue());
-            if (des.Contains("NX2"))
-                des = des.Replace("NX2", _newEffects[1].GetValue());
+            
+            if (_isUpgraded && !_configuration.upgradeDescription.IsNullOrWhitespace())
+            {
+                des += "\n" + _configuration.upgradeDescription;
+                if (des.Contains("NX1"))
+                    des = des.Replace("NX1", _newEffects[0].GetValue());
+                if (des.Contains("NX2"))
+                    des = des.Replace("NX2", _newEffects[1].GetValue());
+            }
             return des;
         }
 

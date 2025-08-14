@@ -22,6 +22,7 @@ namespace VTuber.Core.RaisingEffect
 
         public override void DownGrade()
         {
+            
         }
     }
 }

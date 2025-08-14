@@ -104,6 +104,7 @@ namespace VTuber.BattleSystem.Card
         public string cardName;
 
         public string description;
+        public string upgradeDescription;
         public string liveType;
         public List<string> tags;
         
@@ -137,7 +138,10 @@ namespace VTuber.BattleSystem.Card
             
             id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value.Trim());
             cardName = row.Columns[VCardHeaderIndex.Name].Value.Trim();
-            description = row.Columns[VCardHeaderIndex.DescriptionInGame].Value.Trim();
+            var descriptions = row.Columns[VCardHeaderIndex.DescriptionInGame].Value.Trim().Split('$');
+            description = descriptions[0];
+            if(descriptions.Length > 1)
+                upgradeDescription = descriptions[1];
             rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value.Trim());
             cardType = row.Columns[VCardHeaderIndex.Type].Value.Trim();
             
