@@ -118,13 +118,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EventIcons_0
+      name: shopping
       rect:
         serializedVersion: 2
-        x: 850
-        y: 1541
-        width: 400
-        height: 164
+        x: 776
+        y: 1532
+        width: 530
+        height: 177
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -159,6 +159,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Contact
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 1179
+        width: 530
+        height: 177
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 464ca90c98149aa47b944cefbac218c6
+      internalID: 266400733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: out
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 836
+        width: 557
+        height: 181
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e88e48d9b4f1f54b956bced5b651e07
+      internalID: -1671327432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Assist
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 832
+        width: 520
+        height: 177
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3facd98e9e0114644a9f98c5778f0708
+      internalID: -749342483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -170,9 +233,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      EventIcons_0: -1105731912
+      Assist: -749342483
+      Contact: 266400733
       Practice: 91500968
       Recovery: -1487505022
+      out: -1671327432
+      shopping: -1105731912
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

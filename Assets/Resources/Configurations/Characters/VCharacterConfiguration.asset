@@ -20,7 +20,27 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: pressureBuffs
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Int32,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   staminaInitialValue: 100
   staminaMinValue: 0
   staminaMaxValue: 100
@@ -28,34 +48,42 @@ MonoBehaviour:
   pressureInitialValue: 1
   pressureMinValue: 1
   pressureMaxValue: 5
-  pressureBuffs: 0000000001000000020000000300000004000000
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
-  singingAbilityInitialValue: 200
+  singingAbilityInitialValue: 100
   singingAbilityMinValue: 0
-  singingAbilityMaxValue: -1
+  singingAbilityMaxValue: 3000
   singingAbilityColor: {r: 1, g: 0.12941177, b: 0.37647063, a: 1}
   singingAbilityGainFromBattleRates:
   - from: 0
+    to: 5000
+    rate: 0.005
+  - from: 5001
     to: -1
-    value: 0.18
+    rate: 0.001
   singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
-  gamingAbilityInitialValue: 300
+  gamingAbilityInitialValue: 100
   gamingAbilityMinValue: 0
-  gamingAbilityMaxValue: -1
+  gamingAbilityMaxValue: 3000
   gamingAbilityColor: {r: 0.29411766, g: 0.34509805, b: 1, a: 1}
   gamingAbilityGainFromBattleRates:
   - from: 0
+    to: 5000
+    rate: 0.005
+  - from: 5001
     to: -1
-    value: 0.7
+    rate: 0.001
   gamingAbilityConfiguration: {fileID: 11400000, guid: 9f3418b693f0bd74faf5ef1c80bcabc3, type: 2}
-  chattingAbilityInitialValue: 400
+  chattingAbilityInitialValue: 100
   chattingAbilityMinValue: 0
-  chattingAbilityMaxValue: -1
+  chattingAbilityMaxValue: 3000
   chattingAbilityColor: {r: 0.776, g: 0.651, b: 0.349, a: 1}
   chattingAbilityGainFromBattleRates:
   - from: 0
+    to: 5000
+    rate: 0.005
+  - from: 5001
     to: -1
-    value: 0.7
+    rate: 0.001
   chattingAbilityConfiguration: {fileID: 11400000, guid: 47886f19849f4124695d0c1850eaf5a3, type: 2}
   singingAbilityConversionRatioInitialValue: 1
   singingAbilityConversionRatioMinValue: 0
@@ -81,27 +109,23 @@ MonoBehaviour:
   chattingAbilityGainEfficiencyMinValue: 0
   chattingAbilityGainEfficiencyMaxValue: -1
   chattingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 478411c7b94b699408da8eb08cbbc77a, type: 2}
-  followerCountInitialValue: 0
+  followerCountInitialValue: 100
   followerCountMinValue: 0
   followerCountMaxValue: -1
   followerCountConfiguration: {fileID: 11400000, guid: c8b885d17b6be9949a31e594be5ccccd, type: 2}
-  membershipCountInitialValue: 10
+  membershipCountInitialValue: 0
   membershipCountMinValue: 0
   membershipCountMaxValue: -1
-  membershipBuffs:
-  - from: 0
-    to: -1
-    value: 14
   membershipCountConfiguration: {fileID: 11400000, guid: 4cb43862c41bf544093f4dd19cc1a990, type: 2}
-  followerToViewerRatioInitialValue: 10
+  followerToViewerRatioInitialValue: 1
   followerToViewerRatioMinValue: 0
   followerToViewerRatioMaxValue: -1
   followerToViewerRatioConfiguration: {fileID: 11400000, guid: a5f460326b6f9ed45b2015e071c4edbc, type: 2}
-  moneyInitialValue: 1000
+  moneyInitialValue: 100
   moneyMinValue: 0
   moneyMaxValue: -1
   moneyConfiguration: {fileID: 11400000, guid: ef98052a793634040af651ed3bf119ee, type: 2}
-  revenueShareRateInitialValue: 70
+  revenueShareRateInitialValue: 50
   revenueShareRateMinValue: 0
   revenueShareRateMaxValue: 100
   revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
