@@ -1,4 +1,5 @@
 ﻿using VTuber.Character;
+using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
 namespace VTuber.Core.RaisingEffect
@@ -13,7 +14,10 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            character.CharacterRelicManager.AddRelic(VResourcesManager.Instance.CreateRelicByID(_relicId));
+            character.CharacterRelicManager.AddRelic
+                (VResourcesManager.Instance.CreateRelicByID(_relicId));
+            
+            VDebug.Log("hihi");
         }
 
         public override void Upgrade()

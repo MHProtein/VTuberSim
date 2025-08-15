@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using PrimeTween;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -48,7 +49,7 @@ namespace VTuber.Core.StateMachine
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.EventSystemRoot.SetActive(false); 
-            _currentEvent.ExecuteCoopEvents(stateMachine.Character);
+             _currentEvent.ExecuteCoopEvents(stateMachine.Character);
             if (_currentEvent.FollowUpEvent is not null)
             {
                 Tween.Delay(0.2f, () =>
@@ -133,9 +134,8 @@ namespace VTuber.Core.StateMachine
             {
                 Tween.Delay(0.1f, () =>
                 {
-                    VDebug.Log(_currentEvent.Coordinate);
                     var staminaNotEnoughEvent = VResourcesManager.Instance.CreateDialogueEventByID(8);
-                    staminaNotEnoughEvent.SetDaySchedule(_currentEvent.DaySchedule, _currentEvent.Coordinate);
+                    staminaNotEnoughEvent.SetDaySchedule(e.DaySchedule, -1 * Vector2Int.one);
                     staminaNotEnoughEvent.Execute(stateMachine.Character);
                 });
             }

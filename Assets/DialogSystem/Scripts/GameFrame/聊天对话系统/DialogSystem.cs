@@ -58,6 +58,7 @@ public class DialogSystem : SingletonMono<DialogSystem>
         for (int i = 0; i < dialogs.Count; i++)
         {
             dialogsDic.Add(i, dialogs[i]);
+            dialogs[i].loaded = false;
         }
 
         //初始化选项按钮
@@ -143,7 +144,8 @@ public class DialogSystem : SingletonMono<DialogSystem>
             Dialog dialog = dialogsDic[id];
             dialog.index = 0;
             
-            dialog.InitDialog();
+            if(!dialog.loaded)
+                dialog.InitDialog();
             
             currentDialog = dialog;
             dialogsDic[id] = dialog;

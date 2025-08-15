@@ -19,7 +19,13 @@ namespace VTuber.EventSystem
         private VDialogueEvent _currentEvent;
         
         [SerializeField] private DialogSystem dialogueSystem;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            dialogueSystem.OnDialogFinished += OnDialogueComplete;
+        }
+
         public void InitializeEvent(VCharacter character, VDialogueEvent e)
         {
             _character = character;
@@ -28,7 +34,6 @@ namespace VTuber.EventSystem
             dialogueSystem.LoadDialog(int.Parse(e.dialogueNode));
             dialogueSystem.ShowMe(character);
             dialogueSystem.ContinueDialog();
-            dialogueSystem.OnDialogFinished += OnDialogueComplete;
         }
 
         protected override void OnEnable()
