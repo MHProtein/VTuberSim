@@ -10,8 +10,6 @@ using VTuber.Core.Managers;
 public class DialogSystem : SingletonMono<DialogSystem>
 {
     public Transform canvas;
-    public List<Dialog> dialogs = new List<Dialog>();
-    private Dictionary<int, Dialog> dialogsDic = new Dictionary<int, Dialog>();
 
     private Dialog currentDialog;
     private bool canContinue = false;
@@ -53,13 +51,6 @@ public class DialogSystem : SingletonMono<DialogSystem>
     protected override void Awake()
     {
         base.Awake();
-        
-        //记录对话
-        for (int i = 0; i < dialogs.Count; i++)
-        {
-            dialogsDic.Add(i, dialogs[i]);
-            dialogs[i].loaded = false;
-        }
 
         //初始化选项按钮
         foreach (var optionBtn in optionBtnPrefab)
@@ -134,31 +125,20 @@ public class DialogSystem : SingletonMono<DialogSystem>
         
     }
 
-    public void LoadDialog(int id)
+    public void LoadDialog(string dialogName)
     {
-        print(1);
-        if (dialogsDic.ContainsKey(id))
-        {
-            ClearBtns();
-            ClearDialogs();
-            Dialog dialog = dialogsDic[id];
-            dialog.index = 0;
-            
-            if(!dialog.loaded)
-                dialog.InitDialog();
-            
-            currentDialog = dialog;
-            dialogsDic[id] = dialog;
-            
-            EnableFunctionBtn(true);
-            PauseBtn.interactable = false;
-        }
-        else
-        {
-            Debug.LogError("没有对应id的会话");
-        }
-
+        ClearBtns();
+        ClearDialogs();
+        Dialog dialog = VDialogResourcesManager.Instance.TryGetDialog(dialogName);
+        dialog.index = 0;
         
+        if(!dialog.loaded)
+            dialog.InitDialog();
+        
+        currentDialog = dialog;
+        
+        EnableFunctionBtn(true);
+        PauseBtn.interactable = false;
     }
     
     private void ClearDialogs()

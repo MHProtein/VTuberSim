@@ -31,7 +31,7 @@ namespace VTuber.EventSystem
             _character = character;
             _currentEvent = e;
             VDebug.Log(e.dialogueNode);
-            dialogueSystem.LoadDialog(int.Parse(e.dialogueNode));
+            dialogueSystem.LoadDialog(e.dialogueNode);
             dialogueSystem.ShowMe(character);
             dialogueSystem.ContinueDialog();
         }
