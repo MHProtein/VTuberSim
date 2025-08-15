@@ -1,8 +1,7 @@
 title: PhaseStart
 position: -24,-1
 ---
-He: PhaseStart!
-You: $$$$^_^$$$$
+Me:成功起号
 
 -> Select Phase Ending Event
     <<ApplyEffect Event 19 200000>>
@@ -13,8 +12,8 @@ You: Let's GOOOOOO!
 title: PhaseStart2
 position: -24,-1
 ---
-He: PhaseStart2!
-You: Ayyyyyyy!
+He: 第二阶段开始
+
 
 -> Select Phase Ending Event
     <<ApplyEffect Event 19 200000>>

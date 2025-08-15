@@ -24,10 +24,13 @@ MonoBehaviour:
   cardIDs: 0000000000000000010000000100000003000000
   eventIDs: 0000000001000000020000000300000004000000050000000b0000000c0000000d000000
   streamEventIDs: 000000000100000002000000
-  abilityCoefficient: 1
-  followerCoefficient: 1
-  membershipCoefficient: 1
-  scoreLevels: []
+  abilityCoefficient: 2.3
+  followerCoefficient: 1.4
+  membershipCoefficient: 15
+  scoreLevels:
+  - low: 0
+    high: 200000000
+    name: SSS
   phases:
   - phaseName: "\u7B2C\u4E00\u9636\u6BB5"
     description: "\u7B2C\u4E00\u9636\u6BB5"
@@ -35,11 +38,9 @@ MonoBehaviour:
     startEventType: 1
     startEventID: 9
     endEventWeekIndex: 4
-    endEventIDs: 030000000400000005000000
+    endEventIDs: 040000000500000006000000
     specialEventData:
-    - weekIndex: 0
-      dayIndex: 2
-      timeOfDay: 0
+    - timeOfDay: 0
       eventType: 0
       eventID: 0
       phase:
@@ -58,11 +59,9 @@ MonoBehaviour:
     startEventType: 1
     startEventID: 10
     endEventWeekIndex: 8
-    endEventIDs: 060000000700000008000000
+    endEventIDs: 0700000008000000090000000a000000
     specialEventData:
-    - weekIndex: 0
-      dayIndex: 2
-      timeOfDay: 0
+    - timeOfDay: 0
       eventType: 0
       eventID: 0
       phase:
@@ -79,15 +78,15 @@ MonoBehaviour:
     description: "\u7B2C\u4E09\u9636\u6BB5"
     startEventWeekIndex: 9
     startEventType: 0
-    startEventID: 0
+    startEventID: 22
     endEventWeekIndex: 12
-    endEventIDs: 
+    endEventIDs: 0b0000000c0000000d0000000e000000
     specialEventData: []
   - phaseName: "\u6700\u540E\u9636\u6BB5"
     description: "\u6700\u540E\u9636\u6BB5"
     startEventWeekIndex: 13
     startEventType: 0
-    startEventID: 0
+    startEventID: 23
     endEventWeekIndex: 16
-    endEventIDs: 
+    endEventIDs: 0f000000100000001100000012000000130000001400000015000000
     specialEventData: []
