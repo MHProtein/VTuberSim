@@ -18,14 +18,17 @@ namespace VTuber.EventSystem
         private VCharacter _character;
         private VDialogueEvent _currentEvent;
         
-        [SerializeField] private DialogueRunner dialogueRunner;
+        [SerializeField] private DialogSystem dialogueSystem;
         
         public void InitializeEvent(VCharacter character, VDialogueEvent e)
         {
             _character = character;
             _currentEvent = e;
             VDebug.Log(e.dialogueNode);
-            dialogueRunner.StartDialogue(e.dialogueNode);
+            dialogueSystem.LoadDialog(int.Parse(e.dialogueNode));
+            dialogueSystem.ShowMe(character);
+            dialogueSystem.ContinueDialog();
+            dialogueSystem.OnDialogFinished += OnDialogueComplete;
         }
 
         protected override void OnEnable()
@@ -46,12 +49,22 @@ namespace VTuber.EventSystem
         
         private void OnBeginSelectCardFrom3(Dictionary<string, object> messagedict)
         {
-            VEventSystemUI.Instance.OpenSelectFrom3Menu(messagedict["Cards"] as List<VCard>, messagedict["Action"] as Action<VCard>);
+            VEventSystemUI.Instance.OpenSelectFrom3Menu(messagedict["Cards"] as List<VCard>, messagedict["Action"] as Action<VCard>, 
+                () =>
+                {
+                    dialogueSystem.SetCanContinue(true);
+                });
+            dialogueSystem.SetCanContinue(false);
         }
         
         private void OnBeginSelectCard(Dictionary<string, object> messagedict)
         {
-            VEventSystemUI.Instance.OpenCardLibrary(_character.CardLibrary.GetCards(), true, messagedict["Action"] as Action<VCard>);
+            VEventSystemUI.Instance.OpenCardLibrary(_character.CardLibrary.GetCards(), true, messagedict["Action"] as Action<VCard>,
+                () =>
+                {
+                    dialogueSystem.SetCanContinue(true);
+                });
+            dialogueSystem.SetCanContinue(false);
         }
         
         private void OnPickPhaseEndingBegin(Dictionary<string, object> messagedict)
@@ -61,7 +74,12 @@ namespace VTuber.EventSystem
                 VDebug.LogError("_currentEvent.Phase ist null, lass es reparieren");
                 return;
             }
-            VEventSystemUI.Instance.InitializePhaseEndingSelectionMenu(_currentEvent.Phase.GetPhaseEndingEvents(_character));
+            VEventSystemUI.Instance.InitializePhaseEndingSelectionMenu(_currentEvent.Phase.GetPhaseEndingEvents(_character),
+                () =>
+                {
+                    dialogueSystem.SetCanContinue(true);
+                });
+            dialogueSystem.SetCanContinue(false);
         }
 
         [YarnCommand("ApplyEffect")]
@@ -70,8 +88,8 @@ namespace VTuber.EventSystem
             var effect = VResourcesManager.Instance.CreateRaisingEffectByID(id, value, value);
             effect.ApplyEffect(_character);
         }
-
-        public void OnDialogueComplete()
+        
+        private void OnDialogueComplete(Dialog arg0)
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
                 new Dictionary<string, object>()
@@ -79,6 +97,7 @@ namespace VTuber.EventSystem
                     {"Event", _currentEvent}
                 });
             _currentEvent = null;
+            dialogueSystem.HideMe();
         }
     }
 }

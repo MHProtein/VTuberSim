@@ -29,7 +29,6 @@ namespace VTuber.Consumable
 
         public void ApplyEffect(VBattle battle)
         {
-            effects.ForEach(effect => effect.ApplyEffect(battle, 1, false, false));
         }
         
     }
@@ -43,9 +42,16 @@ namespace VTuber.Consumable
         
         public VConsumableType type;
         
+        private VConsumableManager _consumableManager;
+        
         public VConsumable(VConsumableConfiguration configuration)
         {
             _configuration = configuration;
+        }
+        
+        public void Initialize(VConsumableManager consumableManager)
+        {
+            _consumableManager = consumableManager;
         }
     }
 }

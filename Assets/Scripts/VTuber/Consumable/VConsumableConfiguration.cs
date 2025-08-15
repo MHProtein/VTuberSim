@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.RaisingEffect;
 
@@ -11,6 +12,10 @@ namespace VTuber.Consumable
     public class VBattleConsumableConfiguration
     {
         public List<VEffect> effects;
+
+        public void ApplyEffects(VBattle battle)
+        {
+        }
     }
 
     public class VConsumableConfiguration

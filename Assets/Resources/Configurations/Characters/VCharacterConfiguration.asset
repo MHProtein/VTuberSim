@@ -37,7 +37,7 @@ MonoBehaviour:
   singingAbilityGainFromBattleRates:
   - from: 0
     to: -1
-    value: 0.7
+    value: 0.18
   singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
   gamingAbilityInitialValue: 300
   gamingAbilityMinValue: 0
