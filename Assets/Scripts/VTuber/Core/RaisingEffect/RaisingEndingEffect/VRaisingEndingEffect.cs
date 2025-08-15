@@ -15,11 +15,18 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
             
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginEnding, new Dictionary<string, object>()
             {
             });
+        }
+
+        public override void Upgrade()
+        {
+        }
+
+        public override void DownGrade()
+        {
         }
     }
 }

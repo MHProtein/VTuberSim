@@ -60,9 +60,9 @@ namespace VTuber.BattleSystem.UI
             
             if(card.Facade)
                 icon.sprite = card.Facade;
-            
+
             name.text = card.CardName;
-            description.text = card.Description;
+            description.text = card.GetDescription();
             if(card.IsExhaust)
                 description.text += "\nExhaust.";
             typeText.text = card.CardType;
@@ -82,6 +82,15 @@ namespace VTuber.BattleSystem.UI
             {
                 cost.text = card.Cost.ToString();
             }
+            
+            
+            if (card.IsUpgraded)
+            {
+                name.text += "+"; 
+                ColorUtility.TryParseHtmlString("#0ac736", out var color);
+                name.color = color;
+            }
+            
             Card = card;
         }
 

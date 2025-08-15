@@ -4,7 +4,7 @@ using VTuber.Core.EventCenter;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingEffect
+    public abstract class VRaisingEffect
     {
         protected VRaisingEffectConfiguration _configuration;
         
@@ -17,21 +17,12 @@ namespace VTuber.Core.RaisingEffect
             _configuration = configuration;
         }
 
-            
-        public virtual void ApplyEffect(VCharacter character)
-        {
-            
-        }
 
-        public virtual void Upgrade()
-        {
-            
-        }
+        public abstract void ApplyEffect(VCharacter character);
 
-        public virtual void DownGrade()
-        {
-            
-        }
-        
+        public abstract void Upgrade();
+
+        public abstract void DownGrade();
+
     }
 }

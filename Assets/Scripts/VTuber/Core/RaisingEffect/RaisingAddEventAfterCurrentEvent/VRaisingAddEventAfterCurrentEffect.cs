@@ -17,13 +17,20 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
-
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddFollowUpEvent, new Dictionary<string, object>
             {
                 { "EventType", _eventType },
                 { "EventId", eventId },
             });
+        }
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -14,6 +15,18 @@ namespace VTuber.BattleSystem.Effect
         {
             _buffID = buffID;
             _percentage = new VUpgradableValue<float>(percentage, upgradedPercentage);
+        }
+        
+        public override void Upgrade()
+        {
+            base.Upgrade();
+            _percentage.Upgrade();
+        }
+        
+        public override void Downgrade()
+        {
+            base.Downgrade();
+            _percentage.Downgrade();
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
@@ -34,6 +47,11 @@ namespace VTuber.BattleSystem.Effect
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
                     new Dictionary<string, object>());
             }
+        }
+        
+        public override string GetValue()
+        {
+            return (int)(_percentage.Value * 100) + "%";
         }
     }
 }

@@ -76,11 +76,15 @@ namespace VTuber.BattleSystem.Core
             
             foreach (var cardConfig in cardConfigs)
             {
-                for (int i = 0; i < 2; i++)
+                var card = cardConfig.CreateCard();
+                if(card is not null)
+                    cards.Add(card);
+                
+                var card2 = cardConfig.CreateCard();
+                if (card2 is not null)
                 {
-                    var card = cardConfig.CreateCard();
-                    if(card is not null)
-                        cards.Add(card);
+                    card2.Upgrade(false);
+                    cards.Add(card2);   
                 }
             }
             _character.CardLibrary.AddCards(cards);

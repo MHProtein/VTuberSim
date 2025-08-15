@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 
@@ -6,20 +7,28 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingSkipEventEffect : VRaisingEffect
     {
-        private int _staminaRecovery = 0;
+        private VUpgradableValue<int> _staminaRecovery;
         public VRaisingSkipEventEffect(VRaisingEffectConfiguration configuration, int staminaRecovery) : base(configuration)
         {
-            _staminaRecovery = staminaRecovery;
+            _staminaRecovery = new VUpgradableValue<int>(staminaRecovery, staminaRecovery);
         }
 
         public override void ApplyEffect(VCharacter character)
         {
-            base.ApplyEffect(character);
-
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSkipEvent, new Dictionary<string, object>()
             {
                 {"StaminaRecovery", _staminaRecovery}
             });
+        }
+
+        public override void Upgrade()
+        {
+            
+        }
+
+        public override void DownGrade()
+        {
+            
         }
     }
 }

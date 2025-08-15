@@ -38,5 +38,9 @@ namespace VTuber.BattleSystem.Effect
             _cardCount.Downgrade();
         }
         
+        public override string GetValue()
+        {
+            return _cardCount.Value.ToString();
+        }
     }
 }

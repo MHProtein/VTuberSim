@@ -10,6 +10,18 @@ namespace VTuber.BattleSystem.Effect
         VBuffModifyEffectConfiguration _configuration;
         public VUpgradableValue<int> _addValue;
  
+        public override void Upgrade()
+        {
+            base.Upgrade();
+            _addValue.Upgrade();
+        }
+        
+        public override void Downgrade()
+        {
+            base.Downgrade();
+            _addValue.Downgrade();
+        }
+        
         public VBuffModifyEffect(VBuffModifyEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             _configuration = configuration;
@@ -26,6 +38,10 @@ namespace VTuber.BattleSystem.Effect
             battle.BuffManager.AddBuff(VResourcesManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
             VDebug.Log("效果 " + _configuration.effectName + " 为 Buff(ID: " + _configuration.buffID + ") 增加了 " + value + "。新数值: " + value);
         }
-            
+        
+        public override string GetValue()
+        {
+            return _addValue.Value.ToString();
+        }
     }
 }

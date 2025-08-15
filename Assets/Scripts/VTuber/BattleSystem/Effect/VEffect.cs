@@ -98,5 +98,10 @@ namespace VTuber.BattleSystem.Effect
         {
             VBattleRootEventCenter.Instance.RemoveListener(whenToApply, TryApply);
         }
+
+        public virtual string GetValue()
+        {
+            return "";
+        }
     }
 }

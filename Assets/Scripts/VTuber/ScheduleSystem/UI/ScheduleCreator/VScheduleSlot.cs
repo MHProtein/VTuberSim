@@ -62,6 +62,7 @@ namespace VTuber.ScheduleSystem.UI
         public void RemoveCoopEvent()
         {
             coopEventGameObject.SetActive(false);
+            checkmark.gameObject.SetActive(false);
             IsCoopEventSlot = false;
             foreach (var icon in eventIcons)
             {
