@@ -24,8 +24,7 @@ public class DialogContent
     public bool ifImage;
 }
 
-[CreateAssetMenu(fileName = "Dialog", menuName = "ScriptableObjects/Dialog")]
-public class Dialog :ScriptableObject
+public class Dialog
 {
     //对话csv文件
     public TextAsset csvFile;
@@ -37,6 +36,13 @@ public class Dialog :ScriptableObject
     
     //对话内容表
     public Dictionary<int,DialogContent> contentDic = new Dictionary<int, DialogContent>();
+    
+    public Dialog(TextAsset csvFile)
+    {
+        loaded = false;
+        this.csvFile = csvFile;
+        InitDialog();
+    }
 
     public void InitDialog()
     {

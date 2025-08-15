@@ -67,6 +67,9 @@ namespace VTuber.BattleSystem.Core
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
+            
+            VDialogResourcesManager.Instance.LoadDialogs();
+            
             _script = new VScript(scriptConfiguration);
             
             _character = new VCharacter(_characterConfiguration);

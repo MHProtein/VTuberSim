@@ -15,7 +15,6 @@ public class TestMain : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            DialogSystem.Instance.LoadDialog(0);
         }
 
         if (Input.GetKeyDown(KeyCode.P))
