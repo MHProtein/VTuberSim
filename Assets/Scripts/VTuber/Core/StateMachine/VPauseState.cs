@@ -18,7 +18,6 @@ namespace VTuber.Core.StateMachine
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToPause();
             stateMachine.ScheduleUI.SwitchToExecution();
             
-            stateMachine.Character.ConsumableManager.SetCanUseConsumable(true);
         }
         
         public override void Exit(VState nextState)
@@ -26,7 +25,6 @@ namespace VTuber.Core.StateMachine
             base.Exit(nextState);
             stateMachine.SetShouldPauseSchedule(false);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseUIActive(false);
-            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }
     }
 }

@@ -20,27 +20,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: pressureBuffs
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Int32,
-        mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   staminaInitialValue: 100
   staminaMinValue: 0
   staminaMaxValue: 100
@@ -48,6 +28,7 @@ MonoBehaviour:
   pressureInitialValue: 1
   pressureMinValue: 1
   pressureMaxValue: 5
+  pressureBuffs: 00000000
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100
   singingAbilityMinValue: 0
@@ -56,10 +37,10 @@ MonoBehaviour:
   singingAbilityGainFromBattleRates:
   - from: 0
     to: 5000
-    rate: 0.005
+    value: 0
   - from: 5001
     to: -1
-    rate: 0.001
+    value: 0
   singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
   gamingAbilityInitialValue: 100
   gamingAbilityMinValue: 0
@@ -68,10 +49,10 @@ MonoBehaviour:
   gamingAbilityGainFromBattleRates:
   - from: 0
     to: 5000
-    rate: 0.005
+    value: 0
   - from: 5001
     to: -1
-    rate: 0.001
+    value: 0
   gamingAbilityConfiguration: {fileID: 11400000, guid: 9f3418b693f0bd74faf5ef1c80bcabc3, type: 2}
   chattingAbilityInitialValue: 100
   chattingAbilityMinValue: 0
@@ -80,10 +61,10 @@ MonoBehaviour:
   chattingAbilityGainFromBattleRates:
   - from: 0
     to: 5000
-    rate: 0.005
+    value: 0
   - from: 5001
     to: -1
-    rate: 0.001
+    value: 0
   chattingAbilityConfiguration: {fileID: 11400000, guid: 47886f19849f4124695d0c1850eaf5a3, type: 2}
   singingAbilityConversionRatioInitialValue: 1
   singingAbilityConversionRatioMinValue: 0
@@ -116,6 +97,7 @@ MonoBehaviour:
   membershipCountInitialValue: 0
   membershipCountMinValue: 0
   membershipCountMaxValue: -1
+  membershipBuffs: []
   membershipCountConfiguration: {fileID: 11400000, guid: 4cb43862c41bf544093f4dd19cc1a990, type: 2}
   followerToViewerRatioInitialValue: 1
   followerToViewerRatioMinValue: 0

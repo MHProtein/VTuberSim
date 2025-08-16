@@ -13,7 +13,7 @@ namespace VTuber.Consumable
         private VCharacter _character;
         private VBattle _battle;
         
-        public bool CanUseConsumable => _canUseConsumable;
+        public bool CanUseConsumable => _canUseConsumable || CanUseBattleConsumable();
         private bool _canUseConsumable;
         
         public uint maxConsumableCount = 3;
@@ -31,6 +31,7 @@ namespace VTuber.Consumable
         public void AddConsumable(VConsumable consumable)
         {
             consumables.Add(consumable);
+            consumable.Initialize(this);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddConsumable, new Dictionary<string, object>()
             {
                 { "Consumable", consumable }
@@ -75,6 +76,11 @@ namespace VTuber.Consumable
         public void ApplyRaisingEffects(List<VRaisingEffect> effects)
         {
             effects.ForEach(effect => effect.ApplyEffect(_character));
+        }
+
+        public void Remove(VConsumable consumable)
+        {
+            RemoveConsumable(consumable);
         }
     }
 }

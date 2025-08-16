@@ -23,6 +23,7 @@ namespace VTuber.Consumable
         public override void ApplyEffect()
         {
             _consumableManager.ApplyRaisingEffects(raisingEffects);
+            _consumableManager.Remove(this);
         }
     }
     
@@ -38,6 +39,7 @@ namespace VTuber.Consumable
         public override void ApplyEffect()
         {
             _consumableManager.ApplyBattleEffects(effects);
+            _consumableManager.Remove(this);
         }
 
         public override bool CanApply()
@@ -74,6 +76,11 @@ namespace VTuber.Consumable
         
         public virtual void ApplyEffect()
         {
+        }
+
+        public void Discard()
+        {
+            _consumableManager.Remove(this);
         }
     }
 }

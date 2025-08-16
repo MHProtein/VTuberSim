@@ -45,6 +45,7 @@ namespace VTuber.Core.StateMachine
                     {"Event", _currentEvent}
                 });
             stateMachine.Character.ConsumableManager.SetBattle(null);
+            VRaisingUI.Instance.SetConsumableToRaising();
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
@@ -152,6 +153,7 @@ namespace VTuber.Core.StateMachine
                 targetPopularity, initialViewers,
                 stateMachine.Character.CharacterRelicManager.GetBattleRelics());
             stateMachine.Character.ConsumableManager.SetBattle(stateMachine.Battle);
+            VRaisingUI.Instance.SetConsumableToBattle();
         }
         
         public void InitializeEvent(VDialogueEvent e)
@@ -226,6 +228,7 @@ namespace VTuber.Core.StateMachine
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().
                     OnComplete(() => NextEvent());
             }
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }
 
         public override void Exit(VState nextState)
@@ -242,6 +245,7 @@ namespace VTuber.Core.StateMachine
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
             
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(false);
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(true);
         }
     }
 }
