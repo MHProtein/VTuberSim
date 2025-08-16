@@ -69,7 +69,10 @@ namespace VTuber.Core.EventCenter
         OnSwitchToScheduleExecution = 46,
         OnFinishScheduleCreationOrModification = 47,
         
-        OnSetCoopUpgradeEvent = 48
+        OnSetCoopUpgradeEvent = 48,
+        
+        OnAddConsumable = 49,
+        OnRemoveConsumable = 50,
     }
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>

@@ -5,6 +5,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
+using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;

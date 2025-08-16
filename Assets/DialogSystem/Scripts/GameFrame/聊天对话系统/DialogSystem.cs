@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Managers;
 
-public class DialogSystem : SingletonMono<DialogSystem>
+public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 {
     public Transform canvas;
 
@@ -48,6 +49,7 @@ public class DialogSystem : SingletonMono<DialogSystem>
     
     private VCharacter _character;
     private DialogObj currentDialogObj;
+    private bool paused = false;
     protected override void Awake()
     {
         base.Awake();
@@ -94,20 +96,11 @@ public class DialogSystem : SingletonMono<DialogSystem>
 
         
         HideMe();
-        
-        
     }
-
-    private void Update()
+    
+    public void SetPaused(bool paused)
     {
-        if (canContinue && Input.GetKeyDown(KeyCode.Space))
-        {
-            if (auto)
-            {
-                PauseAuto();
-            }
-            ContinueDialog();
-        }
+        this.paused = paused;
     }
 
     public void ShowMe(VCharacter character)
@@ -348,5 +341,17 @@ public class DialogSystem : SingletonMono<DialogSystem>
     public void SetCanContinue(bool p0)
     {
         canContinue = p0;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!paused && canContinue)
+        {
+            if (auto)
+            {
+                PauseAuto();
+            }
+            ContinueDialog();
+        }
     }
 }

@@ -48,10 +48,11 @@ public class Dialog
     {
         loaded = true;
         string[] data = csvFile.text.Split(new char[] { '\n' });
-        
         for (int i = 1; i < data.Length-1; i++)
         {
             string[] row = data[i].Split(new char[] { ',' });
+            if(row[0].IsNullOrWhitespace())
+                break;
             DialogContent dc = new DialogContent();
             // 处理每一行数据
             for (int j = 0; j < row.Length; j++)

@@ -57,9 +57,9 @@ namespace VTuber.EventSystem
             VEventSystemUI.Instance.OpenSelectFrom3Menu(messagedict["Cards"] as List<VCard>, messagedict["Action"] as Action<VCard>, 
                 () =>
                 {
-                    dialogueSystem.SetCanContinue(true);
+                    dialogueSystem.SetPaused(false);
                 });
-            dialogueSystem.SetCanContinue(false);
+            dialogueSystem.SetPaused(true);
         }
         
         private void OnBeginSelectCard(Dictionary<string, object> messagedict)
@@ -67,9 +67,9 @@ namespace VTuber.EventSystem
             VEventSystemUI.Instance.OpenCardLibrary(_character.CardLibrary.GetCards(), true, messagedict["Action"] as Action<VCard>,
                 () =>
                 {
-                    dialogueSystem.SetCanContinue(true);
+                    dialogueSystem.SetPaused(false);
                 });
-            dialogueSystem.SetCanContinue(false);
+            dialogueSystem.SetPaused(true);
         }
         
         private void OnPickPhaseEndingBegin(Dictionary<string, object> messagedict)
@@ -82,9 +82,9 @@ namespace VTuber.EventSystem
             VEventSystemUI.Instance.InitializePhaseEndingSelectionMenu(_currentEvent.Phase.GetPhaseEndingEvents(_character),
                 () =>
                 {
-                    dialogueSystem.SetCanContinue(true);
+                    dialogueSystem.SetPaused(false);
                 });
-            dialogueSystem.SetCanContinue(false);
+            dialogueSystem.SetPaused(true);
         }
 
         [YarnCommand("ApplyEffect")]
