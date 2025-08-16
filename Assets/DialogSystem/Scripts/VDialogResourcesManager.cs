@@ -13,8 +13,7 @@ public class VDialogResourcesManager : VSingleton<VDialogResourcesManager>
         var assets = Resources.LoadAll<TextAsset>("Dialogs");
         foreach (var asset in assets)
         {
-            var name = Regex.Replace(asset.name, @"\s+", "");
-            dialogDic.Add(name, new Dialog(asset));
+            dialogDic.Add(asset.name, new Dialog(asset));
         }
     }
     
