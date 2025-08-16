@@ -23,5 +23,16 @@ namespace VTuber.Consumable
         {
             _consumable.ApplyEffect();
         }
+
+        public void DiscardConsumable()
+        {
+            _consumable.Discard();
+            _consumable = null;
+        }
+
+        public bool CanUse()
+        {
+            return _consumable.CanApply();
+        }
     }
 }

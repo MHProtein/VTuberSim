@@ -54,6 +54,12 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private GameObject cardLibraryUIObject;
 
         [SerializeField] private VCardLibraryUI cardLibraryUI;
+        
+        [Space(3)]
+        [Header("ConsumableUI")]
+        [SerializeField]private GameObject consumableUIParent;
+        [SerializeField]private GameObject consumableUIBattleParent;
+        [SerializeField]private GameObject consumableUI;
 
         protected override void OnEnable()
         {
@@ -160,6 +166,18 @@ namespace VTuber.ScheduleSystem.UI
 
             Debug.LogWarning($"Icon with name {iconName} not found.");
             return null;
+        }
+
+        public void SetConsumableToBattle()
+        {
+            consumableUI.transform.SetParent(consumableUIBattleParent.transform);
+            consumableUI.transform.localPosition = Vector3.zero;
+        }
+        
+        public void SetConsumableToRaising()
+        {
+            consumableUI.transform.SetParent(consumableUIParent.transform);
+            consumableUI.transform.localPosition = Vector3.zero;
         }
     }
 }

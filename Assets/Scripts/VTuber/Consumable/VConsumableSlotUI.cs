@@ -18,12 +18,30 @@ namespace VTuber.Consumable
         {
             subMenu.SetActive(false);
             _slots = slots;
+            consumableUI.gameObject.SetActive(false);
+            useButton.onClick.AddListener(UseConsumable);
+            discardButton.onClick.AddListener(DiscardConsumable);
+        }
+
+        private void UseConsumable()
+        {
+            consumableUI.gameObject.SetActive(false);
+            consumableUI.UseConsumable();
+            _slots.CloseSubMenu();
+        }
+
+        private void DiscardConsumable()
+        {
+            consumableUI.gameObject.SetActive(false);
+            consumableUI.DiscardConsumable();
+            _slots.CloseSubMenu();
         }
 
         public void SetConsumable(VConsumable consumable)
         {
             consumableUI.gameObject.SetActive(true);
             consumableUI.SetConsumable(consumable);
+            _slots.CloseSubMenu();
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -36,6 +54,7 @@ namespace VTuber.Consumable
 
             if (consumableUI.HasConsumable())
             {
+                useButton.interactable = consumableUI.CanUse();
                 eventData.Use();
                 subMenu.SetActive(true);
                 _slots.OnSubMenuOn();
@@ -45,6 +64,11 @@ namespace VTuber.Consumable
         public void SetSubMenuActive(bool active)
         {
             subMenu.SetActive(active);
+        }
+
+        public bool HasConsumable()
+        {
+            return consumableUI.HasConsumable();
         }
     }
 }

@@ -40,7 +40,7 @@ namespace VTuber.Consumable
         {
             var consumable = messagedict["Consumable"] as VConsumable;
             
-            var slot = _slots.Find(slot => slot);
+            var slot = _slots.Find(slot => slot.HasConsumable() == false);
             slot.SetConsumable(consumable);
         }
 
