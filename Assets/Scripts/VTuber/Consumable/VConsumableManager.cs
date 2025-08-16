@@ -2,6 +2,7 @@
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
+using VTuber.Core.EventCenter;
 using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Consumable
@@ -14,16 +15,36 @@ namespace VTuber.Consumable
         
         public bool CanUseConsumable => _canUseConsumable;
         private bool _canUseConsumable;
+        
+        public uint maxConsumableCount = 3;
+        
+        public VConsumableManager(VCharacter character)
+        {
+            _character = character;
+        }
+        
+        public bool CanAddConsumable()
+        {
+            return consumables.Count < maxConsumableCount;
+        }
 
-        public void AddConsumable(VConsumable consumable, VCharacter character)
+        public void AddConsumable(VConsumable consumable)
         {
             consumables.Add(consumable);
-            _character = character;
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddConsumable, new Dictionary<string, object>()
+            {
+                { "Consumable", consumable }
+            });
         }
         
         public void RemoveConsumable(VConsumable consumable)
         {
             consumables.Remove(consumable);
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable, new Dictionary<string, object>()
+            {
+                { "Consumable", consumable }
+            });
         }
         
         public void SetBattle(VBattle battle)

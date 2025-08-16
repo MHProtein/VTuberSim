@@ -44,6 +44,7 @@ namespace VTuber.Core.StateMachine
                 {
                     {"Event", _currentEvent}
                 });
+            stateMachine.Character.ConsumableManager.SetBattle(null);
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
@@ -150,6 +151,7 @@ namespace VTuber.Core.StateMachine
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts,
                 targetPopularity, initialViewers,
                 stateMachine.Character.CharacterRelicManager.GetBattleRelics());
+            stateMachine.Character.ConsumableManager.SetBattle(stateMachine.Battle);
         }
         
         public void InitializeEvent(VDialogueEvent e)

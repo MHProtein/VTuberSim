@@ -92,6 +92,8 @@ namespace VTuber.BattleSystem.Core
             }
             _character.CardLibrary.AddCards(cards);
 
+            _character.ConsumableManager.AddConsumable(VResourcesManager.Instance.CreateConsumableByID(0));
+            _character.ConsumableManager.AddConsumable(VResourcesManager.Instance.CreateConsumableByID(1));
             
             scheduleUI.Initialize(_character);
             

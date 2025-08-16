@@ -9,32 +9,46 @@ namespace VTuber.Consumable
     public class VRaisingConsumable : VConsumable
     {
         public List<VRaisingEffect> raisingEffects;
-        public VRaisingConsumable(VConsumableConfiguration configuration) : base(configuration)
+        public VRaisingConsumable(uint id, VRaisingConsumableConfiguration configuration) : base(id, configuration)
         {
             type = VConsumableType.Raising;
+            raisingEffects = configuration.effects;
         }
         
-        public void ApplyEffect(VCharacter character)
+        public override bool CanApply()
         {
-            raisingEffects.ForEach(effect => effect.ApplyEffect(character));
+            return _consumableManager.CanUseConsumable;
+        }
+        
+        public override void ApplyEffect()
+        {
+            _consumableManager.ApplyRaisingEffects(raisingEffects);
         }
     }
+    
     public class VBattleConsumable : VConsumable
     {
         public List<VEffect> effects;
-        public VBattleConsumable(VConsumableConfiguration configuration) : base(configuration)
+        public VBattleConsumable(uint id, VBattleConsumableConfiguration configuration) : base(id, configuration)
         {
             type = VConsumableType.Stream;
+            effects = configuration.effects;
         }
 
-        public void ApplyEffect(VBattle battle)
+        public override void ApplyEffect()
         {
+            _consumableManager.ApplyBattleEffects(effects);
         }
-        
+
+        public override bool CanApply()
+        {
+            return _consumableManager.CanUseBattleConsumable();
+        }
     }
     public class VConsumable
     {
-        public uint Id => _configuration.id;
+        public uint Id { get; private set; }
+        public uint ConfigId => _configuration.id;
         public string Name => _configuration.name;
         public string Description => _configuration.description;
         public VConsumableRarity Rarity => _configuration.rarity;
@@ -42,16 +56,24 @@ namespace VTuber.Consumable
         
         public VConsumableType type;
         
-        private VConsumableManager _consumableManager;
+        protected VConsumableManager _consumableManager;
         
-        public VConsumable(VConsumableConfiguration configuration)
+        public VConsumable(uint id, VConsumableConfiguration configuration)
         {
+            Id = id;
             _configuration = configuration;
         }
-        
+        public virtual bool CanApply()
+        {
+            return false;
+        }
         public void Initialize(VConsumableManager consumableManager)
         {
             _consumableManager = consumableManager;
+        }
+        
+        public virtual void ApplyEffect()
+        {
         }
     }
 }

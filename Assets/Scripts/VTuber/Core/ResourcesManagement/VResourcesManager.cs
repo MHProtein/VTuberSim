@@ -3,6 +3,7 @@ using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
@@ -54,6 +55,9 @@ namespace VTuber.Core.Managers
         
         public Dictionary<uint, VPlacingCondition> PlacingConditions => _placingConditions;
         private Dictionary<uint, VPlacingCondition> _placingConditions;
+        
+        public Dictionary<uint, VConsumableConfiguration> ConsumableConfigurationss => _consumableConfigurations;
+        private Dictionary<uint, VConsumableConfiguration> _consumableConfigurations;
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -225,6 +229,19 @@ namespace VTuber.Core.Managers
             }
         }
 
+        public void SetConsumableConfigurations(List<VConsumableConfiguration> consumableConfigurations)
+        {
+            _consumableConfigurations = new Dictionary<uint, VConsumableConfiguration>();
+
+            foreach (var consumableConfig in consumableConfigurations)
+            {
+                if (consumableConfig != null)
+                {
+                    _consumableConfigurations[consumableConfig.id] = consumableConfig;
+                }
+            }
+        }
+
         public VRelic CreateRelicByID(uint id)
         {
             if (_relics.TryGetValue(id, out var relicConfiguration))
@@ -369,6 +386,15 @@ namespace VTuber.Core.Managers
         public VPlacingCondition GetPlacingCondtionByID(uint conditionId)
         {
             return _placingConditions.GetValueOrDefault(conditionId);
+        }
+        
+        public VConsumable CreateConsumableByID(uint consumableID)
+        {
+            if (_consumableConfigurations.TryGetValue(consumableID, out var consumableConfig))
+            {
+                return consumableConfig.CreateConsumable();
+            }
+            return null;
         }
     }
 }
