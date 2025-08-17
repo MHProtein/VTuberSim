@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  id: 5
+  id: 4
   cooperatorName: "\u753B\u5E08mama"
   description: SHORK
   icon: {fileID: 21300000, guid: c4f52f3e9cfd12b45b79692d0ac538a2, type: 3}
@@ -55,9 +55,9 @@ MonoBehaviour:
   minEvents: 0
   maxEvents: 2
   _dayTimeProbabilities:
-  - 0.1
-  - 0.4
-  - 0.4
+  - 0.33
+  - 0.33
+  - 0.33
   _dayProbabilities:
   - 0.14
   - 0.14
