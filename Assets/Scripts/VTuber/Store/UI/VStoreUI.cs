@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -9,24 +11,30 @@ namespace VTuber.Store.UI
 {
     public class VStoreUI : VUIBehaviour
     {
-        [SerializeField] private VCardViewSelectionUI deleteCardLibraryUI;
+        [SerializeField] private Button UpgradeCardButton;
+        [SerializeField] private Button DiscardCardButton;
+        [FormerlySerializedAs("deleteCardLibraryUI")] [SerializeField] private VCardViewSelectionUI discardCardLibraryUI;
         [SerializeField] private VCardViewSelectionUI upgradeCardLibraryUI;
         VCharacter _character;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            //UpgradeCardButton.onClick.AddListener(() => upgradeCardLibraryUI.Initialize(_character.CardLibrary.GetCards(), false));
+            DiscardCardButton.onClick.AddListener(OnStoreBeginDeleteCard);
+        }
+
 
         protected override void OnEnable()
         {
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEnterStore, OnEnterStore);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStoreBeginDeleteCard, OnStoreBeginDeleteCard);
         }
-
-
 
         protected override void OnDisable()
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEnterStore, OnEnterStore);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStoreBeginDeleteCard, OnStoreBeginDeleteCard);
         }
         
         private void OnEnterStore(Dictionary<string, object> messagedict)
@@ -34,9 +42,10 @@ namespace VTuber.Store.UI
             _character = messagedict["Character"] as VCharacter;
         }
         
-        private void OnStoreBeginDeleteCard(Dictionary<string, object> messagedict)
+        private void OnStoreBeginDeleteCard()
         {
-            deleteCardLibraryUI.Initialize(_character.CardLibrary.GetCards(), true, 
+            discardCardLibraryUI.gameObject.SetActive(true);
+            discardCardLibraryUI.Initialize(_character.CardLibrary.GetCards(), true, false,
             confirmAction: (card) =>
             {
                 _character.CardLibrary.RemoveCard(card);
@@ -46,8 +55,8 @@ namespace VTuber.Store.UI
                         { "Deleted", true },
                         { "DeletedCard", card }
                     });
-                deleteCardLibraryUI.Close();
-                deleteCardLibraryUI.gameObject.SetActive(false);
+                discardCardLibraryUI.Close();
+                discardCardLibraryUI.gameObject.SetActive(false);
             },
             returnAction: () =>
             {
@@ -56,10 +65,14 @@ namespace VTuber.Store.UI
                     {
                         { "Deleted", false },
                     });
-                deleteCardLibraryUI.Close();
-                deleteCardLibraryUI.gameObject.SetActive(false);
+                discardCardLibraryUI.Close();
+                discardCardLibraryUI.gameObject.SetActive(false);
             });
-            deleteCardLibraryUI.gameObject.SetActive(true);
+        }
+
+        public void Initialze(VCharacter character)
+        {
+            _character = character;
         }
     }
 }
