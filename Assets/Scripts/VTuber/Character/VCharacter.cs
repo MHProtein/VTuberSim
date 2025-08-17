@@ -79,7 +79,7 @@ namespace VTuber.Character
             _characterRelicManager = new VCharacterRelicManager(this);
             _completedEventIDs = new Dictionary<VEventType, List<uint>>();
             _completedEventIDs[VEventType.Stream] = new List<uint>();
-            _completedEventIDs[VEventType.Recovery] = new List<uint>();
+            _completedEventIDs[VEventType.Rest] = new List<uint>();
             _completedEventIDs[VEventType.Practice] = new List<uint>();
             _completedEventIDs[VEventType.Coop] = new List<uint>();
         }
