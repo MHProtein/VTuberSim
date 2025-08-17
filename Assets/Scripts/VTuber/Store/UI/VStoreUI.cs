@@ -30,17 +30,32 @@ namespace VTuber.Store.UI
         {
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEnterStore, OnEnterStore);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnMoneyChanged, OnMoneyChanged);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEnterStore, OnEnterStore);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnMoneyChanged, OnMoneyChanged);
+        }
+        
+        private void OnMoneyChanged(Dictionary<string, object> messagedict)
+        {
+            foreach (var storeCardItemUI in storeCardItemUIs)
+            {
+                storeCardItemUI.SetCanAfford();;
+            }
         }
         
         private void OnEnterStore(Dictionary<string, object> messagedict)
         {
             _character = messagedict["Character"] as VCharacter;
+            var cardSlots = messagedict["CardSlots"] as List<VStoreCardSlot>;
+            for (int i = 0; i < cardSlots.Count; i++)
+            {
+                storeCardItemUIs[i].SetCardSlot(cardSlots[i], _character);
+            }
         }
         
         private void OnBeginDeleteCard()

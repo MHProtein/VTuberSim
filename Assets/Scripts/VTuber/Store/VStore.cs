@@ -77,9 +77,11 @@ namespace VTuber.Store
         public readonly int originalPrice;
         public readonly int price;
         public readonly float discount;
+        public readonly bool isDiscount;
         
         public VStoreSlot(bool isDiscount, int originalPrice, float discount)
         {
+            this.isDiscount = isDiscount;
             this.originalPrice = originalPrice;
             if(isDiscount)
                 price = (int)(originalPrice * (1.0f - discount));
@@ -123,8 +125,12 @@ namespace VTuber.Store
             _character = character;
             LoadCards();
             LoadConsumables();
-            
-            
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEnterStore, new Dictionary<string, object>()
+            {
+                { "Character", character },
+                { "CardSlots", _cards },
+            });
         }
 
         public void ExitStore()
@@ -165,7 +171,7 @@ namespace VTuber.Store
         
         public void LoadConsumables()
         {
-            var consumables = GetRandomConsumables(4);
+            var consumables = GetRandomConsumables(1);
             
             var slot = new VStoreConsumableSlot(true, _storeConfig.cardPrices[(int)consumables[0].Rarity], 
                 Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount), consumables[0]);
@@ -196,6 +202,11 @@ namespace VTuber.Store
                 0, 0, 0
             };
             List<VCardConfiguration> cards = VResourcesManager.Instance.GetAllCardConfigurations();
+
+            foreach (var card in cards)
+            {
+                rarityCounts[(int) card.rarity - 1]++;
+            }
             
             if (cards.Count == 0)
                 return null;
@@ -253,6 +264,11 @@ namespace VTuber.Store
             if (consumables.Count == 0)
                 return null;
             
+            foreach (var consumable in consumables)
+            {
+                rarityCounts[(int) consumable.rarity]++;
+            }
+            
             float totalRarityProb = 0f;
             for (int r = 0; r < 3; r++)
                 if (rarityCounts[r] > 0)
@@ -280,7 +296,7 @@ namespace VTuber.Store
                 float totalProbability = 0;
                 for (int j = 0; j < consumables.Count; j++)
                 {
-                    totalProbability += perConsumableProbabilityByRarity[(int)consumables[j].rarity - 1];
+                    totalProbability += perConsumableProbabilityByRarity[(int)consumables[j].rarity];
                     if (probability <= totalProbability)
                     {
                         var card = consumables[j].CreateConsumable();
