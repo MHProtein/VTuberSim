@@ -22,7 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   id: 1
-  cooperatorName: "\u81F3\u5C0A\u557E\u54AA"
+  cooperatorName: "\u81F3\u5C0A\u79CB\u54AA"
   description: "\u96EA\u738B"
   icon: {fileID: 21300000, guid: 8aaf071ea4d51a24ea562fdba64ef62f, type: 3}
   baseCoopEvent: 0
@@ -55,15 +55,15 @@ MonoBehaviour:
   minEvents: 2
   maxEvents: 3
   _dayTimeProbabilities:
-  - 0
-  - 0.4
-  - 0.6
+  - 0.33
+  - 0.33
+  - 0.33
   _dayProbabilities:
-  - 0.1
-  - 0.1
-  - 0.1
-  - 0.1
-  - 0.1
-  - 0.2
-  - 0.1
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
   _coopEvents: 0200000003000000
