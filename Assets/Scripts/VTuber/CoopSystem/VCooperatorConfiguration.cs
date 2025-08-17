@@ -55,20 +55,5 @@ namespace VTuber.CoopSystem
         [SerializeField] [LabelText("时间概率")] private List<float> _dayTimeProbabilities;
         [SerializeField] [LabelText("周X概率")] private List<float> _dayProbabilities;
         [SerializeField] [LabelText("协助事件")] private List<uint> _coopEvents;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            _dayTimeProbabilities = new List<float>();
-            for (int i = 0; i < 3; i++)
-            {
-                _dayTimeProbabilities.Add(0.33f);
-            }
-            _dayProbabilities = new List<float>();
-            for (int i = 0; i < 7; i++)
-            {
-                _dayProbabilities.Add(0.14f);
-            }
-        }
     }
 }
