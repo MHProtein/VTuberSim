@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingDeleteCardEffect : VRaisingCardEffect
+    public class VRaisingDeleteCardEffect : VRaisingEffect
     {
         private VCardCondition _condition;
         public VRaisingDeleteCardEffect(VRaisingDeleteCardEffectConfiguration configuration) : base(configuration)
@@ -19,8 +19,11 @@ namespace VTuber.Core.RaisingEffect
         }
 
         public override void ApplyEffect(VCharacter character)
-        {
-            var card = GetRandomCards(1, _condition).FirstOrDefault();
+        {            
+            List<VCard> cards = character.CardLibrary.GetCards();
+            if(_condition is not null)
+                cards = cards.Where(card => _condition.IsTrue(card)).ToList();
+            var card = cards[Random.Range(0, cards.Count)];
             character.CardLibrary.RemoveCard(card);
             VDebug.Log("Deleted card: " + card.CardName);
         }

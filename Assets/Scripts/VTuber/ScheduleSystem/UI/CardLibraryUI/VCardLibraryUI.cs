@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -17,6 +18,7 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Dropdown _rarityDropdown;
         [SerializeField] private Toggle _isUpgraded;
         [SerializeField] private Transform grid;
+        [SerializeField] private VCardUI previewCardUI;
 
         [SerializeField] private Button confirmButton;
         [SerializeField] private Button returnButton;
@@ -27,6 +29,7 @@ namespace VTuber.ScheduleSystem.UI
         private VSelectCardCardUI _selectedCardUI;
 
         private Action<VCard> _confirmAction;
+        private Action<VCard> _previewAction;
         private Action _returnAction;
 
         protected override void Awake()
@@ -40,6 +43,7 @@ namespace VTuber.ScheduleSystem.UI
             _cardUIs = new List<VSelectCardCardUI>();
             _displayingCardUIs = new List<VSelectCardCardUI>();
             confirmButton.onClick.AddListener(Confirm);
+            previewCardUI.gameObject.SetActive(false);
         }
 
         private void Confirm()
@@ -52,12 +56,13 @@ namespace VTuber.ScheduleSystem.UI
             _returnAction?.Invoke();
         }
 
-        public void Initialize(List<VCard> cards, bool select, Action<VCard> confirmAction, Action returnAction = null)
+        public void Initialize(List<VCard> cards, bool select, bool preview, Action<VCard> confirmAction, Action returnAction = null, Action<VCard> previewAction = null)
         {
             confirmButton.gameObject.SetActive(select);
             returnButton.gameObject.SetActive(!select);
             _confirmAction = confirmAction;
             _returnAction = returnAction;
+            _previewAction = previewAction;
             foreach (var card in cards)
             {
                 var item = Instantiate(cardPrefab, grid);
@@ -136,6 +141,14 @@ namespace VTuber.ScheduleSystem.UI
             if(_selectedCardUI is not null)
                 _selectedCardUI.UnSelect();
             _selectedCardUI = cardUI;
+
+            if (previewCardUI)
+            {
+                previewCardUI.gameObject.SetActive(true);
+                VCard previewCard = VResourcesManager.Instance.CreateCardByID(_selectedCardUI.Card.configID);
+                _previewAction?.Invoke(previewCard);
+                previewCardUI.SetCard(previewCard);
+            }
         }
     }
 }

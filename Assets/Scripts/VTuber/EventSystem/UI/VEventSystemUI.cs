@@ -36,7 +36,7 @@ namespace VTuber.Dialogue.UI
         public void OpenCardLibrary(List<VCard> cards, bool select, Action<VCard> confirmAction, Action closeAction)
         {
             cardLibraryUI.gameObject.SetActive(true);
-            cardLibraryUI.Initialize(cards, select, confirmAction);
+            cardLibraryUI.Initialize(cards, select, false, confirmAction);
             _closeCardLibrary = closeAction;
         }
         

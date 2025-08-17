@@ -5,7 +5,7 @@ using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingDeleteCardEffectConfiguration : VRaisingCardEffectConfiguration
+    public class VRaisingDeleteCardEffectConfiguration : VRaisingEffectConfiguration
     {
         public VCardCondition Condition => _condition;
         private VCardCondition _condition;

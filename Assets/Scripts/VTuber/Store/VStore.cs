@@ -181,7 +181,7 @@ namespace VTuber.Store
 
         public void DeleteCard()
         {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreBeginDeleteCard, new Dictionary<string, object>()
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreBeginDiscardCard, new Dictionary<string, object>()
             {
                 {"Character", _character}
             });

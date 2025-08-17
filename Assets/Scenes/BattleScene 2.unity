@@ -637,7 +637,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -823, y: 588}
+  m_AnchoredPosition: {x: -825, y: 546}
   m_SizeDelta: {x: 325.19995, y: 81.30005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &30655019
@@ -19375,6 +19375,7 @@ MonoBehaviour:
   _characterConfiguration: {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
   eventSystemRoot: {fileID: 1361066340}
   eventSystemSystem: {fileID: 908957579}
+  _storeUI: {fileID: 2014909021}
 --- !u!4 &507292049
 Transform:
   m_ObjectHideFlags: 0
@@ -20303,7 +20304,7 @@ MonoBehaviour:
   _rarityDropdown: {fileID: 971972533}
   _isUpgraded: {fileID: 1789744087}
   grid: {fileID: 252155352}
-  confirmButton: {fileID: 0}
+  confirmButton: {fileID: 542024199}
   returnButton: {fileID: 1851790930}
 --- !u!114 &529928178
 MonoBehaviour:
@@ -27599,7 +27600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &777859377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27642,7 +27643,7 @@ MonoBehaviour:
   _rarityDropdown: {fileID: 1096213457}
   _isUpgraded: {fileID: 2108050105}
   grid: {fileID: 1386382053}
-  confirmButton: {fileID: 0}
+  confirmButton: {fileID: 29175154}
   returnButton: {fileID: 2121876727}
 --- !u!114 &777859379
 MonoBehaviour:
@@ -44181,7 +44182,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -116, y: 588}
+  m_AnchoredPosition: {x: -116, y: 552}
   m_SizeDelta: {x: 325.19995, y: 81.30005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!43 &1325912870
@@ -53464,7 +53465,7 @@ MonoBehaviour:
   _rarityDropdown: {fileID: 406863109}
   _isUpgraded: {fileID: 1055819675}
   grid: {fileID: 1620840269}
-  confirmButton: {fileID: 0}
+  confirmButton: {fileID: 527576599}
   returnButton: {fileID: 1419351082}
 --- !u!43 &1610625824
 Mesh:
@@ -67567,13 +67568,14 @@ GameObject:
   - component: {fileID: 2014909018}
   - component: {fileID: 2014909020}
   - component: {fileID: 2014909019}
+  - component: {fileID: 2014909021}
   m_Layer: 5
   m_Name: StoreUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2014909018
 RectTransform:
   m_ObjectHideFlags: 0
@@ -67634,6 +67636,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2014909017}
   m_CullTransparentMesh: 1
+--- !u!114 &2014909021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2014909017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8181820b74a4156a590b33576e9d4cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UpgradeCardButton: {fileID: 1824088644}
+  DiscardCardButton: {fileID: 1136325079}
+  discardCardLibraryUI: {fileID: 777859378}
+  upgradeCardLibraryUI: {fileID: 529928177}
 --- !u!43 &2019391602
 Mesh:
   m_ObjectHideFlags: 0
@@ -70835,7 +70853,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 374, y: 592}
+  m_AnchoredPosition: {x: 540, y: 554}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2108731544
