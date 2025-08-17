@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -15,16 +16,16 @@ namespace VTuber.Store.UI
         [SerializeField] private Button DiscardCardButton;
         [FormerlySerializedAs("deleteCardLibraryUI")] [SerializeField] private VCardViewSelectionUI discardCardLibraryUI;
         [SerializeField] private VCardViewSelectionUI upgradeCardLibraryUI;
+        [SerializeField] private List<VStoreCardItemUI> storeCardItemUIs = new List<VStoreCardItemUI>();
         VCharacter _character;
 
         protected override void Awake()
         {
             base.Awake();
-            //UpgradeCardButton.onClick.AddListener(() => upgradeCardLibraryUI.Initialize(_character.CardLibrary.GetCards(), false));
-            DiscardCardButton.onClick.AddListener(OnStoreBeginDeleteCard);
+            UpgradeCardButton.onClick.AddListener(OnBeginUpgradeCard);
+            DiscardCardButton.onClick.AddListener(OnBeginDeleteCard);
         }
-
-
+        
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -42,7 +43,7 @@ namespace VTuber.Store.UI
             _character = messagedict["Character"] as VCharacter;
         }
         
-        private void OnStoreBeginDeleteCard()
+        private void OnBeginDeleteCard()
         {
             discardCardLibraryUI.gameObject.SetActive(true);
             discardCardLibraryUI.Initialize(_character.CardLibrary.GetCards(), true, false,
@@ -68,6 +69,35 @@ namespace VTuber.Store.UI
                 discardCardLibraryUI.Close();
                 discardCardLibraryUI.gameObject.SetActive(false);
             });
+        }
+        
+        void OnBeginUpgradeCard()
+        {
+            upgradeCardLibraryUI.gameObject.SetActive(true);
+            upgradeCardLibraryUI.Initialize(_character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(), true, false,
+            confirmAction: (card) =>
+            {
+                card.Upgrade(false);
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreEndUpgradeCard,
+                    new Dictionary<string, object>()
+                    {
+                        { "Upgraded", true },
+                        { "UpgradedCard", card }
+                    });
+                upgradeCardLibraryUI.Close();
+                upgradeCardLibraryUI.gameObject.SetActive(false);
+            },
+            returnAction: () =>
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreEndUpgradeCard,
+                    new Dictionary<string, object>()
+                    {
+                        { "Upgraded", false },
+                    });
+                upgradeCardLibraryUI.Close();
+                upgradeCardLibraryUI.gameObject.SetActive(false);
+            },
+            previewAction: (card) => card.Upgrade(false));
         }
 
         public void Initialze(VCharacter character)
