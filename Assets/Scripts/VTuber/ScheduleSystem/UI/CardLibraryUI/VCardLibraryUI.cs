@@ -10,7 +10,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VCardLibraryUI : VUIBehaviour, ISelectableCardMenu
+    public class VCardViewSelectionUI : VUIBehaviour, ISelectableCardMenu
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private TMP_Dropdown _typeDropdown;
@@ -27,6 +27,7 @@ namespace VTuber.ScheduleSystem.UI
         private VSelectCardCardUI _selectedCardUI;
 
         private Action<VCard> _confirmAction;
+        private Action _returnAction;
 
         protected override void Awake()
         {
@@ -44,25 +45,19 @@ namespace VTuber.ScheduleSystem.UI
         private void Confirm()
         {
             _confirmAction?.Invoke(_selectedCardUI.Card);
-            Return();
         }
 
         public void Return()
         {
-            foreach (var cardUI in _cardUIs)
-            {
-                Destroy(cardUI.gameObject);
-            }
-            _cardUIs.Clear();
-            _displayingCardUIs.Clear();
-            _selectedCardUI = null;
+            _returnAction?.Invoke();
         }
 
-        public void Initialize(List<VCard> cards, bool select, Action<VCard> confirmAction)
+        public void Initialize(List<VCard> cards, bool select, Action<VCard> confirmAction, Action returnAction = null)
         {
             confirmButton.gameObject.SetActive(select);
             returnButton.gameObject.SetActive(!select);
             _confirmAction = confirmAction;
+            _returnAction = returnAction;
             foreach (var card in cards)
             {
                 var item = Instantiate(cardPrefab, grid);
@@ -83,6 +78,7 @@ namespace VTuber.ScheduleSystem.UI
                 Destroy(cardUI);
             }
             _cardUIs.Clear();
+            _selectedCardUI = null;
             _displayingCardUIs.Clear();
             _typeDropdown.value = 0; // Reset to "All"
             _rarityDropdown.value = 0; // Reset to "Common"

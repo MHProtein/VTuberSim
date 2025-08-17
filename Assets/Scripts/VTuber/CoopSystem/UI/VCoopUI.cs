@@ -53,12 +53,6 @@ namespace VTuber.CoopSystem.UI
             ui.SetUpgradeEvent(cooperator.UpgradeEvent);
         }
 
-/* <<<<<<<<<<<<<<  ✨ Windsurf Command ⭐ >>>>>>>>>>>>>>>> */
-        /// <summary>
-        /// Handles the event when a cooperator is removed from the cooperator manager.
-        /// </summary>
-        /// <param name="messagedict">The dictionary containing the removed cooperator.</param>
-/* <<<<<<<<<<  13f9513c-050d-4730-ace0-091df801c24b  >>>>>>>>>>> */
         private void OnCooperatorRemoved(Dictionary<string, object> messagedict)
         {
             var cooperator = messagedict["Cooperator"] as VCooperator;

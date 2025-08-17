@@ -53,7 +53,7 @@ namespace VTuber.ScheduleSystem.UI
         [Header("CardLibraryUI")] 
         [SerializeField] private GameObject cardLibraryUIObject;
 
-        [SerializeField] private VCardLibraryUI cardLibraryUI;
+        [SerializeField] private VCardViewSelectionUI cardLibraryUI;
         
         [Space(3)]
         [Header("ConsumableUI")]
