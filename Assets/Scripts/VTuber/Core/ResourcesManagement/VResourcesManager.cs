@@ -314,6 +314,11 @@ namespace VTuber.Core.Managers
             return new List<VCardConfiguration>(_cardConfigurations.Values);
         }
         
+        public List<VConsumableConfiguration> GetAllConsumableConfigurations()
+        {
+            return new List<VConsumableConfiguration>(_consumableConfigurations.Values);
+        }
+        
         public List<VScheduleEventConfiguration> GetAllEventConfigurations()
         {
             var allEvents = new List<VScheduleEventConfiguration>();

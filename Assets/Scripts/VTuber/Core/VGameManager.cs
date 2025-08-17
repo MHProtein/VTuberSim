@@ -68,13 +68,13 @@ namespace VTuber.BattleSystem.Core
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
             
+            var cardConfigs = loader.Load();
             VDialogResourcesManager.Instance.LoadDialogs();
             
             _script = new VScript(scriptConfiguration);
             
             _character = new VCharacter(_characterConfiguration);
             _weeklySchedule = new VWeeklySchedule(_character);
-            var cardConfigs = loader.Load();
             List<VCard> cards = new List<VCard>();
             
             foreach (var cardConfig in cardConfigs)

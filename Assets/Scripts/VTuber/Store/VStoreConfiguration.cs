@@ -19,11 +19,16 @@ namespace VTuber.Store
         [LabelText("最小折扣")] public float minDiscount;
         [LabelText("最大折扣")] public float maxDiscount;
         
-        [LabelText("稀有度出现概率")] public List<float> rarityProbabilities;
-        [LabelText("稀有度升级概率")] public List<float> rarityUpgradeProbabilities;
+        [LabelText("稀有度出现概率")] public List<float> cardRarityProbabilities;
+        [LabelText("稀有度升级概率")] public List<float> cardRarityUpgradeProbabilities;
+        
+        [LabelText("稀有度出现概率")] public List<float> consumableRarityProbabilities;
         
         [LabelText("卡牌价格")] public List<int> cardPrices;
         [LabelText("消耗品价格")] public List<int> consumablePrices;
+        
+        public int cardCount;
+        public int consumableCount;
         
     }
 }

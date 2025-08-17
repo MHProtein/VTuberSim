@@ -200,12 +200,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     {
         if (!dc.ifOption && currentDialogObj != null)
         {
-            if (dc.effectID != -1)
-            {
-                var effect = VResourcesManager.Instance.CreateRaisingEffectByID((uint)dc.effectID, dc.effectParameter, dc.effectParameter);
-                if(effect is not null)
-                    effect.ApplyEffect(_character);
-            }
+            dc.AppleEffects(_character);
         }
         
         GameObject dialogObj;

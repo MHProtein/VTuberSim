@@ -17,13 +17,10 @@ public class OptionBtn:MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         optionDescription = dc.optionDescription;
         btnText.text = dc.context;
         
-        if(dc.effectID != -1)
-            btn.onClick.AddListener(() =>
-            {
-                var effect = VResourcesManager.Instance.CreateRaisingEffectByID((uint)dc.effectID, dc.effectParameter, dc.effectParameter);
-                if(effect is not null)
-                    effect.ApplyEffect(character);
-            });
+        btn.onClick.AddListener(() =>
+        {
+            dc.AppleEffects(character);
+        });
         
         btn.onClick.AddListener(() =>
         {
