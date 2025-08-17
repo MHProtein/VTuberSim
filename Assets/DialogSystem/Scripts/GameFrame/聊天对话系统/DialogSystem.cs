@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Managers;
+using Random = UnityEngine.Random;
 
 public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 {
@@ -184,7 +185,35 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             canContinue = false;
             PauseAuto();
             PauseSkip();
-            CreateOptionBtn(dc);
+            
+            List<DialogContent> options = new List<DialogContent>();
+            var option = dc;
+            while (option.ifOption)
+            {
+                options.Add(option);
+                option = currentDialog.contentDic[option.nextId];
+            }
+
+            var showingOptions = new List<DialogContent>();
+            if (options.Count > 3)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    int index = Random.Range(0, options.Count);
+                    showingOptions.Add(options[index]);
+                    options.RemoveAt(index);
+                }
+                showingOptions.Sort((content, dialogContent) => content.id.CompareTo(dialogContent.id));
+            }
+            else
+            {
+                showingOptions = options;
+            }
+            
+            foreach (var op in showingOptions)
+            {
+                CreateOptionBtn(op);
+            }
         }
         else
         {
@@ -227,7 +256,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             {
                 dialogObj=Instantiate(dialogPrefab_L,canvas,false);
             }
-           
         }
         
         currentDialogObj = dialogObj.GetComponent<DialogObj>();
@@ -260,7 +288,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         optionBtnObj.transform.SetParent(optionBtnRoot);
         optionBtnObj.GetComponent<OptionBtn>().SetBtn(dc, _character);
         currentDialog.index++;
-        ContinueDialog();
     }
 
     public void ShowOptionDescription(string description)

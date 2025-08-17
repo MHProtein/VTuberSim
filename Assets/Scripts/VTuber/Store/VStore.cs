@@ -3,10 +3,49 @@ using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Consumable;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
 
 namespace VTuber.Store
 {
+    public class VStoreButton
+    {
+        public int OriginalPrice { get; protected set; }
+        public int TotalIncrease { get; protected set; }
+        public int Price { get; protected set; }
+        public int PriceIncrease { get; protected set; }
+        public bool IsDiscount { get; protected set; }
+        public float Discount { get; protected set; }
+        public bool SoldOut { get; protected set; } = false;
+
+        public VStoreButton(int originalPrice, int priceIncrease)
+        {
+            PriceIncrease = priceIncrease;
+            OriginalPrice = originalPrice;
+            this.Discount = Discount;
+            
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStoreEndDeleteCard, OnStoreEndDeleteCard);
+        }
+        
+        public void SetPrice(bool isDiscount, float discount)
+        {
+            Discount = discount;
+            if(isDiscount)
+                Price = (int)((OriginalPrice + TotalIncrease) * (1.0f - Discount));
+            else
+                Price = OriginalPrice + TotalIncrease;
+        }
+
+        private void OnStoreEndDeleteCard(Dictionary<string, object> messagedict)
+        {
+            var deleted = messagedict["Deleted"] as bool? ?? false;
+            if (deleted)
+            {
+                SoldOut = true;
+                TotalIncrease += PriceIncrease;
+            }
+        }
+    }
     public class VStoreConsumableSlot : VStoreSlot
     {
         public VConsumable consumable;
@@ -74,16 +113,18 @@ namespace VTuber.Store
         private List<float> ConsumableRarityProbabilities => _storeConfig.consumableRarityProbabilities;
         
         
-        public VStore(VCharacter character, VStoreConfiguration storeConfig)
+        public VStore(VStoreConfiguration storeConfig)
         {
-            _character = character;
             _storeConfig = storeConfig;
         }
 
-        public void EnterStore()
+        public void EnterStore(VCharacter character)
         {
+            _character = character;
             LoadCards();
             LoadConsumables();
+            
+            
         }
 
         public void ExitStore()
@@ -136,6 +177,14 @@ namespace VTuber.Store
                     0.0f, consumables[i]);
                 _consumables.Add(slot);
             }
+        }
+
+        public void DeleteCard()
+        {
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreBeginDeleteCard, new Dictionary<string, object>()
+            {
+                {"Character", _character}
+            });
         }
         
         #region GetItems

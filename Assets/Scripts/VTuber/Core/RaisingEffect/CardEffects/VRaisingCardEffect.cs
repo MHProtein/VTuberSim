@@ -36,6 +36,7 @@ namespace VTuber.Core.RaisingEffect
                             return true;
                         }
                         
+                        
                         if (condition.IsTrue(card))
                         {
                             rarityCounts[(int) card.rarity - 1]++;

@@ -13,7 +13,7 @@ namespace VTuber.Dialogue.UI
     {
         [SerializeField] private VPhaseEndingSelectionMenu phaseEndingSelectionMenu;
         [SerializeField] private GameObject endingOptionPrefab;
-        [SerializeField] private VCardLibraryUI cardLibraryUI;
+        [SerializeField] private VCardViewSelectionUI cardLibraryUI;
         [SerializeField] private VSelectFrom3Menu selectFrom3Menu;
         
         private Action _closePhaseEndingSelectionMenuAction;

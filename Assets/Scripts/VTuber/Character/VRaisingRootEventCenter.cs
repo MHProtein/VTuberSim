@@ -73,7 +73,14 @@ namespace VTuber.Core.EventCenter
         
         OnAddConsumable = 49,
         OnRemoveConsumable = 50,
+        
+        OnEnterStore = 51,
+        OnStoreBeginDeleteCard = 52,
+        OnStoreEndDeleteCard = 53,
+        
     }
+    
+    
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>
     {
