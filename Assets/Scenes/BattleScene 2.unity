@@ -33562,12 +33562,18 @@ MonoBehaviour:
   _icons:
     m_keys:
     - Practice
-    - Recovery
+    - Rest
     - Stream
+    - Coop
+    - Outside
+    - Work
     m_values:
     - {fileID: 91500968, guid: b53d4b8d2c82d154682b6c59192abe95, type: 3}
     - {fileID: -1487505022, guid: b53d4b8d2c82d154682b6c59192abe95, type: 3}
     - {fileID: 2126007384, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
+    - {fileID: 266400733, guid: b53d4b8d2c82d154682b6c59192abe95, type: 3}
+    - {fileID: -1671327432, guid: b53d4b8d2c82d154682b6c59192abe95, type: 3}
+    - {fileID: 21300000, guid: ee2fb36007acab64aa096cbb50ba82d5, type: 3}
   eventUIPrefab: {fileID: 1328888101914423096, guid: 2e229b23f5c424c42ab5ffd3bc7d727c, type: 3}
   scheduleCreationUI: {fileID: 1706758801}
   eventNameUI: {fileID: 1396912219}
