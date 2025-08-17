@@ -21,14 +21,14 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  staminaInitialValue: 100
+  staminaInitialValue: 50
   staminaMinValue: 0
-  staminaMaxValue: 100
+  staminaMaxValue: 50
   staminaConfiguration: {fileID: 11400000, guid: 0b8b1877b943de74184ef7428f6c6787, type: 2}
-  pressureInitialValue: 1
+  pressureInitialValue: 3
   pressureMinValue: 1
   pressureMaxValue: 5
-  pressureBuffs: 00000000
+  pressureBuffs: 
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100
   singingAbilityMinValue: 0
