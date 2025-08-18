@@ -43,7 +43,8 @@ namespace VTuber.ScheduleSystem.UI
             _cardUIs = new List<VSelectCardCardUI>();
             _displayingCardUIs = new List<VSelectCardCardUI>();
             confirmButton.onClick.AddListener(Confirm);
-            previewCardUI.gameObject.SetActive(false);
+            if(previewCardUI)
+                previewCardUI.gameObject.SetActive(false);
         }
 
         private void Confirm()

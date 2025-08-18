@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
@@ -15,7 +16,7 @@ namespace VTuber.Core.RaisingEffect
             _condition = configuration.Condition;
         }
 
-        public override void ApplyEffect(VCharacter character)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             var card = GetRandomCards(1, _condition).FirstOrDefault();
             

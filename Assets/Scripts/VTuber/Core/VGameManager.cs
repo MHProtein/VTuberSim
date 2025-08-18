@@ -17,6 +17,7 @@ using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using VTuber.Store;
 using VTuber.Store.UI;
 
 namespace VTuber.BattleSystem.Core
@@ -47,6 +48,7 @@ namespace VTuber.BattleSystem.Core
         [FormerlySerializedAs("eventSystem")] [SerializeField] private VEventSystem eventSystemSystem;
 
         [SerializeField] private VStoreUI _storeUI;
+        [SerializeField] private VStoreConfiguration storeConfiguration;
         
         private VCharacter _character;
         private VStateMachine _stateMachine;
@@ -100,7 +102,6 @@ namespace VTuber.BattleSystem.Core
             
             scheduleUI.Initialize(_character);
 
-            _storeUI.Initialze(_character);
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
@@ -142,6 +143,8 @@ namespace VTuber.BattleSystem.Core
             {
                 _character.CooperatorManager.AddCooperator(configuration);
             }
+            VStore store = new VStore(storeConfiguration);
+            store.EnterStore(character: _character);
         }
         
         public void ModifySchedule()

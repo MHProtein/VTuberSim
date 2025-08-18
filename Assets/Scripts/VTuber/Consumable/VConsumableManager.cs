@@ -34,7 +34,8 @@ namespace VTuber.Consumable
             consumable.Initialize(this);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddConsumable, new Dictionary<string, object>()
             {
-                { "Consumable", consumable }
+                { "Consumable", consumable },
+                { "AreSlotsFull", !CanAddConsumable() }
             });
         }
         
@@ -44,7 +45,7 @@ namespace VTuber.Consumable
             
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable, new Dictionary<string, object>()
             {
-                { "Consumable", consumable }
+                { "Consumable", consumable },
             });
         }
         
@@ -75,7 +76,7 @@ namespace VTuber.Consumable
         
         public void ApplyRaisingEffects(List<VRaisingEffect> effects)
         {
-            effects.ForEach(effect => effect.ApplyEffect(_character));
+            effects.ForEach(effect => effect.ApplyEffect(_character, null));
         }
 
         public void Remove(VConsumable consumable)

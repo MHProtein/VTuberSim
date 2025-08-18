@@ -143,19 +143,6 @@ namespace VTuber.Core.StateMachine
             }
         }
         
-        public void InitializeBattle(int initialTurnCount, int targetPopularity, int initialViewers,
-            int mainAttributeIndex, List<int> abilityTurnCounts)
-        {
-            stateMachine.BattleRoot.SetActive(true);
-            stateMachine.Battle.InitializeBattle(stateMachine.Character.AttributeManager,
-                stateMachine.Character.CardLibrary,
-                initialTurnCount, mainAttributeIndex, abilityTurnCounts,
-                targetPopularity, initialViewers,
-                stateMachine.Character.CharacterRelicManager.GetBattleRelics());
-            stateMachine.Character.ConsumableManager.SetBattle(stateMachine.Battle);
-            VRaisingUI.Instance.SetConsumableToBattle();
-        }
-        
         public void InitializeEvent(VDialogueEvent e)
         {
             stateMachine.EventSystemRoot.SetActive(true);
@@ -166,14 +153,6 @@ namespace VTuber.Core.StateMachine
         {
             _currentEvent = messagedict["Event"] as VScheduleEvent;
             InitializeEvent(_currentEvent as VDialogueEvent);
-        }
-        
-        private void OnStreamEventStart(Dictionary<string, object> messagedict)
-        {
-            _currentEvent = messagedict["Event"] as VScheduleEvent;
-            var streamEvent = _currentEvent as VStreamEvent;
-            InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers,
-                streamEvent.MainAttributeIndex, streamEvent.AbilityTurnCounts);
         }
 
         private void AddEventToCurrentEvent(VEventType eventType, uint id)
@@ -200,7 +179,6 @@ namespace VTuber.Core.StateMachine
         {
             base.Enter(state, enterParams);
             
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventStart, OnEventStart);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
@@ -235,7 +213,6 @@ namespace VTuber.Core.StateMachine
         {
             base.Exit(nextState);
             
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventStart, OnEventStart);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);

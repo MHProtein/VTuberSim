@@ -15,13 +15,14 @@ namespace VTuber.Consumable
         public const int Name = 1;
         public const int Description = 2;
         public const int Type = 3;
-        public const int Rarity = 4;
-        public const int Effect1 = 5;
-        public const int E1Param = 6;
-        public const int Effect2 = 7;
-        public const int E2Param = 8;
-        public const int Effect3 = 9;
-        public const int E3Param = 10;
+        public const int LiveType = 4;
+        public const int Rarity = 5;
+        public const int Effect1 = 6;
+        public const int E1Param = 7;
+        public const int Effect2 = 8;
+        public const int E2Param = 9;
+        public const int Effect3 = 10;
+        public const int E3Param = 11;
     }
     
     public class VRaisingConsumableConfiguration : VConsumableConfiguration
@@ -88,7 +89,8 @@ namespace VTuber.Consumable
         public string name;
         public string description;
         public VConsumableRarity rarity;
-        protected uint idDistributor = 0;
+        protected uint idDistributor = 0;    
+        public string liveType;
 
         public VConsumableConfiguration(CellRange row)
         {
@@ -96,6 +98,7 @@ namespace VTuber.Consumable
             name = row.Columns[VConsumableHeaderIndex.Name].Value.Trim();
             description = row.Columns[VConsumableHeaderIndex.Description].Value.Trim();
             rarity = Enum.Parse<VConsumableRarity>(row.Columns[VConsumableHeaderIndex.Rarity].Value.Trim());
+            liveType = row.Columns[VConsumableHeaderIndex.LiveType].Value.Trim();
         }
         
         public virtual VConsumable CreateConsumable()

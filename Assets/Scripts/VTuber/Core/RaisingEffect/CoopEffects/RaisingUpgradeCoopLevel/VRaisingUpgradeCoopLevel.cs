@@ -1,4 +1,5 @@
-﻿using VTuber.Character;
+﻿using System.Collections.Generic;
+using VTuber.Character;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -10,7 +11,7 @@ namespace VTuber.Core.RaisingEffect
             cooperatorID = configuration.cooperatorID;
         }
 
-        public override void ApplyEffect(VCharacter character)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CooperatorManager.GetCooperator(cooperatorID).UpgradeLevel();
         }

@@ -29,7 +29,7 @@ public class DialogContent
     {
         foreach (var effect in effects)
         {
-            effect.ApplyEffect(character);
+            effect.ApplyEffect(character, null);
         }
     }
 }

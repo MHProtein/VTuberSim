@@ -1,4 +1,5 @@
-﻿using VTuber.BattleSystem.Effect;
+﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 
 namespace VTuber.Core.RaisingEffect
@@ -13,7 +14,7 @@ namespace VTuber.Core.RaisingEffect
             value = new VUpgradableValue<int>(int.Parse(parameter.Trim()), int.Parse(upgradedParameter.Trim()));
         }
 
-        public override void ApplyEffect(VCharacter character)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CooperatorManager.GetCooperator(cooperatorID).AddCoopValue(value.Value);
         }
