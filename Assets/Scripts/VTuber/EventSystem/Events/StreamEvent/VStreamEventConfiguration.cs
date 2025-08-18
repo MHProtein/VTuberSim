@@ -4,22 +4,23 @@ using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine.Serialization;
 using VTuber.Core.Managers;
+using VTuber.ScheduleSystem.Events.DialogueEvent;
 
 namespace VTuber.ScheduleSystem.Events
 {
     public class VStreamEventHeaderIndex
     {
-        public const int TurnCount = 10;
-        public const int Target = 11;
-        public const int InitialViewers = 12;
-        public const int MainAbility = 13;
-        public const int AbilityTurns = 14;
-        public const uint SuccessEvent = 15;
-        public const uint FailEvent = 16;
-        public const int PhaseEndingConditions = 17;
+        public const int TurnCount = 11;
+        public const int Target = 12;
+        public const int InitialViewers = 13;
+        public const int MainAbility = 14;
+        public const int AbilityTurns = 15;
+        public const uint SuccessEvent = 16;
+        public const uint FailEvent = 17;
+        public const int PhaseEndingConditions = 18;
     }
     
-    public class VStreamEventConfiguration : VScheduleEventConfiguration
+    public class VStreamEventConfiguration : VDialogueEventConfiguration
     {
         public int initialTurnCount;
         public int targetPopularity;

@@ -7,7 +7,7 @@ using VTuber.ScheduleSystem.Events.DialogueEvent;
 
 namespace VTuber.ScheduleSystem.Events
 {
-    public class VStreamEvent : VScheduleEvent
+    public class VStreamEvent : VDialogueEvent
     {
         public int InitialTurnCount { get; private set; }
         public int TargetPopularity { get; private set; } = 0;
@@ -50,18 +50,6 @@ namespace VTuber.ScheduleSystem.Events
             }
 
             return conditionsMet;
-        }
-
-        public override bool Execute(VCharacter player)
-        {
-            if (!CanExecute(player))
-                return false;
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStreamEventStart, new Dictionary<string, object>()
-            {
-                {"Event", this}
-            });
-            IsExecuted = true;
-            return true;
         }
 
         public void SetResultEvent(bool isSuccess)

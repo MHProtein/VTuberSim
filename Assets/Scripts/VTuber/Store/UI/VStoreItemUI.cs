@@ -20,7 +20,7 @@ namespace VTuber.Store.UI
         [SerializeField] protected GameObject poorObject;
         protected VStoreSlot slot;
         protected VCharacter character;
-        protected bool canAfford = true;
+        protected bool canBuy = true;
         protected bool hasBought = false;
 
         protected override void Awake()
@@ -54,7 +54,7 @@ namespace VTuber.Store.UI
 
         public void Buy()
         {
-            if (canAfford)
+            if (canBuy)
             {
                 hasBought = true;
                 buyPanel.SetActive(false);
@@ -65,7 +65,7 @@ namespace VTuber.Store.UI
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            if (!hasBought && canAfford)
+            if (!hasBought && canBuy)
             {
                 buyPanel.SetActive(true);
             }
@@ -83,9 +83,9 @@ namespace VTuber.Store.UI
         {
             if(hasBought)
                 return;
-            canAfford = slot.Affordable(character);
-            poorObject.SetActive(!canAfford);
-            if (!canAfford)
+            canBuy = slot.Affordable(character);
+            poorObject.SetActive(!canBuy);
+            if (!canBuy)
             {
                 priceText.color = Color.red;
             }

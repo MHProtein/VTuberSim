@@ -27,14 +27,29 @@ namespace VTuber.Store.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEnterStore, OnEnterStore);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnMoneyChanged, OnMoneyChanged);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStoreEndRefresh, OnStoreEndRefresh);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnAddConsumable, OnAddConsumable);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRemoveConsumable, OnRemoveConsumable);
         }
-        
+
+        private void OnRemoveConsumable(Dictionary<string, object> messagedict)
+        {
+            storeConsumableItemUIs.ForEach(storeConsumableItemUI => (storeConsumableItemUI as VStoreConsumableItemUI).AreSlotsFull(false));
+        }
+
+        private void OnAddConsumable(Dictionary<string, object> messagedict)
+        {
+            storeConsumableItemUIs.ForEach(storeConsumableItemUI =>
+                (storeConsumableItemUI as VStoreConsumableItemUI).AreSlotsFull((bool)messagedict["AreSlotsFull"]));
+        }
+
         protected override void OnDisable()
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEnterStore, OnEnterStore);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnMoneyChanged, OnMoneyChanged);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStoreEndRefresh, OnStoreEndRefresh);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnAddConsumable, OnAddConsumable);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRemoveConsumable, OnRemoveConsumable);
         }
         
         private void OnMoneyChanged(Dictionary<string, object> messagedict)

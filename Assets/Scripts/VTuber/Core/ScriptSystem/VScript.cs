@@ -3,6 +3,7 @@ using UnityEngine;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Character.Attributes;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Events;
 
@@ -53,6 +54,7 @@ namespace VTuber.Core.ScriptSystem
             if (_currentPhase.nextPhase.IsInPhase(weekIndex))
             {
                 _currentPhase = _currentPhase.nextPhase;
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseBegin, new Dictionary<string, object>());
                 return _currentPhase.GetStartEvent();
             }
 

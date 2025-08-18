@@ -82,6 +82,10 @@ namespace VTuber.Core.EventCenter
         OnStoreBeginRefresh = 56,
         OnStoreEndRefresh = 57,
         OnStoreLoadItems = 58,
+        OnRequestEnterStore = 59,
+        
+        OnPhaseBegin = 60,
+        OnPhaseEnd = 61,
     }
     
     

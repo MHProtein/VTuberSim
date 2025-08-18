@@ -8,10 +8,6 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Store
 {
-    
-    
-    
-    
     public class VStore
     {
         private int refreshCount = 0;
@@ -20,7 +16,6 @@ namespace VTuber.Store
 
         private VCharacter _character;
         private VStoreConfiguration _storeConfig;
-        
 
         private List<float> CardRarityProbabilities => _storeConfig.cardRarityProbabilities;
         private List<float> CardRarityUpgradeProbabilities => _storeConfig.cardRarityUpgradeProbabilities;
@@ -253,5 +248,10 @@ namespace VTuber.Store
             return selectedConsumables;
         }
         #endregion
+
+        public void ResetRefresh()
+        {
+            refreshCount = _storeConfig.defaultRefreshCount;
+        }
     }
 }

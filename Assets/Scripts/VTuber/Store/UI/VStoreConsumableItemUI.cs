@@ -12,6 +12,7 @@ namespace VTuber.Store.UI
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private RectTransform descriptionPanel;
+        [SerializeField] protected GameObject slotsFullObject;
 
         public override void SetSlot(VStoreSlot slot, VCharacter character)
         {
@@ -21,6 +22,13 @@ namespace VTuber.Store.UI
             descriptionText.text = consumableSlot.consumable.Description;
             
             base.SetSlot(slot, character);
+        }  
+        
+        public void AreSlotsFull(bool areSlotsFull)
+        {
+            if(hasBought) return;
+            canBuy = !areSlotsFull;
+            slotsFullObject.SetActive(areSlotsFull);
         }
 
         public override void OnPointerEnter(PointerEventData eventData)
