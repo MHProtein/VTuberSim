@@ -73,6 +73,7 @@ public class Dialog
     {
         loaded = true;
         string[] data = csvFile.text.Split(new char[] { '\n' });
+        Debug.Log(csvFile.name);
         for (int i = 1; i < data.Length-1; i++)
         {
             string[] row = data[i].Split(new char[] { ',' });
@@ -85,7 +86,16 @@ public class Dialog
                 switch (j)
                 { 
                     case 0:
-                        dc.id = int.Parse(row[j]);
+                        try
+                        {
+                            dc.id = int.Parse(row[j]);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.Log(e.Message);
+                        }
+
+                     
                         break;
                     case 1:
                         if (row[j].Equals("1"))
