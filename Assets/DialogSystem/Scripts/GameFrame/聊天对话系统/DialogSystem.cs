@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -12,7 +13,7 @@ using Random = UnityEngine.Random;
 public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 {
     public Transform canvas;
-
+    public Text dialogName;
     private Dialog currentDialog;
     private bool canContinue = false;
 
@@ -133,6 +134,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         
         EnableFunctionBtn(true);
         PauseBtn.interactable = false;
+        this.dialogName.text = dialog.dialogName;
     }
     
     private void ClearDialogs()

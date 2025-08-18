@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Mime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,10 @@ using UnityEngine.UI;
 public class DialogObj : MonoBehaviour
 {
     public Image speakerIcon;
+    public TMP_Text nameText;
+    public RectTransform contentTransform;
+    public RectTransform contentDMTransform;
+    public RectTransform contentGroupTransform;
     public Text words;
     public RectTransform rect;
     private Vector2 originSize;
@@ -30,6 +35,19 @@ public class DialogObj : MonoBehaviour
 
     public void ShowDialog(DialogContent dc)
     {
+        if (dc.isDM)
+        {
+            nameText.gameObject.SetActive(false);
+            if(contentDMTransform != null)
+                contentTransform.anchoredPosition = contentDMTransform.anchoredPosition;
+        }
+        else
+        {
+            nameText.gameObject.SetActive(true);
+            nameText.text = dc.speakerName;
+            if(contentGroupTransform != null)
+                contentTransform.anchoredPosition = contentGroupTransform.anchoredPosition;
+        }
         speakerIcon.sprite = Resources.Load<Sprite>($"Sprites/SpeakerIcons/{dc.iconId}");
         print(dc.iconId);
         if (dc.ifImage)
