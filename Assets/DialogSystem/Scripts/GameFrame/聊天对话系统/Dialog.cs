@@ -24,6 +24,7 @@ public class DialogContent
     public string optionDescription;
     public int nextId;
     public bool ifImage;
+    public bool isDM;
 
     public void AppleEffects(VCharacter character)
     {
@@ -36,13 +37,21 @@ public class DialogContent
 
 public class Dialog
 {
+    public struct CharacterInfo
+    {
+        public string name;
+        public string icon;
+    }
     //对话csv文件
     public TextAsset csvFile;
     
     //当前对话id
     public int index;
+    public bool isDM;
 
     [HideInInspector] public bool loaded = false;
+    public string dialogName;
+    public List<CharacterInfo> characterInfos = new List<CharacterInfo>();
     
     //对话内容表
     public Dictionary<int,DialogContent> contentDic = new Dictionary<int, DialogContent>();
@@ -73,12 +82,31 @@ public class Dialog
     {
         loaded = true;
         string[] data = csvFile.text.Split(new char[] { '\n' });
-        for (int i = 1; i < data.Length-1; i++)
+
+        dialogName = data[0].Split(new char[] { ',' })[0];
+        
+        var rawCharacterInfos = data[1].Split(new char[] { ',' });
+        
+        for (int i = 0; i < rawCharacterInfos.Length; i++)
+        {
+            if (rawCharacterInfos[i].IsNullOrWhitespace())
+                break;
+            CharacterInfo characterInfo = new CharacterInfo();
+            var info = rawCharacterInfos[i].Split(new char[] { '\\' });
+            characterInfo.name = info[0];
+            characterInfo.icon = info[1];
+            characterInfos.Add(characterInfo);
+        }
+
+        isDM = characterInfos.Count == 2;
+        
+        for (int i = 3; i < data.Length-1; i++)
         {
             string[] row = data[i].Split(new char[] { ',' });
             if(row[0].IsNullOrWhitespace())
                 break;
             DialogContent dc = new DialogContent();
+            dc.isDM = isDM;
             // 处理每一行数据
             for (int j = 0; j < row.Length; j++)
             { 
@@ -114,24 +142,23 @@ public class Dialog
                         }
                         break;
                     case 8:
-                        dc.iconId = row[j];
-                        break;
-                    case 9:
                         if (row[j].Equals("1"))
                         {
                             dc.ifImage = true;
                         }
                         break;
-                    case 10:
+                    case 9:
                         dc.imageId = row[j];
                         break;
-                    case 11:
+                    case 10:
                         dc.context = row[j];
                         break;
-                    case 12:
-                        dc.speakerName = row[j];
+                    case 11:
+                        int index = int.Parse(row[j]) - 1;
+                        dc.speakerName = characterInfos[index].name;
+                        dc.iconId = characterInfos[index].icon;
                         break;
-                    case 13:
+                    case 12:
                         dc.nextId = int.Parse(row[j]);
                         break;
                 }
