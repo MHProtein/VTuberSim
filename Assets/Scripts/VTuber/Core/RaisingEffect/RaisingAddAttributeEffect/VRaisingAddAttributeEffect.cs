@@ -1,4 +1,5 @@
-﻿using VTuber.BattleSystem.Effect;
+﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
@@ -16,7 +17,7 @@ namespace VTuber.Core.RaisingEffect
             _value = new VUpgradableValue<int>(value, upgradedValue);
         }
 
-        public override void ApplyEffect(VCharacter character)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {

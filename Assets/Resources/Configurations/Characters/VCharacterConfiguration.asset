@@ -28,7 +28,7 @@ MonoBehaviour:
   pressureInitialValue: 3
   pressureMinValue: 1
   pressureMaxValue: 5
-  pressureBuffs: 
+  pressureBuffs: 0000000001000000020000000300000004000000
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100
   singingAbilityMinValue: 0

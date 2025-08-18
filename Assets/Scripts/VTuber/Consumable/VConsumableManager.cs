@@ -75,7 +75,7 @@ namespace VTuber.Consumable
         
         public void ApplyRaisingEffects(List<VRaisingEffect> effects)
         {
-            effects.ForEach(effect => effect.ApplyEffect(_character));
+            effects.ForEach(effect => effect.ApplyEffect(_character, null));
         }
 
         public void Remove(VConsumable consumable)

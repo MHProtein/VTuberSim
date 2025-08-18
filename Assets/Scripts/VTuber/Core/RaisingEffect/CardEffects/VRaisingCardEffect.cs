@@ -91,7 +91,7 @@ namespace VTuber.Core.RaisingEffect
             return selectedCards;
         }
 
-        public override void ApplyEffect(VCharacter character)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             
         }

@@ -48,7 +48,7 @@ namespace VTuber.Consumable
         {
             clickDetectionPanel.gameObject.SetActive(false);
             IsSubMenuActive = false;
-            _slots.ForEach(slot => slot.SetSubMenuActive(false));
+            _slots.ForEach(slot => slot.SetSubMenuInactive());
         }
         
         public void AddSlot()

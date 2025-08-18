@@ -79,6 +79,9 @@ namespace VTuber.Core.EventCenter
         OnStoreEndDeleteCard = 53,
         OnStoreBeginUpgradeCard = 54,
         OnStoreEndUpgradeCard = 55,
+        OnStoreBeginRefresh = 56,
+        OnStoreEndRefresh = 57,
+        OnStoreLoadItems = 58,
     }
     
     

@@ -18,7 +18,7 @@ namespace VTuber.Core.RaisingEffect
             _condition = configuration.Condition;
         }
 
-        public override void ApplyEffect(VCharacter character)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             _character = character;
             cardToReplace = GetRandomCards(1, _condition).FirstOrDefault();

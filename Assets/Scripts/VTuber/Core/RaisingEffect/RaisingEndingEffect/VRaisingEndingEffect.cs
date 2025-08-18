@@ -13,7 +13,7 @@ namespace VTuber.Core.RaisingEffect
             
         }
 
-        public override void ApplyEffect(VCharacter character)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginEnding, new Dictionary<string, object>()

@@ -22,9 +22,9 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   upgradePrice: 100
-  deleteCardPrice: 100
+  discardCardPrice: 100
   upgradePriceIncrease: 20
-  deletePriceIncrease: 20
+  discardCardPriceIncrease: 20
   defaultRefreshCount: 5
   minDiscount: 0.4
   maxDiscount: 0.9

@@ -8,98 +8,9 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Store
 {
-    public class VStoreButton
-    {
-        public int OriginalPrice { get; protected set; }
-        public int TotalIncrease { get; protected set; }
-        public int Price { get; protected set; }
-        public int PriceIncrease { get; protected set; }
-        public bool IsDiscount { get; protected set; }
-        public float Discount { get; protected set; }
-        public bool SoldOut { get; protected set; } = false;
-
-        public VStoreButton(int originalPrice, int priceIncrease)
-        {
-            PriceIncrease = priceIncrease;
-            OriginalPrice = originalPrice;
-            this.Discount = Discount;
-            
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStoreEndDeleteCard, OnStoreEndDeleteCard);
-        }
-        
-        public void SetPrice(bool isDiscount, float discount)
-        {
-            Discount = discount;
-            if(isDiscount)
-                Price = (int)((OriginalPrice + TotalIncrease) * (1.0f - Discount));
-            else
-                Price = OriginalPrice + TotalIncrease;
-        }
-
-        private void OnStoreEndDeleteCard(Dictionary<string, object> messagedict)
-        {
-            var deleted = messagedict["Deleted"] as bool? ?? false;
-            if (deleted)
-            {
-                SoldOut = true;
-                TotalIncrease += PriceIncrease;
-            }
-        }
-    }
-    public class VStoreConsumableSlot : VStoreSlot
-    {
-        public VConsumable consumable;
-
-        public VStoreConsumableSlot(bool isDiscount, int originalPrice, float discount, VConsumable consumable) : base(isDiscount, originalPrice, discount)
-        {
-            this.consumable = consumable;
-        }
-    }
     
-    public class VStoreCardSlot : VStoreSlot
-    {
-        public VCard card;
-
-        public VStoreCardSlot(bool isDiscount, int originalPrice, float discount, VCard card) : base(isDiscount, originalPrice, discount)
-        {
-            this.card = card;
-        }
-
-        public override void Buy(VCharacter character)
-        {
-            base.Buy(character);
-            character.CardLibrary.AddCard(card);
-        }
-    }
     
-    public class VStoreSlot
-    {
-        public readonly int originalPrice;
-        public readonly int price;
-        public readonly float discount;
-        public readonly bool isDiscount;
-        
-        public VStoreSlot(bool isDiscount, int originalPrice, float discount)
-        {
-            this.isDiscount = isDiscount;
-            this.originalPrice = originalPrice;
-            if(isDiscount)
-                price = (int)(originalPrice * (1.0f - discount));
-            else
-                price = originalPrice;
-            this.discount = discount;
-        }
-
-        public bool Affordable(VCharacter character)
-        {
-            return character.AttributeManager.Attributes["CAMoney"].Value >= price;
-        }
-        
-        public virtual void Buy(VCharacter character)
-        {
-            character.AttributeManager.Attributes["CAMoney"].AddTo(-price);
-        }
-    }
+    
     
     public class VStore
     {
@@ -109,28 +20,84 @@ namespace VTuber.Store
 
         private VCharacter _character;
         private VStoreConfiguration _storeConfig;
+        
 
         private List<float> CardRarityProbabilities => _storeConfig.cardRarityProbabilities;
         private List<float> CardRarityUpgradeProbabilities => _storeConfig.cardRarityUpgradeProbabilities;
         private List<float> ConsumableRarityProbabilities => _storeConfig.consumableRarityProbabilities;
         
+        private VStoreDiscardButton _discardButton;
+        private VStoreUpgradeButton _upgradeButton;
+        private bool _isGlobalDiscount = false;
+        private float _globalDiscount = 0.0f;
         
         public VStore(VStoreConfiguration storeConfig)
         {
             _storeConfig = storeConfig;
+            refreshCount = storeConfig.defaultRefreshCount;
+            
+            _discardButton = new VStoreDiscardButton(storeConfig.discardCardPrice, storeConfig.discardCardPriceIncrease);
+            _upgradeButton = new VStoreUpgradeButton(storeConfig.upgradePrice, storeConfig.upgradePriceIncrease);
+            
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStoreBeginRefresh, OnStoreBeginRefresh);
+        }
+        
+        public void SetGlobalDiscount(float discount)
+        {
+            _isGlobalDiscount = true;
+            _globalDiscount = discount;
+        }
+
+        private void OnStoreBeginRefresh(Dictionary<string, object> messagedict)
+        { 
+            refreshCount--;
+            _cards.Clear();
+            _consumables.Clear();
+            
+            LoadItems();
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreEndRefresh, new Dictionary<string, object>()
+            {
+                { "Character", _character },
+                { "CardSlots", _cards },
+                { "ConsumableSlots", _consumables },
+                { "DiscardButton", _discardButton },
+                { "UpgradeButton", _upgradeButton },
+                { "RefreshCount", refreshCount },
+            });
         }
 
         public void EnterStore(VCharacter character)
         {
             _character = character;
-            LoadCards();
-            LoadConsumables();
+
+            LoadItems();
 
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEnterStore, new Dictionary<string, object>()
             {
                 { "Character", character },
                 { "CardSlots", _cards },
+                { "ConsumableSlots", _consumables },
+                { "DiscardButton", _discardButton },
+                { "UpgradeButton", _upgradeButton },
+                { "RefreshCount", refreshCount },
             });
+        }
+
+        public void LoadItems()
+        {
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreLoadItems, new Dictionary<string, object>()
+            {
+                {"Store", this},
+            });
+            
+            LoadCards();
+            LoadConsumables();
+            
+            _discardButton.SetPrice(_isGlobalDiscount, _globalDiscount);
+            _upgradeButton.SetPrice(_isGlobalDiscount, _globalDiscount);
+            
+            _isGlobalDiscount = false;
         }
 
         public void ExitStore()
@@ -139,58 +106,36 @@ namespace VTuber.Store
             _consumables.Clear();
         }
         
-        public void RefreshStore()
-        {
-            _cards.Clear();
-            _consumables.Clear();
-            LoadCards();
-            LoadConsumables();
-            
-            refreshCount--;
-            if (refreshCount <= 0)
-            {
-                //todo: set not refreshable
-            }
-        }
-        
         public void LoadCards()
         {
-            var cards = GetRandomCards(4);
+            var cards = GetRandomCards(_storeConfig.cardCount);
             
-            var slot = new VStoreCardSlot(true, _storeConfig.cardPrices[(int)(cards[0].Rarity - 1)], 
-                Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount), cards[0]);
+            var slot = new VStoreCardSlot(true, false, _storeConfig.cardPrices[(int)(cards[0].Rarity - 1)], 
+                Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount) * (_isGlobalDiscount ? _globalDiscount : 1.0f), cards[0]);
             _cards.Add(slot);
 
             for (int i = 1; i < cards.Count; i++)
             {
-                slot = new VStoreCardSlot(false, _storeConfig.cardPrices[(int)(cards[i].Rarity - 1)], 
-                    0.0f, cards[i]);
+                slot = new VStoreCardSlot(false, _isGlobalDiscount, _storeConfig.cardPrices[(int)(cards[i].Rarity - 1)], 
+                    _globalDiscount, cards[i]);
                 _cards.Add(slot);
             }
         }
         
         public void LoadConsumables()
         {
-            var consumables = GetRandomConsumables(1);
+            var consumables = GetRandomConsumables(_storeConfig.consumableCount);
             
-            var slot = new VStoreConsumableSlot(true, _storeConfig.cardPrices[(int)consumables[0].Rarity], 
-                Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount), consumables[0]);
+            var slot = new VStoreConsumableSlot(true, false, _storeConfig.cardPrices[(int)consumables[0].Rarity], 
+                Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount) * (_isGlobalDiscount ? _globalDiscount : 1.0f), consumables[0]);
             _consumables.Add(slot);
             
             for (int i = 1; i < consumables.Count; i++)
             {
-                slot = new VStoreConsumableSlot(false, _storeConfig.consumablePrices[(int)(consumables[i].Rarity - 1)], 
-                    0.0f, consumables[i]);
+                slot = new VStoreConsumableSlot(false, _isGlobalDiscount, _storeConfig.consumablePrices[(int)(consumables[i].Rarity)], 
+                    _globalDiscount, consumables[i]);
                 _consumables.Add(slot);
             }
-        }
-
-        public void DeleteCard()
-        {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreBeginDiscardCard, new Dictionary<string, object>()
-            {
-                {"Character", _character}
-            });
         }
         
         #region GetItems

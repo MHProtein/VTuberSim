@@ -1,0 +1,71 @@
+﻿using VTuber.BattleSystem.Card;
+using VTuber.Character;
+using VTuber.Consumable;
+
+namespace VTuber.Store
+{
+    public class VStoreConsumableSlot : VStoreSlot
+    {
+        public VConsumable consumable;
+
+        public VStoreConsumableSlot(bool isDiscount,bool isGlobalDiscount, int originalPrice, float discount, VConsumable consumable)
+            : base(isDiscount, isGlobalDiscount, originalPrice, discount)
+        {
+            this.consumable = consumable;
+        }
+
+        public override void Buy(VCharacter character)
+        {
+            base.Buy(character);
+            character.ConsumableManager.AddConsumable(consumable);
+        }
+    }
+    
+    public class VStoreCardSlot : VStoreSlot
+    {
+        public VCard card;
+
+        public VStoreCardSlot(bool isDiscount,bool isGlobalDiscount, int originalPrice, float discount, VCard card)
+            : base(isDiscount, isGlobalDiscount, originalPrice, discount)
+        {
+            this.card = card;
+        }
+
+        public override void Buy(VCharacter character)
+        {
+            base.Buy(character);
+            character.CardLibrary.AddCard(card);
+        }
+    }
+    
+    public class VStoreSlot
+    {
+        public int OriginalPrice { get; protected set; }
+        public int Price { get; protected set; }
+        public float Discount { get; protected set; }
+        public bool IsDiscount { get; protected set; }
+        public bool IsGlobalDiscount { get; protected set; }
+
+        public VStoreSlot(bool isDiscount, bool isGlobalDiscount, int originalPrice, float discount)
+        {
+            this.IsDiscount = isDiscount;
+            this.IsGlobalDiscount = isGlobalDiscount;
+            this.OriginalPrice = originalPrice;
+            if(isDiscount)
+                Price = (int)(originalPrice * (1.0f - discount));
+            else
+                Price = originalPrice;
+            this.Discount = discount;
+        }
+
+        public bool Affordable(VCharacter character)
+        {
+            return character.AttributeManager.Attributes["CAMoney"].Value >= Price;
+        }
+        
+        public virtual void Buy(VCharacter character)
+        {
+            character.AttributeManager.Attributes["CAMoney"].AddTo(-Price);
+        }
+    }
+}

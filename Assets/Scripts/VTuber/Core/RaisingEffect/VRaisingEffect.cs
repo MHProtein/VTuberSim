@@ -18,7 +18,7 @@ namespace VTuber.Core.RaisingEffect
         }
 
 
-        public abstract void ApplyEffect(VCharacter character);
+        public abstract void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict);
 
         public abstract void Upgrade();
 

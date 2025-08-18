@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 
@@ -12,6 +14,7 @@ namespace VTuber.Consumable
         public void SetConsumable(VConsumable consumable)
         {
             _consumable = consumable;
+            //icon.sprite = consumable.Icon;
         }
 
         public bool HasConsumable()

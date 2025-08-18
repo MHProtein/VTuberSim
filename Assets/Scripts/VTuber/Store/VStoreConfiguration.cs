@@ -10,9 +10,9 @@ namespace VTuber.Store
     {
         [Header("升级/删除卡牌")]
         [LabelText("升级价格")] public int upgradePrice;
-        [LabelText("删卡价格")] public int deleteCardPrice;
+        [FormerlySerializedAs("deleteCardPrice")] [LabelText("删卡价格")] public int discardCardPrice;
         [LabelText("升级价格涨幅")] public int upgradePriceIncrease;
-        [LabelText("删卡价格涨幅")] public int deletePriceIncrease;
+        [FormerlySerializedAs("deletePriceIncrease")] [LabelText("删卡价格涨幅")] public int discardCardPriceIncrease;
 
         [LabelText("刷新次数")] public int defaultRefreshCount;
         
