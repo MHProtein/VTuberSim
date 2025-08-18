@@ -2906,6 +2906,7 @@ MonoBehaviour:
   _rarityDropdown: {fileID: 2105673996}
   _isUpgraded: {fileID: 142394602}
   grid: {fileID: 343915265}
+  previewCardUI: {fileID: 0}
   confirmButton: {fileID: 0}
   returnButton: {fileID: 403045597}
 --- !u!114 &106578635
@@ -20304,6 +20305,7 @@ MonoBehaviour:
   _rarityDropdown: {fileID: 971972533}
   _isUpgraded: {fileID: 1789744087}
   grid: {fileID: 252155352}
+  previewCardUI: {fileID: 0}
   confirmButton: {fileID: 542024199}
   returnButton: {fileID: 1851790930}
 --- !u!114 &529928178
@@ -27643,6 +27645,7 @@ MonoBehaviour:
   _rarityDropdown: {fileID: 1096213457}
   _isUpgraded: {fileID: 2108050105}
   grid: {fileID: 1386382053}
+  previewCardUI: {fileID: 0}
   confirmButton: {fileID: 29175154}
   returnButton: {fileID: 2121876727}
 --- !u!114 &777859379
@@ -53465,6 +53468,7 @@ MonoBehaviour:
   _rarityDropdown: {fileID: 406863109}
   _isUpgraded: {fileID: 1055819675}
   grid: {fileID: 1620840269}
+  previewCardUI: {fileID: 0}
   confirmButton: {fileID: 527576599}
   returnButton: {fileID: 1419351082}
 --- !u!43 &1610625824
