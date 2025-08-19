@@ -111,9 +111,10 @@ public class Dialog
         
 
         isDM = characterInfos.Count == 2;
-        
-        for (int i = 3; i < data.Length-1; i++)
+
+        for (int i = 3; i < data.Length - 1; i++) 
         {
+            int j = 0;
             try
             {
                 string[] row = data[i].Split(new char[] { ',' });
@@ -122,7 +123,7 @@ public class Dialog
                 DialogContent dc = new DialogContent();
                 dc.isDM = isDM;
                 // 处理每一行数据
-                for (int j = 0; j < row.Length; j++)
+                for (j = 0; j < row.Length; j++)
                 { 
                     switch (j)
                     { 
@@ -181,7 +182,7 @@ public class Dialog
             }
             catch (Exception e)
             {
-                VDebug.LogError("对话 " + csvFile.name + " " + i + "行有问题 " + e.Message);
+                VDebug.LogError("对话 " + csvFile.name + " " + i + "行" + j + "有问题 " + e.Message);
                 throw;
             }
             

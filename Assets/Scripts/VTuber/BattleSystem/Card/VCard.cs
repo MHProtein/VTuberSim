@@ -75,17 +75,32 @@ namespace VTuber.BattleSystem.Card
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
             if(conditionId != -1)
                 condition = VResourcesManager.Instance.GetConditionByID((uint)conditionId);
-            
-            foreach (var effect in effects)
+
+            int i = 0;
+            try
             {
-                VDebug.Log("cardId : " + configID);
-                VDebug.Log("effect : " + effect.id);
-                _effects.Add(effect.CreateEffect());
+                for (i = 0; i < effects.Count; i++)
+                {
+                    _effects.Add(effects[i].CreateEffect());
+                }
             }
-            
-            foreach (var effect in newEffects)
+            catch (Exception e)
             {
-                _newEffects.Add(effect.CreateEffect());
+                VDebug.LogError($"id为 {configID} 的卡牌 第{i}个效果配置错误");
+                throw;
+            }
+
+            try
+            {
+                for (i = 0; i < _newEffects.Count; i++)
+                {
+                    _newEffects.Add(newEffects[i].CreateEffect());
+                }
+            }
+            catch (Exception e)
+            {
+                VDebug.LogError($"id为 {configID} 的卡牌 第{i}个—“新”—效果配置错误");
+                throw;
             }
         }
         

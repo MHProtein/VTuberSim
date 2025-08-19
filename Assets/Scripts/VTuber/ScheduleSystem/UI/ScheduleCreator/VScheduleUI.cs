@@ -4,6 +4,7 @@ using PrimeTween;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
@@ -17,6 +18,7 @@ using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
+    
     public class VScheduleUI : VUIBehaviour
     {
         public Vector2Int slotSize;
@@ -32,8 +34,13 @@ namespace VTuber.ScheduleSystem.UI
 
         protected VAnimationQueue animationQueue;
         
+        private Dictionary<VEventType, int> eventCount = new Dictionary<VEventType, int>();
+        private VKPIManager kpiManager;
+        private VScript _script;
+        
         protected override void Awake()
         {
+            kpiManager = new VKPIManager();
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             slots = new VScheduleSlot[slotSize.y, slotSize.x];
             var slotList = GetComponentsInChildren<VScheduleSlot>();
@@ -55,7 +62,10 @@ namespace VTuber.ScheduleSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
         }
+
+
 
         protected override void OnDisable()
         {
@@ -63,6 +73,14 @@ namespace VTuber.ScheduleSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
+        }
+        
+        private void OnPhaseBegin(Dictionary<string, object> messagedict)
+        {
+            kpiManager.ClearPhaseKPIs();
+            var phase = messagedict["Phase"] as VPhase;
+            kpiManager.AddPhaseKPI(phase.KPIs);
         }
         
         private void OnEventUIPlaced(Dictionary<string, object> messagedict)
@@ -188,11 +206,14 @@ namespace VTuber.ScheduleSystem.UI
             ChangeIndicatorColor(Color.yellow);
         }
 
-        public void Initialize(VCharacter character)
+        public void Initialize(VCharacter character, VScript script)
         {
             _character = character;
+            _script = script;
+            kpiManager = new VKPIManager();
+            kpiManager.AddPermanentKPI(script.kpis);
         }
-        
+
         private void OnEventExecuted(Dictionary<string, object> messagedict)
         {
             Vector2Int coordinate = (Vector2Int)messagedict["Coordinate"];

@@ -16,7 +16,7 @@ namespace VTuber.EventSystem.UI
         [SerializeField] private Button confirmButton;
         [SerializeField] private Transform grid;
         
-        public void Initialize(GameObject endingPrefab, List<KeyValuePair<VStreamEvent, List<bool>>> endings)
+        public void Initialize(GameObject endingPrefab, List<VStreamEvent> endings)
         {
             confirmButton.interactable = false;
             _options = new List<VPhaseEndingOption>();
@@ -24,7 +24,7 @@ namespace VTuber.EventSystem.UI
             {
                 GameObject endingGo = Instantiate(endingPrefab, grid);
                 VPhaseEndingOption option = endingGo.GetComponent<VPhaseEndingOption>();
-                option.Initialize(ending.Key, ending.Value, this);
+                option.Initialize(ending, this);
                 _options.Add(option);
             }
         }

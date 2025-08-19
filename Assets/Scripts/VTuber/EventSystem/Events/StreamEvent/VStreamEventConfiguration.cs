@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine.Serialization;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.Core.Managers;
+using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 
 namespace VTuber.ScheduleSystem.Events
@@ -19,7 +22,9 @@ namespace VTuber.ScheduleSystem.Events
         public const int SuccessEvent = 17;
         public const int FailEvent = 18;
         public const int AttributeBonus = 19;
-        public const int PhaseEndingConditions = 20;
+        public const int KPI1 = 20;
+        public const int KPI2 = 21;
+        public const int KPI3 = 22;
     }
     
     public class VStreamEventConfiguration : VDialogueEventConfiguration
@@ -34,7 +39,7 @@ namespace VTuber.ScheduleSystem.Events
         public bool isPhaseEndingEvent = false;
         public int mainAttributeIndex;
         public List<int> abilityTurnCounts;
-        public List<VPhaseEndingCondition> phaseEndingConditions;
+        public List<VKPI> kpis;
 
         public VStreamEventConfiguration(CellRange row) : base(row)
         {
@@ -52,28 +57,20 @@ namespace VTuber.ScheduleSystem.Events
             attributeBonus = int.Parse(row.Columns[VStreamEventHeaderIndex.AttributeBonus].Value);
             successEvent = successEventStr.IsNullOrWhitespace() ? -1 : int.Parse(successEventStr);
             failureEvent = failureEventStr.IsNullOrWhitespace() ? -1 : int.Parse(failureEventStr);
-            phaseEndingConditions = new List<VPhaseEndingCondition>();
-            string phaseEndingConditionsStr = row.Columns[VStreamEventHeaderIndex.PhaseEndingConditions].Value;
-            if (!phaseEndingConditionsStr.IsNullOrWhitespace())
+
+            kpis = new List<VKPI>();
+            for (int i = VStreamEventHeaderIndex.KPI1; i <= VStreamEventHeaderIndex.KPI3; i += 1)
             {
-                string[] conditions = phaseEndingConditionsStr.Split(',');
-                isPhaseEndingEvent = true;
-                foreach (var condition in conditions)
-                {
-                    if (int.TryParse(condition, out int conditionID))
-                    {
-                        if (conditionID == -1)
-                        {
-                            phaseEndingConditions.Clear();
-                            break;
-                        }
-                        else
-                        {
-                            phaseEndingConditions.Add(VResourcesManager.Instance.GetPhaseEndingConditionByID((uint)conditionID));
-                        }
-                    }
-                }
+                var kpiStr = row.Columns[i].Value;
+                if (kpiStr.IsNullOrWhitespace())
+                    continue;
+                var kpiParams = kpiStr.Split(',').ToList();
+                kpis.Add(new VKPI(Enum.Parse<VEventType>(kpiParams[0]), int.Parse(kpiParams[1])));
             }
+            
+            kpis = new List<VKPI>();
+            
+            
         }
 
         public override VScheduleEvent CreateEvent()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Character.Attributes;
@@ -25,10 +26,16 @@ namespace VTuber.Core.ScriptSystem
 
         public List<uint> EventList => _configuration.eventIDs;
         public List<uint> StreamEventList => _configuration.streamEventIDs;
+        public List<VKPI> kpis;
 
         public VScript(VScriptConfiguration configuration)
         {
             _configuration = configuration;
+            kpis = new List<VKPI>();
+            foreach (var kpi in configuration.kpis)
+            {
+                kpis.Add(new VKPI(kpi.EventType, kpi.RequiredAmount, true));
+            }
         }
 
         public VScheduleEvent BeginScript()

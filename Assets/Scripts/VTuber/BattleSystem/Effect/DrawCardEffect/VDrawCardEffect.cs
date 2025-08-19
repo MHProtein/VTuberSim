@@ -11,7 +11,15 @@ namespace VTuber.BattleSystem.Effect
         private VUpgradableValue<int> _drawCardCount;
         public VDrawCardEffect(VDrawCardEffectConfiguration configuration,string parameter, string upgradedParameter) : base(configuration)
         {
-            _drawCardCount = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
+            try
+            {
+                _drawCardCount = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldPlayTwice = false)
