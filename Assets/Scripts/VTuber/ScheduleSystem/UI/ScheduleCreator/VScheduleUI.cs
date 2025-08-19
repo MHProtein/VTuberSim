@@ -35,12 +35,12 @@ namespace VTuber.ScheduleSystem.UI
         protected VAnimationQueue animationQueue;
         
         private Dictionary<VEventType, int> eventCount = new Dictionary<VEventType, int>();
-        private VKPIManager kpiManager;
+        private VKPIManager _kpiManager;
         private VScript _script;
         
         protected override void Awake()
         {
-            kpiManager = new VKPIManager();
+            _kpiManager = new VKPIManager();
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             slots = new VScheduleSlot[slotSize.y, slotSize.x];
             var slotList = GetComponentsInChildren<VScheduleSlot>();
@@ -78,9 +78,9 @@ namespace VTuber.ScheduleSystem.UI
         
         private void OnPhaseBegin(Dictionary<string, object> messagedict)
         {
-            kpiManager.ClearPhaseKPIs();
+            _kpiManager.ClearPhaseKPIs();
             var phase = messagedict["Phase"] as VPhase;
-            kpiManager.AddPhaseKPI(phase.KPIs);
+            _kpiManager.AddPhaseKPI(phase.KPIs);
         }
         
         private void OnEventUIPlaced(Dictionary<string, object> messagedict)
@@ -210,8 +210,8 @@ namespace VTuber.ScheduleSystem.UI
         {
             _character = character;
             _script = script;
-            kpiManager = new VKPIManager();
-            kpiManager.AddPermanentKPI(script.kpis);
+            _kpiManager = new VKPIManager();
+            _kpiManager.AddPermanentKPI(script.kpis);
         }
 
         private void OnEventExecuted(Dictionary<string, object> messagedict)
