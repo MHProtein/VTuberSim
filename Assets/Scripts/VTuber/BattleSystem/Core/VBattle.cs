@@ -64,6 +64,7 @@ namespace VTuber.BattleSystem.Core
         private int _mainAttributeIndex;
         
         private List<AnimationCurve> _decayCurves;
+        private List<int> _abilityTurnCounts;
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
@@ -109,6 +110,7 @@ namespace VTuber.BattleSystem.Core
             _extraTargetPopularity = extraTargetPopularity;
             _decayCurves = decayCurves;
             _abiliyBonus = abilityBonus;
+            _abilityTurnCounts = abilityTurnCounts;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding);
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
@@ -413,20 +415,70 @@ namespace VTuber.BattleSystem.Core
             return attributeGain;
         }
 
+        public string GetAbilityKey(int index)
+        {
+            
+            if(index == 0) return "CASingingAbility";
+            else if(index == 1) return "CAGamingAbility";
+            else return "CAChattingAbility";
+        }
+        
+        public string GetBattleAbilityKey(int index)
+        {
+            if(index == 0) return "BASingingMultiplier";
+            else if(index == 1) return "BAGamingMultiplier";
+            else return "BAChattingMultiplier";
+        }
+        
         private void EndBattle()
         {
-            _battleAttributeManager.TryGetAttribute("BAPopularity", out var popularityAttribute);
+            _battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
+            var popularityAttribute = battleAttribute as VBattlePopularityAttribute;
             if (!_isPhaseEnding)
             {
                 var attributeGain = CalculateAbilityGain(popularityAttribute.Value);
                 
-                string attributeKey;
-                if(_mainAttributeIndex == 0) attributeKey = "CASingingAbility";
-                else if(_mainAttributeIndex == 1) attributeKey = "CAGamingAbility";
-                else attributeKey = "CAChattingAbility";
+                string attributeKey = GetAbilityKey(_mainAttributeIndex);
                 
                 _characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
                 attribute.AddTo(attributeGain);
+            }
+            else
+            {
+                string attributeKey = GetAbilityKey(_mainAttributeIndex);
+                _characterAttributeManager.TryGetAttribute(attributeKey, out var ability);
+                ability.AddTo((int)_decayCurves[0].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(_mainAttributeIndex)]));
+
+                int index1, index2;
+                if (_mainAttributeIndex == 0)
+                {
+                    index1 = 1;
+                    index2 = 2;
+                }
+                else if (_mainAttributeIndex == 1)
+                {
+                    index1 = 0;
+                    index2 = 2;
+                }
+                else
+                {
+                    index1 = 0;
+                    index2 = 1;
+                }
+                
+                _characterAttributeManager.TryGetAttribute(GetAbilityKey(index1), out var ability1);
+                _characterAttributeManager.TryGetAttribute(GetAbilityKey(index2), out var ability2);
+                if(_abilityTurnCounts[index1] <= _abilityTurnCounts[index2])
+                {
+                    ability1.AddTo((int)_decayCurves[2].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]));
+                    ability2.AddTo((int)_decayCurves[1].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]));
+                }
+                else if(_abilityTurnCounts[index1] > _abilityTurnCounts[index2])
+                {
+                    ability1.AddTo((int)_decayCurves[1].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]));
+                    ability2.AddTo((int)_decayCurves[2].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]));
+                }
+
             }
                 
             _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);

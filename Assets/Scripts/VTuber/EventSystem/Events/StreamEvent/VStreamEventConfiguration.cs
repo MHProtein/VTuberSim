@@ -45,7 +45,11 @@ namespace VTuber.ScheduleSystem.Events
         {
             initialTurnCount = int.Parse(row.Columns[VStreamEventHeaderIndex.TurnCount].Value);
             targetPopularity = int.Parse(row.Columns[VStreamEventHeaderIndex.Target].Value);
-            extraTargetPopularity = int.Parse(row.Columns[VStreamEventHeaderIndex.ExtraTarget].Value);
+            
+            var extraTargetPopularityStr = row.Columns[VStreamEventHeaderIndex.ExtraTarget].Value;
+            if (!extraTargetPopularityStr.IsNullOrWhitespace())
+                extraTargetPopularity = int.Parse(row.Columns[VStreamEventHeaderIndex.ExtraTarget].Value);
+            
             initialViewers = int.Parse(row.Columns[VStreamEventHeaderIndex.InitialViewers].Value);
             
             mainAttributeIndex = int.Parse(row.Columns[VStreamEventHeaderIndex.MainAbility].Value);
