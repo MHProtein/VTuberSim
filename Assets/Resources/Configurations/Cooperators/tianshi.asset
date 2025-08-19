@@ -25,7 +25,7 @@ MonoBehaviour:
   cooperatorName: "#\u4E95\u4E95#"
   description: SHORK
   icon: {fileID: 21300000, guid: 708d16a8a44591242bcbb025274738bf, type: 3}
-  baseCoopEvent: 0
+  baseCoopEvent: 26
   _coopLevels:
   - from: 0
     to: 20
