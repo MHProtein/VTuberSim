@@ -3,11 +3,11 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class RaisingUpgradeRandomCardEffectConfiguration : VRaisingCardEffectConfiguration
+    public class VRaisingUpgradeRandomCardEffectConfiguration : VRaisingCardEffectConfiguration
     {
         private readonly VCardCondition _condition;
         public VCardCondition Condition => _condition;
-        public RaisingUpgradeRandomCardEffectConfiguration(CellRange row) : base(row)
+        public VRaisingUpgradeRandomCardEffectConfiguration(CellRange row) : base(row)
         {
             string conditionStr = row.Columns[VRaisingEffectHeaderIndex.Condition].Value;
             if (string.IsNullOrEmpty(conditionStr))
