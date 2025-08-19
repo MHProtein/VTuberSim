@@ -11,10 +11,11 @@ namespace VTuber.Core.RaisingEffect
         private VCardCondition _condition;
         public VRaisingReplaceCardEffectConfiguration(CellRange row) : base(row)
         {
-            
-            _condition =
-                VResourcesManager.Instance.GetCardConditionByID(
-                    Convert.ToUInt32(row.Columns[VRaisingEffectHeaderIndex.Condition].Value));
+            string conditionStr = row.Columns[VRaisingEffectHeaderIndex.Condition].Value;
+            if (string.IsNullOrEmpty(conditionStr))
+                _condition = null;
+            else
+                _condition = VResourcesManager.Instance.GetCardConditionByID(uint.Parse(conditionStr.Trim()));
         }
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
