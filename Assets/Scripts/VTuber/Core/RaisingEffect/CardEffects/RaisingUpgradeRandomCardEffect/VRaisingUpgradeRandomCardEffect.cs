@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 
@@ -7,19 +8,18 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingUpgradeRandomCardEffect : VRaisingCardEffect
     {
-        private VCardCondition _condition;
         public VRaisingUpgradeRandomCardEffect(VRaisingUpgradeRandomCardEffectConfiguration configuration) : base(configuration)
         {
-            _condition = configuration.Condition;
         }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             base.ApplyEffect(character, messagedict);
-            
-            var card = GetRandomCards(1, _condition).FirstOrDefault();
-            
+
+            var cards = character.CardLibrary.GetCards().Where(vCard => !vCard.IsUpgraded).ToList();
+            var card = cards[Random.Range(0, cards.Count)];
             card.Upgrade(false);
+            VDebug.Log("Upgraded card: " + card.CardName);
         }
     }
 }

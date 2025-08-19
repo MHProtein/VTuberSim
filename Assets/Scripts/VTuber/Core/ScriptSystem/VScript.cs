@@ -34,7 +34,7 @@ namespace VTuber.Core.ScriptSystem
             kpis = new List<VKPI>();
             foreach (var kpi in configuration.kpis)
             {
-                kpis.Add(new VKPI(kpi.EventType, kpi.RequiredAmount, true));
+                kpis.Add(new VKPI(kpi.EventType, kpi.RequiredAmount, kpi.AbilityIndex, true));
             }
         }
 

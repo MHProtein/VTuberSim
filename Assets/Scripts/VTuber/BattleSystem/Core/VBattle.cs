@@ -62,6 +62,8 @@ namespace VTuber.BattleSystem.Core
         protected int _abiliyBonus;
         protected bool _isPhaseEnding = false;
         private int _mainAttributeIndex;
+        
+        private List<AnimationCurve> _decayCurves;
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
@@ -97,14 +99,15 @@ namespace VTuber.BattleSystem.Core
         }
         
         public virtual void InitializeBattle(bool isPhaseEnding, VCharacterAttributeManager characterAttributeManager,
-            VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts,
-            int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
+            VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
+        int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
         {
             _mainAttributeIndex = mainAttributeIndex;
             _isPhaseEnding = isPhaseEnding;
             cardTypeHistory = new Dictionary<string, int>();
             _targetPopularity = targetPopularity;
             _extraTargetPopularity = extraTargetPopularity;
+            _decayCurves = decayCurves;
             _abiliyBonus = abilityBonus;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding);

@@ -13,19 +13,31 @@ namespace VTuber.BattleSystem.Core.KPIs.UI
         [SerializeField] TMP_Text text;
         private string _eventName;
         private int _requiredAmount;
+        private int count = 0;
+        private string _abilityName;
+        private int _abilityIndex;
 
         public void Initialize(VKPI kpi)
         {
             ID = kpi.ID;
             _eventName = kpi.EventName;
             _requiredAmount = kpi.RequiredAmount;
+            _abilityName = kpi.AbilityName;
+            _abilityIndex = kpi.AbilityIndex;
             
-            text.color = Color.red;
+            if (kpi.EventType != VEventType.Stream)
+            {
+                _abilityName = "";
+            }
+            
+            ResetText();
         }
         
         public void SetText(int count, bool satisfied)
         {
-            text.text = $"安排{_eventName}事件数: {count}/{_requiredAmount}";
+            if(count == this.count) return;
+            this.count = count;
+            text.text = $"安排{_abilityName}{_eventName}事件数: {count}/{_requiredAmount}";
             if (satisfied)
                 text.color = Color.green;
             else
@@ -36,8 +48,9 @@ namespace VTuber.BattleSystem.Core.KPIs.UI
         
         public void ResetText()
         {
-            text.text = $"安排{_eventName}事件数: 0/{_requiredAmount}";
+            text.text = $"安排{_abilityName}{_eventName}事件数: 0/{_requiredAmount}";
             text.color = Color.red;
+            count = 0;
         }
     }
 }
