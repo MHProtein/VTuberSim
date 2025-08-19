@@ -124,12 +124,12 @@ namespace VTuber.EventSystem
         }
         public void InitializeBattle(bool isPhaseEnding, int initialTurnCount, int targetPopularity, 
             int extraTargetPopularity, int abilityBonus, int initialViewers,
-            int mainAttributeIndex, List<int> abilityTurnCounts)
+            int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves)
         {
             battleObject.SetActive(true);
             battle.InitializeBattle(isPhaseEnding, _character.AttributeManager,
                 _character.CardLibrary,
-                initialTurnCount, mainAttributeIndex, abilityTurnCounts,
+                initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics());
             _character.ConsumableManager.SetBattle(battle);
@@ -148,7 +148,8 @@ namespace VTuber.EventSystem
                     streamEvent.AbilityBonus,
                     streamEvent.InitialViewers,
                     streamEvent.MainAttributeIndex,
-                    streamEvent.AbilityTurnCounts);
+                    streamEvent.AbilityTurnCounts,
+                    _currentEvent.Phase.DecayCurves);
             }
             else if (_shouldEnterStore)
             {

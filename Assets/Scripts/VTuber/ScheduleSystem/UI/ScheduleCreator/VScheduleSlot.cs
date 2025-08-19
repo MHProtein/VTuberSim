@@ -107,7 +107,7 @@ namespace VTuber.ScheduleSystem.UI
             _item = item;
             _scheduleUI.RecordEvent(item.Event);
             
-            if (_coopEventTypes.Count == 0 || IsInCoopEventTypes(item))
+            if (IsCoopEventSlot && (_coopEventTypes.Count == 0 || IsInCoopEventTypes(item)))
             {
                 checkmark.gameObject.SetActive(true);
                 item.Event.SetCoopEffects(this, _coopEventEffects);

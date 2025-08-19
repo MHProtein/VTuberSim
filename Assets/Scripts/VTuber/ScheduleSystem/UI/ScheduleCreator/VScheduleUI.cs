@@ -359,6 +359,7 @@ namespace VTuber.ScheduleSystem.UI
         }
         public void RecordEvent(VScheduleEvent e)
         {
+            e.Phase = _script.CurrentPhase;
             eventCount[e.Type]++;
             if (e is VStreamEvent streamEvent)
             {
