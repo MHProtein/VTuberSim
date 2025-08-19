@@ -31,10 +31,6 @@ namespace VTuber.BattleSystem.BattleAttribute
             {
                 _scoreForAbilities[abilityName] += delta;
             }
-            else
-            {
-                VDebug.LogError("Ability name not found in popularity attribute: " + abilityName);
-            }
             
             AddTo(delta, isFromCard, shouldPlayTwice);
         }

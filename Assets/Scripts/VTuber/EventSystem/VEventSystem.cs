@@ -58,7 +58,7 @@ namespace VTuber.EventSystem
 
         private void OnPhaseBegin(Dictionary<string, object> messagedict)
         {
-            _store.ResetRefresh();
+            _store.Reset();
         }
 
 
@@ -122,14 +122,15 @@ namespace VTuber.EventSystem
                 });
             _currentEvent = null;
         }
-        public void InitializeBattle(int initialTurnCount, int targetPopularity, int initialViewers,
+        public void InitializeBattle(bool isPhaseEnding, int initialTurnCount, int targetPopularity, 
+            int extraTargetPopularity, int abilityBonus, int initialViewers,
             int mainAttributeIndex, List<int> abilityTurnCounts)
         {
             battleObject.SetActive(true);
-            battle.InitializeBattle(_character.AttributeManager,
+            battle.InitializeBattle(isPhaseEnding, _character.AttributeManager,
                 _character.CardLibrary,
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts,
-                targetPopularity, initialViewers,
+                targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics());
             _character.ConsumableManager.SetBattle(battle);
             VRaisingUI.Instance.SetConsumableToBattle();
@@ -140,8 +141,14 @@ namespace VTuber.EventSystem
             if (_currentEvent.Type == VEventType.Stream)
             {
                 var streamEvent = _currentEvent as VStreamEvent;
-                InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers,
-                    streamEvent.MainAttributeIndex, streamEvent.AbilityTurnCounts);
+                InitializeBattle(streamEvent.IsPhaseEndingEvent,
+                    streamEvent.InitialTurnCount,
+                    streamEvent.TargetPopularity,
+                    streamEvent.ExtraTargetPopularity,
+                    streamEvent.AbilityBonus,
+                    streamEvent.InitialViewers,
+                    streamEvent.MainAttributeIndex,
+                    streamEvent.AbilityTurnCounts);
             }
             else if (_shouldEnterStore)
             {

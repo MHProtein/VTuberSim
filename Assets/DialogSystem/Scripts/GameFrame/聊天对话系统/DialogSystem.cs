@@ -52,6 +52,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     private VCharacter _character;
     private DialogObj currentDialogObj;
     private bool paused = false;
+    private bool shouldEnd;
     protected override void Awake()
     {
         base.Awake();
@@ -271,9 +272,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         canContinue = true;
         if (dc.nextId == -1)
         {
-            OnDialogFinished?.Invoke(currentDialog);
-            EnableFunctionBtn(false);
-            canContinue = false;
+            shouldEnd = true;
         }
         currentDialog.index=dc.nextId;
     }
@@ -369,6 +368,14 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (shouldEnd)
+        {
+            shouldEnd = false;
+            OnDialogFinished?.Invoke(currentDialog);
+            EnableFunctionBtn(false);
+            canContinue = false;
+            return;
+        }
         if (!paused && canContinue)
         {
             if (auto)

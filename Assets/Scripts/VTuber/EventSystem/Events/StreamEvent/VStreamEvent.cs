@@ -15,6 +15,9 @@ namespace VTuber.ScheduleSystem.Events
         public int SuccessEvent { get; private set; } = 0;
         public int FailureEvent { get; private set; } = 0;
         
+        public int ExtraTargetPopularity { get; private set; }
+        public int AbilityBonus { get; private set; }
+        
         public int MainAttributeIndex { get; private set; }
         
         public List<int> AbilityTurnCounts { get; private set; }
@@ -32,6 +35,8 @@ namespace VTuber.ScheduleSystem.Events
             FailureEvent = config.failureEvent;
             PhaseEndingConditions = config.phaseEndingConditions;
             IsPhaseEndingEvent = config.isPhaseEndingEvent;
+            ExtraTargetPopularity = config.extraTargetPopularity;
+            AbilityBonus = config.attributeBonus;
         }
 
         public List<bool> CanExecuteAsPhaseEnding(VCharacter character)

@@ -25,6 +25,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private Transform drawPileTransform;
         
         [FormerlySerializedAs("cardSlots")] [SerializeField] private RectTransform handSlotsContent;
+        [SerializeField] private GameObject multiplierUI;
         
         [Space(3)]
         [Header("PickCard Menu")]
@@ -40,6 +41,14 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
+        [SerializeField]
+        private Transform battleUI;
+        [SerializeField] private GameObject battlePausePanel;
+        
+        
+        [Space(3)]
+        [SerializeField] private TMP_Text targetPopularity;
+        [SerializeField] private TMP_Text extraTargetPopularityText;
         
         private float curve = 0.0f;
         
@@ -59,14 +68,10 @@ namespace VTuber.BattleSystem.UI
 
         private Coroutine _drawCardCoroutine;
         
-        
-        [SerializeField]
-        private Transform battleUI;
-        [SerializeField] private GameObject battlePausePanel;
-        
-        
-        [Space(3)]
-        [SerializeField] private TMP_Text targetPopularity;
+        public void SetExtraTargetPopularityText(int text)
+        {
+            extraTargetPopularityText.text = $"额外目标热度: {text}";
+        }
         
         public void SetTargetPopularity(int targetPopularity)
         {
@@ -253,6 +258,8 @@ namespace VTuber.BattleSystem.UI
             _handSlotsCards.Clear();
             SetBattleUIScale(1.0f);
             SetTargetPopularity(messagedict["TargetPopularity"] as int? ?? 0);
+            SetExtraTargetPopularityText(messagedict["ExtraTargetPopularity"] as int? ?? 0);
+            multiplierUI.SetActive(messagedict["IsPhaseEnding"] as bool? ?? false);
         }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)
