@@ -83,88 +83,109 @@ public class Dialog
         loaded = true;
         string[] data = csvFile.text.Split(new char[] { '\n' });
 
-        dialogName = data[0].Split(new char[] { ',' })[0];
-        
-        var rawCharacterInfos = data[1].Split(new char[] { ',' });
-        
-        for (int i = 0; i < rawCharacterInfos.Length; i++)
+
+        try
         {
-            if (rawCharacterInfos[i].IsNullOrWhitespace())
-                break;
-            CharacterInfo characterInfo = new CharacterInfo();
-            var info = rawCharacterInfos[i].Split(new char[] { '\\' });
-            characterInfo.name = info[0];
-            characterInfo.icon = info[1];
-            characterInfos.Add(characterInfo);
+
+            dialogName = data[0].Split(new char[] { ',' })[0];
+        
+            var rawCharacterInfos = data[1].Split(new char[] { ',' });
+            
+            
+            for (int i = 0; i < rawCharacterInfos.Length; i++)
+            {
+                if (rawCharacterInfos[i].IsNullOrWhitespace())
+                    break;
+                CharacterInfo characterInfo = new CharacterInfo();
+                var info = rawCharacterInfos[i].Split(new char[] { '\\' });
+                characterInfo.name = info[0];
+                characterInfo.icon = info[1];
+                characterInfos.Add(characterInfo);
+            }
         }
+        catch (Exception e)
+        {
+            VDebug.LogError("对话 " + csvFile.name + "前两行有问题");
+            throw;
+        }
+        
 
         isDM = characterInfos.Count == 2;
-        
-        for (int i = 3; i < data.Length-1; i++)
+
+        for (int i = 3; i < data.Length - 1; i++) 
         {
-            string[] row = data[i].Split(new char[] { ',' });
-            if(row[0].IsNullOrWhitespace())
-                break;
-            DialogContent dc = new DialogContent();
-            dc.isDM = isDM;
-            // 处理每一行数据
-            for (int j = 0; j < row.Length; j++)
-            { 
-                switch (j)
+            int j = 0;
+            try
+            {
+                string[] row = data[i].Split(new char[] { ',' });
+                if(row[0].IsNullOrWhitespace())
+                    break;
+                DialogContent dc = new DialogContent();
+                dc.isDM = isDM;
+                // 处理每一行数据
+                for (j = 0; j < row.Length; j++)
                 { 
-                    case 0:
-                        dc.id = int.Parse(row[j]);
-                        break;
-                    case 1:
-                        if (row[j].Equals("1"))
-                        {
-                            dc.ifOption = true;
-                        }
-                        break;
-                    case 2:
-                        dc.optionDescription = row[j];
-                        break;
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                        string parameterStr = row[j];
-                        var effect = GetEffect(parameterStr);
-                        if (effect is not null)
-                        {
-                            dc.effects.Add(effect);
-                        }
-                        break;
-                    case 7:
-                        if (row[j].Equals("1"))
-                        {
-                            dc.ifPlayer = true;
-                        }
-                        break;
-                    case 8:
-                        if (row[j].Equals("1"))
-                        {
-                            dc.ifImage = true;
-                        }
-                        break;
-                    case 9:
-                        dc.imageId = row[j];
-                        break;
-                    case 10:
-                        dc.context = row[j];
-                        break;
-                    case 11:
-                        int index = int.Parse(row[j]) - 1;
-                        dc.speakerName = characterInfos[index].name;
-                        dc.iconId = characterInfos[index].icon;
-                        break;
-                    case 12:
-                        dc.nextId = int.Parse(row[j]);
-                        break;
+                    switch (j)
+                    { 
+                        case 0:
+                            dc.id = int.Parse(row[j]);
+                            break;
+                        case 1:
+                            if (row[j].Equals("1"))
+                            {
+                                dc.ifOption = true;
+                            }
+                            break;
+                        case 2:
+                            dc.optionDescription = row[j];
+                            break;
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                            string parameterStr = row[j];
+                            var effect = GetEffect(parameterStr);
+                            if (effect is not null)
+                            {
+                                dc.effects.Add(effect);
+                            }
+                            break;
+                        case 7:
+                            if (row[j].Equals("1"))
+                            {
+                                dc.ifPlayer = true;
+                            }
+                            break;
+                        case 8:
+                            if (row[j].Equals("1"))
+                            {
+                                dc.ifImage = true;
+                            }
+                            break;
+                        case 9:
+                            dc.imageId = row[j];
+                            break;
+                        case 10:
+                            dc.context = row[j];
+                            break;
+                        case 11:
+                            int index = int.Parse(row[j]) - 1;
+                            dc.speakerName = characterInfos[index].name;
+                            dc.iconId = characterInfos[index].icon;
+                            break;
+                        case 12:
+                            dc.nextId = int.Parse(row[j]);
+                            break;
+                    }
                 }
+                contentDic.Add(dc.id, dc);
+            }
+            catch (Exception e)
+            {
+                VDebug.LogError("对话 " + csvFile.name + " " + i + "行" + j + "有问题 " + e.Message);
+                throw;
             }
             
-            contentDic.Add(dc.id, dc);
         }
     }
 }

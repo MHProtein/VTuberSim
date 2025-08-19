@@ -76,5 +76,11 @@ namespace VTuber.Store
         {
             character.AttributeManager.Attributes["CAMoney"].AddTo(-Price);
         }
+        
+        public void Reset()
+        {
+            Price = OriginalPrice;
+            TotalIncrease = 0;
+        }
     }
 }

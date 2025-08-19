@@ -20,7 +20,7 @@ namespace VTuber.Dialogue.UI
         private Action _closeCardLibrary;
         private Action _CloseSelectFrom3Menu;
         
-        public void InitializePhaseEndingSelectionMenu(List<KeyValuePair<VStreamEvent, List<bool>>> endings, Action confirmAction)
+        public void InitializePhaseEndingSelectionMenu(List<VStreamEvent> endings, Action confirmAction)
         {
             phaseEndingSelectionMenu.gameObject.SetActive(true);
             phaseEndingSelectionMenu.Initialize(endingOptionPrefab, endings);

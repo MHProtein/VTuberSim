@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Core.Foundation;
 
@@ -37,6 +38,7 @@ namespace VTuber.Core.ScriptSystem
         [SerializeField] [LabelText("最高舰长数系数")]public float membershipCoefficient = 1f;
 
         [SerializeField] public List<VScoreLevel> scoreLevels;
+        [SerializeField] public List<VKPIInfo> kpis;
         
         [Space(5)]
         [Header("阶段")]

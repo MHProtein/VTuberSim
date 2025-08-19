@@ -249,9 +249,11 @@ namespace VTuber.Store
         }
         #endregion
 
-        public void ResetRefresh()
+        public void Reset()
         {
             refreshCount = _storeConfig.defaultRefreshCount;
+            _discardButton.Reset();
+            _upgradeButton.Reset();
         }
     }
 }

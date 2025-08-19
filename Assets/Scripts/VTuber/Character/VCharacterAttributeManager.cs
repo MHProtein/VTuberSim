@@ -46,6 +46,8 @@ namespace VTuber.Character
         {
             foreach (var attribute in Attributes)
             {
+                if (attribute is VAbilityAttribute)
+                    return;
                 attribute.Value.ConvertToAttribute(attributes);
             }
         }

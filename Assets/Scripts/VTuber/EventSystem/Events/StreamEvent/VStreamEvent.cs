@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
@@ -15,11 +16,14 @@ namespace VTuber.ScheduleSystem.Events
         public int SuccessEvent { get; private set; } = 0;
         public int FailureEvent { get; private set; } = 0;
         
+        public int ExtraTargetPopularity { get; private set; }
+        public int AbilityBonus { get; private set; }
+        
         public int MainAttributeIndex { get; private set; }
         
         public List<int> AbilityTurnCounts { get; private set; }
         
-        public List<VPhaseEndingCondition> PhaseEndingConditions { get; private set; } = new List<VPhaseEndingCondition>();
+        public List<VKPI> Kpis { get; private set; }
         
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
         {
@@ -30,26 +34,10 @@ namespace VTuber.ScheduleSystem.Events
             AbilityTurnCounts = config.abilityTurnCounts;
             SuccessEvent = config.successEvent;
             FailureEvent = config.failureEvent;
-            PhaseEndingConditions = config.phaseEndingConditions;
             IsPhaseEndingEvent = config.isPhaseEndingEvent;
-        }
-
-        public List<bool> CanExecuteAsPhaseEnding(VCharacter character)
-        {
-            List<bool> conditionsMet = new List<bool>();
-            if (!IsPhaseEndingEvent)
-                return null;
-            if (PhaseEndingConditions.Count == 0)
-                return new List<bool>() { true };
-            if (!IsExecuted)
-            {
-                foreach (var condition in PhaseEndingConditions)
-                { 
-                    conditionsMet.Add(condition.IsConditionMet(character));
-                }
-            }
-
-            return conditionsMet;
+            ExtraTargetPopularity = config.extraTargetPopularity;
+            AbilityBonus = config.attributeBonus;
+            Kpis = config.kpis;
         }
 
         public void SetResultEvent(bool isSuccess)
