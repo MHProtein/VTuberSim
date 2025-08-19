@@ -68,9 +68,6 @@ namespace VTuber.ScheduleSystem.Events
                 kpis.Add(new VKPI(Enum.Parse<VEventType>(kpiParams[0]), int.Parse(kpiParams[1])));
             }
             
-            kpis = new List<VKPI>();
-            
-            
         }
 
         public override VScheduleEvent CreateEvent()
