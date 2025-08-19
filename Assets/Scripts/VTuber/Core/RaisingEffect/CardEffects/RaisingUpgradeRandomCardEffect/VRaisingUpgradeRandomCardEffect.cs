@@ -18,7 +18,7 @@ namespace VTuber.Core.RaisingEffect
 
             var cards = character.CardLibrary.GetCards().Where(vCard => !vCard.IsUpgraded).ToList();
             var card = cards[Random.Range(0, cards.Count)];
-            card.Upgrade();
+            card.Upgrade(false);
             VDebug.Log("Upgraded card: " + card.CardName);
         }
     }
