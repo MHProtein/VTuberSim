@@ -60,19 +60,19 @@ namespace VTuber.BattleSystem.Core.KPIs
             phaseKPIs.Clear();
         }
         
-        public bool CheckKPIs(Dictionary<VEventType, int> events)
+        public bool CheckKPIs(Dictionary<VEventType, int> events, List<int> streamEvents)
         {
             bool satisfied = true;
             foreach (var kpi in permanentKPIs)
             {
-                if (!kpi.Check(events))
+                if (!kpi.Check(events, streamEvents))
                 {
                     satisfied = false;
                 }
             }
             foreach (var kpi in phaseKPIs)
             {
-                if (!kpi.Check(events))
+                if (!kpi.Check(events, streamEvents))
                 {
                     satisfied = false;
                 }
@@ -83,6 +83,11 @@ namespace VTuber.BattleSystem.Core.KPIs
         public void ResetKPIUIs()
         {
             VKPIUIManager.Instance.ResetKPIUIs();
+        }
+
+        public bool HasKPIs()
+        {
+            return permanentKPIs.Count > 0 || phaseKPIs.Count > 0;
         }
     }
 }

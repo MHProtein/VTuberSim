@@ -33,11 +33,16 @@ namespace VTuber.CoopSystem
     
     public class VCoopEvent
     {
+        public struct VCoopEventType
+        {
+            public VEventType eventType;
+            public int abilityIndex;
+        }
         public uint id;
         public int unlockLevel;
         public float probability;
         public List<VRaisingEffect>  effects;
-        public List<VEventType> eventTypes;
+        public List<VCoopEventType> eventTypes;
 
         public VCoopEvent(CellRange row)
         {
@@ -55,10 +60,21 @@ namespace VTuber.CoopSystem
                     row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
             }
             
-            eventTypes = new List<VEventType>();
+            eventTypes = new List<VCoopEventType>();
             foreach (var type in row.Columns[VCoopEventHeaderIndex.EventTypes].Value.Split(','))
             {
-                eventTypes.Add(Enum.Parse<VEventType>(type.Trim()));
+                var typeStr = type.Trim();
+                var t = new VCoopEventType();
+                if (type.Contains("Stream") && type.Length != 6)
+                {
+                    t.abilityIndex = int.Parse(type.Substring(6));
+                    typeStr = "Stream";
+                }
+                else
+                    t.abilityIndex = -1;
+                
+                t.eventType = Enum.Parse<VEventType>(typeStr);
+                eventTypes.Add(t);
             }
         }
     }

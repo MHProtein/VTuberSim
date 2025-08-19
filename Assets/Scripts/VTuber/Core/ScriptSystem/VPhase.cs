@@ -58,8 +58,34 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         
         [LabelText("特殊事件")]
         [SerializeField] private List<VSpecialEventData> specialEventData;
+        
+        [HorizontalGroup("curves")]
+        [Header("衰退线1")]
+        [SerializeField] AnimationCurve decayCurve1;
+        [HorizontalGroup("curves")]
+        [Header("衰退线2")]
+        [SerializeField] AnimationCurve decayCurve2;
+        [HorizontalGroup("curves")]
+        [Header("衰退线3")]
+        [SerializeField] AnimationCurve decayCurve3;
 
         public List<VKPI> KPIs { get; private set; }
+
+        public List<AnimationCurve> DecayCurves
+        {
+            get
+            {
+                if (_decayCurves == null)
+                {
+                    _decayCurves = new List<AnimationCurve>();
+                    _decayCurves.Add(decayCurve1);
+                    _decayCurves.Add(decayCurve2);
+                    _decayCurves.Add(decayCurve3);
+                }
+                return _decayCurves;
+            }
+        }
+        private List<AnimationCurve> _decayCurves;
 
         private uint _endEventID;
 

@@ -35397,6 +35397,10 @@ MonoBehaviour:
   consumableUIParent: {fileID: 1407222552}
   consumableUIBattleParent: {fileID: 1620098064}
   consumableUI: {fileID: 1940567011}
+  abilityColors:
+  - {r: 1, g: 0.12941177, b: 0.37647063, a: 1}
+  - {r: 0.29411766, g: 0.34509805, b: 1, a: 1}
+  - {r: 1, g: 0.69803923, b: 0, a: 1}
 --- !u!43 &966234688
 Mesh:
   m_ObjectHideFlags: 0
@@ -80816,6 +80820,10 @@ PrefabInstance:
       propertyPath: indicatorLeft
       value: 
       objectReference: {fileID: 914477721}
+    - target: {fileID: 8580091062451762123, guid: 35b427d225a132041bfe71116c3561bb, type: 3}
+      propertyPath: continueButton
+      value: 
+      objectReference: {fileID: 225570761}
     - target: {fileID: 8580091062451762123, guid: 35b427d225a132041bfe71116c3561bb, type: 3}
       propertyPath: indicatorRight
       value: 

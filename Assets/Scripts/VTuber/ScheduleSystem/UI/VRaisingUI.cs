@@ -60,6 +60,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField]private GameObject consumableUIParent;
         [SerializeField]private GameObject consumableUIBattleParent;
         [SerializeField]private GameObject consumableUI;
+        
+        public List<Color> abilityColors = new List<Color>();
 
         protected override void OnEnable()
         {

@@ -51,7 +51,6 @@ namespace VTuber.Character
             LoadEffects(cardWb);
             LoadBuffs(cardWb);
             LoadCardConditions(raisingWb);
-            LoadPhaseEndingCondition(raisingWb);
             LoadPlacingConditions(raisingWb);
             LoadRaisingEffects(raisingWb);
             LoadDialogueEvents(raisingWb);
@@ -224,30 +223,6 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetPlacingConditon(list);
-        }
-
-        public void LoadPhaseEndingCondition(Workbook wb)
-        {
-            var sheet = Sheet(wb, "PhaseEndingConditions");
-            var list = new List<VPhaseEndingCondition>();
-
-            for (int r = 1; r <= sheet.LastRow - 1; r++)
-            {
-                var row = sheet.Rows[r];
-                var typeName = row.Columns[VPhaseEndingConditionHeaderIndex.Type].Value;
-                if(row.Columns[VPhaseEndingConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
-                    continue; 
-                var conditionType = Type.GetType("VTuber.ScheduleSystem.Events." + typeName.Trim());
-                if (conditionType == null)
-                {
-                    VDebug.LogError($"Card Condition type {typeName} not found.");
-                    continue;
-                }
-                var condition = (VPhaseEndingCondition)Activator.CreateInstance(conditionType, row);
-                list.Add(condition);
-            }
-
-            VResourcesManager.Instance.SetPhaseEndingConditions(list);
         }
 
         public void LoadDialogueEvents(Workbook wb)

@@ -14,8 +14,9 @@ namespace VTuber.Core.KPIs.UI
         public void AddKPIUI(VKPI kpi)
         {
             var go = Instantiate(kpiUIPrefab, transform, false);
-            go.GetComponent<VKPIUI>().Initialize(kpi);
-            kpiUIs.Add(go.GetComponent<VKPIUI>());
+            var kpiUI = go.GetComponent<VKPIUI>();
+            kpiUI.Initialize(kpi);
+            kpiUIs.Add(kpiUI);
         }
         
         public void RemoveKPIUI(VKPI kpi)

@@ -65,9 +65,16 @@ namespace VTuber.ScheduleSystem.Events
                 if (kpiStr.IsNullOrWhitespace())
                     continue;
                 var kpiParams = kpiStr.Split(',').ToList();
-                kpis.Add(new VKPI(Enum.Parse<VEventType>(kpiParams[0]), int.Parse(kpiParams[1])));
+                var kpiType = Enum.Parse<VEventType>(kpiParams[0]);
+                if (kpiType == VEventType.Stream)
+                {
+                    kpis.Add(new VKPI(kpiType, int.Parse(kpiParams[2]), int.Parse(kpiParams[1]), false));
+                }
+                else
+                {
+                    kpis.Add(new VKPI(kpiType, int.Parse(kpiParams[1]), -1, false));
+                }
             }
-            
         }
 
         public override VScheduleEvent CreateEvent()

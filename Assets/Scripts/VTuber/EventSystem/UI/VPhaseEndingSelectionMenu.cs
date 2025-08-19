@@ -41,6 +41,11 @@ namespace VTuber.EventSystem.UI
         {
             confirmButton.interactable = false;
             _selectedOption.E.Phase.SetEndingEventID(_selectedOption.E.EventID);
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseEndingSelected,
+                new Dictionary<string, object>()
+                {
+                    { "KPIs", _selectedOption.E.Kpis }
+                });
             foreach (var option in _options)
             {
                 Destroy(option.gameObject);
