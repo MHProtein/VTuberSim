@@ -31,7 +31,7 @@ namespace VTuber.Dialogue.UI
             {
                 GameObject conditionGo = Instantiate(conditionPrefab, grids);
                 var text = conditionGo.GetComponent<TMP_Text>();
-                text.text = $"每周至少需完成 {kpi.RequiredAmount} 次 {kpi.EventType}";
+                text.text = $"每周至少需完成 {kpi.RequiredAmount} 次 <color=red>{kpi.EventName}</color>";
             }
         }
 

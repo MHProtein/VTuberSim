@@ -8,7 +8,7 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingUpgradeRandomCardEffect : VRaisingCardEffect
     {
         private VCardCondition _condition;
-        public VRaisingUpgradeRandomCardEffect(RaisingUpgradeRandomCardEffectConfiguration configuration) : base(configuration)
+        public VRaisingUpgradeRandomCardEffect(VRaisingUpgradeRandomCardEffectConfiguration configuration) : base(configuration)
         {
             _condition = configuration.Condition;
         }
