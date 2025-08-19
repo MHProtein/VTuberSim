@@ -88,5 +88,5 @@ MonoBehaviour:
     startEventType: 0
     startEventID: 23
     endEventWeekIndex: 16
-    endEventIDs: 0f000000100000001100000012000000130000001400000015000000
+    endEventIDs: 0f0000001000000011000000
     specialEventData: []

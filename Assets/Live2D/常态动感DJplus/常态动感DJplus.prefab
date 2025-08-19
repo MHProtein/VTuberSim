@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7844128868518511164}
   - component: {fileID: 1892320661970494675}
   - component: {fileID: 722753605304770765}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowLX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1892320661970494675
 MonoBehaviour:
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 1675008001206663998}
   - component: {fileID: 4078169617284023403}
   - component: {fileID: 957325974824211898}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBodyAngleZ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4078169617284023403
 MonoBehaviour:
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 7358474625607782205}
   - component: {fileID: 6166279463363918756}
   - component: {fileID: 8464006477565551288}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh16
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +158,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 7815857790154949429}
   - component: {fileID: 8148682043482012900}
   - component: {fileID: 5582062245590476025}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowLY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +284,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8148682043482012900
 MonoBehaviour:
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 3174159104816297595}
   - component: {fileID: 6928198444931869775}
   - component: {fileID: 23386778795245113}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh15
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,7 +348,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -456,7 +456,7 @@ GameObject:
   - component: {fileID: 6487946104541885024}
   - component: {fileID: 1995143739603455933}
   - component: {fileID: 464161527896846575}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh24
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -475,7 +475,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -581,7 +581,7 @@ GameObject:
   - component: {fileID: 5341995552903024392}
   - component: {fileID: 6216586884575377305}
   - component: {fileID: 8407800306388068423}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamHairBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -601,7 +601,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6216586884575377305
 MonoBehaviour:
@@ -644,7 +644,7 @@ GameObject:
   - component: {fileID: 1449456128179007300}
   - component: {fileID: 87125105847479278}
   - component: {fileID: 103130603300703898}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamEyeBallY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -664,7 +664,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &87125105847479278
 MonoBehaviour:
@@ -707,7 +707,7 @@ GameObject:
   - component: {fileID: 4057914051111060193}
   - component: {fileID: 778872401996902234}
   - component: {fileID: 1357778085926653640}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBreath
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -727,7 +727,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &778872401996902234
 MonoBehaviour:
@@ -771,7 +771,7 @@ GameObject:
   - component: {fileID: 3173878069485963724}
   - component: {fileID: 3041453631859944933}
   - component: {fileID: 5523615464557703630}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Part2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -791,7 +791,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7199423528645086692}
+  m_Father: {fileID: 4016473159301047826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3173878069485963724
 MonoBehaviour:
@@ -820,17 +820,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _childDrawableRenderers:
-  - {fileID: 3227090068616997713}
-  - {fileID: 4688160129136418989}
-  - {fileID: 1356466510837280063}
-  - {fileID: 4484128445637425285}
-  - {fileID: 23386778795245113}
-  - {fileID: 8464006477565551288}
-  - {fileID: 7998479928627125071}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _childParts:
-  - {fileID: 3574423797161927816}
-  - {fileID: 3685335412755585865}
-  - {fileID: 8435401563450882119}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _isOverriddenPartMultiplyColors: 0
   _isOverriddenPartScreenColors: 0
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
@@ -862,7 +862,7 @@ GameObject:
   - component: {fileID: 7154188400225430082}
   - component: {fileID: 8431749639761138101}
   - component: {fileID: 7301419664991786578}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -881,7 +881,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -989,7 +989,7 @@ GameObject:
   - component: {fileID: 2964513684350649225}
   - component: {fileID: 6336839999040055806}
   - component: {fileID: 4351226909565794524}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1008,7 +1008,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1115,7 +1115,7 @@ GameObject:
   - component: {fileID: 1420593524031237289}
   - component: {fileID: 3685335412755585865}
   - component: {fileID: 2258114143010322174}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Part4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1135,7 +1135,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7199423528645086692}
+  m_Father: {fileID: 4016473159301047826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1420593524031237289
 MonoBehaviour:
@@ -1164,9 +1164,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _childDrawableRenderers:
-  - {fileID: 1811038512967843775}
-  - {fileID: 772204873469969928}
-  - {fileID: 8971329836344624027}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _childParts: []
   _isOverriddenPartMultiplyColors: 0
   _isOverriddenPartScreenColors: 0
@@ -1199,7 +1199,7 @@ GameObject:
   - component: {fileID: 924837096777436798}
   - component: {fileID: 7582647548746675347}
   - component: {fileID: 4688160129136418989}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1218,7 +1218,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1324,7 +1324,7 @@ GameObject:
   - component: {fileID: 6113377039325175515}
   - component: {fileID: 7857845847268746942}
   - component: {fileID: 3936215185943730578}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamAngleX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1344,7 +1344,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7857845847268746942
 MonoBehaviour:
@@ -1387,7 +1387,7 @@ GameObject:
   - component: {fileID: 3699926687052139926}
   - component: {fileID: 3107346758392573556}
   - component: {fileID: 4243258593017096258}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowRX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1407,7 +1407,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3107346758392573556
 MonoBehaviour:
@@ -1452,7 +1452,7 @@ GameObject:
   - component: {fileID: 7390641157809138513}
   - component: {fileID: 5315883038197900910}
   - component: {fileID: 4582490010612166691}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1471,7 +1471,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1577,7 +1577,7 @@ GameObject:
   - component: {fileID: 4938317556224893047}
   - component: {fileID: 298234168351799422}
   - component: {fileID: 7465987983276822431}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBodyAngleX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1597,7 +1597,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &298234168351799422
 MonoBehaviour:
@@ -1642,7 +1642,7 @@ GameObject:
   - component: {fileID: 4996799764477605475}
   - component: {fileID: 5325595495960146410}
   - component: {fileID: 3338364943203498237}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh20
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1661,7 +1661,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1767,7 +1767,7 @@ GameObject:
   - component: {fileID: 2518439927936292915}
   - component: {fileID: 9005919026426054828}
   - component: {fileID: 2781911527993068843}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBodyAngleY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1787,7 +1787,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9005919026426054828
 MonoBehaviour:
@@ -1830,7 +1830,7 @@ GameObject:
   - component: {fileID: 5118086531412181583}
   - component: {fileID: 1046787161496383459}
   - component: {fileID: 7769288025932837828}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowLAngle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1850,7 +1850,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1046787161496383459
 MonoBehaviour:
@@ -1890,21 +1890,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5941305557851729791}
-  m_Layer: 5
+  - component: {fileID: 2441761618521732453}
+  m_Layer: 0
   m_Name: Drawables
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &5941305557851729791
-RectTransform:
+--- !u!4 &2441761618521732453
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3683556755507091710}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -1938,11 +1939,6 @@ RectTransform:
   - {fileID: 4267357983576264367}
   m_Father: {fileID: 6504397364543747331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3714027429329629507
 GameObject:
   m_ObjectHideFlags: 0
@@ -1954,7 +1950,7 @@ GameObject:
   - component: {fileID: 6117644717804054588}
   - component: {fileID: 3363390541886415007}
   - component: {fileID: 6909910778365996150}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowLForm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1974,7 +1970,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3363390541886415007
 MonoBehaviour:
@@ -2017,7 +2013,7 @@ GameObject:
   - component: {fileID: 8003010951707974095}
   - component: {fileID: 7304978312838644148}
   - component: {fileID: 1770564735455313602}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamEyeBallX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2037,7 +2033,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7304978312838644148
 MonoBehaviour:
@@ -2080,7 +2076,7 @@ GameObject:
   - component: {fileID: 3431168055283059762}
   - component: {fileID: 8519814718176715279}
   - component: {fileID: 7306500106555709088}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamAngleZ
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2100,7 +2096,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8519814718176715279
 MonoBehaviour:
@@ -2143,7 +2139,7 @@ GameObject:
   - component: {fileID: 6751730209652216131}
   - component: {fileID: 8486925298765560991}
   - component: {fileID: 4538573878977584240}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamMouthOpenY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2163,7 +2159,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8486925298765560991
 MonoBehaviour:
@@ -2206,7 +2202,7 @@ GameObject:
   - component: {fileID: 6609540531354058137}
   - component: {fileID: 1694465527821977156}
   - component: {fileID: 7540590303933689109}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamEyeLOpen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2226,7 +2222,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1694465527821977156
 MonoBehaviour:
@@ -2271,7 +2267,7 @@ GameObject:
   - component: {fileID: 7233939645702293410}
   - component: {fileID: 6305528100157379137}
   - component: {fileID: 7444865527272029407}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh18
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2290,7 +2286,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2398,7 +2394,7 @@ GameObject:
   - component: {fileID: 4418522320488161275}
   - component: {fileID: 3354396319593864642}
   - component: {fileID: 1824268941606528313}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh23
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2417,7 +2413,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2524,7 +2520,7 @@ GameObject:
   - component: {fileID: 6418622244416282564}
   - component: {fileID: 1861137541583213705}
   - component: {fileID: 8779698226382542212}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Part
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2544,7 +2540,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7199423528645086692}
+  m_Father: {fileID: 4016473159301047826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6418622244416282564
 MonoBehaviour:
@@ -2573,18 +2569,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _childDrawableRenderers:
-  - {fileID: 7444865527272029407}
-  - {fileID: 5834888963689093429}
-  - {fileID: 3338364943203498237}
-  - {fileID: 8804570420490467866}
-  - {fileID: 5142790979630569391}
-  - {fileID: 1824268941606528313}
-  - {fileID: 464161527896846575}
-  - {fileID: 8631330759627753586}
-  - {fileID: 4889714777032347890}
-  - {fileID: 7301419664991786578}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _childParts:
-  - {fileID: 3041453631859944933}
+  - {fileID: 0}
   _isOverriddenPartMultiplyColors: 0
   _isOverriddenPartScreenColors: 0
   _multiplyColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2616,7 +2612,7 @@ GameObject:
   - component: {fileID: 6133377626195343286}
   - component: {fileID: 240543664771287453}
   - component: {fileID: 7998479928627125071}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh17
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2635,7 +2631,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2741,7 +2737,7 @@ GameObject:
   - component: {fileID: 2914442541965657931}
   - component: {fileID: 3956899488334477032}
   - component: {fileID: 550192774289075913}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamMouthForm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2761,7 +2757,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3956899488334477032
 MonoBehaviour:
@@ -2804,7 +2800,7 @@ GameObject:
   - component: {fileID: 8299906329022449450}
   - component: {fileID: 1706250860789519763}
   - component: {fileID: 3257061533527848366}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamAngleY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2824,7 +2820,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1706250860789519763
 MonoBehaviour:
@@ -2867,7 +2863,7 @@ GameObject:
   - component: {fileID: 8522181101103117113}
   - component: {fileID: 5206116651994407581}
   - component: {fileID: 6178784891016286250}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamHairSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2887,7 +2883,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5206116651994407581
 MonoBehaviour:
@@ -2931,7 +2927,7 @@ GameObject:
   - component: {fileID: 4441242697516065803}
   - component: {fileID: 8435401563450882119}
   - component: {fileID: 5907120665801504442}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Part5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2951,7 +2947,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7199423528645086692}
+  m_Father: {fileID: 4016473159301047826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4441242697516065803
 MonoBehaviour:
@@ -2980,9 +2976,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _childDrawableRenderers:
-  - {fileID: 1195785256436134032}
-  - {fileID: 4582490010612166691}
-  - {fileID: 2938642960138569942}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _childParts: []
   _isOverriddenPartMultiplyColors: 0
   _isOverriddenPartScreenColors: 0
@@ -3013,7 +3009,7 @@ GameObject:
   - component: {fileID: 8153643743435488576}
   - component: {fileID: 2948246950002605362}
   - component: {fileID: 5232104783219239738}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamCheek
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3033,7 +3029,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2948246950002605362
 MonoBehaviour:
@@ -3076,7 +3072,7 @@ GameObject:
   - component: {fileID: 8111512370316295809}
   - component: {fileID: 4303536313008623909}
   - component: {fileID: 4701136417321415609}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowRY
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3096,7 +3092,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4303536313008623909
 MonoBehaviour:
@@ -3136,21 +3132,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2813565427196126642}
-  m_Layer: 5
+  - component: {fileID: 3345376186539025130}
+  m_Layer: 0
   m_Name: Parameters
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &2813565427196126642
-RectTransform:
+--- !u!4 &3345376186539025130
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5941211693361420464}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -3185,11 +3182,6 @@ RectTransform:
   - {fileID: 5341995552903024392}
   m_Father: {fileID: 6504397364543747331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5947495459501232050
 GameObject:
   m_ObjectHideFlags: 0
@@ -3203,7 +3195,7 @@ GameObject:
   - component: {fileID: 7496756496163878426}
   - component: {fileID: 2811941865912649455}
   - component: {fileID: 2938642960138569942}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh13
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3222,7 +3214,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3330,7 +3322,7 @@ GameObject:
   - component: {fileID: 3555853590445567641}
   - component: {fileID: 3081586747487680869}
   - component: {fileID: 1356466510837280063}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3349,7 +3341,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3457,7 +3449,7 @@ GameObject:
   - component: {fileID: 2991600615110401884}
   - component: {fileID: 5608499551487890418}
   - component: {fileID: 772204873469969928}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3476,7 +3468,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3584,7 +3576,7 @@ GameObject:
   - component: {fileID: 192269180161664390}
   - component: {fileID: 5525719827880601219}
   - component: {fileID: 8631330759627753586}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh25
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3603,7 +3595,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3709,7 +3701,7 @@ GameObject:
   - component: {fileID: 8661597904974329931}
   - component: {fileID: 1277033157859612864}
   - component: {fileID: 4978818592746875049}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowRForm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3729,7 +3721,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1277033157859612864
 MonoBehaviour:
@@ -3774,7 +3766,7 @@ GameObject:
   - component: {fileID: 3241955999750561523}
   - component: {fileID: 6793105344839081203}
   - component: {fileID: 1811038512967843775}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3793,7 +3785,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3899,7 +3891,7 @@ GameObject:
   - component: {fileID: 6066983461034574992}
   - component: {fileID: 6576251021146074275}
   - component: {fileID: 6037312333303091001}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamHairFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3919,7 +3911,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6576251021146074275
 MonoBehaviour:
@@ -3964,7 +3956,7 @@ GameObject:
   - component: {fileID: 5353811529827837386}
   - component: {fileID: 259808109333831888}
   - component: {fileID: 8971329836344624027}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3983,7 +3975,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4091,7 +4083,7 @@ GameObject:
   - component: {fileID: 5557469930530523536}
   - component: {fileID: 2931012299999025449}
   - component: {fileID: 1195785256436134032}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4110,7 +4102,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4245,9 +4237,9 @@ RectTransform:
   m_LocalScale: {x: 6.3033, y: 6.3033, z: 6.3033}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2813565427196126642}
-  - {fileID: 7199423528645086692}
-  - {fileID: 5941305557851729791}
+  - {fileID: 3345376186539025130}
+  - {fileID: 4016473159301047826}
+  - {fileID: 2441761618521732453}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4306,7 +4298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Opacity: 1
-  _lastOpacity: 1
+  _lastOpacity: 0
   _isOverriddenModelMultiplyColors: 0
   _isOverriddenModelScreenColors: 0
   _modelMultiplyColor: {r: 0, g: 0, b: 0, a: 0}
@@ -4344,7 +4336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 967223d908bf07b4f90945995bdca68f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maskTexture: {fileID: 11400000, guid: 16bf142754640ab4487bb625c30931fd, type: 2}
+  _maskTexture: {fileID: 0}
 --- !u!114 &7192839893986825097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4444,7 +4436,7 @@ GameObject:
   - component: {fileID: 6394936078574907570}
   - component: {fileID: 8852418561699071095}
   - component: {fileID: 4484128445637425285}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh14
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4463,7 +4455,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4570,7 +4562,7 @@ GameObject:
   - component: {fileID: 5985769745086906511}
   - component: {fileID: 3574423797161927816}
   - component: {fileID: 4326761112522418872}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Part3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4590,7 +4582,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7199423528645086692}
+  m_Father: {fileID: 4016473159301047826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5985769745086906511
 MonoBehaviour:
@@ -4619,9 +4611,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _childDrawableRenderers:
-  - {fileID: 1084244965478360966}
-  - {fileID: 4366771557485230948}
-  - {fileID: 4351226909565794524}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _childParts: []
   _isOverriddenPartMultiplyColors: 0
   _isOverriddenPartScreenColors: 0
@@ -4652,7 +4644,7 @@ GameObject:
   - component: {fileID: 5133271238749386750}
   - component: {fileID: 4582391701444698154}
   - component: {fileID: 9010218960268914495}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamEyeROpen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4672,7 +4664,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4582391701444698154
 MonoBehaviour:
@@ -4717,7 +4709,7 @@ GameObject:
   - component: {fileID: 815459753452853611}
   - component: {fileID: 3647534659612180829}
   - component: {fileID: 1084244965478360966}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4736,7 +4728,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4844,7 +4836,7 @@ GameObject:
   - component: {fileID: 741026147807849754}
   - component: {fileID: 3827801407770514719}
   - component: {fileID: 4889714777032347890}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh26
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4863,7 +4855,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4971,7 +4963,7 @@ GameObject:
   - component: {fileID: 4504949076386945962}
   - component: {fileID: 2590283593718189012}
   - component: {fileID: 5142790979630569391}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh22
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4990,7 +4982,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5098,7 +5090,7 @@ GameObject:
   - component: {fileID: 11626833227183724}
   - component: {fileID: 5438078642991612863}
   - component: {fileID: 8804570420490467866}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh21
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5117,7 +5109,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5220,21 +5212,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7199423528645086692}
-  m_Layer: 5
+  - component: {fileID: 4016473159301047826}
+  m_Layer: 0
   m_Name: Parts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &7199423528645086692
-RectTransform:
+--- !u!4 &4016473159301047826
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8364664931241027595}
+  serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -5247,11 +5240,6 @@ RectTransform:
   - {fileID: 7602015471951257244}
   m_Father: {fileID: 6504397364543747331}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8514126575633228517
 GameObject:
   m_ObjectHideFlags: 0
@@ -5263,7 +5251,7 @@ GameObject:
   - component: {fileID: 379092660879317820}
   - component: {fileID: 630273026475861442}
   - component: {fileID: 9060523623532049419}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamEyeLSmile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5283,7 +5271,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &630273026475861442
 MonoBehaviour:
@@ -5326,7 +5314,7 @@ GameObject:
   - component: {fileID: 7675739952966621270}
   - component: {fileID: 8287508848851880604}
   - component: {fileID: 6331224789474668067}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamBrowRAngle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5346,7 +5334,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8287508848851880604
 MonoBehaviour:
@@ -5391,7 +5379,7 @@ GameObject:
   - component: {fileID: 1376061513652451025}
   - component: {fileID: 8351676855741389805}
   - component: {fileID: 4366771557485230948}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5410,7 +5398,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5518,7 +5506,7 @@ GameObject:
   - component: {fileID: 5088472712626629163}
   - component: {fileID: 4285820607044212022}
   - component: {fileID: 3227090068616997713}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5537,7 +5525,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5645,7 +5633,7 @@ GameObject:
   - component: {fileID: 2621818526417654560}
   - component: {fileID: 6263673477379368059}
   - component: {fileID: 5834888963689093429}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ArtMesh19
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5664,7 +5652,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5941305557851729791}
+  m_Father: {fileID: 2441761618521732453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5770,7 +5758,7 @@ GameObject:
   - component: {fileID: 8698074150606828773}
   - component: {fileID: 9123893258643265492}
   - component: {fileID: 6648119901471625442}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: ParamEyeRSmile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5790,7 +5778,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2813565427196126642}
+  m_Father: {fileID: 3345376186539025130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9123893258643265492
 MonoBehaviour:

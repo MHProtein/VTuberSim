@@ -21,26 +21,26 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  upgradePrice: 100
-  discardCardPrice: 100
-  upgradePriceIncrease: 20
-  discardCardPriceIncrease: 20
-  defaultRefreshCount: 5
-  minDiscount: 0.4
-  maxDiscount: 0.9
+  upgradePrice: 75
+  discardCardPrice: 75
+  upgradePriceIncrease: 25
+  discardCardPriceIncrease: 25
+  defaultRefreshCount: 1
+  minDiscount: 0.2
+  maxDiscount: 0.5
   cardRarityProbabilities:
+  - 0.3
   - 0.4
-  - 0.4
-  - 0.2
+  - 0.3
   cardRarityUpgradeProbabilities:
-  - 0.8
-  - 0.8
-  - 0.5
+  - 0.3
+  - 0.1
+  - 0.05
   consumableRarityProbabilities:
-  - 0.4
-  - 0.4
+  - 0.3
+  - 0.5
   - 0.2
-  cardPrices: 64000000c8000000e8030000
-  consumablePrices: 64000000c8000000e8030000
+  cardPrices: 640000007d00000096000000
+  consumablePrices: 320000005000000064000000
   cardCount: 4
   consumableCount: 4
