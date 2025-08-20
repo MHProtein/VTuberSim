@@ -36,7 +36,7 @@ He: Fuck Yeahhhhhhh!!
 -> Replace Card
     <<ApplyEffect Event 11 200000>>
 -> Select From 3
-    <<ApplyEffect Event 12 200000>>
+    <<ApplyEffect Event 24 200000>>
 -> Add Relic 0
     <<ApplyEffect Event 20 200000>>
 -> Add Relic 1

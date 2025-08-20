@@ -69,8 +69,32 @@ namespace VTuber.Core.EventCenter
         OnSwitchToScheduleExecution = 46,
         OnFinishScheduleCreationOrModification = 47,
         
-        OnSetCoopUpgradeEvent = 48
+        OnSetCoopUpgradeEvent = 48,
+        
+        OnAddConsumable = 49,
+        OnRemoveConsumable = 50,
+        
+        OnEnterStore = 51,
+        OnStoreBeginDiscardCard = 52,
+        OnStoreEndDeleteCard = 53,
+        OnStoreBeginUpgradeCard = 54,
+        OnStoreEndUpgradeCard = 55,
+        OnStoreBeginRefresh = 56,
+        OnStoreEndRefresh = 57,
+        OnStoreLoadItems = 58,
+        OnRequestEnterStore = 59,
+        
+        OnPhaseBegin = 60,
+        OnPhaseEnd = 61,
+        
+        OnEventSelectUpgradeCard = 62,
+        
+        OnRevenueShareRateChanged = 63,
+        OnSkipTurnStaminaChanged = 64,
+        OnSkipEventStaminaChanged = 65,
     }
+    
+    
     
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>
     {

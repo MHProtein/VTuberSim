@@ -11,7 +11,7 @@ namespace VTuber.BattleSystem.Core
             VCardLibrary cardLibrary, int initialTurnCount, int targetPopularity, int initialViewers)
         {    
             _characterAttributeManager = characterAttributeManager;
-            _battleAttributeManager = new VBattleAttributeManager();
+            _battleAttributeManager = new VBattleAttributeManager(true);
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
         }

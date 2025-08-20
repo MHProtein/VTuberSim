@@ -20,8 +20,10 @@
         Stream,
         Practice,
         Coop,
-        Recovery,
-        Work
+        Outside,
+        Work,
+        Rest,
+        Other
     }
 
     /// <summary>

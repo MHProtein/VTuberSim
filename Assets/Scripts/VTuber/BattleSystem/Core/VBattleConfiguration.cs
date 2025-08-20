@@ -8,5 +8,6 @@ namespace VTuber.BattleSystem.Core
         public int maxHandSize = 5;
         public int handSize = 3;
         public int defaultPlayPerTurn = 1;
+        public float staminaRecoveryRate = 0.5f;
     }
 }

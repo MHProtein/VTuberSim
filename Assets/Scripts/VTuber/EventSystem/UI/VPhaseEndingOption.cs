@@ -19,33 +19,20 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private GameObject conditionPrefab;
         [SerializeField] private Transform grids;
         private List<TMP_Text> conditionDescriptions;
-        private bool _selectable = true;
         
-        public void Initialize(VStreamEvent streamEvent, List<bool> conditionsMet, VPhaseEndingSelectionMenu menu)
+        public void Initialize(VStreamEvent streamEvent, VPhaseEndingSelectionMenu menu)
         {
             e = streamEvent;
             _menu = menu;
             conditionDescriptions = new List<TMP_Text>();
             titleText.text = streamEvent.EventName;
-            var conditions = streamEvent.PhaseEndingConditions;
-            for (int i = 0; i < conditions.Count; i++)
+            var kpis = streamEvent.Kpis;
+            foreach (var kpi in kpis)
             {
                 GameObject conditionGo = Instantiate(conditionPrefab, grids);
                 var text = conditionGo.GetComponent<TMP_Text>();
-                text.text = streamEvent.PhaseEndingConditions[i].GetDescription();
-                if (conditionsMet[i])
-                {
-                    text.color = Color.green;
-                }
-                else
-                {
-                    text.color = Color.red;
-                    _selectable = false;
-                }
-                conditionDescriptions.Add(text);
+                text.text = $"每周至少需完成 {kpi.RequiredAmount} 次 <color=red>{kpi.AbilityName}{kpi.EventName}</color>";
             }
-            if(!_selectable)
-                backgroundImage.color = Color.grey;
         }
 
         public void Unselect()
@@ -55,8 +42,6 @@ namespace VTuber.Dialogue.UI
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!_selectable)
-                return;
             _menu.SelectOption(this);
             backgroundImage.color = Color.cyan;
         }

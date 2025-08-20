@@ -12,7 +12,7 @@ namespace VTuber.Core.StateMachine
             stateType = VStateType.PhaseStart;
         }
 
-    public void InitializeEvent(VDialogueEvent e)
+        public void InitializeEvent(VDialogueEvent e)
         {
             stateMachine.EventSystemRoot.SetActive(true);
             stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, e);
@@ -26,6 +26,7 @@ namespace VTuber.Core.StateMachine
             
             InitializeEvent(e);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
@@ -38,6 +39,7 @@ namespace VTuber.Core.StateMachine
         {
             base.Exit(nextState);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(true);
         }
     }
 }

@@ -152,7 +152,7 @@ namespace VTuber.ScheduleSystem.Events
             if(CoopEffects is not null && character is not null)
                 foreach (var effect in CoopEffects.Values)
                 {
-                    effect?.ForEach(x => x.ApplyEffect(character));
+                    effect?.ForEach(x => x.ApplyEffect(character, null));
                 }
         }
     }

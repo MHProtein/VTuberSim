@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
@@ -25,6 +26,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private Transform drawPileTransform;
         
         [FormerlySerializedAs("cardSlots")] [SerializeField] private RectTransform handSlotsContent;
+        [SerializeField] private VBattleMultiplierUI multiplierUI;
         
         [Space(3)]
         [Header("PickCard Menu")]
@@ -40,6 +42,15 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
+        [SerializeField]
+        private Transform battleUI;
+        [SerializeField] private GameObject battlePausePanel;
+        
+        
+        [Space(3)]
+        [SerializeField] private TMP_Text targetPopularity;
+        [SerializeField] private TMP_Text extraTargetPopularityText;
+        [SerializeField] private Button skipTurnButton;
         
         private float curve = 0.0f;
         
@@ -59,14 +70,10 @@ namespace VTuber.BattleSystem.UI
 
         private Coroutine _drawCardCoroutine;
         
-        
-        [SerializeField]
-        private Transform battleUI;
-        [SerializeField] private GameObject battlePausePanel;
-        
-        
-        [Space(3)]
-        [SerializeField] private TMP_Text targetPopularity;
+        public void SetExtraTargetPopularityText(int text)
+        {
+            extraTargetPopularityText.text = $"额外目标热度: {text}";
+        }
         
         public void SetTargetPopularity(int targetPopularity)
         {
@@ -187,6 +194,7 @@ namespace VTuber.BattleSystem.UI
         public void SkipTurn()
         {
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnSkipTurnClicked, new Dictionary<string, object>());
+            skipTurnButton.interactable = false;
         }
         
         public Tween SetBattlePause(bool paused)
@@ -226,13 +234,15 @@ namespace VTuber.BattleSystem.UI
             base.OnDisable();
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattlePause, OnBattlePause);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnDrawCards, OnDrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRedrawCards, OnRedrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnCardBeginDespose);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
-        }        
+        }
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
@@ -253,6 +263,11 @@ namespace VTuber.BattleSystem.UI
             _handSlotsCards.Clear();
             SetBattleUIScale(1.0f);
             SetTargetPopularity(messagedict["TargetPopularity"] as int? ?? 0);
+            SetExtraTargetPopularityText(messagedict["ExtraTargetPopularity"] as int? ?? 0);
+            
+            bool isPhaseEnding = messagedict["IsPhaseEnding"] as bool? ?? false;
+            multiplierUI.IsInUse(isPhaseEnding);
+            multiplierUI.gameObject.SetActive(isPhaseEnding);
         }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)
@@ -281,7 +296,6 @@ namespace VTuber.BattleSystem.UI
                 {
                     card.OnCardStopApplying();
                 }
-                
             }
         }
 
@@ -480,6 +494,8 @@ namespace VTuber.BattleSystem.UI
                     
                 });
             }
+
+            skipTurnButton.interactable = true;
         }
         
         private (Vector3 position, Vector3 rotation, Vector3 scale) ReserveSpaceForNewCard()

@@ -7,19 +7,21 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VCardLibraryUI : VUIBehaviour, ISelectableCardMenu
+    public class VCardViewSelectionUI : VUIBehaviour, ISelectableCardMenu
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private TMP_Dropdown _typeDropdown;
         [SerializeField] private TMP_Dropdown _rarityDropdown;
         [SerializeField] private Toggle _isUpgraded;
         [SerializeField] private Transform grid;
+        [SerializeField] private VCardUI previewCardUI;
 
-        [SerializeField] private Button confirmButton;
-        [SerializeField] private Button returnButton;
+        [SerializeField] public Button confirmButton;
+        [SerializeField] public Button returnButton;
 
         private List<VSelectCardCardUI> _cardUIs; 
         private List<VSelectCardCardUI> _displayingCardUIs;
@@ -27,6 +29,8 @@ namespace VTuber.ScheduleSystem.UI
         private VSelectCardCardUI _selectedCardUI;
 
         private Action<VCard> _confirmAction;
+        private Action<VCard> _previewAction;
+        private Action _returnAction;
 
         protected override void Awake()
         {
@@ -39,30 +43,29 @@ namespace VTuber.ScheduleSystem.UI
             _cardUIs = new List<VSelectCardCardUI>();
             _displayingCardUIs = new List<VSelectCardCardUI>();
             confirmButton.onClick.AddListener(Confirm);
+            if(previewCardUI)
+                previewCardUI.gameObject.SetActive(false);
         }
 
         private void Confirm()
         {
             _confirmAction?.Invoke(_selectedCardUI.Card);
-            Return();
         }
 
         public void Return()
         {
-            foreach (var cardUI in _cardUIs)
-            {
-                Destroy(cardUI.gameObject);
-            }
-            _cardUIs.Clear();
-            _displayingCardUIs.Clear();
-            _selectedCardUI = null;
+            _returnAction?.Invoke();
         }
 
-        public void Initialize(List<VCard> cards, bool select, Action<VCard> confirmAction)
+        public void Initialize(List<VCard> cards, bool isStore, bool select, bool preview, Action<VCard> confirmAction, Action returnAction = null, Action<VCard> previewAction = null)
         {
             confirmButton.gameObject.SetActive(select);
             returnButton.gameObject.SetActive(!select);
+            if(isStore)
+                returnButton.gameObject.SetActive(true);
             _confirmAction = confirmAction;
+            _returnAction = returnAction;
+            _previewAction = previewAction;
             foreach (var card in cards)
             {
                 var item = Instantiate(cardPrefab, grid);
@@ -83,6 +86,7 @@ namespace VTuber.ScheduleSystem.UI
                 Destroy(cardUI);
             }
             _cardUIs.Clear();
+            _selectedCardUI = null;
             _displayingCardUIs.Clear();
             _typeDropdown.value = 0; // Reset to "All"
             _rarityDropdown.value = 0; // Reset to "Common"
@@ -140,6 +144,14 @@ namespace VTuber.ScheduleSystem.UI
             if(_selectedCardUI is not null)
                 _selectedCardUI.UnSelect();
             _selectedCardUI = cardUI;
+
+            if (previewCardUI)
+            {
+                previewCardUI.gameObject.SetActive(true);
+                VCard previewCard = VResourcesManager.Instance.CreateCardByID(_selectedCardUI.Card.configID);
+                _previewAction?.Invoke(previewCard);
+                previewCardUI.SetCard(previewCard);
+            }
         }
     }
 }

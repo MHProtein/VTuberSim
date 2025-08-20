@@ -155,7 +155,7 @@ namespace VTuber.Relic
             if (CanApply(messagedict))
             {
                 foreach (var effect in _effects)
-                    effect.ApplyEffect(_manager.Character);
+                    effect.ApplyEffect(_manager.Character, messagedict);
                 if (!IsPermanent)
                 {
                     layer--;

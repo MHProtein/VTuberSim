@@ -8,6 +8,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -50,7 +51,6 @@ namespace VTuber.Character
             LoadEffects(cardWb);
             LoadBuffs(cardWb);
             LoadCardConditions(raisingWb);
-            LoadPhaseEndingCondition(raisingWb);
             LoadPlacingConditions(raisingWb);
             LoadRaisingEffects(raisingWb);
             LoadDialogueEvents(raisingWb);
@@ -58,6 +58,7 @@ namespace VTuber.Character
             LoadRelicConditions(relicsWb);
             LoadRelics(relicsWb);
             LoadCoopEvents(coopWb);
+            LoadConsumables(relicsWb);
             return LoadCards(cardWb);
         }
 
@@ -65,7 +66,7 @@ namespace VTuber.Character
         {
             var sheet = wb.Worksheets[name];
             if (sheet == null)
-                throw new FileNotFoundException($"Worksheet '{name}' not found in {_cardPath}");
+                throw new FileNotFoundException($"Worksheet '{name}'");
             return sheet;
         }
 
@@ -224,30 +225,6 @@ namespace VTuber.Character
             VResourcesManager.Instance.SetPlacingConditon(list);
         }
 
-        public void LoadPhaseEndingCondition(Workbook wb)
-        {
-            var sheet = Sheet(wb, "PhaseEndingConditions");
-            var list = new List<VPhaseEndingCondition>();
-
-            for (int r = 1; r <= sheet.LastRow - 1; r++)
-            {
-                var row = sheet.Rows[r];
-                var typeName = row.Columns[VPhaseEndingConditionHeaderIndex.Type].Value;
-                if(row.Columns[VPhaseEndingConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
-                    continue; 
-                var conditionType = Type.GetType("VTuber.ScheduleSystem.Events." + typeName.Trim());
-                if (conditionType == null)
-                {
-                    VDebug.LogError($"Card Condition type {typeName} not found.");
-                    continue;
-                }
-                var condition = (VPhaseEndingCondition)Activator.CreateInstance(conditionType, row);
-                list.Add(condition);
-            }
-
-            VResourcesManager.Instance.SetPhaseEndingConditions(list);
-        }
-
         public void LoadDialogueEvents(Workbook wb)
         {
             var sheet = Sheet(wb, "DialogueEvents");
@@ -347,7 +324,30 @@ namespace VTuber.Character
             }
 
             VResourcesManager.Instance.SetCoopEvents(list);
-            
+        }
+        
+        public void LoadConsumables(Workbook wb)
+        {
+            var sheet = Sheet(wb, "Consumables");
+            var list = new List<VConsumableConfiguration>();
+
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                var typeName = row.Columns[VConsumableHeaderIndex.Type].Value;
+                if(row.Columns[VConsumableHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue; 
+                var consumableType = Type.GetType("VTuber.Consumable." + typeName.Trim() + "Configuration");
+                if (consumableType == null)
+                {
+                    VDebug.LogError($"Consumable Condition type {typeName} not found.");
+                    continue;
+                }
+                var consumable = (VConsumableConfiguration)Activator.CreateInstance(consumableType, row);
+                list.Add(consumable);
+            }
+
+            VResourcesManager.Instance.SetConsumableConfigurations(list);
         }
         
     }

@@ -115,7 +115,7 @@ MonoBehaviour:
       Data: 3|System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 13
+      Data: 14
     - Name: 
       Entry: 1
       Data: BAPopularity
@@ -155,6 +155,9 @@ MonoBehaviour:
     - Name: 
       Entry: 1
       Data: BARevenueShareRate
+    - Name: 
+      Entry: 1
+      Data: BASkipTurnStaminaRecovery
     - Name: 
       Entry: 13
       Data: 

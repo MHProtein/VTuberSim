@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b88b8be136cd4fcdbea22f1e27c9dfda, type: 3}
+  m_Name: xuewang
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  id: 1
+  cooperatorName: "\u81F3\u5C0A\u8F9B\u738B"
+  description: "\u96EA\u738B"
+  icon: {fileID: 21300000, guid: 8aaf071ea4d51a24ea562fdba64ef62f, type: 3}
+  baseCoopEvent: 24
+  _coopLevels:
+  - from: 0
+    to: 20
+    levelName: "\u8BA4\u8BC6"
+    eventType: 2
+    upgradeEventID: 24
+  - from: 21
+    to: 40
+    levelName: "\u4E86\u89E3"
+    eventType: 2
+    upgradeEventID: 24
+  - from: 41
+    to: 60
+    levelName: "\u719F\u6089"
+    eventType: 2
+    upgradeEventID: 0
+  - from: 61
+    to: 80
+    levelName: "\u597D\u53CB"
+    eventType: 2
+    upgradeEventID: 0
+  - from: 81
+    to: 100
+    levelName: "\u631A\u53CB"
+    eventType: 2
+    upgradeEventID: 0
+  minEvents: 2
+  maxEvents: 3
+  _dayTimeProbabilities:
+  - 0.4
+  - 0.1
+  - 0.5
+  _dayProbabilities:
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
+  - 0.14
+  _coopEvents: 0200000003000000

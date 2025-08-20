@@ -5,6 +5,7 @@ using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
 using VTuber.ScheduleSystem.Core;
+using VTuber.ScheduleSystem.Events;
 
 
 namespace VTuber.ScheduleSystem.UI
@@ -21,7 +22,7 @@ namespace VTuber.ScheduleSystem.UI
         private Vector2Int _coordination;
         private VEventUI _item;
         private List<VRaisingEffect> _coopEventEffects;
-        private List<VEventType> _coopEventTypes;
+        private List<VCoopEvent.VCoopEventType> _coopEventTypes;
 
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private GameObject highlightFrame;
@@ -54,14 +55,20 @@ namespace VTuber.ScheduleSystem.UI
             for (int i = 0; i < eventItem.e.eventTypes.Count; i++)
             {
                 eventIcons[i].gameObject.SetActive(true);
-                string x = eventItem.e.eventTypes[i].ToString();
+                string x = eventItem.e.eventTypes[i].eventType.ToString();
                 eventIcons[i].sprite = VRaisingUI.Instance.GetIcon(x);
+                if (eventItem.e.eventTypes[i].eventType == VEventType.Stream &&
+                    eventItem.e.eventTypes[i].abilityIndex != -1)
+                {
+                    eventIcons[i].color = VRaisingUI.Instance.abilityColors[eventItem.e.eventTypes[i].abilityIndex];
+                }
             }
         }
         
         public void RemoveCoopEvent()
         {
             coopEventGameObject.SetActive(false);
+            checkmark.gameObject.SetActive(false);
             IsCoopEventSlot = false;
             foreach (var icon in eventIcons)
             {
@@ -69,10 +76,38 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
+        public bool IsInCoopEventTypes(VEventUI item)
+        {
+            if (IsCoopEventSlot)
+            {
+                foreach (var coopEventType in _coopEventTypes)
+                {
+                    if (coopEventType.eventType == VEventType.Stream && coopEventType.abilityIndex != -1)
+                    {
+                        if (item.Event is VStreamEvent streamEvent)
+                        {
+                            if (streamEvent.MainAttributeIndex == coopEventType.abilityIndex)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (item.Event.Type == coopEventType.eventType)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public void SetItem(VEventUI item)
         {
             _item = item;
-            if (IsCoopEventSlot && (_coopEventTypes.Contains(item.Event.Type) || _coopEventTypes.Count == 0))
+            _scheduleUI.RecordEvent(item.Event);
+            
+            if (IsCoopEventSlot && (_coopEventTypes.Count == 0 || IsInCoopEventTypes(item)))
             {
                 checkmark.gameObject.SetActive(true);
                 item.Event.SetCoopEffects(this, _coopEventEffects);
@@ -82,9 +117,12 @@ namespace VTuber.ScheduleSystem.UI
         public void RemoveItem()
         {
             checkmark.gameObject.SetActive(false);
-            
+
             if (_item is not null && _item.Event is not null)
+            {
+                _scheduleUI.UnrecordEvent(_item.Event);
                 _item.Event.RemoveCoopEffects(this);
+            }
             _item = null;
         }
 

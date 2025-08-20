@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Character.Attributes;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Events;
 
@@ -24,10 +26,16 @@ namespace VTuber.Core.ScriptSystem
 
         public List<uint> EventList => _configuration.eventIDs;
         public List<uint> StreamEventList => _configuration.streamEventIDs;
+        public List<VKPI> kpis;
 
         public VScript(VScriptConfiguration configuration)
         {
             _configuration = configuration;
+            kpis = new List<VKPI>();
+            foreach (var kpi in configuration.kpis)
+            {
+                kpis.Add(new VKPI(kpi.EventType, kpi.RequiredAmount, kpi.AbilityIndex, true));
+            }
         }
 
         public VScheduleEvent BeginScript()
@@ -53,6 +61,7 @@ namespace VTuber.Core.ScriptSystem
             if (_currentPhase.nextPhase.IsInPhase(weekIndex))
             {
                 _currentPhase = _currentPhase.nextPhase;
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseBegin, new Dictionary<string, object>());
                 return _currentPhase.GetStartEvent();
             }
 

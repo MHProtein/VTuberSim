@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da29f16aedd4aecb1906e2ddea5e214, type: 3}
+  m_Name: VStoreConfiguration
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  upgradePrice: 75
+  discardCardPrice: 75
+  upgradePriceIncrease: 25
+  discardCardPriceIncrease: 25
+  defaultRefreshCount: 1
+  minDiscount: 0.2
+  maxDiscount: 0.5
+  cardRarityProbabilities:
+  - 0.3
+  - 0.4
+  - 0.3
+  cardRarityUpgradeProbabilities:
+  - 0.3
+  - 0.1
+  - 0.05
+  consumableRarityProbabilities:
+  - 0.3
+  - 0.5
+  - 0.2
+  cardPrices: 640000007d00000096000000
+  consumablePrices: 320000005000000064000000
+  cardCount: 4
+  consumableCount: 4

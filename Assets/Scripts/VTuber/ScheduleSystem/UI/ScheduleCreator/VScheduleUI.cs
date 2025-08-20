@@ -1,9 +1,11 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using PrimeTween;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
@@ -17,6 +19,7 @@ using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
+    
     public class VScheduleUI : VUIBehaviour
     {
         public Vector2Int slotSize;
@@ -24,6 +27,7 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] protected Transform indicator;
         [SerializeField] protected Image indicatorLeft;
         [SerializeField] protected Image indicatorRight;
+        [SerializeField] protected Button continueButton; 
         private Vector2Int _currentIndicatorCoord = Vector2Int.zero;
         private VCharacter _character;
         
@@ -31,9 +35,16 @@ namespace VTuber.ScheduleSystem.UI
         protected VScheduleSlot[,] slots;
 
         protected VAnimationQueue animationQueue;
+
+        private List<VScheduleEvent> _events = new List<VScheduleEvent>();
+        private Dictionary<VEventType, int> _eventCount = new Dictionary<VEventType, int>();
+        private List<int> _streamCount = new();
+        private VKPIManager _kpiManager;
+        private VScript _script;
         
         protected override void Awake()
         {
+            _kpiManager = new VKPIManager();
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             slots = new VScheduleSlot[slotSize.y, slotSize.x];
             var slotList = GetComponentsInChildren<VScheduleSlot>();
@@ -47,6 +58,15 @@ namespace VTuber.ScheduleSystem.UI
                     slots[y, x].Initialize(new Vector2Int(x, y), this);
                 }
             }
+            _eventCount = new Dictionary<VEventType, int>();
+            foreach (VEventType eventType in Enum.GetValues(typeof(VEventType)))
+            {
+                _eventCount.Add(eventType, 0);
+            }
+            _streamCount = new List<int>()
+            {
+                0, 0, 0
+            };
         }
         
         protected override void OnEnable()
@@ -55,7 +75,10 @@ namespace VTuber.ScheduleSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseEndingSelected, OnPhaseEndingSelected);
         }
+
+
 
         protected override void OnDisable()
         {
@@ -63,6 +86,14 @@ namespace VTuber.ScheduleSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseEndingSelected, OnPhaseEndingSelected);
+        }
+        
+        private void OnPhaseEndingSelected(Dictionary<string, object> messagedict)
+        {
+            _kpiManager.ClearPhaseKPIs();
+            var kpis = messagedict["KPIs"] as List<VKPI>;
+            _kpiManager.AddPhaseKPI(kpis);
         }
         
         private void OnEventUIPlaced(Dictionary<string, object> messagedict)
@@ -104,6 +135,19 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToCreation(VCharacter character, VScript script, int weekIndex)
         {
+            _events.Clear();
+            _eventCount = new Dictionary<VEventType, int>();
+            foreach (VEventType eventType in Enum.GetValues(typeof(VEventType)))
+            {
+                _eventCount.Add(eventType, 0);
+            }     
+            _streamCount = new List<int>()
+            {
+                0, 0, 0
+            };
+
+            continueButton.interactable = !_kpiManager.HasKPIs();
+            _kpiManager.ResetKPIUIs();
             foreach (var slot in slots)
             {
                 slot.RemoveCoopEvent();
@@ -188,11 +232,14 @@ namespace VTuber.ScheduleSystem.UI
             ChangeIndicatorColor(Color.yellow);
         }
 
-        public void Initialize(VCharacter character)
+        public void Initialize(VCharacter character, VScript script)
         {
             _character = character;
+            _script = script;
+            _kpiManager = new VKPIManager();
+            _kpiManager.AddPermanentKPI(script.kpis);
         }
-        
+
         private void OnEventExecuted(Dictionary<string, object> messagedict)
         {
             Vector2Int coordinate = (Vector2Int)messagedict["Coordinate"];
@@ -311,6 +358,31 @@ namespace VTuber.ScheduleSystem.UI
             {
                 slot.SetPlaceable(false, false);
             }
+        }
+        public void RecordEvent(VScheduleEvent e)
+        {
+            if (_events.Contains(e))
+                return;
+            _events.Add(e);
+            e.Phase = _script.CurrentPhase;
+            _eventCount[e.Type]++;
+            if (e is VStreamEvent streamEvent)
+            {
+                _streamCount[streamEvent.MainAttributeIndex]++;
+            }
+            continueButton.interactable = _kpiManager.CheckKPIs(_eventCount, _streamCount);
+        }
+        public void UnrecordEvent(VScheduleEvent e)
+        {
+            if (!_events.Contains(e))
+                return;
+            _events.Remove(e);
+            _eventCount[e.Type]--;
+            if (e is VStreamEvent streamEvent)
+            {
+                _streamCount[streamEvent.MainAttributeIndex]--;
+            }
+            continueButton.interactable = _kpiManager.CheckKPIs(_eventCount, _streamCount);
         }
     }
 }

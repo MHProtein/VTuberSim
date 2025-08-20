@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
+using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -48,6 +49,8 @@ namespace VTuber.Character
     {
         public string Name { get; set; }
 
+        public string LiveType => _characterConfig.liveType;
+        
         public uint FillingEventIDDuration1 => _characterConfig.fillingEventIDDuration1;
         public uint FillingEventIDDuration2 => _characterConfig.fillingEventIDDuration2;
         public uint FillingEventIDDuration3 => _characterConfig.fillingEventIDDuration3;
@@ -58,7 +61,6 @@ namespace VTuber.Character
 
         public VCardLibrary CardLibrary => _cardLibrary;
         private VCardLibrary _cardLibrary;
-        private Dictionary<VEventType, List<uint>> _completedEventIDs;
 
         public VCharacterRelicManager CharacterRelicManager => _characterRelicManager;
         private VCharacterRelicManager _characterRelicManager;
@@ -66,17 +68,20 @@ namespace VTuber.Character
         public VCooperatorManager CooperatorManager => _cooperatorManager;
         private VCooperatorManager _cooperatorManager;
         
+        public VConsumableManager ConsumableManager => _consumableManager;
+        private VConsumableManager _consumableManager;
+        
+        public List<VScheduleEvent> eventsCompleted;
+        public List<VScheduleEvent> succeededStreams;
+        
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
             _cooperatorManager = new VCooperatorManager();
+            _consumableManager = new VConsumableManager(this);
             InitializeAttributes(characterConfig);
             _characterRelicManager = new VCharacterRelicManager(this);
-            _completedEventIDs = new Dictionary<VEventType, List<uint>>();
-            _completedEventIDs[VEventType.Stream] = new List<uint>();
-            _completedEventIDs[VEventType.Recovery] = new List<uint>();
-            _completedEventIDs[VEventType.Practice] = new List<uint>();
-            _completedEventIDs[VEventType.Coop] = new List<uint>();
+            eventsCompleted = new List<VScheduleEvent>();
         }
         
         public void OnEnable()
@@ -210,11 +215,25 @@ namespace VTuber.Character
             AttributeManager.AddAttribute("CARevenueShareRate",
                 new VCharacterAttribute(characterConfig.revenueShareRateConfiguration,
                     characterConfig.revenueShareRateInitialValue, 
-                    VRaisingEventKey.Default, 
+                    VRaisingEventKey.OnRevenueShareRateChanged, 
                     characterConfig.revenueShareRateMaxValue == -1 ? int.MaxValue : characterConfig.revenueShareRateMaxValue,
                     characterConfig.revenueShareRateMinValue, true));
+            
+            AttributeManager.AddAttribute("CASkipEventStaminaRecovery",
+                new VCharacterAttribute(characterConfig.skipEventStaminaRecoveryConfiguration,
+                    characterConfig.skipEventStaminaRecoveryInitialValue, 
+                    VRaisingEventKey.OnSkipEventStaminaChanged, 
+                    characterConfig.skipEventStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipEventStaminaRecoveryMaxValue,
+                    characterConfig.skipEventStaminaRecoveryMinValue, true));
+            
+            AttributeManager.AddAttribute("CASkipTurnStaminaRecovery",
+                new VCharacterAttribute(characterConfig.skipTurnStaminaRecoveryConfiguration,
+                    characterConfig.skipTurnStaminaRecoveryInitialValue, 
+                    VRaisingEventKey.OnSkipTurnStaminaChanged, 
+                    characterConfig.skipTurnStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipTurnStaminaRecoveryMaxValue,
+                    characterConfig.skipTurnStaminaRecoveryMinValue, true));
         }
-
+        
         public bool TestCost(VScheduleEvent e)
         {
             return AttributeManager.TestCost(e);
@@ -228,14 +247,27 @@ namespace VTuber.Character
         private void OnEventExecuted(Dictionary<string, object> messagedict)
         {
             var e = messagedict["Event"] as VScheduleEvent;
-            _completedEventIDs[e.Type].Add(e.EventID);
+            eventsCompleted.Add(e);
         }
         
         public bool HasCompletedEvent(VEventType type, uint eventID)
         {
-            return _completedEventIDs[type].Contains(eventID);
+            foreach (var e in eventsCompleted)
+            {
+                if (e.Type == type && e.EventID == eventID)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
-        
+
+        public void SkipEventRecoverStamina()
+        {
+            AttributeManager.TryGetAttribute("CAStamina", out var stamina);
+            AttributeManager.TryGetAttribute("CASkipTurnStaminaRecovery", out var recoveryAmount);
+            stamina.AddTo(recoveryAmount.Value);
+        }
     }
 }
 

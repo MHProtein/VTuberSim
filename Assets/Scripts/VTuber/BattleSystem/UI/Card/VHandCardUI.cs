@@ -311,8 +311,8 @@ namespace VTuber.BattleSystem.UI
             {
                 cardUI.popularityText.gameObject.SetActive(true);
                 cardUI.popularityImage.gameObject.SetActive(true);
-                cardUI.SetPopularityImage(
-                    VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
+                if(VBattle.Instance.BattleAttributeManager.MultiplierManager is not null)
+                    cardUI.SetPopularityImage(VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
                 cardUI.popularityText.text = originalValue.ToString();
                 _popularityPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.popularityText.transform, Vector3.one, 0.5f).OnComplete(
                     () =>

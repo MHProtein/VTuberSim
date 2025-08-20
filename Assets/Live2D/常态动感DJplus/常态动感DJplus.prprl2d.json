@@ -1,0 +1,48 @@
+
+{
+    "customName" : "",
+    "iconPath"   : "",
+    "bodyPhysics" : 0.6,
+    "useAnimBlend" : 0,
+    "modelPos"     : {
+        "x" : 0.0,
+        "y" : 0.0,
+        "z" : -0.800000011920929
+    },
+    "modelSize"    : {
+        "x" : 5.0,
+        "y" : 5.0,
+        "z" : 5.0
+    },
+    "modelAngle"   : {
+        "x" : 0.0,
+        "y" : 0.0,
+        "z" : 0.0
+    },
+    "capsuleRadius" : 1,
+    "capsuleHeight" : 4,
+    "capsulePos"    : {
+        "x" : 0.0,
+        "y" : 0.0,
+        "z" : -1.79999995231628
+    },
+    "defaultAnimIndex" : -1,
+    "keys"             : [
+    ],
+    "useVoice"         : false,
+    "voiceParams"      : [
+        1,
+        1,
+        0.5,
+        0.3,
+        0.4,
+        0.1,
+        1,
+        -1,
+        0.4,
+        1
+    ],
+    "facialSettingMapV2" : null,
+    "L2DName"            : "",
+    "mapIsGlobal"        : false
+}

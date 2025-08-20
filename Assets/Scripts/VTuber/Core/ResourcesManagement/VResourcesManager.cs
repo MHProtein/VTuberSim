@@ -3,6 +3,7 @@ using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
+using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
@@ -34,9 +35,6 @@ namespace VTuber.Core.Managers
         public Dictionary<uint, VCardCondition> CardConditions => _cardConditions;
         private Dictionary<uint, VCardCondition> _cardConditions;
         
-        public Dictionary<uint, VPhaseEndingCondition> PhaseEndingConditions => _phaseEndingConditions;
-        private Dictionary<uint, VPhaseEndingCondition> _phaseEndingConditions;
-        
         public Dictionary<uint, VDialogueEventConfiguration> DialogueEventConfigs => _dialogueEventConfigs;
         private Dictionary<uint, VDialogueEventConfiguration> _dialogueEventConfigs;
         
@@ -54,6 +52,9 @@ namespace VTuber.Core.Managers
         
         public Dictionary<uint, VPlacingCondition> PlacingConditions => _placingConditions;
         private Dictionary<uint, VPlacingCondition> _placingConditions;
+        
+        public Dictionary<uint, VConsumableConfiguration> ConsumableConfigurationss => _consumableConfigurations;
+        private Dictionary<uint, VConsumableConfiguration> _consumableConfigurations;
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -130,19 +131,6 @@ namespace VTuber.Core.Managers
                 if (condition != null)
                 {
                     _cardConditions[condition.ID] = condition;
-                }
-            }
-        }
-        
-        public void SetPhaseEndingConditions(List<VPhaseEndingCondition> newConditions)
-        {
-            _phaseEndingConditions = new Dictionary<uint, VPhaseEndingCondition>();
-
-            foreach (var condition in newConditions)
-            {
-                if (condition != null)
-                {
-                    _phaseEndingConditions[condition.id] = condition;
                 }
             }
         }
@@ -225,6 +213,19 @@ namespace VTuber.Core.Managers
             }
         }
 
+        public void SetConsumableConfigurations(List<VConsumableConfiguration> consumableConfigurations)
+        {
+            _consumableConfigurations = new Dictionary<uint, VConsumableConfiguration>();
+
+            foreach (var consumableConfig in consumableConfigurations)
+            {
+                if (consumableConfig != null)
+                {
+                    _consumableConfigurations[consumableConfig.id] = consumableConfig;
+                }
+            }
+        }
+
         public VRelic CreateRelicByID(uint id)
         {
             if (_relics.TryGetValue(id, out var relicConfiguration))
@@ -297,6 +298,11 @@ namespace VTuber.Core.Managers
             return new List<VCardConfiguration>(_cardConfigurations.Values);
         }
         
+        public List<VConsumableConfiguration> GetAllConsumableConfigurations()
+        {
+            return new List<VConsumableConfiguration>(_consumableConfigurations.Values);
+        }
+        
         public List<VScheduleEventConfiguration> GetAllEventConfigurations()
         {
             var allEvents = new List<VScheduleEventConfiguration>();
@@ -340,12 +346,6 @@ namespace VTuber.Core.Managers
             return _streamEventConfigs.GetValueOrDefault(eventID);
         }
         
-        public VPhaseEndingCondition GetPhaseEndingConditionByID(uint conditionID)
-        {
-            return _phaseEndingConditions.GetValueOrDefault(conditionID);
-        }
-
-        
         public VRaisingRelicCondition GetRaisingRelicCondition(uint conditionID)
         {
             return _raisingRelicConditions.GetValueOrDefault(conditionID);
@@ -369,6 +369,15 @@ namespace VTuber.Core.Managers
         public VPlacingCondition GetPlacingCondtionByID(uint conditionId)
         {
             return _placingConditions.GetValueOrDefault(conditionId);
+        }
+        
+        public VConsumable CreateConsumableByID(uint consumableID)
+        {
+            if (_consumableConfigurations.TryGetValue(consumableID, out var consumableConfig))
+            {
+                return consumableConfig.CreateConsumable();
+            }
+            return null;
         }
     }
 }

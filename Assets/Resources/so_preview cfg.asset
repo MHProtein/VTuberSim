@@ -44,6 +44,28 @@ MonoBehaviour:
       so: {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
   - key: Cooperators
     value:
-    - name: Goomba
+    - name: "\u5BA4\u53CB\u59D0"
       path: 
       so: {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}
+    - name: "\u96EA\u738B"
+      path: 
+      so: {fileID: 11400000, guid: 8e77808f3b45fb34b8fe3e111d0517c1, type: 2}
+    - name: "\u5929\u4F7F\u4E95"
+      path: 
+      so: {fileID: 11400000, guid: fb654f61535c5754d99938109dfde960, type: 2}
+    - name: "\u67DA\u5B50\u8336"
+      path: 
+      so: {fileID: 11400000, guid: 2b8aa29a530a517498bdd4298770c0a4, type: 2}
+    - name: "\u753B\u5E08\u5988\u5988"
+      path: 
+      so: {fileID: 11400000, guid: aba6c02083194394d8c00739e47ac72b, type: 2}
+  - key: 
+    value:
+    - name: Store
+      path: 
+      so: {fileID: 11400000, guid: 7007008a95323e340a43046bbfb9d1f8, type: 2}
+  - key: 
+    value:
+    - name: "\u91CD\u751F\u914D\u7F6E"
+      path: 
+      so: {fileID: 11400000, guid: 334dd11ca5f61594bbc19a30617cfd99, type: 2}

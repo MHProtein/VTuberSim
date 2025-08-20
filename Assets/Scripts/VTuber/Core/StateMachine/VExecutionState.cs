@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using PrimeTween;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
@@ -32,36 +34,47 @@ namespace VTuber.Core.StateMachine
 
         private void OnSkipEvent(Dictionary<string, object> messagedict)
         {
+            stateMachine.Character.SkipEventRecoverStamina();
         }
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.BattleRoot.SetActive(false);
-            (_currentEvent as VStreamEvent).SetResultEvent((bool)messagedict["IsTargetMet"]);
+            bool isSuccess = (bool)messagedict["IsTargetMet"];
+            (_currentEvent as VStreamEvent).SetResultEvent(isSuccess);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
                 new Dictionary<string, object>()
                 {
                     {"Event", _currentEvent}
                 });
+            stateMachine.Character.ConsumableManager.SetBattle(null);
+            VRaisingUI.Instance.SetConsumableToRaising();
+            if(isSuccess)
+                stateMachine.Character.succeededStreams.Add(_currentEvent);
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
-            stateMachine.EventSystemRoot.SetActive(false);
+            stateMachine.EventSystemRoot.SetActive(false); 
             _currentEvent.ExecuteCoopEvents(stateMachine.Character);
+            
+            if (_shouldEndGame)
+            { 
+                _shouldEndGame = false; 
+                var result = stateMachine.Script.CalculateScore(stateMachine.Character); 
+                var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
+                    result.scoreLevelName, stateMachine.Character); 
+                account.Print();
+                
+                return;
+            }
+            
             if (_currentEvent.FollowUpEvent is not null)
             {
                 Tween.Delay(0.2f, () =>
                 {
                     _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
                 });
-                return;
-            }
-
-            if (_shouldEndGame)
-            {
-                _shouldEndGame = false;
-                stateMachine.Script.CalculateScore(stateMachine.Character);
                 return;
             }
             
@@ -133,23 +146,11 @@ namespace VTuber.Core.StateMachine
             {
                 Tween.Delay(0.1f, () =>
                 {
-                    VDebug.Log(_currentEvent.Coordinate);
                     var staminaNotEnoughEvent = VResourcesManager.Instance.CreateDialogueEventByID(8);
-                    staminaNotEnoughEvent.SetDaySchedule(_currentEvent.DaySchedule, _currentEvent.Coordinate);
+                    staminaNotEnoughEvent.SetDaySchedule(e.DaySchedule, -1 * Vector2Int.one);
                     staminaNotEnoughEvent.Execute(stateMachine.Character);
                 });
             }
-        }
-        
-        public void InitializeBattle(int initialTurnCount, int targetPopularity, int initialViewers,
-            int mainAttributeIndex, List<int> abilityTurnCounts)
-        {
-            stateMachine.BattleRoot.SetActive(true);
-            stateMachine.Battle.InitializeBattle(stateMachine.Character.AttributeManager,
-                stateMachine.Character.CardLibrary,
-                initialTurnCount, mainAttributeIndex, abilityTurnCounts,
-                targetPopularity, initialViewers,
-                stateMachine.Character.CharacterRelicManager.GetBattleRelics());
         }
         
         public void InitializeEvent(VDialogueEvent e)
@@ -162,14 +163,6 @@ namespace VTuber.Core.StateMachine
         {
             _currentEvent = messagedict["Event"] as VScheduleEvent;
             InitializeEvent(_currentEvent as VDialogueEvent);
-        }
-        
-        private void OnStreamEventStart(Dictionary<string, object> messagedict)
-        {
-            _currentEvent = messagedict["Event"] as VScheduleEvent;
-            var streamEvent = _currentEvent as VStreamEvent;
-            InitializeBattle(streamEvent.InitialTurnCount, streamEvent.TargetPopularity, streamEvent.InitialViewers,
-                streamEvent.MainAttributeIndex, streamEvent.AbilityTurnCounts);
         }
 
         private void AddEventToCurrentEvent(VEventType eventType, uint id)
@@ -196,7 +189,6 @@ namespace VTuber.Core.StateMachine
         {
             base.Enter(state, enterParams);
             
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventStart, OnEventStart);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
@@ -224,13 +216,13 @@ namespace VTuber.Core.StateMachine
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().
                     OnComplete(() => NextEvent());
             }
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }
 
         public override void Exit(VState nextState)
         {
             base.Exit(nextState);
             
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnStreamEventStart, OnStreamEventStart);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventStart, OnEventStart);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSkipEvent, OnSkipEvent);
@@ -240,6 +232,7 @@ namespace VTuber.Core.StateMachine
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
             
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(false);
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(true);
         }
     }
 }

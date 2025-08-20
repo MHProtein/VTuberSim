@@ -46,7 +46,7 @@ namespace VTuber.ScheduleSystem.UI
                     {"Name", _data.eventName},
                     {"Description", _data.description}
                 });
-            background.color = Color.white;
+            background.color = Color.cyan;
         }
 
         public void OnPointerDown(PointerEventData eventData)

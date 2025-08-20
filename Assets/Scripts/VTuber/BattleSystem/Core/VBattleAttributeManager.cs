@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character;
@@ -239,8 +240,11 @@ namespace VTuber.BattleSystem.Core
         public VMultiplierManager MultiplierManager => _multiplierManager;
         private VMultiplierManager _multiplierManager;
         
-        public VBattleAttributeManager()
+        private bool _isPhaseEnding;
+        
+        public VBattleAttributeManager(bool isPhaseEnding)
         {
+            _isPhaseEnding = isPhaseEnding;
             _battleAttributes = new Dictionary<string, VBattleAttribute>();
         }
 
@@ -252,7 +256,8 @@ namespace VTuber.BattleSystem.Core
         public void Clear()
         {
             _battleAttributes.Clear();
-            _multiplierManager.Reset();
+            if(_multiplierManager is not null)
+                _multiplierManager.Reset();
             _staminaManager.Reset();
         }
         
@@ -262,6 +267,10 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributes.TryGetValue("BAStamina", out var stamina) ? (VBattleStaminaAttribute)stamina : null,
                 _battleAttributes.TryGetValue("BAShield", out var shield) ? (VBattleStaminaAttribute)shield : null
             );
+            
+            if (!_isPhaseEnding)
+                return;
+            
             _multiplierManager = new VMultiplierManager(
                 mainAttributeIndex,
                 4,
@@ -301,17 +310,27 @@ namespace VTuber.BattleSystem.Core
                 attribute.Value.OnDisable();
             }
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
-            _multiplierManager.OnDisable();
+            if(_multiplierManager is not null)
+                _multiplierManager.OnDisable();
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
-            if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
+            int delta = (int)messagedict["Delta"];
+            if(delta == 0)
+                return;
+            if (_isPhaseEnding)
             {
                 float multiplier = _multiplierManager.Multiplier.Value / 100f;
-                int delta = (int)messagedict["Delta"];
                 (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
                     AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName,
+                        messagedict["IsFromCard"] as bool? ?? false,
+                        messagedict["ShouldPlayTwice"] as bool? ?? false);
+            }
+            else
+            {
+                (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
+                    AddPopularity(delta, "",
                         messagedict["IsFromCard"] as bool? ?? false,
                         messagedict["ShouldPlayTwice"] as bool? ?? false);
             }
@@ -321,9 +340,9 @@ namespace VTuber.BattleSystem.Core
         {
             if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
             {
-                float multiplier = _multiplierManager.Multiplier.Value / 100f;
+                float multiplier = _multiplierManager is null ? 1f : _multiplierManager.Multiplier.Value / 100f;
                 int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
-                return (int)(parameterDelta * multiplier);
+                return _isPhaseEnding ? (int)(parameterDelta * multiplier) : parameterDelta;
             }
 
             return 0;
@@ -349,6 +368,13 @@ namespace VTuber.BattleSystem.Core
                 attribute.OnDisable();
                 _battleAttributes.Remove(name);
             }
+        }
+
+        public void SkipTurnRecoverStamina()
+        {
+            _battleAttributes.TryGetValue("BAStamina", out var stamina);
+            _battleAttributes.TryGetValue("BASkipTurnStaminaRecovery", out var recoveryAmount);
+            stamina.AddTo(recoveryAmount.Value, false, false);
         }
     }
 }

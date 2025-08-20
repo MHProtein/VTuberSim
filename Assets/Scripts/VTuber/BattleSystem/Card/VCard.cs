@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.Utilities;
 using Unity.VisualScripting;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
@@ -39,6 +40,7 @@ namespace VTuber.BattleSystem.Card
         private List<VEffect> _newEffects;
 
         public bool IsUpgraded => _isUpgraded;
+        public bool IsPrioritized => _configuration.prioritized;
         public bool IsTemporaryUpgraded => isTemporaryUpgraded;
         
         private bool _isUpgraded = false;
@@ -74,17 +76,32 @@ namespace VTuber.BattleSystem.Card
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
             if(conditionId != -1)
                 condition = VResourcesManager.Instance.GetConditionByID((uint)conditionId);
-            
-            foreach (var effect in effects)
+
+            int i = 0;
+            try
             {
-                VDebug.Log("cardId : " + configID);
-                VDebug.Log("effect : " + effect.id);
-                _effects.Add(effect.CreateEffect());
+                for (i = 0; i < effects.Count; i++)
+                {
+                    _effects.Add(effects[i].CreateEffect());
+                }
             }
-            
-            foreach (var effect in newEffects)
+            catch (Exception e)
             {
-                _newEffects.Add(effect.CreateEffect());
+                VDebug.LogError($"id为 {configID} 的卡牌 第{i}个效果配置错误");
+                throw;
+            }
+
+            try
+            {
+                for (i = 0; i < _newEffects.Count; i++)
+                {
+                    _newEffects.Add(newEffects[i].CreateEffect());
+                }
+            }
+            catch (Exception e)
+            {
+                VDebug.LogError($"id为 {configID} 的卡牌 第{i}个—“新”—效果配置错误");
+                throw;
             }
         }
         
@@ -99,10 +116,15 @@ namespace VTuber.BattleSystem.Card
                 des = des.Replace("X3", _effects[2].GetValue());
             if (des.Contains("X4"))
                 des = des.Replace("X4", _effects[3].GetValue());
-            if (des.Contains("NX1"))
-                des = des.Replace("NX1", _newEffects[0].GetValue());
-            if (des.Contains("NX2"))
-                des = des.Replace("NX2", _newEffects[1].GetValue());
+            
+            if (_isUpgraded && !_configuration.upgradeDescription.IsNullOrWhitespace())
+            {
+                des += "\n" + _configuration.upgradeDescription;
+                if (des.Contains("NX1"))
+                    des = des.Replace("NX1", _newEffects[0].GetValue());
+                if (des.Contains("NX2"))
+                    des = des.Replace("NX2", _newEffects[1].GetValue());
+            }
             return des;
         }
 
@@ -166,6 +188,7 @@ namespace VTuber.BattleSystem.Card
             {
                 effect.Upgrade();
             }
+            VDebug.Log("卡牌升级: " + CardName);
         }
 
         public void Downgrade()

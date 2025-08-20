@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using VTuber.BattleSystem.Core.KPIs;
 using VTuber.Character;
 using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Core;
@@ -57,6 +58,30 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         
         [LabelText("特殊事件")]
         [SerializeField] private List<VSpecialEventData> specialEventData;
+        
+        [HorizontalGroup("curves")]
+        [Header("衰退线1")]
+        [SerializeField] AnimationCurve decayCurve1;
+        [HorizontalGroup("curves")]
+        [Header("衰退线2")]
+        [SerializeField] AnimationCurve decayCurve2;
+        [HorizontalGroup("curves")]
+        [Header("衰退线3")]
+        [SerializeField] AnimationCurve decayCurve3;
+
+        public List<VKPI> KPIs { get; private set; }
+
+        public List<AnimationCurve> DecayCurves
+        {
+            get
+            {
+                var _decayCurves = new List<AnimationCurve>();
+                _decayCurves.Add(decayCurve1);
+                _decayCurves.Add(decayCurve2);
+                _decayCurves.Add(decayCurve3);
+                return _decayCurves;
+            }
+        }
 
         private uint _endEventID;
 
@@ -111,14 +136,14 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
             _endEventID = id;
         }
         
-        public List<KeyValuePair<VStreamEvent, List<bool>>> GetPhaseEndingEvents(VCharacter character)
+        public List<VStreamEvent> GetPhaseEndingEvents(VCharacter character)
         {
-            List<KeyValuePair<VStreamEvent, List<bool>>> events = new List<KeyValuePair<VStreamEvent, List<bool>>>();
+            List<VStreamEvent> events = new List<VStreamEvent>();
             foreach (var id in endEventIDs)
             {
                 var e = VResourcesManager.Instance.CreateStreamEventByID(id);
                 e.Phase = this;
-                events.Add(new KeyValuePair<VStreamEvent, List<bool>>(e, e.CanExecuteAsPhaseEnding(character)));
+                events.Add(e);
             }
 
             return events;

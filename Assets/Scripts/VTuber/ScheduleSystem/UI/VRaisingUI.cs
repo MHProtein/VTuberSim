@@ -53,7 +53,15 @@ namespace VTuber.ScheduleSystem.UI
         [Header("CardLibraryUI")] 
         [SerializeField] private GameObject cardLibraryUIObject;
 
-        [SerializeField] private VCardLibraryUI cardLibraryUI;
+        [SerializeField] private VCardViewSelectionUI cardLibraryUI;
+        
+        [Space(3)]
+        [Header("ConsumableUI")]
+        [SerializeField]private GameObject consumableUIParent;
+        [SerializeField]private GameObject consumableUIBattleParent;
+        [SerializeField]private GameObject consumableUI;
+        
+        public List<Color> abilityColors = new List<Color>();
 
         protected override void OnEnable()
         {
@@ -69,7 +77,7 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeCardLibraryUI(List<VCard> cards)
         {
             cardLibraryUIObject.SetActive(true);
-            cardLibraryUI.Initialize(cards, false, null);
+            cardLibraryUI.Initialize(cards, false, false, false, null);
         }
         
         public void CloseCardLibraryUI()
@@ -160,6 +168,18 @@ namespace VTuber.ScheduleSystem.UI
 
             Debug.LogWarning($"Icon with name {iconName} not found.");
             return null;
+        }
+
+        public void SetConsumableToBattle()
+        {
+            consumableUI.transform.SetParent(consumableUIBattleParent.transform);
+            consumableUI.transform.localPosition = Vector3.zero;
+        }
+        
+        public void SetConsumableToRaising()
+        {
+            consumableUI.transform.SetParent(consumableUIParent.transform);
+            consumableUI.transform.localPosition = Vector3.zero;
         }
     }
 }

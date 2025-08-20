@@ -84,5 +84,10 @@ namespace VTuber.Core.EventCenter
             return false;
         }
         
+        public virtual void Clear()
+        {
+            m_events.Clear();
+        }
+        
     }
 }
