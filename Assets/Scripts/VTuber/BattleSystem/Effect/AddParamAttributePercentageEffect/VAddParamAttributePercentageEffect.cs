@@ -5,7 +5,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
-    public class VAddParamAttributePercentageEffect : VEffect
+    public class VAddParamAttributePercentageEffect : VEffect, IVValuePreview
     {
         private string attributeName;
         private VUpgradableValue<float> _percentage;
@@ -51,6 +51,15 @@ namespace VTuber.BattleSystem.Effect
         {
             base.Downgrade();
             _percentage.Downgrade();
+        }
+
+        public int GetValue(VBattle battle)
+        {
+            if (battle.BattleAttributeManager.TryGetAttribute(attributeName, out var attribute))
+            {
+                return (int)((_percentage.Value) * attribute.Value);
+            }
+            return 0;
         }
     }
 }

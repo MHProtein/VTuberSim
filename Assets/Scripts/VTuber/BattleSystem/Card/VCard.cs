@@ -40,6 +40,7 @@ namespace VTuber.BattleSystem.Card
         private List<VEffect> _newEffects;
 
         public bool IsUpgraded => _isUpgraded;
+        public bool IsPrioritized => _configuration.prioritized;
         public bool IsTemporaryUpgraded => isTemporaryUpgraded;
         
         private bool _isUpgraded = false;

@@ -310,7 +310,8 @@ namespace VTuber.BattleSystem.Core
                 attribute.Value.OnDisable();
             }
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
-            _multiplierManager.OnDisable();
+            if(_multiplierManager is not null)
+                _multiplierManager.OnDisable();
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
@@ -367,6 +368,13 @@ namespace VTuber.BattleSystem.Core
                 attribute.OnDisable();
                 _battleAttributes.Remove(name);
             }
+        }
+
+        public void SkipTurnRecoverStamina()
+        {
+            _battleAttributes.TryGetValue("BAStamina", out var stamina);
+            _battleAttributes.TryGetValue("BASkipTurnStaminaRecovery", out var recoveryAmount);
+            stamina.AddTo(recoveryAmount.Value, false, false);
         }
     }
 }

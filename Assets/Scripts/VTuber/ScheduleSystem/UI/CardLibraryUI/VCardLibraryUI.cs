@@ -20,8 +20,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Transform grid;
         [SerializeField] private VCardUI previewCardUI;
 
-        [SerializeField] private Button confirmButton;
-        [SerializeField] private Button returnButton;
+        [SerializeField] public Button confirmButton;
+        [SerializeField] public Button returnButton;
 
         private List<VSelectCardCardUI> _cardUIs; 
         private List<VSelectCardCardUI> _displayingCardUIs;
@@ -57,10 +57,12 @@ namespace VTuber.ScheduleSystem.UI
             _returnAction?.Invoke();
         }
 
-        public void Initialize(List<VCard> cards, bool select, bool preview, Action<VCard> confirmAction, Action returnAction = null, Action<VCard> previewAction = null)
+        public void Initialize(List<VCard> cards, bool isStore, bool select, bool preview, Action<VCard> confirmAction, Action returnAction = null, Action<VCard> previewAction = null)
         {
             confirmButton.gameObject.SetActive(select);
             returnButton.gameObject.SetActive(!select);
+            if(isStore)
+                returnButton.gameObject.SetActive(true);
             _confirmAction = confirmAction;
             _returnAction = returnAction;
             _previewAction = previewAction;

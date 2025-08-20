@@ -33,12 +33,14 @@ namespace VTuber.ScheduleSystem.UI
 
         public bool IsFixed => _isFixed;
         private bool _isFixed = false;
+        private Camera _camera;
         
         protected override void Awake()
         {
             parentSlots = new List<VScheduleSlot>();
             parentBeforeDrag = new List<VScheduleSlot>();
             _interactable = true;
+            _camera = Camera.main;
         }
 
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
@@ -186,7 +188,8 @@ namespace VTuber.ScheduleSystem.UI
             base.UpdateImpl();            
             if (_isSelected)
             {
-                Vector3 mousePosition = Input.mousePosition  + (Vector3)initOffset;
+                Vector3 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition) + (Vector3)initOffset;
+                mousePosition.z = 0;
                 transform.position = mousePosition;
                 
                 var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
@@ -272,7 +275,7 @@ namespace VTuber.ScheduleSystem.UI
                 icon.raycastTarget = false;
                 parentBeforeDrag = parentSlots;
                 transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
-                initOffset = transform.position - Input.mousePosition;
+                initOffset = transform.position - _camera.ScreenToWorldPoint(Input.mousePosition);
                 _isSelected = true;
                 
                 foreach (var parent in parentSlots)

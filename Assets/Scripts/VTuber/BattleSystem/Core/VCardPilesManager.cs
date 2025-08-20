@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
@@ -28,6 +29,8 @@ namespace VTuber.BattleSystem.Core
         
         private int _handSize;
         private int _maxHandSize;
+        
+        private bool _isFirstTurn;
 
         public VCardPilesManager(int handSize, int maxHandSize, VCardLibrary cardLibrary)
         {
@@ -41,16 +44,19 @@ namespace VTuber.BattleSystem.Core
             
             _deck.AddRange(cardLibrary.GetCards());
             _drawPile.AddRange(_deck);
+            _isFirstTurn = true;
         }
-        
+
         public void OnEnable()
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRequestDrawCards, OnRequestDrawCards);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardDisposed, OnCardDisposed);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardPlayed, OnRemoveCardFromHandPile);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardBeginDisposal, OnRemoveCardFromHandPile);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardBeginDisposal,
+                OnRemoveCardFromHandPile);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardsPickedFromPile,
+                OnCardsPickedFromPile);
         }
 
         public void OnDisable()
@@ -62,7 +68,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardBeginDisposal, OnRemoveCardFromHandPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
         }
-
+        
         private void OnCardsPickedFromPile(Dictionary<string, object> messagedict)
         {
             VCardPileType cardPileType = (VCardPileType)messagedict["CardPileType"];
@@ -131,24 +137,39 @@ namespace VTuber.BattleSystem.Core
 
         public void DrawCards(int drawCount, bool isFromCard = false, bool shouldPlayTwice = false)
         {      
-            if (drawCount <= 0)
+            List<VCard> cards = new List<VCard>();
+            if (_isFirstTurn)
+            {
+                _isFirstTurn = false;
+                var priorityCards = _drawPile.TakeWhile(card => card.IsPrioritized).ToList();
+                if (priorityCards.Count > _maxHandSize)
+                {
+                    cards = priorityCards.OrderBy(card => Random.Range(0f, 1f)).Take(_maxHandSize).ToList();
+                }
+                else
+                    cards = priorityCards;
+                drawCount = Mathf.Max(0, drawCount - cards.Count);
+            }
+            else if (drawCount <= 0)
                 return;
-            if (drawCount + _handPile.Count > _maxHandSize)
-            {
-                drawCount = _maxHandSize - _handPile.Count;
-            }
 
-            List<VCard> cards;
-            if (_drawPile.Count >= drawCount)
+            if (drawCount > 0)
             {
-                cards = DrawFromDrawPile(drawCount);
+                if (drawCount + _handPile.Count > _maxHandSize)
+                {
+                    drawCount = _maxHandSize - _handPile.Count;
+                }
+
+                if (_drawPile.Count >= drawCount)
+                {
+                    cards.AddRange(DrawFromDrawPile(drawCount));
+                }
+                else
+                {
+                    DiscardToDraw();
+                    cards.AddRange(DrawFromDrawPile(drawCount));
+                }
             }
-            else
-            {
-                DiscardToDraw();
-                cards = DrawFromDrawPile(drawCount);
-            }
-                
             
             VDebug.Log("Drawn Cards: " + cards.Count);
             Dictionary<string, object> message = new Dictionary<string, object>();
@@ -213,17 +234,28 @@ namespace VTuber.BattleSystem.Core
             if(card.IsExhaust)
             {
                 _exhaustPile.Add(card);
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardEnterExaustPile,
+                    new Dictionary<string, object>()
+                    {
+                        { "Card", card }
+                    });
                 VDebug.Log($"卡牌已移入消耗堆：{card.CardName}");
             }
             else
             {
                 _discardPile.Add(card);
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardEnterDiscardPile,
+                    new Dictionary<string, object>()
+                    {
+                        { "Card", card }
+                    });
                 VDebug.Log($"卡牌已移入弃牌堆：{card.CardName}");
             }
         }
         
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
+            
             DrawCards(_handSize);
             VDebug.Log($"回合开始，抽取 {_handSize} 张卡牌。");
         }

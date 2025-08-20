@@ -31,6 +31,7 @@ namespace VTuber.BattleSystem.UI
         private List<Image> colorObjects = new List<Image>();
         int arrowIndex = -1;
         private float initSize = 0;
+        private bool _isInUse = false;
         
         protected override void Awake()
         {
@@ -48,6 +49,11 @@ namespace VTuber.BattleSystem.UI
         protected override void Start()
         {
             base.Start();
+        }
+        
+        public void IsInUse(bool isInUse)
+        {
+            _isInUse = isInUse;
         }
 
         protected override void OnEnable()
@@ -72,6 +78,8 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            if (!_isInUse)
+                return;
             foreach (var colorObject in colorObjects)
             {
                 Destroy(colorObject.gameObject);
@@ -81,7 +89,9 @@ namespace VTuber.BattleSystem.UI
         }
         
         private void OnTurnChange(Dictionary<string, object> messagedict)
-        {
+        {         
+            if (!_isInUse)
+                return;
             int delta = (int)messagedict["Delta"];
             if (delta <= 0)
                 return;
@@ -111,6 +121,8 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
+            if (!_isInUse)
+                return;
             Tween.Delay(0.1f, () =>
             {
                 arrowIndex++;
@@ -123,6 +135,8 @@ namespace VTuber.BattleSystem.UI
         
         private void OnMultiplierSequenceCalculated(Dictionary<string, object> messagedict)
         {
+            if (!_isInUse)
+                return;
             List<Color> colors = messagedict["Colors"] as List<Color>;
             if (colors is null)
                 return;
@@ -137,6 +151,8 @@ namespace VTuber.BattleSystem.UI
         
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
+            if (!_isInUse)
+                return;
             MultiplierText.text = $"提升率: {messagedict["NewValue"] as int? ?? 0}%";
             MultiplierText.faceColor = (Color)messagedict["Color"];
             
@@ -145,6 +161,8 @@ namespace VTuber.BattleSystem.UI
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
+            if (!_isInUse)
+                return;
             arrowIndex++;
             if(arrowIndex >= colorObjects.Count)
                 return;

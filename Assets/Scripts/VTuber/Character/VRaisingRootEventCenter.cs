@@ -86,6 +86,12 @@ namespace VTuber.Core.EventCenter
         
         OnPhaseBegin = 60,
         OnPhaseEnd = 61,
+        
+        OnEventSelectUpgradeCard = 62,
+        
+        OnRevenueShareRateChanged = 63,
+        OnSkipTurnStaminaChanged = 64,
+        OnSkipEventStaminaChanged = 65,
     }
     
     

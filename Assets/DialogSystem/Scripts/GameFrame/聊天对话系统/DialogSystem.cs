@@ -326,10 +326,14 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
                 PauseAuto();
                 break;
             }
+
+            // stay paused until unpaused
+            while (paused)
+                yield return null;
+
             ContinueDialog();
             yield return new WaitForSeconds(autoDelay);
         }
-        
     }
 
     private void PauseAuto()
@@ -347,6 +351,8 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
                 PauseSkip();
                 break;
             }
+            while (paused)
+                yield return null;
             ContinueDialog();
             yield return new WaitForSeconds(skipDelay);
         }

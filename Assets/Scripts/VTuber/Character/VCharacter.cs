@@ -49,6 +49,8 @@ namespace VTuber.Character
     {
         public string Name { get; set; }
 
+        public string LiveType => _characterConfig.liveType;
+        
         public uint FillingEventIDDuration1 => _characterConfig.fillingEventIDDuration1;
         public uint FillingEventIDDuration2 => _characterConfig.fillingEventIDDuration2;
         public uint FillingEventIDDuration3 => _characterConfig.fillingEventIDDuration3;
@@ -70,6 +72,7 @@ namespace VTuber.Character
         private VConsumableManager _consumableManager;
         
         public List<VScheduleEvent> eventsCompleted;
+        public List<VScheduleEvent> succeededStreams;
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
@@ -212,9 +215,23 @@ namespace VTuber.Character
             AttributeManager.AddAttribute("CARevenueShareRate",
                 new VCharacterAttribute(characterConfig.revenueShareRateConfiguration,
                     characterConfig.revenueShareRateInitialValue, 
-                    VRaisingEventKey.Default, 
+                    VRaisingEventKey.OnRevenueShareRateChanged, 
                     characterConfig.revenueShareRateMaxValue == -1 ? int.MaxValue : characterConfig.revenueShareRateMaxValue,
                     characterConfig.revenueShareRateMinValue, true));
+            
+            AttributeManager.AddAttribute("CASkipEventStaminaRecovery",
+                new VCharacterAttribute(characterConfig.skipEventStaminaRecoveryConfiguration,
+                    characterConfig.skipEventStaminaRecoveryInitialValue, 
+                    VRaisingEventKey.OnSkipEventStaminaChanged, 
+                    characterConfig.skipEventStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipEventStaminaRecoveryMaxValue,
+                    characterConfig.skipEventStaminaRecoveryMinValue, true));
+            
+            AttributeManager.AddAttribute("CASkipTurnStaminaRecovery",
+                new VCharacterAttribute(characterConfig.skipTurnStaminaRecoveryConfiguration,
+                    characterConfig.skipTurnStaminaRecoveryInitialValue, 
+                    VRaisingEventKey.OnSkipTurnStaminaChanged, 
+                    characterConfig.skipTurnStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipTurnStaminaRecoveryMaxValue,
+                    characterConfig.skipTurnStaminaRecoveryMinValue, true));
         }
         
         public bool TestCost(VScheduleEvent e)
@@ -244,7 +261,13 @@ namespace VTuber.Character
             }
             return false;
         }
-        
+
+        public void SkipEventRecoverStamina()
+        {
+            AttributeManager.TryGetAttribute("CAStamina", out var stamina);
+            AttributeManager.TryGetAttribute("CASkipTurnStaminaRecovery", out var recoveryAmount);
+            stamina.AddTo(recoveryAmount.Value);
+        }
     }
 }
 

@@ -18,6 +18,7 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
+            _character = character;
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>()
             {
                 {"Action", new Action<VCard>(DeleteCard)}

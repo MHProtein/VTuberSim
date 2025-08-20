@@ -21,6 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  liveType: C
   staminaInitialValue: 50
   staminaMinValue: 0
   staminaMaxValue: 50
@@ -111,7 +112,14 @@ MonoBehaviour:
   revenueShareRateMinValue: 0
   revenueShareRateMaxValue: 100
   revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
-  cardIDs: 
+  skipEventStaminaRecoveryInitialValue: 5
+  skipEventStaminaRecoveryMinValue: 0
+  skipEventStaminaRecoveryMaxValue: 100
+  skipEventStaminaRecoveryConfiguration: {fileID: 11400000, guid: e5847616bad94904e90a2ca50333ea9c, type: 2}
+  skipTurnStaminaRecoveryInitialValue: 5
+  skipTurnStaminaRecoveryMinValue: 0
+  skipTurnStaminaRecoveryMaxValue: 100
+  skipTurnStaminaRecoveryConfiguration: {fileID: 11400000, guid: e2f2234de9cc3ea4bba5ddab3a15de3e, type: 2}
   fillingEventIDDuration1: 3
   fillingEventIDDuration2: 4
   fillingEventIDDuration3: 5

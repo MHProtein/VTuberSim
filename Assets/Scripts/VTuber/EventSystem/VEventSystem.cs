@@ -52,22 +52,18 @@ namespace VTuber.EventSystem
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSelectPhaseEndingBegin, OnPickPhaseEndingBegin);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCardFrom3, OnBeginSelectCardFrom3);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventSelectUpgradeCard, OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
         }
-
-        private void OnPhaseBegin(Dictionary<string, object> messagedict)
-        {
-            _store.Reset();
-        }
-
-
+        
         protected override void OnDisable()
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSelectPhaseEndingBegin, OnPickPhaseEndingBegin);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCardFrom3, OnBeginSelectCardFrom3);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventSelectUpgradeCard, OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
         }
@@ -75,6 +71,21 @@ namespace VTuber.EventSystem
         private void OnRequestEnterStore(Dictionary<string, object> messagedict)
         {
             _shouldEnterStore = true;
+        }      
+        
+        private void OnPhaseBegin(Dictionary<string, object> messagedict)
+        {
+            _store.Reset();
+        }
+        
+        private void OnEventSelectUpgradeCard(Dictionary<string, object> messagedict)
+        {
+            VEventSystemUI.Instance.OpenUpgradeCard(_character.CardLibrary.GetCards(),
+                () =>
+                {
+                    dialogueSystem.SetPaused(false);
+                });
+            dialogueSystem.SetPaused(true);
         }
         
         private void OnBeginSelectCardFrom3(Dictionary<string, object> messagedict)
@@ -89,7 +100,7 @@ namespace VTuber.EventSystem
         
         private void OnBeginSelectCard(Dictionary<string, object> messagedict)
         {
-            VEventSystemUI.Instance.OpenCardLibrary(_character.CardLibrary.GetCards(), true, messagedict["Action"] as Action<VCard>,
+            VEventSystemUI.Instance.OpenSelectCard(_character.CardLibrary.GetCards(), true, messagedict["Action"] as Action<VCard>,
                 () =>
                 {
                     dialogueSystem.SetPaused(false);

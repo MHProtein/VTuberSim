@@ -34,12 +34,14 @@ namespace VTuber.Core.StateMachine
 
         private void OnSkipEvent(Dictionary<string, object> messagedict)
         {
+            stateMachine.Character.SkipEventRecoverStamina();
         }
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.BattleRoot.SetActive(false);
-            (_currentEvent as VStreamEvent).SetResultEvent((bool)messagedict["IsTargetMet"]);
+            bool isSuccess = (bool)messagedict["IsTargetMet"];
+            (_currentEvent as VStreamEvent).SetResultEvent(isSuccess);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
                 new Dictionary<string, object>()
                 {
@@ -47,6 +49,8 @@ namespace VTuber.Core.StateMachine
                 });
             stateMachine.Character.ConsumableManager.SetBattle(null);
             VRaisingUI.Instance.SetConsumableToRaising();
+            if(isSuccess)
+                stateMachine.Character.succeededStreams.Add(_currentEvent);
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
