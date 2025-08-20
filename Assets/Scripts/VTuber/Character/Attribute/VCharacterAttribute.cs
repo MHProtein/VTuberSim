@@ -147,10 +147,17 @@ namespace VTuber.Character.Attribute
             var messageDict = new Dictionary<string, object>
             {
                 { "NewValue", newValue },
+                { "MaxValue", _maxValue },
                 { "Delta", delta },
             };
             VRaisingRootEventCenter.Instance.Raise(_eventKey, messageDict);
         }
-        
+
+        public void AddMaxValue(int value)
+        {
+            _maxValue += value;
+            SendEvent(Value, 0);
+            VDebug.Log("Added max value: " + value + " to " + _configuration.attributeName + ", new max value: " + _maxValue);
+        }
     }
 }

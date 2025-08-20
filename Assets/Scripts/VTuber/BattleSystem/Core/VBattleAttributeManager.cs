@@ -315,10 +315,12 @@ namespace VTuber.BattleSystem.Core
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
+            int delta = (int)messagedict["Delta"];
+            if(delta == 0)
+                return;
             if (_isPhaseEnding)
             {
                 float multiplier = _multiplierManager.Multiplier.Value / 100f;
-                int delta = (int)messagedict["Delta"];
                 (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
                     AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName,
                         messagedict["IsFromCard"] as bool? ?? false,
@@ -327,7 +329,7 @@ namespace VTuber.BattleSystem.Core
             else
             {
                 (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                    AddPopularity(((int)messagedict["Delta"]), "",
+                    AddPopularity(delta, "",
                         messagedict["IsFromCard"] as bool? ?? false,
                         messagedict["ShouldPlayTwice"] as bool? ?? false);
             }

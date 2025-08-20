@@ -13,6 +13,7 @@ using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
+using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
@@ -27,6 +28,7 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private bool dev;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
         [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
+        [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
         
         [FormerlySerializedAs("schedule")]
         [Header("Schedule")] 
@@ -105,7 +107,7 @@ namespace VTuber.BattleSystem.Core
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character, _script);
+                _character, _script, reincarnationConfiguration);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());

@@ -10,6 +10,7 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem;
+using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
@@ -59,12 +60,14 @@ namespace VTuber.Core.StateMachine
         public VScript Script => _script;
         private VScript _script;
         
-
+        public VReincarnationConfiguration ReincarnationConfiguration => _reincarnationConfiguration;
+        private VReincarnationConfiguration _reincarnationConfiguration;
+        
         public VStateMachine(VScheduleUI scheduleUI,
             VWeeklySchedule weeklySchedule,
             GameObject battleRoot, VBattle battle,
             GameObject eventSystemRoot, VEventSystem eventSystemSystem,
-            VCharacter character, VScript script)
+            VCharacter character, VScript script, VReincarnationConfiguration reincarnationConfiguration)
         {
             _scheduleUI = scheduleUI;
             _weeklySchedule = weeklySchedule;
@@ -75,6 +78,7 @@ namespace VTuber.Core.StateMachine
             _character = character;
             _script = script;
             IsInitialized = true;
+            _reincarnationConfiguration = reincarnationConfiguration;
         }
 
         public void OnEnable()

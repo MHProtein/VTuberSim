@@ -5,6 +5,7 @@ using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
@@ -51,20 +52,25 @@ namespace VTuber.Core.StateMachine
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.EventSystemRoot.SetActive(false); 
-             _currentEvent.ExecuteCoopEvents(stateMachine.Character);
+            _currentEvent.ExecuteCoopEvents(stateMachine.Character);
+            
+            if (_shouldEndGame)
+            { 
+                _shouldEndGame = false; 
+                var result = stateMachine.Script.CalculateScore(stateMachine.Character); 
+                var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
+                    result.scoreLevelName, stateMachine.Character); 
+                account.Print();
+                
+                return;
+            }
+            
             if (_currentEvent.FollowUpEvent is not null)
             {
                 Tween.Delay(0.2f, () =>
                 {
                     _currentEvent.FollowUpEvent.Execute(stateMachine.Character);
                 });
-                return;
-            }
-
-            if (_shouldEndGame)
-            {
-                _shouldEndGame = false;
-                stateMachine.Script.CalculateScore(stateMachine.Character);
                 return;
             }
             

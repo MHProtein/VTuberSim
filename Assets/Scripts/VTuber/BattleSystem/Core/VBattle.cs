@@ -128,13 +128,13 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
             
-            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
-            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
-            
             _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
             _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
 
             _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+            
+            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             
             if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
             {

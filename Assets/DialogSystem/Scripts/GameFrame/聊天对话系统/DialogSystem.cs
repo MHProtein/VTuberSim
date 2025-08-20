@@ -182,7 +182,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     {
         DialogContent dc=currentDialog.contentDic[currentDialog.index];
         
-
         if (dc.ifOption)
         {
             canContinue = false;
@@ -322,6 +321,11 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     {
         while (auto)
         {
+            if (shouldEnd)
+            {
+                PauseAuto();
+                break;
+            }
             ContinueDialog();
             yield return new WaitForSeconds(autoDelay);
         }
@@ -338,6 +342,11 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     {
         while (skip)
         {
+            if (shouldEnd)
+            {
+                PauseSkip();
+                break;
+            }
             ContinueDialog();
             yield return new WaitForSeconds(skipDelay);
         }

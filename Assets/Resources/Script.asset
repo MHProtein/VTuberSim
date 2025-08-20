@@ -30,7 +30,13 @@ MonoBehaviour:
   scoreLevels:
   - low: 0
     high: 200000000
-    name: SSS
+    name: S
+  - low: 0
+    high: 0
+    name: 
+  - low: 0
+    high: 0
+    name: 
   kpis: []
   phases:
   - phaseName: "\u7B2C\u4E00\u9636\u6BB5"
@@ -38,7 +44,7 @@ MonoBehaviour:
     startEventWeekIndex: 1
     startEventType: 1
     startEventID: 9
-    endEventWeekIndex: 4
+    endEventWeekIndex: 1
     endEventIDs: 040000000500000006000000
     specialEventData:
     - timeOfDay: 0
@@ -74,19 +80,73 @@ MonoBehaviour:
       isPhaseStart: 0
     decayCurve1:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0.6
+        outSlope: 0.6
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 500
+        value: 300
+        inSlope: 0.6
+        outSlope: 0.6
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     decayCurve2:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0.4
+        outSlope: 0.4
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 500
+        value: 200
+        inSlope: 0.4
+        outSlope: 0.4
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     decayCurve3:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0.2
+        outSlope: 0.2
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 500
+        value: 100
+        inSlope: 0.2
+        outSlope: 0.2
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4

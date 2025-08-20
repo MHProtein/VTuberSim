@@ -75,17 +75,13 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         {
             get
             {
-                if (_decayCurves == null)
-                {
-                    _decayCurves = new List<AnimationCurve>();
-                    _decayCurves.Add(decayCurve1);
-                    _decayCurves.Add(decayCurve2);
-                    _decayCurves.Add(decayCurve3);
-                }
+                var _decayCurves = new List<AnimationCurve>();
+                _decayCurves.Add(decayCurve1);
+                _decayCurves.Add(decayCurve2);
+                _decayCurves.Add(decayCurve3);
                 return _decayCurves;
             }
         }
-        private List<AnimationCurve> _decayCurves;
 
         private uint _endEventID;
 
