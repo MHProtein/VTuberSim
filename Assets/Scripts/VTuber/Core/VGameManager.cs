@@ -92,9 +92,6 @@ namespace VTuber.BattleSystem.Core
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
             
-            scheduleUI.Initialize(_character, _script);
-
-            
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
                 _character, _script, reincarnationConfiguration);
@@ -123,6 +120,7 @@ namespace VTuber.BattleSystem.Core
         {
             base.Start();
             
+            scheduleUI.Initialize(_character, _script);
             List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
             eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
             eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
