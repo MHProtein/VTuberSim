@@ -197,12 +197,81 @@ namespace VTuber.BattleSystem.Buff
         }
     }
 
+    public class VBuffLayerModifier
+    {
+        public uint buffId;
+        Dictionary<uint, float> modifiers = new Dictionary<uint, float>();
+        private uint _idDistributor = 0;
+        
+        public uint AddModifier(float modifier)
+        {
+            _idDistributor++;
+            modifiers.Add(_idDistributor, modifier);
+            return _idDistributor;
+        }
+        
+        public void RemoveModifier(uint id)
+        {
+            modifiers.Remove(id);
+        }
+        
+        public void ChangeModifier(uint id, float newValue)
+        {
+            modifiers[id] = newValue;
+        }
+        
+        public float GetModifier()
+        {
+            return modifiers.Values.Sum();
+        }
+    }
+    
+    public class VBuffLayerModifierManager
+    {
+        public Dictionary<uint, VBuffLayerModifier> modifiers = new Dictionary<uint, VBuffLayerModifier>();
+        
+        public uint AddModifier(uint buffId, float modifier)
+        {
+            if (!modifiers.ContainsKey(buffId))
+            {
+                modifiers.Add(buffId, new VBuffLayerModifier());
+            }
+            return modifiers[buffId].AddModifier(modifier);
+        }
+        
+        public void RemoveModifier(uint buffId, uint id)
+        {
+            if (modifiers.ContainsKey(buffId))
+            {
+                modifiers[buffId].RemoveModifier(id);
+            }
+        }
+        
+        public void ChangeModifier(uint buffId, uint id, float newValue)
+        {
+            if (modifiers.ContainsKey(buffId))
+            {
+                modifiers[buffId].ChangeModifier(id, newValue);
+            }
+        }
+        
+        public float GetModifier(uint buffId)
+        {
+            if (modifiers.ContainsKey(buffId))
+            {
+                return modifiers[buffId].GetModifier();
+            }
+            return 0;
+        }
+    }
+
     
     public class VBuffManager
     {
         private readonly List<VBuffItem> _buffs = new List<VBuffItem>();
         private VBattle _battle;
         private uint _idDistributor = 0;
+        private VBuffLayerModifierManager _buffLayerModifierManager = new VBuffLayerModifierManager();
 
         public VBuffManager(VBattle battle)
         {
@@ -254,7 +323,8 @@ namespace VTuber.BattleSystem.Buff
             var existingBuff = _buffs.Find(b => b.ConfigId == buff.ConfigId);
             if (existingBuff != null && buff.IsStackable())
             {
-                if (existingBuff.Stack(value, isFromCard, shouldPlayTwice))
+                if (existingBuff.Stack((int)(value * (1.0f + _buffLayerModifierManager.GetModifier(buff.ConfigId))),
+                        isFromCard, shouldPlayTwice))
                 {
                     RemoveBuff(existingBuff);
                 }

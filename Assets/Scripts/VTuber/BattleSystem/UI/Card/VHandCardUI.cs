@@ -101,12 +101,14 @@ namespace VTuber.BattleSystem.UI
         public void MoveToDiscardPile(Vector3 targetPosition, float smoothTime)
         {
             SetInteractive(false);
-            Tween.Position(transform, targetPosition, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
+            Tween.Position(transform, targetPosition, smoothTime, Ease.Linear);
             Tween.Scale(transform, Vector3.zero, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
         }
 
         private void DestroyGameObject()
         {
+            _popularityPreviewAnimationQueue.Clear();
+            _shieldPreviewAnimationQueue.Clear();
             if(gameObject)
                 Destroy(gameObject);
         }
@@ -316,11 +318,12 @@ namespace VTuber.BattleSystem.UI
                 if(VBattle.Instance.BattleAttributeManager.MultiplierManager is not null)
                     cardUI.SetPopularityImage(VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
                 cardUI.popularityText.text = originalValue.ToString();
+    
                 _popularityPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.popularityText.transform, Vector3.one, 0.5f).OnComplete(
                     () =>
                     {
                         cardUI.popularityText.text = finalValue.ToString();
-                        if(finalValue != originalValue)
+                        if (finalValue != originalValue)
                             Tween.PunchScale(cardUI.popularityText.transform, Vector3.one * 1.3f, 0.3f);
                     }));
             }

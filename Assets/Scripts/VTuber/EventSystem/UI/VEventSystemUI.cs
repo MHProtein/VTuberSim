@@ -21,6 +21,7 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private VCardViewSelectionUI upgradeCardUI;
         [FormerlySerializedAs("selectFrom3Menu")] [SerializeField] private VSelectFrom3CardsMenu selectFrom3CardsMenu;
         [SerializeField] private VSelectFrom3ConsumablesMenu selectFrom3ConsumablesMenu;
+        [SerializeField] private VAddConsumableUI addConsumableUI;
         
         private Action _closePhaseEndingSelectionMenuAction;
         private Action _closeCardLibrary;
@@ -40,11 +41,14 @@ namespace VTuber.Dialogue.UI
             phaseEndingSelectionMenu.Initialize(endingOptionPrefab, endings);
             _closePhaseEndingSelectionMenuAction = confirmAction;
         }
-
-        public void ClosePhaseEndingSelectionMenu()
+        
+        public void OpenAddConsumableUI(VCharacter character, VConsumable consumable, Action<VConsumable> confirmAction, Action closeAction)
         {
-            phaseEndingSelectionMenu.gameObject.SetActive(false);
-            _closePhaseEndingSelectionMenuAction?.Invoke();
+            addConsumableUI.gameObject.SetActive(true);
+            addConsumableUI.Initialize(character, consumable, confirmAction);
+            _closeCardLibrary = closeAction;
+            addConsumableUI.confirmButton.onClick.AddListener(CloseAddConsumableUI);
+            addConsumableUI.returnButton.onClick.AddListener(CloseAddConsumableUI);
         }
         
         public void OpenSelectFrom3ConsumablesMenu(VCharacter character, List<VConsumable> consumables, Action<VConsumable> confirmAction, Action closeAction)
@@ -74,6 +78,18 @@ namespace VTuber.Dialogue.UI
             selectFrom3CardsMenu.gameObject.SetActive(true);
             selectFrom3CardsMenu.Initialize(cards, confirmAction);
             _CloseSelectFrom3Menu = closeAction;
+        }
+        
+        public void CloseAddConsumableUI()
+        {
+            addConsumableUI.gameObject.SetActive(false);
+            _closeCardLibrary?.Invoke();
+        }
+        
+        public void ClosePhaseEndingSelectionMenu()
+        {
+            phaseEndingSelectionMenu.gameObject.SetActive(false);
+            _closePhaseEndingSelectionMenuAction?.Invoke();
         }
         
         public void CloseCardLibrary()

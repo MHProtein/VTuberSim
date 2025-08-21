@@ -1,8 +1,8 @@
 ﻿using Spire.Xls;
 
-namespace VTuber.Core.RaisingEffect.ConsumableEffects
+namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingAddSelectFrom3ConsumableEffectConfiguration : VRaisingEffectConfiguration
+    public class VRaisingAddSelectFrom3ConsumableEffectConfiguration : VRaisingConsumableEffectConfiguration
     {
         public VRaisingAddSelectFrom3ConsumableEffectConfiguration(CellRange row) : base(row)
         {

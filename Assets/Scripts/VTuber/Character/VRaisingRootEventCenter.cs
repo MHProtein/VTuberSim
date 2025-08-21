@@ -92,6 +92,9 @@ namespace VTuber.Core.EventCenter
         OnRevenueShareRateChanged = 63,
         OnSkipTurnStaminaChanged = 64,
         OnSkipEventStaminaChanged = 65,
+        
+        OnBeginSelectConsumableFrom3 = 66,
+        OnShowAddConsumable = 67,
     }
     
     

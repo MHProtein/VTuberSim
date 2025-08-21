@@ -232,14 +232,14 @@ namespace VTuber.Character
                     characterConfig.skipEventStaminaRecoveryInitialValue, 
                     VRaisingEventKey.OnSkipEventStaminaChanged, 
                     characterConfig.skipEventStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipEventStaminaRecoveryMaxValue,
-                    characterConfig.skipEventStaminaRecoveryMinValue, true));
+                    characterConfig.skipEventStaminaRecoveryMinValue, false, false));
             
             AttributeManager.AddAttribute("CASkipTurnStaminaRecovery",
                 new VCharacterAttribute(characterConfig.skipTurnStaminaRecoveryConfiguration,
                     characterConfig.skipTurnStaminaRecoveryInitialValue, 
                     VRaisingEventKey.OnSkipTurnStaminaChanged, 
                     characterConfig.skipTurnStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipTurnStaminaRecoveryMaxValue,
-                    characterConfig.skipTurnStaminaRecoveryMinValue, true));
+                    characterConfig.skipTurnStaminaRecoveryMinValue, false));
         }
         
         public bool TestCost(VScheduleEvent e)

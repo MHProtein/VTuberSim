@@ -88,13 +88,21 @@ namespace VTuber.Character.Attribute
         {
             if (!ShouldBattleAttributeConvertTo)
                 return;
+
+            try
+            {
+                var battleAttribute = battleAttributes[_configuration.battleAttributeNameWhenConvertBack];
+                
+                SetValue(battleAttribute.Value);
             
-            var battleAttribute = battleAttributes[_configuration.battleAttributeNameWhenConvertBack];
+                VDebug.Log("Converted to attribute: " + _configuration.battleAttributeNameWhenConvertBack + ", value: " + Value + 
+                           ", battle attribute value: " + battleAttribute.Value);
+            }
+            catch (Exception e)
+            {
+                VDebug.LogError(e);
+            }
             
-            SetValue(battleAttribute.Value);
-            
-            VDebug.Log("Converted to attribute: " + _configuration.battleAttributeNameWhenConvertBack + ", value: " + Value + 
-                       ", battle attribute value: " + battleAttribute.Value);
         }
         
         public virtual void AddTo(int delta)

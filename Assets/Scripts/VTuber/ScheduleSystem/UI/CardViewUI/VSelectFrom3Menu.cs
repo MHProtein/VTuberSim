@@ -11,11 +11,6 @@ using VTuber.Dialogue.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public interface ISelectableCardMenu
-    {
-        public void Select(VSelectCardCardUI cardUI);
-    }
-    
     public class VSelectFrom3CardsMenu : VUIBehaviour, ISelectableCardMenu
     {
         [SerializeField] private GameObject cardPrefab;

@@ -108,12 +108,6 @@ namespace VTuber.BattleSystem.Core
             {
                 viewerCountAttribute.AddTo(initialViewers, false);
             }
-            
-            foreach (var buff in characterAttributeManager.GetBuffs())
-            {
-                if(buff is not null)
-                    _buffManager.AddBuff(buff, 1, false, false);
-            }
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
@@ -124,6 +118,12 @@ namespace VTuber.BattleSystem.Core
             });
             
             _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+            
+            foreach (var buff in characterAttributeManager.GetBuffs())
+            {
+                if(buff is not null)
+                    _buffManager.AddBuff(buff, 1, false, false);
+            }
             
             InitializeTurn();
         }
@@ -310,7 +310,8 @@ namespace VTuber.BattleSystem.Core
         private void OnSkipTurnClicked(Dictionary<string, object> messagedict)
         {
             EndTurn();
-            _battleAttributeManager.SkipTurnRecoverStamina();
+            if(_battleAttributeManager is not null)
+                _battleAttributeManager.SkipTurnRecoverStamina();
         }
         
         private void OnPlayTheSecondTime(Dictionary<string, object> messagedict)
@@ -507,7 +508,7 @@ namespace VTuber.BattleSystem.Core
             {
                 {"TurnLeft", TurnLeft}
             });
-
+            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEndNotify, new Dictionary<string, object>
             {
                 { "TurnLeft", TurnLeft },

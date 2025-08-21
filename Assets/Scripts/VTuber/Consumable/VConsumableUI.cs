@@ -10,12 +10,18 @@ namespace VTuber.Consumable
     {
         [SerializeField] private Image icon;
         [SerializeField] public Image background;
+        [SerializeField] public GameObject descriptionObject;
+        [SerializeField] public TMP_Text description;
+        [SerializeField] public TMP_Text consumableName;
         public VConsumable consumable;
         
         public void SetConsumable(VConsumable consumable)
         {
             this.consumable = consumable;
             //icon.sprite = consumable.Icon;
+            
+            consumableName.text = consumable.Name;
+            description.text = consumable.Description;
         }
 
         public bool HasConsumable()

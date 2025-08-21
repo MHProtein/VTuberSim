@@ -21,6 +21,7 @@ namespace VTuber.ScheduleSystem.UI
             _consumableUI = consumableUI;
             _selectable = selectable;
             _selectAction = selectAction;
+            consumableUI.descriptionObject.SetActive(true);
         }
         
         public void SetSelectable(bool selectable)
