@@ -107,7 +107,6 @@ namespace VTuber.ScheduleSystem.UI.ConsumableViewUI
             }
             _consumableUIs.Clear();
             _selectedConsumableUI = null;
-            VEventSystemUI.Instance.CloseSelectFrom3Menu();
         }
         
         public void Select(VSelectcConsumableUI consumableUI)

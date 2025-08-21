@@ -1,13 +1,72 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using VTuber.Character;
+using VTuber.Consumable;
+using VTuber.Core.Managers;
 
-namespace VTuber.Core.RaisingEffect.ConsumableEffects
+namespace VTuber.Core.RaisingEffect
 {
     public abstract class VRaisingConsumableEffect : VRaisingEffect
     {
-        public VRaisingConsumableEffect(VRaisingEffectConfiguration configuration) : base(configuration)
+        public readonly List<float> rarityProbabilities;
+        public VRaisingConsumableEffect(VRaisingConsumableEffectConfiguration configuration) : base(configuration)
         {
+            rarityProbabilities = configuration.rarityProbabilities;
+        }
+        
+        public List<VConsumable> GetRandomConsumables(int count)
+        {
+            List<int> rarityCounts = new List<int>()
+            {
+                0, 0, 0
+            };
+            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations();
             
+            if (consumables.Count == 0)
+                return null;
+            
+            foreach (var consumable in consumables)
+            {
+                rarityCounts[(int) consumable.rarity]++;
+            }
+            
+            float totalRarityProb = 0f;
+            for (int r = 0; r < 3; r++)
+                if (rarityCounts[r] > 0)
+                    totalRarityProb += rarityProbabilities[r];
+
+            float[] perConsumableProbabilityByRarity = new float[3];
+            for (int r = 0; r < 3; r++)
+            {
+                if (rarityCounts[r] > 0)
+                {
+                    float adjustedRarityProb = rarityProbabilities[r] / totalRarityProb; // normalize
+                    perConsumableProbabilityByRarity[r] = adjustedRarityProb / rarityCounts[r];
+                }
+                else
+                {
+                    perConsumableProbabilityByRarity[r] = 0f;
+                }
+            }
+            
+            List<VConsumable> selectedConsumables = new List<VConsumable>();
+
+            for (int i = 0; i < count; i++)
+            {
+                float probability = Random.Range(0, 1.0f);
+                float totalProbability = 0;
+                for (int j = 0; j < consumables.Count; j++)
+                {
+                    totalProbability += perConsumableProbabilityByRarity[(int)consumables[j].rarity];
+                    if (probability <= totalProbability)
+                    {
+                        var card = consumables[j].CreateConsumable();
+                        selectedConsumables.Add(card);
+                        break;
+                    }
+                }
+            }
+            return selectedConsumables;
         }
     }
 }

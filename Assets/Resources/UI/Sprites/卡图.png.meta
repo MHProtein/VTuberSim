@@ -105,7 +105,7 @@ TextureImporter:
         width: 238
         height: 219
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -113,6 +113,27 @@ TextureImporter:
       bones: []
       spriteID: 2fcdf682c2ab79b43b7c470fa8c4ca24
       internalID: 798493683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SC
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 1148
+        width: 298
+        height: 158
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec3cd9be7d71f9949a26a6a91b5b781d
+      internalID: 457490309
       vertices: []
       indices: 
       edges: []
@@ -128,6 +149,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      SC: 457490309
       WaveHand: 798493683
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

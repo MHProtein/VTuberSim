@@ -43,7 +43,8 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
         [SerializeField]
-        private Transform battleUI;
+        private Transform battleUIWrapper;
+        private Transform backgroundUIWrapper;
         [SerializeField] private GameObject battlePausePanel;
         
         
@@ -104,7 +105,8 @@ namespace VTuber.BattleSystem.UI
         
         public Tween SetBattleUIScale(float scale)
         {
-            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
+            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
+            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
         }
         
         public void Selected(bool value)
@@ -201,7 +203,8 @@ namespace VTuber.BattleSystem.UI
         {
             battlePausePanel.SetActive(paused);
             float scale = paused ? 0.75f : 1.0f;
-            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
+            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
+            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
         }
         
         protected override void Awake()
