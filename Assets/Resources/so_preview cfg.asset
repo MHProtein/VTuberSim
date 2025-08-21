@@ -64,3 +64,8 @@ MonoBehaviour:
     - name: Store
       path: 
       so: {fileID: 11400000, guid: 7007008a95323e340a43046bbfb9d1f8, type: 2}
+  - key: 
+    value:
+    - name: "\u91CD\u751F\u914D\u7F6E"
+      path: 
+      so: {fileID: 11400000, guid: 334dd11ca5f61594bbc19a30617cfd99, type: 2}

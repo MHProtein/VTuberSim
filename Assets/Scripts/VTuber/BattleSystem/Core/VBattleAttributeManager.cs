@@ -310,15 +310,18 @@ namespace VTuber.BattleSystem.Core
                 attribute.Value.OnDisable();
             }
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
-            _multiplierManager.OnDisable();
+            if(_multiplierManager is not null)
+                _multiplierManager.OnDisable();
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
+            int delta = (int)messagedict["Delta"];
+            if(delta == 0)
+                return;
             if (_isPhaseEnding)
             {
                 float multiplier = _multiplierManager.Multiplier.Value / 100f;
-                int delta = (int)messagedict["Delta"];
                 (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
                     AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName,
                         messagedict["IsFromCard"] as bool? ?? false,
@@ -327,7 +330,7 @@ namespace VTuber.BattleSystem.Core
             else
             {
                 (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                    AddPopularity(((int)messagedict["Delta"]), "",
+                    AddPopularity(delta, "",
                         messagedict["IsFromCard"] as bool? ?? false,
                         messagedict["ShouldPlayTwice"] as bool? ?? false);
             }
@@ -365,6 +368,13 @@ namespace VTuber.BattleSystem.Core
                 attribute.OnDisable();
                 _battleAttributes.Remove(name);
             }
+        }
+
+        public void SkipTurnRecoverStamina()
+        {
+            _battleAttributes.TryGetValue("BAStamina", out var stamina);
+            _battleAttributes.TryGetValue("BASkipTurnStaminaRecovery", out var recoveryAmount);
+            stamina.AddTo(recoveryAmount.Value, false, false);
         }
     }
 }

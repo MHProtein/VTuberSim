@@ -79,6 +79,7 @@ namespace VTuber.ScheduleSystem.Events
                     kpis.Add(new VKPI(kpiType, int.Parse(kpiParams[1]), -1, false));
                 }
             }
+            isPhaseEndingEvent = kpis.Count > 0;
         }
 
         public override VScheduleEvent CreateEvent()

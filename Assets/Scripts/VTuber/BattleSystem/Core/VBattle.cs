@@ -68,36 +68,6 @@ namespace VTuber.BattleSystem.Core
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
-
-        public void SetShouldNextCardPlayTwice(bool value)
-        {
-            if(value == false)
-                VDebug.Log("");
-            _shouldNextCardPlayTwice = value;
-        }
-        
-        public void NextCardPlayTwice()
-        {
-            SetShouldNextCardPlayTwice(true);
-            
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>() { });
-        }
-        
-        public void RedrawRest()
-        {
-            _shouldRedraw = true;
-        }
-
-        public void Pause()
-        {
-            paused = !paused;
-
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattlePause, new Dictionary<string, object>
-            {
-                {"Paused", paused}
-            });
-            
-        }
         
         public virtual void InitializeBattle(bool isPhaseEnding, VCharacterAttributeManager characterAttributeManager,
             VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
@@ -128,13 +98,11 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
             
-            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
-            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
-            
             _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
             _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
-
-            _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+            
+            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             
             if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
             {
@@ -155,7 +123,39 @@ namespace VTuber.BattleSystem.Core
                 { "IsPhaseEnding", isPhaseEnding }
             });
             
+            _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+            
             InitializeTurn();
+        }
+        
+        public void SetShouldNextCardPlayTwice(bool value)
+        {
+            if(value == false)
+                VDebug.Log("");
+            _shouldNextCardPlayTwice = value;
+        }
+        
+        public void NextCardPlayTwice()
+        {
+            SetShouldNextCardPlayTwice(true);
+            
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard, new Dictionary<string ,object>() { });
+        }
+        
+        public void RedrawRest()
+        {
+            _shouldRedraw = true;
+        }
+
+        public void Pause()
+        {
+            paused = !paused;
+
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattlePause, new Dictionary<string, object>
+            {
+                {"Paused", paused}
+            });
+            
         }
         
         protected override void OnEnable()
@@ -181,9 +181,6 @@ namespace VTuber.BattleSystem.Core
         protected override void OnDisable()
         {
             base.OnDisable();
-            _battleAttributeManager.OnDisable();
-            _cardPilesManager.OnDisable();
-            _buffManager.OnDisable();
             
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
@@ -302,6 +299,7 @@ namespace VTuber.BattleSystem.Core
         private void OnSkipTurnClicked(Dictionary<string, object> messagedict)
         {
             EndTurn();
+            _battleAttributeManager.SkipTurnRecoverStamina();
         }
         
         private void OnPlayTheSecondTime(Dictionary<string, object> messagedict)
@@ -367,7 +365,6 @@ namespace VTuber.BattleSystem.Core
             {
                 {"TurnLeft", TurnLeft},
                 {"HandSize", configuration.maxHandSize}
-                
             });
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>
             {
@@ -485,12 +482,16 @@ namespace VTuber.BattleSystem.Core
                 
             _buffManager.Clear();
             _battleAttributeManager.Clear();
-            _cardPilesManager.DiscardPile.Clear();
-            _cardPilesManager.DrawPile.Clear();
-            _cardPilesManager.HandPile.Clear();
-            _cardPilesManager.Deck.Clear();
-                
-                
+            _cardPilesManager.Clear();
+
+            _battleAttributeManager.OnDisable();
+            _cardPilesManager.OnDisable();
+            _buffManager.OnDisable();
+            
+            _cardPilesManager = null;
+            _buffManager = null;
+            _battleAttributeManager = null;
+            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft}
@@ -499,7 +500,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEndNotify, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
-                {"IsTargetMet", popularityAttribute.Value >= _targetPopularity}
+                {"IsTargetMet", popularityAttribute.Value >= _targetPopularity},
             });
         }
         

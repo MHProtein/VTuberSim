@@ -12,7 +12,7 @@ namespace VTuber.Store.UI
         public override void OnClick()
         {
             discardCardLibraryUI.gameObject.SetActive(true);
-            discardCardLibraryUI.Initialize(character.CardLibrary.GetCards(), true, false,
+            discardCardLibraryUI.Initialize(character.CardLibrary.GetCards(), true, true, false,
                 confirmAction: (card) =>
                 {
                     character.CardLibrary.RemoveCard(card);

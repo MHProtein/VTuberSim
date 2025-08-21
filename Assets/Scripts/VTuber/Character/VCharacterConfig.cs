@@ -11,6 +11,7 @@ namespace VTuber.Character
 {
     public class VCharacterConfiguration : VScriptableObject
     {
+        public string liveType;
         #region AttributeConfigs
         
         [HorizontalGroup("StaminaGroup", Gap = 10)]
@@ -350,11 +351,41 @@ namespace VTuber.Character
         [PropertySpace(10)]
         [LabelText("Config文件")]
         public VCharacterAttributeConfiguration revenueShareRateConfiguration;
-
-        #endregion
         
-        [Header("基础卡牌")] 
-        [SerializeField] public List<uint> cardIDs;
+        [HorizontalGroup("SkipEventStaminaRecovery", Gap = 10)]
+        [Header("跳过事件回复体力")]
+        [LabelText("初始值")]
+        public int skipEventStaminaRecoveryInitialValue;
+
+        [HorizontalGroup("SkipEventStaminaRecovery")]
+        [Header("")]
+        [LabelText("最小值")]
+        public int skipEventStaminaRecoveryMinValue;
+
+        [HorizontalGroup("SkipEventStaminaRecovery")]
+        [Header("")]
+        [LabelText("最大值")]
+        public int skipEventStaminaRecoveryMaxValue;
+        [LabelText("Config文件")]
+        public VCharacterAttributeConfiguration skipEventStaminaRecoveryConfiguration;
+        
+        [HorizontalGroup("SkipTurnStaminaRecovery", Gap = 10)]
+        [Header("跳过回合回复体力")]
+        [LabelText("初始值")]
+        public int skipTurnStaminaRecoveryInitialValue;
+
+        [HorizontalGroup("SkipTurnStaminaRecovery")]
+        [Header("")]
+        [LabelText("最小值")]
+        public int skipTurnStaminaRecoveryMinValue;
+
+        [HorizontalGroup("SkipTurnStaminaRecovery")]
+        [Header("")]
+        [LabelText("最大值")]
+        public int skipTurnStaminaRecoveryMaxValue;
+        [LabelText("Config文件")]
+        public VCharacterAttributeConfiguration skipTurnStaminaRecoveryConfiguration;
+        #endregion
         
         [FormerlySerializedAs("fillingEventIDSize1")]
         [Header("补充事件")]

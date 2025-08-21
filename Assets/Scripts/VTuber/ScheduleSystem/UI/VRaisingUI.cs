@@ -77,7 +77,7 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeCardLibraryUI(List<VCard> cards)
         {
             cardLibraryUIObject.SetActive(true);
-            cardLibraryUI.Initialize(cards, false, false, null);
+            cardLibraryUI.Initialize(cards, false, false, false, null);
         }
         
         public void CloseCardLibraryUI()

@@ -5,7 +5,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
-    public class VAddEffect : VEffect
+    public class VAddEffect : VEffect, IVValuePreview
     {
         public string AttributeName => _configuration.attributeName;
         private VUpgradableValue<int> _addValue;
@@ -44,6 +44,11 @@ namespace VTuber.BattleSystem.Effect
         public override string GetValue()
         {
             return _addValue.Value.ToString();
+        }
+
+        public int GetValue(VBattle battle)
+        {
+            return _addValue.Value;
         }
     }
 }

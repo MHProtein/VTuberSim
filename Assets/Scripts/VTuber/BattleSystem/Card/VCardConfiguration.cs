@@ -46,23 +46,24 @@ namespace VTuber.BattleSystem.Card
         public const int UpgradedCost = 12;
         public const int IsExhaust = 13;
         public const int NotRepeatable = 14;
-        public const int Condition = 15;
-        public const int Effect1 = 16;
-        public const int E1Param = 17;
-        public const int E1UpgradedParam = 18;
-        public const int Effect2 = 19;
-        public const int E2Param = 20;
-        public const int E2UpgradedParam = 21;
-        public const int Effect3 = 22;
-        public const int E3Param = 23;
-        public const int E3UpgradedParam = 24;
-        public const int Effect4 = 25;
-        public const int E4Param = 26;
-        public const int E4UpgradedParam = 27;
-        public const int NewEffect1 = 28;
-        public const int NE1Param = 29;
-        public const int NewEffect2 = 30;
-        public const int NE2Param = 31;
+        public const int Priority = 15;
+        public const int Condition = 16;
+        public const int Effect1 = 17;
+        public const int E1Param = 18;
+        public const int E1UpgradedParam = 19;
+        public const int Effect2 = 20;
+        public const int E2Param = 21;
+        public const int E2UpgradedParam = 22;
+        public const int Effect3 = 23;
+        public const int E3Param = 24;
+        public const int E3UpgradedParam = 25;
+        public const int Effect4 = 26;
+        public const int E4Param = 27;
+        public const int E4UpgradedParam = 28;
+        public const int NewEffect1 = 29;
+        public const int NE1Param = 30;
+        public const int NewEffect2 = 31;
+        public const int NE2Param = 32;
     }
 
     public struct VEffectItem
@@ -121,7 +122,8 @@ namespace VTuber.BattleSystem.Card
         public int upgradedCost;
         public bool isExhaust = false;
         public bool notRepeatable = false;
-
+        public bool prioritized = false;
+        
         public List<VEffectItem> effects;
         public List<VEffectItem> newEffects;
 
@@ -161,6 +163,7 @@ namespace VTuber.BattleSystem.Card
             upgradedCost = Convert.ToInt32(row.Columns[VCardHeaderIndex.UpgradedCost].Value.Trim());
             notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value.Trim()) == 1;
             isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value.Trim()) == 1;
+            prioritized = !row.Columns[VCardHeaderIndex.Priority].Value.Trim().IsNullOrWhitespace();
             
             var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value.Trim();
             if(!conditionStr.IsNullOrWhitespace())

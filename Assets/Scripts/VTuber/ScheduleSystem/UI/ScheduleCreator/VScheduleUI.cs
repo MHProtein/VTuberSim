@@ -35,8 +35,9 @@ namespace VTuber.ScheduleSystem.UI
         protected VScheduleSlot[,] slots;
 
         protected VAnimationQueue animationQueue;
-        
-        private Dictionary<VEventType, int> eventCount = new Dictionary<VEventType, int>();
+
+        private List<VScheduleEvent> _events = new List<VScheduleEvent>();
+        private Dictionary<VEventType, int> _eventCount = new Dictionary<VEventType, int>();
         private List<int> _streamCount = new();
         private VKPIManager _kpiManager;
         private VScript _script;
@@ -57,10 +58,10 @@ namespace VTuber.ScheduleSystem.UI
                     slots[y, x].Initialize(new Vector2Int(x, y), this);
                 }
             }
-            eventCount = new Dictionary<VEventType, int>();
+            _eventCount = new Dictionary<VEventType, int>();
             foreach (VEventType eventType in Enum.GetValues(typeof(VEventType)))
             {
-                eventCount.Add(eventType, 0);
+                _eventCount.Add(eventType, 0);
             }
             _streamCount = new List<int>()
             {
@@ -134,10 +135,11 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToCreation(VCharacter character, VScript script, int weekIndex)
         {
-            eventCount = new Dictionary<VEventType, int>();
+            _events.Clear();
+            _eventCount = new Dictionary<VEventType, int>();
             foreach (VEventType eventType in Enum.GetValues(typeof(VEventType)))
             {
-                eventCount.Add(eventType, 0);
+                _eventCount.Add(eventType, 0);
             }     
             _streamCount = new List<int>()
             {
@@ -359,22 +361,28 @@ namespace VTuber.ScheduleSystem.UI
         }
         public void RecordEvent(VScheduleEvent e)
         {
+            if (_events.Contains(e))
+                return;
+            _events.Add(e);
             e.Phase = _script.CurrentPhase;
-            eventCount[e.Type]++;
+            _eventCount[e.Type]++;
             if (e is VStreamEvent streamEvent)
             {
                 _streamCount[streamEvent.MainAttributeIndex]++;
             }
-            continueButton.interactable = _kpiManager.CheckKPIs(eventCount, _streamCount);
+            continueButton.interactable = _kpiManager.CheckKPIs(_eventCount, _streamCount);
         }
         public void UnrecordEvent(VScheduleEvent e)
         {
-            eventCount[e.Type]--;
+            if (!_events.Contains(e))
+                return;
+            _events.Remove(e);
+            _eventCount[e.Type]--;
             if (e is VStreamEvent streamEvent)
             {
                 _streamCount[streamEvent.MainAttributeIndex]--;
             }
-            continueButton.interactable = _kpiManager.CheckKPIs(eventCount, _streamCount);
+            continueButton.interactable = _kpiManager.CheckKPIs(_eventCount, _streamCount);
         }
     }
 }

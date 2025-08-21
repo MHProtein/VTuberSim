@@ -13,6 +13,7 @@ using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
+using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
@@ -27,6 +28,7 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private bool dev;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
         [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
+        [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
         
         [FormerlySerializedAs("schedule")]
         [Header("Schedule")] 
@@ -80,22 +82,12 @@ namespace VTuber.BattleSystem.Core
             
             _character = new VCharacter(_characterConfiguration);
             _weeklySchedule = new VWeeklySchedule(_character);
-            List<VCard> cards = new List<VCard>();
-            
-            foreach (var cardConfig in cardConfigs)
+
+            foreach (var config in cardConfigs)
             {
-                var card = cardConfig.CreateCard();
-                if(card is not null)
-                    cards.Add(card);
-                
-                var card2 = cardConfig.CreateCard();
-                if (card2 is not null)
-                {
-                    card2.Upgrade(false);
-                    cards.Add(card2);   
-                }
+                if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
+                    _character.CardLibrary.AddCard(config.CreateCard());
             }
-            _character.CardLibrary.AddCards(cards);
 
             _character.ConsumableManager.AddConsumable(VResourcesManager.Instance.CreateConsumableByID(0));
             _character.ConsumableManager.AddConsumable(VResourcesManager.Instance.CreateConsumableByID(1));
@@ -105,7 +97,7 @@ namespace VTuber.BattleSystem.Core
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character, _script);
+                _character, _script, reincarnationConfiguration);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
             _stateMachine.RegisterState(new VPauseState());

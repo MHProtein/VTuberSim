@@ -38,6 +38,7 @@ namespace VTuber.BattleSystem.Core
         OnMembershipCountChange,
         OnViewerCountChange,
         OnRevenueChange,
+        OnSkipTurnStaminaChange,
         
         OnParameterPopularityModifierChanged,
         
@@ -65,6 +66,9 @@ namespace VTuber.BattleSystem.Core
         OnRelicAdded,
         OnRelicRemoved,
         OnRelicValueChanged,
+        
+        OnCardEnterDiscardPile,
+        OnCardEnterExaustPile,
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

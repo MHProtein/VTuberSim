@@ -14,7 +14,7 @@ namespace VTuber.Store.UI
         {
             base.OnClick();
             upgradeCardLibraryUI.gameObject.SetActive(true);
-            upgradeCardLibraryUI.Initialize(character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(), true, false,
+            upgradeCardLibraryUI.Initialize(character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(), true, true, false,
                 confirmAction: (card) =>
                 {
                     card.Upgrade(false);

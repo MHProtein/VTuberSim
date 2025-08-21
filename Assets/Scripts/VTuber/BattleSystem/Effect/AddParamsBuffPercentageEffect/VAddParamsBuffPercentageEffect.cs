@@ -7,7 +7,7 @@ using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Effect
 {
-    public class VAddParamsBuffPercentageEffect : VEffect
+    public class VAddParamsBuffPercentageEffect : VEffect, IVValuePreview
     {        
         private readonly uint _buffID;
         private readonly VUpgradableValue<float> _percentage;
@@ -57,6 +57,15 @@ namespace VTuber.BattleSystem.Effect
         public override string GetValue()
         {
             return (int)(_percentage.Value * 100) + "%";
+        }
+
+        public int GetValue(VBattle battle)
+        {
+            if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
+            {
+                return (int)((_percentage.Value) * buff.Value);
+            }
+            return 0;
         }
     }
 }
