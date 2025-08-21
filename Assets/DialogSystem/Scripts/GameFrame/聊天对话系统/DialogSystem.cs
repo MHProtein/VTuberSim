@@ -125,7 +125,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     {
         ClearBtns();
         ClearDialogs();
-        Dialog dialog = VDialogResourcesManager.Instance.TryGetDialog(dialogName);
+        Dialog dialog = VResourcesManager.Instance.TryGetDialog(dialogName);
         dialog.index = 0;
         
         if(!dialog.loaded)

@@ -21,14 +21,14 @@ using VCardHeaderIndex = VTuber.BattleSystem.Card.VCardHeaderIndex;
 
 namespace VTuber.Character
 {
-    public class VResourcesLoader
+    public class VDataLoader
     {
         private readonly string _cardPath;
         private readonly string _raisingPath;
         private readonly string _relicsPath;
         private readonly string _coopPath;
 
-        public VResourcesLoader(string cardPath, string raisingPath, string relicsPath, string coopPath)
+        public VDataLoader(string cardPath, string raisingPath, string relicsPath, string coopPath)
         {
             _cardPath = cardPath;
             _raisingPath = raisingPath;
@@ -84,7 +84,7 @@ namespace VTuber.Character
                 list.Add(cfg);
             }
 
-            VResourcesManager.Instance.SetCardConfigurations(list);
+            VDataManager.Instance.SetCardConfigurations(list);
             return list;
         }
 
@@ -109,7 +109,7 @@ namespace VTuber.Character
                 list.Add(effect);
             }
 
-            VResourcesManager.Instance.SetEffectConfigurations(list);
+            VDataManager.Instance.SetEffectConfigurations(list);
         }
 
         private void LoadBuffs(Workbook wb)
@@ -126,7 +126,7 @@ namespace VTuber.Character
                 list.Add(cfg);
             }
 
-            VResourcesManager.Instance.SetBuffConfigurations(list);
+            VDataManager.Instance.SetBuffConfigurations(list);
         }
 
         private void LoadConditions(Workbook wb)
@@ -150,7 +150,7 @@ namespace VTuber.Character
                 list.Add(cond);
             }
 
-            VResourcesManager.Instance.SetConditions(list);
+            VDataManager.Instance.SetConditions(list);
         }
 
         public void LoadRaisingEffects(Workbook wb)
@@ -174,7 +174,7 @@ namespace VTuber.Character
                 list.Add(effect);
             }
 
-            VResourcesManager.Instance.SetRaisingEffectConfigurations(list);
+            VDataManager.Instance.SetRaisingEffectConfigurations(list);
         }
         
         public void LoadCardConditions(Workbook wb)
@@ -198,7 +198,7 @@ namespace VTuber.Character
                 list.Add(condition);
             }
 
-            VResourcesManager.Instance.SetCardConditions(list);
+            VDataManager.Instance.SetCardConditions(list);
         }
 
         public void LoadPlacingConditions(Workbook wb)
@@ -222,7 +222,7 @@ namespace VTuber.Character
                 list.Add(condition);
             }
 
-            VResourcesManager.Instance.SetPlacingConditon(list);
+            VDataManager.Instance.SetPlacingConditon(list);
         }
 
         public void LoadDialogueEvents(Workbook wb)
@@ -239,7 +239,7 @@ namespace VTuber.Character
                 list.Add(condition);
             }
 
-            VResourcesManager.Instance.SetDialogueEventConfigurations(list);
+            VDataManager.Instance.SetDialogueEventConfigurations(list);
         }
         
         public void LoadStreamEvents(Workbook wb)
@@ -256,7 +256,7 @@ namespace VTuber.Character
                 list.Add(condition);
             }
 
-            VResourcesManager.Instance.SetStreamEventConfigurations(list);
+            VDataManager.Instance.SetStreamEventConfigurations(list);
         }
         
         public void LoadRelicConditions(Workbook wb)
@@ -281,7 +281,7 @@ namespace VTuber.Character
                 list.Add(condition);
             }
 
-            VResourcesManager.Instance.SetRelicConditions(list);
+            VDataManager.Instance.SetRelicConditions(list);
         }
         
         public void LoadRelics(Workbook wb)
@@ -305,7 +305,7 @@ namespace VTuber.Character
                 list.Add(relic);
             }
 
-            VResourcesManager.Instance.SetRelics(list);
+            VDataManager.Instance.SetRelics(list);
         }
 
         public void LoadCoopEvents(Workbook wb)
@@ -323,7 +323,7 @@ namespace VTuber.Character
                 list.Add(coopEvent);
             }
 
-            VResourcesManager.Instance.SetCoopEvents(list);
+            VDataManager.Instance.SetCoopEvents(list);
         }
         
         public void LoadConsumables(Workbook wb)
@@ -347,7 +347,7 @@ namespace VTuber.Character
                 list.Add(consumable);
             }
 
-            VResourcesManager.Instance.SetConsumableConfigurations(list);
+            VDataManager.Instance.SetConsumableConfigurations(list);
         }
         
     }

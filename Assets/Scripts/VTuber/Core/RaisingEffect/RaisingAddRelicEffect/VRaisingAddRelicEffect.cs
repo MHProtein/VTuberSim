@@ -16,7 +16,7 @@ namespace VTuber.Core.RaisingEffect
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CharacterRelicManager.AddRelic
-                (VResourcesManager.Instance.CreateRelicByID(_relicId));
+                (VDataManager.Instance.CreateRelicByID(_relicId));
             
             VDebug.Log("hihi");
         }

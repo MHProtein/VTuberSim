@@ -16,7 +16,7 @@ namespace VTuber.ScheduleSystem.UI
         public void Select(VSelectCardCardUI cardUI);
     }
     
-    public class VSelectFrom3Menu : VUIBehaviour, ISelectableCardMenu
+    public class VSelectFrom3CardsMenu : VUIBehaviour, ISelectableCardMenu
     {
         [SerializeField] private GameObject cardPrefab;
         private List<VSelectCardCardUI> _cardUIs;

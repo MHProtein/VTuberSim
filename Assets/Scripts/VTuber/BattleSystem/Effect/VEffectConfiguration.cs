@@ -56,7 +56,7 @@ namespace VTuber.BattleSystem.Effect
                 if (string.IsNullOrEmpty(conditionStr))
                     continue;
                 
-                conditions.Add(VResourcesManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr)));
+                conditions.Add(VDataManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr)));
             }
         }
         

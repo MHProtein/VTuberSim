@@ -20,6 +20,7 @@ namespace VTuber.Core.StateMachine
         private VScheduleEvent _skipToEvent;
         private Queue<VScheduleEvent> _dayEndEvents;
         private bool _shouldEndGame = false;
+        private int lastStreamPopularity = 0;
         
         public VExecutionState()
         {
@@ -49,6 +50,7 @@ namespace VTuber.Core.StateMachine
                 });
             stateMachine.Character.ConsumableManager.SetBattle(null);
             VRaisingUI.Instance.SetConsumableToRaising();
+            lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
             if(isSuccess)
                 stateMachine.Character.succeededStreams.Add(_currentEvent);
         }
@@ -61,7 +63,7 @@ namespace VTuber.Core.StateMachine
             if (_shouldEndGame)
             { 
                 _shouldEndGame = false; 
-                var result = stateMachine.Script.CalculateScore(stateMachine.Character); 
+                var result = stateMachine.Script.CalculateScore(stateMachine.Character, lastStreamPopularity); 
                 var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
                     result.scoreLevelName, stateMachine.Character); 
                 account.Print();
@@ -146,7 +148,7 @@ namespace VTuber.Core.StateMachine
             {
                 Tween.Delay(0.1f, () =>
                 {
-                    var staminaNotEnoughEvent = VResourcesManager.Instance.CreateDialogueEventByID(8);
+                    var staminaNotEnoughEvent = VDataManager.Instance.CreateDialogueEventByID(8);
                     staminaNotEnoughEvent.SetDaySchedule(e.DaySchedule, -1 * Vector2Int.one);
                     staminaNotEnoughEvent.Execute(stateMachine.Character);
                 });
@@ -168,7 +170,7 @@ namespace VTuber.Core.StateMachine
         private void AddEventToCurrentEvent(VEventType eventType, uint id)
         {
             if(_currentEvent is null)
-                _dayEndEvents.Enqueue(VResourcesManager.Instance.CreateEvent(eventType, id));
+                _dayEndEvents.Enqueue(VDataManager.Instance.CreateEvent(eventType, id));
             else
                 _currentEvent.AddFollowUpEvent(eventType, id);
         }

@@ -19,7 +19,7 @@ namespace VTuber.Character.Attributes
         public override KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()
         {
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
-                new VBattleStaminaAttribute(Value, VBattleEventKey.OnStaminaChange, _configuration.maxValue, _configuration.minValue));
+                new VBattleStaminaAttribute(Value, VBattleEventKey.OnStaminaChange, false, _configuration.maxValue, _configuration.minValue));
         }
 
     }

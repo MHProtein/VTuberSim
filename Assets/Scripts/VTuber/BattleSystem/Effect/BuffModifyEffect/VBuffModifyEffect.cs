@@ -35,7 +35,7 @@ namespace VTuber.BattleSystem.Effect
             if (MultiplyByLayer > 0.0f)
                 value *= (int)(layer * MultiplyByLayer);
             
-            battle.BuffManager.AddBuff(VResourcesManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
+            battle.BuffManager.AddBuff(VDataManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
             VDebug.Log("效果 " + _configuration.effectName + " 为 Buff(ID: " + _configuration.buffID + ") 增加了 " + value + "。新数值: " + value);
         }
         

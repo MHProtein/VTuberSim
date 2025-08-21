@@ -7,6 +7,8 @@ namespace VTuber.BattleSystem.Effect
 {
     public class VAddParamAttributePercentageEffect : VEffect, IVValuePreview
     {
+        public string AttributeName => "BAParameter";
+
         private string attributeName;
         private VUpgradableValue<float> _percentage;
         

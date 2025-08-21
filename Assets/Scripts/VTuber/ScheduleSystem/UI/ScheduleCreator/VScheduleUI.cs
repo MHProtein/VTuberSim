@@ -160,11 +160,11 @@ namespace VTuber.ScheduleSystem.UI
                 VScheduleEvent e;
                 if (specialEvent.eventType == VEventType.Stream)
                 {
-                    e = VResourcesManager.Instance.CreateStreamEventByID(specialEvent.eventID);
+                    e = VDataManager.Instance.CreateStreamEventByID(specialEvent.eventID);
                 }
                 else
                 {
-                    e = VResourcesManager.Instance.CreateDialogueEventByID(specialEvent.eventID);
+                    e = VDataManager.Instance.CreateDialogueEventByID(specialEvent.eventID);
                 }
                 e.Phase = specialEvent.phase;
                 e.IsPhaseStart = specialEvent.isPhaseStart;
@@ -330,7 +330,7 @@ namespace VTuber.ScheduleSystem.UI
                                 eventId = size1Id;
                             else if(emptyCount == 2)
                                 eventId = size2Id;
-                            var e = VResourcesManager.Instance.CreateDialogueEventByID(eventId);
+                            var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                             e.IsSpecialEvent = true;
                             eventUIObject.Initialize(e, slots[yy, x]);
                             
@@ -349,7 +349,7 @@ namespace VTuber.ScheduleSystem.UI
                         eventId = size2Id;
                     else if(emptyCount == 3)
                         eventId = size3Id;
-                    var e = VResourcesManager.Instance.CreateDialogueEventByID(eventId);
+                    var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                     e.IsSpecialEvent = true;
                     eventUIObject.Initialize(e, slots[yy, x]);
                 }

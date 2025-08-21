@@ -27,6 +27,10 @@ MonoBehaviour:
   abilityCoefficient: 1.4
   followerCoefficient: 2.2
   membershipCoefficient: 15
+  popularityCoefficient:
+  - from: 0
+    to: -1
+    value: 1.2
   scoreLevels:
   - low: 0
     high: 200000000

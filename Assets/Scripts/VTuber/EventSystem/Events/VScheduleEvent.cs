@@ -64,7 +64,7 @@ namespace VTuber.ScheduleSystem.Events
             _placingConditions = new List<VPlacingCondition>();
             foreach (var conditionId in config.placingConditions)
             {
-                _placingConditions.Add(VResourcesManager.Instance.GetPlacingCondtionByID(conditionId));
+                _placingConditions.Add(VDataManager.Instance.GetPlacingCondtionByID(conditionId));
             }
         }
         
@@ -130,7 +130,7 @@ namespace VTuber.ScheduleSystem.Events
         {
             if (_followUpEvent is null)
             {
-                _followUpEvent = VResourcesManager.Instance.CreateEvent(eventType, id);
+                _followUpEvent = VDataManager.Instance.CreateEvent(eventType, id);
                 _followUpEvent._daySchedule = _daySchedule;
                 _followUpEvent.isFollowUp = true;
             }
@@ -141,7 +141,7 @@ namespace VTuber.ScheduleSystem.Events
                 {
                     followUp = followUp.FollowUpEvent;
                 }
-                followUp._followUpEvent = VResourcesManager.Instance.CreateEvent(eventType, id);
+                followUp._followUpEvent = VDataManager.Instance.CreateEvent(eventType, id);
                 followUp._followUpEvent._daySchedule = followUp._daySchedule;
                 followUp._followUpEvent.isFollowUp = true;
             }

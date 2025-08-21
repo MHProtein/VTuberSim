@@ -148,7 +148,7 @@ namespace VTuber.ScheduleSystem.UI
             if (previewCardUI)
             {
                 previewCardUI.gameObject.SetActive(true);
-                VCard previewCard = VResourcesManager.Instance.CreateCardByID(_selectedCardUI.Card.configID);
+                VCard previewCard = VDataManager.Instance.CreateCardByID(_selectedCardUI.Card.configID);
                 _previewAction?.Invoke(previewCard);
                 previewCardUI.SetCard(previewCard);
             }

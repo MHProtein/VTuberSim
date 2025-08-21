@@ -62,7 +62,8 @@ namespace VTuber.BattleSystem.Card
         public VCardRarity Rarity => _configuration.rarity;
         
         public Action<bool> setPlayable;
-        public Action<bool, int, int> setPopularityPreview;
+        public Action<bool, int, int> popularityPreviewAction;
+        public Action<bool, int, int> shieldPreviewAction;
         
         private readonly VCardConfiguration _configuration;
         
@@ -75,7 +76,7 @@ namespace VTuber.BattleSystem.Card
             _newEffects = new List<VEffect>();
             _cost = new VUpgradableValue<int>(configuration.cost, configuration.upgradedCost);
             if(conditionId != -1)
-                condition = VResourcesManager.Instance.GetConditionByID((uint)conditionId);
+                condition = VDataManager.Instance.GetConditionByID((uint)conditionId);
 
             int i = 0;
             try
@@ -158,21 +159,38 @@ namespace VTuber.BattleSystem.Card
             {
                 if(effect is IVValuePreview preview)
                 {
-                    if (effect is VAddEffect addEffect)
+                    if (preview.AttributeName == "BAParameter")
                     {
-                        if (addEffect.AttributeName == "BAParameter")
-                        {
-                            int value = preview.GetValue(battle);
-                            originalValue += value;
-                            finalValue += battle.BattleAttributeManager.PreviewPopularityChange(value);
-                            
-                        }
+                        int value = preview.GetValue(battle);
+                        originalValue += value;
+                        finalValue += battle.BattleAttributeManager.PreviewPopularityChange(value);
+                        
                     }
                 }
             }
-            setPopularityPreview?.Invoke(firstTime, originalValue, finalValue);
+            popularityPreviewAction?.Invoke(firstTime, originalValue, finalValue);
         }
-        
+
+        public void PreviewShield(VBattle battle, bool firstTime)
+        {
+            int originalValue = 0;
+            int finalValue = 0;
+            foreach (var effect in _effects)
+            {
+                if (effect is IVValuePreview preview)
+                {
+                    if (preview.AttributeName == "BAShield")
+                    {
+                        int value = preview.GetValue(battle);
+                        originalValue += value;
+                        finalValue += battle.BattleAttributeManager.PreviewShieldChange(value);
+                    }
+                    
+                }
+            }
+            shieldPreviewAction?.Invoke(firstTime, originalValue, finalValue);
+        }
+
         public void Upgrade(bool isTemporary)
         {
             if (_isUpgraded)

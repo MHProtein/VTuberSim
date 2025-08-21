@@ -139,11 +139,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Recovery
+      name: Rest
       rect:
         serializedVersion: 2
         x: 82
-        y: 1187
+        y: 1189
         width: 530
         height: 177
       alignment: 0
@@ -160,7 +160,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Contact
+      name: Coop
       rect:
         serializedVersion: 2
         x: 774
@@ -181,7 +181,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: out
+      name: Outside
       rect:
         serializedVersion: 2
         x: 82
@@ -205,7 +205,7 @@ TextureImporter:
       name: Assist
       rect:
         serializedVersion: 2
-        x: 788
+        x: 790
         y: 832
         width: 520
         height: 177
@@ -234,10 +234,10 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Assist: -749342483
-      Contact: 266400733
+      Coop: 266400733
+      Outside: -1671327432
       Practice: 91500968
-      Recovery: -1487505022
-      out: -1671327432
+      Rest: -1487505022
       shopping: -1105731912
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

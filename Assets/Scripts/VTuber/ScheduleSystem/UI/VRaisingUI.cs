@@ -19,7 +19,6 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Text weekCountText;
         
         [Header("Schedule")] [SerializeField] private Transform _scheduleUI;
-        [SerializeField] private SerializableDictionary<string, Sprite> _icons;
         [SerializeField] private GameObject eventUIPrefab;
         
         [Space(3)]
@@ -50,7 +49,7 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Transform pauseSchedulePosition;
         
         [Space(3)] 
-        [Header("CardLibraryUI")] 
+        [Header("CardViewUI")] 
         [SerializeField] private GameObject cardLibraryUIObject;
 
         [SerializeField] private VCardViewSelectionUI cardLibraryUI;
@@ -157,17 +156,6 @@ namespace VTuber.ScheduleSystem.UI
             var eventUI = Instantiate(eventUIPrefab, parent);
             var eventUIComponent = eventUI.GetComponent<VEventUI>();
             return eventUIComponent;
-        }
-
-        public Sprite GetIcon(string iconName)
-        {
-            if (_icons.TryGetValue(iconName, out var icon))
-            {
-                return icon;
-            }
-
-            Debug.LogWarning($"Icon with name {iconName} not found.");
-            return null;
         }
 
         public void SetConsumableToBattle()

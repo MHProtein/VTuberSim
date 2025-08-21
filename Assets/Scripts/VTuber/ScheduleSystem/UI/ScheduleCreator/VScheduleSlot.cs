@@ -56,7 +56,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 eventIcons[i].gameObject.SetActive(true);
                 string x = eventItem.e.eventTypes[i].eventType.ToString();
-                eventIcons[i].sprite = VRaisingUI.Instance.GetIcon(x);
+                eventIcons[i].sprite = VResourcesManager.Instance.TryGetSprite(x);
                 if (eventItem.e.eventTypes[i].eventType == VEventType.Stream &&
                     eventItem.e.eventTypes[i].abilityIndex != -1)
                 {

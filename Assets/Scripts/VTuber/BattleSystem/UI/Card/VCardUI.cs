@@ -41,12 +41,14 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] public Image nameImage;
         [SerializeField] public Image typeImage;
         [SerializeField] public Image popularityImage;
+        [SerializeField] public Image shieldImage;
         
         [FormerlySerializedAs("Name")] [SerializeField] public TMP_Text name;
         [FormerlySerializedAs("Description")] [SerializeField] public TMP_Text description;
         [SerializeField] public TMP_Text cost;
         [SerializeField] public TMP_Text typeText;
         [SerializeField] public TMP_Text popularityText;
+        [SerializeField] public TMP_Text shieldText;
         
         public VCard Card { get; private set; }
 
@@ -75,7 +77,7 @@ namespace VTuber.BattleSystem.UI
 
             if (card.CostType == CostType.Buff)
             {
-                var buff = VResourcesManager.Instance.GetBuffConfigurationByID(card.CostBuffId);
+                var buff = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId);
                 cost.text = buff.buffName + " x " + card.Cost.ToString();
             }
             else

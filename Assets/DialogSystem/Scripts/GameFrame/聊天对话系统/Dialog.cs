@@ -75,7 +75,7 @@ public class Dialog
         string effectParameter = "";
         if (parameters.Length == 2)
             effectParameter = parameters[1];
-        return VResourcesManager.Instance.CreateRaisingEffectByID(effectID, effectParameter, effectParameter);
+        return VDataManager.Instance.CreateRaisingEffectByID(effectID, effectParameter, effectParameter);
     }
 
     public void InitDialog()

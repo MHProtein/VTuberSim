@@ -56,7 +56,7 @@ namespace VTuber.CoopSystem
                 var effectIDStr = row.Columns[i].Value;
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
-                effects.Add(VResourcesManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr),
+                effects.Add(VDataManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr),
                     row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
             }
             
@@ -107,7 +107,7 @@ namespace VTuber.CoopSystem
         {
             _currentLevelIndex = 0;
             this.configuration = configuration;
-            _coopEvents = this.configuration.CoopEvents.Select(@event => VResourcesManager.Instance.GetCoopEventByID(@event)).ToList();
+            _coopEvents = this.configuration.CoopEvents.Select(@event => VDataManager.Instance.GetCoopEventByID(@event)).ToList();
         }
 
         public void OnEnable()
@@ -169,9 +169,9 @@ namespace VTuber.CoopSystem
             if (_coopValue - CurrentCoopLevel.to >= 0)
             {
                 if (CurrentCoopLevel.eventType == VEventType.Stream)
-                    _upgradeEvent = VResourcesManager.Instance.CreateStreamEventByID(CurrentCoopLevel.upgradeEventID);
+                    _upgradeEvent = VDataManager.Instance.CreateStreamEventByID(CurrentCoopLevel.upgradeEventID);
                 else
-                    _upgradeEvent = VResourcesManager.Instance.CreateDialogueEventByID(CurrentCoopLevel.upgradeEventID);
+                    _upgradeEvent = VDataManager.Instance.CreateDialogueEventByID(CurrentCoopLevel.upgradeEventID);
             }
         }
         

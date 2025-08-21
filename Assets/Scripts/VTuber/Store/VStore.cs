@@ -141,7 +141,7 @@ namespace VTuber.Store
             {
                 0, 0, 0
             };
-            List<VCardConfiguration> cards = VResourcesManager.Instance.GetAllCardConfigurations();
+            List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations();
 
             foreach (var card in cards)
             {
@@ -199,7 +199,7 @@ namespace VTuber.Store
             {
                 0, 0, 0
             };
-            List<VConsumableConfiguration> consumables = VResourcesManager.Instance.GetAllConsumableConfigurations();
+            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations();
             
             if (consumables.Count == 0)
                 return null;

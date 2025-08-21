@@ -15,7 +15,7 @@ namespace VTuber.Core.RaisingEffect
             if (string.IsNullOrEmpty(conditionStr))
                 _condition = null;
             else
-                _condition = VResourcesManager.Instance.GetCardConditionByID(uint.Parse(conditionStr.Trim()));
+                _condition = VDataManager.Instance.GetCardConditionByID(uint.Parse(conditionStr.Trim()));
         }
 
 

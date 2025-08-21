@@ -87,11 +87,18 @@ namespace VTuber.Character
         public void OnEnable()
         {
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnDayEnd, OnDayEnd);
+        }
+
+        private void OnDayEnd(Dictionary<string, object> messagedict)
+        {
+            AttributeManager.ApplyPressureEffects(this);
         }
 
         public void OnDisable()
         {
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnDayEnd, OnDayEnd);
         }
         
         void InitializeAttributes(VCharacterConfiguration characterConfig)
@@ -109,6 +116,7 @@ namespace VTuber.Character
             AttributeManager.AddAttribute("CAPressure",
                 new VPressureAttribute(characterConfig.pressureConfiguration, 
                     characterConfig.pressureBuffs,
+                    characterConfig.pressureEffects,
                     characterConfig.pressureInitialValue, 
                     VRaisingEventKey.OnPressureChanged, 
                     characterConfig.pressureMaxValue == -1 ? int.MaxValue : characterConfig.pressureMaxValue,
