@@ -42,9 +42,8 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
-        [SerializeField]
-        private Transform battleUIWrapper;
-        private Transform backgroundUIWrapper;
+        [SerializeField] private Transform battleUIWrapper;
+        [SerializeField] private Transform backgroundUIWrapper;
         [SerializeField] private GameObject battlePausePanel;
         
         
@@ -249,7 +248,7 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
+            //SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
         }
 
         private void OnBattlePause(Dictionary<string, object> messagedict)
