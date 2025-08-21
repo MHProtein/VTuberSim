@@ -31,7 +31,7 @@ namespace VTuber.ScheduleSystem.UI
         public void Initialize(VScheduleEventConfiguration data)
         {
             _data = data;
-            icon.sprite = VRaisingUI.Instance.GetIcon(data.icon);;
+            icon.sprite = VResourcesManager.Instance.TryGetSprite(data.icon);;
             background.color = data.backgroundColor;
             duration.text = data.Duration.ToString();
             costText.text = data.cost.ToString();

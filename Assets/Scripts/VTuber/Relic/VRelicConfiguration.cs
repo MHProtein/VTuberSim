@@ -47,7 +47,7 @@ namespace VTuber.Relic
             string conditionStr = row.Columns[VRelicHeaderIndex.Condition].Value;
             if (!string.IsNullOrEmpty(conditionStr))
             {
-                condition = VResourcesManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr));
+                condition = VDataManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr));
             }
             else
             {
@@ -91,7 +91,7 @@ namespace VTuber.Relic
             whenToApply = Enum.Parse<VRaisingEventKey>(row.Columns[VRelicHeaderIndex.WhenToApply].Value.Trim());
             if (!string.IsNullOrEmpty(conditionStr))
             {
-                condition = VResourcesManager.Instance.GetRaisingRelicCondition(Convert.ToUInt32(conditionStr));
+                condition = VDataManager.Instance.GetRaisingRelicCondition(Convert.ToUInt32(conditionStr));
             }
             
             for (int i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3UpgradedParam; i += 3)

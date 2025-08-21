@@ -8,9 +8,14 @@ namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VBattleStaminaAttribute : VBattleAttribute
     {
-        public VBattleStaminaAttribute(int value, VBattleEventKey key, int maxValue = Int32.MaxValue, int minValue = 0)
+        public VBattleStaminaAttribute(int value, VBattleEventKey key, bool isShield = false, int maxValue = Int32.MaxValue, int minValue = 0)
             : base(value, false, key, maxValue, minValue)
         {
+            if (isShield)
+            {
+                gainPointsModifier.SetEventKey(VBattleEventKey.OnShieldModifierChanged);
+                gainRateModifier.SetEventKey(VBattleEventKey.OnShieldModifierChanged);
+            }
         }
         
         public override void AddTo(int delta, bool isFromCard, bool shouldApplyTwice = false)

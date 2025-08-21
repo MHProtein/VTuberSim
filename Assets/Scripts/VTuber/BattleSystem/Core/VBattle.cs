@@ -98,7 +98,7 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
             
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange));
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
             _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
             
             _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
@@ -176,6 +176,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnPopularityChange, OnPopularityChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
         }
 
         protected override void OnDisable()
@@ -196,6 +197,15 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnAttributeValueChange, OnAttributeValueChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnPopularityChange, OnPopularityChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
+        }
+        
+        private void OnShieldModifierChanged(Dictionary<string, object> messagedict)
+        {
+            foreach (var card in _cardPilesManager.HandPile)
+            {
+                card.PreviewShield(this, false);
+            }
         }
         
         private void OnPopularityChange(Dictionary<string, object> messagedict)
@@ -261,6 +271,7 @@ namespace VTuber.BattleSystem.Core
             }
             card.TestCondition(this);
             card.PreviewPopularity(this, true);
+            card.PreviewShield(this, true);
         }
         
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
@@ -496,11 +507,12 @@ namespace VTuber.BattleSystem.Core
             {
                 {"TurnLeft", TurnLeft}
             });
-                
+
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEndNotify, new Dictionary<string, object>
             {
-                {"TurnLeft", TurnLeft},
-                {"IsTargetMet", popularityAttribute.Value >= _targetPopularity},
+                { "TurnLeft", TurnLeft },
+                { "IsTargetMet", popularityAttribute.Value >= _targetPopularity },
+                { "Popularity", popularityAttribute.Value },
             });
         }
         

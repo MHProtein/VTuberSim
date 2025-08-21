@@ -15,7 +15,7 @@ using VTuber.ScheduleSystem.Events.DialogueEvent;
 
 namespace VTuber.Core.Managers
 {
-    public class VResourcesManager : VSingleton<VResourcesManager>
+    public class VDataManager : VSingleton<VDataManager>
     {
         public Dictionary<uint, VCardConfiguration> CardConfigurations => _cardConfigurations;
         private Dictionary<uint, VCardConfiguration> _cardConfigurations;

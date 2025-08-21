@@ -46,6 +46,7 @@ namespace VTuber.Consumable
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable, new Dictionary<string, object>()
             {
                 { "Consumable", consumable },
+                { "AreSlotsFull", !CanAddConsumable() }
             });
         }
         

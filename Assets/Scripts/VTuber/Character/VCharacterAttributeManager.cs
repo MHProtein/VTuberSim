@@ -100,5 +100,13 @@ namespace VTuber.Character
 
             return buffs;
         }
+
+        public void ApplyPressureEffects(VCharacter character)
+        {
+            if (TryGetAttribute("CAPressure", out var pressure))
+            {
+                (pressure as VPressureAttribute).ApplyEffects(character);
+            }
+        }
     }
 }

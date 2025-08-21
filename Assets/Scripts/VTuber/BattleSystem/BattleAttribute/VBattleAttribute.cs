@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.Utilities;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
@@ -90,7 +91,36 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             VBattleRootEventCenter.Instance.Raise(_eventKey, new Dictionary<string, object>());
         }
+    }
+    
+    public class VTemporaryValue
+    {
+        uint _idDistributor = 0;
+        Dictionary<uint, int> _tempValues = new Dictionary<uint, int>();
         
+        public uint AddTemporaryValue(int value)
+        {
+            _tempValues.Add(_idDistributor++, value);
+            return _idDistributor - 1;
+        }
+        
+        public void RemoveTemporaryValue(uint id)
+        {
+            if (_tempValues.ContainsKey(id))
+            {
+                _tempValues.Remove(id);
+            }
+        }
+        
+        public int GetTemporaryValue()
+        {
+            return _tempValues.Values.Sum();
+        }
+        
+        public void Reset()
+        {
+            _tempValues.Clear();
+        }
     }
     
     //All the attributes treated as int type, if is percentage, it is multiplied by 100 and vice versa when used. 
@@ -107,6 +137,9 @@ namespace VTuber.BattleSystem.BattleAttribute
         public VValueModifier<int> GainPointsModifier => gainPointsModifier;
         protected VValueModifier<int> gainPointsModifier;
         
+        public VTemporaryValue TemporaryValue => _temporaryValue;
+        protected VTemporaryValue _temporaryValue;
+        
         private bool _isPercentage;
         protected VBattleEventKey _eventKey;
         
@@ -120,6 +153,7 @@ namespace VTuber.BattleSystem.BattleAttribute
 
             gainRateModifier = new VValueModifier<float>(1.0f);
             gainPointsModifier = new VValueModifier<int>(0);
+            _temporaryValue = new VTemporaryValue();
         }
         
         public virtual void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)

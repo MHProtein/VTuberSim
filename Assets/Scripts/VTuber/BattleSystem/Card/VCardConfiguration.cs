@@ -74,7 +74,7 @@ namespace VTuber.BattleSystem.Card
         
         public VEffect CreateEffect()
         {
-            if (VResourcesManager.Instance.EffectConfigurations.TryGetValue(id, out var config))
+            if (VDataManager.Instance.EffectConfigurations.TryGetValue(id, out var config))
             {
                 return config.CreateEffect(parameter, upgradedParameter);
             }
@@ -87,7 +87,7 @@ namespace VTuber.BattleSystem.Card
 
         public VRaisingEffect CreateRaisingEffect()
         {
-            if (VResourcesManager.Instance.RaisingEffects.TryGetValue(id, out var config))
+            if (VDataManager.Instance.RaisingEffects.TryGetValue(id, out var config))
             {
                 return config.CreateEffect(parameter, upgradedParameter);
             }
@@ -185,7 +185,7 @@ namespace VTuber.BattleSystem.Card
                     continue;
                 uint effectID = Convert.ToUInt32(effectIDStr);
 
-                if (VResourcesManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
+                if (VDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
                 {
                     string parameter = row.Columns[i + 1].Value;
                     string upgradedParameter = row.Columns[i + 2].Value;
@@ -204,7 +204,7 @@ namespace VTuber.BattleSystem.Card
                     continue;
                 uint effectID = Convert.ToUInt32(effectIDStr);
 
-                if (VResourcesManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
+                if (VDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
                 {
                     string parameter = row.Columns[i + 1].Value;
                     newEffects.Add(new VEffectItem(){

@@ -347,6 +347,17 @@ namespace VTuber.BattleSystem.Core
 
             return 0;
         }
+        
+        public int PreviewShieldChange(int delta)
+        {
+            if (_battleAttributes.TryGetValue("BAShield", out var parameter))
+            {
+                int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
+                return parameterDelta;
+            }
+
+            return 0;
+        }
 
         public bool TryGetAttribute(string name, out VBattleAttribute attribute)
         {

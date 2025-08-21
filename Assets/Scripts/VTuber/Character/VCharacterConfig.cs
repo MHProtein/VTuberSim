@@ -54,6 +54,11 @@ namespace VTuber.Character
             DisplayMode = DictionaryDisplayOptions.OneLine)]
         public List<int> pressureBuffs = new List<int>();
         
+        [LabelText("压力效果表")]
+        [DictionaryDrawerSettings(KeyLabel = "效果ID", ValueLabel = "参数",
+            DisplayMode = DictionaryDisplayOptions.OneLine)]
+        public Dictionary<uint, string> pressureEffects = new ();
+        
         [PropertySpace(10)]
         [LabelText("Config文件")]
         public VCharacterAttributeConfiguration pressureConfiguration;

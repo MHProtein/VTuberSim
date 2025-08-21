@@ -59,24 +59,24 @@ namespace VTuber.BattleSystem.Core
         protected override void Awake()
         {
             base.Awake();
-            VResourcesLoader loader;
+            VDataLoader loader;
             if (dev)
             {
-                loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
+                loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Raising.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Relics.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Coop.xlsx"));
             }
             else
             {
-                loader = new VResourcesLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
+                loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
             
             var cardConfigs = loader.Load();
-            VDialogResourcesManager.Instance.LoadDialogs();
+            VResourcesManager.Instance.Load();
             
             _script = new VScript(scriptConfiguration);
             
@@ -85,12 +85,12 @@ namespace VTuber.BattleSystem.Core
 
             foreach (var config in cardConfigs)
             {
-                if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
+                if((config.liveType == "F" || config.liveType == _character.LiveType))
                     _character.CardLibrary.AddCard(config.CreateCard());
             }
 
-            _character.ConsumableManager.AddConsumable(VResourcesManager.Instance.CreateConsumableByID(0));
-            _character.ConsumableManager.AddConsumable(VResourcesManager.Instance.CreateConsumableByID(1));
+            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
+            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
             
             scheduleUI.Initialize(_character, _script);
 
@@ -124,8 +124,8 @@ namespace VTuber.BattleSystem.Core
             base.Start();
             
             List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
-            eventConfigs.AddRange(_script.EventList.Select((id => VResourcesManager.Instance.GetDialogueEventConfigurationByID(id))));
-            eventConfigs.AddRange(_script.StreamEventList.Select((id => VResourcesManager.Instance.GetStreamEventConfigurationByID(id))));
+            eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
+            eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
             
             scheduleCreator.InitializeCreator(eventConfigs);
             

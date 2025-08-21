@@ -33,7 +33,7 @@ namespace VTuber.Character.Attributes
             {
                 if (valueMap.IsInRange(Value))
                 {
-                    return VResourcesManager.Instance.CreateBuffByID(valueMap.value);
+                    return VDataManager.Instance.CreateBuffByID(valueMap.value);
                 }
             }
 

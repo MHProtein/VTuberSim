@@ -3,7 +3,7 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingUpgradeRandomCardEffectConfiguration : VRaisingCardEffectConfiguration
+    public class VRaisingUpgradeRandomCardEffectConfiguration : VRaisingEffectConfiguration
     {
         public VRaisingUpgradeRandomCardEffectConfiguration(CellRange row) : base(row)
         {
