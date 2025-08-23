@@ -105,7 +105,8 @@ namespace VTuber.ScheduleSystem.UI
         public void SetItem(VEventUI item)
         {
             _item = item;
-            _scheduleUI.RecordEvent(item.Event);
+            if(_scheduleUI is not null)
+                _scheduleUI.RecordEvent(item.Event);
             
             if (IsCoopEventSlot && (_coopEventTypes.Count == 0 || IsInCoopEventTypes(item)))
             {
@@ -120,7 +121,8 @@ namespace VTuber.ScheduleSystem.UI
 
             if (_item is not null && _item.Event is not null)
             {
-                _scheduleUI.UnrecordEvent(_item.Event);
+                if(_scheduleUI is not null)
+                    _scheduleUI.UnrecordEvent(_item.Event);
                 _item.Event.RemoveCoopEffects(this);
             }
             _item = null;
