@@ -5,7 +5,6 @@ using UnityEngine;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character.Attributes;
-using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 
 namespace VTuber.Core.ScriptSystem
@@ -22,10 +21,6 @@ namespace VTuber.Core.ScriptSystem
     }
     public class VScriptConfiguration : VScriptableObject
     {
-        public string scriptName;
-        public string description;
-        public Sprite icon;
-        public List<VCooperatorConfiguration> coops;
         [Header("基础卡牌")] 
         [SerializeField] public List<uint> cardIDs;
         

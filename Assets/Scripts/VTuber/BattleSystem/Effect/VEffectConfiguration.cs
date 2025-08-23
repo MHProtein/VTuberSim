@@ -24,7 +24,7 @@ namespace VTuber.BattleSystem.Effect
         public const int MultiplyByLayer = 8;
     }
     
-    public abstract class VEffectConfiguration
+    public class VEffectConfiguration
     { 
         public uint id;
         public string effectName;
@@ -59,7 +59,10 @@ namespace VTuber.BattleSystem.Effect
                 conditions.Add(VDataManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr)));
             }
         }
-
-        public abstract VEffect CreateEffect(string parameter, string upgradedParameter);
+        
+        public virtual VEffect CreateEffect(string parameter, string upgradedParameter)
+        {
+            return new VEffect(this);
+        }
     }
 }

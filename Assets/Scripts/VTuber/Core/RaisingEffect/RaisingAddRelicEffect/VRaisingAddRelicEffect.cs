@@ -8,15 +8,17 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingAddRelicEffect : VRaisingEffect
     {
         private uint _relicId;
-        public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+        public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration) : base(configuration)
         {
-            _relicId = uint.Parse(parameter);
+            _relicId = configuration.relicId;
         }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CharacterRelicManager.AddRelic
                 (VDataManager.Instance.CreateRelicByID(_relicId));
+            
+            VDebug.Log("hihi");
         }
 
         public override void Upgrade()

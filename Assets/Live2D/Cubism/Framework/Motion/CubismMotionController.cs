@@ -119,34 +119,11 @@ namespace Live2D.Cubism.Framework.Motion
         public void PlayAnimation(AnimationClip clip, int layerIndex = 0, int priority = CubismMotionPriority.PriorityNormal, bool isLoop = true, float speed = 1.0f)
         {
             // Fail silently...
-            if (!enabled)
+            if(!enabled || !_isActive || _cubismFadeMotionList == null || clip == null
+               || layerIndex < 0 || layerIndex >= LayerCount ||
+               ((_motionPriorities[layerIndex] >= priority) && (priority != CubismMotionPriority.PriorityForce)))
             {
-                Debug.Log("!enabled can't start motion.");
-                return;
-            }
-            if (!enabled)
-            {
-                Debug.Log("!enabled can't start motion.");
-                return;
-            }
-            if (_cubismFadeMotionList == null)
-            {
-                Debug.Log("_cubismFadeMotionList == null can't start motion.");
-                return;
-            }
-            if ( clip == null)
-            {
-                Debug.Log("clip == null can't start motion.");
-                return;
-            }
-            if ( layerIndex < 0 || layerIndex >= LayerCount)
-            {
-                Debug.Log("layerIndex < 0 || layerIndex >= LayerCount can't start motion.");
-                return;
-            }
-            if ( ((_motionPriorities[layerIndex] >= priority) && (priority != CubismMotionPriority.PriorityForce)))
-            {
-                Debug.Log("((_motionPriorities[layerIndex] >= priority) && (priority != CubismMotionPriority.PriorityForce)) can't start motion.");
+                Debug.Log("can't start motion.");
                 return;
             }
 

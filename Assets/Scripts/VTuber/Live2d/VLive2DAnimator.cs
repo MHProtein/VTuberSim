@@ -1,53 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Live2D.Cubism.Core;
+using Live2D.Cubism.Framework.Json;
 using Live2D.Cubism.Framework.Motion;
-using VTuber.BattleSystem.Core;
-using VTuber.Core.Foundation;
-using Random = UnityEngine.Random;
 
-public class VLive2DAnimator : VMonoBehaviour
+public class MotionPlayer : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private Dictionary<VBattleEventKey, List<string>> motionClips;
-    private Dictionary<VBattleEventKey, List<int>> motionClipHashes;
-    private Dictionary<VBattleEventKey, FunctionWithADict> motionClipPlayers;
+    private CubismMotionController motionController;
+    private CubismModel model;
 
-    protected override void Awake()
+    private AnimationClip motionClip;
+
+    void Start()
     {
-        motionClipHashes = new Dictionary<VBattleEventKey, List<int>>();
-        foreach (var clip in motionClips)
-        {
-            motionClipHashes.Add(clip.Key, clip.Value.ConvertAll(Animator.StringToHash));
-        }
+        motionController = GetComponent<CubismMotionController>();
+        model = GetComponent<CubismModel>();
         
-        motionClipPlayers = new Dictionary<VBattleEventKey, FunctionWithADict>();
-        foreach (var clip in motionClipHashes)
+        if (motionClip != null)
         {
-            motionClipPlayers.Add(clip.Key, (objects =>
-            {
-                var hash = clip.Value[Random.Range(0, motionClipHashes[clip.Key].Count)];
-                animator.Play(hash);
-                VDebug.Log("播放动画: " + hash);
-            }));
+            motionController.PlayAnimation(motionClip, isLoop: false);
         }
     }
 
-    protected override void OnEnable()
+    void Update()
     {
-        base.OnEnable();
-        foreach (var motionClipHash in motionClipPlayers)
+        if (Input.GetKeyDown(KeyCode.Space) && motionClip != null)
         {
-            VBattleRootEventCenter.Instance.RegisterListener(motionClipHash.Key, motionClipHash.Value);
-        }
-    }
-
-    protected override void OnDisable()
-    {
-        foreach (var motionClipHash in motionClipPlayers)
-        {
-            VBattleRootEventCenter.Instance.RemoveListener(motionClipHash.Key, motionClipHash.Value);
+            motionController.PlayAnimation(motionClip, isLoop: true);
         }
     }
 }
