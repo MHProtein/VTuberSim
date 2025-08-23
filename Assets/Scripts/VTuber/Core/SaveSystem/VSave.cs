@@ -20,8 +20,8 @@ namespace VTuber.BattleSystem.Core.SaveSystem
         
         public VSave(VCharacter character)
         {
-            accountData = new int[5, 30];
-            for (int i = 0; i < 5; i++)
+            accountData = new int[100, 30];
+            for (int i = 0; i < 100; i++)
             {
                 for (int j = 0; j < 30; j++)
                 {
@@ -29,7 +29,7 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                 }
             }
 
-            effectParameters = new string[5, 10];
+            effectParameters = new string[100, 10];
             accountCount = character.Accounts.Count;
             for (int i = 0; i < character.Accounts.Count; i++)
             {
