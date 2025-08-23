@@ -5430,7 +5430,7 @@
             This simple type specifies the set of possible aliases (or editing groups) which can be used as aliases to
             determine if the current user shall be allowed to edit a single range defined by a range permission with 
             in a document. This mechanism simply provides a set of predefined editing groups which can be associated 
-            with accounts by applications in any desired manner.
+            with Accounts by applications in any desired manner.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.EditingGroup.None">

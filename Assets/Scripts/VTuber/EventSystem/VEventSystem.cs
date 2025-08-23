@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
@@ -108,7 +109,7 @@ namespace VTuber.EventSystem
         
         private void OnEventSelectUpgradeCard(Dictionary<string, object> messagedict)
         {
-            VEventSystemUI.Instance.OpenUpgradeCard(_character.CardLibrary.GetCards(),
+            VEventSystemUI.Instance.OpenUpgradeCard(_character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(),
                 () =>
                 {
                     dialogueSystem.SetPaused(false);

@@ -21,10 +21,5 @@ namespace VTuber.BattleSystem.BattleAttribute
         public override void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)
         {
         }
-
-        protected override void SetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
-        {
-            Value = value;
-        }
     }
 }

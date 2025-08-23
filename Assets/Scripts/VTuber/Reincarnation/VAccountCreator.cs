@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
@@ -115,7 +116,7 @@ namespace VTuber.Reincarnation
             return relics;
         }
 
-        public static List<VRaisingEffect> GetEffects(VReincarnationConfiguration config, string ratingLevel,
+        public static List<VEffectItem> GetEffects(VReincarnationConfiguration config, string ratingLevel,
             VCharacter character)
         {
             int count = config.attributeLevels[ratingLevel].count;
@@ -125,7 +126,7 @@ namespace VTuber.Reincarnation
 
             // StreamAttributes
             List<VAbilityEffectInfo> streamEffectInfos = new List<VAbilityEffectInfo>();
-            List<VRaisingEffect> streamEffects = new List<VRaisingEffect>();
+            List<VEffectItem> streamEffects = new List<VEffectItem>();
 
             foreach (var requirement in ratingLevelInfo.streamEffectsRequirements)
             {
@@ -136,8 +137,14 @@ namespace VTuber.Reincarnation
                 }
 
                 var param = effectInfo.levelInfos[requirement.level].levelParam;
-                var effect = VDataManager.Instance.CreateRaisingEffectByID(effectInfo.effect, param, param);
-                streamEffects.Add(effect);
+                
+                streamEffects.Add(new VEffectItem()
+                {
+                    id = effectInfo.effect,
+                    parameter = param,
+                    upgradedParameter = param
+                });
+                
                 streamEffectInfos.Add(effectInfo);
                 capacity += config.effectCapacities[requirement.level];
 
@@ -153,11 +160,15 @@ namespace VTuber.Reincarnation
 
                 var level = Random.Range(0, effectInfo.levelInfos.Count);
                 var levelInfo = effectInfo.levelInfos[level];
-                var effect = VDataManager.Instance.CreateRaisingEffectByID(effectInfo.effect, levelInfo.levelParam, levelInfo.levelParam);
 
                 if (capacity + config.effectCapacities[level] <= maxCapacity)
                 {
-                    streamEffects.Add(effect);
+                    streamEffects.Add(new VEffectItem()
+                    {
+                        id = effectInfo.effect,
+                        parameter = levelInfo.levelParam,
+                        upgradedParameter = levelInfo.levelParam
+                    });;
                     streamEffectInfos.Add(effectInfo);
                     capacity += config.effectCapacities[level];
 
@@ -167,7 +178,7 @@ namespace VTuber.Reincarnation
             }
 
             // OtherAttributes
-            List<VRaisingEffect> otherEffects = new List<VRaisingEffect>();
+            List<VEffectItem> otherEffects = new List<VEffectItem>();
             foreach (var requirement in ratingLevelInfo.attributeEffectsRequirements)
             {
                 var effectInfos = config.attributeEffects.OrderBy(r => Random.Range(0f, 1f))
@@ -178,15 +189,21 @@ namespace VTuber.Reincarnation
                         return otherEffects.Union(streamEffects).ToList();
 
                     var param = effectInfo.levelInfos[requirement.level].levelParam;
-                    var effect = VDataManager.Instance.CreateRaisingEffectByID(effectInfo.effect, param, param);
-                    otherEffects.Add(effect);
+                    
+                    otherEffects.Add(new VEffectItem()
+                    {
+                        id = effectInfo.effect,
+                        parameter = param,
+                        upgradedParameter = param
+                    });;
                     capacity += config.effectCapacities[requirement.level];
                 }
             }
 
             // Remaining pool (allEffects)
             var allEffects = config.attributeEffects.Where(e =>
-                !otherEffects.Exists(eft => eft.Id == e.effect)).OrderBy(r => Random.Range(0f, 1f)).ToList();// shuffle.ToList();
+                !otherEffects.Exists(eft => eft.id == e.effect))
+                .OrderBy(r => Random.Range(0f, 1f)).ToList();// shuffle.ToList();
 
             foreach (var streamAttributeEffect in config.streamAttributeEffects)
             {
@@ -214,10 +231,13 @@ namespace VTuber.Reincarnation
                 int cost = config.effectCapacities[level];
                 if (capacity + cost > maxCapacity)
                     continue;
-
-                var effect = VDataManager.Instance.CreateRaisingEffectByID(effectInfo.effect, levelInfo.levelParam, levelInfo.levelParam);
-
-                otherEffects.Add(effect);
+                
+                otherEffects.Add(new VEffectItem()
+                {
+                    id = effectInfo.effect,
+                    parameter = levelInfo.levelParam,
+                    upgradedParameter = levelInfo.levelParam
+                });;
                 capacity += cost;
 
                 if (capacity == maxCapacity || streamEffects.Count + otherEffects.Count >= count)

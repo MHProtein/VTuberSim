@@ -34,7 +34,7 @@ MonoBehaviour:
   scoreLevels:
   - low: 0
     high: 200000000
-    name: SSS
+    name: S
   kpis:
   - EventType: 0
     RequiredAmount: 2
