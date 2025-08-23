@@ -25,15 +25,48 @@ MonoBehaviour:
   eventIDs: 0000000001000000020000000300000004000000050000000b0000000c0000000d000000
   streamEventIDs: 000000000100000002000000
   abilityCoefficient: 1.4
-  followerCoefficient: 2.2
-  membershipCoefficient: 15
+  followerCoefficient: 1.5
+  membershipCoefficient: 20
   popularityCoefficient:
   - from: 0
+    to: 5000
+    value: 0.6
+  - from: 5000
+    to: 10000
+    value: 0.3
+  - from: 10000
+    to: 20000
+    value: 0.1
+  - from: 20000
+    to: 50000
+    value: 0.05
+  - from: 50000
     to: -1
-    value: 1.2
+    value: 0.01
   scoreLevels:
   - low: 0
-    high: 200000000
+    high: 5000
+    name: E
+  - low: 5000
+    high: 10000
+    name: D
+  - low: 10000
+    high: 15000
+    name: C
+  - low: 15000
+    high: 20000
+    name: B
+  - low: 20000
+    high: 25000
+    name: A
+  - low: 25000
+    high: 30000
+    name: S
+  - low: 30000
+    high: 35000
+    name: SS
+  - low: 35000
+    high: -1
     name: SSS
   kpis:
   - EventType: 0
