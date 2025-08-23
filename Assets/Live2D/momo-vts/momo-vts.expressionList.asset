@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: momo-vts.expressionList
   m_EditorClassIdentifier: 
   CubismExpressionObjects:
-  - {fileID: 11400000, guid: f64834b569083bf4ca185d446a9c13bd, type: 2}
+  - {fileID: 11400000, guid: cfb4677f780dff241b266b4b886b283b, type: 2}

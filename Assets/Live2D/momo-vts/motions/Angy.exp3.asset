@@ -1,0 +1,582 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58229d41c24a7fb4aafd097ab43bcc2a, type: 3}
+  m_Name: Angy.exp3
+  m_EditorClassIdentifier: 
+  Type: Live2D Expression
+  FadeInTime: 1
+  FadeOutTime: 1
+  Parameters:
+  - Id: Param154
+    Value: 0
+    Blend: 1
+  - Id: Param153
+    Value: 0
+    Blend: 1
+  - Id: Param155
+    Value: 0
+    Blend: 1
+  - Id: Param158
+    Value: 0
+    Blend: 1
+  - Id: Param159
+    Value: 0
+    Blend: 1
+  - Id: Param160
+    Value: 0
+    Blend: 1
+  - Id: Param161
+    Value: 1
+    Blend: 1
+  - Id: Param156
+    Value: 7.914
+    Blend: 1
+  - Id: Param157
+    Value: -8.428
+    Blend: 1
+  - Id: Param54
+    Value: 0
+    Blend: 1
+  - Id: Param143
+    Value: 0
+    Blend: 1
+  - Id: Param151
+    Value: -0.643
+    Blend: 1
+  - Id: Param152
+    Value: 0
+    Blend: 1
+  - Id: Param86
+    Value: 7.933
+    Blend: 1
+  - Id: Param91
+    Value: 11.333
+    Blend: 1
+  - Id: Param128
+    Value: 11.333
+    Blend: 1
+  - Id: Param87
+    Value: -5.051
+    Blend: 1
+  - Id: Param88
+    Value: -6.523
+    Blend: 1
+  - Id: Param111
+    Value: 0
+    Blend: 1
+  - Id: Param112
+    Value: -8.662
+    Blend: 1
+  - Id: Param89
+    Value: 0
+    Blend: 1
+  - Id: Param90
+    Value: 0
+    Blend: 1
+  - Id: Param147
+    Value: -0.832
+    Blend: 1
+  - Id: Param148
+    Value: 9.111
+    Blend: 1
+  - Id: Param149
+    Value: -0.832
+    Blend: 1
+  - Id: Param150
+    Value: 9.111
+    Blend: 1
+  - Id: ParamAngleX
+    Value: 5.185
+    Blend: 1
+  - Id: ParamAngleY
+    Value: -5.76
+    Blend: 1
+  - Id: ParamAngleZ
+    Value: 2.374
+    Blend: 1
+  - Id: ParamEyeLOpen
+    Value: 0.134
+    Blend: 1
+  - Id: ParamEyeLSmile
+    Value: 0.603
+    Blend: 1
+  - Id: ParamEyeROpen
+    Value: 0.134
+    Blend: 1
+  - Id: ParamEyeRSmile
+    Value: 0.603
+    Blend: 1
+  - Id: ParamEyeBallX
+    Value: 0.679
+    Blend: 1
+  - Id: ParamEyeBallY
+    Value: -0.23
+    Blend: 1
+  - Id: ParamBrowLY
+    Value: 0.425
+    Blend: 1
+  - Id: ParamBrowLAngle
+    Value: 0
+    Blend: 1
+  - Id: ParamBrowLX
+    Value: 0
+    Blend: 1
+  - Id: ParamBrowLForm
+    Value: 0.424
+    Blend: 1
+  - Id: ParamBrowRY
+    Value: 0.425
+    Blend: 1
+  - Id: ParamBrowRAngle
+    Value: 0
+    Blend: 1
+  - Id: ParamBrowRX
+    Value: 0
+    Blend: 1
+  - Id: ParamBrowRForm
+    Value: 0.424
+    Blend: 1
+  - Id: ParamMouthForm
+    Value: 0.148
+    Blend: 1
+  - Id: ParamMouthOpenY
+    Value: 0.173
+    Blend: 1
+  - Id: ParamCheek
+    Value: 0.742
+    Blend: 1
+  - Id: ParamBodyAngleX
+    Value: 1.748
+    Blend: 1
+  - Id: ParamBodyAngleY
+    Value: -1.295
+    Blend: 1
+  - Id: ParamBodyAngleZ
+    Value: 0.774
+    Blend: 1
+  - Id: ParamBreath
+    Value: 0.425
+    Blend: 1
+  - Id: Param141
+    Value: 1.613
+    Blend: 1
+  - Id: Param142
+    Value: 0.085
+    Blend: 1
+  - Id: Param144
+    Value: -0.637
+    Blend: 1
+  - Id: Param145
+    Value: 6.573
+    Blend: 1
+  - Id: Param146
+    Value: -6.667
+    Blend: 1
+  - Id: Param133
+    Value: -1.652
+    Blend: 1
+  - Id: Param134
+    Value: -0.027
+    Blend: 1
+  - Id: Param135
+    Value: 1.234
+    Blend: 1
+  - Id: Param136
+    Value: -0.541
+    Blend: 1
+  - Id: Param99
+    Value: -2.255
+    Blend: 1
+  - Id: Param100
+    Value: -0.029
+    Blend: 1
+  - Id: Param126
+    Value: 0.112
+    Blend: 1
+  - Id: Param101
+    Value: 1.578
+    Blend: 1
+  - Id: Param102
+    Value: -0.553
+    Blend: 1
+  - Id: Param127
+    Value: -0.415
+    Blend: 1
+  - Id: Param137
+    Value: 2.665
+    Blend: 1
+  - Id: Param138
+    Value: -2.741
+    Blend: 1
+  - Id: Param139
+    Value: -1.174
+    Blend: 1
+  - Id: Param140
+    Value: 2.075
+    Blend: 1
+  - Id: Param113
+    Value: 2.171
+    Blend: 1
+  - Id: Param114
+    Value: -0.604
+    Blend: 1
+  - Id: Param115
+    Value: -0.872
+    Blend: 1
+  - Id: Param116
+    Value: -0.486
+    Blend: 1
+  - Id: Param117
+    Value: -0.136
+    Blend: 1
+  - Id: Param118
+    Value: 1.475
+    Blend: 1
+  - Id: Param103
+    Value: 3.22
+    Blend: 1
+  - Id: Param104
+    Value: -0.91
+    Blend: 1
+  - Id: Param105
+    Value: -1.777
+    Blend: 1
+  - Id: Param106
+    Value: 0.888
+    Blend: 1
+  - Id: Param107
+    Value: -0.03
+    Blend: 1
+  - Id: Param83
+    Value: 1.27
+    Blend: 1
+  - Id: Param84
+    Value: -0.38
+    Blend: 1
+  - Id: Param85
+    Value: -0.43
+    Blend: 1
+  - Id: Param92
+    Value: -0.72
+    Blend: 1
+  - Id: Param93
+    Value: 0.501
+    Blend: 1
+  - Id: Param94
+    Value: 0.161
+    Blend: 1
+  - Id: Param108
+    Value: 1.87
+    Blend: 1
+  - Id: Param109
+    Value: -0.078
+    Blend: 1
+  - Id: Param110
+    Value: -0.384
+    Blend: 1
+  - Id: Param123
+    Value: -1.19
+    Blend: 1
+  - Id: Param124
+    Value: 0.634
+    Blend: 1
+  - Id: Param125
+    Value: 0.309
+    Blend: 1
+  - Id: Param45
+    Value: -1.238
+    Blend: 1
+  - Id: Param46
+    Value: 1.242
+    Blend: 1
+  - Id: Param43
+    Value: -4.557
+    Blend: 1
+  - Id: Param44
+    Value: -0.335
+    Blend: 1
+  - Id: Param95
+    Value: -2.052
+    Blend: 1
+  - Id: Param96
+    Value: 1.235
+    Blend: 1
+  - Id: Param97
+    Value: 0
+    Blend: 1
+  - Id: Param98
+    Value: 0
+    Blend: 1
+  - Id: Param119
+    Value: 1.235
+    Blend: 1
+  - Id: Param120
+    Value: 0.627
+    Blend: 1
+  - Id: Param121
+    Value: 0
+    Blend: 1
+  - Id: Param122
+    Value: 0
+    Blend: 1
+  - Id: Param49
+    Value: -0.574
+    Blend: 1
+  - Id: Param50
+    Value: 0.211
+    Blend: 1
+  - Id: Param51
+    Value: 0.368
+    Blend: 1
+  - Id: Param47
+    Value: 1.114
+    Blend: 1
+  - Id: Param48
+    Value: -0.004
+    Blend: 1
+  - Id: Param52
+    Value: 1.233
+    Blend: 1
+  - Id: Param53
+    Value: -0.016
+    Blend: 1
+  - Id: Param15
+    Value: 2.409
+    Blend: 1
+  - Id: Param16
+    Value: 0.042
+    Blend: 1
+  - Id: Param17
+    Value: -0.045
+    Blend: 1
+  - Id: Param18
+    Value: 2.482
+    Blend: 1
+  - Id: Param19
+    Value: 0.048
+    Blend: 1
+  - Id: Param20
+    Value: -0.095
+    Blend: 1
+  - Id: Param21
+    Value: 2.558
+    Blend: 1
+  - Id: Param22
+    Value: -0.004
+    Blend: 1
+  - Id: Param23
+    Value: -0.113
+    Blend: 1
+  - Id: Param24
+    Value: 2.409
+    Blend: 1
+  - Id: Param25
+    Value: 0.01
+    Blend: 1
+  - Id: Param26
+    Value: -0.034
+    Blend: 1
+  - Id: Param27
+    Value: -1.588
+    Blend: 1
+  - Id: Param28
+    Value: 0.415
+    Blend: 1
+  - Id: Param29
+    Value: 0.12
+    Blend: 1
+  - Id: Param30
+    Value: -1.596
+    Blend: 1
+  - Id: Param31
+    Value: 0.481
+    Blend: 1
+  - Id: Param32
+    Value: 0.105
+    Blend: 1
+  - Id: Param33
+    Value: -1.599
+    Blend: 1
+  - Id: Param34
+    Value: 0.537
+    Blend: 1
+  - Id: Param35
+    Value: 0.047
+    Blend: 1
+  - Id: Param36
+    Value: -1.588
+    Blend: 1
+  - Id: Param37
+    Value: 0.249
+    Blend: 1
+  - Id: Param38
+    Value: 0.085
+    Blend: 1
+  - Id: Param
+    Value: 2.53
+    Blend: 1
+  - Id: Param2
+    Value: -0.157
+    Blend: 1
+  - Id: Param3
+    Value: -1.597
+    Blend: 1
+  - Id: Param4
+    Value: 0.521
+    Blend: 1
+  - Id: Param5
+    Value: 2.327
+    Blend: 1
+  - Id: Param6
+    Value: -0.447
+    Blend: 1
+  - Id: Param7
+    Value: 0.333
+    Blend: 1
+  - Id: Param8
+    Value: 0
+    Blend: 1
+  - Id: Param9
+    Value: 2.226
+    Blend: 1
+  - Id: Param10
+    Value: 0.247
+    Blend: 1
+  - Id: Param11
+    Value: 0.053
+    Blend: 1
+  - Id: Param12
+    Value: -1.567
+    Blend: 1
+  - Id: Param13
+    Value: 0.381
+    Blend: 1
+  - Id: Param14
+    Value: 0.351
+    Blend: 1
+  - Id: Param39
+    Value: -0.467
+    Blend: 1
+  - Id: Param40
+    Value: 0.296
+    Blend: 1
+  - Id: Param41
+    Value: -0.245
+    Blend: 1
+  - Id: Param42
+    Value: 0.323
+    Blend: 1
+  - Id: Param129
+    Value: 1.666
+    Blend: 1
+  - Id: Param130
+    Value: -0.483
+    Blend: 1
+  - Id: Param131
+    Value: -3.087
+    Blend: 1
+  - Id: Param132
+    Value: 0.103
+    Blend: 1
+  - Id: Param75
+    Value: -0.518
+    Blend: 1
+  - Id: Param76
+    Value: 0.507
+    Blend: 1
+  - Id: Param77
+    Value: 0.314
+    Blend: 1
+  - Id: Param78
+    Value: 0.385
+    Blend: 1
+  - Id: Param79
+    Value: 0.52
+    Blend: 1
+  - Id: Param80
+    Value: 0.409
+    Blend: 1
+  - Id: Param81
+    Value: -0.097
+    Blend: 1
+  - Id: Param82
+    Value: 0.345
+    Blend: 1
+  - Id: Param55
+    Value: -0.497
+    Blend: 1
+  - Id: Param56
+    Value: 0.963
+    Blend: 1
+  - Id: Param57
+    Value: 0.111
+    Blend: 1
+  - Id: Param58
+    Value: 0.237
+    Blend: 1
+  - Id: Param59
+    Value: 0.255
+    Blend: 1
+  - Id: Param60
+    Value: 0.662
+    Blend: 1
+  - Id: Param61
+    Value: -0.32
+    Blend: 1
+  - Id: Param62
+    Value: 0.111
+    Blend: 1
+  - Id: Param63
+    Value: 0.012
+    Blend: 1
+  - Id: Param64
+    Value: -0.461
+    Blend: 1
+  - Id: Param65
+    Value: -0.331
+    Blend: 1
+  - Id: Param66
+    Value: 0.821
+    Blend: 1
+  - Id: Param67
+    Value: 0.057
+    Blend: 1
+  - Id: Param68
+    Value: 0.119
+    Blend: 1
+  - Id: Param69
+    Value: 0.22
+    Blend: 1
+  - Id: Param70
+    Value: 0.415
+    Blend: 1
+  - Id: Param71
+    Value: -0.315
+    Blend: 1
+  - Id: Param72
+    Value: 0.029
+    Blend: 1
+  - Id: Param73
+    Value: 0.089
+    Blend: 1
+  - Id: Param74
+    Value: -0.097
+    Blend: 1
+  - Id: ParamHairFront
+    Value: 0
+    Blend: 1
+  - Id: ParamHairSide
+    Value: 0
+    Blend: 1
+  - Id: ParamHairBack
+    Value: 0
+    Blend: 1

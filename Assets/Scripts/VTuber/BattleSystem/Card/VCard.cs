@@ -161,10 +161,17 @@ namespace VTuber.BattleSystem.Card
                 {
                     if (preview.AttributeName == "BAParameter")
                     {
+                        bool isTrue = true;
+                        foreach (var c in effect.conditions)
+                        {
+                            if (!c.IsTrue(battle, null))
+                                isTrue = false;
+                        }
+                        if(!isTrue)
+                            continue;
                         int value = preview.GetValue(battle);
                         originalValue += value;
                         finalValue += battle.BattleAttributeManager.PreviewPopularityChange(value);
-                        
                     }
                 }
             }
@@ -181,6 +188,14 @@ namespace VTuber.BattleSystem.Card
                 {
                     if (preview.AttributeName == "BAShield")
                     {
+                        bool isTrue = true;
+                        foreach (var c in effect.conditions)
+                        {
+                            if (!c.IsTrue(battle, null))
+                                isTrue = false;
+                        }
+                        if(!isTrue)
+                            continue;
                         int value = preview.GetValue(battle);
                         originalValue += value;
                         finalValue += battle.BattleAttributeManager.PreviewShieldChange(value);

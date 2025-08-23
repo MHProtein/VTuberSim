@@ -63,5 +63,10 @@ namespace VTuber.BattleSystem.Effect
             }
             return 0;
         }
+        
+        public override string GetValue()
+        {
+            return (int)(_percentage.Value * 100) + "%";
+        }
     }
 }

@@ -28,11 +28,8 @@ namespace VTuber.BattleSystem.BattleAttribute
                 base.AddTo(delta, isFromCard, shouldApplyTwice);
                 return;
             }
-            Value = Mathf.Clamp(delta + Value, _minValue, _maxValue);
+            SetValue(Mathf.Clamp(delta + Value, _minValue, _maxValue), isFromCard, shouldApplyTwice);
             VDebug.Log($"{AttributeName} 消耗: {delta}, 当前数值: {Value})");
-            
-            if (delta != 0)
-                SendEvent(Value, delta, isFromCard);
         }
         
 

@@ -13,6 +13,11 @@ namespace VTuber.BattleSystem.Effect
         {
             battle.NextCardPlayTwice();
             VDebug.Log($"效果 {_configuration.effectName} 已应用：下一张卡牌将被打出两次。");
+        }        
+        
+        public override string GetValue()
+        {
+            return "";
         }
     }
 }
