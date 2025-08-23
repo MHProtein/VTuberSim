@@ -44,13 +44,13 @@ MonoBehaviour:
       so: {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
   - key: Cooperators
     value:
-    - name: "\u5BA4\u53CB\u59D0"
+    - name: "\u5C0F\u5BA4"
       path: 
       so: {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}
     - name: "\u96EA\u738B"
       path: 
       so: {fileID: 11400000, guid: 8e77808f3b45fb34b8fe3e111d0517c1, type: 2}
-    - name: "\u5929\u4F7F\u4E95"
+    - name: "\u4E95\u4E95"
       path: 
       so: {fileID: 11400000, guid: fb654f61535c5754d99938109dfde960, type: 2}
     - name: "\u67DA\u5B50\u8336"
