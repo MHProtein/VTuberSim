@@ -82103,6 +82103,8 @@ MonoBehaviour:
   - {fileID: 1001512311}
   - {fileID: 459166819}
   characterUI: {fileID: 963992881}
+  confirmButton: {fileID: 1918692081}
+  returnButton: {fileID: 399920443}
 --- !u!43 &1875831609
 Mesh:
   m_ObjectHideFlags: 0

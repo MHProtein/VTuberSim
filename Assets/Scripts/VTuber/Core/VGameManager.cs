@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.ScriptSystem;
+using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
 using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
@@ -51,6 +52,9 @@ namespace VTuber.BattleSystem.Core
 
         [SerializeField] private VStoreUI _storeUI;
         [SerializeField] private VStoreConfiguration storeConfiguration;
+
+        [Space(5)] [Header("MainMenu")] [SerializeField]
+        private VMainMenu _mainMenu;
         
         public VCharacter Character => _character;
         private VCharacter _character;
