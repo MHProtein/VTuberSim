@@ -29,5 +29,9 @@ namespace VTuber.Core.RaisingEffect
         {
             
         }
+        public override string GetParameter()
+        {
+            return "";
+        }
     }
 }

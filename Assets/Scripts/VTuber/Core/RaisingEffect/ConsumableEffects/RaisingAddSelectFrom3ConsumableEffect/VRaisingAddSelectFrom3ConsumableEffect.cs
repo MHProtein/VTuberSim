@@ -39,5 +39,9 @@ namespace VTuber.Core.RaisingEffect
         {
             _character.ConsumableManager.AddConsumable(consumable);
         }
+        public override string GetParameter()
+        {
+            return "";
+        }
     }
 }

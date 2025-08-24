@@ -53,6 +53,7 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private VStoreUI _storeUI;
         [SerializeField] private VStoreConfiguration storeConfiguration;
         
+        public VCharacter Character => _character;
         private VCharacter _character;
         private VStateMachine _stateMachine;
         private VScript _script;

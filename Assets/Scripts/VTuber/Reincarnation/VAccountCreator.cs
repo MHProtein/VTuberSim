@@ -90,6 +90,8 @@ namespace VTuber.Reincarnation
         
         public static List<VRelic> GetRelics(VReincarnationConfiguration config, string ratingLevel, VCharacter character)
         {
+            if (character is null)
+                return new List<VRelic>();
             int relicCount = config.relicCount[ratingLevel];
             List<uint> relicIDs = new List<uint>();
             var streamEvents = character.succeededStreams.Select(e => e.EventID).ToList();

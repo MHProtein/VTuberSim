@@ -44,5 +44,9 @@ namespace VTuber.Core.RaisingEffect
         {
             _character.CardLibrary.AddCard(selectedCard);
         }
+        public override string GetParameter()
+        {
+            return "";
+        }
     }
 }

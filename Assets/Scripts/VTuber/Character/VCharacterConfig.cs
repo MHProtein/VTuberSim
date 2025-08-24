@@ -12,6 +12,8 @@ namespace VTuber.Character
     public class VCharacterConfiguration : VScriptableObject
     {
         public string liveType;
+        public uint initialCardId;
+        public uint initialRelicId;
         #region AttributeConfigs
         
         [HorizontalGroup("StaminaGroup", Gap = 10)]
