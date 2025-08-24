@@ -12,7 +12,7 @@ namespace VTuber.Core.RaisingEffect
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            return new VRaisingUpgradeCoopLevel(this);
+            return new VRaisingUpgradeCoopLevel(this, parameter);
         }
     }
 }

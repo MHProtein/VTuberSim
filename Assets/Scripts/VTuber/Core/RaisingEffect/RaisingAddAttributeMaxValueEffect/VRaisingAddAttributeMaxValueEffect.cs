@@ -4,8 +4,9 @@ using VTuber.Character;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingAddAttributeMaxValueEffect : VRaisingEffect
+    public class VRaisingAddAttributeMaxValueEffect : VRaisingEffect, IAttributeEffect
     {
+        public string AttributeName => _attributeName;
         private string _attributeName;
         private VUpgradableValue<int> _value;
         public VRaisingAddAttributeMaxValueEffect(VRaisingAddAttributeMaxValueEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
@@ -31,5 +32,11 @@ namespace VTuber.Core.RaisingEffect
         {
             _value.Downgrade();
         }
+        
+        public override string GetParameter()
+        {
+            return _value.Value.ToString();
+        }
+
     }
 }

@@ -28,5 +28,10 @@ namespace VTuber.Core.RaisingEffect
         public override void DownGrade()
         {
         }
+
+        public override string GetParameter()
+        {
+            return VDataManager.Instance.Relics[_relicId].relicName;
+        }
     }
 }

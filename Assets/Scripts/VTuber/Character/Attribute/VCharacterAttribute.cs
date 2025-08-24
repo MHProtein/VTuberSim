@@ -28,6 +28,7 @@ namespace VTuber.Character.Attribute
 
         public bool ShouldBattleAttributeConvertTo { get; private set; }
 
+        public int MaxValue => _maxValue;
         protected int _minValue;
         protected int _maxValue;
         protected VRaisingEventKey _eventKey;

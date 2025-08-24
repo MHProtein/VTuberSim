@@ -7,8 +7,13 @@ using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingAddAbilityEffect : VRaisingEffect
+    public interface IAttributeEffect
     {
+        string AttributeName { get; }
+    }
+    public class VRaisingAddAbilityEffect : VRaisingEffect, IAttributeEffect
+    {
+        public string AttributeName => _attributeName;
         private readonly string _attributeName;
         private readonly VUpgradableValue<int> _value;
         private readonly bool _shouldUseEfficiency;
@@ -40,5 +45,11 @@ namespace VTuber.Core.RaisingEffect
         {
             _value.Downgrade();
         }
+
+        public override string GetParameter()
+        {
+            return _value.Value.ToString();
+        }
+        
     }
 }

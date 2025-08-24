@@ -7,7 +7,7 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingCardEffect : VRaisingEffect
+    public abstract class VRaisingCardEffect : VRaisingEffect
     {
         private readonly List<float> _rarityProbabilities;
         private readonly List<float> _upgradeProbabilities;
@@ -89,19 +89,6 @@ namespace VTuber.Core.RaisingEffect
                 }
             }
             return selectedCards;
-        }
-
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
-        {
-            
-        }
-
-        public override void Upgrade()
-        {
-        }
-
-        public override void DownGrade()
-        {
         }
     }
 }
