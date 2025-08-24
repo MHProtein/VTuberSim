@@ -29,22 +29,22 @@ MonoBehaviour:
   _coopLevels:
   - from: 0
     to: 25
-    levelName: "\u8BA4\u8BC6"
+    levelName: "\u719F\u6089"
     eventType: 2
     upgradeEventID: 24
   - from: 26
     to: 50
-    levelName: "\u719F\u6089"
+    levelName: "\u597D\u53CB"
     eventType: 2
     upgradeEventID: 0
   - from: 51
     to: 75
-    levelName: "\u597D\u53CB"
+    levelName: "\u631A\u53CB"
     eventType: 2
     upgradeEventID: 0
   - from: 76
     to: 100
-    levelName: "\u631A\u53CB"
+    levelName: "\u66A7\u6627"
     eventType: 2
     upgradeEventID: 0
   minEvents: 2

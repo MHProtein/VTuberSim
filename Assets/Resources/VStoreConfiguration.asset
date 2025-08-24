@@ -30,8 +30,8 @@ MonoBehaviour:
   maxDiscount: 0.5
   cardRarityProbabilities:
   - 0.3
-  - 0.4
-  - 0.3
+  - 0.5
+  - 0.2
   cardRarityUpgradeProbabilities:
   - 0.3
   - 0.1

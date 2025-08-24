@@ -61,7 +61,7 @@ MonoBehaviour:
       so: {fileID: 11400000, guid: aba6c02083194394d8c00739e47ac72b, type: 2}
   - key: 
     value:
-    - name: Store
+    - name: "\u5546\u5E97"
       path: 
       so: {fileID: 11400000, guid: 7007008a95323e340a43046bbfb9d1f8, type: 2}
   - key: 
