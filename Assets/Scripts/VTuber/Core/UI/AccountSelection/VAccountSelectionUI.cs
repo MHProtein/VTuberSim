@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.UI;
 using VTuber.Consumable;
 using VTuber.Core.Foundation;
 using VTuber.Reincarnation;
@@ -19,12 +21,16 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
         [SerializeField] private List<VAccountSlot> accountSlots;
         [SerializeField] private List<VClickDetectionPanel> detectionPanels;
         [SerializeField] private VAccountSelectionCharacterUI characterUI;
-        
+        [SerializeField] private Button confirmButton;
+        [SerializeField] private Button returnButton;
+
         List<VAccount> _accounts;
         private List<VAccountUI> _selectedAccounts;
         private List<VAccountUI> _accountUIs;
         private VGameConfigSelection _gameConfigSelection;
 
+        private Action<List<VAccount>> _confirmAction;
+        private Action _returnAction;
         public bool IsFull() => _selectedAccounts.Count == accountSlots.Count;
 
         protected override void Awake()
@@ -34,6 +40,8 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             {
                 detectionPanel.onClick += UnselectAll;
             }
+            confirmButton.onClick.AddListener(Confirm);
+            returnButton.onClick.AddListener(Return);
         }
 
         public void ActivatePanels(bool value)
@@ -44,15 +52,27 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             }
         }
 
-        public void Initialize(VGameConfigSelection gameConfigSelection, List<VAccount> accounts)
+        public void Initialize(VGameConfigSelection gameConfigSelection, List<VAccount> accounts, Action<List<VAccount>> confirmAction, Action returnAction)
         {
+            _confirmAction = confirmAction;
+            _returnAction = returnAction;
             _gameConfigSelection = gameConfigSelection;
             _accounts = accounts;
             _selectedAccounts = new List<VAccountUI>();
             Spawn();
         }
 
-        public async void Spawn()
+        public void Confirm()
+        {
+            _confirmAction?.Invoke(_selectedAccounts.Select(accountUI => accountUI.Account).ToList());
+        }
+
+        public void Return()
+        {
+            _returnAction?.Invoke();
+        }
+
+    public async void Spawn()
         {
             try
             {
