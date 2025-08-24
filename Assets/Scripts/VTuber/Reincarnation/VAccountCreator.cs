@@ -137,14 +137,15 @@ namespace VTuber.Reincarnation
                 {
                     effectInfo = config.streamAttributeEffects[Random.Range(0, config.streamAttributeEffects.Count)];
                 }
-
+                
                 var param = effectInfo.levelInfos[requirement.level].levelParam;
                 
                 streamEffects.Add(new VEffectItem()
                 {
                     id = effectInfo.effect,
                     parameter = param,
-                    upgradedParameter = param
+                    upgradedParameter = param,
+                    level = requirement.level
                 });
                 
                 streamEffectInfos.Add(effectInfo);
@@ -169,7 +170,8 @@ namespace VTuber.Reincarnation
                     {
                         id = effectInfo.effect,
                         parameter = levelInfo.levelParam,
-                        upgradedParameter = levelInfo.levelParam
+                        upgradedParameter = levelInfo.levelParam,
+                        level = level
                     });;
                     streamEffectInfos.Add(effectInfo);
                     capacity += config.effectCapacities[level];
@@ -196,7 +198,8 @@ namespace VTuber.Reincarnation
                     {
                         id = effectInfo.effect,
                         parameter = param,
-                        upgradedParameter = param
+                        upgradedParameter = param,
+                        level = requirement.level
                     });;
                     capacity += config.effectCapacities[requirement.level];
                 }
@@ -238,7 +241,8 @@ namespace VTuber.Reincarnation
                 {
                     id = effectInfo.effect,
                     parameter = levelInfo.levelParam,
-                    upgradedParameter = levelInfo.levelParam
+                    upgradedParameter = levelInfo.levelParam,
+                    level = level
                 });;
                 capacity += cost;
 
@@ -246,7 +250,7 @@ namespace VTuber.Reincarnation
                     break;
             }
 
-            return otherEffects.Union(streamEffects).ToList();
+            return streamEffects.Union(otherEffects).ToList();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
@@ -8,9 +9,10 @@ using VTuber.Reincarnation;
 
 namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 {
-    public class VAccountUI : VUIBehaviour
+    public class VAccountUI : VUIBehaviour, IPointerClickHandler
     {
         [SerializeField] private Image icon;
+        [SerializeField] private Image background;
         [SerializeField] private TMP_Text name;
         [SerializeField] private List<Image> cardIcons;
 
@@ -18,12 +20,23 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
         [SerializeField] private int maxAttribtues;
         [SerializeField] private GameObject attributePrefab;
         [SerializeField] private Sprite ellipsisIcon;
+        
+        public VAccount Account => _account;
         private VAccount _account;
+        private VAccountSelectionMenu _menu;
         
         private List<VAttributeEffectUI> attributeEffectUIs;
+        private bool _selected;
+        private bool _selectable;
+        private bool _picked;
 
         public void Initialize(VAccountSelectionMenu menu, VAccount account)
         {
+            _picked = false;
+            _selectable = true;
+            _menu = menu;
+            _account = account;
+            
             for (int i = 0; i < cardIcons.Count; i++)
             {
                 cardIcons[i].gameObject.SetActive(false);
@@ -49,7 +62,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
                 if (attributeEffect != null)
                 {
                     var attributeEffectUI = Instantiate(attributePrefab, attributeGrids).GetComponent<VAttributeEffectUI>();
-                    attributeEffectUI.Initialize(effect);
+                    attributeEffectUI.Initialize(effect, account.EffectItems[i].level);
                     attributeEffectUIs.Add(attributeEffectUI);
                 }
             }
@@ -58,6 +71,63 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             {
                 attributeEffectUIs[attributeEffectUIs.Count - 1].SetEllipsis(ellipsisIcon);
             }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (_picked)
+            {
+                if (_selected)
+                {
+                    _selected = false;
+                    background.color = Color.white;
+                    _picked = false;
+                    _menu.UnpickAccount(this);
+                }
+                else
+                {
+                    _selected = true;
+                    background.color = Color.cyan;
+                    _menu.OnSelected(this);
+                }
+
+                return;
+            }
+            
+            if (!_selectable)
+                return;
+            if (_selected)
+            {
+                _selected = false;
+                background.color = Color.white;
+                _picked = true;
+                _menu.PickAccount(this);
+            }
+            else
+            {
+                _selected = true;
+                background.color = Color.cyan;
+                _menu.OnSelected(this);
+            }
+        }
+        
+        public void Deselect()
+        {
+            _selected = false;
+            
+            if (!_selectable)
+                return;
+            background.color = Color.white;
+        }
+        
+        public void SetSelectable(bool value)
+        {
+            if (_picked)
+                return;
+            _selectable = value;
+            if (!value)
+                _selected = false;
+            background.color = value ? Color.white : Color.grey;
         }
     }
 }

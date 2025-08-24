@@ -71,6 +71,7 @@ namespace VTuber.BattleSystem.Card
         public uint id;
         public string parameter;
         public string upgradedParameter;
+        public int level;
         
         public VEffect CreateEffect()
         {

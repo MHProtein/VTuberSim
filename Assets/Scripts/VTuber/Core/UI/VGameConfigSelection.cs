@@ -24,21 +24,23 @@ namespace VTuber.BattleSystem.Core.UI
         private List<VAccount> accounts = new List<VAccount>();
         private List<VAccount> currentAccount;
 
-        private VScriptConfiguration selectedScript;
-        private VCharacterConfiguration selectedCharacter;
+        public VScriptConfiguration SelectedScript => _selectedScript;
+        private VScriptConfiguration _selectedScript;
+        public VCharacterConfiguration SelectedCharacter => _selectedCharacter;
+        private VCharacterConfiguration _selectedCharacter;
         private Action _returnAction;
 
         public void Begin(List<VScriptConfiguration> scripts, List<VCharacterConfiguration> characters, List<VAccount> accounts)
         {
             _scriptSelectionMenu.Initialize(scripts, ScriptSelectionMenuConfirm, ScriptSelectionMenuReturn);
             _characterSelectionMenu.Initialize(characters, CharacterSelectionMenuConfirm, CharacterSelectionMenuReturn);
-            _accountSelectionMenu.Initialize(accounts);
+            _accountSelectionMenu.Initialize(this, accounts);
             _scriptSelectionMenu.Show();
         }
 
         public void ScriptSelectionMenuConfirm(VScriptConfiguration script)
         {
-            selectedScript = script;
+            _selectedScript = script;
             
             _scriptSelectionMenu.Hide();
             _characterSelectionMenu.Show();
@@ -51,7 +53,7 @@ namespace VTuber.BattleSystem.Core.UI
 
         public void CharacterSelectionMenuConfirm(VCharacterConfiguration character)
         {
-            selectedCharacter = character;
+            _selectedCharacter = character;
             _characterSelectionMenu.Hide();
             _accountSelectionMenu.Show();
         }
