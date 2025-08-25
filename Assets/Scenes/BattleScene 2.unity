@@ -4113,14 +4113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 3892113020135790413, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
-  _typeDropdown: {fileID: 1044496533}
-  _rarityDropdown: {fileID: 795083479}
-  _isUpgraded: {fileID: 60867243}
-  grid: {fileID: 1363430251}
-  previewCardUI: {fileID: 1265857130}
-  confirmButton: {fileID: 305012970}
-  returnButton: {fileID: 2050175117}
 --- !u!114 &111429749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32352,14 +32344,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 3892113020135790413, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
-  _typeDropdown: {fileID: 1490475436}
-  _rarityDropdown: {fileID: 1096213457}
-  _isUpgraded: {fileID: 2108050105}
-  grid: {fileID: 1386382053}
-  previewCardUI: {fileID: 0}
-  confirmButton: {fileID: 29175154}
-  returnButton: {fileID: 2121876727}
 --- !u!114 &777859379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57004,17 +56988,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
---- !u!114 &1265857130 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2116682789660745416, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
-  m_PrefabInstance: {fileID: 1265857129}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2078c8f7d4a41768f95171d0b4c6341, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1265857131 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8706350015193601529, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
@@ -69348,7 +69321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1567595154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71395,14 +71368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 3892113020135790413, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
-  _typeDropdown: {fileID: 959861389}
-  _rarityDropdown: {fileID: 406863109}
-  _isUpgraded: {fileID: 1055819675}
-  grid: {fileID: 1620840269}
-  previewCardUI: {fileID: 0}
-  confirmButton: {fileID: 527576599}
-  returnButton: {fileID: 1419351082}
 --- !u!1 &1610811950
 GameObject:
   m_ObjectHideFlags: 0

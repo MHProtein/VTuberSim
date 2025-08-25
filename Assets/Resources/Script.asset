@@ -38,12 +38,48 @@ MonoBehaviour:
   membershipCoefficient: 15
   popularityCoefficient:
   - from: 0
+    to: 5000
+    value: 0.7
+  - from: 5000
+    to: 10000
+    value: 0.4
+  - from: 10000
+    to: 15000
+    value: 0.2
+  - from: 15000
+    to: 20000
+    value: 0.1
+  - from: 20000
     to: -1
-    value: 1.2
+    value: 0.05
   scoreLevels:
   - low: 0
-    high: 200000000
+    high: 5000
+    name: F
+  - low: 5000
+    high: 10000
+    name: E
+  - low: 10000
+    high: 15000
+    name: D
+  - low: 15000
+    high: 20000
+    name: C
+  - low: 20000
+    high: 25000
+    name: B
+  - low: 25000
+    high: 30000
+    name: A
+  - low: 30000
+    high: 35000
     name: S
+  - low: 35000
+    high: 40000
+    name: SS
+  - low: 40000
+    high: 45000
+    name: SSS
   kpis:
   - EventType: 0
     RequiredAmount: 2
