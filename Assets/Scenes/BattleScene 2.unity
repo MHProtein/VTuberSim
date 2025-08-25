@@ -4247,6 +4247,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 0}
+  _typeDropdown: {fileID: 0}
+  _rarityDropdown: {fileID: 0}
+  _isUpgraded: {fileID: 0}
+  grid: {fileID: 0}
+  previewCardUI: {fileID: 0}
+  confirmButton: {fileID: 0}
+  returnButton: {fileID: 0}
 --- !u!114 &111429749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33435,6 +33443,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 0}
+  _typeDropdown: {fileID: 0}
+  _rarityDropdown: {fileID: 0}
+  _isUpgraded: {fileID: 0}
+  grid: {fileID: 0}
+  previewCardUI: {fileID: 0}
+  confirmButton: {fileID: 0}
+  returnButton: {fileID: 0}
 --- !u!114 &777859379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71233,7 +71249,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1567595154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73273,6 +73289,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardPrefab: {fileID: 0}
+  _typeDropdown: {fileID: 0}
+  _rarityDropdown: {fileID: 0}
+  _isUpgraded: {fileID: 0}
+  grid: {fileID: 0}
+  previewCardUI: {fileID: 0}
+  confirmButton: {fileID: 0}
+  returnButton: {fileID: 0}
 --- !u!1 &1610811950
 GameObject:
   m_ObjectHideFlags: 0
