@@ -20,7 +20,27 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: pressureEffects
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.UInt32, mscorlib],[System.String,
+        mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.UInt32,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   liveType: C
   staminaInitialValue: 50
   staminaMinValue: 0
@@ -98,7 +118,37 @@ MonoBehaviour:
   membershipCountInitialValue: 0
   membershipCountMinValue: 0
   membershipCountMaxValue: -1
-  membershipBuffs: []
+  membershipBuffs:
+  - from: 0
+    to: 10
+    value: 23
+  - from: 11
+    to: 20
+    value: 24
+  - from: 21
+    to: 30
+    value: 25
+  - from: 31
+    to: 40
+    value: 26
+  - from: 41
+    to: 50
+    value: 27
+  - from: 51
+    to: 60
+    value: 28
+  - from: 61
+    to: 70
+    value: 29
+  - from: 71
+    to: 80
+    value: 30
+  - from: 81
+    to: 90
+    value: 31
+  - from: 91
+    to: 100
+    value: 32
   membershipCountConfiguration: {fileID: 11400000, guid: 4cb43862c41bf544093f4dd19cc1a990, type: 2}
   followerToViewerRatioInitialValue: 1
   followerToViewerRatioMinValue: 0
@@ -112,11 +162,11 @@ MonoBehaviour:
   revenueShareRateMinValue: 0
   revenueShareRateMaxValue: 100
   revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
-  skipEventStaminaRecoveryInitialValue: 5
+  skipEventStaminaRecoveryInitialValue: 4
   skipEventStaminaRecoveryMinValue: 0
   skipEventStaminaRecoveryMaxValue: 100
   skipEventStaminaRecoveryConfiguration: {fileID: 11400000, guid: e5847616bad94904e90a2ca50333ea9c, type: 2}
-  skipTurnStaminaRecoveryInitialValue: 5
+  skipTurnStaminaRecoveryInitialValue: 2
   skipTurnStaminaRecoveryMinValue: 0
   skipTurnStaminaRecoveryMaxValue: 100
   skipTurnStaminaRecoveryConfiguration: {fileID: 11400000, guid: e2f2234de9cc3ea4bba5ddab3a15de3e, type: 2}

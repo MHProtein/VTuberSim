@@ -108,13 +108,97 @@ MonoBehaviour:
       Data: 1
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 8
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
       Data: S
+    - Name: $v
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: A
+    - Name: $v
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: B
+    - Name: $v
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: C
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: D
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: E
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SS
+    - Name: $v
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SSS
     - Name: $v
       Entry: 3
       Data: 4
@@ -149,7 +233,7 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 3
-      Data: 5
+      Data: 4
     - Name: 
       Entry: 8
       Data: 
@@ -161,7 +245,7 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 3
-      Data: 10
+      Data: 8
     - Name: 
       Entry: 8
       Data: 
@@ -173,7 +257,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 3
-      Data: 15
+      Data: 14
     - Name: 
       Entry: 8
       Data: 
@@ -288,78 +372,78 @@ MonoBehaviour:
       Data: 
   cardCapacities:
   - rarity: 1
-    capacity: 5
-    upgradeCapacity: 10
+    capacity: 4
+    upgradeCapacity: 6
   - rarity: 2
+    capacity: 6
+    upgradeCapacity: 9
+  - rarity: 3
     capacity: 10
     upgradeCapacity: 15
-  - rarity: 3
-    capacity: 15
-    upgradeCapacity: 20
   relicRewards:
   - relicID: 0
     eventID: 4
   streamAttributeEffects:
-  - effect: 0
+  - effect: 28
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 30
+    - levelParam: 60
+    - levelParam: 90
     ability: 0
-    isGainEfficiency: 0
-  - effect: 1
-    levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
-    ability: 1
-    isGainEfficiency: 0
-  - effect: 2
-    levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
-    ability: 2
     isGainEfficiency: 0
   - effect: 9
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 2
+    - levelParam: 4
+    - levelParam: 6
     ability: 0
     isGainEfficiency: 1
+  - effect: 29
+    levelInfos:
+    - levelParam: 30
+    - levelParam: 60
+    - levelParam: 90
+    ability: 1
+    isGainEfficiency: 0
   - effect: 10
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 2
+    - levelParam: 4
+    - levelParam: 6
     ability: 1
     isGainEfficiency: 1
+  - effect: 30
+    levelInfos:
+    - levelParam: 30
+    - levelParam: 60
+    - levelParam: 90
+    ability: 2
+    isGainEfficiency: 0
   - effect: 11
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 2
+    - levelParam: 4
+    - levelParam: 6
     ability: 2
     isGainEfficiency: 1
   attributeEffects:
   - effect: 15
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 100
+    - levelParam: 200
+    - levelParam: 400
   - effect: 16
     levelInfos:
+    - levelParam: 5
     - levelParam: 10
     - levelParam: 20
-    - levelParam: 40
   - effect: 5
     levelInfos:
     - levelParam: 100
     - levelParam: 200
-    - levelParam: 400
-  - effect: 4
+    - levelParam: 350
+  - effect: 44
     levelInfos:
-    - levelParam: -1
-    - levelParam: -2
-    - levelParam: -3
+    - levelParam: 3
+    - levelParam: 5
+    - levelParam: 8
