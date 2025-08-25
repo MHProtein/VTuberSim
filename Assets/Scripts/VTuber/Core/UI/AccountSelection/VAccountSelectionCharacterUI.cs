@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 {
@@ -62,7 +63,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             maxStaminaText.text = _character.AttributeManager.Attributes["CAStamina"].MaxValue.ToString();
             
             var pressure = _character.AttributeManager.Attributes["CAPressure"].Value;
-            initialPressureImage.sprite = VUIUtils.Instance.GetPressureIcon(pressure);
+            initialPressureImage.sprite = VUIUtils.Instance.GetPressureIcon(pressure).Value;
             initialMoneyText.text = _character.AttributeManager.Attributes["CAMoney"].Value.ToString();
             initialMembershipText.text = _character.AttributeManager.Attributes["CAMembershipCount"].Value.ToString();
             initialFollowerText.text = _character.AttributeManager.Attributes["CAFollowerCount"].Value.ToString();
