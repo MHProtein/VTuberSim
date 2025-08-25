@@ -22,7 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   id: 4
-  cooperatorName: "\u753B\u5E08\u9EBB\u9EBB"
+  cooperatorName: "\u753B\u5E08mama"
   description: "\u4E00\u4F4D\u5F53\u865A\u62DF\u4E3B\u64AD\u7684\u7F8E\u5C11\u5973\u753B\u5E08"
   icon: {fileID: 21300000, guid: c4f52f3e9cfd12b45b79692d0ac538a2, type: 3}
   baseCoopEvent: 28
