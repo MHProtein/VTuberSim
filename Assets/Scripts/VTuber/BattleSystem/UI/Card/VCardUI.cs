@@ -59,9 +59,8 @@ namespace VTuber.BattleSystem.UI
             nameImage.sprite = nameSprites[(int)card.Rarity];
             typeImage.sprite = typeSprites[(int)card.Rarity];
             
-            
-            if(card.Facade)
-                icon.sprite = card.Facade;
+            if(card.Icon)
+                icon.sprite = card.Icon;
 
             name.text = card.CardName;
             description.text = card.GetDescription();

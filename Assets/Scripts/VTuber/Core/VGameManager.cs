@@ -84,8 +84,9 @@ namespace VTuber.BattleSystem.Core
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
             
+            VResourcesManager.Instance.LoadSprites();
             loader.Load();
-            VResourcesManager.Instance.Load();
+            VResourcesManager.Instance.LoadDialogs();
             
             VSave save = VSaveSystem.Load();
             List<VAccount> accounts = new List<VAccount>();
@@ -105,14 +106,16 @@ namespace VTuber.BattleSystem.Core
         protected override void OnDisable()
         {
             base.OnDisable();
-            _stateMachine.OnDisable();
-            _character.OnDisable();
+            if(_stateMachine is not null)
+                _stateMachine.OnDisable();
+            if(_character is not null)
+                _character.OnDisable();
         }
 
         protected override void Start()
         {
             base.Start();
-            
+            _mainMenu.gameObject.SetActive(true);
         }
 
         public void InitializeGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)

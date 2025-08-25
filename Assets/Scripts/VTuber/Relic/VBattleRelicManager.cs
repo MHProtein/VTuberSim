@@ -28,12 +28,12 @@ namespace VTuber.Relic
 
             relics.Add(relic);
             relic.Initialize(idDistributor++, this);
-            relic.OnRelicAdded();
+            relic.OnRelicAddedInRaising();
         }
 
         public void Remove(VBattleRelic relic)
         {
-            relic.OnRelicRemoved();
+            relic.OnRelicRemovedInRaising();
             relics.Remove(relic);
         }
     }

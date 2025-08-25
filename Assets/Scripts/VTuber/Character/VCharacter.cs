@@ -19,6 +19,7 @@ namespace VTuber.Character
         public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
         private readonly VRaisingRelicManager _raisingRelicManager;
         
+        private uint _battleRelicIdDistributor = 0;
         private List<VBattleRelic> _battleRelics;
 
         public VCharacterRelicManager(VCharacter character)
@@ -36,7 +37,11 @@ namespace VTuber.Character
         {
             if (relic is VBattleRelic battleRelic)
             {
+                if (_battleRelics.Contains(battleRelic))
+                    return;
                 _battleRelics.Add(battleRelic);
+                battleRelic.Initialize(_battleRelicIdDistributor++);
+                battleRelic.OnRelicAddedInRaising();
             }
             else
             {

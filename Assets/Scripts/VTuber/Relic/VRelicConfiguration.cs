@@ -16,24 +16,24 @@ using VTuber.Core.Managers;
 namespace VTuber.Relic
 {
     public static class VRelicHeaderIndex
-    {
+    {  
         public const int Id = 0;
         public const int Name = 1;
         public const int Description = 2;
         public const int Type = 3;
         public const int Layer = 4;
         public const int WhenToApply = 5;
-        public const int Condition = 6;
-        public const int Effect1 = 7;
-        public const int E1Param = 8;
-        public const int E1UpgradedParam = 9;
-        public const int Effect2 = 10;
-        public const int E2Param = 11;
-        public const int E2UpgradedParam = 12;
-        public const int Effect3 = 13;
-        public const int E3Param = 14;
-        public const int E3UpgradedParam = 15;
-        public const int Icon = 16;
+        public const int Icon = 6;
+        public const int Condition = 7;
+        public const int Effect1 = 8;
+        public const int E1Param = 9;
+        public const int E1UpgradedParam = 10;
+        public const int Effect2 = 11;
+        public const int E2Param = 12;
+        public const int E2UpgradedParam = 13;
+        public const int Effect3 = 14;
+        public const int E3Param = 15;
+        public const int E3UpgradedParam = 16;
     }
     
     public class VBattleRelicConfiguration : VRelicConfiguration
@@ -87,7 +87,7 @@ namespace VTuber.Relic
         {
             effectItems = new List<VEffectItem>();
             
-            string conditionStr = row.Columns[VCardHeaderIndex.Condition].Value;
+            string conditionStr = row.Columns[VRelicHeaderIndex.Condition].Value;
             whenToApply = Enum.Parse<VRaisingEventKey>(row.Columns[VRelicHeaderIndex.WhenToApply].Value.Trim());
             if (!string.IsNullOrEmpty(conditionStr))
             {
@@ -132,6 +132,8 @@ namespace VTuber.Relic
             layer = Convert.ToInt32(row.Columns[VRelicHeaderIndex.Layer].Value);
             if (layer == -1)
                 isPermanent = true;
+            description = row.Columns[VRelicHeaderIndex.Description].Value;
+            icon = VResourcesManager.Instance.TryGetSprite(row.Columns[VRelicHeaderIndex.Icon].Value.Trim());
         }
 
         public virtual VRelic CreateRelic()

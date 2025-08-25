@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
@@ -18,6 +19,7 @@ namespace VTuber.Relic
         public VBattleEventKey whenToApply;
         public VEffectCondition condition;
         private uint _id;
+        private uint _battleID;
         
         public VBattleRelic(VBattleRelicConfiguration config) : base(config)
         {
@@ -27,29 +29,59 @@ namespace VTuber.Relic
             whenToApply = config.whenToApply;
         }
 
-        public override void OnRelicAdded()
+        public override void OnRelicAddedInRaising()
         {
-            base.OnRelicAdded();
+            base.OnRelicAddedInRaising();
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRelicAdded,
+                new Dictionary<string, object>()
+                {
+                    { "Id", _id },
+                    { "IsPermanent", IsPermanent },
+                    { "Relic", this },
+                    { "Value", Layer },
+                    { "RelicName", GetRelicName() },
+                    { "IsStreamRelic", true }
+                });
+        }
+
+        public override void OnRelicRemovedInRaising()
+        {
+            base.OnRelicRemovedInRaising();
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRelicRemoved,
+                new Dictionary<string, object>()
+                {
+                    { "Id", _id },
+                    { "IsPermanent", IsPermanent },
+                    { "Relic", this },
+                    { "Value", Layer },
+                    { "RelicName", GetRelicName() },
+                    { "IsStreamRelic", true }
+                });
+        }
+
+        public void OnRelicAddedInBattle()
+        {
             VBattleRootEventCenter.Instance.RegisterListener(whenToApply, OnEventRaised);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicAdded,
                 new Dictionary<string, object>()
                 {
                     { "Id", _id },
                     { "IsPermanent", IsPermanent },
+                    { "Relic", this },
                     { "Value", Layer },
                     { "RelicName", GetRelicName() }
                 });
         }
 
-        public override void OnRelicRemoved()
+        public void OnRelicRemovedInBattle()
         {
-            base.OnRelicRemoved();
             VBattleRootEventCenter.Instance.RemoveListener(whenToApply, OnEventRaised);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicRemoved,
                 new Dictionary<string, object>()
                 {
                     { "Id", _id },
                     { "IsPermanent", IsPermanent },
+                    { "Relic", this },
                     { "Value", Layer },
                     { "RelicName", GetRelicName() }
                 });
@@ -91,16 +123,20 @@ namespace VTuber.Relic
             }
         }
 
-        public void Initialize(uint id, VBattleRelicManager manager)
+        public void Initialize(uint id)
         {
             _id = id;
+        }
+        
+        public void Initialize(uint id, VBattleRelicManager manager)
+        {
+            _battleID = id;
             _manager = manager;
         }
     }
 
     public class VRaisingRelic : VRelic
     {
-        private uint _id;
         public List<VRaisingEffect> Effects => _effects;
         private List<VRaisingEffect> _effects;
         private VRaisingRelicManager _manager;
@@ -115,31 +151,35 @@ namespace VTuber.Relic
             whenToApply = config.whenToApply;
         }
         
-        public override void OnRelicAdded()
+        public override void OnRelicAddedInRaising()
         {
-            base.OnRelicAdded();
+            base.OnRelicAddedInRaising();
             VRaisingRootEventCenter.Instance.RegisterListener(whenToApply, OnEventRaised);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRelicAdded,
                 new Dictionary<string, object>()
                 {
                     { "Id", _id },
                     { "IsPermanent", IsPermanent },
+                    { "Relic", this },
                     { "Value", Layer },
-                    { "RelicName", GetRelicName() }
+                    { "RelicName", GetRelicName() },
+                    { "IsStreamRelic", false }
                 });
         }
 
-        public override void OnRelicRemoved()
+        public override void OnRelicRemovedInRaising()
         {
-            base.OnRelicRemoved();
+            base.OnRelicRemovedInRaising();
             VRaisingRootEventCenter.Instance.RemoveListener(whenToApply, OnEventRaised);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRelicRemoved,
                 new Dictionary<string, object>()
                 {
                     { "Id", _id },
                     { "IsPermanent", IsPermanent },
+                    { "Relic", this },
                     { "Value", Layer },
-                    { "RelicName", GetRelicName() }
+                    { "RelicName", GetRelicName() },
+                    { "IsStreamRelic", false }
                 });
         }
         
@@ -166,7 +206,8 @@ namespace VTuber.Relic
                             { "Id", _id },
                             { "IsPermanent", IsPermanent },
                             { "Value", Layer },
-                            { "RelicName", GetRelicName() }
+                            { "RelicName", GetRelicName() },
+                            { "IsStreamRelic", false }
                         });
                     
                     if (layer <= 0)
@@ -186,10 +227,13 @@ namespace VTuber.Relic
     
     public class VRelic
     {
+        public uint Id => _id;
+        protected uint _id;
+        public string Description => _configuration.description;
         private VRelicConfiguration _configuration;
         public uint ConfigId => _configuration.id;
         public string GetRelicName() => _configuration.relicName;
-
+        public Sprite Icon => _configuration.icon;
         public int Layer => layer;
         protected int layer;
 
@@ -204,12 +248,12 @@ namespace VTuber.Relic
                 _isPermanent = true;
         }
 
-        public virtual void OnRelicAdded()
+        public virtual void OnRelicAddedInRaising()
         {
             
         }
 
-        public virtual void OnRelicRemoved()
+        public virtual void OnRelicRemovedInRaising()
         {
             
         }
