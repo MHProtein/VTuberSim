@@ -21465,7 +21465,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  dev: 1
+  dev: 0
   cooperatorConfigurations:
   - {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}
   - {fileID: 11400000, guid: fb654f61535c5754d99938109dfde960, type: 2}
@@ -21484,6 +21484,7 @@ MonoBehaviour:
   eventSystemSystem: {fileID: 908957579}
   _storeUI: {fileID: 2014909021}
   storeConfiguration: {fileID: 11400000, guid: 7007008a95323e340a43046bbfb9d1f8, type: 2}
+  _mainMenu: {fileID: 0}
 --- !u!4 &507292049
 Transform:
   m_ObjectHideFlags: 0

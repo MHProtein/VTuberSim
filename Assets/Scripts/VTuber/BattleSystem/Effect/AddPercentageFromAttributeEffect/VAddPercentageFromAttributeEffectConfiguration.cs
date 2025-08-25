@@ -7,10 +7,11 @@ namespace VTuber.BattleSystem.Effect
         public string attributeNameToAdd;
         public string attributeNameToBeAdded;
 
-        public VAddPercentageFromAttributeEffectConfiguration(CellRange row, string attributeNameToAdd, string attributeNameToBeAdded) : base(row)
+        public VAddPercentageFromAttributeEffectConfiguration(CellRange row) : base(row)
         {
-            this.attributeNameToAdd = attributeNameToAdd;
-            this.attributeNameToBeAdded = attributeNameToBeAdded;
+            var parameters = row.Columns[VEffectHeaderIndex.Parameter].Value.Split(',');
+            attributeNameToAdd = parameters[0];
+            attributeNameToBeAdded = parameters[1];
         }
 
         public override VEffect CreateEffect(string parameter, string upgradedParameter)
