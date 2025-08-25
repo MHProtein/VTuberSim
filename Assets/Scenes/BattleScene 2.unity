@@ -3324,10 +3324,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "\u5927\u5B66\u53D7\u5BA4\u53CB\u5F71\u54CD\u68A6\u60F3\u8FDB\u5165\u865A\u62DF\u4E3B\u64AD\u884C\u4E1A\u7684\u6BD5\u4E1A\u5927\u5B66\u751F\uFF0C\u6CA1\u4EC0\u4E48\u7279\u522B\u7684\u80FD\u529B\u3002"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7ea5d369986dba74389f46649730c87e, type: 2}
+  m_sharedMaterial: {fileID: -6189769089334440164, guid: 7ea5d369986dba74389f46649730c87e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3351,8 +3351,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 54
+  m_fontSizeBase: 54
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4247,14 +4247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 0}
-  _typeDropdown: {fileID: 0}
-  _rarityDropdown: {fileID: 0}
-  _isUpgraded: {fileID: 0}
-  grid: {fileID: 0}
-  previewCardUI: {fileID: 0}
-  confirmButton: {fileID: 0}
-  returnButton: {fileID: 0}
 --- !u!114 &111429749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33443,14 +33435,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 0}
-  _typeDropdown: {fileID: 0}
-  _rarityDropdown: {fileID: 0}
-  _isUpgraded: {fileID: 0}
-  grid: {fileID: 0}
-  previewCardUI: {fileID: 0}
-  confirmButton: {fileID: 0}
-  returnButton: {fileID: 0}
 --- !u!114 &777859379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73289,14 +73273,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3d8d29c29c942dd82467da7d3fee8f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardPrefab: {fileID: 0}
-  _typeDropdown: {fileID: 0}
-  _rarityDropdown: {fileID: 0}
-  _isUpgraded: {fileID: 0}
-  grid: {fileID: 0}
-  previewCardUI: {fileID: 0}
-  confirmButton: {fileID: 0}
-  returnButton: {fileID: 0}
 --- !u!1 &1610811950
 GameObject:
   m_ObjectHideFlags: 0
@@ -81573,7 +81549,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 478, y: 630}
+  m_AnchoredPosition: {x: 240, y: 628}
   m_SizeDelta: {x: 800, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1806711023
@@ -81596,10 +81572,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MOMO
+  m_text: "\u96C5\u5C3E\u58A8\u6CABmormya"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7ea5d369986dba74389f46649730c87e, type: 2}
+  m_sharedMaterial: {fileID: -6189769089334440164, guid: 7ea5d369986dba74389f46649730c87e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
