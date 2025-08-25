@@ -88,26 +88,18 @@ namespace VTuber.BattleSystem.Core
             VResourcesManager.Instance.Load();
             
             VSave save = VSaveSystem.Load();
-            
+            List<VAccount> accounts = new List<VAccount>();
             if(save != null)
             {
+                accounts = save.LoadAccounts();
             }
             
-            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
-                battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character, _script, reincarnationConfiguration);
-            _stateMachine.RegisterState(new VScheduleCreationState());
-            _stateMachine.RegisterState(new VExecutionState());
-            _stateMachine.RegisterState(new VPauseState());
-            _stateMachine.RegisterState(new VScheduleModifyState());
-            _stateMachine.RegisterState(new VPhaseStartState());
+            _mainMenu.Initialize(scripts, characters, accounts, InitializeGame);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            _stateMachine.OnEnable();
-            _character.OnEnable();
         }
         
         protected override void OnDisable()
@@ -121,25 +113,9 @@ namespace VTuber.BattleSystem.Core
         {
             base.Start();
             
-            scheduleUI.Initialize(_character, _script);
-            List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
-            eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
-            eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
-            
-            scheduleCreator.InitializeCreator(eventConfigs);
-            
-            _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
-            
-            foreach (var configuration in cooperatorConfigurations)
-            {
-                _character.CooperatorManager.AddCooperator(configuration);
-            }
-            VStore store = new VStore(storeConfiguration);
-            store.EnterStore(character: _character);
-            
         }
 
-        public void InitializeGame(VScriptConfiguration scriptConfig, VCharacterConfiguration characterConfiguration, List<VAccount> accounts)
+        public void InitializeGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
         {
             _script = new VScript(scriptConfig);
             _character = new VCharacter(characterConfiguration);
@@ -162,6 +138,36 @@ namespace VTuber.BattleSystem.Core
 
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
+            
+            
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
+                battleRoot, battle, eventSystemRoot, eventSystemSystem,
+                _character, _script, reincarnationConfiguration);
+            _stateMachine.RegisterState(new VScheduleCreationState());
+            _stateMachine.RegisterState(new VExecutionState());
+            _stateMachine.RegisterState(new VPauseState());
+            _stateMachine.RegisterState(new VScheduleModifyState());
+            _stateMachine.RegisterState(new VPhaseStartState());
+            
+            _stateMachine.OnEnable();
+            _character.OnEnable();
+            
+            scheduleUI.Initialize(_character, _script);
+            List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
+            eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
+            eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
+            
+            scheduleCreator.InitializeCreator(eventConfigs);
+            
+            _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
+            
+            foreach (var configuration in cooperatorConfigurations)
+            {
+                _character.CooperatorManager.AddCooperator(configuration);
+            }
+            
+            _mainMenu.gameObject.SetActive(false);
+            
         }
         
         public void ModifySchedule()

@@ -21484,6 +21484,14 @@ MonoBehaviour:
   eventSystemSystem: {fileID: 908957579}
   _storeUI: {fileID: 2014909021}
   storeConfiguration: {fileID: 11400000, guid: 7007008a95323e340a43046bbfb9d1f8, type: 2}
+  _mainMenu: {fileID: 1567595154}
+  scripts:
+  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
+  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
+  characters:
+  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
+  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
+  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
 --- !u!4 &507292049
 Transform:
   m_ObjectHideFlags: 0
@@ -40332,6 +40340,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 5688799896201192151, guid: cd50b8af38f87f54f884443287f2634d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 903cc4ff0d356ca48bed1032d03963b5, type: 2}
     - target: {fileID: 5719797459428582276, guid: cd50b8af38f87f54f884443287f2634d, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -69365,19 +69377,6 @@ MonoBehaviour:
   _exitButton: {fileID: 552402446}
   gameConfigSelection: {fileID: 49957807}
   gameManager: {fileID: 507292048}
-  scripts:
-  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-  characters:
-  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
-  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
-  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
-  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
-  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
   reincarnationConfiguration: {fileID: 11400000, guid: 334dd11ca5f61594bbc19a30617cfd99, type: 2}
 --- !u!114 &1567595155
 MonoBehaviour:
