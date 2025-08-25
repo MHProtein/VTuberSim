@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
@@ -85,7 +86,15 @@ namespace VTuber.BattleSystem.Core
             
             _script = new VScript(scriptConfiguration);
             
+            VSave save = VSaveSystem.Load();
+            
             _character = new VCharacter(_characterConfiguration);
+            
+            if(save != null)
+            {
+                _character.LoadCharacterData(save);
+            }
+            
             _weeklySchedule = new VWeeklySchedule(_character);
 
             foreach (var config in cardConfigs)

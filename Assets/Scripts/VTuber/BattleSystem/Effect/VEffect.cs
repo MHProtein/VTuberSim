@@ -7,7 +7,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
 {
-    public class VEffect
+    public abstract class VEffect
     {
         protected VEffectConfiguration _configuration;
         public uint Id => _configuration.id;
@@ -99,9 +99,6 @@ namespace VTuber.BattleSystem.Effect
             VBattleRootEventCenter.Instance.RemoveListener(whenToApply, TryApply);
         }
 
-        public virtual string GetValue()
-        {
-            return "";
-        }
+        public abstract string GetValue();
     }
 }

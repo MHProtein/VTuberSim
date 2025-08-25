@@ -317,7 +317,7 @@ namespace VTuber.BattleSystem.Core
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
             int delta = (int)messagedict["Delta"];
-            if(delta == 0)
+            if(delta <= 0)
                 return;
             if (_isPhaseEnding)
             {

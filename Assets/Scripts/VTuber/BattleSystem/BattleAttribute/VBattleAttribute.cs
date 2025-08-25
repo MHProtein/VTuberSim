@@ -127,7 +127,8 @@ namespace VTuber.BattleSystem.BattleAttribute
     public class VBattleAttribute
     {
         public string AttributeName;
-        public int Value { get; protected set; }
+        public int Value { get; private set; }
+        public int HighestValue { get; private set; }
         protected int _minValue;
         protected int _maxValue;
         
@@ -160,17 +161,15 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             if (delta == 0)
                 return;
-            int temp = Value;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
             int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue ));
             if(delta < 0 && finalDelta > 0)
                 finalDelta = 0;
-            Value = Mathf.Clamp(finalDelta + Value,
-                _minValue, _maxValue);
+            SetValue(Mathf.Clamp(finalDelta + Value,
+                _minValue, _maxValue), isFromCard, shouldPlayTwice); ;
             VDebug.Log("添加 (变化量:" + delta + " + " + gainPointsModifierValue + ") * " + gainRateModifierValue + " = " + finalDelta
                        + " 到 " + AttributeName + "，新数值: " + Value);
-            SendEvent(Value, Value - temp, isFromCard, shouldPlayTwice);
         }
         
         public int PreviewAddTo(int delta)
@@ -197,13 +196,17 @@ namespace VTuber.BattleSystem.BattleAttribute
         protected virtual void InitSetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
         {
             Value = Mathf.Clamp(value, _minValue, _maxValue);
-            SendEvent(Value, value - Value, isFromCard, shouldPlayTwice);
+            HighestValue = Value;
+            SendEvent(Value, Value, isFromCard, shouldPlayTwice);
         }
         
         protected virtual void SetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
         {
+            var delta = value - Value;
             Value = Mathf.Clamp(value, _minValue, _maxValue);
-            SendEvent(Value, value - Value, isFromCard, shouldPlayTwice);
+            if (Value > HighestValue)
+                HighestValue = Value;
+            SendEvent(Value, delta, isFromCard, shouldPlayTwice);
         }
         
         public void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)  
