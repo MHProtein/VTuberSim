@@ -48,6 +48,7 @@ namespace VTuber.ScheduleSystem.UI
                 }));
                 i++;
             }
+            confirmButton.onClick.AddListener(Confirm);
         }
 
         public void Confirm()

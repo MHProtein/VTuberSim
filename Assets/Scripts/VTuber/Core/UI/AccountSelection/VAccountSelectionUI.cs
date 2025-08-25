@@ -179,5 +179,14 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             Tween.LocalPosition(accountUI.transform, unpickPosition.localPosition, 0.4f).OnComplete((() => accountUI.transform.SetParent(accountGrids)));
             Tween.Scale(accountUI.transform, Vector3.one, 0.4f);
         }
+
+        public void Clear()
+        {
+            foreach (var accountUI in _accountUIs)
+            {
+                Destroy(accountUI);
+            }
+            _accountUIs.Clear();
+        }
     }
 }

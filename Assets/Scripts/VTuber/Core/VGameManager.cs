@@ -56,6 +56,9 @@ namespace VTuber.BattleSystem.Core
 
         [Space(5)] [Header("MainMenu")] [SerializeField]
         private VMainMenu _mainMenu;
+        [SerializeField] private List<VScriptConfiguration> scripts;
+        [SerializeField] private List<VCharacterConfiguration> characters;
+        
         
         public VCharacter Character => _character;
         private VCharacter _character;
@@ -81,46 +84,22 @@ namespace VTuber.BattleSystem.Core
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
             
-            var cardConfigs = loader.Load();
+            loader.Load();
             VResourcesManager.Instance.Load();
             
-            _script = new VScript(scriptConfiguration);
-            
             VSave save = VSaveSystem.Load();
-            
-            _character = new VCharacter(_characterConfiguration);
-            
+            List<VAccount> accounts = new List<VAccount>();
             if(save != null)
             {
-                _character.LoadCharacterData(save);
+                accounts = save.LoadAccounts();
             }
             
-            _weeklySchedule = new VWeeklySchedule(_character);
-
-            foreach (var config in cardConfigs)
-            {
-                if((config.liveType == "F" || config.liveType == _character.LiveType))
-                    _character.CardLibrary.AddCard(config.CreateCard());
-            }
-
-            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
-            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
-            
-            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
-                battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character, _script, reincarnationConfiguration);
-            _stateMachine.RegisterState(new VScheduleCreationState());
-            _stateMachine.RegisterState(new VExecutionState());
-            _stateMachine.RegisterState(new VPauseState());
-            _stateMachine.RegisterState(new VScheduleModifyState());
-            _stateMachine.RegisterState(new VPhaseStartState());
+            _mainMenu.Initialize(scripts, characters, accounts, InitializeGame);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            _stateMachine.OnEnable();
-            _character.OnEnable();
         }
         
         protected override void OnDisable()
@@ -133,6 +112,45 @@ namespace VTuber.BattleSystem.Core
         protected override void Start()
         {
             base.Start();
+            
+        }
+
+        public void InitializeGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
+        {
+            _script = new VScript(scriptConfig);
+            _character = new VCharacter(characterConfiguration);
+
+            foreach (var account in accounts)
+            {
+                foreach (var effect in account.Effects)
+                {
+                    effect.ApplyEffect(_character, null);
+                }
+            }
+            
+            _weeklySchedule = new VWeeklySchedule(_character);
+
+            foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
+            {
+                if((config.liveType == "F" || config.liveType == _character.LiveType))
+                    _character.CardLibrary.AddCard(config.CreateCard());
+            }
+
+            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
+            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
+            
+            
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
+                battleRoot, battle, eventSystemRoot, eventSystemSystem,
+                _character, _script, reincarnationConfiguration);
+            _stateMachine.RegisterState(new VScheduleCreationState());
+            _stateMachine.RegisterState(new VExecutionState());
+            _stateMachine.RegisterState(new VPauseState());
+            _stateMachine.RegisterState(new VScheduleModifyState());
+            _stateMachine.RegisterState(new VPhaseStartState());
+            
+            _stateMachine.OnEnable();
+            _character.OnEnable();
             
             scheduleUI.Initialize(_character, _script);
             List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
@@ -147,8 +165,9 @@ namespace VTuber.BattleSystem.Core
             {
                 _character.CooperatorManager.AddCooperator(configuration);
             }
-            VStore store = new VStore(storeConfiguration);
-            store.EnterStore(character: _character);
+            
+            _mainMenu.gameObject.SetActive(false);
+            
         }
         
         public void ModifySchedule()

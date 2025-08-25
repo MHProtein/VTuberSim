@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
@@ -17,9 +17,13 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private VGameConfigSelection gameConfigSelection;
         [SerializeField] private VGameManager gameManager;
 
-        [SerializeField] private List<VScriptConfiguration> scripts;
-        [SerializeField] private List<VCharacterConfiguration> characters;
         [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
+        
+        private List<VScriptConfiguration> _scripts;
+        private List<VCharacterConfiguration> _characters;
+        private List<VAccount> _accounts;
+        private Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> _startGame;
+
         protected override void Awake()
         {
             base.Awake();
@@ -32,16 +36,18 @@ namespace VTuber.BattleSystem.Core.UI
         private void StartGame()
         {
             //VSave save = VSaveSystem.Load();
-
-            List<VAccount> accounts = new List<VAccount>();
-
-            for (int i = 0; i < 50; i++)
-            { 
-                accounts.Add(VAccountCreator.CreateAccount(reincarnationConfiguration, "S", gameManager.Character));
-                
-            }
             
-            gameConfigSelection.Begin(scripts, characters, accounts);
+            gameConfigSelection.Begin(_scripts, _characters, _accounts, _startGame);
+        }
+
+        public void Initialize(List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
+            List<VAccount> accounts, Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> startGame)
+        {
+            _scripts = scriptConfig;
+            _characters = characterConfiguration;
+            _startGame = startGame;
+            
+            _accounts = accounts;
         }
 
         private void OpenOptionMenu()

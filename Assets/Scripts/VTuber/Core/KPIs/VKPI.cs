@@ -38,6 +38,7 @@ namespace VTuber.BattleSystem.Core.KPIs
             RequiredAmount = requiredAmount;
             EventType = eventType;
             IsPermanent = isPermanent;
+            AbilityIndex = abilityIndex;
 
             if (eventType == VEventType.Stream)
             {

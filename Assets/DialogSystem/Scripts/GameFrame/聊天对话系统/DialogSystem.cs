@@ -193,7 +193,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             while (option.ifOption)
             {
                 options.Add(option);
-                option = currentDialog.contentDic[option.nextId];
+                option = currentDialog.contentDic[++currentDialog.index];
             }
 
             var showingOptions = new List<DialogContent>();

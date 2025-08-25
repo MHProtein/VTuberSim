@@ -22,6 +22,7 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private GameObject scriptUIPrefab;
         private float contentSpacing;
         private List<VScriptConfiguration> _scripts;
+        private List<VScriptSelectionUI> _scriptUIs;
         private int _index;
         public Action<VScriptConfiguration> _confirmAction;
         private Action _returnAction;
@@ -56,11 +57,13 @@ namespace VTuber.BattleSystem.Core.UI
             _index = 0;
             nextButton.interactable = _index < _scripts.Count - 1;
             prevButton.interactable = _index > 0;
+            _scriptUIs = new List<VScriptSelectionUI>();
             foreach (var script in scripts)
             {
                 var scriptUI = Instantiate(scriptUIPrefab, content.transform);
                 var scriptSelectionUI = scriptUI.GetComponent<VScriptSelectionUI>();
                 scriptSelectionUI.ShowScript(script);
+                _scriptUIs.Add(scriptSelectionUI);
             }
         }
 
@@ -110,6 +113,15 @@ namespace VTuber.BattleSystem.Core.UI
                 {
                     confirmButton.interactable = true;
                 });
+        }
+
+        public void Clear()
+        {
+            foreach (var ui in _scriptUIs)
+            {
+                Destroy(ui);
+            }
+            _scriptUIs.Clear();
         }
     }
 }

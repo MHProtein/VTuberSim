@@ -76,6 +76,7 @@ namespace VTuber.Dialogue.UI
         public void OpenSelectFrom3Menu(List<VCard> cards, Action<VCard> confirmAction, Action closeAction)
         {
             selectFrom3CardsMenu.gameObject.SetActive(true);
+            confirmAction += card => CloseSelectFrom3Menu();
             selectFrom3CardsMenu.Initialize(cards, confirmAction);
             _CloseSelectFrom3Menu = closeAction;
         }
