@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -193,6 +194,10 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             while (option.ifOption)
             {
                 options.Add(option);
+                if (option.nextId == -1)
+                {
+                    break;
+                }
                 option = currentDialog.contentDic[++currentDialog.index];
             }
 

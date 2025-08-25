@@ -67,12 +67,6 @@ namespace VTuber.BattleSystem.UI
             if(card.IsExhaust)
                 description.text += "\nExhaust.";
             typeText.text = card.CardType;
-            
-            // foreach (var effect in card.Effects)
-            // {
-            //     string effectDescription = effect.Name + ": " + effect.Description;
-            //     description.text += "\n" + effectDescription;
-            // }
 
             if (card.CostType == CostType.Buff)
             {
