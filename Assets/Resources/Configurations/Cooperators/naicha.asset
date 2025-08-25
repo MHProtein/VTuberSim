@@ -31,22 +31,22 @@ MonoBehaviour:
     to: 25
     levelName: "\u719F\u6089"
     eventType: 2
-    upgradeEventID: 24
+    upgradeEventID: 48
   - from: 26
     to: 50
     levelName: "\u597D\u53CB"
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 49
   - from: 51
     to: 75
     levelName: "\u631A\u53CB"
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 50
   - from: 76
     to: 100
     levelName: "\u66A7\u6627"
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 51
   minEvents: 2
   maxEvents: 4
   _dayTimeProbabilities:

@@ -23,7 +23,7 @@ MonoBehaviour:
     SerializationNodes: []
   id: 2
   cooperatorName: "#\u4E95\u4E95#"
-  description: SHORK
+  description: "\u5929\u4F7F\u4E00\u822C\u7684\u6B4C\u52BF\u4E3B\u64AD"
   icon: {fileID: 21300000, guid: 708d16a8a44591242bcbb025274738bf, type: 3}
   baseCoopEvent: 26
   _coopLevels:
@@ -31,22 +31,22 @@ MonoBehaviour:
     to: 20
     levelName: "\u719F\u6089"
     eventType: 2
-    upgradeEventID: 24
+    upgradeEventID: 40
   - from: 26
     to: 60
     levelName: "\u597D\u53CB"
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 41
   - from: 51
     to: 80
     levelName: "\u631A\u53CB"
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 42
   - from: 76
     to: 100
     levelName: "\u66A7\u6627"
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 43
   minEvents: 2
   maxEvents: 4
   _dayTimeProbabilities:
