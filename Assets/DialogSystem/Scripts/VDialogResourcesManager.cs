@@ -2,9 +2,16 @@
 using UnityEngine;
 using VTuber.Core.Foundation;
 
-public class VDialogResourcesManager : VSingleton<VDialogResourcesManager>
+public class VResourcesManager : VSingleton<VResourcesManager>
 {
     private Dictionary<string, Dialog> dialogDic = new Dictionary<string, Dialog>();
+    private Dictionary<string, Sprite> spriteDic = new Dictionary<string, Sprite>();
+    
+    public void Load()
+    {
+        LoadDialogs();
+        LoadSprites();
+    }
     
     public void LoadDialogs()
     {
@@ -15,12 +22,30 @@ public class VDialogResourcesManager : VSingleton<VDialogResourcesManager>
         }
     }
     
+    public void LoadSprites()
+    {
+        var assets = Resources.LoadAll<Sprite>("UI/Sprites");
+        foreach (var asset in assets)
+        {
+            spriteDic.Add(asset.name, asset);
+        }
+    }
+    
     public Dialog TryGetDialog(string name)
     {
         if(dialogDic.TryGetValue(name, out var dialog)) 
             return dialog;
         
         Debug.LogError($"没有找到对应的对话 {name}");
+        return null;
+    }
+    
+    public Sprite TryGetSprite(string name)
+    {
+        if(spriteDic.TryGetValue(name, out var sprite)) 
+            return sprite;
+        
+        Debug.LogError($"没有找到对应的Sprite {name}");
         return null;
     }
 }

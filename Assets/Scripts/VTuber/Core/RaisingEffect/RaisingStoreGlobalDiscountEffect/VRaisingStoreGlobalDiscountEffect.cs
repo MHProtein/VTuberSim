@@ -28,5 +28,9 @@ namespace VTuber.Core.RaisingEffect
         {
             _discount.Downgrade();
         }
+        public override string GetParameter()
+        {
+            return (_discount.Value * 100f).ToString("0.0");
+        }
     }
 }

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Live2D.expressionList
   m_EditorClassIdentifier: 
   CubismExpressionObjects:
-  - {fileID: 11400000, guid: e5c1c07f769ee184e9566dad5dc4502c, type: 2}
-  - {fileID: 11400000, guid: 963cbedef8fedce4d9f0d995e7b87da5, type: 2}
-  - {fileID: 11400000, guid: 6ad693edda7c7d641b2f23ea71d0d499, type: 2}
-  - {fileID: 11400000, guid: 269a5f7ed2d241b49913265c50a93338, type: 2}
-  - {fileID: 11400000, guid: d70851fceaba4ce4d8b393c7b9f2d693, type: 2}
-  - {fileID: 11400000, guid: a96f27aacfe39d242955eb01b6eb2fba, type: 2}
-  - {fileID: 11400000, guid: 9ec50986e2554fc49b9cc12c8144f87b, type: 2}
-  - {fileID: 11400000, guid: 990b7b2b47309f5428b5ed01c4be81b7, type: 2}
+  - {fileID: 11400000, guid: d241e3862db3a8844888aa77261ec612, type: 2}
+  - {fileID: 11400000, guid: 0375410bf43b7c14ebab23fed78aa930, type: 2}
+  - {fileID: 11400000, guid: e71300ba15780d647862bc64cdf82e64, type: 2}
+  - {fileID: 11400000, guid: 2249d03fba18ec54aa69a1eb22885afd, type: 2}
+  - {fileID: 11400000, guid: a8a524d9fbf313e4393cbfbf614f43ab, type: 2}
+  - {fileID: 11400000, guid: fcf109e10d0ee68449c851ba1157cc82, type: 2}
+  - {fileID: 11400000, guid: 045d78d5c7fcc304c89f4195f3ef3748, type: 2}
+  - {fileID: 11400000, guid: af2d5de5f6db07b42bdb7aa4e054891b, type: 2}

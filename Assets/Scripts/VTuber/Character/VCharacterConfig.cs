@@ -12,6 +12,8 @@ namespace VTuber.Character
     public class VCharacterConfiguration : VScriptableObject
     {
         public string liveType;
+        public uint initialCardId;
+        public uint initialRelicId;
         #region AttributeConfigs
         
         [HorizontalGroup("StaminaGroup", Gap = 10)]
@@ -53,6 +55,11 @@ namespace VTuber.Character
         [DictionaryDrawerSettings(KeyLabel = "BuffID", ValueLabel = "Layer",
             DisplayMode = DictionaryDisplayOptions.OneLine)]
         public List<int> pressureBuffs = new List<int>();
+        
+        [LabelText("压力效果表")]
+        [DictionaryDrawerSettings(KeyLabel = "效果ID", ValueLabel = "参数",
+            DisplayMode = DictionaryDisplayOptions.OneLine)]
+        public Dictionary<uint, string> pressureEffects = new ();
         
         [PropertySpace(10)]
         [LabelText("Config文件")]

@@ -5,8 +5,6 @@ using UnityEngine;
 
 namespace VTuber.BattleSystem.UI
 {
-
-
     public class VAnimationQueue
     {
         private readonly Queue<Sequence> queue = new Queue<Sequence>();
@@ -25,6 +23,13 @@ namespace VTuber.BattleSystem.UI
             queue.Dequeue();
         }
 
+        public void Clear()
+        {
+            while (queue.Count > 0)
+            {
+                queue.Dequeue().Stop();
+            }
+        }
     }
 
 }

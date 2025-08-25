@@ -9,6 +9,7 @@ namespace VTuber.BattleSystem.Effect
 {
     public class VAddParamsBuffPercentageEffect : VEffect, IVValuePreview
     {        
+        public string AttributeName => "BAParameter";
         private readonly uint _buffID;
         private readonly VUpgradableValue<float> _percentage;
         

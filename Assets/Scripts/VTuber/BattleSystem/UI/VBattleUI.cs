@@ -42,8 +42,8 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
-        [SerializeField]
-        private Transform battleUI;
+        [SerializeField] private Transform battleUIWrapper;
+        [SerializeField] private Transform backgroundUIWrapper;
         [SerializeField] private GameObject battlePausePanel;
         
         
@@ -104,7 +104,8 @@ namespace VTuber.BattleSystem.UI
         
         public Tween SetBattleUIScale(float scale)
         {
-            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
+            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
+            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
         }
         
         public void Selected(bool value)
@@ -201,7 +202,8 @@ namespace VTuber.BattleSystem.UI
         {
             battlePausePanel.SetActive(paused);
             float scale = paused ? 0.75f : 1.0f;
-            return Tween.Scale(battleUI, Vector3.one * scale, 0.3f);
+            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
+            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
         }
         
         protected override void Awake()
@@ -246,7 +248,7 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
+            //SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
         }
 
         private void OnBattlePause(Dictionary<string, object> messagedict)
@@ -463,7 +465,8 @@ namespace VTuber.BattleSystem.UI
                 handCardUI.battleUI = this;
                 handCardUI.card = card;
                 card.setPlayable = handCardUI.SetCardPlayable;
-                card.setPopularityPreview = handCardUI.SetPopularityPreview;
+                card.popularityPreviewAction = handCardUI.SetPopularityPreview;
+                card.shieldPreviewAction = handCardUI.SetShieldPreview;
                 handCardUI.cardUI = cardUI;
                 handCardUI.ToHandSlot(position, rotation, Vector3.one, drawCardToSlotTime);
                 SetHandCardPositionRotation(handCardUI, position.x);

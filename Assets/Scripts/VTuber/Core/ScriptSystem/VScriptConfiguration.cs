@@ -4,6 +4,8 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
+using VTuber.Character.Attributes;
+using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 
 namespace VTuber.Core.ScriptSystem
@@ -17,10 +19,13 @@ namespace VTuber.Core.ScriptSystem
         public int high;
         [HorizontalGroup("ScoreLevel", Gap = 10)]
         public string name;
-        
     }
     public class VScriptConfiguration : VScriptableObject
     {
+        public string scriptName;
+        public string description;
+        public Sprite icon;
+        public List<VCooperatorConfiguration> coops;
         [Header("基础卡牌")] 
         [SerializeField] public List<uint> cardIDs;
         
@@ -36,6 +41,7 @@ namespace VTuber.Core.ScriptSystem
         [SerializeField] [LabelText("总面板系数")] public float abilityCoefficient = 1f;
         [SerializeField] [LabelText("粉丝数系数")] public float followerCoefficient = 1f;
         [SerializeField] [LabelText("最高舰长数系数")]public float membershipCoefficient = 1f;
+        [SerializeField] [LabelText("直播热度系数")]public List<VRangeValueMap<float>> popularityCoefficient;
 
         [SerializeField] public List<VScoreLevel> scoreLevels;
         [SerializeField] public List<VKPIInfo> kpis;

@@ -317,7 +317,7 @@ namespace VTuber.BattleSystem.Core
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
             int delta = (int)messagedict["Delta"];
-            if(delta == 0)
+            if(delta <= 0)
                 return;
             if (_isPhaseEnding)
             {
@@ -343,6 +343,17 @@ namespace VTuber.BattleSystem.Core
                 float multiplier = _multiplierManager is null ? 1f : _multiplierManager.Multiplier.Value / 100f;
                 int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
                 return _isPhaseEnding ? (int)(parameterDelta * multiplier) : parameterDelta;
+            }
+
+            return 0;
+        }
+        
+        public int PreviewShieldChange(int delta)
+        {
+            if (_battleAttributes.TryGetValue("BAShield", out var parameter))
+            {
+                int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
+                return parameterDelta;
             }
 
             return 0;

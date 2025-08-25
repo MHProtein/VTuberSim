@@ -18,12 +18,15 @@ namespace VTuber.Core.RaisingEffect
 
         public override void Upgrade()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void DownGrade()
         {
-            throw new System.NotImplementedException();
+        }
+
+        public override string GetParameter()
+        {
+            return "";
         }
     }
 }

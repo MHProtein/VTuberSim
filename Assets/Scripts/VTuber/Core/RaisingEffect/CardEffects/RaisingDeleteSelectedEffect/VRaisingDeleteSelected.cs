@@ -39,5 +39,9 @@ namespace VTuber.Core.RaisingEffect
             _character.CardLibrary.RemoveCard(selectedCard);
             
         }
+        public override string GetParameter()
+        {
+            return "";
+        }
     }
 }

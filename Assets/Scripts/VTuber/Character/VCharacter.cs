@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
 using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
@@ -74,6 +76,9 @@ namespace VTuber.Character
         public List<VScheduleEvent> eventsCompleted;
         public List<VScheduleEvent> succeededStreams;
         
+        public List<VAccount> Accounts => _accounts;
+        private List<VAccount> _accounts = new List<VAccount>();
+        
         public VCharacter(VCharacterConfiguration characterConfig)
         {
             _cardLibrary = new VCardLibrary();
@@ -82,16 +87,37 @@ namespace VTuber.Character
             InitializeAttributes(characterConfig);
             _characterRelicManager = new VCharacterRelicManager(this);
             eventsCompleted = new List<VScheduleEvent>();
+            succeededStreams = new List<VScheduleEvent>();
+            _accounts = new List<VAccount>();
         }
         
         public void OnEnable()
         {
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnDayEnd, OnDayEnd);
         }
 
         public void OnDisable()
         {
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnDayEnd, OnDayEnd);
+        }
+        
+        public void AddAccount(VAccount account)
+        {
+            _accounts.Add(account);
+            VSave save = new VSave(this);
+            VSaveSystem.Save(save);
+        }
+        
+        public void LoadCharacterData(VSave save)
+        {
+            _accounts = save.LoadAccounts();
+        }
+        
+        private void OnDayEnd(Dictionary<string, object> messagedict)
+        {
+            AttributeManager.ApplyPressureEffects(this);
         }
         
         void InitializeAttributes(VCharacterConfiguration characterConfig)
@@ -109,6 +135,7 @@ namespace VTuber.Character
             AttributeManager.AddAttribute("CAPressure",
                 new VPressureAttribute(characterConfig.pressureConfiguration, 
                     characterConfig.pressureBuffs,
+                    characterConfig.pressureEffects,
                     characterConfig.pressureInitialValue, 
                     VRaisingEventKey.OnPressureChanged, 
                     characterConfig.pressureMaxValue == -1 ? int.MaxValue : characterConfig.pressureMaxValue,
@@ -224,14 +251,14 @@ namespace VTuber.Character
                     characterConfig.skipEventStaminaRecoveryInitialValue, 
                     VRaisingEventKey.OnSkipEventStaminaChanged, 
                     characterConfig.skipEventStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipEventStaminaRecoveryMaxValue,
-                    characterConfig.skipEventStaminaRecoveryMinValue, true));
+                    characterConfig.skipEventStaminaRecoveryMinValue, false, false));
             
             AttributeManager.AddAttribute("CASkipTurnStaminaRecovery",
                 new VCharacterAttribute(characterConfig.skipTurnStaminaRecoveryConfiguration,
                     characterConfig.skipTurnStaminaRecoveryInitialValue, 
                     VRaisingEventKey.OnSkipTurnStaminaChanged, 
                     characterConfig.skipTurnStaminaRecoveryMaxValue == -1 ? int.MaxValue : characterConfig.skipTurnStaminaRecoveryMaxValue,
-                    characterConfig.skipTurnStaminaRecoveryMinValue, true));
+                    characterConfig.skipTurnStaminaRecoveryMinValue, false));
         }
         
         public bool TestCost(VScheduleEvent e)

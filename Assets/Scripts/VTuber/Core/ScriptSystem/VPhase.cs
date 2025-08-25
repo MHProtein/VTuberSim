@@ -126,7 +126,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
 
         public VScheduleEvent GetStartEvent()
         {
-            var e = VResourcesManager.Instance.CreateDialogueEventByID(startEventID);
+            var e = VDataManager.Instance.CreateDialogueEventByID(startEventID);
             e.Phase = this;
             return e;
         }
@@ -141,7 +141,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
             List<VStreamEvent> events = new List<VStreamEvent>();
             foreach (var id in endEventIDs)
             {
-                var e = VResourcesManager.Instance.CreateStreamEventByID(id);
+                var e = VDataManager.Instance.CreateStreamEventByID(id);
                 e.Phase = this;
                 events.Add(e);
             }

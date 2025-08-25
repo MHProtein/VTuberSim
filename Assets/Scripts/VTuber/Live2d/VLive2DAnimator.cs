@@ -1,36 +1,53 @@
-﻿using Live2D.Cubism.Framework.Json;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework.Motion;
+using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
+using Random = UnityEngine.Random;
 
-public class MotionImporter : MonoBehaviour
+public class VLive2DAnimator : VMonoBehaviour
 {
-    // 在 Inspector 里拖入 .motion3.json (TextAsset)
-    public TextAsset motionJson;
+    [SerializeField] private Animator animator;
+    [SerializeField] private Dictionary<VBattleEventKey, List<string>> motionClips;
+    private Dictionary<VBattleEventKey, List<int>> motionClipHashes;
+    private Dictionary<VBattleEventKey, FunctionWithADict> motionClipPlayers;
 
-    private AnimationClip motionClip;
-
-    void Start()
+    protected override void Awake()
     {
-        if (motionJson == null)
+        motionClipHashes = new Dictionary<VBattleEventKey, List<int>>();
+        foreach (var clip in motionClips)
         {
-            Debug.LogError("❌ 请在 Inspector 拖入 .motion3.json 文件！");
-            return;
+            motionClipHashes.Add(clip.Key, clip.Value.ConvertAll(Animator.StringToHash));
         }
-
-        // 读取 motion3.json 并生成 AnimationClip
-        var motion3 = CubismMotion3Json.LoadFrom(motionJson, false);
-        motionClip = motion3.ToAnimationClip();
-
-        if (motionClip != null)
+        
+        motionClipPlayers = new Dictionary<VBattleEventKey, FunctionWithADict>();
+        foreach (var clip in motionClipHashes)
         {
-            Debug.Log("✅ Motion3.json 已转换为 Unity AnimationClip: " + motionClip.name);
-
-            // 你可以把它直接加到 Animator 或者 CubismMotionController 来播放
-            var controller = GetComponent<Live2D.Cubism.Framework.Motion.CubismMotionController>();
-            if (controller != null)
+            motionClipPlayers.Add(clip.Key, (objects =>
             {
-                controller.PlayAnimation(motionClip, isLoop: false);
-            }
+                var hash = clip.Value[Random.Range(0, motionClipHashes[clip.Key].Count)];
+                animator.Play(hash);
+                VDebug.Log("播放动画: " + hash);
+            }));
+        }
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        foreach (var motionClipHash in motionClipPlayers)
+        {
+            VBattleRootEventCenter.Instance.RegisterListener(motionClipHash.Key, motionClipHash.Value);
+        }
+    }
+
+    protected override void OnDisable()
+    {
+        foreach (var motionClipHash in motionClipPlayers)
+        {
+            VBattleRootEventCenter.Instance.RemoveListener(motionClipHash.Key, motionClipHash.Value);
         }
     }
 }

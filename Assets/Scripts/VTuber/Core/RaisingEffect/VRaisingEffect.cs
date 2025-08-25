@@ -10,13 +10,20 @@ namespace VTuber.Core.RaisingEffect
         
         public uint Id => _configuration.id;
         public string Name => _configuration.effectName;
-        public string Description => _configuration.description;
-        
+        public string Description
+        {
+            get
+            {
+                string description = _configuration.description;
+
+                return description.Replace("X", GetParameter());
+            }
+        }
+
         public VRaisingEffect(VRaisingEffectConfiguration configuration)
         {
             _configuration = configuration;
         }
-
 
         public abstract void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict);
 
@@ -24,5 +31,6 @@ namespace VTuber.Core.RaisingEffect
 
         public abstract void DownGrade();
 
+        public abstract string GetParameter();
     }
 }

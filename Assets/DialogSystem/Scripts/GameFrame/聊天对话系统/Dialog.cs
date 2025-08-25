@@ -71,11 +71,21 @@ public class Dialog
         {
             return null;
         }
-        var effectID = uint.Parse(parameters[0].Trim());
+        uint effectID = 0;
+        try
+        {
+
+            effectID = uint.Parse(parameters[0].Trim());
+
+        }
+        catch(Exception e)
+        {
+            VDebug.Log("");
+        };
         string effectParameter = "";
         if (parameters.Length == 2)
             effectParameter = parameters[1];
-        return VResourcesManager.Instance.CreateRaisingEffectByID(effectID, effectParameter, effectParameter);
+        return VDataManager.Instance.CreateRaisingEffectByID(effectID, effectParameter, effectParameter);
     }
 
     public void InitDialog()

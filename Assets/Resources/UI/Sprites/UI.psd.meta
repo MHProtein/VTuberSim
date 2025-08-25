@@ -496,7 +496,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_2
+      name: Icon_Money
       rect:
         serializedVersion: 2
         x: 1083
@@ -504,7 +504,7 @@ TextureImporter:
         width: 281
         height: 283
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -536,6 +536,7 @@ TextureImporter:
       Icon_Happy: -481025564
       Icon_Horny: 2126007384
       Icon_Membership: -969642166
+      Icon_Money: 795351739
       Icon_Pause: -468953493
       Icon_Revenue: 399481705
       Icon_Shield: 129526763
@@ -546,7 +547,6 @@ TextureImporter:
       UI_13: -525010816
       UI_14: -369240892
       UI_16: -526003056
-      UI_2: 795351739
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

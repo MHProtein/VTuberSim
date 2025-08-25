@@ -10,6 +10,8 @@ namespace VTuber.BattleSystem.Effect
         public string AttributeName => _configuration.attributeName;
         private VUpgradableValue<int> _addValue;
         VAddEffectConfiguration _configuration;
+        private string _attribute;
+
         public VAddEffect(VAddEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             _configuration = configuration;

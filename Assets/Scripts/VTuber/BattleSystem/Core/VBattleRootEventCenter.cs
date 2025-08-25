@@ -41,6 +41,7 @@ namespace VTuber.BattleSystem.Core
         OnSkipTurnStaminaChange,
         
         OnParameterPopularityModifierChanged,
+        OnShieldModifierChanged,
         
         OnBuffAdded,
         OnBuffRemoved,

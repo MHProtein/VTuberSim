@@ -43,6 +43,10 @@ namespace VTuber.Core.RaisingEffect
             _character.CardLibrary.ReplaceCard(cardToReplace, selectedCard);
             
         }
+        public override string GetParameter()
+        {
+            return "";
+        }
         
     }
 }

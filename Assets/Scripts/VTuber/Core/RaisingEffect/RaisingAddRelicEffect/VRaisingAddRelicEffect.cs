@@ -8,17 +8,15 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingAddRelicEffect : VRaisingEffect
     {
         private uint _relicId;
-        public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration) : base(configuration)
+        public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
-            _relicId = configuration.relicId;
+            _relicId = uint.Parse(parameter);
         }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CharacterRelicManager.AddRelic
-                (VResourcesManager.Instance.CreateRelicByID(_relicId));
-            
-            VDebug.Log("hihi");
+                (VDataManager.Instance.CreateRelicByID(_relicId));
         }
 
         public override void Upgrade()
@@ -27,6 +25,11 @@ namespace VTuber.Core.RaisingEffect
 
         public override void DownGrade()
         {
+        }
+
+        public override string GetParameter()
+        {
+            return VDataManager.Instance.Relics[_relicId].relicName;
         }
     }
 }

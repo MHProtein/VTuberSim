@@ -22,7 +22,7 @@
 //         protected override void Awake()
 //         {
 //             base.Awake();
-//             VResourcesLoader loader = new VResourcesLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
+//             VDataLoader loader = new VDataLoader(@"Assets\Resources\Configurations\NewCards.xlsx");
 //         }
 //
 //         protected override void OnEnable()

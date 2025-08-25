@@ -37,7 +37,7 @@ namespace VTuber.Consumable
                 var effectIDStr = row.Columns[i].Value;
                 if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                effects.Add(VResourcesManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr.Trim()),
+                effects.Add(VDataManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr.Trim()),
                     row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
             }
         }
@@ -59,7 +59,7 @@ namespace VTuber.Consumable
                 var effectIDStr = row.Columns[i].Value;
                 if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                effects.Add(VResourcesManager.Instance.CreateEffectByID(Convert.ToUInt32(effectIDStr.Trim()),
+                effects.Add(VDataManager.Instance.CreateEffectByID(Convert.ToUInt32(effectIDStr.Trim()),
                     row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
             }
         }

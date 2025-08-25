@@ -22,38 +22,33 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   id: 3
-  cooperatorName: "yuzu\u8336"
+  cooperatorName: "\u67DA\u5B50\u8336"
   description: "\u61D2\u60F0\u59D0\u7CFB\u6E38\u620F\u52BF\u4E3B\u64AD"
   icon: {fileID: 21300000, guid: 0e7a7746ebd06e54da5794e8f64f38c1, type: 3}
   baseCoopEvent: 27
   _coopLevels:
   - from: 0
-    to: 20
+    to: 25
     levelName: "\u8BA4\u8BC6"
     eventType: 2
     upgradeEventID: 24
-  - from: 21
-    to: 40
-    levelName: "\u4E86\u89E3"
-    eventType: 2
-    upgradeEventID: 24
-  - from: 41
-    to: 60
+  - from: 26
+    to: 50
     levelName: "\u719F\u6089"
     eventType: 2
     upgradeEventID: 0
-  - from: 61
-    to: 80
+  - from: 51
+    to: 75
     levelName: "\u597D\u53CB"
     eventType: 2
     upgradeEventID: 0
-  - from: 81
+  - from: 76
     to: 100
     levelName: "\u631A\u53CB"
     eventType: 2
     upgradeEventID: 0
   minEvents: 2
-  maxEvents: 3
+  maxEvents: 4
   _dayTimeProbabilities:
   - 0.33
   - 0.33

@@ -69,6 +69,7 @@ namespace VTuber.BattleSystem.UI
         private bool shouldWaitSetPlayable = false;
         
         private VAnimationQueue _popularityPreviewAnimationQueue;
+        private VAnimationQueue _shieldPreviewAnimationQueue;
 
         public VHandCardUI(Vector3 targetRotation, bool isScaling)
         {
@@ -86,6 +87,7 @@ namespace VTuber.BattleSystem.UI
             message = new Dictionary<string, object>();
             PrimeTweenConfig.warnEndValueEqualsCurrent = false;
             _popularityPreviewAnimationQueue = new VAnimationQueue();
+            _shieldPreviewAnimationQueue = new VAnimationQueue();
         }
         
         public void ToHandSlot(Vector3 position, Vector3 rotation, Vector3 scale, float smoothTime)
@@ -99,12 +101,14 @@ namespace VTuber.BattleSystem.UI
         public void MoveToDiscardPile(Vector3 targetPosition, float smoothTime)
         {
             SetInteractive(false);
-            Tween.Position(transform, targetPosition, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
+            Tween.Position(transform, targetPosition, smoothTime, Ease.Linear);
             Tween.Scale(transform, Vector3.zero, smoothTime, Ease.Linear).OnComplete(DestroyGameObject);
         }
 
         private void DestroyGameObject()
         {
+            _popularityPreviewAnimationQueue.Clear();
+            _shieldPreviewAnimationQueue.Clear();
             if(gameObject)
                 Destroy(gameObject);
         }
@@ -314,11 +318,12 @@ namespace VTuber.BattleSystem.UI
                 if(VBattle.Instance.BattleAttributeManager.MultiplierManager is not null)
                     cardUI.SetPopularityImage(VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
                 cardUI.popularityText.text = originalValue.ToString();
+    
                 _popularityPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.popularityText.transform, Vector3.one, 0.5f).OnComplete(
                     () =>
                     {
                         cardUI.popularityText.text = finalValue.ToString();
-                        if(finalValue != originalValue)
+                        if (finalValue != originalValue)
                             Tween.PunchScale(cardUI.popularityText.transform, Vector3.one * 1.3f, 0.3f);
                     }));
             }
@@ -328,6 +333,37 @@ namespace VTuber.BattleSystem.UI
                     return;
                 cardUI.popularityText.text = finalValue.ToString();
                 _popularityPreviewAnimationQueue.Enqueue(Tween.PunchScale(cardUI.popularityText.transform, Vector3.one * 1.3f, 0.3f));
+            }
+        }
+
+        public void SetShieldPreview(bool isFirstTime, int originalValue, int finalValue)
+        {
+            if (originalValue == 0)
+            {
+                cardUI.shieldText.gameObject.SetActive(false);
+                cardUI.shieldImage.gameObject.SetActive(false);
+                return;
+            }
+
+            if (isFirstTime)
+            {
+                cardUI.shieldText.gameObject.SetActive(true);
+                cardUI.shieldImage.gameObject.SetActive(true);
+                cardUI.shieldText.text = originalValue.ToString();
+                _shieldPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.shieldText.transform, Vector3.one, 0.5f).OnComplete(
+                    () =>
+                    {
+                        cardUI.shieldText.text = finalValue.ToString();
+                        if(finalValue != originalValue)
+                            Tween.PunchScale(cardUI.shieldText.transform, Vector3.one * 1.3f, 0.3f);
+                    }));
+            }
+            else
+            {
+                if (cardUI.shieldText.text == finalValue.ToString())
+                    return;
+                cardUI.shieldText.text = finalValue.ToString();
+                _shieldPreviewAnimationQueue.Enqueue(Tween.PunchScale(cardUI.shieldText.transform, Vector3.one * 1.3f, 0.3f));
             }
         }
     }

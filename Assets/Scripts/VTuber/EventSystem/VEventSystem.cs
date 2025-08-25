@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
 using VTuber.Character;
+using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -55,8 +57,10 @@ namespace VTuber.EventSystem
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventSelectUpgradeCard, OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectConsumableFrom3, OnBeginSelectConsumableFrom3);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnShowAddConsumable, OnShowAddConsumable);
         }
-        
+
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -66,6 +70,31 @@ namespace VTuber.EventSystem
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventSelectUpgradeCard, OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnShowAddConsumable, OnShowAddConsumable);
+        }
+        
+        private void OnShowAddConsumable(Dictionary<string, object> messagedict)
+        {
+            VEventSystemUI.Instance.OpenAddConsumableUI(_character,
+                messagedict["Consumable"] as VConsumable,
+                messagedict["Action"] as Action<VConsumable>, 
+                () =>
+                {
+                    dialogueSystem.SetPaused(false);
+                });
+            dialogueSystem.SetPaused(true);
+        }
+        
+        private void OnBeginSelectConsumableFrom3(Dictionary<string, object> messagedict)
+        {
+            VEventSystemUI.Instance.OpenSelectFrom3ConsumablesMenu(_character,
+                messagedict["Consumables"] as List<VConsumable>,
+                messagedict["Action"] as Action<VConsumable>, 
+                () =>
+                {
+                    dialogueSystem.SetPaused(false);
+                });
+            dialogueSystem.SetPaused(true);
         }
         
         private void OnRequestEnterStore(Dictionary<string, object> messagedict)
@@ -80,7 +109,7 @@ namespace VTuber.EventSystem
         
         private void OnEventSelectUpgradeCard(Dictionary<string, object> messagedict)
         {
-            VEventSystemUI.Instance.OpenUpgradeCard(_character.CardLibrary.GetCards(),
+            VEventSystemUI.Instance.OpenUpgradeCard(_character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(),
                 () =>
                 {
                     dialogueSystem.SetPaused(false);

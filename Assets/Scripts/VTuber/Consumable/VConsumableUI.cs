@@ -9,33 +9,40 @@ namespace VTuber.Consumable
     public class VConsumableUI : VUIBehaviour
     {
         [SerializeField] private Image icon;
-        private VConsumable _consumable;
+        [SerializeField] public Image background;
+        [SerializeField] public GameObject descriptionObject;
+        [SerializeField] public TMP_Text description;
+        [SerializeField] public TMP_Text consumableName;
+        public VConsumable consumable;
         
         public void SetConsumable(VConsumable consumable)
         {
-            _consumable = consumable;
+            this.consumable = consumable;
             //icon.sprite = consumable.Icon;
+            
+            consumableName.text = consumable.Name;
+            description.text = consumable.Description;
         }
 
         public bool HasConsumable()
         {
-            return _consumable is not null;
+            return consumable is not null;
         }
         
         public void UseConsumable()
         {
-            _consumable.ApplyEffect();
+            consumable.ApplyEffect();
         }
 
         public void DiscardConsumable()
         {
-            _consumable.Discard();
-            _consumable = null;
+            consumable.Discard();
+            consumable = null;
         }
 
         public bool CanUse()
         {
-            return _consumable.CanApply();
+            return consumable.CanApply();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace VTuber.CoopSystem.UI
             pfp.sprite = cooperator.configuration.Icon;
             cooperatorName.text = cooperator.configuration.Name;
             coopLevel.text = cooperator.CurrentCoopLevel.levelName;
-            SetBaseCoopEvent(VResourcesManager.Instance.GetAllEventConfigurations()
+            SetBaseCoopEvent(VDataManager.Instance.GetAllEventConfigurations()
                 .Find(x => x.id == cooperator.configuration.BaseCoopEvent));
         }
 

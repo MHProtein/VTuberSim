@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
+using VTuber.Character;
+using VTuber.Consumable;
 using VTuber.Core.Foundation;
 using VTuber.EventSystem.UI;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.ConsumableViewUI;
 
 namespace VTuber.Dialogue.UI
 {
@@ -16,11 +19,14 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private GameObject endingOptionPrefab;
         [SerializeField] private VCardViewSelectionUI selectCardUI;
         [SerializeField] private VCardViewSelectionUI upgradeCardUI;
-        [SerializeField] private VSelectFrom3Menu selectFrom3Menu;
+        [FormerlySerializedAs("selectFrom3Menu")] [SerializeField] private VSelectFrom3CardsMenu selectFrom3CardsMenu;
+        [SerializeField] private VSelectFrom3ConsumablesMenu selectFrom3ConsumablesMenu;
+        [SerializeField] private VAddConsumableUI addConsumableUI;
         
         private Action _closePhaseEndingSelectionMenuAction;
         private Action _closeCardLibrary;
         private Action _CloseSelectFrom3Menu;
+        private Action _CloseSelectFrom3ConsumablesMenu;
 
         protected override void Awake()
         {
@@ -35,11 +41,22 @@ namespace VTuber.Dialogue.UI
             phaseEndingSelectionMenu.Initialize(endingOptionPrefab, endings);
             _closePhaseEndingSelectionMenuAction = confirmAction;
         }
-
-        public void ClosePhaseEndingSelectionMenu()
+        
+        public void OpenAddConsumableUI(VCharacter character, VConsumable consumable, Action<VConsumable> confirmAction, Action closeAction)
         {
-            phaseEndingSelectionMenu.gameObject.SetActive(false);
-            _closePhaseEndingSelectionMenuAction?.Invoke();
+            addConsumableUI.gameObject.SetActive(true);
+            addConsumableUI.Initialize(character, consumable, confirmAction);
+            _closeCardLibrary = closeAction;
+            addConsumableUI.confirmButton.onClick.AddListener(CloseAddConsumableUI);
+            addConsumableUI.returnButton.onClick.AddListener(CloseAddConsumableUI);
+        }
+        
+        public void OpenSelectFrom3ConsumablesMenu(VCharacter character, List<VConsumable> consumables, Action<VConsumable> confirmAction, Action closeAction)
+        {
+            selectFrom3ConsumablesMenu.gameObject.SetActive(true);
+            selectFrom3ConsumablesMenu.Initialize(character, consumables, confirmAction);
+            _CloseSelectFrom3ConsumablesMenu = closeAction;
+            selectFrom3ConsumablesMenu.confirmButton.onClick.AddListener(CloseSelectFrom3ConsumablesMenu);
         }
         
         public void OpenSelectCard(List<VCard> cards, bool select, Action<VCard> confirmAction, Action closeAction)
@@ -56,6 +73,25 @@ namespace VTuber.Dialogue.UI
             _closeCardLibrary = closeAction;
         }
         
+        public void OpenSelectFrom3Menu(List<VCard> cards, Action<VCard> confirmAction, Action closeAction)
+        {
+            selectFrom3CardsMenu.gameObject.SetActive(true);
+            selectFrom3CardsMenu.Initialize(cards, confirmAction);
+            _CloseSelectFrom3Menu = closeAction;
+        }
+        
+        public void CloseAddConsumableUI()
+        {
+            addConsumableUI.gameObject.SetActive(false);
+            _closeCardLibrary?.Invoke();
+        }
+        
+        public void ClosePhaseEndingSelectionMenu()
+        {
+            phaseEndingSelectionMenu.gameObject.SetActive(false);
+            _closePhaseEndingSelectionMenuAction?.Invoke();
+        }
+        
         public void CloseCardLibrary()
         {
             selectCardUI.gameObject.SetActive(false);
@@ -68,16 +104,15 @@ namespace VTuber.Dialogue.UI
             _closeCardLibrary?.Invoke();
         }
         
-        public void OpenSelectFrom3Menu(List<VCard> cards, Action<VCard> confirmAction, Action closeAction)
+        public void CloseSelectFrom3ConsumablesMenu()
         {
-            selectFrom3Menu.gameObject.SetActive(true);
-            selectFrom3Menu.Initialize(cards, confirmAction);
-            _CloseSelectFrom3Menu = closeAction;
+            selectFrom3ConsumablesMenu.gameObject.SetActive(false);
+            _CloseSelectFrom3ConsumablesMenu?.Invoke();
         }
         
         public void CloseSelectFrom3Menu()
         {
-            selectFrom3Menu.gameObject.SetActive(false);
+            selectFrom3CardsMenu.gameObject.SetActive(false);
             _CloseSelectFrom3Menu?.Invoke();
         }
     }

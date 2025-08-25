@@ -84,7 +84,7 @@ namespace VTuber.ScheduleSystem.UI
         public void Initialize(VScheduleEvent e, VScheduleSlot slot)
         {
             _event = e;
-            icon.sprite = VRaisingUI.Instance.GetIcon(e.Icon);
+            icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
             background.color = e.BackgroundColor;
             _bgColor = background.color;
             icon.transform.localScale = Vector3.zero;
@@ -101,7 +101,7 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
             _event = e;
-            icon.sprite = VRaisingUI.Instance.GetIcon(e.Icon);
+            icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
             background.color = e.BackgroundColor;
             _bgColor = background.color;
             _initPosition = initPosition;

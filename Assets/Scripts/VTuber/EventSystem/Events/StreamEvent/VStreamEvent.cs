@@ -47,13 +47,13 @@ namespace VTuber.ScheduleSystem.Events
             {
                 if (SuccessEvent == -1)
                     return;
-                e = VResourcesManager.Instance.CreateDialogueEventByID((uint)SuccessEvent);
+                e = VDataManager.Instance.CreateDialogueEventByID((uint)SuccessEvent);
             }
             else
             {
                 if (FailureEvent == -1)
                     return;
-                e = VResourcesManager.Instance.CreateDialogueEventByID((uint)FailureEvent);
+                e = VDataManager.Instance.CreateDialogueEventByID((uint)FailureEvent);
             }
 
             e.isFollowUp = true;

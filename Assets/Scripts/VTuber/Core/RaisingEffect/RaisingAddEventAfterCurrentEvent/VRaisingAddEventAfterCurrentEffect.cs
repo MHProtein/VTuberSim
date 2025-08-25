@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
+using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.Core.RaisingEffect
@@ -31,6 +32,16 @@ namespace VTuber.Core.RaisingEffect
 
         public override void DownGrade()
         {
+            
+        }
+        
+        public override string GetParameter()
+        {
+            if (_eventType == VEventType.Stream)
+            {
+                return VDataManager.Instance.GetStreamEventConfigurationByID(eventId).eventName;
+            }
+            return VDataManager.Instance.GetDialogueEventConfigurationByID(eventId).eventName;
         }
     }
 }

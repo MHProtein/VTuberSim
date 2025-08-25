@@ -68,7 +68,7 @@ namespace VTuber.Core.ScriptSystem
             return null;
         }
 
-        public VScoreResult CalculateScore(VCharacter character)
+        public VScoreResult CalculateScore(VCharacter character, int popularity)
         {
             int singingAbility = character.AttributeManager.Attributes["CASingingAbility"].Value;
             int gamingAbility = character.AttributeManager.Attributes["CAGamingAbility"].Value;
@@ -76,9 +76,19 @@ namespace VTuber.Core.ScriptSystem
             int follower = character.AttributeManager.Attributes["CAFollowerCount"].Value;
             int highestMembershipCount = (character.AttributeManager.Attributes["CAMembershipCount"] as VMembershipCountAttribute).highestValue;
 
+            float popularityCoefficient = 0;
+            foreach (var range in _configuration.popularityCoefficient)
+            {
+                if (range.IsInRange(popularity))
+                {
+                    popularityCoefficient = range.value;
+                }
+            }
+            
             int score = Mathf.CeilToInt((singingAbility + gamingAbility + chattingAbility) * _configuration.abilityCoefficient +
                         follower * _configuration.followerCoefficient
-                        + highestMembershipCount * _configuration.membershipCoefficient);
+                        + highestMembershipCount * _configuration.membershipCoefficient
+                        + popularityCoefficient * popularity);
             
             var scoreLevel = _configuration.scoreLevels.Find(level => score >= level.low && score <= level.high);
             VDebug.Log("歌力： " + singingAbility);
@@ -86,6 +96,7 @@ namespace VTuber.Core.ScriptSystem
             VDebug.Log("杂谈力： " + chattingAbility);
             VDebug.Log("关注人数： " + follower);
             VDebug.Log("最高舰长数： " + highestMembershipCount);
+            VDebug.Log("直播热度： " + popularity);
             VDebug.Log("分数： " + score);
             VDebug.Log("等级： " + scoreLevel);
             return new VScoreResult
