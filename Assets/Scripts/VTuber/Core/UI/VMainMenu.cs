@@ -17,9 +17,12 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private VGameConfigSelection gameConfigSelection;
         [SerializeField] private VGameManager gameManager;
 
-        [SerializeField] private List<VScriptConfiguration> scripts;
-        [SerializeField] private List<VCharacterConfiguration> characters;
         [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
+        
+        private List<VScriptConfiguration> _scripts;
+        private List<VCharacterConfiguration> _characters;
+        private List<VAccount> _accounts;
+
         protected override void Awake()
         {
             base.Awake();
@@ -41,7 +44,15 @@ namespace VTuber.BattleSystem.Core.UI
                 
             }
             
-            gameConfigSelection.Begin(scripts, characters, accounts);
+            gameConfigSelection.Begin(_scripts, _characters, accounts);
+        }
+
+        public void Initialize(List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
+            List<VAccount> accounts)
+        {
+            _scripts = scriptConfig;
+            _characters = characterConfiguration;
+            _accounts = accounts;
         }
 
         private void OpenOptionMenu()

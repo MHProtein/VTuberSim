@@ -56,6 +56,9 @@ namespace VTuber.BattleSystem.Core
 
         [Space(5)] [Header("MainMenu")] [SerializeField]
         private VMainMenu _mainMenu;
+        [SerializeField] private List<VScriptConfiguration> scripts;
+        [SerializeField] private List<VCharacterConfiguration> characters;
+        
         
         public VCharacter Character => _character;
         private VCharacter _character;
@@ -81,30 +84,14 @@ namespace VTuber.BattleSystem.Core
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
             
-            var cardConfigs = loader.Load();
+            loader.Load();
             VResourcesManager.Instance.Load();
-            
-            _script = new VScript(scriptConfiguration);
             
             VSave save = VSaveSystem.Load();
             
-            _character = new VCharacter(_characterConfiguration);
-            
             if(save != null)
             {
-                _character.LoadCharacterData(save);
             }
-            
-            _weeklySchedule = new VWeeklySchedule(_character);
-
-            foreach (var config in cardConfigs)
-            {
-                if((config.liveType == "F" || config.liveType == _character.LiveType))
-                    _character.CardLibrary.AddCard(config.CreateCard());
-            }
-
-            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
-            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
@@ -149,6 +136,32 @@ namespace VTuber.BattleSystem.Core
             }
             VStore store = new VStore(storeConfiguration);
             store.EnterStore(character: _character);
+            
+        }
+
+        public void InitializeGame(VScriptConfiguration scriptConfig, VCharacterConfiguration characterConfiguration, List<VAccount> accounts)
+        {
+            _script = new VScript(scriptConfig);
+            _character = new VCharacter(characterConfiguration);
+
+            foreach (var account in accounts)
+            {
+                foreach (var effect in account.Effects)
+                {
+                    effect.ApplyEffect(_character, null);
+                }
+            }
+            
+            _weeklySchedule = new VWeeklySchedule(_character);
+
+            foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
+            {
+                if((config.liveType == "F" || config.liveType == _character.LiveType))
+                    _character.CardLibrary.AddCard(config.CreateCard());
+            }
+
+            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
+            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
         }
         
         public void ModifySchedule()
