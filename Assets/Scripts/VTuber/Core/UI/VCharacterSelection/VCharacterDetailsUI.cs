@@ -46,7 +46,8 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
         
         public string GetPercentage(int value, int decimalPlaces)
         {
-            return (value / 100f).ToString($"F{decimalPlaces}");
+            var v = (value - 100f);
+            return v.ToString();
         }
         
         public void SetDetails(VCharacterConfiguration characterConfig)
@@ -67,9 +68,9 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
             singingAbilityValueText.text = characterConfig.singingAbilityInitialValue.ToString();
             gamingAbilityText.text = characterConfig.gamingAbilityInitialValue.ToString();
             chattingAbilityText.text = characterConfig.chattingAbilityInitialValue.ToString();
-            singingAbilityGainEfficiencyText.text = GetPercentage(characterConfig.singingAbilityGainEfficiencyInitialValue, 1);
-            gamingAbilityGainEfficiencyText.text = GetPercentage(characterConfig.gamingAbilityGainEfficiencyInitialValue, 1);
-            chattingAbilityGainEfficiencyText.text = GetPercentage(characterConfig.chattingAbilityGainEfficiencyInitialValue, 1);
+            singingAbilityGainEfficiencyText.text = "+" + GetPercentage(characterConfig.singingAbilityGainEfficiencyInitialValue, 1) + "%";
+            gamingAbilityGainEfficiencyText.text = "+" + GetPercentage(characterConfig.gamingAbilityGainEfficiencyInitialValue, 1) + "%";
+            chattingAbilityGainEfficiencyText.text = "+" + GetPercentage(characterConfig.chattingAbilityGainEfficiencyInitialValue, 1) + "%";
         }
     }
 }

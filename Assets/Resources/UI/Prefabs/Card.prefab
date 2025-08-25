@@ -655,7 +655,7 @@ MonoBehaviour:
   gamingColor: {r: 0.29411766, g: 0.34509805, b: 1, a: 1}
   chattingColor: {r: 1, g: 0.69803923, b: 0, a: 1}
   background: {fileID: 5418081280116854409}
-  icon: {fileID: 492576563808840563}
+  icon: {fileID: 1854077458432877146}
   descriptionImage: {fileID: 9155409624160156474}
   nameImage: {fileID: 1597430812531397724}
   typeImage: {fileID: 2039202165101778702}

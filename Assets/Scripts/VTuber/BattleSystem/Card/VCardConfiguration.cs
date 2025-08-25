@@ -10,6 +10,7 @@ using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.StringToEnum;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Card
 {   
@@ -40,30 +41,31 @@ namespace VTuber.BattleSystem.Card
         public const int LiveType = 6;
         public const int Tag1 = 7;
         public const int Tag2 = 8;
-        public const int CostType = 9;
-        public const int CostBuffID = 10;
-        public const int Cost = 11;
-        public const int UpgradedCost = 12;
-        public const int IsExhaust = 13;
-        public const int NotRepeatable = 14;
-        public const int Priority = 15;
-        public const int Condition = 16;
-        public const int Effect1 = 17;
-        public const int E1Param = 18;
-        public const int E1UpgradedParam = 19;
-        public const int Effect2 = 20;
-        public const int E2Param = 21;
-        public const int E2UpgradedParam = 22;
-        public const int Effect3 = 23;
-        public const int E3Param = 24;
-        public const int E3UpgradedParam = 25;
-        public const int Effect4 = 26;
-        public const int E4Param = 27;
-        public const int E4UpgradedParam = 28;
-        public const int NewEffect1 = 29;
-        public const int NE1Param = 30;
-        public const int NewEffect2 = 31;
-        public const int NE2Param = 32;
+        public const int Icon = 9;
+        public const int CostType = 10;
+        public const int CostBuffID = 11;
+        public const int Cost = 12;
+        public const int UpgradedCost = 13;
+        public const int IsExhaust = 14;
+        public const int NotRepeatable = 15;
+        public const int Priority = 16;
+        public const int Condition = 17;
+        public const int Effect1 = 18;
+        public const int E1Param = 19;
+        public const int E1UpgradedParam = 20;
+        public const int Effect2 = 21;
+        public const int E2Param = 22;
+        public const int E2UpgradedParam = 23;
+        public const int Effect3 = 24;
+        public const int E3Param = 25;
+        public const int E3UpgradedParam = 26;
+        public const int Effect4 = 27;
+        public const int E4Param = 28;
+        public const int E4UpgradedParam = 29;
+        public const int NewEffect1 = 30;
+        public const int NE1Param = 31;
+        public const int NewEffect2 = 32;
+        public const int NE2Param = 33;
     }
 
     public struct VEffectItem
@@ -104,6 +106,7 @@ namespace VTuber.BattleSystem.Card
     {
         public uint id;
         public string cardName;
+        public Sprite icon;
 
         public string description;
         public string upgradeDescription;
@@ -147,7 +150,7 @@ namespace VTuber.BattleSystem.Card
                 upgradeDescription = descriptions[1];
             rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value.Trim());
             cardType = row.Columns[VCardHeaderIndex.Type].Value.Trim();
-            
+            icon = VResourcesManager.Instance.TryGetSprite(row.Columns[VCardHeaderIndex.Icon].Value.Trim());
             liveType = row.Columns[VCardHeaderIndex.LiveType].Value.Trim();
             tags = new List<string>
             {

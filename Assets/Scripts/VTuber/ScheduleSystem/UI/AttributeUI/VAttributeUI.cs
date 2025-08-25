@@ -34,7 +34,7 @@ namespace VTuber.ScheduleSystem.UI
         protected virtual void OnValueChanged(Dictionary<string, object> messagedict)
         {
             int delta = messagedict["Delta"] as int ? ?? 0;
-            text.text = $"{messagedict["NewValue"] as int? ?? 0}";
+            text.text = $"{name}{messagedict["NewValue"] as int? ?? 0}";
             if (isPercentage)
                 text.text += "%";
             if(delta == 0)

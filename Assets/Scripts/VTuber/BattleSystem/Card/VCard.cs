@@ -32,9 +32,7 @@ namespace VTuber.BattleSystem.Card
         
         public int Cost => _cost.Value;
         private VUpgradableValue<int> _cost;
-        
-        public Sprite Background => _configuration.background;
-        public Sprite Facade => _configuration.facade;
+        public Sprite Icon => _configuration.icon;
         
         private List<VEffect> _effects;
         private List<VEffect> _newEffects;
