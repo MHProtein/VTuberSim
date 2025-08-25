@@ -11,6 +11,8 @@ namespace VTuber.Character
 {
     public class VCharacterConfiguration : VScriptableObject
     {
+        public string characterName;
+        [TextArea] public string description;
         public string liveType;
         public uint initialCardId;
         public uint initialRelicId;

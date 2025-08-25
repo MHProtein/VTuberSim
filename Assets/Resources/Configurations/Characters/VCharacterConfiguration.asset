@@ -42,8 +42,8 @@ MonoBehaviour:
       Entry: 8
       Data: 
   liveType: C
-  initialCardId: 0
-  initialRelicId: 0
+  initialCardId: 67
+  initialRelicId: 11
   staminaInitialValue: 50
   staminaMinValue: 0
   staminaMaxValue: 50
