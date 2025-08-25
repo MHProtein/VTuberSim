@@ -22190,7 +22190,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  dev: 1
+  dev: 0
   cooperatorConfigurations:
   - {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}
   - {fileID: 11400000, guid: fb654f61535c5754d99938109dfde960, type: 2}
