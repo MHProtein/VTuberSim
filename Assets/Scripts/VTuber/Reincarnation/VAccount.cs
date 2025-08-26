@@ -8,6 +8,7 @@ namespace VTuber.Reincarnation
 {
     public class VAccount
     {
+        public string accountName;
         public List<VCard> Cards => cards;
         public List<VRelic> Relics => relics;
         public List<VRaisingEffect> Effects => effects;
