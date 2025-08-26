@@ -135,7 +135,7 @@ namespace VTuber.BattleSystem.Core
 
             foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
             {
-                if((config.liveType == "F" || config.liveType == _character.LiveType))
+                if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
                     _character.CardLibrary.AddCard(config.CreateCard());
             }
 
