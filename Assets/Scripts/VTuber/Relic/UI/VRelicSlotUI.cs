@@ -29,10 +29,10 @@ namespace VTuber.Relic.UI
             _isAdditional = isAdditional;
         }
         
-        public void Initialize(VRelic relic)
+        public void Initialize(VRelic relic, bool displayValue)
         {
             _relic = relic;
-            if (!relic.IsPermanent)
+            if (displayValue && !relic.IsPermanent)
             {
                 layer.gameObject.SetActive(true);
                 UpdateValue();

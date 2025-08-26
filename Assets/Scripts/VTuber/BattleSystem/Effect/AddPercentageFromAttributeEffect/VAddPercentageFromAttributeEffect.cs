@@ -14,6 +14,7 @@ namespace VTuber.BattleSystem.Effect
         {
             attributeNameToAdd = configuration.attributeNameToAdd;
             attributeNameToBeAdded = configuration.attributeNameToBeAdded;
+            _percentage = new VUpgradableValue<float>(float.Parse(parameter), float.Parse(upgradedParameter));
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)

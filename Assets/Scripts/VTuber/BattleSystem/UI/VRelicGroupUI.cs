@@ -2,47 +2,42 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
+using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Relic;
+using VTuber.Relic.UI;
 
 namespace VTuber.BattleSystem.UI
 {
-    class VRelicUI
-    {
-        public TMP_Text text;
-        public GameObject gameObject;
-        public bool isPermanent;
-        public string relicName;
-
-        public VRelicUI(GameObject go, bool isPermanent, string relicName)
-        {
-            gameObject = go;
-            text = go.GetComponentInChildren<TMP_Text>();
-            this.isPermanent = isPermanent;
-            this.relicName = relicName;
-        }
-
-        public void SetText(int value)
-        {
-            if (isPermanent)
-                text.text = $"{relicName}";
-            else
-                text.text = $"{relicName} 层: {value}";
-        }
-    }
-
     public class VRelicGroupUI : VUIBehaviour
     {
-        [SerializeField] private GameObject buffCellPrefab;
+        [SerializeField] private int displayingRelicCount = 5;
+        [SerializeField] private GameObject subMenuButtonPrefab;
+        [SerializeField] private GameObject displayingRelicSlotPrefab;
+        [SerializeField] private GameObject submenuRelicSlotPrefab;
+        [SerializeField] private Transform displayGroup;
+        [SerializeField] private Transform submenuRelicGroup;
+        [SerializeField] private GameObject submenuObject;
+        [SerializeField] private VClickDetectionPanel detectionPanel;
 
-        private Dictionary<uint, VRelicUI> _buffUIs;
+        private List<VRelicSlotUI> displayingRelics;
+        private List<VRelicSlotUI> hiddenRelics;
+
         private readonly VAnimationQueue _animationQueue = new VAnimationQueue();
 
+        private GameObject _ellipsisObject;
+        private bool _isSubmenuOpen = false;
+        
         protected override void Awake()
         {
             base.Awake();
-            _buffUIs = new Dictionary<uint, VRelicUI>();
+            displayingRelics = new List<VRelicSlotUI>();
+            hiddenRelics = new List<VRelicSlotUI>();
+            detectionPanel.onClick = OnEllipsisButtonClicked;
         }
 
         protected override void OnEnable()
@@ -62,59 +57,118 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicValueChanged, OnBuffValueUpdated);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
+
+        public void OnEllipsisButtonClicked()
+        {
+            _isSubmenuOpen = !_isSubmenuOpen;
+            submenuObject.SetActive(_isSubmenuOpen);
+            detectionPanel.gameObject.SetActive(_isSubmenuOpen);
+        }
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            foreach (var ui in _buffUIs)
+            foreach (var ui in hiddenRelics)
             {
-                Destroy(ui.Value.gameObject);
+                Destroy(ui.gameObject);
+            }    
+            foreach (var ui in displayingRelics)
+            {
+                Destroy(ui.gameObject);
             }
-            _buffUIs.Clear();
+            hiddenRelics.Clear();
+            displayingRelics.Clear();
+        }
+
+        private VRelicSlotUI SpawnRelicSlot(GameObject prefab, Transform parent)
+        {
+            var go = Instantiate(prefab, parent); 
+            return go.GetComponent<VRelicSlotUI>();
         }
         
         private void OnBuffAdded(Dictionary<string, object> msg)
-        {
-            uint id = (uint)msg["Id"];
-            
-            if( _buffUIs.ContainsKey(id))
+        {                                                                                                                                                                                                                                       
+            VRelic relic = (VRelic)msg["Relic"];
+
+            if (displayingRelics.Count <= displayingRelicCount)
             {
-                OnBuffValueUpdated(msg);
+                var relicUI = SpawnRelicSlot(displayingRelicSlotPrefab, displayGroup);
+                displayingRelics.Add(relicUI);
+                relicUI.Initialize(relic, true);
                 return;
             }
             
-            bool isPermanent = (bool)msg["IsPermanent"];
-            string buffName = (string)msg["RelicName"];
-            int value = (int)msg["Value"];
-            
-            // instantiate
-            var go = Instantiate(buffCellPrefab, transform);
-            var ui = new VRelicUI(go, isPermanent, buffName);
-            _buffUIs[id] = ui;
-            ui.SetText(value);
-
-            // enqueue scale‑in then punch
-            _animationQueue.Enqueue(Tween.Scale(ui.gameObject.transform, Vector3.one, 0.4f));
+            if(hiddenRelics.Count == 0)
+            {
+                _ellipsisObject = Instantiate(submenuRelicSlotPrefab, displayGroup);
+                _ellipsisObject.GetComponent<Button>().onClick.AddListener(OnEllipsisButtonClicked);
+            }
+            var newRelicUI = SpawnRelicSlot(submenuRelicSlotPrefab, submenuRelicGroup);
+            hiddenRelics.Add(newRelicUI);
+            newRelicUI.Initialize(relic, true);
         }
 
         private void OnBuffValueUpdated(Dictionary<string, object> msg)
         {
             uint id = (uint)msg["Id"];
-            if (_buffUIs.TryGetValue(id, out var ui))
-            {
-                ui.SetText((int)msg["Value"]);
-                // only punch on update
 
-                _animationQueue.Enqueue(Tween.PunchScale(ui.gameObject.transform, Vector3.one * 1.3f, 0.4f));
+            var relic = displayingRelics.Find(ui => ui.Relic.Id == id);
+            if (relic == null)
+            {
+                relic = hiddenRelics.Find(ui => ui.Relic.Id == id);
             }
+            
+            relic.UpdateValue();
         }
 
         private void OnBuffRemoved(Dictionary<string, object> msg)
         {
             uint id = (uint)msg["Id"];
-            if (_buffUIs.TryGetValue(id, out var ui))
+            
+            var relic = displayingRelics.Find(ui => ui.Relic.Id == id);
+            if (relic != null)
             {
-                Destroy(ui.gameObject);
-                _buffUIs.Remove(id);
+                if (hiddenRelics.Count == 0)
+                {
+                    displayingRelics.Remove(relic);
+                    Destroy(relic.gameObject);
+                }
+                else
+                {
+                    displayingRelics.Remove(relic);
+                    Destroy(relic.gameObject);
+                    
+                    var hiddenRelic = hiddenRelics[0];
+                    hiddenRelics.Remove(hiddenRelic);
+
+                    if (hiddenRelics.Count == 0)
+                    {
+                        Destroy(_ellipsisObject);
+                        _ellipsisObject = null;
+                    }
+                    else
+                    {
+                        _ellipsisObject.gameObject.transform.SetParent(null);
+                    }
+                    
+                    var newDisplayingRelic =  SpawnRelicSlot(displayingRelicSlotPrefab, displayGroup);
+                    newDisplayingRelic.Initialize(hiddenRelic.Relic, true);
+                    displayingRelics.Add(newDisplayingRelic);
+                    
+                    if(_ellipsisObject != null)
+                        _ellipsisObject.gameObject.transform.SetParent(displayGroup);
+                }
+            }
+            else
+            {
+                var hiddenRelic = hiddenRelics.Find(ui => ui.Relic.Id == id);
+                hiddenRelics.Remove(hiddenRelic);
+                Destroy(hiddenRelic.gameObject);
+
+                if (hiddenRelics.Count == 0)
+                {
+                    Destroy(_ellipsisObject);
+                    _ellipsisObject = null;
+                }
             }
         }
     }
