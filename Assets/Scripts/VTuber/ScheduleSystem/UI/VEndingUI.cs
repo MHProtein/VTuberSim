@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using PrimeTween;
+using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,17 +18,16 @@ namespace VTuber.ScheduleSystem.UI
 {
     public class VEndingUI : VUIBehaviour
     {
+        [SerializeField] private GameObject ui;
         [SerializeField] private TMP_Text ratingLevelText;
         [SerializeField] private TMP_Text scoreText;
-        [SerializeField] private TMP_Text accountNameText;
-        [SerializeField] private Button nextButton;
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private GameObject relicPrefab;
         [SerializeField] private GameObject attributeEffectPrefab;
         [SerializeField] private Transform relicGrid; 
         [SerializeField] private Transform cardGrid; 
         [SerializeField] private Transform attributeEffectGrid; 
-        [SerializeField] private InputField inputField;
+        [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Button continueButton;
         
         private List<VCardUI> _cards;
@@ -40,9 +41,10 @@ namespace VTuber.ScheduleSystem.UI
             continueButton.onClick.AddListener(OnNextButtonClicked);
         }
 
-        public void Initialize(string ratingLevel, int score, VAccount account)
+        public void Initialize(string characterName, string ratingLevel, int score, VAccount account)
         {
             _account = account;
+            inputField.text = characterName;
             inputField.characterLimit = 10;
             ratingLevelText.text = ratingLevel;
             scoreText.text = score.ToString();
@@ -64,6 +66,17 @@ namespace VTuber.ScheduleSystem.UI
             {
                 SpawnAttributeEffect(account.Effects[i], account.EffectItems[i].level);
             }
+        }
+
+        public void Show()
+        {
+            ui.SetActive(true);
+            Tween.PunchScale(ratingLevelText.transform, Vector3.one * 1.3f, 0.5f);
+        }
+
+        public void Hide()
+        {
+            ui.SetActive(false);
         }
 
         private void SpawnCard(VCard card)
@@ -92,6 +105,12 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnNextButtonClicked()
         {
+            _account.accountName = inputField.text;
+            VGameManager.Instance.AddAccount(_account);
+            VGameManager.Instance.ChangeToMainMenu();
+            
+            Hide();
+            
             foreach (var card in _cards)
             {
                 Destroy(card.gameObject);
@@ -110,10 +129,6 @@ namespace VTuber.ScheduleSystem.UI
             _cards.Clear();
             _relics.Clear();
             _attributeEffects.Clear();
-            
-            _account.accountName = inputField.text;
-            VGameManager.Instance.AddAccount(_account);
-            VGameManager.Instance.ChangeToMainMenu();
         }
     }
 }

@@ -54,7 +54,7 @@ namespace VTuber.Character
     
     public class VCharacter
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         public string LiveType => _characterConfig.liveType;
         
@@ -83,6 +83,7 @@ namespace VTuber.Character
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
+            Name = characterConfig.name;
             _cardLibrary = new VCardLibrary();
             _cooperatorManager = new VCooperatorManager();
             _consumableManager = new VConsumableManager(this);

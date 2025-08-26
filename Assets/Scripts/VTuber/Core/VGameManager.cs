@@ -97,7 +97,7 @@ namespace VTuber.BattleSystem.Core
                 _accounts = save.LoadAccounts();
             }
             
-            _mainMenu.Initialize(scripts, characters, _accounts, InitializeGame);
+            ChangeToMainMenu();
         }
 
         protected override void OnEnable()
@@ -253,7 +253,7 @@ namespace VTuber.BattleSystem.Core
 
         public void ChangeToMainMenu()
         {
-            
+            _mainMenu.Initialize(scripts, characters, _accounts, InitializeGame);
         }
     }
 }

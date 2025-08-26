@@ -63,11 +63,7 @@ namespace VTuber.Core.StateMachine
             if (_shouldEndGame)
             { 
                 _shouldEndGame = false; 
-                var result = stateMachine.Script.CalculateScore(stateMachine.Character, lastStreamPopularity); 
-                var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
-                    result.scoreLevelName, stateMachine.Character); 
-                account.Print();
-                //stateMachine.Character.AddAccount(account);
+                EndRun();
                 return;
             }
             
@@ -105,6 +101,16 @@ namespace VTuber.Core.StateMachine
             {
                 NextEvent();
             }
+        }
+
+        public void EndRun()
+        {
+            var result = stateMachine.Script.CalculateScore(stateMachine.Character, lastStreamPopularity); 
+            var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
+                result.scoreLevelName, stateMachine.Character); 
+            
+            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, result.scoreLevelName, result.score, account);
+            VRaisingUI.Instance.ShowEndingUI();
         }
 
         private void NextEvent()

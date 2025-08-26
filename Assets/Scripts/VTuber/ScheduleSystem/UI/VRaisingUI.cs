@@ -9,6 +9,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Reincarnation;
 using Yarn.Unity;
 using VTuber.ScheduleSystem.UI;
 
@@ -60,6 +61,10 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField]private GameObject consumableUIBattleParent;
         [SerializeField]private GameObject consumableUI;
         
+        [Space(3)]
+        [Header("EndingUI")]
+        [SerializeField] private VEndingUI endingUI;
+        
         public List<Color> abilityColors = new List<Color>();
 
         protected override void OnEnable()
@@ -71,6 +76,16 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+
+        public void InitializeEndingUI(string characterName, string ratingLevel, int score, VAccount account)
+        {
+            endingUI.Initialize(characterName, ratingLevel, score, account);
+        }
+
+        public void ShowEndingUI()
+        {
+            endingUI.Show();
         }
 
         public void InitializeCardLibraryUI(List<VCard> cards)
