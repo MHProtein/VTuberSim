@@ -81,8 +81,7 @@ namespace VTuber.Character.Attribute
                     Value,
                     _configuration.isBattleAttributePercentage,
                     _configuration.battleEventKey,
-                    _configuration.maxValue,
-                    _configuration.minValue));
+                    _maxValue, _minValue));
         }
 
         public virtual void ConvertToAttribute(Dictionary<string, VBattleAttribute> battleAttributes)

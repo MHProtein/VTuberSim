@@ -432,8 +432,8 @@ namespace VTuber.BattleSystem.Core
             }
             if (popularity >= _targetPopularity)
             {
-                attributeGain = (int)(_abiliyBonus * 0.5f + _abiliyBonus * 0.5f * 
-                    (popularity - _targetPopularity) / (_extraTargetPopularity - _targetPopularity));
+                attributeGain = Mathf.CeilToInt((_abiliyBonus * 0.5f + _abiliyBonus * 0.5f * 
+                    (popularity - _targetPopularity) / (_extraTargetPopularity - _targetPopularity)));
             }
             return attributeGain;
         }

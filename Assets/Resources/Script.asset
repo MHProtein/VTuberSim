@@ -78,7 +78,7 @@ MonoBehaviour:
     high: 40000
     name: SS
   - low: 40000
-    high: 45000
+    high: -1
     name: SSS
   kpis:
   - EventType: 0

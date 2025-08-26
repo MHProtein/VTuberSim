@@ -41,6 +41,8 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  characterName: MOMO
+  description: 
   liveType: C
   initialCardId: 67
   initialRelicId: 11

@@ -30,8 +30,8 @@ namespace VTuber.Character.Attributes
                     (int)(value * conversionRate * 100f),
                     _configuration.isBattleAttributePercentage,
                     _configuration.battleEventKey,
-                    _configuration.maxValue,
-                    _configuration.minValue));
+                    _maxValue,
+                    _minValue));
         }
     }
 }

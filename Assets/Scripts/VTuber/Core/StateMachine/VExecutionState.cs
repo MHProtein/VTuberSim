@@ -107,9 +107,9 @@ namespace VTuber.Core.StateMachine
         {
             var result = stateMachine.Script.CalculateScore(stateMachine.Character, lastStreamPopularity); 
             var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
-                result.scoreLevelName, stateMachine.Character); 
+                "SSS", stateMachine.Character); 
             
-            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, result.scoreLevelName, result.score, account);
+            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, "SSS", 50000, account);
             VRaisingUI.Instance.ShowEndingUI();
         }
 

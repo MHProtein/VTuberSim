@@ -124,6 +124,7 @@ namespace VTuber.BattleSystem.Core
         {
             _script = new VScript(scriptConfig);
             _character = new VCharacter(characterConfiguration);
+            _character.Initialize();
 
             foreach (var account in accounts)
             {
@@ -143,7 +144,6 @@ namespace VTuber.BattleSystem.Core
 
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
-            
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
@@ -253,6 +253,7 @@ namespace VTuber.BattleSystem.Core
 
         public void ChangeToMainMenu()
         {
+            _mainMenu.gameObject.SetActive(true);
             _mainMenu.Initialize(scripts, characters, _accounts, InitializeGame);
         }
     }

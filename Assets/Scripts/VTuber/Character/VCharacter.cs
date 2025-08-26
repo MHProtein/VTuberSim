@@ -7,6 +7,7 @@ using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
@@ -83,14 +84,20 @@ namespace VTuber.Character
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
-            Name = characterConfig.name;
+            Name = characterConfig.characterName;
+            InitializeAttributes(characterConfig);
+        }
+
+        public void Initialize()
+        {
             _cardLibrary = new VCardLibrary();
             _cooperatorManager = new VCooperatorManager();
             _consumableManager = new VConsumableManager(this);
-            InitializeAttributes(characterConfig);
             _characterRelicManager = new VCharacterRelicManager(this);
             eventsCompleted = new List<VScheduleEvent>();
             succeededStreams = new List<VScheduleEvent>();
+            _cardLibrary.AddCard(VDataManager.Instance.CreateCardByID(_characterConfig.initialCardId));
+            _characterRelicManager.AddRelic(VDataManager.Instance.CreateRelicByID(_characterConfig.initialRelicId));
         }
         
         public void OnEnable()
