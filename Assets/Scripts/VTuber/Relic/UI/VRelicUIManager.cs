@@ -66,13 +66,13 @@ namespace VTuber.Relic.UI
 
             if (TryGetEmptySlot(out var slot))
             {
-                slot.Initialize((VRelic)messagedict["Relic"]);
+                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics);
             }
             else
             {
                 var go = Instantiate(slotPrefab, content);
                 slot = go.GetComponent<VRelicSlotUI>();
-                slot.Initialize((VRelic)messagedict["Relic"]);
+                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics);
                 slot.SetIsAdditional(true);
                 _slotUIs.Add(slot);
             }
