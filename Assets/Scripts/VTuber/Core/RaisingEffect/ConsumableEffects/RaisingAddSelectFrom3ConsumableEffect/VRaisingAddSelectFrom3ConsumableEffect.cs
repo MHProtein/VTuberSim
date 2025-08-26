@@ -16,6 +16,7 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
+            _character = character;
             var consumables = GetRandomConsumables(3);
             
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectConsumableFrom3, new Dictionary<string, object>()

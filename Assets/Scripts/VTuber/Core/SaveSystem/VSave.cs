@@ -15,12 +15,14 @@ namespace VTuber.BattleSystem.Core.SaveSystem
         //5 Accounts in total
         //10-cards, 10-relics, 10-attributes
         public int accountCount;
+        public string[] accountNames;
         public int[,] accountData;
         public string[,] effectParameters;
-        
-        public VSave(VCharacter character)
+
+        public VSave(List<VAccount> accounts)
         {
             accountData = new int[100, 30];
+            
             for (int i = 0; i < 100; i++)
             {
                 for (int j = 0; j < 30; j++)
@@ -28,12 +30,17 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                     accountData[i, j] = -1;
                 }
             }
+            
+            accountNames = new string[100];
+            for (int i = 0; i < accounts.Count; i++)
+            {
+                accountNames[i] = accounts[i].accountName;
+            }
 
             effectParameters = new string[100, 10];
-            accountCount = character.Accounts.Count;
-            for (int i = 0; i < character.Accounts.Count; i++)
+            for (int i = 0; i < accounts.Count; i++)
             {
-                var account = character.Accounts[i];
+                var account = accounts[i];
                 for (int j = 0; j < account.Cards.Count; j++)
                 {
                     accountData[i, j] = (int)account.Cards[j].configID;
@@ -50,9 +57,9 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                 }
             }
             
-            for (int i = 0; i < character.Accounts.Count; i++)
+            for (int i = 0; i < accounts.Count; i++)
             {
-                var account = character.Accounts[i];
+                var account = accounts[i];
                 for (int j = 0; j < account.Effects.Count; j++)
                 {
                     effectParameters[i, j] = account.EffectItems[j].parameter;
@@ -63,11 +70,15 @@ namespace VTuber.BattleSystem.Core.SaveSystem
         public List<VAccount> LoadAccounts()
         {
             List<VAccount> accounts = new List<VAccount>();
+            
             for (int i = 0; i < accountCount; i++)
             {
                 List<VCard> cards = new List<VCard>();
                 List<VRelic> relics = new List<VRelic>();
                 List<VRaisingEffect> effects = new List<VRaisingEffect>();
+                
+                
+                
                 for (int j = 0; j < 10; j++)
                 {
                     if (accountData[i, j] == -1)
@@ -90,8 +101,10 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                     effects.Add(VDataManager.Instance.CreateRaisingEffectByID
                         ((uint)accountData[i, j], effectParameters[i, j], effectParameters[i, j]));
                 }
-                
-                accounts.Add(new VAccount(cards, relics, effects));
+
+                var account = new VAccount(cards, relics, effects);
+                account.accountName = accountNames[i];
+                accounts.Add(account);
             }
             return accounts;
         }

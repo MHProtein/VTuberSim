@@ -22,7 +22,13 @@ namespace VTuber.ScheduleSystem.UI
 
         public List<Transform> positions;
         public Transform spawnPosition;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            confirmButton.onClick.AddListener(Confirm);
+        }
+
         public void Initialize(List<VCard> cards, Action<VCard> confirmAction)
         {
             confirmButton.interactable = false;
@@ -48,7 +54,6 @@ namespace VTuber.ScheduleSystem.UI
                 }));
                 i++;
             }
-            confirmButton.onClick.AddListener(Confirm);
         }
 
         public void Confirm()
