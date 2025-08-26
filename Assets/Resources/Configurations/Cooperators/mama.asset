@@ -47,7 +47,7 @@ MonoBehaviour:
     levelName: "\u66A7\u6627"
     eventType: 2
     upgradeEventID: 47
-  minEvents: 0
+  minEvents: 1
   maxEvents: 2
   _dayTimeProbabilities:
   - 0.1
