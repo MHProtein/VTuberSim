@@ -48,7 +48,7 @@ MonoBehaviour:
     eventType: 2
     upgradeEventID: 51
   minEvents: 2
-  maxEvents: 4
+  maxEvents: 3
   _dayTimeProbabilities:
   - 0.33
   - 0.33
