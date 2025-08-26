@@ -14,23 +14,28 @@ namespace VTuber.ScheduleSystem.UI
     {
         [SerializeField] private GameObject consumablePrefab;
         public Transform spawnPosition;
-        private VSelectcConsumableUI _consumableUI;
+        private VSelectConsumableUI _consumableUI;
         
         [SerializeField] public Button confirmButton;
         [SerializeField] public Button returnButton;
         private Action<VConsumable> _confirmAction;
         private VCharacter _character;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            confirmButton.onClick.AddListener(Confirm);
+        }
+
         public void Initialize(VCharacter character, VConsumable consumable, Action<VConsumable> confirmAction)
         {
             confirmButton.interactable = false;
             _confirmAction = confirmAction;
-            confirmButton.onClick.AddListener(Confirm);
             
             _character = character;
             
             var item = Instantiate(consumablePrefab, spawnPosition);
-            _consumableUI = item.AddComponent<VSelectcConsumableUI>();
+            _consumableUI = item.AddComponent<VSelectConsumableUI>();
             var consumableUI = _consumableUI.GetComponent<VConsumableUI>();
             consumableUI.SetConsumable(consumable);
             
@@ -40,12 +45,12 @@ namespace VTuber.ScheduleSystem.UI
             consumableUI.transform.position = spawnPosition.position;
             Tween.Scale(consumableUI.transform, Vector3.one * 3.0f, 0.5f, Ease.OutBounce).OnComplete((() =>
             {
-                _consumableUI.SetSelectable(true);
+                _consumableUI.SetSelectable(false);
+
+                bool areSlotsFull = character.ConsumableManager.CanAddConsumable();
+                confirmButton.interactable = !areSlotsFull;
             }));
             
-
-            bool areSlotsFull = character.ConsumableManager.CanAddConsumable();
-            confirmButton.interactable = !areSlotsFull;
         }
 
         protected override void OnEnable()
@@ -71,7 +76,7 @@ namespace VTuber.ScheduleSystem.UI
         
         public void Confirm()
         {
-            _confirmAction?.Invoke(_consumableUI.Card);
+            _confirmAction?.Invoke(_consumableUI.Consumable);
             
             Destroy(_consumableUI.gameObject);
             

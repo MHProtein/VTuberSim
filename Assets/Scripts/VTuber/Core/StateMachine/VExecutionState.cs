@@ -67,7 +67,7 @@ namespace VTuber.Core.StateMachine
                 var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
                     result.scoreLevelName, stateMachine.Character); 
                 account.Print();
-                stateMachine.Character.AddAccount(account);
+                //stateMachine.Character.AddAccount(account);
                 return;
             }
             

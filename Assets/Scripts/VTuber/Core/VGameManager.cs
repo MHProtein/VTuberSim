@@ -25,7 +25,7 @@ using VTuber.Store.UI;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VGameManager : VMonoBehaviour
+    public class VGameManager : VSingletonMonobehaviour<VGameManager>
     {
         [SerializeField] private bool dev;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
@@ -64,11 +64,14 @@ namespace VTuber.BattleSystem.Core
         private VCharacter _character;
         private VStateMachine _stateMachine;
         private VScript _script;
+
+        private List<VAccount> _accounts;
         
         protected override void Awake()
         {
             base.Awake();
             VDataLoader loader;
+            _accounts = new List<VAccount>();
             if (dev)
             {
                 loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
@@ -89,13 +92,12 @@ namespace VTuber.BattleSystem.Core
             VResourcesManager.Instance.LoadDialogs();
             
             VSave save = VSaveSystem.Load();
-            List<VAccount> accounts = new List<VAccount>();
             if(save != null)
             {
-                accounts = save.LoadAccounts();
+                _accounts = save.LoadAccounts();
             }
             
-            _mainMenu.Initialize(scripts, characters, accounts, InitializeGame);
+            _mainMenu.Initialize(scripts, characters, _accounts, InitializeGame);
         }
 
         protected override void OnEnable()
@@ -170,7 +172,13 @@ namespace VTuber.BattleSystem.Core
             }
             
             _mainMenu.gameObject.SetActive(false);
-            
+        }
+
+        public void AddAccount(VAccount account)
+        {
+            _accounts.Add(account);
+            var save = new VSave(_accounts);
+            VSaveSystem.Save(save);
         }
         
         public void ModifySchedule()
@@ -241,6 +249,11 @@ namespace VTuber.BattleSystem.Core
             {
                 _stateMachine.SwitchState(VStateType.Pause);
             }
+        }
+
+        public void ChangeToMainMenu()
+        {
+            
         }
     }
 }

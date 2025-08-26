@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
-using PrimeTween;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 using VTuber.Consumable;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Relic;
 using VTuber.Relic.UI;
