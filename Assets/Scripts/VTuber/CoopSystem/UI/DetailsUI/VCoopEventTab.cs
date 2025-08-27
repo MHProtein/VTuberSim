@@ -31,7 +31,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         {
             foreach (var ui in eventUIs)
             {
-                Destroy(ui);
+                Destroy(ui.gameObject);
             }
             eventUIs.Clear();
         }

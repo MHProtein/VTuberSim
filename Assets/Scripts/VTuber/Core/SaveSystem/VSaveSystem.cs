@@ -6,7 +6,7 @@ namespace VTuber.BattleSystem.Core.SaveSystem
 {
     public static class VSaveSystem
     {
-        static string _savePath = $"{Application.persistentDataPath}/plaer.vtuber";
+        static string _savePath = $"{Application.persistentDataPath}/player.vtuber";
         
         public static void Save(VSave save)
         {

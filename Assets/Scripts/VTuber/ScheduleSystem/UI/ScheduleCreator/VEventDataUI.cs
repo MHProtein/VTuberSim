@@ -13,7 +13,7 @@ using VTuber.ScheduleSystem.Events;
 namespace VTuber.ScheduleSystem.UI
 {
     public class VEventDataUI : VUIBehaviour, IPointerEnterHandler,
-        IPointerDownHandler, IPointerUpHandler,
+        IPointerDownHandler, IPointerUpHandler, IPointerClickHandler,
         IPointerExitHandler, IBeginDragHandler, IDragHandler
     {
         [SerializeField] private Image icon;
@@ -91,6 +91,11 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnDrag(PointerEventData eventData)
         {
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            eventData.Use();
         }
     }
 }
