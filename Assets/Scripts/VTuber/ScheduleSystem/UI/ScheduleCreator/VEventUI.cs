@@ -10,7 +10,7 @@ using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VEventUI : VUIBehaviour, IPointerEnterHandler, IPointerDownHandler,
+    public class VEventUI : VUIBehaviour, IPointerEnterHandler, IPointerClickHandler,
         IPointerExitHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField] private Image icon;
@@ -265,12 +265,12 @@ namespace VTuber.ScheduleSystem.UI
                 });
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
             if (!_interactable || _isFixed)
                 return;
             if (!_isSelected && eventData.button
-                        == PointerEventData.InputButton.Left)
+                == PointerEventData.InputButton.Left)
             {
                 icon.raycastTarget = false;
                 parentBeforeDrag = parentSlots;
@@ -289,6 +289,7 @@ namespace VTuber.ScheduleSystem.UI
                     { "Event", _event }
                 });
             }
+            eventData.Use();
         }
         
         public void OnPointerUp(PointerEventData eventData)
@@ -315,5 +316,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             Debug.Log("EndDrag");
         }
+
+  
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VTuber.CoopSystem.UI.DetailsUI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
@@ -10,6 +11,7 @@ namespace VTuber.CoopSystem.UI
         private List<VCooperatorUI> uis;
 
         [SerializeField] private GameObject cooperatorPrefab;
+        [SerializeField] private VCoopDetails detailsTab;
         
         protected override void Awake()
         {
@@ -74,8 +76,14 @@ namespace VTuber.CoopSystem.UI
             var cooperator = messagedict["Cooperator"] as VCooperator;
             GameObject cooperatorGo = Instantiate(cooperatorPrefab, transform);
             var ui = cooperatorGo.GetComponent<VCooperatorUI>();
-            ui.SetCooperator(cooperator);
+            ui.SetCooperator(cooperator, CooperatorClicked);
             uis.Add(ui);
+        }
+
+        public void CooperatorClicked(VCooperator cooperator)
+        {
+            detailsTab.SetCooperator(cooperator);
+            detailsTab.Show();
         }
     }
 }

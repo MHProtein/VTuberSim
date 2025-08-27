@@ -9,13 +9,14 @@ using VTuber.ScheduleSystem.Core;
 namespace VTuber.CoopSystem
 {
     [Serializable]
-    public struct VCoopLevel
+    public class VCoopLevel
     {
         [HorizontalGroup] public int from;
         [HorizontalGroup] public int to;
         [HorizontalGroup] public string levelName;
         public VEventType eventType;
         public uint upgradeEventID;
+        public VCoopLevel nextLevel;
 
         public bool InLevel(int value)
         {
