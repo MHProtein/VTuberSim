@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using VTuber.Consumable;
@@ -11,7 +12,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         [SerializeField] private VClickDetectionPanel detectionPanel;
         [SerializeField] private TMP_Text coopName;
         [SerializeField] private TMP_Text coopValue;
-        
+        [SerializeField] private List<VCoopTab> tabs;
 
         protected override void Awake()
         {
@@ -31,6 +32,11 @@ namespace VTuber.CoopSystem.UI.DetailsUI
             {
                 coopValue.text = $"{cooperator.CoopValue}/{cooperator.configuration.CoopLevels[nextLevelIndex].from}";
             }
+
+            foreach (var tab in tabs)
+            {
+                tab.SetTab(cooperator);
+            }
         }
 
         public void Show()
@@ -41,6 +47,10 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         public void Hide()
         {
             ui.gameObject.SetActive(false);
+            foreach (var tab in tabs)
+            {
+                tab.Clear();
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ namespace VTuber.CoopSystem
             public int abilityIndex;
         }
         public uint id;
+        public string eventName;
         public int unlockLevel;
         public float probability;
         public List<VRaisingEffect>  effects;
@@ -47,6 +48,7 @@ namespace VTuber.CoopSystem
         public VCoopEvent(CellRange row)
         {
             id = uint.Parse(row.Columns[VCoopEventHeaderIndex.Id].Value);
+            eventName = row.Columns[VCoopEventHeaderIndex.Name].Value;
             unlockLevel = int.Parse(row.Columns[VCoopEventHeaderIndex.UnlockLevel].Value);
             probability = float.Parse(row.Columns[VCoopEventHeaderIndex.Probability].Value);
             
@@ -99,6 +101,8 @@ namespace VTuber.CoopSystem
         public int CurrentLevel => _currentLevelIndex;
         private int _currentLevelIndex;
         private int _coopValue;
+        
+        public List<VCoopEvent> CoopEvents => _coopEvents;
         private List<VCoopEvent> _coopEvents;
 
         private bool _hasExecutedUpgradeEventThisWeek;
