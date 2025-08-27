@@ -41,7 +41,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  characterName: MOMO
+  characterName: "\u96C5\u5C3E\u58A8\u6CAB"
   description: 
   liveType: C
   initialCardId: 67

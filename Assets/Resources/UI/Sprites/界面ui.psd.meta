@@ -336,7 +336,7 @@ TextureImporter:
         width: 170
         height: 142
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -344,6 +344,27 @@ TextureImporter:
       bones: []
       spriteID: 47d941fcbbcf5414cb192badbb043922
       internalID: -541574120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Outside
+      rect:
+        serializedVersion: 2
+        x: 233
+        y: 823
+        width: 217
+        height: 185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64fb087a4bc66f840a356ccebe6ad889
+      internalID: -1087201087
       vertices: []
       indices: 
       edges: []
@@ -360,6 +381,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Coop: -541574120
+      Outside: -1087201087
       Practice: -1104793278
       Rest: -1206604687
       backicon: 188248212
