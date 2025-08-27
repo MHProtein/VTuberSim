@@ -24,6 +24,16 @@ namespace VTuber.Consumable
             description.text = consumable.Description;
         }
 
+        public void Clear()
+        {
+            consumable = null;
+            consumableName.text = "";
+            description.text = "";
+            icon.sprite = null;
+            descriptionObject.SetActive(false);
+            gameObject.SetActive(false);
+        }
+
         public bool HasConsumable()
         {
             return consumable is not null;

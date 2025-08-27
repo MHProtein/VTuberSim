@@ -22,6 +22,10 @@ namespace VTuber.CoopSystem.UI.DetailsUI
 
         public void SetCooperator(VCooperator cooperator)
         {
+            foreach (var tab in tabs)
+            {
+                tab.Clear();
+            }
             coopName.text = cooperator.configuration.Name;
             var nextLevelIndex = cooperator.CurrentLevel + 1;
             if (nextLevelIndex >= cooperator.configuration.CoopLevels.Count)

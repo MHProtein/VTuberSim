@@ -23,16 +23,20 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         private List<GameObject> _conditions;
         private List<GameObject> _effects;
         
-        public void Initialize(VCoopEvent coopEvent, int coopLevel, string levelName)
+        public void Initialize(VCoopEvent coopEvent, VCooperator cooperator)
         {
             _conditions = new List<GameObject>();
             _effects = new List<GameObject>();
                 
             eventName.text = coopEvent.eventName;
-            unlockLevel.text = levelName;
-            if (coopEvent.unlockLevel >= coopLevel)
+            unlockLevel.text = "解锁等级：" + cooperator.configuration.CoopLevels[coopEvent.unlockLevel].levelName;
+            if (cooperator.CurrentCoopLevel.levelIndex >= coopEvent.unlockLevel)
             {
                 checkmark.gameObject.SetActive(true);
+            }
+            else
+            {
+                checkmark.gameObject.SetActive(false);
             }
 
             foreach (var eventType in coopEvent.eventTypes)
@@ -53,7 +57,6 @@ namespace VTuber.CoopSystem.UI.DetailsUI
                     effectUI.GetComponentInChildren<Image>().sprite =
                         VUIUtils.Instance.GetAttributeIcon(attributeEffect.AttributeName);
                     _effects.Add(effectUI);
-                    return;
                 }
 
                 if (effect is VRaisingAddCoopValueEffect raisingAddCoopValueEffect)

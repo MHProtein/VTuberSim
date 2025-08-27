@@ -34,6 +34,9 @@ namespace VTuber.ScheduleSystem.UI
         public bool IsFixed => _isFixed;
         private bool _isFixed = false;
         private Camera _camera;
+        private List<VScheduleSlot> _disposeSlots;
+        private bool _disposable;
+        private Vector2 _disposePosition;
         
         protected override void Awake()
         {
@@ -81,7 +84,7 @@ namespace VTuber.ScheduleSystem.UI
             _interactable = interactable;
         }
 
-        public void Initialize(VScheduleEvent e, VScheduleSlot slot)
+        public void Initialize(VScheduleEvent e, VScheduleSlot slot, bool disposable, Transform parent = null)
         {
             _event = e;
             icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
@@ -91,11 +94,24 @@ namespace VTuber.ScheduleSystem.UI
             background.transform.localScale = Vector3.zero;
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
             Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
-            
-            if(slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
+
+            if (slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent,
+                    out var position))
             {
-                SetNewParents(parents, transformParent, position, false);
+                SetNewParents(parents, VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect, position,
+                    false);
+
+                if (parent is not null)
+                {
+                    transform.SetParent(parent);
+                    transform.SetAsLastSibling();
+                }
+
+                parentBeforeDrag = parentSlots;
+                _disposeSlots = parentSlots;
+                _disposePosition = transform.position;
             }
+            _disposable = disposable;
         }
 
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
@@ -137,6 +153,19 @@ namespace VTuber.ScheduleSystem.UI
                 { "Event", _event }
             });
         }
+        
+        public void SetParentDisposeSlot()
+        {
+            parentSlots = _disposeSlots;
+
+            Tween.Position(transform, _disposePosition, 0.2f);
+            //transform.position = _lastPosition;
+            foreach (var parent in parentSlots)
+            {
+                parent.SetItem(this);
+            }
+            
+        }
 
         public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position, bool shouldTween)
         {
@@ -154,7 +183,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 transform.position = position;
             }
-            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
+            transform.SetParent(transformParent);
             //transform.position = position;
             if(!_event.IsSpecialEvent)
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
@@ -172,7 +201,7 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     if(slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
                     {
-                        SetNewParents(parents, transformParent, position, true);
+                        SetNewParents(parents, VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect, position, true);
                         return true;
                     }
                 }
@@ -216,11 +245,20 @@ namespace VTuber.ScheduleSystem.UI
                     _isSelected = false;
                     return;
                 }
-                
+
+      
                 if(parentSlots is null || parentSlots.Count == 0)
                 {
-                    Despawn();
-                    return;
+                    if (_disposable)
+                    {
+                        Despawn();
+                        return;
+                    }
+                    else
+                    {
+                        SetParentBeforeDrag();
+                        return;
+                    }
                 }
 
                 foreach (var result in results)
@@ -232,7 +270,15 @@ namespace VTuber.ScheduleSystem.UI
                         return;
                     }
                 }
-                Despawn();
+
+                if (!_disposable && _disposeSlots is not null)
+                {
+                    SetParentDisposeSlot();
+                }
+                else
+                {
+                    Despawn();
+                }
             }
         }
 

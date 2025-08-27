@@ -67,5 +67,10 @@ namespace VTuber.Character
                 });
             }
         }
+
+        public void Clear()
+        {
+            cards.Clear();
+        }
     }
 }

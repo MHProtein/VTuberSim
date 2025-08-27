@@ -58,9 +58,9 @@ namespace VTuber.CoopSystem.UI
             upgradeEventScheduleSlot.SetPlaceable(true, false);
             
             _upgradeEventUI = Instantiate(upgradeEventUIPrefab, upgradeEventScheduleSlot.transform).GetComponent<VEventUI>();
-            _upgradeEventUI.Initialize(scheduleEvent, upgradeEventScheduleSlot);
+            _upgradeEventUI.Initialize(scheduleEvent, upgradeEventScheduleSlot, false, transform);
             upgradeEventScheduleSlot.SetPlaceable(false, false);
-        }
+        }                                                     
         
         public void ClearUpgradeEvent()
         {

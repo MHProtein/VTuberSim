@@ -48,5 +48,36 @@ namespace VTuber.Core.UI
             }
             return "";
         }
+
+        public string GetAttributeName(string attributeName)
+        {
+            switch (attributeName)
+            {
+                case "CAStamina":
+                    return "体力<sprite name=Icon_Stamina>";
+                case "CAPressure":
+                    return "压力<sprite name=Icon_Happy>";
+                case "CASingingAbility":
+                    return "歌力<sprite name=Icon_SingingAbility>";
+                case "CASingingAbilityGainEfficiency":
+                    return "歌力提升率<sprite name=Icon_SingingAbility>";
+                case "CAGamingAbility":
+                    return "游戏力<sprite name=Icon_GamingAbility>";
+                case "CAGamingAbilityGainEfficiency":
+                    return "游戏力提升率<sprite name=Icon_GamingAbility>";
+                case "CAChattingAbility":
+                    return "杂谈力<sprite name=Icon_ChattingAbility>";
+                case "CAChattingAbilityGainEfficiency":
+                    return "杂谈力提升率<sprite name=Icon_ChattingAbility>";
+                case "CAFollowerCount":
+                    return "粉丝<sprite name=Icon_Follower>";
+                case "CAMembershipCount":
+                    return "舰长<sprite name=Icon_Membership>";
+                case "CAMoney":
+                    return "沪币<sprite name=Icon_Money>";
+            }
+
+            return "";
+        }
     }
 }

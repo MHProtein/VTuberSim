@@ -30,21 +30,25 @@ MonoBehaviour:
   - from: 0
     to: 20
     levelName: "\u719F\u6089"
+    levelIndex: 0
     eventType: 2
     upgradeEventID: 40
   - from: 26
     to: 60
     levelName: "\u597D\u53CB"
+    levelIndex: 1
     eventType: 2
     upgradeEventID: 41
   - from: 51
     to: 80
     levelName: "\u631A\u53CB"
+    levelIndex: 2
     eventType: 2
     upgradeEventID: 42
   - from: 76
     to: 100
     levelName: "\u66A7\u6627"
+    levelIndex: 3
     eventType: 2
     upgradeEventID: 43
   minEvents: 2

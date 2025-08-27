@@ -51,6 +51,31 @@ namespace VTuber.Character
             VDebug.Log("Added Relic " + relic.GetRelicName());
             
         }
+
+        public void RemoveRelic(VRelic relic)
+        {
+            if (relic is VBattleRelic battleRelic)
+            {
+                if (_battleRelics.Contains(battleRelic))
+                    return;
+                _battleRelics.Remove(battleRelic);
+                battleRelic.OnRelicRemovedInRaising();
+            }
+            else
+            {
+                _raisingRelicManager.Remove(relic as VRaisingRelic);
+            }
+        }
+
+        public void Clear()
+        {
+            foreach (var battleRelic in _battleRelics)
+            {
+                battleRelic.OnRelicRemovedInRaising();
+            }
+            _battleRelics.Clear();
+            _raisingRelicManager.Clear();
+        }
     }
     
     public class VCharacter
@@ -291,6 +316,13 @@ namespace VTuber.Character
             AttributeManager.TryGetAttribute("CAStamina", out var stamina);
             AttributeManager.TryGetAttribute("CASkipTurnStaminaRecovery", out var recoveryAmount);
             stamina.AddTo(recoveryAmount.Value);
+        }
+
+        public void EndRun()
+        {
+            _consumableManager.Clear();
+            _characterRelicManager.Clear();
+            _cardLibrary.Clear();
         }
     }
 }

@@ -168,12 +168,18 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             }
             
             characterUI.SetAccounts(_selectedAccounts);
-            Tween.LocalPosition(accountUI.transform, unpickPosition.localPosition, 0.4f).OnComplete((() => accountUI.transform.SetParent(accountGrids)));
-            Tween.Scale(accountUI.transform, Vector3.one, 0.4f);
+            
+            accountUI.transform.localScale = Vector3.one;
+            Tween.LocalPosition(accountUI.transform, unpickPosition.localPosition, 0.4f);
+            Tween.Scale(accountUI.transform, Vector3.one, 0.35f).OnComplete((() => accountUI.transform.SetParent(accountGrids)));
         }
 
         public void Clear()
         {
+            foreach (var accountSlot in accountSlots)
+            {
+                accountSlot.RemoveAccountUI();
+            }
             foreach (var accountUI in _accountUIs)
             {
                 Destroy(accountUI.gameObject);
