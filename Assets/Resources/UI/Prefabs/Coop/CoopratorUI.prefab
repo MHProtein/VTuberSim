@@ -264,6 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pfp: {fileID: 68989507566002924}
+  background: {fileID: 2707114615654148799}
   cooperatorName: {fileID: 4563477807515621647}
   coopLevel: {fileID: 7055062594309085290}
   upgradeEventScheduleSlot: {fileID: 6405588331881643632}

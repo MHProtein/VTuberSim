@@ -94,6 +94,9 @@ namespace VTuber.CoopSystem
         
         public readonly VCooperatorConfiguration configuration;
         
+        public int CoopValue => _coopValue;
+        
+        public int CurrentLevel => _currentLevelIndex;
         private int _currentLevelIndex;
         private int _coopValue;
         private List<VCoopEvent> _coopEvents;
