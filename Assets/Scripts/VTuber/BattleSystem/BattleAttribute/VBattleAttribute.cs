@@ -159,8 +159,6 @@ namespace VTuber.BattleSystem.BattleAttribute
         
         public virtual void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)
         {
-            if (delta == 0)
-                return;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
             int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue ));

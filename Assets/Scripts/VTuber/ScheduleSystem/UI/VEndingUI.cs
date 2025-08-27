@@ -64,7 +64,7 @@ namespace VTuber.ScheduleSystem.UI
 
             for (int i = 0; i < account.Effects.Count; i++)
             {
-                SpawnAttributeEffect(account.Effects[i], account.EffectItems[i].level);
+                SpawnAttributeEffect(account.Effects[i], account.EffectLevels[i]);
             }
         }
 

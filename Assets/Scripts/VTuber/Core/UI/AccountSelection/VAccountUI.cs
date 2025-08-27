@@ -62,7 +62,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
                 if (attributeEffect != null)
                 {
                     var attributeEffectUI = Instantiate(attributePrefab, attributeGrids).GetComponent<VAttributeEffectUI>();
-                    attributeEffectUI.Initialize(effect, account.EffectItems[i].level);
+                    attributeEffectUI.Initialize(effect, account.EffectLevels[i]);
                     attributeEffectUIs.Add(attributeEffectUI);
                 }
             }

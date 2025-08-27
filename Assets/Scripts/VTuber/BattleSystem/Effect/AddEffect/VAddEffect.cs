@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
@@ -26,6 +27,12 @@ namespace VTuber.BattleSystem.Effect
                 int value = _addValue.Value;
                 if (MultiplyByLayer > 0.0f)
                     value *= (int)(layer * MultiplyByLayer);
+                if (value == 0 && isFromCard)
+                {
+                    VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+                        new Dictionary<string, object>());
+                    return;
+                }
                 attribute.AddTo(value, isFromCard, shouldApplyTwice);
                 VDebug.Log($"Effect{_configuration.effectName} added {_addValue.Value} to {_configuration.attributeName}. New value: {attribute.Value}");
             }

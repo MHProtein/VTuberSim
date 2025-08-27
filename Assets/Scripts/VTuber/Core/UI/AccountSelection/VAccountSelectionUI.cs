@@ -72,28 +72,20 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             _returnAction?.Invoke();
         }
 
-    public async void Spawn()
+        public void Spawn()
         {
-            try
-            {
-                _accountUIs = new List<VAccountUI>();
-                foreach (var account in _accounts)
-                {
-                    await SpawnAccount(account);
-                }
-            }
-            catch (Exception e)
-            {
-                VDebug.LogError(e.Message);
+            _accountUIs = new List<VAccountUI>();
+            foreach (var account in _accounts)
+            { 
+                SpawnAccount(account);
             }
         }
 
-        private Task SpawnAccount(VAccount account)
+        private void SpawnAccount(VAccount account)
         {
             var accountUI = Instantiate(accountPrefab, accountGrids).GetComponent<VAccountUI>();
             accountUI.Initialize(this, account);
             _accountUIs.Add(accountUI);
-            return Task.CompletedTask;
         }
 
         public void Show()
@@ -184,9 +176,15 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
         {
             foreach (var accountUI in _accountUIs)
             {
-                Destroy(accountUI);
+                Destroy(accountUI.gameObject);
+            }
+
+            foreach (var selectedAccount in _selectedAccounts)
+            {
+                Destroy(selectedAccount.gameObject);
             }
             _accountUIs.Clear();
+            _selectedAccounts.Clear();
         }
     }
 }

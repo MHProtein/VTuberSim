@@ -28,6 +28,13 @@ namespace VTuber.BattleSystem.Effect
                 
                 if (MultiplyByLayer > 0.0f)
                     delta *= (int)(layer * MultiplyByLayer);
+
+                if (delta == 0 && isFromCard)
+                {
+                    VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+                        new Dictionary<string, object>());
+                    return;
+                }
                 
                 if(battle.BattleAttributeManager.TryGetAttribute("BAParameter", out var baAttribute))
                 {

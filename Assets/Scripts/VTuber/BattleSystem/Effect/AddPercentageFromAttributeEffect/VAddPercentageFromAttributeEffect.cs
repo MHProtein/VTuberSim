@@ -1,4 +1,5 @@
-﻿using VTuber.BattleSystem.Core;
+﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
@@ -28,10 +29,18 @@ namespace VTuber.BattleSystem.Effect
                 VDebug.LogError($"Attribute {attributeNameToAdd} or {attributeNameToBeAdded} not found.");
                 return;
             }
-            
+
             int delta = (int)(_percentage.Value * attributeToAdd.Value);
             if (MultiplyByLayer > 0.0f)
                 delta *= (int)(layer * MultiplyByLayer);
+            
+            if (delta == 0 && isFromCard)
+            {
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+                    new Dictionary<string, object>());
+                return;
+            }
+            
             attributeToBeAdded.AddTo(delta, isFromCard, shouldApplyTwice);
             VDebug.Log($"Effect {_configuration.effectName} added {delta} to {attributeNameToBeAdded}. New value: {attributeToBeAdded.Value}");
         }

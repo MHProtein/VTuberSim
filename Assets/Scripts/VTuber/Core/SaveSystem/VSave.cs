@@ -18,9 +18,11 @@ namespace VTuber.BattleSystem.Core.SaveSystem
         public string[] accountNames;
         public int[,] accountData;
         public string[,] effectParameters;
+        public int[,] effectLevels;
 
         public VSave(List<VAccount> accounts)
         {
+            accountCount = accounts.Count;
             accountData = new int[100, 30];
             
             for (int i = 0; i < 100; i++)
@@ -38,6 +40,7 @@ namespace VTuber.BattleSystem.Core.SaveSystem
             }
 
             effectParameters = new string[100, 10];
+            effectLevels = new int[100, 10];
             for (int i = 0; i < accounts.Count; i++)
             {
                 var account = accounts[i];
@@ -62,7 +65,8 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                 var account = accounts[i];
                 for (int j = 0; j < account.Effects.Count; j++)
                 {
-                    effectParameters[i, j] = account.EffectItems[j].parameter;
+                    effectParameters[i, j] = account.Effects[j].GetParameter();
+                    effectLevels[i, j] = account.EffectLevels[j];
                 }
             }
         }
@@ -76,8 +80,7 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                 List<VCard> cards = new List<VCard>();
                 List<VRelic> relics = new List<VRelic>();
                 List<VRaisingEffect> effects = new List<VRaisingEffect>();
-                
-                
+                List<int> effectLevel = new List<int>();
                 
                 for (int j = 0; j < 10; j++)
                 {
@@ -99,10 +102,11 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                     if (accountData[i, j] == -1)
                         break;
                     effects.Add(VDataManager.Instance.CreateRaisingEffectByID
-                        ((uint)accountData[i, j], effectParameters[i, j], effectParameters[i, j]));
+                        ((uint)accountData[i, j], effectParameters[i, j - 20], effectParameters[i, j - 20]));
+                    effectLevel.Add(effectLevels[i, j - 20]);
                 }
 
-                var account = new VAccount(cards, relics, effects);
+                var account = new VAccount(cards, relics, effects, effectLevel);
                 account.accountName = accountNames[i];
                 accounts.Add(account);
             }

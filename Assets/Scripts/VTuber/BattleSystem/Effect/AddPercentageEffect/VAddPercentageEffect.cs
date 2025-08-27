@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 
@@ -23,6 +24,14 @@ namespace VTuber.BattleSystem.Effect.AddPercentageEffect
                 int delta = (int)(_percentage.Value * attribute.Value);
                 if (MultiplyByLayer > 0.0f)
                     delta *= (int)(layer * MultiplyByLayer);
+                
+                if (delta == 0 && isFromCard)
+                {
+                    VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+                        new Dictionary<string, object>());
+                    return;
+                }
+
                 attribute.AddTo(delta, isFromCard, shouldApplyTwice);
                 VDebug.Log($"Effect{_configuration.effectName} added {_percentage.Value} to {_attributeName}. New value: {attribute.Value}");
             }   
