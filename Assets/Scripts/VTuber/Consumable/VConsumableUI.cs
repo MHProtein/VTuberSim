@@ -18,7 +18,7 @@ namespace VTuber.Consumable
         public void SetConsumable(VConsumable consumable)
         {
             this.consumable = consumable;
-            //icon.sprite = consumable.Icon;
+            icon.sprite = consumable.Icon;
             
             consumableName.text = consumable.Name;
             description.text = consumable.Description;

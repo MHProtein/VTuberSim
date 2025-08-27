@@ -4,6 +4,7 @@ using Spire.Xls;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -37,10 +38,10 @@ namespace VTuber.BattleSystem.Effect
             
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
-                int delta = (int)((_percentage.Value) * buff.Value);
+                int delta = VMathUtils.FloatToInt((_percentage.Value) * buff.Value);
                 
                 if (MultiplyByLayer > 0.0f)
-                    delta *= (int)(layer * MultiplyByLayer);
+                    delta *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
                 
                 if (delta == 0 && isFromCard)
                 {
@@ -64,14 +65,14 @@ namespace VTuber.BattleSystem.Effect
 
         public override string GetValue()
         {
-            return (int)(_percentage.Value * 100) + "%";
+            return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";
         }
 
         public int GetValue(VBattle battle)
         {
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
-                return (int)((_percentage.Value) * buff.Value);
+                return VMathUtils.FloatToInt((_percentage.Value) * buff.Value);
             }
             return 0;
         }

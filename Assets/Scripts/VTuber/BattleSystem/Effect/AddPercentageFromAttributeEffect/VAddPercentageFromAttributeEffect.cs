@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -30,9 +31,9 @@ namespace VTuber.BattleSystem.Effect
                 return;
             }
 
-            int delta = (int)(_percentage.Value * attributeToAdd.Value);
+            int delta = VMathUtils.FloatToInt(_percentage.Value * attributeToAdd.Value);
             if (MultiplyByLayer > 0.0f)
-                delta *= (int)(layer * MultiplyByLayer);
+                delta *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
             
             if (delta == 0 && isFromCard)
             {
@@ -47,7 +48,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override string GetValue()
         {
-            return (int)(_percentage.Value * 100) + "%";
+            return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";
         }
 
         public string AttributeName => attributeNameToBeAdded;

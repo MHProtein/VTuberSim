@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
@@ -53,6 +54,7 @@ namespace VTuber.Consumable
         public uint ConfigId => _configuration.id;
         public string Name => _configuration.name;
         public string Description => _configuration.description;
+        public Sprite Icon => _configuration.icon;
         public VConsumableRarity Rarity => _configuration.rarity;
         public VConsumableConfiguration _configuration;
         

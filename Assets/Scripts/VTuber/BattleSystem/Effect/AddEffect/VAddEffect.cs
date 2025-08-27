@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -26,7 +28,7 @@ namespace VTuber.BattleSystem.Effect
             {
                 int value = _addValue.Value;
                 if (MultiplyByLayer > 0.0f)
-                    value *= (int)(layer * MultiplyByLayer);
+                    value *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
                 if (value == 0 && isFromCard)
                 {
                     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
@@ -34,7 +36,6 @@ namespace VTuber.BattleSystem.Effect
                     return;
                 }
                 attribute.AddTo(value, isFromCard, shouldApplyTwice);
-                VDebug.Log($"Effect{_configuration.effectName} added {_addValue.Value} to {_configuration.attributeName}. New value: {attribute.Value}");
             }
         }
 

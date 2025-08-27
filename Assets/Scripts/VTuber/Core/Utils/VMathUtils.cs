@@ -11,7 +11,7 @@ namespace VTuber.Core.UI
             Floor,
             Round
         }
-        public static int FloatToInt(float value, RoundingType type)
+        public static int FloatToInt(float value, RoundingType type = RoundingType.Ceil)
         {
             switch (type)
             {

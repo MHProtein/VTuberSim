@@ -95,6 +95,16 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AttributesConversion(_characterAttributeManager);
             _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
             _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
+
+            if (!isPhaseEnding)
+            {
+                _battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
+                attribute.SetValue(100, false, false, false);
+                _battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
+                attribute.SetValue(100, false, false, false);
+                _battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
+                attribute.SetValue(100, false, false, false);
+            }
             
             _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
             _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
