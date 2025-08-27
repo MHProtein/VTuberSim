@@ -50,8 +50,11 @@ MonoBehaviour:
     to: 20000
     value: 0.1
   - from: 20000
-    to: -1
+    to: 25000
     value: 0.05
+  - from: 25000
+    to: -1
+    value: 0.01
   scoreLevels:
   - low: 0
     high: 5000
