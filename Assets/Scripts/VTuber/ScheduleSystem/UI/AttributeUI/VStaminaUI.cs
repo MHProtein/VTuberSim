@@ -18,7 +18,7 @@ namespace VTuber.ScheduleSystem.UI
             text.text = $"{value}/{maxValue}";
             if(delta == 0)
                 return;
-            bar.fillAmount = (float)value / maxValue;
+            Tween.UIFillAmount(bar, (float)value / maxValue, 0.3f);
             text.faceColor = delta > 0 ? Color.green : Color.red;
             _animationQueue.Enqueue(Tween.PunchScale(text.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
                 () =>

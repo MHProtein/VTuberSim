@@ -29,6 +29,7 @@ namespace VTuber.BattleSystem.UI
         private VAnimationQueue arrowSequence;
         
         private List<Image> colorObjects = new List<Image>();
+        private string _attributeName = "";
         int arrowIndex = -1;
         private float initSize = 0;
         
@@ -61,12 +62,24 @@ namespace VTuber.BattleSystem.UI
         {
             base.OnDisable();
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnMultiplierSequenceCalculated, OnMultiplierSequenceCalculated);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRotateMultiplier, OnRotateMultiplier);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
-        
+
+        private void OnRotateMultiplier(Dictionary<string, object> messagedict)
+        {
+            _attributeName = (string)messagedict["Name"];
+            MultiplierText.text = $"提升率: {messagedict["NewValue"] as int? ?? 0}%";
+            
+            textSequence.Enqueue(Tween.PunchScale(MultiplierText.transform, Vector3.one * 1.3f, 0.5f));
+            if (!messagedict.ContainsKey("Color"))
+                return;
+            MultiplierText.faceColor = (Color)messagedict["Color"];
+        }
+
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
             foreach (var colorObject in colorObjects)
@@ -92,8 +105,7 @@ namespace VTuber.BattleSystem.UI
                 float scale = initSize / (colorObjects.Count * blockWidth);
                 
                 arrowSequence.Enqueue(Tween.Scale(grid.transform, new Vector3(scale, 1, 1), 0.2f));
-
-
+                
                 StartCoroutine(DelayMoveArrow());
             }
         }
@@ -124,6 +136,8 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRotateMultiplier, OnRotateMultiplier);
+            
             List<Color> colors = messagedict["Colors"] as List<Color>;
             if (colors is null)
                 return;
@@ -138,13 +152,11 @@ namespace VTuber.BattleSystem.UI
         
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
+            if (!_attributeName.Equals((string)messagedict["Name"]))
+                return;
             MultiplierText.text = $"提升率: {messagedict["NewValue"] as int? ?? 0}%";
             
             textSequence.Enqueue(Tween.PunchScale(MultiplierText.transform, Vector3.one * 1.3f, 0.5f));
-            if (!messagedict.ContainsKey("Color"))
-                return;
-            MultiplierText.faceColor = (Color)messagedict["Color"];
-            
         }
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)

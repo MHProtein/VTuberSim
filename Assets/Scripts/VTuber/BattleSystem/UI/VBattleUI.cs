@@ -14,6 +14,7 @@ using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -47,8 +48,6 @@ namespace VTuber.BattleSystem.UI
         
         
         [Space(3)]
-        [SerializeField] private TMP_Text targetPopularity;
-        [SerializeField] private TMP_Text extraTargetPopularityText;
         [SerializeField] private Button skipTurnButton;
         
         private float curve = 0.0f;
@@ -68,16 +67,6 @@ namespace VTuber.BattleSystem.UI
         private VHandCardUI cardToDispose;
 
         private Coroutine _drawCardCoroutine;
-        
-        public void SetExtraTargetPopularityText(int text)
-        {
-            extraTargetPopularityText.text = $"额外目标热度: {text}";
-        }
-        
-        public void SetTargetPopularity(int targetPopularity)
-        {
-            this.targetPopularity.text = $"目标热度: {targetPopularity}";
-        }
 
         public void Rearrange(int index)
         {
@@ -117,7 +106,7 @@ namespace VTuber.BattleSystem.UI
 
         public void PickCardDebug()
         {
-            ShowPickCardMenu(VCardPileType.Deck, 3, false, false);
+            ShowPickCardMenu(VCardPileType.ALL, 3, false, false);
         }
         
         public void ShowPickCardMenu(VCardPileType cardPileType, int count, bool isFromCard, bool shouldPlayTwice)
@@ -137,6 +126,10 @@ namespace VTuber.BattleSystem.UI
                     break;
                 case VCardPileType.Deck:
                     cards = VBattle.Instance.CardPilesManager.Deck.ToList();
+                    break;
+                case VCardPileType.ALL:
+                    cards = VDataManager.Instance.GetAllCardConfigurations().Select(card => card.CreateCard())
+                        .ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cardPileType), cardPileType, null);
@@ -263,9 +256,6 @@ namespace VTuber.BattleSystem.UI
             }
             _handSlotsCards.Clear();
             SetBattleUIScale(1.0f);
-            SetTargetPopularity(messagedict["TargetPopularity"] as int? ?? 0);
-            SetExtraTargetPopularityText(messagedict["ExtraTargetPopularity"] as int? ?? 0);
-            
         }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)

@@ -208,7 +208,7 @@ namespace VTuber.BattleSystem.BattleAttribute
                 SendEvent(Value, delta, isFromCard, shouldPlayTwice);
         }
         
-        public void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)  
+        public virtual void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)  
         {
             var messageDict = new Dictionary<string, object>
             {

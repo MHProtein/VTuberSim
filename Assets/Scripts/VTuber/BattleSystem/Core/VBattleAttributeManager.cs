@@ -81,6 +81,7 @@ namespace VTuber.BattleSystem.Core
     public class VMultiplierManager
     {
         public VBattleMultiplierAttribute Multiplier { get; private set; }
+        public List<VBattleMultiplierAttribute> Multipliers => _multiplierAttributes;
         private List<VBattleMultiplierAttribute> _multiplierAttributes;
         private List<int> multiplierSequence;
         private int _currentTurnIndex = 0;
@@ -131,8 +132,9 @@ namespace VTuber.BattleSystem.Core
         
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnMultiplierChange, new Dictionary<string, object>()
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRotateMultiplier, new Dictionary<string, object>()
             {
+                { "Name", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].AttributeName },
                 { "NewValue", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].Value },
                 { "Color", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].color },
             });
@@ -278,6 +280,13 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributes.TryGetValue("BAChattingMultiplier", out var chatting) ? (VBattleMultiplierAttribute)chatting : null,
                 _battleAttributes.TryGetValue("BATurn", out var turnAttribute) ? (VBattleTurnAttribute)turnAttribute : null
             );
+
+            var viewerCount = _battleAttributes["BAViewerCount"].Value;
+            foreach (var multiplier in _multiplierManager.Multipliers)
+            {
+                multiplier.AddTo(VMathUtils.FloatToInt(viewerCount * 0.1f), false, false);
+            }
+            
             _multiplierManager.OnEnable();
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnViewerCountChange, OnViewerCountChange);
         }
@@ -320,27 +329,33 @@ namespace VTuber.BattleSystem.Core
             var delta = (int)messagedict["Delta"];
             if(delta <= 0)
                 return;
-            
-            _multiplierManager.Multiplier.AddTo(VMathUtils.FloatToInt(delta * 0.1f), false, false);
+
+            foreach (var multiplier in _multiplierManager.Multipliers)
+            {
+                multiplier.AddTo(VMathUtils.FloatToInt(delta * 0.1f), false, false);
+            }
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
-            int delta = (int)messagedict["Delta"];
-            if(delta <= 0)
-                return;
-
-            (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                AddPopularity(delta, "",
-                    messagedict["IsFromCard"] as bool? ?? false,
-                    messagedict["ShouldPlayTwice"] as bool? ?? false);
+            if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
+            {
+                float multiplier = _multiplierManager.Multiplier.Value / 100f;
+                int delta = (int)messagedict["Delta"];
+                if (delta <= 0)
+                    return;
+                (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
+                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName,
+                        messagedict["IsFromCard"] as bool? ?? false,
+                        messagedict["ShouldPlayTwice"] as bool? ?? false);
+            }
         }
 
         public int PreviewPopularityChange(int delta)
         {
             if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
             {
-                float multiplier = _multiplierManager is null ? 1f : _multiplierManager.Multiplier.Value / 100f;
+                float multiplier = _multiplierManager.Multiplier.Value / 100f;
                 int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
                 return (int)(parameterDelta * multiplier);
             }

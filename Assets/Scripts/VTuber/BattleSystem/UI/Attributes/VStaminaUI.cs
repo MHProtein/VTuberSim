@@ -34,9 +34,9 @@ namespace VTuber.BattleSystem.UI
             if(delta == 0)
                 return;
             
-            bar.fillAmount = (float)value / maxValue;
+            Tween.UIFillAmount(bar, (float)value / maxValue, 0.3f);
             staminaText.faceColor = delta > 0 ? Color.green : Color.red;
-            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
+            _animationQueue.Enqueue(Tween.PunchScale(staminaText.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
                 () =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);

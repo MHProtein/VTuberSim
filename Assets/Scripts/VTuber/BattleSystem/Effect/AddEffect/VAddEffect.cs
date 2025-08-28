@@ -24,6 +24,8 @@ namespace VTuber.BattleSystem.Effect
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
+            if (battle is null || battle.BattleAttributeManager is null)
+                return;
             if (battle.BattleAttributeManager.TryGetAttribute(_configuration.attributeName, out var attribute))
             {
                 int value = _addValue.Value;
