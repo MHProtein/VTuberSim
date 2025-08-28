@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 using VTuber.CoopSystem.UI.DetailsUI;
 using VTuber.Core.EventCenter;
@@ -12,11 +13,14 @@ namespace VTuber.CoopSystem.UI
 
         [SerializeField] private GameObject cooperatorPrefab;
         [SerializeField] private VCoopDetails detailsTab;
+        [SerializeField] private VCooperatorUI _selectedCooperator;
+
         
         protected override void Awake()
         {
             base.Awake();
             uis = new List<VCooperatorUI>();
+            detailsTab.onHide += OnDetailsHide;
         }
 
         protected override void OnEnable()
@@ -80,10 +84,36 @@ namespace VTuber.CoopSystem.UI
             uis.Add(ui);
         }
 
-        public void CooperatorClicked(VCooperator cooperator)
+        public void OnDetailsHide()
         {
-            detailsTab.SetCooperator(cooperator);
-            detailsTab.Show();
+            _selectedCooperator.Unselect();
+            _selectedCooperator = null;
+            foreach (var ui in uis)
+            {
+                ui.SetSlotShowable(true);
+                ui.RestoreSlot();
+            }
+        }
+
+        public void CooperatorClicked(VCooperatorUI cooperator)
+        {
+            if (cooperator == _selectedCooperator)
+            {
+                detailsTab.Hide();
+                return;
+            }
+            Tween tween = Tween.Delay(0.05f);
+            foreach (var ui in uis)
+            {
+                ui.SetSlotShowable(false);
+                tween = ui.HideSlot(true);
+            }
+
+            if(_selectedCooperator)
+                _selectedCooperator.Unselect();
+            _selectedCooperator = cooperator;
+            tween.OnComplete(() => detailsTab.Show());
+            detailsTab.SetCooperator(cooperator.Cooperator);
         }
     }
 }

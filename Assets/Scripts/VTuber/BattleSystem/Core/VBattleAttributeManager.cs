@@ -81,6 +81,7 @@ namespace VTuber.BattleSystem.Core
     public class VMultiplierManager
     {
         public VBattleMultiplierAttribute Multiplier { get; private set; }
+        public List<VBattleMultiplierAttribute> Multipliers => _multiplierAttributes;
         private List<VBattleMultiplierAttribute> _multiplierAttributes;
         private List<int> multiplierSequence;
         private int _currentTurnIndex = 0;
@@ -278,6 +279,13 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributes.TryGetValue("BAChattingMultiplier", out var chatting) ? (VBattleMultiplierAttribute)chatting : null,
                 _battleAttributes.TryGetValue("BATurn", out var turnAttribute) ? (VBattleTurnAttribute)turnAttribute : null
             );
+
+            var viewerCount = _battleAttributes["BAViewerCount"].Value;
+            foreach (var multiplier in _multiplierManager.Multipliers)
+            {
+                multiplier.AddTo(VMathUtils.FloatToInt(viewerCount * 0.1f), false, false);
+            }
+            
             _multiplierManager.OnEnable();
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnViewerCountChange, OnViewerCountChange);
         }
@@ -320,8 +328,11 @@ namespace VTuber.BattleSystem.Core
             var delta = (int)messagedict["Delta"];
             if(delta <= 0)
                 return;
-            
-            _multiplierManager.Multiplier.AddTo(VMathUtils.FloatToInt(delta * 0.1f), false, false);
+
+            foreach (var multiplier in _multiplierManager.Multipliers)
+            {
+                multiplier.AddTo(VMathUtils.FloatToInt(delta * 0.1f), false, false);
+            }
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)

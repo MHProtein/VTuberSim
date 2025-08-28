@@ -36,7 +36,7 @@ namespace VTuber.ScheduleSystem.UI
         private Camera _camera;
         private List<VScheduleSlot> _disposeSlots;
         private bool _disposable;
-        private Vector2 _disposePosition;
+        private Transform _disposePosition;
         
         protected override void Awake()
         {
@@ -95,10 +95,10 @@ namespace VTuber.ScheduleSystem.UI
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
             Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
 
-            if (slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent,
+            if (slot.FindPosition((int)e.EventID, _event.Duration, initOffset.y, out var parents, out var transformParent,
                     out var position))
             {
-                SetNewParents(parents, VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect, position,
+                SetNewParents(parents, transformParent, position,
                     false);
 
                 if (parent is not null)
@@ -109,7 +109,7 @@ namespace VTuber.ScheduleSystem.UI
 
                 parentBeforeDrag = parentSlots;
                 _disposeSlots = parentSlots;
-                _disposePosition = transform.position;
+                _disposePosition = parent;
             }
             _disposable = disposable;
         }
@@ -158,7 +158,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             parentSlots = _disposeSlots;
 
-            Tween.Position(transform, _disposePosition, 0.2f);
+            Tween.Position(transform, _disposePosition.position, 0.2f);
             //transform.position = _lastPosition;
             foreach (var parent in parentSlots)
             {
@@ -199,9 +199,9 @@ namespace VTuber.ScheduleSystem.UI
                 var slot = result.gameObject.GetComponent<VScheduleSlot>();
                 if (slot is not null)
                 {
-                    if(slot.FindPosition(_event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
+                    if(slot.FindPosition((int)_event.EventID, _event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
                     {
-                        SetNewParents(parents, VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect, position, true);
+                        SetNewParents(parents, transformParent, position, true);
                         return true;
                     }
                 }

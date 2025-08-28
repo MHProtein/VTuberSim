@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -13,6 +14,8 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         [SerializeField] private TMP_Text coopName;
         [SerializeField] private TMP_Text coopValue;
         [SerializeField] private List<VCoopTab> tabs;
+
+        public Action onHide;
 
         protected override void Awake()
         {
@@ -55,6 +58,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
             {
                 tab.Clear();
             }
+            onHide?.Invoke();          
         }
     }
 }
