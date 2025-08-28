@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Effect
         private Action<uint, float> _onBuffLayerChangeRate;
         private Action<uint, int> _onBuffLayerChangePoints;
         private uint modifierID;
+        private bool _applied = false;
         
         public VAttributeGainPointsModifierEffect(VAttributeGainPointsModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
@@ -36,21 +37,16 @@ namespace VTuber.BattleSystem.Effect
         
         public override void OnBuffAdded(VBattle battle, int layer)
         {
-            if(battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
-            {
-                float pointValue = _deltaPoints.Value;
-                if(MultiplyByLayer > 0.0f)
-                    pointValue *= layer * MultiplyByLayer;
-                
-                modifierID = attribute.GainPointsModifier.AddModifier((int)pointValue, -1);
-                _onBuffRemove = attribute.GainPointsModifier.RemoveModifier;
-                _onBuffLayerChangePoints = attribute.GainPointsModifier.ChangeModifier;
-                VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + modifierID);
-            }
+            Apply(battle, layer);
         }
 
         public override void OnBuffLayerChange(int layer)
         {
+            if (!_applied)
+            {
+                Apply(_battle, layer);
+                return;
+            }
             if (MultiplyByLayer < 0.0f)
                 return;
 
@@ -73,6 +69,25 @@ namespace VTuber.BattleSystem.Effect
         public override string GetValue()
         {
             return _deltaPoints.Value.ToString();
+        }
+
+        public void Apply(VBattle battle, int layer)
+        {
+            if (_applied)
+                return;
+            if (!CanApply(battle, null))
+                return;
+            if(battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
+            {
+                float pointValue = _deltaPoints.Value;
+                if(MultiplyByLayer > 0.0f)
+                    pointValue *= layer * MultiplyByLayer;
+                
+                modifierID = attribute.GainPointsModifier.AddModifier((int)pointValue, -1);
+                _onBuffRemove = attribute.GainPointsModifier.RemoveModifier;
+                _onBuffLayerChangePoints = attribute.GainPointsModifier.ChangeModifier;
+                VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + modifierID);
+            }
         }
     }
 }

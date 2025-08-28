@@ -7,6 +7,7 @@ using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
@@ -189,7 +190,7 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue ));
+            int finalDelta = VMathUtils.FloatToInt((delta + gainPointsModifierValue) * (gainRateModifierValue ));
             if(delta < 0 && finalDelta > 0)
                 finalDelta = 0;
             SetValue(Mathf.Clamp(finalDelta + Value,
@@ -204,7 +205,7 @@ namespace VTuber.BattleSystem.BattleAttribute
                 return Value;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue));
+            int finalDelta = VMathUtils.FloatToInt((delta + gainPointsModifierValue) * (gainRateModifierValue));
             if(delta < 0 && finalDelta > 0)
                 finalDelta = 0;
             return Value + finalDelta;

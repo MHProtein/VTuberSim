@@ -95,6 +95,7 @@ namespace VTuber.Core.EventCenter
         
         OnBeginSelectConsumableFrom3 = 66,
         OnShowAddConsumable = 67,
+        OnCardUpgraded = 68,
     }
     
     
