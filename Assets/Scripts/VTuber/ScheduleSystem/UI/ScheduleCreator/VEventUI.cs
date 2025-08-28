@@ -15,6 +15,10 @@ namespace VTuber.ScheduleSystem.UI
     {
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
+        [SerializeField] private Image nameIcon;
+        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_Text costText;
+        [SerializeField] private Image costIcon;
         [HideInInspector] public Vector2 initOffset;
         private bool _isSelected;
         private bool _interactable;
@@ -38,12 +42,15 @@ namespace VTuber.ScheduleSystem.UI
         private bool _disposable;
         private Transform _disposePosition;
         
+        private RectTransform _rectTransform;
+        
         protected override void Awake()
         {
             parentSlots = new List<VScheduleSlot>();
             parentBeforeDrag = new List<VScheduleSlot>();
             _interactable = true;
             _camera = Camera.main;
+            _rectTransform = GetComponent<RectTransform>();
         }
 
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
@@ -92,8 +99,25 @@ namespace VTuber.ScheduleSystem.UI
             _bgColor = background.color;
             icon.transform.localScale = Vector3.zero;
             background.transform.localScale = Vector3.zero;
-            Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
-            Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
+            nameText.text = e.EventName;
+            nameIcon.color = e.BackgroundColor;
+            
+            switch (e.CostType)
+            {
+                case VEventCostType.Stamina:
+                    costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Stamina");
+                    break;
+                case VEventCostType.Money:
+                    costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Money");
+                    break;
+            }
+            
+            costText.text = e.Cost.ToString();
+            
+            Tween.Scale(icon.transform, Vector3.one, 0.3f);
+            Tween.Scale(background.transform, Vector3.one, 0.3f);
+            var rectTransform = (background.transform as RectTransform);
+            Tween.UISizeDelta(rectTransform, new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
 
             if (slot.FindPosition((int)e.EventID, _event.Duration, initOffset.y, out var parents, out var transformParent,
                     out var position))
@@ -126,8 +150,25 @@ namespace VTuber.ScheduleSystem.UI
             _isSelected = true;
             icon.transform.localScale = Vector3.zero;
             background.transform.localScale = Vector3.zero;
+            nameText.text = e.EventName;
+            nameIcon.color = e.BackgroundColor;
+            
+            switch (e.CostType)
+            {
+                case VEventCostType.Stamina:
+                    costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Stamina");
+                    break;
+                case VEventCostType.Money:
+                    costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Money");
+                    break;
+            }
+            
+            costText.text = e.Cost.ToString();
+
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
-            Tween.Scale(background.transform, new Vector3(1, e.Duration, 1), 0.3f);
+            Tween.Scale(background.transform, Vector3.one, 0.3f);
+            var rectTransform = (background.transform as RectTransform);
+            Tween.UISizeDelta(rectTransform, new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
 
             transform.SetAsLastSibling();
 

@@ -75,6 +75,24 @@ namespace VTuber.BattleSystem.Core
             consumeRateModifier.Reset();
             consumePointsModifier.Reset();
         }
+
+        public void OnTurnEnd()
+        {
+            foreach (var mod in consumePointsModifier.Modifiers)
+            {
+                if (mod.Value.DecreaseTurnCount())
+                {
+                    consumePointsModifier.RemoveModifier(mod.Key);
+                }
+            }
+            foreach (var mod in consumeRateModifier.Modifiers)
+            {
+                if (mod.Value.DecreaseTurnCount())
+                {
+                    consumeRateModifier.RemoveModifier(mod.Key);
+                }
+            }
+        }
         
     }
 
@@ -117,13 +135,15 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
         }
-        
+
         private void OnTurnChange(Dictionary<string, object> messagedict)
         {
             int delta = (int)messagedict["Delta"];
             if (delta <= 0)
                 return;
 
+            if (multiplierSequence is null)
+                return;
             for (int i = 0; i < delta; i++)
             {
                 multiplierSequence.Add(multiplierSequence.Last());
@@ -309,6 +329,7 @@ namespace VTuber.BattleSystem.Core
         public void OnEnable()
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             
         }
         
@@ -320,8 +341,13 @@ namespace VTuber.BattleSystem.Core
             }
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnViewerCountChange, OnViewerCountChange);
-            if(_multiplierManager is not null)
-                _multiplierManager.OnDisable();
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnViewerCountChange, OnTurnEnd);
+            _multiplierManager.OnDisable();
+        }
+
+        private void OnTurnEnd(Dictionary<string, object> messagedict)
+        {
+            _staminaManager.OnTurnEnd();
         }
 
         private void OnViewerCountChange(Dictionary<string, object> messagedict)

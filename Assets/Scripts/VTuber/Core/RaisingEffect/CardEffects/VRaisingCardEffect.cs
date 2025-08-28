@@ -81,7 +81,7 @@ namespace VTuber.Core.RaisingEffect
                     if (probability <= totalProbability)
                     {
                         var card = cards[j].CreateCard();
-                        if (selectedCards.Contains(card))
+                        if (selectedCards.Find(vCard => vCard.configID == card.configID) != null)
                             break;
                         float upgradeProbability = Random.Range(0, 1.0f);
                         if(upgradeProbability <= _upgradeProbabilities[(int)card.Rarity - 1])

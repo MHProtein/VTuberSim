@@ -54,9 +54,10 @@ namespace VTuber.Reincarnation
     {
         [Space(3)]
         [HorizontalGroup("VRelicRewardInfo")]
-        [LabelText("遗物ID")] public uint relicID;
-        [HorizontalGroup("VRelicRewardInfo")]
         [LabelText("事件ID")] public uint eventID;
+
+        [HorizontalGroup("VRelicRewardInfo")] [LabelText("遗物ID")]
+        public List<uint> relicIDs;
     }
     
     [Serializable]

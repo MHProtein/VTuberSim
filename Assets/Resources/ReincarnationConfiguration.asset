@@ -1389,8 +1389,8 @@ MonoBehaviour:
     capacity: 10
     upgradeCapacity: 15
   relicRewards:
-  - relicID: 0
-    eventID: 4
+  - eventID: 4
+    relicIDs: 
   streamAttributeEffects:
   - effect: 28
     levelInfos:

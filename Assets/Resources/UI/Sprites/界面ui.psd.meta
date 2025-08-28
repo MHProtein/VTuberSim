@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: backicon
+      name: EventUI_Background
       rect:
         serializedVersion: 2
         x: 772
-        y: 28
-        width: 557
-        height: 293
+        y: 125
+        width: 559
+        height: 196
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -369,6 +369,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: EventUI_NameIcon
+      rect:
+        serializedVersion: 2
+        x: 772
+        y: 28
+        width: 559
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5467fc213e1f2b4489aec22a1d981f98
+      internalID: -1361271893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -381,10 +402,11 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Coop: -541574120
+      EventUI_Background: 188248212
+      EventUI_NameIcon: -1361271893
       Outside: -1087201087
       Practice: -1104793278
       Rest: -1206604687
-      backicon: 188248212
       coop: 994785631
       gift: 1171262407
       lamian: -467975455

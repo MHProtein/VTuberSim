@@ -8,9 +8,11 @@ using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Dialogue.UI;
 using VTuber.Relic;
 
 namespace VTuber.BattleSystem.Core
@@ -115,30 +117,33 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             
-            if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+            VBattleUI.Instance.PlayVideo(() =>
             {
-                viewerCountAttribute.AddTo(initialViewers, false);
-            }
-
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
-            {
-                { "TurnLeft", TurnLeft },
-                { "TargetPopularity", targetPopularity },
-                { "ExtraTargetPopularity", extraTargetPopularity },
-                { "IsPhaseEnding", isPhaseEnding },
-                { "CharacterAttributeManager", characterAttributeManager },
-                { "BattleAttributeManager", _battleAttributeManager }
+                if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+                {
+                    viewerCountAttribute.AddTo(initialViewers, false);
+                }
+                
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
+                {
+                    { "TurnLeft", TurnLeft },
+                    { "TargetPopularity", targetPopularity },
+                    { "ExtraTargetPopularity", extraTargetPopularity },
+                    { "IsPhaseEnding", isPhaseEnding },
+                    { "CharacterAttributeManager", characterAttributeManager },
+                    { "BattleAttributeManager", _battleAttributeManager }
+                });
+            
+                _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+            
+                foreach (var buff in characterAttributeManager.GetBuffs())
+                {
+                    if(buff is not null)
+                        _buffManager.AddBuff(buff, 1, false, false);
+                }
+            
+                InitializeTurn();
             });
-            
-            _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
-            
-            foreach (var buff in characterAttributeManager.GetBuffs())
-            {
-                if(buff is not null)
-                    _buffManager.AddBuff(buff, 1, false, false);
-            }
-            
-            InitializeTurn();
         }
         
         public void SetShouldNextCardPlayTwice(bool value)

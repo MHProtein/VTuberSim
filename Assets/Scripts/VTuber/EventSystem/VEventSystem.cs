@@ -41,11 +41,14 @@ namespace VTuber.EventSystem
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e)
         {
-            _character = character;
-            _currentEvent = e;
-            dialogueSystem.LoadDialog(e.dialogueNode);
-            dialogueSystem.ShowMe(character);
-            dialogueSystem.ContinueDialog();
+            VEventSystemUI.Instance.PlayVideo(() =>
+            {
+                _character = character;
+                _currentEvent = e;
+                dialogueSystem.LoadDialog(e.dialogueNode);
+                dialogueSystem.ShowMe(character);
+                dialogueSystem.ContinueDialog();
+            });
         }
 
         protected override void OnEnable()
