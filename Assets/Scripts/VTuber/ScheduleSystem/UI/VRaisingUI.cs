@@ -102,7 +102,7 @@ namespace VTuber.ScheduleSystem.UI
         
         public void SetPauseText(bool shouldPause)
         {
-            pauseText.text = shouldPause ? "Pause After This" : "Pause Schedule";
+            pauseText.text = shouldPause ? "此事件后暂停" : "暂停周表";
         }
         
         private void OnNotifyEventDescriptionChange(Dictionary<string, object> messagedict)

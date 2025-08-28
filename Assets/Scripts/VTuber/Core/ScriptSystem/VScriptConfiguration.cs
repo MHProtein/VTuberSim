@@ -42,6 +42,7 @@ namespace VTuber.Core.ScriptSystem
         [SerializeField] [LabelText("粉丝数系数")] public float followerCoefficient = 1f;
         [SerializeField] [LabelText("最高舰长数系数")]public float membershipCoefficient = 1f;
         [SerializeField] [LabelText("直播热度系数")]public List<VRangeValueMap<float>> popularityCoefficient;
+        [SerializeField] [LabelText("通过加成")]public int successBonus;
 
         [SerializeField] public List<VScoreLevel> scoreLevels;
         [SerializeField] public List<VKPIInfo> kpis;
