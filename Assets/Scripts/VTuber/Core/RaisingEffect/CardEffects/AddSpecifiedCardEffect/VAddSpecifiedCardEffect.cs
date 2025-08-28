@@ -6,6 +6,7 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VAddSpecifiedCardEffect : VRaisingEffect
     {
+        public uint CardId => cardId;
         private uint cardId;
         public VAddSpecifiedCardEffect(VRaisingEffectConfiguration configuration, string parameter) : base(configuration)
         {

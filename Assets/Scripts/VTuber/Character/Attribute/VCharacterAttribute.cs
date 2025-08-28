@@ -164,7 +164,7 @@ namespace VTuber.Character.Attribute
         public void AddMaxValue(int value)
         {
             _maxValue += value;
-            SendEvent(Value, 0);
+            AddTo(value);
             VDebug.Log("Added max value: " + value + " to " + _configuration.attributeName + ", new max value: " + _maxValue);
         }
     }

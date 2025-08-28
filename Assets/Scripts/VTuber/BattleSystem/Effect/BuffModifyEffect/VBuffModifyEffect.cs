@@ -2,6 +2,7 @@
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -33,7 +34,7 @@ namespace VTuber.BattleSystem.Effect
         {
             int value = _addValue.Value;
             if (MultiplyByLayer > 0.0f)
-                value *= (int)(layer * MultiplyByLayer);
+                value *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
             
             battle.BuffManager.AddBuff(VDataManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
             VDebug.Log("效果 " + _configuration.effectName + " 为 Buff(ID: " + _configuration.buffID + ") 增加了 " + value + "。新数值: " + value);

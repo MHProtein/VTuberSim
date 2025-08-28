@@ -36,5 +36,14 @@ namespace VTuber.Relic
                 _relics.Remove(relic);
             }
         }
+
+        public void Clear()
+        {
+            foreach (var relic in _relics)
+            {
+                relic.OnRelicRemovedInRaising();
+            }
+            _relics.Clear();
+        }
     }
 }

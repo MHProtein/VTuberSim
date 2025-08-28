@@ -19,7 +19,7 @@ namespace VTuber.Core.RaisingEffect
             _upgradeProbabilities = configuration.upgradeProbabilities;
         }
 
-        public List<VCard> GetRandomCards(int count, VCardCondition condition)
+        public List<VCard> GetRandomCards(int count, VCardCondition condition, string liveType)
         {
             List<int> rarityCounts = new List<int>()
             {
@@ -28,7 +28,7 @@ namespace VTuber.Core.RaisingEffect
             List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations().
                 Where(card =>
                 {
-                    if (card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special)
+                    if (card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special && card.liveType == liveType)
                     {
                         if (condition is null)
                         {
@@ -70,7 +70,8 @@ namespace VTuber.Core.RaisingEffect
             
             List<VCard> selectedCards = new List<VCard>();
 
-            for (int i = 0; i < count; i++)
+            int i = 0;
+            while (i < count)
             {
                 float probability = Random.Range(0, 1.0f);
                 float totalProbability = 0;
@@ -80,10 +81,13 @@ namespace VTuber.Core.RaisingEffect
                     if (probability <= totalProbability)
                     {
                         var card = cards[j].CreateCard();
+                        if (selectedCards.Contains(card))
+                            break;
                         float upgradeProbability = Random.Range(0, 1.0f);
                         if(upgradeProbability <= _upgradeProbabilities[(int)card.Rarity - 1])
                             card.Upgrade(false);
                         selectedCards.Add(card);
+                        ++i;
                         break;
                     }
                 }

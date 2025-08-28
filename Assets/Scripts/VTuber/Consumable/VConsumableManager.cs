@@ -84,5 +84,18 @@ namespace VTuber.Consumable
         {
             RemoveConsumable(consumable);
         }
+
+        public void Clear()
+        {
+            foreach (var consumable in consumables)
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable, new Dictionary<string, object>()
+                {
+                    { "Consumable", consumable },
+                    { "AreSlotsFull", !CanAddConsumable() }
+                });
+            }
+            consumables.Clear();
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Globalization;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -74,7 +75,7 @@ namespace VTuber.BattleSystem.Effect
         
         public override string GetValue()
         {
-            return (int)(_deltaRate.Value * 100) + "%";
+            return VMathUtils.FloatToInt(_deltaRate.Value * 100) + "%";
         }
     }
 }

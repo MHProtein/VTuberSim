@@ -11,29 +11,31 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         [SerializeField] private Transform eventContainer;
         
         private List<VCoopEventUI> eventUIs;
-
-
+        
         public override void SetTab(VCooperator cooperator)
         {
             eventUIs = new List<VCoopEventUI>();
-
+            description.text = cooperator.configuration.Description;
             var coopEvents = cooperator.CoopEvents;
             for (int i = 0; i < coopEvents.Count; i++)
             {
                 var ui = Instantiate(eventUIPrefab, eventContainer);
                 var eventUI = ui.GetComponent<VCoopEventUI>();
-                eventUI.Initialize(coopEvents[i], cooperator.CurrentLevel, cooperator.CurrentCoopLevel.levelName);
+                eventUI.Initialize(coopEvents[i], cooperator);
                 eventUIs.Add(eventUI);
             }
         }
 
         public override void Clear()
         {
-            foreach (var ui in eventUIs)
+            if (eventUIs != null)
             {
-                Destroy(ui.gameObject);
+                foreach (var ui in eventUIs)
+                {
+                    Destroy(ui.gameObject);
+                }
+                eventUIs.Clear();
             }
-            eventUIs.Clear();
         }
     }
 }

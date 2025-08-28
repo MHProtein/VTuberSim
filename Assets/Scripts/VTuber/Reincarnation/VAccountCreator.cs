@@ -187,29 +187,32 @@ namespace VTuber.Reincarnation
 
             // OtherAttributes
             List<VEffectItem> otherEffects = new List<VEffectItem>();
+            List<VAttributeEffectInfo> otherEffectInfos = new List<VAttributeEffectInfo>();
             foreach (var requirement in ratingLevelInfo.attributeEffectsRequirements)
             {
                 for (int i = 0; i < requirement.count; i++)
                 {
-                    var effectInfos = config.attributeEffects.OrderBy(r => Random.Range(0f, 1f))
-                        .Take(requirement.count);
-                    foreach (var effectInfo in effectInfos)
+                    var effectInfo = config.attributeEffects[Random.Range(0, config.attributeEffects.Count)];
+                    while (otherEffectInfos.Find(info => info.effect == effectInfo.effect) != null)
                     {
-                        if (streamEffects.Count + otherEffects.Count >= count)
-                            return otherEffects.Union(streamEffects).ToList();
-                        var level = Random.Range(0, effectInfo.levelInfos.Count - 1);
-                        var param = effectInfo.levelInfos[level].levelParam;
-
-                        otherEffects.Add(new VEffectItem()
-                        {
-                            id = effectInfo.effect,
-                            parameter = param,
-                            upgradedParameter = param,
-                            level = level
-                        });
-                        ;
-                        capacity += config.effectCapacities[requirement.level];
+                        effectInfo = config.attributeEffects[Random.Range(0, config.attributeEffects.Count)];
                     }
+           
+                    if (streamEffects.Count + otherEffects.Count >= count)
+                        return otherEffects.Union(streamEffects).ToList();
+                    var level = Random.Range(0, effectInfo.levelInfos.Count - 1);
+                    var param = effectInfo.levelInfos[level].levelParam;
+
+                    otherEffects.Add(new VEffectItem()
+                    {
+                        id = effectInfo.effect,
+                        parameter = param,
+                        upgradedParameter = param,
+                        level = level
+                    });
+                    otherEffectInfos.Add(effectInfo);
+                    
+                    capacity += config.effectCapacities[requirement.level];
                 }
             }
 

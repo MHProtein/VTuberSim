@@ -31,7 +31,6 @@ namespace VTuber.BattleSystem.UI
         private List<Image> colorObjects = new List<Image>();
         int arrowIndex = -1;
         private float initSize = 0;
-        private bool _isInUse = false;
         
         protected override void Awake()
         {
@@ -51,19 +50,11 @@ namespace VTuber.BattleSystem.UI
             base.Start();
         }
         
-        public void IsInUse(bool isInUse)
-        {
-            _isInUse = isInUse;
-        }
-
         protected override void OnEnable()
         {
             base.OnEnable();
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnMultiplierSequenceCalculated, OnMultiplierSequenceCalculated);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+
         }
 
         protected override void OnDisable()
@@ -78,8 +69,6 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            if (!_isInUse)
-                return;
             foreach (var colorObject in colorObjects)
             {
                 Destroy(colorObject.gameObject);
@@ -90,8 +79,6 @@ namespace VTuber.BattleSystem.UI
         
         private void OnTurnChange(Dictionary<string, object> messagedict)
         {         
-            if (!_isInUse)
-                return;
             int delta = (int)messagedict["Delta"];
             if (delta <= 0)
                 return;
@@ -121,8 +108,6 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
-            if (!_isInUse)
-                return;
             Tween.Delay(0.1f, () =>
             {
                 arrowIndex++;
@@ -135,8 +120,10 @@ namespace VTuber.BattleSystem.UI
         
         private void OnMultiplierSequenceCalculated(Dictionary<string, object> messagedict)
         {
-            if (!_isInUse)
-                return;
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
             List<Color> colors = messagedict["Colors"] as List<Color>;
             if (colors is null)
                 return;
@@ -151,18 +138,17 @@ namespace VTuber.BattleSystem.UI
         
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            if (!_isInUse)
-                return;
             MultiplierText.text = $"提升率: {messagedict["NewValue"] as int? ?? 0}%";
-            MultiplierText.faceColor = (Color)messagedict["Color"];
             
             textSequence.Enqueue(Tween.PunchScale(MultiplierText.transform, Vector3.one * 1.3f, 0.5f));
+            if (!messagedict.ContainsKey("Color"))
+                return;
+            MultiplierText.faceColor = (Color)messagedict["Color"];
+            
         }
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
-            if (!_isInUse)
-                return;
             arrowIndex++;
             if(arrowIndex >= colorObjects.Count)
                 return;

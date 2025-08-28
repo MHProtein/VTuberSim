@@ -29,6 +29,5 @@ MonoBehaviour:
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   battleAttributeName: BASingingMultiplier
   isBattleAttributePercentage: 1
-  battleEventKey: 18
-  minValue: 0
-  maxValue: 2147483647
+  battleEventKey: 20
+  battleAttributeNameWhenConvertBack: BASingingMultiplier

@@ -198,13 +198,14 @@ namespace VTuber.BattleSystem.BattleAttribute
             SendEvent(Value, Value, isFromCard, shouldPlayTwice);
         }
         
-        protected virtual void SetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
+        public virtual void SetValue(int value, bool isFromCard, bool shouldPlayTwice = false, bool sendEvent = true)
         {
             var delta = value - Value;
             Value = Mathf.Clamp(value, _minValue, _maxValue);
             if (Value > HighestValue)
                 HighestValue = Value;
-            SendEvent(Value, delta, isFromCard, shouldPlayTwice);
+            if(sendEvent)
+                SendEvent(Value, delta, isFromCard, shouldPlayTwice);
         }
         
         public void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)  
@@ -214,7 +215,8 @@ namespace VTuber.BattleSystem.BattleAttribute
                 { "NewValue", newValue },
                 { "Delta", delta },
                 {"IsFromCard", isFromCard },
-                {"ShouldPlayTwice", shouldPlayTwice }
+                {"ShouldPlayTwice", shouldPlayTwice },
+                {"MaxValue", _maxValue}
             };
             VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
             

@@ -6,6 +6,7 @@ using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -268,9 +269,6 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributes.TryGetValue("BAShield", out var shield) ? (VBattleStaminaAttribute)shield : null
             );
             
-            if (!_isPhaseEnding)
-                return;
-            
             _multiplierManager = new VMultiplierManager(
                 mainAttributeIndex,
                 4,
@@ -281,6 +279,7 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributes.TryGetValue("BATurn", out var turnAttribute) ? (VBattleTurnAttribute)turnAttribute : null
             );
             _multiplierManager.OnEnable();
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnViewerCountChange, OnViewerCountChange);
         }
         
         public void ConvertFromCharacterAttributes(VCharacterAttributeManager characterAttributeManager)
@@ -301,6 +300,7 @@ namespace VTuber.BattleSystem.Core
         public void OnEnable()
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
+            
         }
         
         public void OnDisable()
@@ -310,8 +310,18 @@ namespace VTuber.BattleSystem.Core
                 attribute.Value.OnDisable();
             }
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnViewerCountChange, OnViewerCountChange);
             if(_multiplierManager is not null)
                 _multiplierManager.OnDisable();
+        }
+
+        private void OnViewerCountChange(Dictionary<string, object> messagedict)
+        {
+            var delta = (int)messagedict["Delta"];
+            if(delta <= 0)
+                return;
+            
+            _multiplierManager.Multiplier.AddTo(VMathUtils.FloatToInt(delta * 0.1f), false, false);
         }
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
@@ -319,21 +329,11 @@ namespace VTuber.BattleSystem.Core
             int delta = (int)messagedict["Delta"];
             if(delta <= 0)
                 return;
-            if (_isPhaseEnding)
-            {
-                float multiplier = _multiplierManager.Multiplier.Value / 100f;
-                (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName,
-                        messagedict["IsFromCard"] as bool? ?? false,
-                        messagedict["ShouldPlayTwice"] as bool? ?? false);
-            }
-            else
-            {
-                (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                    AddPopularity(delta, "",
-                        messagedict["IsFromCard"] as bool? ?? false,
-                        messagedict["ShouldPlayTwice"] as bool? ?? false);
-            }
+
+            (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
+                AddPopularity(delta, "",
+                    messagedict["IsFromCard"] as bool? ?? false,
+                    messagedict["ShouldPlayTwice"] as bool? ?? false);
         }
 
         public int PreviewPopularityChange(int delta)
@@ -342,7 +342,7 @@ namespace VTuber.BattleSystem.Core
             {
                 float multiplier = _multiplierManager is null ? 1f : _multiplierManager.Multiplier.Value / 100f;
                 int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
-                return _isPhaseEnding ? (int)(parameterDelta * multiplier) : parameterDelta;
+                return (int)(parameterDelta * multiplier);
             }
 
             return 0;

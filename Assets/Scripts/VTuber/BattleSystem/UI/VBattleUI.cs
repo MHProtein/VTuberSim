@@ -26,7 +26,6 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private Transform drawPileTransform;
         
         [FormerlySerializedAs("cardSlots")] [SerializeField] private RectTransform handSlotsContent;
-        [SerializeField] private VBattleMultiplierUI multiplierUI;
         
         [Space(3)]
         [Header("PickCard Menu")]
@@ -267,9 +266,6 @@ namespace VTuber.BattleSystem.UI
             SetTargetPopularity(messagedict["TargetPopularity"] as int? ?? 0);
             SetExtraTargetPopularityText(messagedict["ExtraTargetPopularity"] as int? ?? 0);
             
-            bool isPhaseEnding = messagedict["IsPhaseEnding"] as bool? ?? false;
-            multiplierUI.IsInUse(isPhaseEnding);
-            multiplierUI.gameObject.SetActive(isPhaseEnding);
         }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)

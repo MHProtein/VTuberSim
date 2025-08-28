@@ -111,6 +111,7 @@ namespace VTuber.Core.StateMachine
             
             VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, "SSS", 50000, account);
             VRaisingUI.Instance.ShowEndingUI();
+            stateMachine.Character.EndRun();
         }
 
         private void NextEvent()

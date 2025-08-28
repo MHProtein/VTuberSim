@@ -14,9 +14,9 @@ namespace VTuber.CoopSystem
         [HorizontalGroup] public int from;
         [HorizontalGroup] public int to;
         [HorizontalGroup] public string levelName;
+        public int levelIndex;
         public VEventType eventType;
         public uint upgradeEventID;
-        public VCoopLevel nextLevel;
 
         public bool InLevel(int value)
         {

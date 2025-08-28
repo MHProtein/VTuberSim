@@ -3,6 +3,7 @@ using System.Globalization;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -84,7 +85,7 @@ namespace VTuber.BattleSystem.Effect
                 case VStaminaModifiyType.Points:
                     int pointsValue = _deltaPoints.Value;
                     if(MultiplyByLayer > 0.0f)
-                        pointsValue *= (int)(layer * MultiplyByLayer);
+                        pointsValue *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
             
                     modifierID = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.AddModifier(pointsValue);
                     _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.RemoveModifier;
@@ -113,7 +114,7 @@ namespace VTuber.BattleSystem.Effect
                     if (MultiplyByLayer < 0.0f)
                         return;
                     int pointsValue = _deltaPoints.Value;
-                    pointsValue *= (int)(layer * MultiplyByLayer);
+                    pointsValue *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
                     _onBuffLayerChangePoints(modifierID, pointsValue);
                     VDebug.Log($"效果 {_configuration.effectName} 修改了PointsModifier为 {pointsValue}，层数：{layer}");
                     break;
@@ -133,7 +134,7 @@ namespace VTuber.BattleSystem.Effect
             switch (_modifiyType)
             {
                 case VStaminaModifiyType.Rate:
-                    return (int)(_deltaRate.Value * 100) + "%";
+                    return VMathUtils.FloatToInt(_deltaRate.Value * 100) + "%";
                 case VStaminaModifiyType.Points:
                     return _deltaPoints.Value.ToString();
             }

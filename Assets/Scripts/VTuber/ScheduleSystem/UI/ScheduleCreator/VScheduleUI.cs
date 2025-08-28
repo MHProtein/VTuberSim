@@ -170,7 +170,7 @@ namespace VTuber.ScheduleSystem.UI
                 e.IsPhaseStart = specialEvent.isPhaseStart;
                 e.IsSpecialEvent = true;
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
-                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex]);
+                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], true);
                 ui.SetFixed(true);
             }
             foreach (var slot in slots)
@@ -332,7 +332,7 @@ namespace VTuber.ScheduleSystem.UI
                                 eventId = size2Id;
                             var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                             e.IsSpecialEvent = true;
-                            eventUIObject.Initialize(e, slots[yy, x]);
+                            eventUIObject.Initialize(e, slots[yy, x], true);
                             
                             emptyCount = 0;
                         }
@@ -351,7 +351,7 @@ namespace VTuber.ScheduleSystem.UI
                         eventId = size3Id;
                     var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                     e.IsSpecialEvent = true;
-                    eventUIObject.Initialize(e, slots[yy, x]);
+                    eventUIObject.Initialize(e, slots[yy, x], true);
                 }
             }
             foreach (var slot in slots)

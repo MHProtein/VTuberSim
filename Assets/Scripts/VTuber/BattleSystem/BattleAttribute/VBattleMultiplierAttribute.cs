@@ -18,8 +18,5 @@ namespace VTuber.BattleSystem.BattleAttribute
             SetValue(value, isFromCard, shouldPlayTwice);
         }
 
-        public override void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)
-        {
-        }
     }
 }

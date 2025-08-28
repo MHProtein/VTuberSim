@@ -3,6 +3,7 @@ using System.Globalization;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -34,10 +35,10 @@ namespace VTuber.BattleSystem.Effect
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
 
-                int value = (int)((_percentage.Value) * buff.Value);
+                int value = VMathUtils.FloatToInt((_percentage.Value) * buff.Value);
                 
                 if (_configuration.multiplyByLayer > 0.0f)
-                    value *= (int)(layer * _configuration.multiplyByLayer);
+                    value *= VMathUtils.FloatToInt(layer * _configuration.multiplyByLayer);
                 value = value == 0 ? (_percentage.Value > 0.0f ? 1 : -1) : value;
                 
                 battle.BuffManager.AddBuff(VDataManager.Instance.CreateBuffByID(_buffID), value, isFromCard, shouldApplyTwice);
@@ -52,7 +53,7 @@ namespace VTuber.BattleSystem.Effect
         
         public override string GetValue()
         {
-            return (int)(_percentage.Value * 100) + "%";
+            return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";
         }
     }
 }

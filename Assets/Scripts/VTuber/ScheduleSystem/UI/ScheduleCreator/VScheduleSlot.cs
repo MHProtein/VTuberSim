@@ -30,8 +30,9 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image pfp;
         [SerializeField] private List<Image> eventIcons;
         
-        public bool Available => placeable && _item is null;
-        public bool placeable = true;
+        public bool Available => _placeable && _item is null;
+        private bool _placeable = true;
+        private bool _disposing = false;
         
         public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI)
         {
@@ -41,7 +42,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SetPlaceable(bool isPlaceable, bool showFrame)
         {
-            placeable = isPlaceable;
+            _placeable = isPlaceable;
             highlightFrame.SetActive(showFrame);
         }
 
