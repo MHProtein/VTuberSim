@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
@@ -18,9 +19,10 @@ using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VBattleUI : VUIBehaviour
+    public class VBattleUI : VSingletonMonobehaviour<VBattleUI>
     {
         [SerializeField] private GameObject battleRoot;
+        [SerializeField] private VideoPlayer loadingVideoPlayer;
         [SerializeField] private Transform cardPileContent;
         [FormerlySerializedAs("scrollView")] [SerializeField] private GameObject cardPileScrollView;
         [SerializeField] private Transform discardPileTransform;
@@ -67,7 +69,24 @@ namespace VTuber.BattleSystem.UI
         private VHandCardUI cardToDispose;
 
         private Coroutine _drawCardCoroutine;
+        
+        private Action onVideoFinish;
 
+        private void OnLoadingEnded(VideoPlayer source)
+        {
+            loadingVideoPlayer.gameObject.SetActive(false);
+            loadingVideoPlayer.Stop();
+            onVideoFinish?.Invoke();
+            onVideoFinish = null;
+        }
+
+        public void PlayVideo(Action onFinish)
+        {
+            loadingVideoPlayer.gameObject.SetActive(true);
+            loadingVideoPlayer.Play();
+            onVideoFinish = onFinish;
+        }
+        
         public void Rearrange(int index)
         {
             if (_handSlotsCards.Count == 0)
@@ -206,6 +225,7 @@ namespace VTuber.BattleSystem.UI
             _handSlotsSize = handSlotsContent.rect.size;
             cardToDispose = null;
             _pickCardMenu = pickCardMenuScroll.GetComponent<VPickCardMenu>();
+            loadingVideoPlayer.loopPointReached += OnLoadingEnded;
         }
 
         protected override void OnEnable()

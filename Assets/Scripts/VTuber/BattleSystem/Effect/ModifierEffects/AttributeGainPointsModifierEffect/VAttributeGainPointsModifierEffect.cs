@@ -42,7 +42,7 @@ namespace VTuber.BattleSystem.Effect
                 if(MultiplyByLayer > 0.0f)
                     pointValue *= layer * MultiplyByLayer;
                 
-                modifierID = attribute.GainPointsModifier.AddModifier((int)pointValue);
+                modifierID = attribute.GainPointsModifier.AddModifier((int)pointValue, -1);
                 _onBuffRemove = attribute.GainPointsModifier.RemoveModifier;
                 _onBuffLayerChangePoints = attribute.GainPointsModifier.ChangeModifier;
                 VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + modifierID);

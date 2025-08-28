@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.Video;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Consumable;
@@ -15,6 +16,7 @@ namespace VTuber.Dialogue.UI
 {
     public class VEventSystemUI : VSingletonMonobehaviour<VEventSystemUI>
     {
+        [SerializeField] private VideoPlayer loadingVideoPlayer;
         [SerializeField] private VPhaseEndingSelectionMenu phaseEndingSelectionMenu;
         [SerializeField] private GameObject endingOptionPrefab;
         [SerializeField] private VCardViewSelectionUI selectCardUI;
@@ -27,12 +29,30 @@ namespace VTuber.Dialogue.UI
         private Action _closeCardLibrary;
         private Action _CloseSelectFrom3Menu;
         private Action _CloseSelectFrom3ConsumablesMenu;
-
+        private Action onVideoFinish;
+        
         protected override void Awake()
         {
             base.Awake();
             selectCardUI.confirmButton.onClick.AddListener(CloseCardLibrary);
             upgradeCardUI.confirmButton.onClick.AddListener(CloseUpgradeCard);
+
+            loadingVideoPlayer.loopPointReached += OnLoadingEnded;
+        }
+
+        private void OnLoadingEnded(VideoPlayer source)
+        {
+            loadingVideoPlayer.gameObject.SetActive(false);
+            loadingVideoPlayer.Stop();
+            onVideoFinish?.Invoke();
+            onVideoFinish = null;
+        }
+
+        public void PlayVideo(Action onFinish)
+        {
+            loadingVideoPlayer.gameObject.SetActive(true);
+            loadingVideoPlayer.Play();
+            onVideoFinish = onFinish;
         }
 
         public void InitializePhaseEndingSelectionMenu(List<VStreamEvent> endings, Action confirmAction)

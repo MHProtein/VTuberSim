@@ -76,7 +76,7 @@ namespace VTuber.BattleSystem.Effect
                     if(MultiplyByLayer > 0.0f)
                         rateValue *= layer * MultiplyByLayer;
             
-                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.AddModifier(rateValue);
+                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.AddModifier(rateValue, -1);
                     _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.RemoveModifier;
                     _onBuffLayerChangeRate = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.ChangeModifier;
                     VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaRate.Value} 获取RateModifier，ID：{modifierID}");
@@ -87,7 +87,7 @@ namespace VTuber.BattleSystem.Effect
                     if(MultiplyByLayer > 0.0f)
                         pointsValue *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
             
-                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.AddModifier(pointsValue);
+                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.AddModifier(pointsValue, -1);
                     _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.RemoveModifier;
                     _onBuffLayerChangePoints = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.ChangeModifier;
                     VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaPoints.Value} 获取PointsModifier，ID：{modifierID}");

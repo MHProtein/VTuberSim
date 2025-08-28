@@ -62,10 +62,10 @@ namespace VTuber.Core.RaisingEffect
                     totalProbability += perConsumableProbabilityByRarity[(int)consumables[j].rarity];
                     if (probability <= totalProbability)
                     {
-                        var card = consumables[j].CreateConsumable();
-                        if (selectedConsumables.Contains(card))
+                        var consumable = consumables[j].CreateConsumable();
+                        if (selectedConsumables.Find(vConsumable => vConsumable._configuration.id == consumable._configuration.id) != null)
                             break;
-                        selectedConsumables.Add(card);
+                        selectedConsumables.Add(consumable);
                         ++i;
                         break;
                     }
