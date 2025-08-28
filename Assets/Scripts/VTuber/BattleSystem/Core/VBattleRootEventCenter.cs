@@ -70,6 +70,8 @@ namespace VTuber.BattleSystem.Core
         
         OnCardEnterDiscardPile,
         OnCardEnterExaustPile,
+        
+        OnRotateMultiplier,
     }
     
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);

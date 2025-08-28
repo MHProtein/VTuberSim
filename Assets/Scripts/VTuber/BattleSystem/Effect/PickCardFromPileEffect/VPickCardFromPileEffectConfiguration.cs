@@ -8,7 +8,8 @@ namespace VTuber.BattleSystem.Effect
         DrawPile,
         Discard,
         Exhaust,
-        Deck
+        Deck,
+        ALL
     }
     
     public class VPickCardFromPileEffectConfiguration : VEffectConfiguration

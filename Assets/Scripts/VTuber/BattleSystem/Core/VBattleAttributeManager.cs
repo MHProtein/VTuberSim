@@ -132,8 +132,9 @@ namespace VTuber.BattleSystem.Core
         
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnMultiplierChange, new Dictionary<string, object>()
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRotateMultiplier, new Dictionary<string, object>()
             {
+                { "Name", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].AttributeName },
                 { "NewValue", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].Value },
                 { "Color", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].color },
             });
@@ -337,21 +338,24 @@ namespace VTuber.BattleSystem.Core
 
         private void OnParameterChange(Dictionary<string, object> messagedict)
         {
-            int delta = (int)messagedict["Delta"];
-            if(delta <= 0)
-                return;
-
-            (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
-                AddPopularity(delta, "",
-                    messagedict["IsFromCard"] as bool? ?? false,
-                    messagedict["ShouldPlayTwice"] as bool? ?? false);
+            if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
+            {
+                float multiplier = _multiplierManager.Multiplier.Value / 100f;
+                int delta = (int)messagedict["Delta"];
+                if (delta <= 0)
+                    return;
+                (_battleAttributes["BAPopularity"] as VBattlePopularityAttribute).
+                    AddPopularity((int)(delta * multiplier), MultiplierManager.Multiplier.AttributeName,
+                        messagedict["IsFromCard"] as bool? ?? false,
+                        messagedict["ShouldPlayTwice"] as bool? ?? false);
+            }
         }
 
         public int PreviewPopularityChange(int delta)
         {
             if (_battleAttributes.TryGetValue("BAParameter", out var parameter))
             {
-                float multiplier = _multiplierManager is null ? 1f : _multiplierManager.Multiplier.Value / 100f;
+                float multiplier = _multiplierManager.Multiplier.Value / 100f;
                 int parameterDelta = parameter.PreviewAddTo(delta) - parameter.Value;
                 return (int)(parameterDelta * multiplier);
             }
