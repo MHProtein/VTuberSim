@@ -342,6 +342,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnViewerCountChange, OnViewerCountChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnViewerCountChange, OnTurnEnd);
+            _multiplierManager.OnDisable();
         }
 
         private void OnTurnEnd(Dictionary<string, object> messagedict)

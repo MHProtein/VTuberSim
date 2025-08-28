@@ -45,6 +45,7 @@ namespace VTuber.BattleSystem.UI
             _target = (int)messagedict["TargetPopularity"];
             _extraTarget = (int)messagedict["ExtraTargetPopularity"];
             targetText.text = _target.ToString();
+            bar.fillAmount = 0;
         }
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
