@@ -99,7 +99,7 @@ namespace VTuber.Reincarnation
             {
                 if (streamEvents.Contains(relicInfo.eventID))
                 {
-                    relicIDs.Add(relicInfo.relicID);
+                    relicIDs.Add(relicInfo.relicIDs[Random.Range(0, relicInfo.relicIDs.Count)]);
                 }
             }
             
