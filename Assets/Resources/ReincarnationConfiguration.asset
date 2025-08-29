@@ -1390,7 +1390,41 @@ MonoBehaviour:
     upgradeCapacity: 15
   relicRewards:
   - eventID: 4
-    relicIDs: 
+    relicIDs: 0f000000
+  - eventID: 5
+    relicIDs: 10000000
+  - eventID: 6
+    relicIDs: 11000000
+  - eventID: 7
+    relicIDs: 16000000
+  - eventID: 8
+    relicIDs: 17000000
+  - eventID: 9
+    relicIDs: 18000000
+  - eventID: 10
+    relicIDs: 19000000
+  - eventID: 11
+    relicIDs: 1a000000
+  - eventID: 12
+    relicIDs: 1b000000
+  - eventID: 13
+    relicIDs: 1c000000
+  - eventID: 14
+    relicIDs: 1d000000
+  - eventID: 15
+    relicIDs: 2a000000
+  - eventID: 16
+    relicIDs: 2b000000
+  - eventID: 17
+    relicIDs: 2c000000
+  - eventID: 18
+    relicIDs: 270000002800000029000000
+  - eventID: 19
+    relicIDs: 240000002500000026000000
+  - eventID: 20
+    relicIDs: 210000002200000023000000
+  - eventID: 21
+    relicIDs: 2d000000
   streamAttributeEffects:
   - effect: 28
     levelInfos:

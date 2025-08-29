@@ -103,15 +103,15 @@ MonoBehaviour:
   chattingAbilityConversionRatioMinValue: 0
   chattingAbilityConversionRatioMaxValue: -1
   chattingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: 9c44347f16d4a6845bab07b4623f7f2e, type: 2}
-  singingAbilityGainEfficiencyInitialValue: 110
+  singingAbilityGainEfficiencyInitialValue: 105
   singingAbilityGainEfficiencyMinValue: 0
   singingAbilityGainEfficiencyMaxValue: -1
   singingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 0d92ba3c5867c5142a5408b59bbdb238, type: 2}
-  gamingAbilityGainEfficiencyInitialValue: 110
+  gamingAbilityGainEfficiencyInitialValue: 105
   gamingAbilityGainEfficiencyMinValue: 0
   gamingAbilityGainEfficiencyMaxValue: -1
   gamingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: e4bca2514f94f2c48b494fbbbba6c54b, type: 2}
-  chattingAbilityGainEfficiencyInitialValue: 110
+  chattingAbilityGainEfficiencyInitialValue: 105
   chattingAbilityGainEfficiencyMinValue: 0
   chattingAbilityGainEfficiencyMaxValue: -1
   chattingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 478411c7b94b699408da8eb08cbbc77a, type: 2}

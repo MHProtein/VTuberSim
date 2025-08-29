@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fa59175de532c2a4b96e570485770062
+guid: 9a3f0341aeb07054384bd1c52d1fc5af
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,22 +97,253 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Icon_Popularity
+      name: gamelive
       rect:
         serializedVersion: 2
-        x: 1146
-        y: 1484
-        width: 157
-        height: 190
+        x: 32
+        y: 818
+        width: 438
+        height: 206
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a49530bd6d1b78e46aa22389f8483ea2
-      internalID: 571560629
+      spriteID: f3c17429af061ed4ebc1fc230024bbbc
+      internalID: 2039547791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: singlive
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 589
+        width: 438
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f37e30f7ac1b0fc46a4cf3cdc0072834
+      internalID: 1510028459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chatlive
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 355
+        width: 438
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce9de1cf6ec10424c97a5e7e8228774e
+      internalID: -471595426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chatpractice
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 804
+        width: 438
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b25dd930c1ddcd141933eaa3d71a31c6
+      internalID: 579747891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gamepractice
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 1000
+        width: 438
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ccd5ef001d954a4396f91572fe4a282
+      internalID: 309489391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: singpractice
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 1194
+        width: 438
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ed1262108b163643896826a3533f216
+      internalID: 1673946961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fire
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 1465
+        width: 214
+        height: 221
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 072c0532317439342ba691fce50a1cce
+      internalID: -439340241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: live
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 1460
+        width: 236
+        height: 216
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6bbbd6baa0a0d5438e7e8ab8a03b138
+      internalID: -1940928810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: love
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 1118
+        width: 287
+        height: 245
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8cf6490c7647b3439356229b6edba95
+      internalID: -2090269636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icons2_9
+      rect:
+        serializedVersion: 2
+        x: 378
+        y: 1090
+        width: 289
+        height: 301
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61dbff0d6c71f624da277a5bdfd6f584
+      internalID: -120359380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: work
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 1496
+        width: 351
+        height: 172
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e14e2348df27ba4788a61b950ac78d4
+      internalID: -1603398674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deeplove
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 1469
+        width: 352
+        height: 212
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0aae4c33dc3ca704c91755ec724cc77a
+      internalID: -538188362
       vertices: []
       indices: 
       edges: []
@@ -120,7 +351,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 099dc84beb0efe84d85016312380590b
     internalID: 0
     vertices: []
     indices: 
@@ -128,7 +359,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Icon_Popularity: 571560629
+      Icons2_9: -120359380
+      chatlive: -471595426
+      chatpractice: 579747891
+      deeplove: -538188362
+      fire: -439340241
+      gamelive: 2039547791
+      gamepractice: 309489391
+      live: -1940928810
+      love: -2090269636
+      singlive: 1510028459
+      singpractice: 1673946961
+      work: -1603398674
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
