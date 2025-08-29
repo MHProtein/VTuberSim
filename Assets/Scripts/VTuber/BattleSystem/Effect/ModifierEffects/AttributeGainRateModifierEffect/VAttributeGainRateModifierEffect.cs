@@ -16,7 +16,7 @@ namespace VTuber.BattleSystem.Effect
         private Action<uint, float> _onBuffLayerChangeRate;
         private Action<uint, int> _onBuffLayerChangePoints;
         private uint modifierID;
-        private bool applied = false;
+        private bool _applied = false;
         
         public VAttributeGainRateModifierEffect(VAttributeGainRateModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
@@ -38,22 +38,18 @@ namespace VTuber.BattleSystem.Effect
         }
 
         public override void OnBuffAdded(VBattle battle, int layer)
-        {            
-            if(battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
-            {
-                float rateValue = _deltaRate.Value;
-                if(MultiplyByLayer > 0.0f)
-                    rateValue *= layer * MultiplyByLayer;
-                
-                modifierID = attribute.GainRateModifier.AddModifier(rateValue, -1);
-                _onBuffRemove = attribute.GainRateModifier.RemoveModifier;
-                _onBuffLayerChangeRate = attribute.GainRateModifier.ChangeModifier;
-                VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaRate.Value + " gain rate modifier with ID: " + modifierID);
-            }
+        {
+            _battle = battle;
+            Apply(battle, layer);
         }
 
         public override void OnBuffLayerChange(int layer)
         {
+            if (!_applied)
+            {
+                Apply(_battle, layer);
+                return;
+            }
             if (MultiplyByLayer < 0.0f)
                 return;
     
@@ -76,6 +72,27 @@ namespace VTuber.BattleSystem.Effect
         public override string GetValue()
         {
             return VMathUtils.FloatToInt(_deltaRate.Value * 100) + "%";
+        }
+
+        public void Apply(VBattle battle, int layer)
+        {
+            if (_applied)
+                return;
+            if (!CanApply(battle, null))
+                return;
+            if (battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
+            {
+                _applied = true;
+                float rateValue = _deltaRate.Value;
+                if (MultiplyByLayer > 0.0f)
+                    rateValue *= layer * MultiplyByLayer;
+
+                modifierID = attribute.GainRateModifier.AddModifier(rateValue, -1);
+                _onBuffRemove = attribute.GainRateModifier.RemoveModifier;
+                _onBuffLayerChangeRate = attribute.GainRateModifier.ChangeModifier;
+                VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaRate.Value +
+                           " gain rate modifier with ID: " + modifierID);
+            }
         }
     }
 }

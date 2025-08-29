@@ -220,6 +220,10 @@ namespace VTuber.BattleSystem.Card
                 effect.Upgrade();
             }
             VDebug.Log("卡牌升级: " + CardName);
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardUpgraded, new Dictionary<string, object>()
+            {
+                { "Card", this }
+            });
         }
 
         public void Downgrade()

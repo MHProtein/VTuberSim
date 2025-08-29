@@ -16,11 +16,12 @@ namespace VTuber.Core.StateMachine
     public class VExecutionState : VState
     {
         private VScheduleEvent _currentEvent;
-        private bool shouldSwitchToModifySchedule = false;
+        private bool _shouldSwitchToModifySchedule = false;
         private VScheduleEvent _skipToEvent;
         private Queue<VScheduleEvent> _dayEndEvents;
         private bool _shouldEndGame = false;
-        private int lastStreamPopularity = 0;
+        private int _lastStreamPopularity = 0;
+        private bool _isLastStreamSuccess = false;
         
         public VExecutionState()
         {
@@ -30,7 +31,7 @@ namespace VTuber.Core.StateMachine
         
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
         {
-            shouldSwitchToModifySchedule = true;
+            _shouldSwitchToModifySchedule = true;
         }
 
         private void OnSkipEvent(Dictionary<string, object> messagedict)
@@ -41,8 +42,8 @@ namespace VTuber.Core.StateMachine
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.BattleRoot.SetActive(false);
-            bool isSuccess = (bool)messagedict["IsTargetMet"];
-            (_currentEvent as VStreamEvent).SetResultEvent(isSuccess);
+            _isLastStreamSuccess = (bool)messagedict["IsTargetMet"];
+            (_currentEvent as VStreamEvent).SetResultEvent(_isLastStreamSuccess);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd, 
                 new Dictionary<string, object>()
                 {
@@ -50,8 +51,8 @@ namespace VTuber.Core.StateMachine
                 });
             stateMachine.Character.ConsumableManager.SetBattle(null);
             VRaisingUI.Instance.SetConsumableToRaising();
-            lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
-            if(isSuccess)
+            _lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
+            if(_isLastStreamSuccess)
                 stateMachine.Character.succeededStreams.Add(_currentEvent);
         }
         
@@ -76,9 +77,9 @@ namespace VTuber.Core.StateMachine
                 return;
             }
             
-            if (shouldSwitchToModifySchedule)
+            if (_shouldSwitchToModifySchedule)
             {
-                shouldSwitchToModifySchedule = false;
+                _shouldSwitchToModifySchedule = false;
                 stateMachine.SwitchState(VStateType.ScheduleModify);
                 return;
             }
@@ -105,11 +106,11 @@ namespace VTuber.Core.StateMachine
 
         public void EndRun()
         {
-            var result = stateMachine.Script.CalculateScore(stateMachine.Character, lastStreamPopularity); 
+            var result = stateMachine.Script.CalculateScore(stateMachine.Character, _lastStreamPopularity, _isLastStreamSuccess); 
             var account =VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
-                "SSS", stateMachine.Character); 
+                result.scoreLevelName, stateMachine.Character); 
             
-            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, "SSS", 50000, account);
+            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, result.scoreLevelName, result.score, account);
             VRaisingUI.Instance.ShowEndingUI();
             stateMachine.Character.EndRun();
         }
