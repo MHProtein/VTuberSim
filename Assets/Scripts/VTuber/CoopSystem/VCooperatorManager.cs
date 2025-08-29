@@ -23,8 +23,8 @@ namespace VTuber.CoopSystem
             foreach (var cooperator in _cooperators)
             {
                 events.AddRange(cooperator.GenerateCoopEventPositions(occupiedPositions));
+                occupiedPositions.AddRange(events.Select(x => x.position).ToList());
             }
-            occupiedPositions.AddRange(events.Select(x => x.position).ToList());
             return events;
         }
         

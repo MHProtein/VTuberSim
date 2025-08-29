@@ -208,7 +208,13 @@ namespace VTuber.CoopSystem
                     position = new Vector2Int(GetDay(), GetTime());
                 }
 
-                var e = GetEvent();
+                VDebug.Log(position);
+
+                VCoopEvent e = null;
+                while (e is null)
+                {
+                    e = GetEvent();
+                }
                 events.Add(new VCoopEventItem()
                 {
                     e = e,
@@ -223,6 +229,8 @@ namespace VTuber.CoopSystem
         public VCoopEvent GetEvent()
         {
             List<VCoopEvent> events = _coopEvents.Where(x => x.unlockLevel <= _currentLevelIndex).ToList();
+            if (events.Count == 1)
+                return events.FirstOrDefault();
             float probabilitySum = events.Sum(x => x.probability);
             if (probabilitySum <= 0)
             {
