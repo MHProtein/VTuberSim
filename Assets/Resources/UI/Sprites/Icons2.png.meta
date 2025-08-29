@@ -244,7 +244,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: live
+      name: Stream
       rect:
         serializedVersion: 2
         x: 70
@@ -269,7 +269,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 27
-        y: 1118
+        y: 1120
         width: 287
         height: 245
       alignment: 0
@@ -307,7 +307,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: work
+      name: Work
       rect:
         serializedVersion: 2
         x: 343
@@ -331,7 +331,7 @@ TextureImporter:
       name: deeplove
       rect:
         serializedVersion: 2
-        x: 690
+        x: 687
         y: 1469
         width: 352
         height: 212
@@ -360,17 +360,17 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Icons2_9: -120359380
+      Stream: -1940928810
+      Work: -1603398674
       chatlive: -471595426
       chatpractice: 579747891
       deeplove: -538188362
       fire: -439340241
       gamelive: 2039547791
       gamepractice: 309489391
-      live: -1940928810
       love: -2090269636
       singlive: 1510028459
       singpractice: 1673946961
-      work: -1603398674
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
