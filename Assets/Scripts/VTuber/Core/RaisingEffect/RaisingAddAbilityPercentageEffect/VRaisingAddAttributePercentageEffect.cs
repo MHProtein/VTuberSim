@@ -7,12 +7,12 @@ using VTuber.Core.UI;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class VRaisingAddAbilityPercentageEffect : VRaisingEffect, IAttributeEffect
+    public class VRaisingAddAttributePercentageEffect : VRaisingEffect, IAttributeEffect
     {
         public string AttributeName => _attributeName;
         private readonly string _attributeName;
         private readonly VUpgradableValue<float> _percentage;
-        public VRaisingAddAbilityPercentageEffect(VRaisingAddAbilityPercentageEffectConfiguration configuration,
+        public VRaisingAddAttributePercentageEffect(VRaisingAddAttributePercentageEffectConfiguration configuration,
             string parameter, string upgradedParameter) : base(configuration)
         {
             _attributeName = configuration.abilityName;
@@ -24,10 +24,19 @@ namespace VTuber.Core.RaisingEffect
         {
             if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
-                var abilityAttribute = attribute as VAbilityAttribute;
-                if (abilityAttribute is not null)
+                if (_attributeName.Contains("Ability"))
                 {
-                    abilityAttribute.AddAbility(VMathUtils.FloatToInt(_percentage.Value * abilityAttribute.Value), false);
+                    var abilityAttribute = attribute as VAbilityAttribute;
+                    if (abilityAttribute is not null)
+                    {
+                        abilityAttribute.AddAbility(VMathUtils.FloatToInt(_percentage.Value * abilityAttribute.Value),
+                            false);
+                    }
+                }               
+                else
+                {
+
+                    attribute.AddTo(VMathUtils.FloatToInt(_percentage.Value * attribute.Value));
                 }
             }
         }
@@ -48,17 +57,17 @@ namespace VTuber.Core.RaisingEffect
         }
     }
     
-    public class VRaisingAddAbilityPercentageEffectConfiguration : VRaisingEffectConfiguration
+    public class VRaisingAddAttributePercentageEffectConfiguration : VRaisingEffectConfiguration
     {
         public string abilityName;
-        public VRaisingAddAbilityPercentageEffectConfiguration(CellRange row) : base(row)
+        public VRaisingAddAttributePercentageEffectConfiguration(CellRange row) : base(row)
         {
             abilityName = row.Columns[VRaisingEffectHeaderIndex.Param].Value;
         }
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            return new VRaisingAddAbilityPercentageEffect(this, parameter, upgradedParameter);
+            return new VRaisingAddAttributePercentageEffect(this, parameter, upgradedParameter);
         }
     }
 }

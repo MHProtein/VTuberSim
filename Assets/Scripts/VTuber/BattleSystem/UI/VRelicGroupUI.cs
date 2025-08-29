@@ -39,18 +39,18 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicAdded, OnBuffAdded);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicRemoved, OnBuffRemoved);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicValueChanged, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicAdded, OnRelicAdded);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicRemoved, OnRelicRemoved);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicValueChanged, OnRelicValueUpdated);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicAdded, OnBuffAdded);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicRemoved, OnBuffRemoved);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicValueChanged, OnBuffValueUpdated);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicAdded, OnRelicAdded);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicRemoved, OnRelicRemoved);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicValueChanged, OnRelicValueUpdated);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
 
@@ -81,7 +81,7 @@ namespace VTuber.BattleSystem.UI
             return go.GetComponent<VRelicSlotUI>();
         }
         
-        private void OnBuffAdded(Dictionary<string, object> msg)
+        private void OnRelicAdded(Dictionary<string, object> msg)
         {                                                                                                                                                                                                                                       
             VRelic relic = (VRelic)msg["Relic"];
 
@@ -103,7 +103,7 @@ namespace VTuber.BattleSystem.UI
             newRelicUI.Initialize(relic, true);
         }
 
-        private void OnBuffValueUpdated(Dictionary<string, object> msg)
+        private void OnRelicValueUpdated(Dictionary<string, object> msg)
         {
             uint id = (uint)msg["Id"];
 
@@ -116,7 +116,7 @@ namespace VTuber.BattleSystem.UI
             relic.UpdateValue();
         }
 
-        private void OnBuffRemoved(Dictionary<string, object> msg)
+        private void OnRelicRemoved(Dictionary<string, object> msg)
         {
             uint id = (uint)msg["Id"];
             

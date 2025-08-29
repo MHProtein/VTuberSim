@@ -60,6 +60,7 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField]private GameObject consumableUIParent;
         [SerializeField]private GameObject consumableUIBattleParent;
         [SerializeField]private GameObject consumableUI;
+        [SerializeField]private Transform uiWrapper;
         
         [Space(3)]
         [Header("EndingUI")]
@@ -175,14 +176,17 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SetConsumableToBattle()
         {
+            consumableUI.transform.SetParent(uiWrapper.transform);
             consumableUI.transform.SetParent(consumableUIBattleParent.transform);
             consumableUI.transform.localPosition = Vector3.zero;
+            consumableUI.transform.localScale = Vector3.one;
         }
         
         public void SetConsumableToRaising()
         {
             consumableUI.transform.SetParent(consumableUIParent.transform);
             consumableUI.transform.localPosition = Vector3.zero;
+            consumableUI.transform.localScale = Vector3.one;
         }
     }
 }

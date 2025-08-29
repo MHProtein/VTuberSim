@@ -554,6 +554,7 @@ MonoBehaviour:
   contentTransform: {fileID: 0}
   contentDMTransform: {fileID: 0}
   contentGroupTransform: {fileID: 0}
+  WordBoxTransform: {fileID: 5132876119665088317}
   words: {fileID: 1051047822411277140}
   rect: {fileID: 1349061912462464061}
   wordsImage: {fileID: 8624142761924358182}

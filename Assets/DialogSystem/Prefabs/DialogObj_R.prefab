@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 317, y: -28}
+  m_AnchoredPosition: {x: 317, y: -15}
   m_SizeDelta: {x: 594, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1887167164435175205
@@ -720,6 +720,7 @@ MonoBehaviour:
   contentTransform: {fileID: 891017688675006165}
   contentDMTransform: {fileID: 882665237277934669}
   contentGroupTransform: {fileID: 2174939723361241475}
+  WordBoxTransform: {fileID: 0}
   words: {fileID: 8036898344636618567}
   rect: {fileID: 6430993792532683235}
   wordsImage: {fileID: 0}
