@@ -244,11 +244,11 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         {
             if (dc.ifImage)
             {
-                dialogObj = Instantiate(dialogPrefab_R_Image,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_R_Image, canvas, false);
             }
             else
             {
-                dialogObj=Instantiate(dialogPrefab_R,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_R, canvas, false);
             }
 
             
@@ -257,17 +257,18 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         {
             if (dc.ifImage)
             {
-                dialogObj = Instantiate(dialogPrefab_L_Image,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_L_Image, canvas, false);
             }
             else
             {
-                dialogObj=Instantiate(dialogPrefab_L,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_L, canvas, false);
             }
         }
         
         currentDialogObj = dialogObj.GetComponent<DialogObj>();
         currentDialogObj.ShowDialog(dc);
         currentDialogObj.transform.SetParent(dialogRoot);    
+        currentDialogObj.transform.localScale = Vector3.one * 0.85f;  
         Canvas.ForceUpdateCanvases();
         
         AdjustScrollView();
@@ -292,6 +293,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         optionBtnObj.SetActive(true);
         optionBtnObj.transform.SetParent(optionBtnRoot);
         optionBtnObj.GetComponent<OptionBtn>().SetBtn(dc, _character);
+        optionBtnObj.transform.localScale = Vector3.one * 0.85f;  
         currentDialog.index++;
     }
 

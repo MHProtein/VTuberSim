@@ -16,13 +16,14 @@ using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Dialogue.UI;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VBattleUI : VSingletonMonobehaviour<VBattleUI>
+    public class VBattleUI : VUIBehaviour
     {
         [SerializeField] private GameObject battleRoot;
-        [SerializeField] private VideoPlayer loadingVideoPlayer;
         [SerializeField] private Transform cardPileContent;
         [FormerlySerializedAs("scrollView")] [SerializeField] private GameObject cardPileScrollView;
         [SerializeField] private Transform discardPileTransform;
@@ -44,8 +45,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
-        [SerializeField] private Transform battleUIWrapper;
-        [SerializeField] private Transform backgroundUIWrapper;
+        [SerializeField] private RectTransform battleUIWrapper;
         [SerializeField] private GameObject battlePausePanel;
         
         
@@ -70,23 +70,6 @@ namespace VTuber.BattleSystem.UI
 
         private Coroutine _drawCardCoroutine;
         
-        private Action onVideoFinish;
-
-        private void OnLoadingEnded(VideoPlayer source)
-        {
-            loadingVideoPlayer.gameObject.SetActive(false);
-            loadingVideoPlayer.Stop();
-            onVideoFinish?.Invoke();
-            onVideoFinish = null;
-        }
-
-        public void PlayVideo(Action onFinish)
-        {
-            loadingVideoPlayer.gameObject.SetActive(true);
-            loadingVideoPlayer.Play();
-            onVideoFinish = onFinish;
-        }
-        
         public void Rearrange(int index)
         {
             if (_handSlotsCards.Count == 0)
@@ -108,12 +91,7 @@ namespace VTuber.BattleSystem.UI
             
             return cardUI;
         }
-        
-        public Tween SetBattleUIScale(float scale)
-        {
-            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
-            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
-        }
+
         
         public void Selected(bool value)
         {
@@ -211,10 +189,7 @@ namespace VTuber.BattleSystem.UI
         
         public Tween SetBattlePause(bool paused)
         {
-            battlePausePanel.SetActive(paused);
-            float scale = paused ? 0.75f : 1.0f;
-            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
-            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
+            return VEventSystemUI.Instance.SetFullScreen();
         }
         
         protected override void Awake()
@@ -225,7 +200,6 @@ namespace VTuber.BattleSystem.UI
             _handSlotsSize = handSlotsContent.rect.size;
             cardToDispose = null;
             _pickCardMenu = pickCardMenuScroll.GetComponent<VPickCardMenu>();
-            loadingVideoPlayer.loopPointReached += OnLoadingEnded;
         }
 
         protected override void OnEnable()
@@ -260,7 +234,7 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            //SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
+            //SetFullScreen(0.75f).OnComplete(() => battleRoot.SetActive(false));
         }
 
         private void OnBattlePause(Dictionary<string, object> messagedict)
@@ -275,7 +249,6 @@ namespace VTuber.BattleSystem.UI
                 Destroy(card.gameObject);
             }
             _handSlotsCards.Clear();
-            SetBattleUIScale(1.0f);
         }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)

@@ -146,8 +146,9 @@ namespace VTuber.Character.Attribute
         
         protected virtual void SetValue(int value)
         {
+            var delta = value - Value;
             Value = Mathf.Clamp(value, _minValue, _maxValue);
-            SendEvent(Value, value - Value);
+            SendEvent(Value, delta);
         }
         
         public void SendEvent(int newValue, int delta)  

@@ -88,7 +88,6 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding);
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
-            _battleRelicManager = new VBattleRelicManager(this, relics);
             
             _battleAttributeManager.OnEnable();
             _cardPilesManager.OnEnable();
@@ -117,8 +116,10 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
             _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
             
-            VBattleUI.Instance.PlayVideo(() =>
+            VEventSystemUI.Instance.PlayVideo(() =>
             {
+                VEventSystemUI.Instance.OpenBattleUI();
+                _battleRelicManager = new VBattleRelicManager(this, relics);
                 if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
                 {
                     viewerCountAttribute.AddTo(initialViewers, false);
@@ -195,10 +196,8 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnPopularityChange, OnPopularityChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
-    
         }
         
-
         protected override void OnDisable()
         {
             base.OnDisable();

@@ -10,7 +10,7 @@ namespace VTuber.BattleSystem.Effect
         public int turnCount;
         public VUpgradableValue<float> deltaRate;
         
-        public VAttributeTurnGainRateModifierEffect(VAttributeTurnRatePointsModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+        public VAttributeTurnGainRateModifierEffect(VAttributeTurnGainRateModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             attributeName = configuration.attributeName;
             turnCount = configuration.turnCount;
@@ -37,11 +37,11 @@ namespace VTuber.BattleSystem.Effect
         }
     }
 
-    public class VAttributeTurnRatePointsModifierEffectConfiguration : VEffectConfiguration
+    public class VAttributeTurnGainRateModifierEffectConfiguration : VEffectConfiguration
     {
         public string attributeName;
         public int turnCount;
-        public VAttributeTurnRatePointsModifierEffectConfiguration(CellRange row) : base(row)
+        public VAttributeTurnGainRateModifierEffectConfiguration(CellRange row) : base(row)
         {
             var parameters = row.Columns[VEffectHeaderIndex.Parameter].Value.Split(',');
             attributeName = parameters[0].Trim();

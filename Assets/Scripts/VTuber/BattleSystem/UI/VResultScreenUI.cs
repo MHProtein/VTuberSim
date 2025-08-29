@@ -10,7 +10,7 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    public class VClearingScreenUI : VUIBehaviour
+    public class VResultScreenUI : VUIBehaviour
     {
         [SerializeField] private GameObject ui;
         [SerializeField] private Transform attributes;

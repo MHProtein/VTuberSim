@@ -45,6 +45,7 @@ namespace VTuber.EventSystem
             {
                 _character = character;
                 _currentEvent = e;
+                VEventSystemUI.Instance.OpenEventUI();
                 dialogueSystem.LoadDialog(e.dialogueNode);
                 dialogueSystem.ShowMe(character);
                 dialogueSystem.ContinueDialog();

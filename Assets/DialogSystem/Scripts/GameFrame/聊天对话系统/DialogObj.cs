@@ -14,6 +14,7 @@ public class DialogObj : MonoBehaviour
     public RectTransform contentTransform;
     public RectTransform contentDMTransform;
     public RectTransform contentGroupTransform;
+    public RectTransform WordBoxTransform;
     public Text words;
     public RectTransform rect;
     private Vector2 originSize;
@@ -49,11 +50,10 @@ public class DialogObj : MonoBehaviour
                 contentTransform.anchoredPosition = contentGroupTransform.anchoredPosition;
         }
         speakerIcon.sprite = Resources.Load<Sprite>($"Sprites/SpeakerIcons/{dc.iconId}");
-        print(dc.iconId);
         if (dc.ifImage)
         {
-            print(dc.imageId);
             wordsImage.sprite = Resources.Load<Sprite>($"Sprites/SpeakerImages/{dc.imageId}");
+            WordBoxTransform.localScale *= 1.2f;
         }
         else
         {
