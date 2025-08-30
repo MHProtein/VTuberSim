@@ -11,7 +11,7 @@ namespace TMPro
     //[CreateAssetMenu(fileName = "InputValidator - Digits.asset", menuName = "TextMeshPro/Input Validators/Digits", order = 100)]
     public class TMP_DigitValidator : TMP_InputValidator
     {
-        // Custom text input validation function
+        // Custom layer input validation function
         public override char Validate(ref string text, ref int pos, char ch)
         {
             if (ch >= '0' && ch <= '9')

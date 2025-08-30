@@ -19,7 +19,7 @@
         <member name="T:SkiaSharp.GRBackendRenderTarget">
             <summary>Wrap an existing render target created by the client in the 3D API.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The client is responsible for ensuring that the underlying 3D API object lives
@@ -108,7 +108,7 @@ doesn't require this (eg: OpenGL).
         <member name="T:SkiaSharp.GRBackendRenderTargetDesc">
             <summary>Wrap an existing render target created by the client in the 3D API with an underlying GRRenderTarget object.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The client is responsible for ensuring that the underlying 3D API object lives 
@@ -179,7 +179,7 @@ doesn't require this (eg: OpenGL).
         <member name="T:SkiaSharp.GRBackendTexture">
             <summary>Wrap an existing texture created by the client in the 3D API.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The client is responsible for ensuring that the underlying 3D API object lives
@@ -266,7 +266,7 @@ doesn't require this (eg: OpenGL).
         <member name="T:SkiaSharp.GRBackendTextureDesc">
             <summary>Wrap an existing texture created by the client in the 3D API with an underlying GRTexture object.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The client is responsible for ensuring that the texture lives at least as long
@@ -979,7 +979,7 @@ API (stencil buffer, FBO id, etc) objects necessary will be managed.
         <member name="T:SkiaSharp.SK3dView">
             <summary>A utility class that can be used to create 3D transformations.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Examples
 
 ```csharp
@@ -1294,7 +1294,7 @@ The example above produces the following:
         <member name="T:SkiaSharp.SKAutoCanvasRestore">
             <summary>Convenience class used to restore the canvas state in a using statement.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This class can be used in a using statement to save the state of the canvas
@@ -1371,7 +1371,7 @@ using (new SKAutoCanvasRestore(canvas)) {
         <member name="T:SkiaSharp.SKAutoLockPixels">
             <summary>Convenience class used to lock and unlock the bitmap pixels in a using statement.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This class can be used in a using statement to lock the pixels of the bitmap
@@ -1421,7 +1421,7 @@ using (new SKAutoLockPixels(bitmap)) {
         <member name="T:SkiaSharp.SKAutoMaskFreeImage">
             <summary>Convenience class used to automatically free the image data for a mask in a using statement.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This class can be used in a using statement to automatically free the image
@@ -1989,7 +1989,7 @@ using (new SKAutoMaskFreeImage(mask.Image)) {
             <summary>Copies this pixmap to the destination, scaling the pixels to fit the destination size and converting the pixels to match the color type and alpha type.</summary>
             <returns>Returns <see langword="true" /> on success, or <see langword="false" /> if there was an error.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Pixels are copied only if pixel conversion is possible.
@@ -2022,7 +2022,7 @@ Filter Quality:
             <summary>Copies this pixmap to the destination, scaling the pixels to fit the destination size and converting the pixels to match the color type and alpha type.</summary>
             <returns>Returns <see langword="true" /> on success, or <see langword="false" /> if there was an error.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Pixels are copied only if pixel conversion is possible.
@@ -2143,7 +2143,7 @@ Filter Quality:
         <member name="T:SkiaSharp.SKBlendMode">
             <summary>Predefined blend modes.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 - **Porter Duff Compositing Operators**  
@@ -2282,7 +2282,7 @@ Filter Quality:
         <member name="T:SkiaSharp.SKCanvas">
             <summary>Encapsulates all of the state about drawing into a device (bitmap or surface).</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 A canvas encapsulates all of the state about drawing into a device (bitmap or
@@ -2638,7 +2638,7 @@ using (var surface = SKSurface.Create(info)) {
             <param name="value">The blob of data to attach to the annotation.</param>
             <summary>Send an key/value pair "annotation" to the canvas.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The caller still retains its ownership of the data (if any).
@@ -2807,7 +2807,7 @@ this information.
             <param name="value">The data that specifies the name of the link's destination.</param>
             <summary>Annotates the canvas by making the specified rectangle link to a named destination (see <see cref="M:SkiaSharp.SKCanvas.DrawNamedDestinationAnnotation(SkiaSharp.SKPoint,SkiaSharp.SKData)" />).</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The caller is responsible for managing its ownership of the data.
@@ -2829,7 +2829,7 @@ safely ignored.
             <param name="value">The data that specifies the name of the destination.</param>
             <summary>Annotates the canvas by associating a name with the specified point (see <see cref="M:SkiaSharp.SKCanvas.DrawLinkDestinationAnnotation(SkiaSharp.SKRect,SkiaSharp.SKData)" />).</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The caller is responsible for managing its ownership of the data.
@@ -2891,7 +2891,7 @@ safely ignored.
             <param name="paint">The paint to use when drawing the picture, or <see langword="null" />.</param>
             <summary>Draws a picture on the canvas.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This is equivalent to calling <xref:SkiaSharp.SKCanvas.Save>, followed by
@@ -2952,7 +2952,7 @@ buffer as it is drawn to the canvas.
             <param name="paint">The paint to use when drawing the points.</param>
             <summary>Draws an array of points, lines or a polygon in the canvas, one at a time.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 For <xref:SkiaSharp.SKPointMode.Points>, each point is drawn centered at its
@@ -2974,25 +2974,25 @@ contours intersect each other (think <xref:SkiaSharp.SKBlendMode.Xor>).
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawPositionedText(System.Byte[],SkiaSharp.SKPoint[],SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="points">The positions for each glyph in the <paramref name="text" /> string.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws glyphs of the text at specified locations on the canvas.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="points">The positions for each glyph in the <paramref name="layer" /> string.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws glyphs of the layer at specified locations on the canvas.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawPositionedText(System.String,SkiaSharp.SKPoint[],SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="points">The positions for each glyph in the <paramref name="text" /> string.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws glyphs of the text at specified locations on the canvas.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="points">The positions for each glyph in the <paramref name="layer" /> string.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws glyphs of the layer at specified locations on the canvas.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawPositionedText(System.IntPtr,System.Int32,SkiaSharp.SKPoint[],SkiaSharp.SKPaint)">
-            <param name="buffer">The pointer to a region holding UTF-8 encoded text to draw.</param>
+            <param name="buffer">The pointer to a region holding UTF-8 encoded layer to draw.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
             <param name="points">The positions for each glyph in the <paramref name="buffer." /></param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text from a UTF-8 buffer at specified locations on the canvas.</summary>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer from a UTF-8 buffer at specified locations on the canvas.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawRect(SkiaSharp.SKRect,SkiaSharp.SKPaint)">
@@ -3064,154 +3064,154 @@ contours intersect each other (think <xref:SkiaSharp.SKBlendMode.Xor>).
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.Byte[],SkiaSharp.SKPoint,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="p">The coordinates of the origin of the text being drawn.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas at the specified coordinates.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="p">The coordinates of the origin of the layer being drawn.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas at the specified coordinates.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.String,SkiaSharp.SKPoint,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="p">The coordinates of the origin of the text being drawn.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas at the specified coordinates.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="p">The coordinates of the origin of the layer being drawn.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas at the specified coordinates.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.String,SkiaSharp.SKPoint[],SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="points">The positions for each glyph in the <paramref name="text" /> string.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws glyphs of the text at specified locations on the canvas.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="points">The positions for each glyph in the <paramref name="layer" /> string.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws glyphs of the layer at specified locations on the canvas.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(SkiaSharp.SKTextBlob,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="text">The text blob to draw.</param>
-            <param name="x">The x-coordinate of the origin of the text being drawn.</param>
-            <param name="y">The y-coordinate of the origin of the text being drawn.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws a text blob on the canvas at the specified coordinates.</summary>
+            <param name="layer">The layer blob to draw.</param>
+            <param name="x">The x-coordinate of the origin of the layer being drawn.</param>
+            <param name="y">The y-coordinate of the origin of the layer being drawn.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws a layer blob on the canvas at the specified coordinates.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.Byte[],System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="x">The x-coordinate of the origin of the text being drawn.</param>
-            <param name="y">The y-coordinate of the origin of the text being drawn.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas at the specified coordinates.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="x">The x-coordinate of the origin of the layer being drawn.</param>
+            <param name="y">The y-coordinate of the origin of the layer being drawn.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas at the specified coordinates.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.IntPtr,System.Int32,SkiaSharp.SKPoint,SkiaSharp.SKPaint)">
-            <param name="buffer">The pointer to a region holding UTF-8 encoded text to draw.</param>
+            <param name="buffer">The pointer to a region holding UTF-8 encoded layer to draw.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="p">The coordinates of the origin of the text being drawn.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text encoded in a UTF-8 buffer on the canvas at the specified coordinates.</summary>
+            <param name="p">The coordinates of the origin of the layer being drawn.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer encoded in a UTF-8 buffer on the canvas at the specified coordinates.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.IntPtr,System.Int32,SkiaSharp.SKPoint[],SkiaSharp.SKPaint)">
-            <param name="buffer">The pointer to a region holding UTF-8 encoded text to draw.</param>
+            <param name="buffer">The pointer to a region holding UTF-8 encoded layer to draw.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
             <param name="points">The positions for each glyph in the <paramref name="buffer." /></param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text from a UTF-8 buffer at specified locations on the canvas.</summary>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer from a UTF-8 buffer at specified locations on the canvas.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.String,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="x">The x-coordinate of the origin of the text being drawn.</param>
-            <param name="y">The y-coordinate of the origin of the text being drawn.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas at the specified coordinates.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="x">The x-coordinate of the origin of the layer being drawn.</param>
+            <param name="y">The y-coordinate of the origin of the layer being drawn.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas at the specified coordinates.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.Byte[],SkiaSharp.SKPath,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="hOffset">The distance along the path to add to the text's starting position.</param>
-            <param name="vOffset">The distance above (-) or below (+) the path to position the text.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas following a path.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="hOffset">The distance along the path to add to the layer's starting position.</param>
+            <param name="vOffset">The distance above (-) or below (+) the path to position the layer.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.IntPtr,System.Int32,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="buffer">The pointer to a region holding UTF-8 encoded text to draw.</param>
+            <param name="buffer">The pointer to a region holding UTF-8 encoded layer to draw.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="x">The x-coordinate of the origin of the text being drawn.</param>
-            <param name="y">The y-coordinate of the origin of the text being drawn.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text encoded in a UTF-8 buffer on the canvas at the specified coordinates.</summary>
+            <param name="x">The x-coordinate of the origin of the layer being drawn.</param>
+            <param name="y">The y-coordinate of the origin of the layer being drawn.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer encoded in a UTF-8 buffer on the canvas at the specified coordinates.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.String,SkiaSharp.SKPath,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="hOffset">The distance along the path to add to the text's starting position.</param>
-            <param name="vOffset">The distance above (-) or below (+) the path to position the text.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas following a path.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="hOffset">The distance along the path to add to the layer's starting position.</param>
+            <param name="vOffset">The distance above (-) or below (+) the path to position the layer.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawText(System.IntPtr,System.Int32,SkiaSharp.SKPath,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="buffer">The pointer to a region holding UTF-8 encoded text to draw.</param>
+            <param name="buffer">The pointer to a region holding UTF-8 encoded layer to draw.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="hOffset">The distance along the path to add to the text's starting position.</param>
-            <param name="vOffset">The distance above (-) or below (+) the path to position the text.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text encoded in a UTF-8 buffer on the canvas following a path.</summary>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="hOffset">The distance along the path to add to the layer's starting position.</param>
+            <param name="vOffset">The distance above (-) or below (+) the path to position the layer.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer encoded in a UTF-8 buffer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawTextOnPath(System.Byte[],SkiaSharp.SKPath,SkiaSharp.SKPoint,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="offset">The offset to the path to add to the text's starting position.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas following a path.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="offset">The offset to the path to add to the layer's starting position.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawTextOnPath(System.String,SkiaSharp.SKPath,SkiaSharp.SKPoint,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="offset">The offset to the path to add to the text's starting position.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas following a path.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="offset">The offset to the path to add to the layer's starting position.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawTextOnPath(System.Byte[],SkiaSharp.SKPath,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="hOffset">The distance along the path to add to the text's starting position.</param>
-            <param name="vOffset">The distance above (-) or below (+) the path to position the text.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas following a path.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="hOffset">The distance along the path to add to the layer's starting position.</param>
+            <param name="vOffset">The distance above (-) or below (+) the path to position the layer.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawTextOnPath(System.IntPtr,System.Int32,SkiaSharp.SKPath,SkiaSharp.SKPoint,SkiaSharp.SKPaint)">
-            <param name="buffer">The pointer to a region holding UTF-8 encoded text to draw.</param>
+            <param name="buffer">The pointer to a region holding UTF-8 encoded layer to draw.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="offset">The offset to the path to add to the text's starting position.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas following a path.</summary>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="offset">The offset to the path to add to the layer's starting position.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawTextOnPath(System.String,SkiaSharp.SKPath,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="text">The text to draw.</param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="hOffset">The distance along the path to add to the text's starting position.</param>
-            <param name="vOffset">The distance above (-) or below (+) the path to position the text.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text on the canvas following a path.</summary>
+            <param name="layer">The layer to draw.</param>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="hOffset">The distance along the path to add to the layer's starting position.</param>
+            <param name="vOffset">The distance above (-) or below (+) the path to position the layer.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawTextOnPath(System.IntPtr,System.Int32,SkiaSharp.SKPath,System.Single,System.Single,SkiaSharp.SKPaint)">
-            <param name="buffer">The pointer to a region holding UTF-8 encoded text to draw.</param>
+            <param name="buffer">The pointer to a region holding UTF-8 encoded layer to draw.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="path">The path the text should follow for its baseline.</param>
-            <param name="hOffset">The distance along the path to add to the text's starting position.</param>
-            <param name="vOffset">The distance above (-) or below (+) the path to position the text.</param>
-            <param name="paint">The paint to use when drawing the text.</param>
-            <summary>Draws text encoded in a UTF-8 buffer on the canvas following a path.</summary>
+            <param name="path">The path the layer should follow for its baseline.</param>
+            <param name="hOffset">The distance along the path to add to the layer's starting position.</param>
+            <param name="vOffset">The distance above (-) or below (+) the path to position the layer.</param>
+            <param name="paint">The paint to use when drawing the layer.</param>
+            <summary>Draws layer encoded in a UTF-8 buffer on the canvas following a path.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKCanvas.DrawUrlAnnotation(SkiaSharp.SKRect,SkiaSharp.SKData)">
@@ -3219,7 +3219,7 @@ contours intersect each other (think <xref:SkiaSharp.SKBlendMode.Xor>).
             <param name="value">The data that specifies the URL.</param>
             <summary>Annotates the canvas by associating the specified URL with the specified rectangle (in local coordinates).</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The caller is responsible for managing its ownership of the data.
@@ -3385,7 +3385,7 @@ safely ignored.
             <summary>Saves the canvas state and allocates an offscreen bitmap.</summary>
             <returns>The value to pass to <see cref="M:SkiaSharp.SKCanvas.RestoreToCount(System.Int32)" /> to balance this save.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This behaves the same as <xref:SkiaSharp.SKCanvas.Save> but in addition it
@@ -3581,7 +3581,7 @@ guaranteed to happen. If exact clipping is desired, use
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3601,7 +3601,7 @@ return <xref:SkiaSharp.SKCodecResult.InvalidScale>.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3621,7 +3621,7 @@ return <xref:SkiaSharp.SKCodecResult.InvalidScale>.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3642,7 +3642,7 @@ return <xref:SkiaSharp.SKCodecResult.InvalidScale>.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3664,7 +3664,7 @@ return <xref:SkiaSharp.SKCodecResult.InvalidScale>.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3691,7 +3691,7 @@ logical number of table entries.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3713,7 +3713,7 @@ return <xref:SkiaSharp.SKCodecResult.InvalidScale>.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3741,7 +3741,7 @@ success, the codec will copy the colors into that storage, and set
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3769,7 +3769,7 @@ logical number of table entries.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3798,7 +3798,7 @@ success, the codec will copy the colors into that storage, and set
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -3827,7 +3827,7 @@ logical number of table entries.
             <summary>Decode the bitmap into the specified memory block.</summary>
             <returns>Returns <see cref="F:SkiaSharp.SKCodecResult.Success" /> on success, or another value explaining the type of failure.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The specified <xref:SkiaSharp.SKImageInfo>, can either be
@@ -4098,7 +4098,7 @@ success, the codec will copy the colors into that storage, and set
             <summary>Gets or sets a value indicating which frame, if any, the destination bitmap already contains.</summary>
             <value />
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Only meaningful for multi-frame images.
@@ -5735,7 +5735,7 @@ If set to -1, the codec will decode any necessary required frame(s) first.
         <member name="T:SkiaSharp.SKDocument">
             <summary>A high-level API for creating a document-based canvas.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 For each page, call <xref:SkiaSharp.SKDocument.BeginPage%2A> to get the
@@ -5940,7 +5940,7 @@ canvas, and then complete the page with a call to
             <summary>Gets or sets the encoding quality.</summary>
             <value />
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Encoding quality controls the trade-off between size and quality. By default
@@ -5964,7 +5964,7 @@ value is set to a value <= 100, and the image is opaque, it will be encoded
             <summary>Gets or sets a value indicating whether or not make the document PDF/A-2b conformant.</summary>
             <value />
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If true, include XMP metadata, a document UUID, and sRGB output intent
@@ -5982,7 +5982,7 @@ but are necessary features for PDF/A-2b conformance.
             <summary>Gets or sets the DPI (pixels-per-inch) at which features without native PDF support will be rasterized.</summary>
             <value />
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 PDF pages are sized in point units. 1 pt == 1/72 inch == 127/360 mm.
@@ -6418,7 +6418,7 @@ or to printer.
             <summary>Use the system fallback to find a typeface for the given character.</summary>
             <returns>Returns the <see cref="T:SkiaSharp.SKTypeface" /> that contains the given character, or <see langword="null" /> if none was found.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Note that `bcp47` is a combination of ISO 639, 15924, and3166-1 codes, so it
@@ -6439,7 +6439,7 @@ in the system fallback.]]></format>
             <summary>Use the system fallback to find a typeface for the given character.</summary>
             <returns>Returns the <see cref="T:SkiaSharp.SKTypeface" /> that contains the given character, or <see langword="null" /> if none was found.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Note that `bcp47` is a combination of ISO 639, 15924, and3166-1 codes, so it
@@ -6461,7 +6461,7 @@ in the system fallback.]]></format>
             <summary>Use the system fallback to find a typeface for the given character.</summary>
             <returns>Returns the <see cref="T:SkiaSharp.SKTypeface" /> that contains the given character, or <see langword="null" /> if none was found.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Note that `bcp47` is a combination of ISO 639, 15924, and3166-1 codes, so it
@@ -6485,7 +6485,7 @@ in the system fallback.]]></format>
             <summary>Use the system fallback to find a typeface for the given character.</summary>
             <returns>Returns the <see cref="T:SkiaSharp.SKTypeface" /> that contains the given character, or <see langword="null" /> if none was found.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Note that `bcp47` is a combination of ISO 639, 15924, and3166-1 codes, so it
@@ -6509,7 +6509,7 @@ in the system fallback.]]></format>
             <summary>Use the system fallback to find a typeface for the given character.</summary>
             <returns>Returns the <see cref="T:SkiaSharp.SKTypeface" /> that contains the given character, or <see langword="null" /> if none was found.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Note that `bcp47` is a combination of ISO 639, 15924, and3166-1 codes, so it
@@ -6533,7 +6533,7 @@ in the system fallback.]]></format>
             <summary>Use the system fallback to find a typeface for the given character.</summary>
             <returns>Returns the <see cref="T:SkiaSharp.SKTypeface" /> that contains the given character, or <see langword="null" /> if none was found.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Note that `bcp47` is a combination of ISO 639, 15924, and3166-1 codes, so it
@@ -6591,7 +6591,7 @@ in the system fallback.]]></format>
             <remarks>Will be &gt;= 0.</remarks>
         </member>
         <member name="P:SkiaSharp.SKFontMetrics.Leading">
-            <summary>Gets the recommended distance to add between lines of text.</summary>
+            <summary>Gets the recommended distance to add between lines of layer.</summary>
             <value />
             <remarks>Will be &gt;= 0.</remarks>
         </member>
@@ -8472,7 +8472,7 @@ in the system fallback.]]></format>
             <summary>Implemented by derived <see cref="T:SkiaSharp.SKManagedPixelSerializer" /> types to determine whether the caller should use the specified encoded data instead of encoding a new version.</summary>
             <returns>Returns <see langword="true" /> if the specified encoded data should be used, otherwise <see langword="false" /> to serialize another version.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If this method returns `true`, then
@@ -8484,7 +8484,7 @@ the source data.
         <member name="T:SkiaSharp.SKManagedStream">
             <summary>Wraps a <see cref="T:System.IO.Stream" /> into a <see cref="T:SkiaSharp.SKStreamAsset" /> (a seekable, rewindable Skia stream)</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The following example shows how to wrap a <xref:System.IO.Stream> that
@@ -8672,7 +8672,7 @@ public static void BitmapShader (SKCanvas canvas, int width, int height)
             <summary>Calculates the byte size of the mask, assuming only 1 plane.</summary>
             <returns>Returns the byte size of the mask.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Does not account for
@@ -8717,7 +8717,7 @@ If there is an overflow of 32bits, then returns 0.
             <summary>Returns the address of the specified pixel, computing the pixel-size at runtime based on the mask format.</summary>
             <returns>Returns the address of the specified pixel.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This will be slightly slower than using one of the routines where the format
@@ -9597,9 +9597,9 @@ give unspecified results.
             <remarks />
         </member>
         <member name="T:SkiaSharp.SKPaint">
-            <summary>Holds the style and color information about how to draw geometries, text and bitmaps.</summary>
+            <summary>Holds the style and color information about how to draw geometries, layer and bitmaps.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Anytime you draw something in SkiaSharp, and want to specify what color it is,
@@ -9732,59 +9732,59 @@ The example above produces the following:
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.BreakText(System.Byte[],System.Single)">
-            <param name="text">The text to be measured.</param>
-            <param name="maxWidth">The maximum width. Only the subset of text whose accumulated widths are &lt;= maxWidth are measured.</param>
-            <summary>Measure the text, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
-            <returns>Returns the number of bytes of text that were measured. </returns>
+            <param name="layer">The layer to be measured.</param>
+            <param name="maxWidth">The maximum width. Only the subset of layer whose accumulated widths are &lt;= maxWidth are measured.</param>
+            <summary>Measure the layer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
+            <returns>Returns the number of bytes of layer that were measured. </returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.BreakText(System.String,System.Single)">
-            <param name="text">The text to be measured.</param>
-            <param name="maxWidth">The maximum width. Only the subset of text whose accumulated widths are &lt;= maxWidth are measured.</param>
-            <summary>Measure the text, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
-            <returns>Returns the number of characters of text that were measured. </returns>
+            <param name="layer">The layer to be measured.</param>
+            <param name="maxWidth">The maximum width. Only the subset of layer whose accumulated widths are &lt;= maxWidth are measured.</param>
+            <summary>Measure the layer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
+            <returns>Returns the number of characters of layer that were measured. </returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.BreakText(System.Byte[],System.Single,System.Single@)">
-            <param name="text">The text to be measured.</param>
-            <param name="maxWidth">The maximum width. Only the subset of text whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
-            <param name="measuredWidth">The actual width of the measured text.</param>
-            <summary>Measure the text, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
-            <returns>Returns the number of bytes of text that were measured. </returns>
+            <param name="layer">The layer to be measured.</param>
+            <param name="maxWidth">The maximum width. Only the subset of layer whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
+            <param name="measuredWidth">The actual width of the measured layer.</param>
+            <summary>Measure the layer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
+            <returns>Returns the number of bytes of layer that were measured. </returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.BreakText(System.IntPtr,System.IntPtr,System.Single)">
-            <param name="buffer">The pointer to a region holding text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="buffer">The pointer to a region holding layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="maxWidth">The maximum width. Only the subset of text whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
-            <summary>Measure the text buffer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
-            <returns>Returns the number of bytes of text that were measured. </returns>
-            <remarks>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains text encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format. This only consumes up to <paramref name="length" /> bytes from the buffer.</remarks>
+            <param name="maxWidth">The maximum width. Only the subset of layer whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
+            <summary>Measure the layer buffer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
+            <returns>Returns the number of bytes of layer that were measured. </returns>
+            <remarks>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains layer encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format. This only consumes up to <paramref name="length" /> bytes from the buffer.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.BreakText(System.String,System.Single,System.Single@)">
-            <param name="text">The text to be measured.</param>
-            <param name="maxWidth">The maximum width. Only the subset of text whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
-            <param name="measuredWidth">The actual width of the measured text.</param>
-            <summary>Measure the text, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
-            <returns>Returns the number of characters of text that were measured. </returns>
+            <param name="layer">The layer to be measured.</param>
+            <param name="maxWidth">The maximum width. Only the subset of layer whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
+            <param name="measuredWidth">The actual width of the measured layer.</param>
+            <summary>Measure the layer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
+            <returns>Returns the number of characters of layer that were measured. </returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.BreakText(System.IntPtr,System.IntPtr,System.Single,System.Single@)">
-            <param name="buffer">The pointer to a region holding text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="buffer">The pointer to a region holding layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="maxWidth">The maximum width. Only the subset of text whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
-            <param name="measuredWidth">The actual width of the measured text.</param>
-            <summary>Measure the text buffer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
-            <returns>Returns the number of bytes of text that were measured. </returns>
-            <remarks>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains text encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format. This only consumes up to <paramref name="length" /> bytes from the buffer.</remarks>
+            <param name="maxWidth">The maximum width. Only the subset of layer whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
+            <param name="measuredWidth">The actual width of the measured layer.</param>
+            <summary>Measure the layer buffer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
+            <returns>Returns the number of bytes of layer that were measured. </returns>
+            <remarks>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains layer encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format. This only consumes up to <paramref name="length" /> bytes from the buffer.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.BreakText(System.String,System.Single,System.Single@,System.String@)">
-            <param name="text">The text to be measured.</param>
-            <param name="maxWidth">The maximum width. Only the subset of text whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
-            <param name="measuredWidth">The actual width of the measured text.</param>
-            <param name="measuredText">The text that was measured.</param>
-            <summary>Measure the text, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
-            <returns>Returns the number of characters of text that were measured. </returns>
+            <param name="layer">The layer to be measured.</param>
+            <param name="maxWidth">The maximum width. Only the subset of layer whose accumulated widths are &lt;= <paramref name="maxWidth" /> are measured.</param>
+            <param name="measuredWidth">The actual width of the measured layer.</param>
+            <param name="measuredText">The layer that was measured.</param>
+            <summary>Measure the layer, stopping early if the measured width exceeds <paramref name="maxWidth" />.</summary>
+            <returns>Returns the number of characters of layer that were measured. </returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.Clone">
@@ -9803,41 +9803,41 @@ The example above produces the following:
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.ContainsGlyphs(System.Byte[])">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <summary>Returns a value indicating whether or not all the characters corresponds to a non-zero glyph index.</summary>
-            <returns>Returns true if all the characters corresponds to a non-zero glyph index, otherwise false if any characters in text are not supported in the typeface.</returns>
-            <remarks>This method does not check to see if the text contains invalid glyph indices.</remarks>
+            <returns>Returns true if all the characters corresponds to a non-zero glyph index, otherwise false if any characters in layer are not supported in the typeface.</returns>
+            <remarks>This method does not check to see if the layer contains invalid glyph indices.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.ContainsGlyphs(System.String)">
-            <param name="text">The text.</param>
+            <param name="layer">The layer.</param>
             <summary>Returns a value indicating whether or not all the characters corresponds to a non-zero glyph index.</summary>
-            <returns>Returns true if all the characters corresponds to a non-zero glyph index, otherwise false if any characters in text are not supported in the typeface.</returns>
-            <remarks>This method does not check to see if the text contains invalid glyph indices.</remarks>
+            <returns>Returns true if all the characters corresponds to a non-zero glyph index, otherwise false if any characters in layer are not supported in the typeface.</returns>
+            <remarks>This method does not check to see if the layer contains invalid glyph indices.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.ContainsGlyphs(System.IntPtr,System.Int32)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
             <summary>Returns a value indicating whether or not all the characters corresponds to a non-zero glyph index.</summary>
-            <returns>Returns true if all the characters corresponds to a non-zero glyph index, otherwise false if any characters in text are not supported in the typeface.</returns>
-            <remarks>This method does not check to see if the text contains invalid glyph indices.</remarks>
+            <returns>Returns true if all the characters corresponds to a non-zero glyph index, otherwise false if any characters in layer are not supported in the typeface.</returns>
+            <remarks>This method does not check to see if the layer contains invalid glyph indices.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.CountGlyphs(System.Byte[])">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <summary>Returns the number of glyphs in text.</summary>
-            <returns>Returns the number of glyphs in text.</returns>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <summary>Returns the number of glyphs in layer.</summary>
+            <returns>Returns the number of glyphs in layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.CountGlyphs(System.String)">
-            <param name="text">The text.</param>
-            <summary>Returns the number of glyphs in text.</summary>
-            <returns>Returns the number of glyphs in text.</returns>
+            <param name="layer">The layer.</param>
+            <summary>Returns the number of glyphs in layer.</summary>
+            <returns>Returns the number of glyphs in layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.CountGlyphs(System.IntPtr,System.Int32)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
-            <summary>Returns the number of glyphs in text.</summary>
-            <returns>Returns the number of glyphs in text.</returns>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
+            <summary>Returns the number of glyphs in layer.</summary>
+            <returns>Returns the number of glyphs in layer.</returns>
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.DeviceKerningEnabled">
@@ -9852,7 +9852,7 @@ The example above produces the following:
             <remarks>Always dispose the object before you release your last reference to the <see cref="T:SkiaSharp.SKPaint" />. Otherwise, the resources it is using will not be freed until the garbage collector calls the finalizer.</remarks>
         </member>
         <member name="P:SkiaSharp.SKPaint.FakeBoldText">
-            <summary>Gets or sets a value indicating whether fake bold text is enabled.</summary>
+            <summary>Gets or sets a value indicating whether fake bold layer is enabled.</summary>
             <value />
             <remarks />
         </member>
@@ -9939,30 +9939,30 @@ The example above produces the following:
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphs(System.Byte[])">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <summary>Converts text into glyph indices.</summary>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <summary>Converts layer into glyph indices.</summary>
             <returns>Returns the glyph indices.</returns>
-            <remarks>This method does not check the text for valid character codes or valid glyph indices.</remarks>
+            <remarks>This method does not check the layer for valid character codes or valid glyph indices.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphs(System.String)">
-            <param name="text">The text.</param>
-            <summary>Converts text into glyph indices.</summary>
+            <param name="layer">The layer.</param>
+            <summary>Converts layer into glyph indices.</summary>
             <returns>Returns the glyph indices.</returns>
-            <remarks>This method does not check the text for valid character codes or valid glyph indices.</remarks>
+            <remarks>This method does not check the layer for valid character codes or valid glyph indices.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphs(System.IntPtr,System.Int32)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
-            <summary>Converts text into glyph indices.</summary>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
+            <summary>Converts layer into glyph indices.</summary>
             <returns>Returns the glyph indices.</returns>
-            <remarks>This method does not check the text for valid character codes or valid glyph indices.</remarks>
+            <remarks>This method does not check the layer for valid character codes or valid glyph indices.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphWidths(System.Byte[])">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <summary>Retrieves the advance for each glyph in the text.</summary>
-            <returns>Returns the text advances for each glyph.</returns>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <summary>Retrieves the advance for each glyph in the layer.</summary>
+            <returns>Returns the layer advances for each glyph.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If <xref:SkiaSharp.SKPaint.IsVerticalText> is false, this method returns the
@@ -9976,11 +9976,11 @@ Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphWidths(System.String)">
-            <param name="text">The text.</param>
-            <summary>Retrieves the advance for each glyph in the text.</summary>
-            <returns>Returns the text advances for each glyph.</returns>
+            <param name="layer">The layer.</param>
+            <summary>Retrieves the advance for each glyph in the layer.</summary>
+            <returns>Returns the layer advances for each glyph.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If <xref:SkiaSharp.SKPaint.IsVerticalText> is false, this method returns the
@@ -9994,12 +9994,12 @@ Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphWidths(System.Byte[],SkiaSharp.SKRect[]@)">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="bounds">The bounds for each glyph relative to (0, 0).</param>
-            <summary>Retrieves the advance and bounds for each glyph in the text.</summary>
-            <returns>Returns the text advances for each glyph.</returns>
+            <summary>Retrieves the advance and bounds for each glyph in the layer.</summary>
+            <returns>Returns the layer advances for each glyph.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If <xref:SkiaSharp.SKPaint.IsVerticalText> is false, this method returns the
@@ -10013,12 +10013,12 @@ Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphWidths(System.IntPtr,System.Int32)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
-            <summary>Retrieves the advance for each glyph in the text.</summary>
-            <returns>Returns the text advances for each glyph.</returns>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
+            <summary>Retrieves the advance for each glyph in the layer.</summary>
+            <returns>Returns the layer advances for each glyph.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If <xref:SkiaSharp.SKPaint.IsVerticalText> is false, this method returns the
@@ -10032,12 +10032,12 @@ Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphWidths(System.String,SkiaSharp.SKRect[]@)">
-            <param name="text">The text.</param>
+            <param name="layer">The layer.</param>
             <param name="bounds">The bounds for each glyph relative to (0, 0).</param>
-            <summary>Retrieves the advance and bounds for each glyph in the text.</summary>
-            <returns>Returns the text advances for each glyph.</returns>
+            <summary>Retrieves the advance and bounds for each glyph in the layer.</summary>
+            <returns>Returns the layer advances for each glyph.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If <xref:SkiaSharp.SKPaint.IsVerticalText> is false, this method returns the
@@ -10051,13 +10051,13 @@ Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetGlyphWidths(System.IntPtr,System.Int32,SkiaSharp.SKRect[]@)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
             <param name="bounds">The bounds for each glyph relative to (0, 0).</param>
-            <summary>Retrieves the advance and bounds for each glyph in the text.</summary>
-            <returns>Returns the text advances for each glyph.</returns>
+            <summary>Retrieves the advance and bounds for each glyph in the layer.</summary>
+            <returns>Returns the layer advances for each glyph.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If <xref:SkiaSharp.SKPaint.IsVerticalText> is false, this method returns the
@@ -10071,7 +10071,7 @@ Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetHorizontalTextIntercepts(System.Byte[],System.Single[],System.Single,System.Single,System.Single)">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="xpositions">The positions of each glyph in the horizontal direction.</param>
             <param name="y">The positions of all the glyphs along the y-coordinate.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
@@ -10079,7 +10079,7 @@ Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10090,7 +10090,7 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetHorizontalTextIntercepts(System.String,System.Single[],System.Single,System.Single,System.Single)">
-            <param name="text">The text.</param>
+            <param name="layer">The layer.</param>
             <param name="xpositions">The positions of each glyph in the horizontal direction.</param>
             <param name="y">The positions of all the glyphs along the y-coordinate.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
@@ -10098,7 +10098,7 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10109,8 +10109,8 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetHorizontalTextIntercepts(System.IntPtr,System.Int32,System.Single[],System.Single,System.Single,System.Single)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
             <param name="xpositions">The positions of each glyph in the horizontal direction.</param>
             <param name="y">The positions of all the glyphs along the y-coordinate.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
@@ -10118,7 +10118,7 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10129,14 +10129,14 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetPositionedTextIntercepts(System.Byte[],SkiaSharp.SKPoint[],System.Single,System.Single)">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="positions">The positions of each glyph.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
             <param name="lowerBounds">The lower line parallel to the advance.</param>
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10147,14 +10147,14 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetPositionedTextIntercepts(System.String,SkiaSharp.SKPoint[],System.Single,System.Single)">
-            <param name="text">The text.</param>
+            <param name="layer">The layer.</param>
             <param name="positions">The positions of each glyph.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
             <param name="lowerBounds">The lower line parallel to the advance.</param>
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10165,15 +10165,15 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetPositionedTextIntercepts(System.IntPtr,System.Int32,SkiaSharp.SKPoint[],System.Single,System.Single)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
             <param name="positions">The positions of each glyph.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
             <param name="lowerBounds">The lower line parallel to the advance.</param>
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10184,13 +10184,13 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextIntercepts(SkiaSharp.SKTextBlob,System.Single,System.Single)">
-            <param name="text">The text blob.</param>
+            <param name="layer">The layer blob.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
             <param name="lowerBounds">The lower line parallel to the advance.</param>
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10201,15 +10201,15 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextIntercepts(System.Byte[],System.Single,System.Single,System.Single,System.Single)">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="x">The x-coordinate of the origin to the text.</param>
-            <param name="y">The y-coordinate of the origin to the text.</param>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="x">The x-coordinate of the origin to the layer.</param>
+            <param name="y">The y-coordinate of the origin to the layer.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
             <param name="lowerBounds">The lower line parallel to the advance.</param>
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10220,15 +10220,15 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextIntercepts(System.String,System.Single,System.Single,System.Single,System.Single)">
-            <param name="text">The text.</param>
-            <param name="x">The x-coordinate of the origin to the text.</param>
-            <param name="y">The y-coordinate of the origin to the text.</param>
+            <param name="layer">The layer.</param>
+            <param name="x">The x-coordinate of the origin to the layer.</param>
+            <param name="y">The y-coordinate of the origin to the layer.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
             <param name="lowerBounds">The lower line parallel to the advance.</param>
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10239,16 +10239,16 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextIntercepts(System.IntPtr,System.Int32,System.Single,System.Single,System.Single,System.Single)">
-            <param name="text">The text buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="length">The length of the text buffer.</param>
-            <param name="x">The x-coordinate of the origin to the text.</param>
-            <param name="y">The y-coordinate of the origin to the text.</param>
+            <param name="layer">The layer buffer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="length">The length of the layer buffer.</param>
+            <param name="x">The x-coordinate of the origin to the layer.</param>
+            <param name="y">The y-coordinate of the origin to the layer.</param>
             <param name="upperBounds">The upper line parallel to the advance.</param>
             <param name="lowerBounds">The lower line parallel to the advance.</param>
             <summary>Calculate the intersections of two parallel lines and the glyphs.</summary>
             <returns>Returns the intersections of two parallel lines and the glyphs.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Uses <xref:SkiaSharp.SKPaint.TextEncoding> to decode text,
@@ -10259,50 +10259,50 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             </remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextPath(System.Byte[],SkiaSharp.SKPoint[])">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="points">The position to use for each glyph in the text.</param>
-            <summary>Returns the path (outline) for the specified text.</summary>
-            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the text.</returns>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="points">The position to use for each glyph in the layer.</param>
+            <summary>Returns the path (outline) for the specified layer.</summary>
+            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextPath(System.String,SkiaSharp.SKPoint[])">
-            <param name="text">The text to generate an outline for.</param>
-            <param name="points">The position to use for each glyph in the text.</param>
-            <summary>Returns the path (outline) for the specified text.</summary>
-            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the text.</returns>
+            <param name="layer">The layer to generate an outline for.</param>
+            <param name="points">The position to use for each glyph in the layer.</param>
+            <summary>Returns the path (outline) for the specified layer.</summary>
+            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextPath(System.Byte[],System.Single,System.Single)">
-            <param name="text">The text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
-            <param name="x">The x-coordinate of the first glyph in the text.</param>
-            <param name="y">The y-coordinate of the first glyph in the text.</param>
-            <summary>Returns the path (outline) for the specified text.</summary>
-            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the text.</returns>
+            <param name="layer">The layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="x">The x-coordinate of the first glyph in the layer.</param>
+            <param name="y">The y-coordinate of the first glyph in the layer.</param>
+            <summary>Returns the path (outline) for the specified layer.</summary>
+            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextPath(System.IntPtr,System.IntPtr,SkiaSharp.SKPoint[])">
-            <param name="buffer">The pointer to a region holding text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="buffer">The pointer to a region holding layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="points">The position to use for each glyph in the text.</param>
-            <summary>Returns the path (outline) for the specified text.</summary>
-            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the text.</returns>
+            <param name="points">The position to use for each glyph in the layer.</param>
+            <summary>Returns the path (outline) for the specified layer.</summary>
+            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextPath(System.String,System.Single,System.Single)">
-            <param name="text">The text to generate an outline for.</param>
-            <param name="x">The x-coordinate of the first glyph in the text.</param>
-            <param name="y">The y-coordinate of the first glyph in the text.</param>
-            <summary>Returns the path (outline) for the specified text.</summary>
-            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the text.</returns>
+            <param name="layer">The layer to generate an outline for.</param>
+            <param name="x">The x-coordinate of the first glyph in the layer.</param>
+            <param name="y">The y-coordinate of the first glyph in the layer.</param>
+            <summary>Returns the path (outline) for the specified layer.</summary>
+            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKPaint.GetTextPath(System.IntPtr,System.IntPtr,System.Single,System.Single)">
-            <param name="buffer">The pointer to a region holding text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="buffer">The pointer to a region holding layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="x">The x-coordinate of the first glyph in the text.</param>
-            <param name="y">The y-coordinate of the first glyph in the text.</param>
-            <summary>Returns the path (outline) for the specified text.</summary>
-            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the text.</returns>
+            <param name="x">The x-coordinate of the first glyph in the layer.</param>
+            <param name="y">The y-coordinate of the first glyph in the layer.</param>
+            <summary>Returns the path (outline) for the specified layer.</summary>
+            <returns>Returns the <see cref="T:SkiaSharp.SKPath" /> containing the outline of the layer.</returns>
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.HintingLevel">
@@ -10331,12 +10331,12 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.IsEmbeddedBitmapText">
-            <summary>Gets or sets a value indicating whether text is an embedded bitmap.</summary>
+            <summary>Gets or sets a value indicating whether layer is an embedded bitmap.</summary>
             <value />
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.IsLinearText">
-            <summary>Gets or sets a value indicating whether text is linear.</summary>
+            <summary>Gets or sets a value indicating whether layer is linear.</summary>
             <value />
             <remarks />
         </member>
@@ -10346,10 +10346,10 @@ and <xref:SkiaSharp.SKPaint.PathEffect> to scale and modify the glyph paths.
             <remarks>This is a shortcut way to set <see cref="P:SkiaSharp.SKPaint.Style" /> to either <see cref="F:SkiaSharp.SKPaintStyle.Stroke" /> or <see cref="F:SkiaSharp.SKPaintStyle.Fill" />.</remarks>
         </member>
         <member name="P:SkiaSharp.SKPaint.IsVerticalText">
-            <summary>Gets or sets a value indicating whether the text is vertical or horizontal is enabled.</summary>
+            <summary>Gets or sets a value indicating whether the layer is vertical or horizontal is enabled.</summary>
             <value />
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If this property is set true, then advances are treated as Y values rather
@@ -10360,7 +10360,7 @@ its glyphs vertically rather than horizontally.
             </remarks>
         </member>
         <member name="P:SkiaSharp.SKPaint.LcdRenderText">
-            <summary>Gets or sets a value indicating whether LCD text rendering is enabled.</summary>
+            <summary>Gets or sets a value indicating whether LCD layer rendering is enabled.</summary>
             <value />
             <remarks>
                 <see cref="P:SkiaSharp.SKPaint.IsAntialias" /> must also be enabled for LCD rendering to be enabled.</remarks>
@@ -10371,47 +10371,47 @@ its glyphs vertically rather than horizontally.
             <remarks>Mask filters control the transformations on the alpha channel before primitives are drawn. Examples are blur or emboss.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.MeasureText(System.Byte[])">
-            <param name="text">The text to be measured.</param>
-            <summary>Measures the specified text.</summary>
-            <returns>Returns the width of the text.</returns>
-            <remarks>This will return the vertical measure if this is vertical text, in which case the returned value should be treated has a height instead of a width.</remarks>
+            <param name="layer">The layer to be measured.</param>
+            <summary>Measures the specified layer.</summary>
+            <returns>Returns the width of the layer.</returns>
+            <remarks>This will return the vertical measure if this is vertical layer, in which case the returned value should be treated has a height instead of a width.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.MeasureText(System.String)">
-            <param name="text">The text to be measured.</param>
-            <summary>Measures the specified text.</summary>
-            <returns>Returns the width of the text.</returns>
-            <remarks>This will return the vertical measure if this is vertical text, in which case the returned value should be treated has a height instead of a width.</remarks>
+            <param name="layer">The layer to be measured.</param>
+            <summary>Measures the specified layer.</summary>
+            <returns>Returns the width of the layer.</returns>
+            <remarks>This will return the vertical measure if this is vertical layer, in which case the returned value should be treated has a height instead of a width.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.MeasureText(System.Byte[],SkiaSharp.SKRect@)">
-            <param name="text">The text to be measured.</param>
-            <param name="bounds">The bounds of the text relative to (0, 0)</param>
-            <summary>Measures the specified text.</summary>
-            <returns>Returns the width of the text.</returns>
-            <remarks>This will return the vertical measure if this is vertical text, in which case the returned value should be treated has a height instead of a width.</remarks>
+            <param name="layer">The layer to be measured.</param>
+            <param name="bounds">The bounds of the layer relative to (0, 0)</param>
+            <summary>Measures the specified layer.</summary>
+            <returns>Returns the width of the layer.</returns>
+            <remarks>This will return the vertical measure if this is vertical layer, in which case the returned value should be treated has a height instead of a width.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.MeasureText(System.IntPtr,System.IntPtr)">
-            <param name="buffer">The pointer to a region holding text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="buffer">The pointer to a region holding layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <summary>Measures the specified UTF-8 encoded text.</summary>
-            <returns>Returns the width of the text.</returns>
-            <remarks>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains text encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.   This only consumes up to <paramref name="length" /> bytes from the buffer.</remarks>
+            <summary>Measures the specified UTF-8 encoded layer.</summary>
+            <returns>Returns the width of the layer.</returns>
+            <remarks>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains layer encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.   This only consumes up to <paramref name="length" /> bytes from the buffer.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.MeasureText(System.String,SkiaSharp.SKRect@)">
-            <param name="text">The text to be measured.</param>
-            <param name="bounds">The bounds of the text relative to (0, 0)</param>
-            <summary>Measures the specified text.</summary>
-            <returns>Returns the width of the text.</returns>
-            <remarks>This will return the vertical measure if this is vertical text, in which case the returned value should be treated has a height instead of a width.</remarks>
+            <param name="layer">The layer to be measured.</param>
+            <param name="bounds">The bounds of the layer relative to (0, 0)</param>
+            <summary>Measures the specified layer.</summary>
+            <returns>Returns the width of the layer.</returns>
+            <remarks>This will return the vertical measure if this is vertical layer, in which case the returned value should be treated has a height instead of a width.</remarks>
         </member>
         <member name="M:SkiaSharp.SKPaint.MeasureText(System.IntPtr,System.IntPtr,SkiaSharp.SKRect@)">
-            <param name="buffer">The pointer to a region holding text encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
+            <param name="buffer">The pointer to a region holding layer encoded using the encoding specified in <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.</param>
             <param name="length">The number of bytes to read from the <paramref name="buffer." /></param>
-            <param name="bounds">The bounds of the text relative to (0, 0)</param>
-            <summary>Measures the specified UTF-8 encoded text.</summary>
-            <returns>Returns the width of the text.</returns>
+            <param name="bounds">The bounds of the layer relative to (0, 0)</param>
+            <summary>Measures the specified UTF-8 encoded layer.</summary>
+            <returns>Returns the width of the layer.</returns>
             <remarks>
-                <para>This will return the vertical measure if this is vertical text, in which case the returned value should be treated has a height instead of a width.</para>
-                <para>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains text encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.   This only consumes up to <paramref name="length" /> bytes from the buffer.</para>
+                <para>This will return the vertical measure if this is vertical layer, in which case the returned value should be treated has a height instead of a width.</para>
+                <para>The <paramref name="buffer" /> parameter is a pointer to a region in memory that contains layer encoded in the <see cref="P:SkiaSharp.SKPaint.TextEncoding" /> format.   This only consumes up to <paramref name="length" /> bytes from the buffer.</para>
             </remarks>
         </member>
         <member name="P:SkiaSharp.SKPaint.PathEffect">
@@ -10425,7 +10425,7 @@ its glyphs vertically rather than horizontally.
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.StrikeThruText">
-            <summary>Gets or sets a value indicating whether to strike through text.</summary>
+            <summary>Gets or sets a value indicating whether to strike through layer.</summary>
             <value />
             <remarks />
         </member>
@@ -10455,7 +10455,7 @@ its glyphs vertically rather than horizontally.
             <remarks>Can also be set using <see cref="P:SkiaSharp.SKPaint.IsStroke" />.</remarks>
         </member>
         <member name="P:SkiaSharp.SKPaint.SubpixelText">
-            <summary>Gets or sets a value indicating whether to use subpixel text positioning.</summary>
+            <summary>Gets or sets a value indicating whether to use subpixel layer positioning.</summary>
             <value />
             <remarks />
         </member>
@@ -10465,32 +10465,32 @@ its glyphs vertically rather than horizontally.
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.TextEncoding">
-            <summary>Gets or sets the encoding used when drawing or measuring text.</summary>
+            <summary>Gets or sets the encoding used when drawing or measuring layer.</summary>
             <value />
             <remarks>This defaults to UTF-8 encoding.</remarks>
         </member>
         <member name="P:SkiaSharp.SKPaint.TextScaleX">
-            <summary>Gets or sets paint's horizontal scale factor for text.</summary>
+            <summary>Gets or sets paint's horizontal scale factor for layer.</summary>
             <value />
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.TextSize">
-            <summary>Gets or sets the text size.</summary>
+            <summary>Gets or sets the layer size.</summary>
             <value />
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.TextSkewX">
-            <summary>Gets or sets paint's horizontal skew factor for text.</summary>
+            <summary>Gets or sets paint's horizontal skew factor for layer.</summary>
             <value />
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.Typeface">
-            <summary>Gets or sets the typeface used when painting text. May be <see langword="null" />.</summary>
+            <summary>Gets or sets the typeface used when painting layer. May be <see langword="null" />.</summary>
             <value />
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKPaint.UnderlineText">
-            <summary>Gets or sets a value indicating whether to underline text.</summary>
+            <summary>Gets or sets a value indicating whether to underline layer.</summary>
             <value />
             <remarks />
         </member>
@@ -10518,7 +10518,7 @@ its glyphs vertically rather than horizontally.
         <member name="T:SkiaSharp.SKPaintStyle">
             <summary>Indications on how to draw geometry.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Styles apply to rectangle, oval, path, and text. Bitmaps are always drawn in
@@ -10684,7 +10684,7 @@ stroked.
             <param name="forceMoveTo">Whether to always begin a new contour with the arc.</param>
             <summary>Appends the specified arc to the path.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If the start of the arc is different from the path's current last point, then
@@ -10747,7 +10747,7 @@ contour to the start of the arc. However, if the path is empty, then we call
             <param name="w">The weight of the conic curve.</param>
             <summary>Add a conic path from the last point.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -10763,7 +10763,7 @@ the first point is automatically set to (0, 0).
             <param name="w">The weight of the conic curve.</param>
             <summary>Add a conic path from the last point.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -10820,7 +10820,7 @@ the first point is automatically set to (0, 0).
             <summary>Creates an iterator object to scan the all of the segments (lines, quadratics, cubics) of each contours in a path.</summary>
             <returns>Returns an object that can be used to iterate over the various elements of the path.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This iterator is able to clean up the path as the values are returned. If you
@@ -10833,7 +10833,7 @@ do not desire to get verbs that have been cleaned up, use the
             <summary>Creates a raw iterator object to scan the all of the segments (lines, quadratics, cubics) of each contours in a path.</summary>
             <returns>Returns an object that can be used to iterate over the various elements of the path.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Unlike the <xref:SkiaSharp.SKPath.CreateIterator%2A> method, this iterator
@@ -10848,7 +10848,7 @@ elements contained in the path.
             <param name="point2">The coordinates of the end point on a cubic curve.</param>
             <summary>Adds a cubic bezier from the last point.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -10865,7 +10865,7 @@ the first point is automatically set to (0, 0).
             <param name="y2">The y-coordinate of the end point on a cubic curve.</param>
             <summary>Adds a cubic bezier from the last point.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -10992,7 +10992,7 @@ the first point is automatically set to (0, 0).
             <param name="point">The coordinates of the end of a line.</param>
             <summary>Add a line from the last point to the specified point (x, y).</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11005,7 +11005,7 @@ the first point is automatically set to (0, 0).
             <param name="y">The y-coordinate of the end of a line.</param>
             <summary>Add a line from the last point to the specified point (x, y).</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11065,7 +11065,7 @@ the first point is automatically set to (0, 0).
             <summary>Gets all the points in the path.</summary>
             <value />
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The number of points will be <xref:SkiaSharp.SKPath.PointCount>, To only
@@ -11079,7 +11079,7 @@ return a subset of the points in the path, use
             <param name="point1">The coordinates of the end point on a quadratic curve.</param>
             <summary>Add a quadratic bezier from the last point.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Add a quadratic bezier from the last point, approaching control point 
@@ -11097,7 +11097,7 @@ the first point is automatically set to (0, 0).
             <param name="y1">The y-coordinate of the end point on a quadratic curve.</param>
             <summary>Add a quadratic bezier from the last point.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Add a quadratic bezier from the last point, approaching control point
@@ -11134,7 +11134,7 @@ the first point is automatically set to (0, 0).
             <param name="w">The weight of the conic curve.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.ConicTo(SkiaSharp.SKPoint,SkiaSharp.SKPoint,System.Single)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11150,7 +11150,7 @@ the first point is automatically set to (0, 0).
             <param name="w">The weight of the conic curve.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.ConicTo(System.Single,System.Single,System.Single,System.Single,System.Single)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11164,7 +11164,7 @@ the first point is automatically set to (0, 0).
             <param name="point2">The amount to add to the coordinates of the last point on this contour, to specify the end point on a cubic curve.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.CubicTo(SkiaSharp.SKPoint,SkiaSharp.SKPoint,SkiaSharp.SKPoint)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11181,7 +11181,7 @@ the first point is automatically set to (0, 0).
             <param name="dy2">The amount to add to the y-coordinate of the last point on this contour, to specify the end point on a cubic curve.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.CubicTo(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11201,7 +11201,7 @@ the first point is automatically set to (0, 0).
             <param name="point">The amount to add to the coordinates of the last point on this contour, to specify the end of a line.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.LineTo(SkiaSharp.SKPoint)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11214,7 +11214,7 @@ the first point is automatically set to (0, 0).
             <param name="dy">The amount to add to the y-coordinate of the last point on this contour, to specify the end of a line.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.LineTo(System.Single,System.Single)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11238,7 +11238,7 @@ the first point is automatically set to (0, 0).
             <param name="point1">The amount to add to the coordinates of the last point on this contour, to specify end point on a quadratic curve.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.QuadTo(SkiaSharp.SKPoint,SkiaSharp.SKPoint)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11253,7 +11253,7 @@ the first point is automatically set to (0, 0).
             <param name="dy1">The amount to add to the y-coordinate of the last point on this contour, to specify end point on a quadratic curve.</param>
             <summary>Same as <see cref="M:SkiaSharp.SKPath.QuadTo(System.Single,System.Single,System.Single,System.Single)" /> but the coordinates are considered relative to the last point on this contour.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If no <xref:SkiaSharp.SKPath.MoveTo%2A> call has been made for this contour,
@@ -11310,7 +11310,7 @@ the first point is automatically set to (0, 0).
         <member name="T:SkiaSharp.SKPath+Iterator">
             <summary>Iterator object to scan the all of the segments (lines, quadratics, cubics) of each contours in a path.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Iterators are created by calling the
@@ -11322,7 +11322,7 @@ Iterators are created by calling the
             <summary>Return the weight for the current conic.</summary>
             <returns />
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Only valid if the current segment return by
@@ -11383,7 +11383,7 @@ Only valid if the current segment return by
         <member name="T:SkiaSharp.SKPath+RawIterator">
             <summary>Iterator object to scan through the verbs in the path, providing the associated points.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Iterators are created by calling the
@@ -11836,7 +11836,7 @@ method.
             <summary>Signal that the caller is done recording.</summary>
             <returns>Returns the <see cref="T:SkiaSharp.SKPicture" /> containing the recorded content.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This invalidates the canvas returned by
@@ -11914,7 +11914,7 @@ This invalidates the canvas returned by
             <summary>Implemented by derived <see cref="T:SkiaSharp.SKPixelSerializer" /> types to determine whether the caller should use the specified encoded data instead of encoding a new version.</summary>
             <returns>Returns <see langword="true" /> if the specified encoded data should be used, otherwise <see langword="false" /> to serialize another version.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If this method returns `true`, then
@@ -11929,7 +11929,7 @@ the source data.
             <summary>Determines whether the serializer wants to use the specified encoded data instead of encoding a new version.</summary>
             <returns>Returns <see langword="true" /> if the specified encoded data should be used, otherwise <see langword="false" /> to serialize another version.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If this method returns `true`, then
@@ -12240,7 +12240,7 @@ source data.
             <summary>Copies this pixmap to the destination, scaling the pixels to fit the destination size and converting the pixels to match the color type and alpha type.</summary>
             <returns>Returns <see langword="true" /> on success, or <see langword="false" /> if there was an error.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Pixels are copied only if pixel conversion is possible.
@@ -13818,7 +13818,7 @@ Filter Quality:
         <member name="T:SkiaSharp.SKShader">
             <summary>Shaders specify the source color(s) for what is being drawn in the <see cref="T:SkiaSharp.SKPaint" />.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 Shaders specify the source colors for what is being drawn. If a paint has no
@@ -14060,7 +14060,7 @@ The example above produces the following:
             <summary>Creates a new shader that will draw with the specified bitmap.</summary>
             <returns>Returns a new <see cref="T:SkiaSharp.SKShader" />, or an empty shader on error. This function never returns null.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If the bitmap cannot be used (has no pixels, or its dimensions exceed
@@ -14078,7 +14078,7 @@ be colorized using the color on the paint.
             <summary>Creates a new shader that will draw with the specified bitmap.</summary>
             <returns>Returns a new <see cref="T:SkiaSharp.SKShader" />, or an empty shader on error. This function never returns null.</returns>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 If the bitmap cannot be used (has no pixels, or its dimensions exceed
@@ -14720,7 +14720,7 @@ be colorized using the color on the paint.
         <member name="T:SkiaSharp.SKSurface">
             <summary>Represents the backend/results of drawing to a canvas.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 The surface represents the backend/results of drawing to a canvas. For raster
@@ -15457,20 +15457,20 @@ The example above produces the following:
             <remarks />
         </member>
         <member name="T:SkiaSharp.SKTextAlign">
-            <summary>Possible text alignment values.</summary>
+            <summary>Possible layer alignment values.</summary>
             <remarks />
         </member>
         <member name="F:SkiaSharp.SKTextAlign.Center">
-            <summary>Center the text.</summary>
+            <summary>Center the layer.</summary>
         </member>
         <member name="F:SkiaSharp.SKTextAlign.Left">
-            <summary>Left align the text.</summary>
+            <summary>Left align the layer.</summary>
         </member>
         <member name="F:SkiaSharp.SKTextAlign.Right">
-            <summary>Right align the text.</summary>
+            <summary>Right align the layer.</summary>
         </member>
         <member name="T:SkiaSharp.SKTextBlob">
-            <summary>Represents multiple text runs of glyphs and positions.</summary>
+            <summary>Represents multiple layer runs of glyphs and positions.</summary>
             <remarks />
         </member>
         <member name="P:SkiaSharp.SKTextBlob.Bounds">
@@ -15485,7 +15485,7 @@ The example above produces the following:
             <remarks>Always dispose the object before you release your last reference to the <see cref="T:SkiaSharp.SKTextBlob" />. Otherwise, the resources it is using will not be freed until the garbage collector calls the finalizer.</remarks>
         </member>
         <member name="P:SkiaSharp.SKTextBlob.UniqueId">
-            <summary>Gets the unique, non-zero value representing the text blob.</summary>
+            <summary>Gets the unique, non-zero value representing the layer blob.</summary>
             <value />
             <remarks />
         </member>
@@ -15529,7 +15529,7 @@ The example above produces the following:
             <param name="y">The vertical offset within the blob.</param>
             <param name="glyphs">The glyphs for this run.</param>
             <param name="positions">The horizontal positions of each glyph.</param>
-            <param name="text">The chacracter information for this run.</param>
+            <param name="layer">The chacracter information for this run.</param>
             <param name="clusters">The glyph's cluster information.</param>
             <summary>Adds a new horizontally-positioned run to the builder.</summary>
             <remarks>The number of positions, characters and clusters must be the same as the number of glyphs.</remarks>
@@ -15550,7 +15550,7 @@ The example above produces the following:
             <param name="y">The vertical offset within the blob.</param>
             <param name="glyphs">The glyphs for this run.</param>
             <param name="positions">The horizontal positions of each glyph.</param>
-            <param name="text">The chacracter information for this run.</param>
+            <param name="layer">The chacracter information for this run.</param>
             <param name="clusters">The glyph's cluster information.</param>
             <param name="bounds">The bounding box of the run, used when computing the blob bounds to avoid re-measuring.</param>
             <summary>Adds a new horizontally-positioned run to the builder.</summary>
@@ -15584,7 +15584,7 @@ The example above produces the following:
             <param name="font">The font to be used for this run.</param>
             <param name="glyphs">The glyphs for this run.</param>
             <param name="positions">The positions of each glyph.</param>
-            <param name="text">The chacracter information for this run.</param>
+            <param name="layer">The chacracter information for this run.</param>
             <param name="clusters">The glyph's cluster information.</param>
             <summary>Adds a new fully-positioned run to the builder.</summary>
             <remarks>The number of positions, characters and clusters must be the same as the number of glyphs.</remarks>
@@ -15603,7 +15603,7 @@ The example above produces the following:
             <param name="font">The font to be used for this run.</param>
             <param name="glyphs">The glyphs for this run.</param>
             <param name="positions">The positions of each glyph.</param>
-            <param name="text">The chacracter information for this run.</param>
+            <param name="layer">The chacracter information for this run.</param>
             <param name="clusters">The glyph's cluster information.</param>
             <param name="bounds">The bounding box of the run, used when computing the blob bounds to avoid re-measuring.</param>
             <summary>Adds a new fully-positioned run to the builder.</summary>
@@ -15641,7 +15641,7 @@ The example above produces the following:
             <param name="x">The x-position of the origin of this run.</param>
             <param name="y">The y-position of the origin of this run.</param>
             <param name="glyphs">The glyphs for this run.</param>
-            <param name="text">The chacracter information for this run.</param>
+            <param name="layer">The chacracter information for this run.</param>
             <param name="clusters">The glyph's cluster information.</param>
             <summary>Adds a new deafult-positioned run to the builder.</summary>
             <remarks>The number of characters and clusters must be the same as the number of glyphs.</remarks>
@@ -15662,7 +15662,7 @@ The example above produces the following:
             <param name="x">The x-position of the origin of this run.</param>
             <param name="y">The y-position of the origin of this run.</param>
             <param name="glyphs">The glyphs for this run.</param>
-            <param name="text">The chacracter information for this run.</param>
+            <param name="layer">The chacracter information for this run.</param>
             <param name="clusters">The glyph's cluster information.</param>
             <param name="bounds">The bounding box of the run, used when computing the blob bounds to avoid re-measuring.</param>
             <summary>Adds a new deafult-positioned run to the builder.</summary>
@@ -15680,7 +15680,7 @@ The example above produces the following:
             <remarks>Always dispose the object before you release your last reference to the <see cref="T:SkiaSharp.SKTextBlobBuilder" />. Otherwise, the resources it is using will not be freed until the garbage collector calls the finalizer.</remarks>
         </member>
         <member name="T:SkiaSharp.SKTextEncoding">
-            <summary>Possible text encodings.</summary>
+            <summary>Possible layer encodings.</summary>
             <remarks />
         </member>
         <member name="F:SkiaSharp.SKTextEncoding.GlyphId">
@@ -15718,7 +15718,7 @@ The example above produces the following:
         <member name="T:SkiaSharp.SKTypeface">
             <summary>Represents a specific typeface and intrinsic style of a font.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 This is used in the paint, along with optionally algorithmic settings like
@@ -15762,7 +15762,7 @@ Typeface objects are immutable, and so they can be shared between threads.
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.CountGlyphs(System.String,SkiaSharp.SKEncoding)">
-            <param name="str">The text containing characters.</param>
+            <param name="str">The layer containing characters.</param>
             <param name="encoding">How the characters are to be encoded.</param>
             <summary>Returns the number of glyphs on the string.</summary>
             <returns>The number of number of continuous non-zero glyph IDs computed from the beginning of chars.</returns>
@@ -15891,34 +15891,34 @@ Typeface objects are immutable, and so they can be shared between threads.
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.String)">
-            <param name="text">The string of characters.</param>
+            <param name="layer">The string of characters.</param>
             <summary>Retrieve the corresponding glyph IDs of a string of characters.</summary>
             <returns>Returns the corresponding glyph IDs for each character.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.Byte[],SkiaSharp.SKEncoding)">
-            <param name="text">The buffer of character codes.</param>
+            <param name="layer">The buffer of character codes.</param>
             <param name="encoding">How the character codes are encoded.</param>
             <summary>Retrieve the corresponding glyph IDs of a buffer containing character codes, of the specified encoding.</summary>
             <returns>Returns the corresponding glyph IDs for each character.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.String,SkiaSharp.SKEncoding)">
-            <param name="text">The string of characters.</param>
+            <param name="layer">The string of characters.</param>
             <param name="encoding">How the characters are to be encoded.</param>
             <summary>Retrieve the corresponding glyph IDs of a string of characters, of the specified encoding.</summary>
             <returns>Returns the corresponding glyph IDs for each character.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.String,System.UInt16[]@)">
-            <param name="text">The string of characters.</param>
+            <param name="layer">The string of characters.</param>
             <param name="glyphs">Destination for the corresponding glyph IDs for each character.</param>
             <summary>Retrieve the corresponding glyph IDs of a string of characters.</summary>
             <returns>The number of number of continuous non-zero glyph IDs computed from the beginning of the character codes.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.Byte[],SkiaSharp.SKEncoding,System.UInt16[]@)">
-            <param name="text">The buffer of character codes.</param>
+            <param name="layer">The buffer of character codes.</param>
             <param name="encoding">How the character codes are encoded.</param>
             <param name="glyphs">Destination for the corresponding glyph IDs for each character.</param>
             <summary>Retrieve the corresponding glyph IDs of a buffer containing character codes, of the specified encoding.</summary>
@@ -15926,7 +15926,7 @@ Typeface objects are immutable, and so they can be shared between threads.
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.IntPtr,System.Int32,SkiaSharp.SKEncoding)">
-            <param name="text">The buffer of character codes.</param>
+            <param name="layer">The buffer of character codes.</param>
             <param name="length">The length of the buffer.</param>
             <param name="encoding">How the character codes are encoded.</param>
             <summary>Retrieve the corresponding glyph IDs of a buffer containing character codes, of the specified encoding.</summary>
@@ -15934,7 +15934,7 @@ Typeface objects are immutable, and so they can be shared between threads.
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.String,SkiaSharp.SKEncoding,System.UInt16[]@)">
-            <param name="text">The string of characters.</param>
+            <param name="layer">The string of characters.</param>
             <param name="encoding">How the characters are to be encoded.</param>
             <param name="glyphs">Destination for the corresponding glyph IDs for each character.</param>
             <summary>Retrieve the corresponding glyph IDs of a string of characters.</summary>
@@ -15942,7 +15942,7 @@ Typeface objects are immutable, and so they can be shared between threads.
             <remarks />
         </member>
         <member name="M:SkiaSharp.SKTypeface.GetGlyphs(System.IntPtr,System.Int32,SkiaSharp.SKEncoding,System.UInt16[]@)">
-            <param name="text">The buffer of character codes.</param>
+            <param name="layer">The buffer of character codes.</param>
             <param name="length">The length of the buffer.</param>
             <param name="encoding">How the character codes are encoded.</param>
             <param name="glyphs">Destination for the corresponding glyph IDs for each character.</param>
@@ -16193,7 +16193,7 @@ Typeface objects are immutable, and so they can be shared between threads.
         </member>
         <member name="M:SkiaSharp.SKWStream.WriteScalarAsText(System.Single)">
             <param name="value">The floating-point number to write.</param>
-            <summary>Write a single, floating-point number to the stream as text.</summary>
+            <summary>Write a single, floating-point number to the stream as layer.</summary>
             <returns>Returns true if the write succeeded, otherwise false.</returns>
             <remarks />
         </member>
@@ -16213,7 +16213,7 @@ Typeface objects are immutable, and so they can be shared between threads.
         <member name="T:SkiaSharp.SKXferMode">
             <summary>Predefined blend modes.</summary>
             <remarks>
-                <format type="text/markdown"><![CDATA[
+                <format type="layer/markdown"><![CDATA[
 ## Remarks
 
 - **Porter Duff Compositing Operators**  
@@ -16347,45 +16347,45 @@ Typeface objects are immutable, and so they can be shared between threads.
             <summary>The memory passed is zero initialized, so the codec may take advantage of this by skipping writing zeroes.</summary>
         </member>
         <member name="T:SkiaSharp.StringUtilities">
-            <summary>Various utility methods for when working with strings and text.</summary>
+            <summary>Various utility methods for when working with strings and layer.</summary>
             <remarks />
         </member>
         <member name="M:SkiaSharp.StringUtilities.GetEncodedText(System.String,SkiaSharp.SKEncoding)">
-            <param name="text">The text to encode.</param>
+            <param name="layer">The layer to encode.</param>
             <param name="encoding">The encoding to use.</param>
             <summary>Encodes the specified string using the encoding as a byte array.</summary>
-            <returns>Returns the encoded text as a byte array.</returns>
+            <returns>Returns the encoded layer as a byte array.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.StringUtilities.GetEncodedText(System.String,SkiaSharp.SKTextEncoding)">
-            <param name="text">The text to encode.</param>
+            <param name="layer">The layer to encode.</param>
             <param name="encoding">The encoding to use.</param>
             <summary>Encodes the specified string using the encoding as a byte array.</summary>
-            <returns>Returns the encoded text as a byte array.</returns>
+            <returns>Returns the encoded layer as a byte array.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.StringUtilities.GetString(System.Byte[],SkiaSharp.SKTextEncoding)">
-            <param name="data">The bytes representing text.</param>
+            <param name="data">The bytes representing layer.</param>
             <param name="encoding">The encoding to use.</param>
             <summary>Decodes the specified bytes as a string.</summary>
-            <returns>Returns the decoded text.</returns>
+            <returns>Returns the decoded layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.StringUtilities.GetString(System.IntPtr,System.Int32,SkiaSharp.SKTextEncoding)">
-            <param name="data">The pointer to the bytes representing text.</param>
+            <param name="data">The pointer to the bytes representing layer.</param>
             <param name="dataLength">The number of bytes to decode.</param>
             <param name="encoding">The encoding to use.</param>
             <summary>Decodes the specified bytes as a string.</summary>
-            <returns>Returns the decoded text.</returns>
+            <returns>Returns the decoded layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.StringUtilities.GetString(System.Byte[],System.Int32,System.Int32,SkiaSharp.SKTextEncoding)">
-            <param name="data">The bytes representing text.</param>
+            <param name="data">The bytes representing layer.</param>
             <param name="index">The index to start decoding.</param>
             <param name="count">The number of bytes to decode.</param>
             <param name="encoding">The encoding to use.</param>
             <summary>Encodes the specified string using the encoding as a byte array.</summary>
-            <returns>Returns the decoded text.</returns>
+            <returns>Returns the decoded layer.</returns>
             <remarks />
         </member>
         <member name="M:SkiaSharp.StringUtilities.GetUnicodeCharacterCode(System.String,SkiaSharp.SKTextEncoding)">

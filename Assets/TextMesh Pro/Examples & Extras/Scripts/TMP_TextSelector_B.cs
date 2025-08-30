@@ -47,7 +47,7 @@ namespace TMPro.Examples
             else
                 m_Camera = m_Canvas.worldCamera;
 
-            // Create pop-up text object which is used to show the link information.
+            // Create pop-up layer object which is used to show the link information.
             m_TextPopup_RectTransform = Instantiate(TextPopup_Prefab_01) as RectTransform;
             m_TextPopup_RectTransform.SetParent(m_Canvas.transform, false);
             m_TextPopup_TMPComponent = m_TextPopup_RectTransform.GetComponentInChildren<TextMeshProUGUI>();
@@ -57,13 +57,13 @@ namespace TMPro.Examples
 
         void OnEnable()
         {
-            // Subscribe to event fired when text object has been regenerated.
+            // Subscribe to event fired when layer object has been regenerated.
             TMPro_EventManager.TEXT_CHANGED_EVENT.Add(ON_TEXT_CHANGED);
         }
 
         void OnDisable()
         {
-            // UnSubscribe to event fired when text object has been regenerated.
+            // UnSubscribe to event fired when layer object has been regenerated.
             TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(ON_TEXT_CHANGED);
         }
 
@@ -97,7 +97,7 @@ namespace TMPro.Examples
                 {
                     m_lastIndex = charIndex;
 
-                    // Get the index of the material / sub text object used by this character.
+                    // Get the index of the material / sub layer object used by this character.
                     int materialIndex = m_TextMeshPro.textInfo.characterInfo[charIndex].materialReferenceIndex;
 
                     // Get the index of the first vertex of the selected character.
@@ -178,7 +178,7 @@ namespace TMPro.Examples
                     {
                         int characterIndex = wInfo.firstCharacterIndex + i;
 
-                        // Get the index of the material / sub text object used by this character.
+                        // Get the index of the material / sub layer object used by this character.
                         int meshIndex = m_TextMeshPro.textInfo.characterInfo[characterIndex].materialReferenceIndex;
 
                         // Get the index of the first vertex of this character.
@@ -214,7 +214,7 @@ namespace TMPro.Examples
                     {
                         int characterIndex = wInfo.firstCharacterIndex + i;
 
-                        // Get the index of the material / sub text object used by this character.
+                        // Get the index of the material / sub layer object used by this character.
                         int meshIndex = m_TextMeshPro.textInfo.characterInfo[characterIndex].materialReferenceIndex;
 
                         int vertexIndex = m_TextMeshPro.textInfo.characterInfo[characterIndex].vertexIndex;
@@ -457,7 +457,7 @@ namespace TMPro.Examples
         {
             if (index == -1 || index > m_TextMeshPro.textInfo.characterCount - 1) return;
 
-            // Get the index of the material / sub text object used by this character.
+            // Get the index of the material / sub layer object used by this character.
             int materialIndex = m_TextMeshPro.textInfo.characterInfo[index].materialReferenceIndex;
 
             // Get the index of the first vertex of the selected character.

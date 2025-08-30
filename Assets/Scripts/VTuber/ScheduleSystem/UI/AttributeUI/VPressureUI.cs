@@ -20,11 +20,11 @@ namespace VTuber.ScheduleSystem.UI
             if(delta == 0)
                 return;
             
-            text.faceColor = delta > 0 ? Color.green : Color.red;
+            text.color = delta > 0 ? Color.green : Color.red;
             _animationQueue.Enqueue(Tween.PunchScale(text.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
                 () =>
                 {
-                    text.faceColor = Color.white;
+                    text.color = Color.white;
                 })));
         }
     }

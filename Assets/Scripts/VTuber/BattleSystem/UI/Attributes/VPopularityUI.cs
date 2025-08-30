@@ -2,11 +2,9 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
-using VTuber.Core.Foundation;
+using DG.Tweening;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -58,24 +56,27 @@ namespace VTuber.BattleSystem.UI
             if(delta == 0)
                 return;
             
-            popularityText.faceColor = delta > 0 ? Color.green : Color.red;
-            _animationQueue.Enqueue(Tween.PunchScale(popularityText.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
+            transform.DOKill();
+
+            popularityText.color = delta > 0 ? Color.green : Color.red;
+
+            transform.DOPunchScale(Vector3.one * 0.3f, 0.4f, vibrato: 1)
+                .OnComplete(() =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);
-                    popularityText.faceColor = Color.white;
-                })));
+                    popularityText.color = Color.white;
+                });
 
             if (value <= _target)
             {
-                Tween.UIFillAmount(bar, Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
+                bar.DOFillAmount(Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
                 targetText.text = _target.ToString();
             }
             else
             {
                 if (!_isPhaseEnding)
                 {
-                    Tween.UIFillAmount(bar, Mathf.Clamp((float)(value - _target) / (_extraTarget - _target), 0.0f, 1.0f), 0.3f);
+                    bar.DOFillAmount(Mathf.Clamp((float)(value - _target) / (_extraTarget - _target), 0.0f, 1.0f), 0.3f);
                     targetText.text = _extraTarget.ToString();
                 }
             }

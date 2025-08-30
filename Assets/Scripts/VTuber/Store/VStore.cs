@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
@@ -141,7 +142,8 @@ namespace VTuber.Store
             {
                 0, 0, 0
             };
-            List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations();
+            List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations().
+                Where(card => card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special).ToList();
 
             foreach (var card in cards)
             {

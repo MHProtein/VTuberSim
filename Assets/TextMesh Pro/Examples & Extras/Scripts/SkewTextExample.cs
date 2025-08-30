@@ -39,7 +39,7 @@ namespace TMPro.Examples
 
 
         /// <summary>
-        ///  Method to curve text along a Unity animation curve.
+        ///  Method to curve layer along a Unity animation curve.
         /// </summary>
         /// <param name="textComponent"></param>
         /// <returns></returns>

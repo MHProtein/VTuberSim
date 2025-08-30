@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DG.Tweening;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -30,14 +31,16 @@ namespace VTuber.BattleSystem.UI
             if(delta == 0)
                 return;
             
-            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
+            transform.DOKill();
+
+            PlayLeftText.color = delta > 0 ? Color.green : Color.red;
+
+            transform.DOPunchScale(Vector3.one * 0.3f, 0.4f, vibrato: 1)
+                .OnComplete(() =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);
-                    PlayLeftText.faceColor = Color.white;
-                })));
-
-            PlayLeftText.faceColor = delta > 0 ? Color.green : Color.red;
+                    PlayLeftText.color = Color.white;
+                });
         }
         
     }

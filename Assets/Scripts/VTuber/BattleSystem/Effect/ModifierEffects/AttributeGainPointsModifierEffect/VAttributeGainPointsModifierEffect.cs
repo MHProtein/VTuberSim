@@ -37,6 +37,7 @@ namespace VTuber.BattleSystem.Effect
         
         public override void OnBuffAdded(VBattle battle, int layer)
         {
+            _battle = battle;
             Apply(battle, layer);
         }
 
@@ -87,6 +88,10 @@ namespace VTuber.BattleSystem.Effect
                 _onBuffRemove = attribute.GainPointsModifier.RemoveModifier;
                 _onBuffLayerChangePoints = attribute.GainPointsModifier.ChangeModifier;
                 VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + modifierID);
+            }
+            else
+            {
+                VDebug.LogError(_attributeName + "not found");
             }
         }
     }
