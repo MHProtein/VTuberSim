@@ -143,7 +143,7 @@ MonoBehaviour:
     sprite: {fileID: -85991086, guid: d1134cdef75ed6a4ea73e36d40e658a7, type: 3}
   - m_Index: 4
     m_Metrics:
-      m_Width: 470.7097
+      m_Width: 280
       m_Height: 470.74973
       m_HorizontalBearingX: -235.35484
       m_HorizontalBearingY: 235.37486
