@@ -4356,7 +4356,7 @@ MonoBehaviour:
   _typeDropdown: {fileID: 1044496533}
   _rarityDropdown: {fileID: 795083479}
   _isUpgraded: {fileID: 60867243}
-  grid: {fileID: 1678640989}
+  grid: {fileID: 1363430251}
   previewCardUI: {fileID: 1455998507}
   confirmButton: {fileID: 305012970}
   returnButton: {fileID: 2050175117}
@@ -23218,7 +23218,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  dev: 0
+  dev: 1
   cooperatorConfigurations:
   - {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}
   - {fileID: 11400000, guid: fb654f61535c5754d99938109dfde960, type: 2}
@@ -71995,7 +71995,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1361066341
 Transform:
   m_ObjectHideFlags: 0
@@ -98332,7 +98332,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1925573680
 RectTransform:
   m_ObjectHideFlags: 0
@@ -104774,7 +104774,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 989, y: -516}
+  m_AnchoredPosition: {x: 989, y: -397}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2050175117
@@ -108707,7 +108707,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2145636660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -108725,7 +108725,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 988.4, y: -515.7}
+  m_AnchoredPosition: {x: 859, y: -658}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2145636661
@@ -109495,6 +109495,10 @@ PrefabInstance:
     - target: {fileID: 1634956856010804596, guid: 81cb2ae803db63c46bb291d0ff689c44, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6265358038173447057, guid: 81cb2ae803db63c46bb291d0ff689c44, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 11.200001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -20,6 +20,7 @@ namespace VTuber.BattleSystem.Card
         public uint configID => _configuration.id;
         public string CardName => _configuration.cardName;
         public bool IsExhaust => _configuration.isExhaust;
+        public bool IsUnique => _configuration.notRepeatable;
         public string CardType => _configuration.cardType;
    
         public string LiveType => _configuration.liveType;

@@ -50,11 +50,13 @@ namespace VTuber.ScheduleSystem.UI
         private void Confirm()
         {
             _confirmAction?.Invoke(_selectedCardUI.Card);
+            Close();
         }
 
         public void Return()
         {
-            _returnAction?.Invoke();
+            _returnAction?.Invoke();  
+            Close();
         }
 
         public void Initialize(List<VCard> cards, bool isStore, bool select, bool preview, Action<VCard> confirmAction, Action returnAction = null, Action<VCard> previewAction = null)

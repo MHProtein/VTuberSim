@@ -60,6 +60,7 @@ namespace VTuber.Store.UI
         {
             hasBought = true;
             soldOutObject.SetActive(true);
+            button.interactable = false;
             storeButton.Buy(character);
         }
         

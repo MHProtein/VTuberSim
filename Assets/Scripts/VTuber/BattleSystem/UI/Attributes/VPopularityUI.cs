@@ -58,12 +58,12 @@ namespace VTuber.BattleSystem.UI
             if(delta == 0)
                 return;
             
-            popularityText.faceColor = delta > 0 ? Color.green : Color.red;
+            popularityText.color = delta > 0 ? Color.green : Color.red;
             _animationQueue.Enqueue(Tween.PunchScale(popularityText.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
                 () =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);
-                    popularityText.faceColor = Color.white;
+                    popularityText.color = Color.white;
                 })));
 
             if (value <= _target)

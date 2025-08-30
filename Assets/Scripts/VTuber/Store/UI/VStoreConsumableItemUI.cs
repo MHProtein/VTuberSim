@@ -20,9 +20,9 @@ namespace VTuber.Store.UI
             consumableUI.SetConsumable(consumableSlot.consumable);
             nameText.text = consumableSlot.consumable.Name;
             descriptionText.text = consumableSlot.consumable.Description;
-            
             base.SetSlot(slot, character);
-        }  
+            AreSlotsFull(!base.character.ConsumableManager.CanAddConsumable());
+        }
         
         public void AreSlotsFull(bool areSlotsFull)
         {
