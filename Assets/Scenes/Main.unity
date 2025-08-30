@@ -112287,8 +112287,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 
   isPercentage: 0
-  text: {fileID: 0}
-  key: 0
+  text: {fileID: 394546065}
+  key: 7
   icon: {fileID: 723076802005736476}
 --- !u!224 &3403247642773318335
 RectTransform:
