@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
@@ -19,6 +20,7 @@ namespace VTuber.BattleSystem.Buff
         
         public int latency;
         public BuffType BuffType => _configuration.buffType;
+        public Sprite Icon => _configuration.icon;
         public VBuff(VBuffConfiguration configuration, List<VEffect> effects)
         {
             _configuration = configuration;

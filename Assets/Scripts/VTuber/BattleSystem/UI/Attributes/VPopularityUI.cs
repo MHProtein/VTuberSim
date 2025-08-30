@@ -2,9 +2,11 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
-using DG.Tweening;
+using VTuber.Core.EventCenter;
+using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -52,31 +54,28 @@ namespace VTuber.BattleSystem.UI
             bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
             int delta = messagedict["Delta"] as int ? ?? 0;
             var value = messagedict["NewValue"] as int? ?? 0;
-            popularityText.text = $"直播热度: {value}";
+            popularityText.text = $"{value}";
             if(delta == 0)
                 return;
             
-            transform.DOKill();
-
-            popularityText.color = delta > 0 ? Color.green : Color.red;
-
-            transform.DOPunchScale(Vector3.one * 0.3f, 0.4f, vibrato: 1)
-                .OnComplete(() =>
+            popularityText.faceColor = delta > 0 ? Color.green : Color.red;
+            _animationQueue.Enqueue(Tween.PunchScale(popularityText.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
+                () =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);
-                    popularityText.color = Color.white;
-                });
+                    popularityText.faceColor = Color.white;
+                })));
 
             if (value <= _target)
             {
-                bar.DOFillAmount(Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
+                Tween.UIFillAmount(bar, Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
                 targetText.text = _target.ToString();
             }
             else
             {
                 if (!_isPhaseEnding)
                 {
-                    bar.DOFillAmount(Mathf.Clamp((float)(value - _target) / (_extraTarget - _target), 0.0f, 1.0f), 0.3f);
+                    Tween.UIFillAmount(bar, Mathf.Clamp((float)(value - _target) / (_extraTarget - _target), 0.0f, 1.0f), 0.3f);
                     targetText.text = _extraTarget.ToString();
                 }
             }

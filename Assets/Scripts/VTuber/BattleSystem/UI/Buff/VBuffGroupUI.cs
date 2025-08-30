@@ -1,31 +1,37 @@
 ﻿using System.Collections.Generic;
-using PrimeTween;
-using TMPro;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
+using VTuber.Consumable;
 using VTuber.Core.Foundation;
+using Tween = PrimeTween.Tween;
 
 namespace VTuber.BattleSystem.UI {
-    public class VBuffGroupUI : VUIBehaviour {
+    public class VBuffGroupUI : VUIBehaviour
+    {
+        [SerializeField] private GameObject buffDetailsObject;
+        [SerializeField] private VClickDetectionPanel clickDetectionPanel;
+        [SerializeField] private Transform buffDetailsParent;
+        [SerializeField] private GameObject buffDetailsPrefab;
         [SerializeField] private GameObject ellipsisPrefab;
         [SerializeField] private GameObject buffCellPrefab;
         [SerializeField] private int displayingBuffCount = 6;
 
-        private List<VBuffUI> _displayingBuffUIs;
-        private List<VBuffUI> _hiddenBuffUIs;
+        private List<VBuffUI> _buffUIs;
         private VAnimationQueue _animationQueue = new VAnimationQueue();
-
         private GameObject _ellipsisObject;
+        private bool _isDetailsOpen = false;
 
-        protected override void Awake() {
+        protected override void Awake()
+        {
             base.Awake();
-            _displayingBuffUIs = new List<VBuffUI>();
-            _hiddenBuffUIs = new List<VBuffUI>();
+            _buffUIs = new List<VBuffUI>();
+            clickDetectionPanel.onClick += OpenBuffDetails;
         }
 
-        protected override void OnEnable() {
+        protected override void OnEnable()
+        {
             base.OnEnable();
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
@@ -33,7 +39,8 @@ namespace VTuber.BattleSystem.UI {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
 
-        protected override void OnDisable() {
+        protected override void OnDisable()
+        {
             base.OnDisable();
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffAdded, OnBuffAdded);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
@@ -41,141 +48,154 @@ namespace VTuber.BattleSystem.UI {
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
         }
 
-        private void OnBattleEnd(Dictionary<string, object> messagedict) {
-            foreach (var ui in _hiddenBuffUIs) {
+        public void OpenBuffDetails()
+        {
+            _isDetailsOpen = !_isDetailsOpen;
+            buffDetailsObject.SetActive(_isDetailsOpen);
+            clickDetectionPanel.gameObject.SetActive(_isDetailsOpen);
+        }
+
+        private void OnBattleEnd(Dictionary<string, object> msg) 
+        {
+            foreach (var ui in _buffUIs)
+            {
+                ui.Clear();
                 Destroy(ui.gameObject);
             }
-            foreach (var ui in _displayingBuffUIs) {
-                Destroy(ui.gameObject);
-            }
-            _hiddenBuffUIs.Clear();
-            _displayingBuffUIs.Clear();
-            if (_ellipsisObject) {
+            _buffUIs.Clear();
+            if (_ellipsisObject)
+            {
                 Destroy(_ellipsisObject);
                 _ellipsisObject = null;
             }
         }
 
-        private void OnBuffAdded(Dictionary<string, object> msg) {
+        private void OnBuffAdded(Dictionary<string, object> msg)
+        {
             uint id = (uint)msg["Id"];
             bool isFromCard = msg["IsFromCard"] as bool? ?? false;
             bool shouldTwice = msg["ShouldPlayTwice"] as bool? ?? false;
-            bool isPermanent = (bool)msg["IsPermanent"];
-            string buffName = (string)msg["BuffName"];
+            var buff = (VBuffItem)msg["Buff"];
             int value = (int)msg["Value"];
-            int latency = (int)msg["Latency"];
 
-            // Always create one buffCell
             var go = Instantiate(buffCellPrefab, transform);
+            var details = Instantiate(buffDetailsPrefab, buffDetailsParent);
             var ui = go.GetComponent<VBuffUI>();
-            ui.SetBuff((VBuffItem)msg["Buff"]);
-            ui.SetText(value);
-
-            // Default hidden
             go.transform.localScale = Vector3.zero;
+            ui.onClick += () => OpenBuffDetails();
+            ui.SetBuff(buff, details.GetComponent<VBuffDetailsUI>());
+            ui.SetText(value);
+            
 
-            int n = _displayingBuffUIs.Count + (_ellipsisObject ? 1 : 0);
-
-            if (n < displayingBuffCount) {
-                // Add to display list
-                _displayingBuffUIs.Add(ui);
-                _animationQueue.Enqueue(
-                    Tween.Scale(go.transform, Vector3.one, 0.4f).OnComplete(() => {
-                        RaiseEvents(isFromCard, shouldTwice);
-                    })
-                );
-            } else {
-                // Hide the last displayed and show ellipsis
-                if (_hiddenBuffUIs.Count == 0) {
-                    var lastUI = _displayingBuffUIs[_displayingBuffUIs.Count - 1];
-                    lastUI.gameObject.SetActive(false);
-                    _hiddenBuffUIs.Add(lastUI);
-                    _ellipsisObject = Instantiate(ellipsisPrefab, transform);
-                }
-
-                go.SetActive(false);
-                _hiddenBuffUIs.Add(ui);
-            }
+            _buffUIs.Add(ui);
+            _animationQueue.Enqueue(Tween.Scale(ui.transform, Vector3.one, 0.3f).OnComplete(() =>
+            {
+                RaiseEvents(msg["IsFromCard"] as bool? ?? false,
+                    msg["ShouldPlayTwice"] as bool? ?? false);
+            }));
+            RefreshBuffDisplay();
+            RaiseEvents(isFromCard, shouldTwice);
         }
 
-        private void OnBuffValueUpdated(Dictionary<string, object> msg) {
+        private void OnBuffValueUpdated(Dictionary<string, object> msg)
+        {
             uint id = (uint)msg["Id"];
-            var relic = _displayingBuffUIs.Find(ui => ui.id == id);
-            if (relic == null) {
-                relic = _hiddenBuffUIs.Find(ui => ui.id == id);
-            }
 
-            if (relic == null) {
-                // Buff not found, still raise for consistency
+            var buff = _buffUIs.Find(ui => ui.id == id);
+            if (buff is not null) {
+                buff.SetText((int)msg["Value"]);
+
+                if (IsVisible(buff))
+                {
+                    _animationQueue.Enqueue(Tween.PunchScale(buff.transform, Vector3.one * 1.3f, 0.3f).OnComplete(() =>
+                    {
+                        RaiseEvents(msg["IsFromCard"] as bool? ?? false,
+                            msg["ShouldPlayTwice"] as bool? ?? false);
+                    }));
+                }
+            } 
+            else 
+            {
                 RaiseEvents(false, false);
-                return;
-            }
-
-            relic.SetText((int)msg["Value"]);
-
-            if (_displayingBuffUIs.Contains(relic)) {
-                // Punch only if base scale > 0 to avoid NaN
-                if (relic.transform.localScale.sqrMagnitude > 0.0001f) {
-                    _animationQueue.Enqueue(
-                        Tween.PunchScale(relic.transform, Vector3.one * 0.3f, 0.4f).OnComplete(() => {
-                            RaiseEvents(msg["IsFromCard"] as bool? ?? false,
-                                msg["ShouldPlayTwice"] as bool? ?? false);
-                        })
-                    );
-                } else {
-                    RaiseEvents(msg["IsFromCard"] as bool? ?? false,
-                        msg["ShouldPlayTwice"] as bool? ?? false);
-                }
             }
         }
 
-        private void OnBuffRemoved(Dictionary<string, object> msg) {
+        private void OnBuffRemoved(Dictionary<string, object> msg)
+        {
             uint id = (uint)msg["Id"];
 
-            var relic = _displayingBuffUIs.Find(ui => ui.id == id);
-            if (relic != null) {
-                _displayingBuffUIs.Remove(relic);
-                Destroy(relic.gameObject);
+            var buff = _buffUIs.Find(ui => ui.id == id);
+            if (buff is not null)
+            {
+                buff.Clear();
+                _buffUIs.Remove(buff);
+                Destroy(buff.gameObject);
+                RefreshBuffDisplay();
+            }
+        }
 
-                if (_hiddenBuffUIs.Count > 0) {
-                    var hiddenRelic = _hiddenBuffUIs[0];
-                    _hiddenBuffUIs.RemoveAt(0);
-                    hiddenRelic.gameObject.SetActive(true);
+        private void RefreshBuffDisplay() 
+        {
+            var ordered = _buffUIs.OrderBy(ui => ui.ConfigID).ToList();
 
-                    if (_hiddenBuffUIs.Count == 0) {
-                        if (_ellipsisObject) {
-                            Destroy(_ellipsisObject);
-                            _ellipsisObject = null;
-                        }
-                    } else {
-                        _ellipsisObject.transform.SetParent(null);
-                        _ellipsisObject.transform.SetParent(transform);
-                    }
-                    _displayingBuffUIs.Add(hiddenRelic);
+            int n = displayingBuffCount;
+            if (ordered.Count > n)
+            {
+                n--;
+            }
+            
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                var ui = ordered[i];
+                if (i < n)
+                {
+                    ui.gameObject.SetActive(true);
+                    ui.transform.SetSiblingIndex(i);
                 }
-            } else {
-                var hiddenRelic = _hiddenBuffUIs.Find(ui => ui.id == id);
-                if (hiddenRelic != null) {
-                    _hiddenBuffUIs.Remove(hiddenRelic);
-                    Destroy(hiddenRelic.gameObject);
+                else
+                {
+                    ui.gameObject.SetActive(false);
+                }
+            }
 
-                    if (_hiddenBuffUIs.Count == 0 && _ellipsisObject) {
-                        Destroy(_ellipsisObject);
-                        _ellipsisObject = null;
-                    }
+            if (ordered.Count > displayingBuffCount)
+            {
+                if (_ellipsisObject == null)
+                {
+                    _ellipsisObject = Instantiate(ellipsisPrefab, transform);
+                    _ellipsisObject.transform.SetAsLastSibling();
+                    _ellipsisObject.GetComponent<VEllipsisUI>().onClick = OpenBuffDetails;
+                }
+            } 
+            else
+            {
+                if (_ellipsisObject != null)
+                {
+                    Destroy(_ellipsisObject);
+                    _ellipsisObject = null;
                 }
             }
         }
 
-        private void RaiseEvents(bool isFromCard, bool shouldPlayTwice) {
+        private bool IsVisible(VBuffUI ui) 
+        {
+            return ui.gameObject.activeSelf;
+        }
+
+        private void RaiseEvents(bool isFromCard, bool shouldPlayTwice) 
+        {
             if (shouldPlayTwice) {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime,
-                    new Dictionary<string, object>());
+                VBattleRootEventCenter.Instance.Raise(
+                    VBattleEventKey.OnPlayTheSecondTime,
+                    new Dictionary<string, object>()
+                );
                 return;
             }
             if (isFromCard) {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>());
+                VBattleRootEventCenter.Instance.Raise(
+                    VBattleEventKey.OnNotifyBeginDisposeCard,
+                    new Dictionary<string, object>()
+                );
             }
         }
     }
