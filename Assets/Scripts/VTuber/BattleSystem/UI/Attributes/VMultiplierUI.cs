@@ -77,7 +77,7 @@ namespace VTuber.BattleSystem.UI
             textSequence.Enqueue(Tween.PunchScale(MultiplierText.transform, Vector3.one * 1.3f, 0.5f));
             if (!messagedict.ContainsKey("Color"))
                 return;
-            MultiplierText.faceColor = (Color)messagedict["Color"];
+            MultiplierText.color = (Color)messagedict["Color"];
         }
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)

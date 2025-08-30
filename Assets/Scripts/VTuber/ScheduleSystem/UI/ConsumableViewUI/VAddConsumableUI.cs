@@ -47,8 +47,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 _consumableUI.SetSelectable(false);
 
-                bool areSlotsFull = character.ConsumableManager.CanAddConsumable();
-                confirmButton.interactable = !areSlotsFull;
+                confirmButton.interactable = character.ConsumableManager.CanAddConsumable();
             }));
             
         }

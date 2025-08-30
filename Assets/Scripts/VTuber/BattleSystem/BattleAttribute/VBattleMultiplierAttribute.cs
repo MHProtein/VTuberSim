@@ -20,7 +20,6 @@ namespace VTuber.BattleSystem.BattleAttribute
 
         public override void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)
         {
-
             var messageDict = new Dictionary<string, object>
             {
                 { "Name", AttributeName },

@@ -21,7 +21,8 @@ namespace VTuber.Core.RaisingEffect
             {
                 0, 0, 0
             };
-            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations().Where(configuration => configuration.liveType == liveType).ToList();
+            List<VConsumableConfiguration> consumables = VDataManager.Instance.
+                GetAllConsumableConfigurations().Where(configuration => (configuration.liveType == liveType || configuration.liveType == "F")).ToList();
             
             if (consumables.Count == 0)
                 return null;

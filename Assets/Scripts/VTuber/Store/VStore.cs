@@ -104,7 +104,7 @@ namespace VTuber.Store
         
         public void LoadCards()
         {
-            var cards = GetRandomCards(_storeConfig.cardCount);
+            var cards = GetRandomCards(_storeConfig.cardCount, _character.LiveType);
             
             var slot = new VStoreCardSlot(true, false, _storeConfig.cardPrices[(int)(cards[0].Rarity - 1)], 
                 Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount) * (_isGlobalDiscount ? _globalDiscount : 1.0f), cards[0]);
@@ -120,7 +120,7 @@ namespace VTuber.Store
         
         public void LoadConsumables()
         {
-            var consumables = GetRandomConsumables(_storeConfig.consumableCount);
+            var consumables = GetRandomConsumables(_storeConfig.consumableCount, _character.LiveType);
             
             var slot = new VStoreConsumableSlot(true, false, _storeConfig.cardPrices[(int)consumables[0].Rarity], 
                 Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount) * (_isGlobalDiscount ? _globalDiscount : 1.0f), consumables[0]);
@@ -136,14 +136,14 @@ namespace VTuber.Store
         
         #region GetItems
         
-        public List<VCard> GetRandomCards(int count)
+        public List<VCard> GetRandomCards(int count, string liveType)
         {
             List<int> rarityCounts = new List<int>()
             {
                 0, 0, 0
             };
             List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations().
-                Where(card => card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special).ToList();
+                Where(card => (card.liveType == liveType || card.liveType == "F") && card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special).ToList();
 
             foreach (var card in cards)
             {
@@ -195,13 +195,14 @@ namespace VTuber.Store
             return selectedCards;
         }
 
-        public List<VConsumable> GetRandomConsumables(int count)
+        public List<VConsumable> GetRandomConsumables(int count, string liveType)
         {
             List<int> rarityCounts = new List<int>()
             {
                 0, 0, 0
             };
-            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations();
+            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations().
+                Where(consumable => (consumable.liveType == liveType || consumable.liveType == "F")).ToList();
             
             if (consumables.Count == 0)
                 return null;

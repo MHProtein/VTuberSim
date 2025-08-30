@@ -28,7 +28,8 @@ namespace VTuber.Core.RaisingEffect
             List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations().
                 Where(card =>
                 {
-                    if (card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special && card.liveType == liveType)
+                    if (card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special &&
+                        (card.liveType == liveType || card.liveType == "F"))
                     {
                         if (condition is null)
                         {
