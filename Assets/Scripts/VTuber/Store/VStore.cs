@@ -65,6 +65,8 @@ namespace VTuber.Store
 
         public void EnterStore(VCharacter character)
         {
+            _cards.Clear();
+            _consumables.Clear();
             _character = character;
 
             LoadItems();
