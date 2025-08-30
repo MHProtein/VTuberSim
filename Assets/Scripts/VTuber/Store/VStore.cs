@@ -97,12 +97,6 @@ namespace VTuber.Store
             
             _isGlobalDiscount = false;
         }
-
-        public void ExitStore()
-        {
-            _cards.Clear();
-            _consumables.Clear();
-        }
         
         public void LoadCards()
         {
@@ -124,7 +118,7 @@ namespace VTuber.Store
         {
             var consumables = GetRandomConsumables(_storeConfig.consumableCount, _character.LiveType);
             
-            var slot = new VStoreConsumableSlot(true, false, _storeConfig.cardPrices[(int)consumables[0].Rarity], 
+            var slot = new VStoreConsumableSlot(true, false, _storeConfig.consumablePrices[(int)consumables[0].Rarity], 
                 Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount) * (_isGlobalDiscount ? _globalDiscount : 1.0f), consumables[0]);
             _consumables.Add(slot);
             
@@ -175,8 +169,9 @@ namespace VTuber.Store
             }
             
             List<VCard> selectedCards = new List<VCard>();
-
-            for (int i = 0; i < count; i++)
+            
+            int i = 0;
+            while (i < count)
             {
                 float probability = Random.Range(0, 1.0f);
                 float totalProbability = 0;
@@ -186,10 +181,13 @@ namespace VTuber.Store
                     if (probability <= totalProbability)
                     {
                         var card = cards[j].CreateCard();
+                        if(selectedCards.Exists(c => c.configID == card.configID))
+                            break;
                         float upgradeProbability = Random.Range(0, 1.0f);
                         if(upgradeProbability <= CardRarityUpgradeProbabilities[(int)card.Rarity - 1])
                             card.Upgrade(false);
                         selectedCards.Add(card);
+                        ++i;
                         break;
                     }
                 }
@@ -235,7 +233,8 @@ namespace VTuber.Store
             
             List<VConsumable> selectedConsumables = new List<VConsumable>();
 
-            for (int i = 0; i < count; i++)
+            int i = 0;
+            while (i < count)
             {
                 float probability = Random.Range(0, 1.0f);
                 float totalProbability = 0;
@@ -244,8 +243,11 @@ namespace VTuber.Store
                     totalProbability += perConsumableProbabilityByRarity[(int)consumables[j].rarity];
                     if (probability <= totalProbability)
                     {
-                        var card = consumables[j].CreateConsumable();
-                        selectedConsumables.Add(card);
+                        var consumable = consumables[j].CreateConsumable();
+                        if (selectedConsumables.Exists(c => c.ConfigId == consumable.ConfigId))
+                            break;
+                        selectedConsumables.Add(consumable);
+                        i++;
                         break;
                     }
                 }

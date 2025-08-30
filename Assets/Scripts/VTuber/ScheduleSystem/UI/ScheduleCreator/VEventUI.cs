@@ -39,7 +39,7 @@ namespace VTuber.ScheduleSystem.UI
         private bool _isFixed = false;
         private Camera _camera;
         private List<VScheduleSlot> _disposeSlots;
-        private bool _disposable;
+        private bool _disposable = true;
         private Transform _disposePosition;
         
         private RectTransform _rectTransform;
@@ -205,6 +205,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 parent.SetItem(this);
             }
+            transform.SetParent(_disposePosition);
             
         }
 
