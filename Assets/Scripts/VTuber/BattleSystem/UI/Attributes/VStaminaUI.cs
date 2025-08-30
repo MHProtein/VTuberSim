@@ -23,6 +23,12 @@ namespace VTuber.BattleSystem.UI
             SetFontStyle(staminaText, FontStyles.Bold);
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            VDebug.Log("");
+        }
+
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
             bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;

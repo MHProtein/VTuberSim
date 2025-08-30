@@ -93,32 +93,33 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
             
-            _battleAttributeManager.AttributesConversion(_characterAttributeManager);
-            _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
-            _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
-
-            if (!isPhaseEnding)
-            {
-                _battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
-                attribute.SetValue(100, false, false, false);
-                _battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
-                attribute.SetValue(100, false, false, false);
-                _battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
-                attribute.SetValue(100, false, false, false);
-            }
-            
-            _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
-            _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
-            
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
-            _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
-            
-            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
-            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
+            VEventSystemUI.Instance.OpenBattleUI();
             
             VEventSystemUI.Instance.PlayVideo(() =>
             {
-                VEventSystemUI.Instance.OpenBattleUI();
+                _battleAttributeManager.AttributesConversion(_characterAttributeManager);
+                _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
+                _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
+
+                if (!isPhaseEnding)
+                {
+                    _battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
+                    attribute.SetValue(100, false, false, false);
+                    _battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
+                    attribute.SetValue(100, false, false, false);
+                    _battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
+                    attribute.SetValue(100, false, false, false);
+                }
+            
+                _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
+                _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
+            
+                _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
+                _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
+            
+                _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+                _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
+                
                 _battleRelicManager = new VBattleRelicManager(this, relics);
                 if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
                 {
@@ -134,7 +135,6 @@ namespace VTuber.BattleSystem.Core
                     { "CharacterAttributeManager", characterAttributeManager },
                     { "BattleAttributeManager", _battleAttributeManager }
                 });
-            
             
                 foreach (var buff in characterAttributeManager.GetBuffs())
                 {

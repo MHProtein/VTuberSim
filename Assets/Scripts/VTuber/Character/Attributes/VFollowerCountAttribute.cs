@@ -28,7 +28,7 @@ namespace VTuber.Character.Attributes
             
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
                 (VBattleAttribute)Activator.CreateInstance(BattleAttributeType,
-                    VMathUtils.FloatToInt(value * conversionRate * 100f),
+                    VMathUtils.FloatToInt(Value * conversionRate),
                     _configuration.isBattleAttributePercentage,
                     _configuration.battleEventKey,
                     _maxValue,

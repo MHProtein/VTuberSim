@@ -44,6 +44,7 @@ namespace VTuber.BattleSystem.UI
             _isPhaseEnding = messagedict["IsPhaseEnding"] as bool? ?? false;
             _target = (int)messagedict["TargetPopularity"];
             _extraTarget = (int)messagedict["ExtraTargetPopularity"];
+            popularityText.text = "0";
             targetText.text = _target.ToString();
             bar.fillAmount = 0;
         }

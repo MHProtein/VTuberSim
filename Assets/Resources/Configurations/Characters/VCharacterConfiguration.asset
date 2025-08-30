@@ -20,27 +20,7 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: pressureEffects
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.UInt32, mscorlib],[System.String,
-        mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.UInt32,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   characterName: "\u96C5\u5C3E\u58A8\u6CAB"
   description: "\u539F\u6559\u65E8\u7CFBv\uFF08\u65E0\u611F\u60C5\u7CFB\u865A\u62DF\u9F9F\u9F9F\u3002\u6CA1\u4E8B\u53BB\u6574\u70B9\u85AF\u6761"
   liveType: C
@@ -53,7 +33,27 @@ MonoBehaviour:
   pressureInitialValue: 3
   pressureMinValue: 1
   pressureMaxValue: 5
-  pressureBuffs: 0000000001000000020000000300000004000000
+  pressureEffects:
+  - id: 0
+    parameter: 1
+    upgradedParameter: 1
+    level: 0
+  - id: 0
+    parameter: 1
+    upgradedParameter: 1
+    level: 0
+  - id: 0
+    parameter: 1
+    upgradedParameter: 1
+    level: 0
+  - id: 0
+    parameter: 1
+    upgradedParameter: 1
+    level: 0
+  - id: 0
+    parameter: 1
+    upgradedParameter: 1
+    level: 0
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100
   singingAbilityMinValue: 0
