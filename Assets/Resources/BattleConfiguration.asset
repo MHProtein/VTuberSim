@@ -24,4 +24,5 @@ MonoBehaviour:
   maxTurnCount: 10
   maxHandSize: 5
   handSize: 3
-  defaultPlayPerTurn: 2
+  defaultPlayPerTurn: 1
+  staminaRecoveryRate: 0.5
