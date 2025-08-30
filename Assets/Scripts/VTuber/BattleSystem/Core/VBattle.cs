@@ -218,8 +218,6 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
         }
         
-
-        
         private void OnShieldModifierChanged(Dictionary<string, object> messagedict)
         {
             if (_cardPilesManager is null)
@@ -285,18 +283,6 @@ namespace VTuber.BattleSystem.Core
         {
             VCard card = messagedict["Card"] as VCard;
             
-            switch (card.CostType)
-            {
-                case CostType.Stamina:
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
-                    break;
-                case CostType.TrueStamina:
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
-                    break;
-                case CostType.Buff:
-                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
-                    break;
-            }
             card.TestCondition(this);
             card.PreviewPopularity(this, true);
             card.PreviewShield(this, true);
@@ -317,8 +303,6 @@ namespace VTuber.BattleSystem.Core
         {
             foreach (var card in _cardPilesManager.HandPile)
             {
-                if(card.CostType == CostType.Buff)
-                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
                 card.PreviewPopularity(this, false);
             } 
@@ -329,9 +313,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Stamina)
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.TestCondition(this);
                 if(card.CostType == CostType.TrueStamina)
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.TestCondition(this);
             }
         }
         

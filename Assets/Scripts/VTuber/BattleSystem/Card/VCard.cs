@@ -145,9 +145,26 @@ namespace VTuber.BattleSystem.Card
 
         public void TestCondition(VBattle battle)
         {
+
+            bool costSatisfied = false;
+            if (CostType == CostType.Buff)
+            {
+                costSatisfied = battle.BuffManager.TestCost(CostBuffId, Cost);
+            }
+            else
+            {
+                costSatisfied = battle.BattleAttributeManager.StaminaManager.TestCost(Cost, CostType == CostType.TrueStamina);
+            }
+            
+            bool conditionSatisfied = false;
+
             if (condition == null)
-                return;
-            setPlayable?.Invoke(condition.IsTrue(battle, null));
+                conditionSatisfied = true;
+            else
+                conditionSatisfied = condition.IsTrue(battle, null);
+            
+            
+            setPlayable?.Invoke(costSatisfied && conditionSatisfied);
         }
 
         public void PreviewPopularity(VBattle battle, bool firstTime)

@@ -42,6 +42,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] public Image typeImage;
         [SerializeField] public Image popularityImage;
         [SerializeField] public Image shieldImage;
+        [SerializeField] public Image costImage;
         
         [FormerlySerializedAs("Name")] [SerializeField] public TMP_Text name;
         [FormerlySerializedAs("Description")] [SerializeField] public TMP_Text description;
@@ -68,6 +69,11 @@ namespace VTuber.BattleSystem.UI
                 description.text += "\nExhaust.";
             typeText.text = card.CardType;
 
+            if (card.CostType == CostType.TrueStamina)
+            {
+                costImage.color = Color.red;
+            }
+            
             if (card.CostType == CostType.Buff)
             {
                 var buff = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId);
@@ -77,7 +83,6 @@ namespace VTuber.BattleSystem.UI
             {
                 cost.text = card.Cost.ToString();
             }
-            
             
             if (card.IsUpgraded)
             {
