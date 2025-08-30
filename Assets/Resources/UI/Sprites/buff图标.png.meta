@@ -100,8 +100,8 @@ TextureImporter:
       name: angry
       rect:
         serializedVersion: 2
-        x: 94
-        y: 1143
+        x: 95
+        y: 1269
         width: 513
         height: 513
       alignment: 0
@@ -122,7 +122,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 794
-        y: 1143
+        y: 1275
         width: 513
         height: 513
       alignment: 0
@@ -142,8 +142,8 @@ TextureImporter:
       name: buff1
       rect:
         serializedVersion: 2
-        x: 94
-        y: 438
+        x: 95
+        y: 570
         width: 513
         height: 513
       alignment: 0
@@ -163,8 +163,8 @@ TextureImporter:
       name: buff2
       rect:
         serializedVersion: 2
-        x: 786
-        y: 441
+        x: 795
+        y: 575
         width: 513
         height: 513
       alignment: 0
@@ -176,6 +176,48 @@ TextureImporter:
       bones: []
       spriteID: 1f02faddc4fc3604baef66bac462aa15
       internalID: -85991086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jianzhang
+      rect:
+        serializedVersion: 2
+        x: 1436
+        y: 574
+        width: 513
+        height: 513
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 898223262c772e748910748de247d505
+      internalID: 443270028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: badbuff1
+      rect:
+        serializedVersion: 2
+        x: 1434
+        y: 1279
+        width: 513
+        height: 513
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 656e74629ab5d7e428659205ab0bd733
+      internalID: -1695153713
       vertices: []
       indices: 
       edges: []
@@ -192,8 +234,10 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       angry: 1079348126
+      badbuff1: -1695153713
       buff1: 593291609
       buff2: -85991086
+      jianzhang: 443270028
       joker: 1432375578
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
