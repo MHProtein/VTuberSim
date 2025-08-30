@@ -61,6 +61,8 @@ namespace VTuber.BattleSystem.Effect
 
         public override void OnBuffRemove()
         {
+            if (!_applied)
+                return;
             if (_onBuffRemove is null)
             {
                 VDebug.LogError("OnBuffRemove is null for modifierID: " + modifierID + ", attribute: " + _attributeName + "检查属性名");
@@ -82,6 +84,7 @@ namespace VTuber.BattleSystem.Effect
                 return;
             if (battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
+                Triggered = true;
                 _applied = true;
                 float rateValue = _deltaRate.Value;
                 if (MultiplyByLayer > 0.0f)

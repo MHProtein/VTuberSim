@@ -124,7 +124,7 @@ namespace VTuber.BattleSystem.Core
                 {
                     viewerCountAttribute.AddTo(initialViewers, false);
                 }
-                
+                _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
                 {
                     { "TurnLeft", TurnLeft },
@@ -135,7 +135,6 @@ namespace VTuber.BattleSystem.Core
                     { "BattleAttributeManager", _battleAttributeManager }
                 });
             
-                _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
             
                 foreach (var buff in characterAttributeManager.GetBuffs())
                 {

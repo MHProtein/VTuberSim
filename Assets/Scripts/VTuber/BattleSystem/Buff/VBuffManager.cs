@@ -68,7 +68,7 @@ namespace VTuber.BattleSystem.Buff
                 bool shouldSkipDecrement = true;
                 foreach (var effect in buff.Effects)
                 {
-                    if (effect.TriggeredInFirstTurn)
+                    if (effect.Triggered)
                     {
                         shouldSkipDecrement = false;
                         break;

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4157315197781789545}
   - component: {fileID: 1781574155557055054}
   - component: {fileID: 7888610949304562073}
+  - component: {fileID: 4504978287122586810}
   m_Layer: 5
   m_Name: Ellipsis
   m_TagString: Untagged
@@ -75,3 +76,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4504978287122586810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737244885935132744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c6884d2a6844a73b5ee0edf72355d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
