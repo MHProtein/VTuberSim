@@ -661,6 +661,7 @@ MonoBehaviour:
   typeImage: {fileID: 2039202165101778702}
   popularityImage: {fileID: 1296972818887279486}
   shieldImage: {fileID: 2929790270933716188}
+  costImage: {fileID: 6832644472111513667}
   name: {fileID: 3601492734164757646}
   description: {fileID: 3844727032169294534}
   cost: {fileID: 4540963570463774130}
