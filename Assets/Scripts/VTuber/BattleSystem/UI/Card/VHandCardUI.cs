@@ -118,7 +118,8 @@ namespace VTuber.BattleSystem.UI
             if (!isPlayable)
             {
                 _isPlayable = false;
-                cardUI.background.color = Color.gray;
+                if(cardUI.background != null)
+                    cardUI.background.color = Color.gray;
                 return;
             }
 
@@ -129,7 +130,8 @@ namespace VTuber.BattleSystem.UI
             }
             
             _isPlayable = true;
-            cardUI.background.color = Color.white;
+            if(cardUI.background != null)
+                cardUI.background.color = Color.white;
         }
         
         public void SetInteractive(bool interactive)

@@ -54137,8 +54137,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1706758802}
-  - {fileID: 1370900052}
   - {fileID: 695283901}
   - {fileID: 1706294309}
   - {fileID: 1338393392}
@@ -54146,6 +54144,8 @@ RectTransform:
   - {fileID: 1642484396}
   - {fileID: 1407222553}
   - {fileID: 1725202475745509020}
+  - {fileID: 1706758802}
+  - {fileID: 1370900052}
   - {fileID: 617845857}
   - {fileID: 198425575}
   m_Father: {fileID: 1603380200}
@@ -103623,7 +103623,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 111429748}
-        m_TargetAssemblyTypeName: VTuber.ScheduleSystem.UI.VCardLibraryUI, Assembly-CSharp
+        m_TargetAssemblyTypeName: VTuber.ScheduleSystem.UI.VCardViewSelectionUI,
+          Assembly-CSharp
         m_MethodName: Return
         m_Mode: 1
         m_Arguments:

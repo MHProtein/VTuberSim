@@ -88,10 +88,6 @@ namespace VTuber.Character
         public List<VBuff> GetBuffs()
         {
             List<VBuff> buffs = new List<VBuff>();
-            if(TryGetAttribute("CAPressure", out var pressure))
-            {
-                buffs.Add((pressure as VPressureAttribute).GetBuff());
-            }
 
             if (TryGetAttribute("CAMembershipCount", out var membership))
             {

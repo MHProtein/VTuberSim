@@ -156,7 +156,6 @@ namespace VTuber.Character
             
             AttributeManager.AddAttribute("CAPressure",
                 new VPressureAttribute(characterConfig.pressureConfiguration, 
-                    characterConfig.pressureBuffs,
                     characterConfig.pressureEffects,
                     characterConfig.pressureInitialValue, 
                     VRaisingEventKey.OnPressureChanged, 

@@ -68,12 +68,13 @@ namespace VTuber.BattleSystem.Card
         public const int NE2Param = 33;
     }
 
+    [Serializable]
     public struct VEffectItem
     {
         public uint id;
         public string parameter;
         public string upgradedParameter;
-        public int level;
+        [HideInInspector]public int level;
         
         public VEffect CreateEffect()
         {

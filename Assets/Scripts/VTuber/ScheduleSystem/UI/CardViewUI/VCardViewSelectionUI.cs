@@ -85,8 +85,9 @@ namespace VTuber.ScheduleSystem.UI
         {
             foreach (var cardUI in _cardUIs)
             {
-                Destroy(cardUI);
+                Destroy(cardUI.gameObject);
             }
+
             _cardUIs.Clear();
             _selectedCardUI = null;
             _displayingCardUIs.Clear();

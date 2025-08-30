@@ -43,9 +43,9 @@ namespace VTuber.BattleSystem.Core.KPIs
 
             if (eventType == VEventType.Stream)
             {
-                if (abilityIndex == 0) AbilityName = "歌力";
-                if (abilityIndex == 1) AbilityName = "游戏力";
-                if (abilityIndex == 2) AbilityName = "杂谈力";
+                if (abilityIndex == 0) AbilityName = "歌回";
+                if (abilityIndex == 1) AbilityName = "游戏";
+                if (abilityIndex == 2) AbilityName = "杂谈";
             }
 
             EventName = VUIUtils.Instance.GetEventName(eventType);
