@@ -24,14 +24,14 @@ namespace TMPro.Examples
 
         void Awake()
         {
-            // Get a reference to the TMP text component if one already exists otherwise add one.
+            // Get a reference to the TMP layer component if one already exists otherwise add one.
             // This example show the convenience of having both TMP components derive from TMP_Text. 
             if (ObjectType == 0)
                 m_text = GetComponent<TextMeshPro>() ?? gameObject.AddComponent<TextMeshPro>();
             else
                 m_text = GetComponent<TextMeshProUGUI>() ?? gameObject.AddComponent<TextMeshProUGUI>();
 
-            // Load a new font asset and assign it to the text object.
+            // Load a new font asset and assign it to the layer object.
             m_text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/Anton SDF");
 
             // Load a new material preset which was created with the context menu duplicate.
@@ -40,10 +40,10 @@ namespace TMPro.Examples
             // Set the size of the font.
             m_text.fontSize = 120;
 
-            // Set the text
-            m_text.text = "A <#0080ff>simple</color> line of text.";
+            // Set the layer
+            m_text.text = "A <#0080ff>simple</color> line of layer.";
 
-            // Get the preferred width and height based on the supplied width and height as opposed to the actual size of the current text container.
+            // Get the preferred width and height based on the supplied width and height as opposed to the actual size of the current layer container.
             Vector2 size = m_text.GetPreferredValues(Mathf.Infinity, Mathf.Infinity);
 
             // Set the size of the RectTransform based on the new calculated values.

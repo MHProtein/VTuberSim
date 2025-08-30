@@ -146,16 +146,16 @@
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ImageGenerate(System.String)">
             <summary>
-            Generate images from text using AI.
+            Generate images from layer using AI.
             </summary>
-            <param name="description">text description about image.</param>
+            <param name="description">layer description about image.</param>
             <returns>the stream of the Image.</returns>
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ImageGenerate(System.String,Spire.AI.Api.ImageGenarationModel,Spire.AI.Api.ImageGenarationSize)">
             <summary>
-            Generate images from text using AI.
+            Generate images from layer using AI.
             </summary>
-            <param name="description">text description about image.</param>
+            <param name="description">layer description about image.</param>
             <param name="model">Image Models for generation.</param>
             <param name="size">Image Size for generation.</param>
             <returns>the stream of the Image.</returns>
@@ -181,7 +181,7 @@
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ExcelTranslate(System.Collections.Generic.List{Spire.Xls.Worksheet},System.String,System.Boolean)">
             <summary>
-            Translates the text within the specified worksheets using AI.
+            Translates the layer within the specified worksheets using AI.
             </summary>
             <param name="srcWorksheets">The list of Worksheets representing the source data.</param>
             <param name="language">The target language for translation.</param>
@@ -190,7 +190,7 @@
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ExcelTranslate(System.Collections.Generic.List{Spire.Xls.CellRange},System.String)">
             <summary>
-            Translates the text within the specified cell ranges using AI.
+            Translates the layer within the specified cell ranges using AI.
             </summary>
             <param name="srcRanges">The list of CellRanges representing the source data.</param>
             <param name="language">The target language for translation.</param>
@@ -292,23 +292,23 @@
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ImageGenerateAsync(System.String)">
             <summary>
-            Generate images from text using AI.
+            Generate images from layer using AI.
             </summary>
-            <param name="description">text description about image.</param>
+            <param name="description">layer description about image.</param>
             <returns>A task that represents the asynchronous operation. The task result contains the stream of the Image.</returns>
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ImageGenerateAsync(System.String,Spire.AI.Api.ImageGenarationModel,Spire.AI.Api.ImageGenarationSize)">
             <summary>
-            Generate images from text using AI.
+            Generate images from layer using AI.
             </summary>
-            <param name="description">text description about image.</param>
+            <param name="description">layer description about image.</param>
             <param name="model">Image Models for generation.</param>
             <param name="size">Image Size for generation.</param>
             <returns>A task that represents the asynchronous operation. The task result contains the stream of the Image.</returns>
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ExcelTranslateAsync(System.Collections.Generic.List{Spire.Xls.Worksheet},System.String,System.Boolean)">
             <summary>
-            Translates the text within the specified worksheets using AI.
+            Translates the layer within the specified worksheets using AI.
             </summary>
             <param name="srcWorksheets">The list of Worksheets representing the source data.</param>
             <param name="language">The target language for translation.</param>
@@ -317,7 +317,7 @@
         </member>
         <member name="M:Spire.Xls.AI.ExcelAI.ExcelTranslateAsync(System.Collections.Generic.List{Spire.Xls.CellRange},System.String)">
             <summary>
-            Translates the text within the specified cell ranges using AI.
+            Translates the layer within the specified cell ranges using AI.
             </summary>
             <param name="srcRanges">The list of CellRanges representing the source data.</param>
             <param name="language">The target language for translation.</param>
@@ -427,7 +427,7 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.Exporting.OOXML.ExpChartEx.SerializeAxisShapeAndTextProperties(System.Xml.XmlTextWriter,Spire.Xls.Core.Converter.Spreadsheet.Charts.Axis)">
             <summary>
-            Serialize the axis shape and text properties
+            Serialize the axis shape and layer properties
             </summary>
             <param name="writer">input XML writer</param>
             <param name="axis">input axis to be serialized</param>
@@ -546,20 +546,20 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.Exporting.OOXML.ExpChartEx.SeriliazeChartTextArea(System.Xml.XmlTextWriter,Spire.Xls.Core.Converter.Spreadsheet.Charts.Title,System.Double,System.String,System.Boolean,System.Boolean)">
             <summary>
-            Serialize the chart text area properties for text elements
+            Serialize the chart layer area properties for layer elements
             </summary>
             <param name="writer">input XML writer</param>
-            <param name="chartTextArea">input chart text area</param>
+            <param name="chartTextArea">input chart layer area</param>
             <param name="chart">input chart</param>
             <param name="relations">input relation collection</param>
-            <param name="defaultFontSize">default font size for text area</param>
+            <param name="defaultFontSize">default font size for layer area</param>
             <param name="parentElement">input XML elemet parent</param>
             <param name="isNotAuto">boolean value indicates whether the title is auto</param>
             <param name="isChartTitle">boolean value indicates whether element is chart title</param>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Exporting.OOXML.ExpChartEx.SerializeTextElementAttributes(System.Xml.XmlTextWriter,System.UInt16,System.Boolean)">
             <summary>
-            Serialize the chart text element properties for chart title and legend
+            Serialize the chart layer element properties for chart title and legend
             </summary>
             <param name="writer">input XML writer</param>
             <param name="position">input position of element</param>
@@ -567,13 +567,13 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.Exporting.OOXML.ExpChartEx.SerializeTextAreaText(System.Xml.XmlTextWriter,Spire.Xls.Core.Converter.Spreadsheet.Charts.Title,System.Double)">
             <summary>
-            Serialize the chart text area Tx and rich
+            Serialize the chart layer area Tx and rich
             </summary>
             <param name="writer">input XML writer</param>
-            <param name="chartTextArea">input chart text area</param>
+            <param name="chartTextArea">input chart layer area</param>
             <param name="chart">input chart</param>
-            <param name="defaultFontSize">default font size for text area</param>
-            <returns>boolean value indicates whether the title serialized as rich text or not</returns>
+            <param name="defaultFontSize">default font size for layer area</param>
+            <returns>boolean value indicates whether the title serialized as rich layer or not</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Exporting.OOXML.ExpChartEx.SerializeChartExData(System.Xml.XmlTextWriter)">
             <summary>
@@ -1708,7 +1708,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.DataLabelsSeparatorTag">
             <summary>
-            This element specifies text that shall be used to separate the parts of a data label.
+            This element specifies layer that shall be used to separate the parts of a data label.
             The default is a comma, except for pie charts showing only category name and percentage,
             when a line break shall be used instead.
             </summary>
@@ -1988,12 +1988,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.ChartTextTag">
             <summary>
-            This element specifies text to use on a chart, including rich text formatting.
+            This element specifies layer to use on a chart, including rich layer formatting.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.RichTextTag">
             <summary>
-            This element contains a string with rich text formatting.
+            This element contains a string with rich layer formatting.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.ChartsheetTag">
@@ -2008,22 +2008,22 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.UnderlineSingle">
             <summary>
-            Underline the text with a single line of normal thickness.
+            Underline the layer with a single line of normal thickness.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.UnderlineDouble">
             <summary>
-            Underline the text with two lines of normal thickness.
+            Underline the layer with two lines of normal thickness.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.StrikeThroughSingle">
             <summary>
-            A single strikethrough is applied to the text.
+            A single strikethrough is applied to the layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.StrikeThroughDouble">
             <summary>
-            A double strikethrough is applied to the text.
+            A double strikethrough is applied to the layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.StrikeThroughNone">
@@ -2094,12 +2094,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.SeriesTextTag">
             <summary>
-            This element specifies text for a series name, without rich text formatting.
+            This element specifies layer for a series name, without rich layer formatting.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.TextValueTag">
             <summary>
-            This element specifies a text value for a category axis label or a series name.
+            This element specifies a layer value for a category axis label or a series name.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.HiLowLinesTag">
@@ -2241,12 +2241,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.TextPropertiesTag">
             <summary>
-            This element contains text properties.
+            This element contains layer properties.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartConstants.AutoCategoryAxis">
             <summary>
-            This element specifies that this axis is a date or text axis based on
+            This element specifies that this axis is a date or layer axis based on
             the data that is used for the axis labels, not a specific choice.
             </summary>
         </member>
@@ -2601,7 +2601,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartExConstants.TextDataTag">
             <summary>
-            The element specifies the text data used for chartEx text
+            The element specifies the layer data used for chartEx layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.ChartExConstants.ValueTag">
@@ -3028,7 +3028,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.ChartStyleTag">
             <summary>
-            It specifies visual and text properties for all elements present on a chart
+            It specifies visual and layer properties for all elements present on a chart
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.ColorStyleTag">
@@ -3068,12 +3068,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.DefaultRunPropertiesTag">
             <summary>
-            Element that specifies the default text character properties for a text body on a chart which is associated with this CT_StyleEntry
+            Element that specifies the default layer character properties for a layer body on a chart which is associated with this CT_StyleEntry
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.BodyPropertiesTag">
             <summary>
-            Element that specifies the body properties for a text body on a chart that is associated with this CT_StyleEntry.
+            Element that specifies the body properties for a layer body on a chart that is associated with this CT_StyleEntry.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.IndexAttribute">
@@ -3163,12 +3163,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.Tx1String">
             <summary>
-            (Text Color 1) Semantic text color
+            (Text Color 1) Semantic layer color
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.Tx2String">
             <summary>
-             (Text Color 2) Semantic additional text color
+             (Text Color 2) Semantic additional layer color
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.OOXML.StyleConstants.ColorStyleVariationTag">
@@ -3197,8 +3197,8 @@
             Replace European digits (U+0030...U+0039) by Arabic-Indic digits
             if the most recent strongly directional character
             is an Arabic letter (its Bidi direction value is RIGHT_TO_LEFT_ARABIC).
-            The initial state at the start of the text is assumed to be not an Arabic,
-            letter, so European digits at the start of the text will not change.
+            The initial state at the start of the layer is assumed to be not an Arabic,
+            letter, so European digits at the start of the layer will not change.
             Compare to DIGITS_ALEN2AN_INIT_AL.
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.EMF.ArabicLigaturizer.DIGITS_EN2AN_INIT_AL">
@@ -3206,8 +3206,8 @@
             Replace European digits (U+0030...U+0039) by Arabic-Indic digits
             if the most recent strongly directional character
             is an Arabic letter (its Bidi direction value is RIGHT_TO_LEFT_ARABIC).
-            The initial state at the start of the text is assumed to be an Arabic,
-            letter, so European digits at the start of the text will change.
+            The initial state at the start of the layer is assumed to be an Arabic,
+            letter, so European digits at the start of the layer will change.
             Compare to DIGITS_ALEN2AN_INT_LR.
         </member>
         <member name="F:Spire.Xls.Core.Converter.Exporting.EMF.ArabicLigaturizer.DIGITS_RESERVED">
@@ -3295,7 +3295,7 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.Exporting.EMF.BidiOrder.#ctor(System.SByte[])">
              Initialize using an array of direction types.  Types range from TYPE_MIN to TYPE_MAX inclusive
-             and represent the direction codes of the characters in the text.
+             and represent the direction codes of the characters in the layer.
             
              @param types the types array
         </member>
@@ -3327,7 +3327,7 @@
         <member name="M:Spire.Xls.Core.Converter.Exporting.EMF.BidiOrder.RemoveExplicitCodes">
             Rules X9.
             Remove explicit codes so that they may be ignored during the remainder
-            of the main portion of the algorithm.  The length of the resulting text
+            of the main portion of the algorithm.  The length of the resulting layer
             is returned.
             @return the length of the data excluding explicit codes and BN.
         </member>
@@ -3701,10 +3701,10 @@
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Documents.Paragraph.Text">
             <summary>
-            Returns or sets paragraph text.
+            Returns or sets paragraph layer.
             </summary>
             <value></value>
-            <remarks>All internal formatting will be cleared when new text is set.</remarks>
+            <remarks>All internal formatting will be cleared when new layer is set.</remarks>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Documents.Paragraph.Item(System.Int32)">
             <summary>
@@ -3756,14 +3756,14 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.General.Word.Documents.Paragraph.AppendText(System.String)">
             <summary>
-            Appends text to end of document.
+            Appends layer to end of document.
             </summary>
-            <param name="text"></param>
+            <param name="layer"></param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.General.Word.Documents.Paragraph.CalculatedResult">
             <summary>
-            Get the text that the field items have been updated .
+            Get the layer that the field items have been updated .
             </summary>
             <returns></returns>
         </member>
@@ -3779,12 +3779,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.DocumentObjectType.Section">
             <summary>
-            The text bodies
+            The layer bodies
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.DocumentObjectType.Paragraph">
             <summary>
-            The text body items
+            The layer body items
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.DocumentObjectType.TextRange">
@@ -3832,7 +3832,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.ParagraphItemType.TextRange">
             <summary>
-            ParagraphBase is a text.
+            ParagraphBase is a layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.ParagraphItemType.Picture">
@@ -3986,26 +3986,26 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.HorizontalAlignment.Distribute">
             <summary>
-            Specifies that the text shall be justified between both
-            of the text margins in the document.
+            Specifies that the layer shall be justified between both
+            of the layer margins in the document.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.HorizontalAlignment.HightKashida">
             <summary>
-            Specifies that the kashida length for text in the current paragraph
+            Specifies that the kashida length for layer in the current paragraph
             shall be extended to its wides possible length.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.HorizontalAlignment.LowKashida">
             <summary>
-            Specifies that the kashida length for text in the current paragraph
+            Specifies that the kashida length for layer in the current paragraph
             shall be exended to a slightly longer length.
-            This setting shall also be applied to Arabic text when the both setting is applied.
+            This setting shall also be applied to Arabic layer when the both setting is applied.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.HorizontalAlignment.MediumKashida">
             <summary>
-            Specifies that the kashida length for text in the current paragraph
+            Specifies that the kashida length for layer in the current paragraph
             shall be extended to a medium length determined by the consumer.
             </summary>
         </member>
@@ -4219,7 +4219,7 @@
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.ListPatternType.OrdinalText">
             <summary>
             Specifies Ordinal Text numbering format.
-            Ordinal (text) (First, Second, Third, ...)
+            Ordinal (layer) (First, Second, Third, ...)
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.ListPatternType.Chicago">
@@ -4696,51 +4696,51 @@
         </member>
         <member name="T:Spire.Xls.Core.Converter.General.Word.Documents.TextDirection">
             <summary>
-            Defines the direction of text.
+            Defines the direction of layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.TextDirection.TopToBottom">
             <summary>
-            Specifies that text in the parent object shall flow from left to right horizontally,
+            Specifies that layer in the parent object shall flow from left to right horizontally,
             then top to bottom vertically on the page.
-            This means that horizontal lines are filled before the text expands vertically.
+            This means that horizontal lines are filled before the layer expands vertically.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.TextDirection.RightToLeft">
             <summary>
-            Specifies that text in the parent object shall flow from right to left horizontally, 
+            Specifies that layer in the parent object shall flow from right to left horizontally, 
             then top to bottom vertically on the page.
-            This means that horizontal lines are filled before the text expands vertically.
+            This means that horizontal lines are filled before the layer expands vertically.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.TextDirection.LeftToRightRotated">
             <summary>
-            Specifies that text in the parent object shall flow from top to bottom vertically,
+            Specifies that layer in the parent object shall flow from top to bottom vertically,
             then left to right horizontally on the page.
-            This means that horizontal lines are filled before the text expands vertically.
-            This flow is also rotated such that all text is rotated 90 degrees when displayed on a page.
+            This means that horizontal lines are filled before the layer expands vertically.
+            This flow is also rotated such that all layer is rotated 90 degrees when displayed on a page.
             </summary>      
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.TextDirection.LeftToRight">
             <summary>
-            Specifies that text in the parent object shall flow from bottom to top vertically,
+            Specifies that layer in the parent object shall flow from bottom to top vertically,
             then from left to right horizontally on the page.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.TextDirection.TopToBottomRotated">
             <summary>
-            Specifies that text in the parent object shall flow from left to right horizontally,
+            Specifies that layer in the parent object shall flow from left to right horizontally,
             then top to bottom vertically on the page.
-            This means that horizontal lines are filled before the text expands vertically.
-            This flow is also rotated such that any East Asian text shall be rotated 270 degrees when displayed on a page.
+            This means that horizontal lines are filled before the layer expands vertically.
+            This flow is also rotated such that any East Asian layer shall be rotated 270 degrees when displayed on a page.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.TextDirection.RightToLeftRotated">
             <summary>
-            Specifies that text in the parent object shall flow from top to bottom vertically, 
+            Specifies that layer in the parent object shall flow from top to bottom vertically, 
             then right to left horizontally on the page.
-            This means that horizontal lines are filled before the text expands vertically.
-            This flow is also rotated such that all text is rotated 90 degrees when displayed on a page.
+            This means that horizontal lines are filled before the layer expands vertically.
+            This flow is also rotated such that all layer is rotated 90 degrees when displayed on a page.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.ConditionalFormattingCode.OddRowBanding">
@@ -5150,12 +5150,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.PrintBodyBeforeHdr">
             <summary>
-            Print body text before header/footer.
+            Print body layer before header/footer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.NoExtLeading">
             <summary>
-            Don't add leading (extra space) between rows of text.
+            Don't add leading (extra space) between rows of layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.DontMakeSpaceForUL">
@@ -5260,7 +5260,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.UseWord97LineBreakingRules">
             <summary>
-            Use Word 97 line breaking rules for Asian text.
+            Use Word 97 line breaking rules for Asian layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.DontBreakWrappedTables">
@@ -5270,7 +5270,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.DontSnapToGridInCell">
             <summary>
-            Don't snap text to grid inside table with inline objects.
+            Don't snap layer to grid inside table with inline objects.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.DontAllowFieldEndSelect">
@@ -5326,7 +5326,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.WW11IndentRules">
             <summary>
-            Use Word 2003 indent rules for text next to wrapped objects.
+            Use Word 2003 indent rules for layer next to wrapped objects.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.DontAutofitConstrainedTables">
@@ -5341,7 +5341,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.UnderlineTabInNumList">
             <summary>
-            Underline the tab character between the number and the text in numbered lists.
+            Underline the tab character between the number and the layer in numbered lists.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.HangulWidthLikeWW11">
@@ -5366,7 +5366,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.DontVertAlignInTxbx">
             <summary>
-            Specifies whether to ignore vertical alignment in text boxes
+            Specifies whether to ignore vertical alignment in layer boxes
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.Word11KerningPairs">
@@ -5381,7 +5381,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.overrideTableStyleFontSizeAndJustification">
             <summary>
-            specifies whether to apply the additional preceding rules when determining the font size and justification of text within tables.
+            specifies whether to apply the additional preceding rules when determining the font size and justification of layer within tables.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.Documents.CompatibilityOptions.enableOpenTypeFeatures">
@@ -5823,27 +5823,27 @@
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Formatting.CharacterFormat.Bidi">
             <summary>
-            Returns or sets right-to-left property of text.
+            Returns or sets right-to-left property of layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Formatting.CharacterFormat.BoldBidi">
             <summary>
-            Returns or sets bold property for right-to-left text.
+            Returns or sets bold property for right-to-left layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Formatting.CharacterFormat.HighlightColor">
             <summary>
-            Gets or sets highlight color of text.
+            Gets or sets highlight color of layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Formatting.CharacterFormat.FontNameAscii">
             <summary>
-            Gets or setsthe font used for Latin text (characters with character codes from 0 through 127). 
+            Gets or setsthe font used for Latin layer (characters with character codes from 0 through 127). 
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Formatting.CharacterFormat.FontNameBidi">
             <summary>
-            Gets or sets font name for right-to-left text.
+            Gets or sets font name for right-to-left layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Formatting.CharacterFormat.FontNameFarEast">
@@ -6278,7 +6278,7 @@
             <summary>
             Latexes to mathML.
             </summary>
-            <param name="latexText">The latex text.</param>
+            <param name="latexText">The latex layer.</param>
             <returns>System.String.</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.General.Word.Fields.OMath.OfficeMath.FromMathMLCode(System.String)">
@@ -6350,7 +6350,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Fields.TextRange.OwnerEmptyParagraph">
             <summary>
-            Indicates this text range is a temp and blank text range of an empty paragraph
+            Indicates this layer range is a temp and blank layer range of an empty paragraph
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Fields.TextRange.DocumentObjectType">
@@ -6361,17 +6361,17 @@
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Fields.TextRange.Text">
             <summary>
-            Returns or sets text.
+            Returns or sets layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Fields.TextRange.IsAddForEmptyPara">
             <summary>
-            if the text range is added for an empty paragraph ,return true; otherwise,false.
+            if the layer range is added for an empty paragraph ,return true; otherwise,false.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Fields.TextRange.IsAddForBreak">
             <summary>
-            if the text range is added for Break ,return true; otherwise,false.
+            if the layer range is added for Break ,return true; otherwise,false.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Fields.TextRange.IsFieldToTextRange">
@@ -6433,7 +6433,7 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.General.Word.Layout.IStringWidgetText.GetVisualText">
             <summary>
-            Gets visual text string.
+            Gets visual layer string.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.General.Word.Layout.ILayoutInfo.IsBidi">
@@ -6536,7 +6536,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.SpecialCharacters.SpecialBreakCodeArr">
             <summary>
-            Array of break char which text could be contains
+            Array of break char which layer could be contains
             </summary>
         </member>
         <member name="T:Spire.Xls.Core.Converter.General.Word.FileFormat">
@@ -6736,7 +6736,7 @@
         </member>
         <member name="T:Spire.Xls.Core.Converter.General.Word.TextEffect">
             <summary>
-            Animation effect for text.
+            Animation effect for layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextEffect.None">
@@ -6746,35 +6746,35 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextEffect.LasVegasLights">
             <summary>
-            Specifies that this text shall be surrounded by a border consisting of a series of
+            Specifies that this layer shall be surrounded by a border consisting of a series of
             colored lights, which constantly change colors in sequence.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextEffect.BlinkingBackground">
             <summary>
-            Specifies that this text shall be surrounded by a background 
+            Specifies that this layer shall be surrounded by a background 
             color which alternates between black and white.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextEffect.SparkleText">
             <summary>
-            Specifies that this text shall have a background consisting of a random pattern of
+            Specifies that this layer shall have a background consisting of a random pattern of
             colored lights, which constantly change colors in sequence.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextEffect.MarchingBlackAnts">
             <summary>
-            Specifies that this text shall be surrounded by an animated black dashed line border.
+            Specifies that this layer shall be surrounded by an animated black dashed line border.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextEffect.MarchingRedAnts">
             <summary>
-            Specifies that this text shall be surrounded by an animated red dashed line border.
+            Specifies that this layer shall be surrounded by an animated red dashed line border.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextEffect.Shimmer">
             <summary>
-            Specifies that this text shall be animated by alternating between normal and blurry states.
+            Specifies that this layer shall be animated by alternating between normal and blurry states.
             </summary>
         </member>
         <member name="T:Spire.Xls.Core.Converter.General.Word.OutlineLevel">
@@ -7074,12 +7074,12 @@
         </member>
         <member name="T:Spire.Xls.Core.Converter.General.Word.TextFormFieldType">
             <summary>
-            Specifies the type of a text form field.
+            Specifies the type of a layer form field.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextFormFieldType.RegularText">
             <summary>
-            Text form field can contain any text. 
+            Text form field can contain any layer. 
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.General.Word.TextFormFieldType.NumberText">
@@ -8893,8 +8893,8 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.ClickHyperlinkTag">
             <summary>
-            This element specifies the on-click hyperlink information to be applied to a run of text.
-            When the hyperlink text is clicked the link is fetched.
+            This element specifies the on-click hyperlink information to be applied to a run of layer.
+            When the hyperlink layer is clicked the link is fetched.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.BlipFillTagName">
@@ -9194,71 +9194,71 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextBodyPropertiesTag">
             <summary>
-            This element defines the body properties for the text body within a shape.
+            This element defines the body properties for the layer body within a shape.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.ListStylesTag">
             <summary>
-            This element specifies the list of styles associated with this body of text.
+            This element specifies the list of styles associated with this body of layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.Paragraphs">
             <summary>
-            This element specifies the presence of a paragraph of text within the containing text body.
+            This element specifies the presence of a paragraph of layer within the containing layer body.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.ParagraphProperties">
             <summary>
-            This element contains all paragraph level text properties for the containing paragraph.
+            This element contains all paragraph level layer properties for the containing paragraph.
             These paragraph properties should override any and all conflicting properties that are
             associated with the paragraph in question.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.DefaultParagraphProperites">
             <summary>
-            This element contains all default run level text properties for the text
+            This element contains all default run level layer properties for the layer
             runs within a containing paragraph. These properties are to be used when
             overriding properties have not been defined within the rPr element.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.ParagraphRun">
             <summary>
-            This element specifies the presence of a run of text within the containing text body.
+            This element specifies the presence of a run of layer within the containing layer body.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.ParagraphText">
             <summary>
-            This element specifies the actual text for this text run. This is the
-            text that will be formatted using all specified body, paragraph and run
-            properties. This element must be present within a run of text.
+            This element specifies the actual layer for this layer run. This is the
+            layer that will be formatted using all specified body, paragraph and run
+            properties. This element must be present within a run of layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextRunProperites">
             <summary>
-            This element contains all run level text properties for the text runs within a containing paragraph.
+            This element contains all run level layer properties for the layer runs within a containing paragraph.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.FontBoldAttribute">
             <summary>
-            Specifies whether a run of text will be formatted as bold text. If this
+            Specifies whether a run of layer will be formatted as bold layer. If this
             attribute is omitted, than a value of 0, or false is assumed.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.FontItalicAttribute">
             <summary>
-            Specifies whether a run of text will be formatted as italic text. If this
+            Specifies whether a run of layer will be formatted as italic layer. If this
             attribute is omitted, than a value of 0, or false is assumed.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.FontStrikeAttribute">
             <summary>
-            Specifies whether a run of text will be formatted as strikethrough text.
+            Specifies whether a run of layer will be formatted as strikethrough layer.
             If this attribute is omitted, than no strikethrough is assumed.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.FontSizeAttribute">
             <summary>
-            Specifies the size of text within a text run. Whole points are specified
+            Specifies the size of layer within a layer run. Whole points are specified
             in increments of 100 starting with 100 being a point size of 1. For instance
             a font point size of 12 would be 1200 and a font point size of 12.5 would be
             1250. If this attribute is omitted, than the value in defRPr should be used.
@@ -9266,7 +9266,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.FontUnderlineAttribute">
             <summary>
-            Specifies whether a run of text will be formatted as underlined text.
+            Specifies whether a run of layer will be formatted as underlined layer.
             If this attribute is omitted, than no underline is assumed.
             </summary>
         </member>
@@ -9301,7 +9301,7 @@
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.LineTag">
             <summary>
             This element specifies an outline style that can be applied to a number
-            of different objects such as shapes and text.
+            of different objects such as shapes and layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.LineWidthAttribute">
@@ -9597,18 +9597,18 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextRotationAttribute">
             <summary>
-            This element specified the rotation of text.
+            This element specified the rotation of layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.Baseline">
             <summary>
-            Specifies that all text in the parent object shall be aligned to the baseline of 
+            Specifies that all layer in the parent object shall be aligned to the baseline of 
             each character when displayed.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.LatinTag">
             <summary>
-            This element specifies that a Latin font be used for a specific run of text.
+            This element specifies that a Latin font be used for a specific run of layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TypefaceTag">
@@ -9634,9 +9634,9 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextBoxAttribute">
             <summary>
-            Specifies that the corresponding shape is a text box and thus should be treated
+            Specifies that the corresponding shape is a layer box and thus should be treated
             as such by the generating application. If this attribute is omitted then it is
-            assumed that the corresponding shape is not specifically a text box.
+            assumed that the corresponding shape is not specifically a layer box.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.NonVisualShapeProperties">
@@ -9650,10 +9650,10 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextBody">
             <summary>
-            This element specifies the existence of text to be contained within the
-            corresponding shape. All visible text and visible text related properties
+            This element specifies the existence of layer to be contained within the
+            corresponding shape. All visible layer and visible layer related properties
             are contained within this element. There can be multiple paragraphs and
-            within paragraphs multiple runs of text.
+            within paragraphs multiple runs of layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.SubscriptBaseline">
@@ -9679,13 +9679,13 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextBoxRotationAttribute">
             <summary>
-            Determines if the text within the given text body should be displayed vertically.
-            If this attribute is omitted, then a value of horz, or no vertical text is implied.
+            Determines if the layer within the given layer body should be displayed vertically.
+            If this attribute is omitted, then a value of horz, or no vertical layer is implied.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.LockTextAttribute">
             <summary>
-            This attribute indicates whether to allow text editing within this drawing
+            This attribute indicates whether to allow layer editing within this drawing
             object when the parent worksheet is protected.
             </summary>
         </member>
@@ -9698,12 +9698,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.CapitalizationTag">
             <summary>
-            specifies the capitialization for rich text 
+            specifies the capitialization for rich layer 
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.NormalizationHeightTag">
             <summary>
-            specifies the normaliztion of heights for text 
+            specifies the normaliztion of heights for layer 
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.ShapeAutoFitTag">
@@ -9713,27 +9713,27 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextCapsAllString">
             <summary>
-            Apply all caps on the text.
+            Apply all caps on the layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextCapsSmallString">
             <summary>
-            Apply small caps to the text.
+            Apply small caps to the layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.TextCapsNoneString">
             <summary>
-            Caps is not applied to the text
+            Caps is not applied to the layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.VerticalOverFlowAttribute">
             <summary>
-            Determines whether the text can flow out of the bounding box vertically
+            Determines whether the layer can flow out of the bounding box vertically
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.HorizontalOverFlowAttribute">
             <summary>
-            Determines whether the text can flow out of the bounding box horizontally
+            Determines whether the layer can flow out of the bounding box horizontally
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.LeftInsetAttribute">
@@ -9758,12 +9758,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.KerningAttribute">
             <summary>
-            Specifies the minimum font size at which character kerning occurs for this text run.
+            Specifies the minimum font size at which character kerning occurs for this layer run.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.SpacingAttribute">
             <summary>
-            Specifies the spacing between characters within a text run.
+            Specifies the spacing between characters within a layer run.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.Drawings.HLinkClickTag">
@@ -9978,12 +9978,12 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.ShapeStyle.m_defaultParagraphRunProperties">
             <summary>
-            It specifies the default text character properties for a text body associated with this StyleEntry.
+            It specifies the default layer character properties for a layer body associated with this StyleEntry.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.ShapeStyle.m_textBodyProperties">
             <summary>
-            It specifies the body properties for a text body associated with this StyleEntry
+            It specifies the body properties for a layer body associated with this StyleEntry
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.Spreadsheet.Shapes.ShapeStyle.StyleElementMod">
@@ -10028,7 +10028,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Converter.Spreadsheet.Shapes.ShapeStyle.TextBodyProperties">
             <summary>
-            Gets / Sets the text body properties of style entry
+            Gets / Sets the layer body properties of style entry
             </summary>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.ShapeStyle.#ctor">
@@ -10372,47 +10372,47 @@
         </member>
         <member name="T:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder">
             <summary>
-            Class that stores that text body properties
+            Class that stores that layer body properties
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_textVertOverflowType">
             <summary>
-            text vertical overflow type
+            layer vertical overflow type
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_textHorzOverflowType">
             <summary>
-            text horizontal overflow type
+            layer horizontal overflow type
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_textDirection">
             <summary>
-            text direction enum
+            layer direction enum
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_leftMarginPt">
             <summary>
-            left margin point of text
+            left margin point of layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_topMarginPt">
             <summary>
-            top margin point of text
+            top margin point of layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_rightMarginPt">
             <summary>
-            right margin point of text
+            right margin point of layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_bottomMarginPt">
             <summary>
-            bottom margin of text
+            bottom margin of layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_wrapTextInShape">
             <summary>
-            boolean value indicates whether the text to be wrapped in text
+            boolean value indicates whether the layer to be wrapped in layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_columns">
@@ -10422,17 +10422,17 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_verticalAlignment">
             <summary>
-            vertical alignment of text
+            vertical alignment of layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_horizontalAlignment">
             <summary>
-            horizontal alignment of text
+            horizontal alignment of layer
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_isAutoSize">
             <summary>
-            Boolean value indicates whether the text is to be auto sized
+            Boolean value indicates whether the layer is to be auto sized
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.m_isAutoMargins">
@@ -10512,11 +10512,11 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetVerticalAnchorPosition(Spire.Xls.TextDirection,Spire.Xls.ExcelVerticalAlignment,Spire.Xls.ExcelHorizontalAlignment,System.String@)">
             <summary>
-            Get the anchor position from text direction and alignment
+            Get the anchor position from layer direction and alignment
             </summary>
-            <param name="textDirection">input text Direction of the text body</param>
-            <param name="verticalAlignment">input text body vertical alignment</param>
-            <param name="horizontalAlignment">input text body horizontal alignment</param>
+            <param name="textDirection">input layer Direction of the layer body</param>
+            <param name="verticalAlignment">input layer body vertical alignment</param>
+            <param name="horizontalAlignment">input layer body horizontal alignment</param>
             <param name="anchor">output anchor</param>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetHorizontalAnchorPostion(Spire.Xls.TextDirection,Spire.Xls.ExcelVerticalAlignment,Spire.Xls.ExcelHorizontalAlignment,System.String@)">
@@ -10531,68 +10531,68 @@
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetTextDirection(Spire.Xls.TextDirection)">
             <summary>
-            Get the string formatted text direction from enum
+            Get the string formatted layer direction from enum
             </summary>
-            <param name="textDirection">input text direction enum</param>
-            <returns>output string formatted text direction</returns>
+            <param name="textDirection">input layer direction enum</param>
+            <returns>output string formatted layer direction</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetLeftMargin">
             <summary>
-            Get Left margin value of text body
+            Get Left margin value of layer body
             </summary>
             <returns>converted left margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.SetLeftMargin(System.Int32)">
             <summary>
-            Set Left margin value of text body
+            Set Left margin value of layer body
             </summary>
             <returns>converted left margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetTopMargin">
             <summary>
-            Get Top margin value of text body
+            Get Top margin value of layer body
             </summary>
             <returns>converted Top margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.SetTopMargin(System.Int32)">
             <summary>
-            Set Top margin value of text body
+            Set Top margin value of layer body
             </summary>
             <returns>converted Top margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetRightMargin">
             <summary>
-            Get Right margin value of text body
+            Get Right margin value of layer body
             </summary>
             <returns>converted right margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.SetRightMargin(System.Int32)">
             <summary>
-            Set Right margin value of text body
+            Set Right margin value of layer body
             </summary>
             <returns>converted right margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetBottomMargin">
             <summary>
-            Get Bottom margin value of text body
+            Get Bottom margin value of layer body
             </summary>
             <returns>converted Bottom margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.SetBottomMargin(System.Int32)">
             <summary>
-            Set Bottom margin value of text body
+            Set Bottom margin value of layer body
             </summary>
             <returns>converted Bottom margin value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.GetVerticalAnchorPosition(System.String@)">
             <summary>
-            Get anchor position value of text body from current object properties
+            Get anchor position value of layer body from current object properties
             </summary>
             <returns>anchor position value</returns>
         </member>
         <member name="M:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextBodyPropertiesHolder.SerialzieTextBodyProperties(System.Xml.XmlWriter,System.String,System.String)">
             <summary>
-            Serializes the text body properties attributes
+            Serializes the layer body properties attributes
             </summary>
             <param name="xmlTextWriter">input XML writer</param>
             <param name="prefix">prefix of the element</param>
@@ -10606,12 +10606,12 @@
         </member>
         <member name="P:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextFrameColumns.Number">
             <summary>
-            Gets or sets the number of the text frame columns.
+            Gets or sets the number of the layer frame columns.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextFrameColumns.SpacingPt">
             <summary>
-            Gets or sets the spacing point of the text frame columns.
+            Gets or sets the spacing point of the layer frame columns.
             </summary>
         </member>
         <member name="T:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextSettings">
@@ -10641,17 +10641,17 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextSettings.Italic">
             <summary>
-            Value indicating whether text 
+            Value indicating whether layer 
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextSettings.Striked">
             <summary>
-            Value indicating whether text is striked.
+            Value indicating whether layer is striked.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextSettings.Language">
             <summary>
-            Language used to display text.
+            Language used to display layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextSettings.FontColor">
@@ -10692,13 +10692,13 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextSettings.KerningValue">
             <summary>
-            Specifies the minimum font size at which character kerning occurs for this text run.
+            Specifies the minimum font size at which character kerning occurs for this layer run.
             default -1, it was non negative on chart style
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Spreadsheet.Shapes.TextSettings.SpacingValue">
             <summary>
-            Specifies the spacing between characters within a text run.
+            Specifies the spacing between characters within a layer run.
             default -1, it was non negative
             </summary>
         </member>
@@ -11330,7 +11330,7 @@
         </member>
         <member name="F:Spire.Xls.Core.Converter.Content.BulletNumStyle.BulletCircleNumWDBlackPlain">
             <summary>
-            Shadow color number with circular background of normal text color.
+            Shadow color number with circular background of normal layer color.
             </summary>
         </member>
         <member name="F:Spire.Xls.Core.Converter.Content.BulletNumStyle.BulletTradChinPlain">
@@ -11911,7 +11911,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChart.Font">
             <summary>
-            Gets font which used for displaying axis text .
+            Gets font which used for displaying axis layer .
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChart.IsCategoryAxisAvail">
@@ -12159,7 +12159,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartAxis.TitleArea">
             <summary>
-            Returns text area for the axis title. Read-only.
+            Returns layer area for the axis title. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartAxis.FrameFormat">
@@ -12229,7 +12229,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartAxis.TextDirection">
             <summary>
-            axis's text direction
+            axis's layer direction
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartBorder.Color">
@@ -12486,7 +12486,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartDataLabelArea.Text">
             <summary>
-            Gets or sets text.
+            Gets or sets layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartDataLabelArea.TextRotationAngle">
@@ -12579,7 +12579,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartDataLabels.Text">
             <summary>
-            Gets or sets text.
+            Gets or sets layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartDataLabels.TextRotationAngle">
@@ -13296,7 +13296,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartLegendArea.Text">
             <summary>
-            Gets or sets text.
+            Gets or sets layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartLegendArea.TextRotationAngle">
@@ -13758,7 +13758,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartTitleArea.Text">
             <summary>
-            Gets or sets text.
+            Gets or sets layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Charts.XlsChartTitleArea.TextRotationAngle">
@@ -14427,28 +14427,28 @@
             <summary>
             Add new begin with condition to the collection.
             </summary>
-            <param name="text">begin with text</param>
+            <param name="layer">begin with layer</param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.Collections.XlsConditionalFormats.AddContainsTextCondition(System.String)">
             <summary>
             Add new contain condition to the collection.
             </summary>
-            <param name="text">contain text</param>
+            <param name="layer">contain layer</param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.Collections.XlsConditionalFormats.AddEndsWithCondition(System.String)">
             <summary>
             Add new end with condition to the collection.
             </summary>
-            <param name="text">end with text</param>
+            <param name="layer">end with layer</param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.Collections.XlsConditionalFormats.AddNotContainsTextCondition(System.String)">
             <summary>
             Add new not contain condition to the collection.
             </summary>
-            <param name="text">not contain text</param>
+            <param name="layer">not contain layer</param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.Collections.XlsConditionalFormats.AddContainsBlanksCondition">
@@ -14898,7 +14898,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Shapes.XlsShape.AlternativeText">
             <summary>
-            Returns or sets the descriptive (alternative) text string for a Shape object when the object is saved to a Web page. Read/write String
+            Returns or sets the descriptive (alternative) layer string for a Shape object when the object is saved to a Web page. Read/write String
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Shapes.XlsShape.Fill">
@@ -14928,7 +14928,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Shapes.XlsShape.AlternativeTextTitle">
             <summary>
-            Returns or sets the descriptive (alternative) text title string for a Shape object when the object is saved to a Web page. Read/write String
+            Returns or sets the descriptive (alternative) layer title string for a Shape object when the object is saved to a Web page. Read/write String
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.Shapes.XlsShape.ResizeBehave">
@@ -15223,7 +15223,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.AddtionalFormatWrapper.JustifyLast">
             <summary>
-            Represents justify text alignment
+            Represents justify layer alignment
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.AddtionalFormatWrapper.NumberFormat">
@@ -15249,12 +15249,12 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.AddtionalFormatWrapper.Rotation">
             <summary>
-            The text orientation. Can be an integer value from 1 to 180 degrees
+            The layer orientation. Can be an integer value from 1 to 180 degrees
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.AddtionalFormatWrapper.ShrinkToFit">
             <summary>
-            True if text automatically shrinks to fit in the available column width.
+            True if layer automatically shrinks to fit in the available column width.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.AddtionalFormatWrapper.VerticalAlignment">
@@ -15264,7 +15264,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.AddtionalFormatWrapper.WrapText">
             <summary>
-            True if Microsoft Excel wraps the text in the object.
+            True if Microsoft Excel wraps the layer in the object.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.AddtionalFormatWrapper.IsFirstSymbolApostrophe">
@@ -15518,7 +15518,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.PivotTables.XlsPivotField.SubtotalCaption">
             <summary>
-            Specifies the custom text that is displayed for the subtotals caption.
+            Specifies the custom layer that is displayed for the subtotals caption.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.PivotTables.XlsPivotField.SubtotalTop">
@@ -16212,7 +16212,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsHyperLink.TextToDisplay">
             <summary>
-            Returns or sets the text to be displayed for the specified hyperlink.
+            Returns or sets the layer to be displayed for the specified hyperlink.
             The default value is the address of the hyperlink.
             </summary>
         </member>
@@ -16627,7 +16627,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
             
                  <para>//Set built in style</para>
@@ -16693,7 +16693,7 @@
                 <para>Worksheet worksheet = workbook.Worksheets[0];</para>
                 
                 <para>//Set the ColumnWidth</para>
-                <para>worksheet["A1"].Text = "This cell contains sample text";</para>
+                <para>worksheet["A1"].Text = "This cell contains sample layer";</para>
                 <para>worksheet["A1"].ColumnWidth = 25;</para>
                 
                 <para>//Save to file</para>
@@ -16960,8 +16960,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "Sample layer in cell";</para>
             
                  <para>//Set merge</para>
                  <para>worksheet["A1:B1"].Merge();</para>
@@ -17000,7 +17000,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.HasRichText">
              <summary>
-             Determines if all cells in the range contain rich text string.
+             Determines if all cells in the range contain rich layer string.
              <example>The following code illustrates how to access HasRichText property:
              <code>
                  <para>//Create worksheet</para>
@@ -17010,7 +17010,7 @@
                  <para>//Create style</para>
                  <para>IStyle style = workbook.Styles.Add("CustomStyle");</para>
                          
-                 <para>//Set rich text</para>
+                 <para>//Set rich layer</para>
                  <para>IRichTextString richText = worksheet["C2"].RichText;</para>
                  <para>richText.Text = "Sample";</para>
                  <para>IFont font = style.Font;</para>
@@ -17065,7 +17065,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Test";</para>
                          
                  <para>//Set alignment</para>
@@ -17096,7 +17096,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
                          
                  <para>//Set indent level</para>
@@ -17145,17 +17145,17 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.IsWrapText">
              <summary>
-             Determines if Microsoft Excel wraps the text in the object.
+             Determines if Microsoft Excel wraps the layer in the object.
              <example>The following code illustrates how to access WrapText property:
              <code>
                  <para>//Create worksheet</para>
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "This cell contains sample text";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "This cell contains sample layer";</para>
             
-                 <para>//Set wrap text</para>
+                 <para>//Set wrap layer</para>
                  <para>worksheet["A1"].IsWrapText = true;</para>
             
                  <para>//Save to file</para>
@@ -17176,7 +17176,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.DisplayedText">
             <summary>
-            Gets cell displayed text.
+            Gets cell displayed layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.HasConditionFormats">
@@ -17207,7 +17207,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.NumberText">
             <summary>
-            Returns cell text for number format.
+            Returns cell layer for number format.
             <example>The following code illustrates how to access NumberText property of the Range:
             <code>
                 <para>//Create worksheet</para>
@@ -17341,7 +17341,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Test";</para>
                          
                  <para>//Set row height</para>
@@ -17355,7 +17355,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.Text">
             <summary>
-            Gets / sets text of range.
+            Gets / sets layer of range.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.TimeSpanValue">
@@ -17412,7 +17412,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Test";</para>
             
                  <para>//Set alignment</para>
@@ -17556,9 +17556,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17580,9 +17580,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17605,9 +17605,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17631,9 +17631,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17657,9 +17657,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17681,9 +17681,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17706,9 +17706,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17732,9 +17732,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -17967,7 +17967,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Merged cell";</para>
             
                  <para>//Merge cells</para>
@@ -17988,7 +17988,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Merged cell";</para>
                  <para>worksheet["B1"].Text = "sample";</para>
             
@@ -18009,9 +18009,9 @@
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.XlsRange.TextPartReplace(System.String,System.String)">
             <summary>
-            Replaces cell's part text and reserve text's format.
+            Replaces cell's part layer and reserve layer's format.
             </summary>
-            <param name="oldPartValue">Part value of cell's text to search for.</param>
+            <param name="oldPartValue">Part value of cell's layer to search for.</param>
             <param name="newPartValue">The replacement value.</param>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsRange.CombinedAddress">
@@ -18029,7 +18029,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Merged cell";</para>
             
                  <para>//Merge cells</para>
@@ -18129,7 +18129,7 @@
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.XlsRange.ConvertToNumber">
             <summary>
-            Convert number that stored as text to number
+            Convert number that stored as layer to number
             </summary>
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.XlsRange.GetConditionFormatsStyle">
@@ -18742,7 +18742,7 @@
             <param name="firstRow">The row number of the first cell to import in.</param>
             <param name="firstColumn">The column number of the first cell to import in.</param>
             <param name="isVertical">Specifies to import data vertically or horizontally.</param>
-            <param name="isText">Specifies to import data as text or not.</param>
+            <param name="isText">Specifies to import data as layer or not.</param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.XlsWorksheet.InsertDataColumn(System.Data.DataColumn,System.Boolean,System.Int32,System.Int32)">
@@ -19113,8 +19113,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "Sample layer in cell";</para>
                  
                  <para>//Set auto fit</para>
                  <para>worksheet.AutoFitColumn(1);</para>
@@ -19159,8 +19159,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["C2"].Value = "Sample text";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["C2"].Value = "Sample layer";</para>
                          
                  <para>//Set Style</para>
                  <para>CellStyle style = workbook.Styles.Add("CustomStyle");</para>
@@ -19215,7 +19215,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet.Range["A1"].Text = "Hello";</para>
                  
                  <para>//Check the cell.Output will be true.</para>
@@ -19405,8 +19405,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "Sample layer in cell";</para>
                          
                  <para>//Set auto fit</para>
                  <para>worksheet.AutoFitColumn(1);</para>
@@ -19526,8 +19526,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["C2"].Text = "Sample text";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["C2"].Text = "Sample layer";</para>
                  <para>worksheet["C2"].Style.Font.Size = 18;</para>
                          
                  <para>//Set auto fit</para>
@@ -20179,7 +20179,7 @@
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.XlsWorksheet.SetText(System.Int32,System.Int32,System.String)">
             <summary>
-            Sets text in the specified cell.
+            Sets layer in the specified cell.
             </summary>
             <param name="iRow">One-based row index  of the cell to set value.</param>
             <param name="iColumn">One-based column index of the cell to set value.</param>
@@ -20823,7 +20823,7 @@
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsConditionalFormat.Text">
             <summary>
-            The text value in a "text contains" conditional formatting rule. 
+            The layer value in a "layer contains" conditional formatting rule. 
             Valid only for FormatType = containsText, notContainsText, beginsWith and endsWith.
             The default value is null.
             </summary>
@@ -21165,7 +21165,7 @@
         </member>
         <member name="M:Spire.Xls.Core.IShapes.AddLine(System.Drawing.Point,System.Drawing.Point,Spire.Xls.LineShapeType)">
             <summary>
-            Adds new text line to the collection.
+            Adds new layer line to the collection.
             </summary>
             <param name="startPoint">startPoint</param>
             <param name="endPoint">endPoint</param>
@@ -22297,7 +22297,7 @@
                  <para>//Set chart category axis</para>
                  <para>IChartAxis chartAxis =  chart.PrimaryCategoryAxis;</para>
                  
-                 <para>//Set text rotation angle</para>
+                 <para>//Set layer rotation angle</para>
                  <para>chartAxis.TextRotationAngle = 90;</para>
                  
                  <para>//Save to file</para>
@@ -22308,7 +22308,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IChartAxis.TitleArea">
              <summary>
-             Returns text area for the axis title. Read-only.
+             Returns layer area for the axis title. Read-only.
              <example>The following code illustrates how to set foreground color to 
              IChart.PrimaryCategoryAxis's title area using TitleArea property:
              <code>
@@ -22348,7 +22348,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IChartAxis.Font">
              <summary>
-             Returns font used for axis text displaying. Read-only.
+             Returns font used for axis layer displaying. Read-only.
              <example>The following code illustrates how to set font color to the 
              IChart.PrimaryCategoryAxis's category labels using Font property:
              <code>
@@ -22710,7 +22710,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IChartAxis.TextDirection">
             <summary>
-            axis's text direction
+            axis's layer direction
             </summary>
         </member>
         <member name="T:Spire.Xls.Core.IChartBorder">
@@ -24908,7 +24908,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IChartLegend.TextArea">
             <summary>
-            Return text area of legend.
+            Return layer area of legend.
             <example>The following code illustrates use of TextArea property:
             <code>
                 <para>//Create worksheet</para>
@@ -24923,7 +24923,7 @@
                 <para>//Set chart type</para>
                 <para>chart.ChartType = ExcelChartType.Cone3DClustered;</para>
                 
-                <para>//Set text area for the legend</para>
+                <para>//Set layer area for the legend</para>
                 <para>chart.Legend.TextArea.Color = Color.Gray;</para>
                 <para>chart.Legend.TextArea.Size = 10;</para>
                 <para>chart.Legend.TextArea.FontName = "Bernard MT Condensed";</para>
@@ -25260,7 +25260,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IChartLegendEntry.TextArea">
             <summary>
-            Represents text area.
+            Represents layer area.
             <example>The following code illustrates use of TextArea property:
             <code>
                 <para>//Create worksheet</para>
@@ -26512,7 +26512,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IChartTextArea.Text">
             <summary>
-            Area's text.Some items(such as legend,axis...) maybe invalid.
+            Area's layer.Some items(such as legend,axis...) maybe invalid.
             <example>The following code illustrates the use of Text property:
             <code>
                 <para>//Create worksheet</para>
@@ -26529,7 +26529,7 @@
                 <para>//Set chart type</para>
                 <para>chart.ChartType = ExcelChartType.Cone3DClustered;</para>
                 
-                <para>//Set the Area's text in the chart</para>
+                <para>//Set the Area's layer in the chart</para>
                 <para>chart.ChartTitleArea.Text = "Student Chart";</para>
                 
                 <para>//Save to file</para>
@@ -26557,7 +26557,7 @@
                 <para>//Set chart type</para>
                 <para>chart.ChartType = ExcelChartType.Cone3DClustered;</para>
                 
-                <para>//Set the Area's text in the chart</para>
+                <para>//Set the Area's layer in the chart</para>
                 <para>chart.ChartTitleArea.Text = "Student Chart";</para>
                 
                 <para>//Set the Text rotation angle</para>
@@ -26571,7 +26571,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IChartTextArea.FrameFormat">
             <summary>
-            Return format of the text area.
+            Return format of the layer area.
             <example>The following code illustrates the use of FrameFormat property:
             <code>
                 <para>//Create worksheet</para>
@@ -26588,7 +26588,7 @@
                 <para>//Set chart type</para>
                 <para>chart.ChartType = ExcelChartType.Cone3DClustered;</para>
                 
-                <para>//Get the formatting options of the chart for text area</para>
+                <para>//Get the formatting options of the chart for layer area</para>
                 <para>chart.ChartTitleArea.Text = "Student Chart";</para>
                 <para>chart.ChartTitleArea.FrameFormat.Border.Color = Color.Brown;</para>
                 <para>chart.ChartTitleArea.FrameFormat.Interior.Pattern = ExcelPatternType.Percent25;</para>
@@ -26618,7 +26618,7 @@
                 <para>//Set chart type</para>
                 <para>chart.ChartType = ExcelChartType.Cone3DClustered;</para>
                 
-                <para>//Set the Area's text in the chart</para>
+                <para>//Set the Area's layer in the chart</para>
                 <para>chart.ChartTitleArea.Text = "Student Chart";</para>
                 
                 <para>//Set the Display mode of the background</para>
@@ -26649,7 +26649,7 @@
                 <para>//Set chart type</para>
                 <para>chart.ChartType = ExcelChartType.Cone3DClustered;</para>
                 
-                <para>//Set the Area's text in the chart</para>
+                <para>//Set the Area's layer in the chart</para>
                 <para>chart.ChartTitleArea.Text = "Student Chart";</para>
                 
                 <para>//True if background is set to automatic</para>
@@ -27055,7 +27055,7 @@
         <member name="P:Spire.Xls.Core.IChartTrendLine.DataLabel">
             <summary>
             Returns data label. Read only.
-            <example>The following code illustrates how to enable and set IChartTextArea text for 
+            <example>The following code illustrates how to enable and set IChartTextArea layer for 
             IChartTrendLine object:
             <code>
                 <para>//Create worksheet</para>
@@ -27075,7 +27075,7 @@
                 <para>//Enable trendline data label by DisplayRSquared</para>
                 <para>trendline.DisplayRSquared = true;</para>
                 
-                <para>//Set data label text</para>
+                <para>//Set data label layer</para>
                 <para>trendline.DataLabel.Text = "y=10*x";</para>
                 
                 <para>//Save to file</para>
@@ -28272,7 +28272,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
                          
                  <para>//Set borders</para>
@@ -28308,7 +28308,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text. The content contained by ![CDATA[]] will be expressed as plain text</para>
+                 <para>//Set layer. The content contained by ![CDATA[]] will be expressed as plain layer</para>
                  <para>List<![CDATA[CellRange]]> cells = worksheet["A1:E8"].CellList;</para>
                          
                  <para>//Do some manipulations</para>
@@ -28356,7 +28356,7 @@
                 <para>Worksheet worksheet = workbook.Worksheets[0];</para>
                 
                 <para>//Set the ColumnWidth</para>
-                <para>worksheet["A1"].Text = "This cell contains sample text";</para>
+                <para>worksheet["A1"].Text = "This cell contains sample layer";</para>
                 <para>worksheet["A1"].ColumnWidth = 25;</para>
                 
                 <para>//Save to file</para>
@@ -28594,7 +28594,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IXLSRange.HasRichText">
              <summary>
-             Indicates whether cell contains formatted rich text string.
+             Indicates whether cell contains formatted rich layer string.
              <example>The following code illustrates how to access HasRichText property:
              <code>
                  <para>//Create worksheet</para>
@@ -28604,7 +28604,7 @@
                  <para>//Create style</para>
                  <para>IStyle style = workbook.Styles.Add("CustomStyle");</para>
                          
-                 <para>//Set rich text</para>
+                 <para>//Set rich layer</para>
                  <para>IRichTextString richText = worksheet["C2"].RichText;</para>
                  <para>richText.Text = "Sample";</para>
                  <para>IFont font = style.Font;</para>
@@ -28661,7 +28661,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Test";</para>
                          
                  <para>//Set alignment</para>
@@ -28683,7 +28683,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
                          
                  <para>//Set indent level</para>
@@ -28781,7 +28781,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Test";</para>
                          
                  <para>//Set row height</para>
@@ -28849,7 +28849,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
                          
                  <para>//Add and set style</para>
@@ -28962,7 +28962,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Test";</para>
             
                  <para>//Set alignment</para>
@@ -29080,8 +29080,8 @@
         </member>
         <member name="P:Spire.Xls.Core.IXLSRange.RichText">
              <summary>
-             String with rich text formatting. Read-only.
-             <example>The following code illustrates how to set rich text formatting in the range:
+             String with rich layer formatting. Read-only.
+             <example>The following code illustrates how to set rich layer formatting in the range:
              <code>
                  <para>//Create worksheet</para>
                  <para>Workbook workbook = new Workbook();</para>
@@ -29090,11 +29090,11 @@
                  <para>//Create style</para>
                  <para>IStyle style = workbook.Styles.Add("CustomStyle");</para>
             
-                 <para>//Set rich text</para>
+                 <para>//Set rich layer</para>
                  <para>IRichTextString richText = worksheet["C2"].RichText;</para>
-                 <para>richText.Text = "Sample text";</para>
+                 <para>richText.Text = "Sample layer";</para>
             
-                 <para>//Set rich text font</para>
+                 <para>//Set rich layer font</para>
                  <para>IFont font = style.Font;</para>
                  <para>font.IsBold = true;</para>
                  <para>richText.SetFont(0, 5, font);</para>
@@ -29119,8 +29119,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "Sample layer in cell";</para>
             
                  <para>//Set merge</para>
                  <para>worksheet["A1:B1"].Merge();</para>
@@ -29142,8 +29142,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["C2"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["C2"].Text = "Sample layer in cell";</para>
             
                  <para>//Set merge</para>
                  <para>worksheet["C2:D3"].Merge();</para>
@@ -29156,7 +29156,7 @@
         </member>
         <member name="P:Spire.Xls.Core.IXLSRange.IsWrapText">
              <summary>
-             True if Microsoft Excel wraps the text in the object.
+             True if Microsoft Excel wraps the layer in the object.
              Read/write Boolean.
              <example>The following code illustrates how to access WrapText property:
              <code>
@@ -29164,10 +29164,10 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "This cell contains sample text";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "This cell contains sample layer";</para>
             
-                 <para>//Set wrap text</para>
+                 <para>//Set wrap layer</para>
                  <para>worksheet["A1"].IsWrapText = true;</para>
             
                  <para>//Save to file</para>
@@ -29200,7 +29200,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
             
                  <para>//Set built in style</para>
@@ -29247,7 +29247,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Merged cell";</para>
             
                  <para>//Merge cells</para>
@@ -29268,7 +29268,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Merged cell";</para>
                  <para>worksheet["B1"].Text = "sample";</para>
             
@@ -29291,7 +29291,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["A1"].Text = "Merged cell";</para>
             
                  <para>//Merge cells</para>
@@ -29478,9 +29478,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29502,9 +29502,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29527,9 +29527,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29553,9 +29553,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29579,9 +29579,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29603,9 +29603,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29628,9 +29628,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29654,9 +29654,9 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
-                 <para>worksheet["D2"].Text = "text";</para>
+                 <para>worksheet["D2"].Text = "layer";</para>
                  <para>worksheet["C3"].Text = "in";</para>
                  <para>worksheet["D3"].Text = "cell";</para>
             
@@ -29997,7 +29997,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["B2"].Text = "Text";</para>
                          
                  <para>//Set standard font</para>
@@ -30021,7 +30021,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["B2"].Text = "Text";</para>
                          
                  <para>//Set standard font</para>
@@ -30357,7 +30357,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>IRichTextString richText = worksheet["B2"].RichText;</para>
                  
                  <para>//Create font</para>
@@ -30366,7 +30366,7 @@
                  <para>//Set color</para>
                  <para>font.Color = Color.Red;</para>
                  
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>richText.Text = "Sample";</para>
                  
                  <para>//Set font</para>
@@ -30966,7 +30966,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["B2"].Text = "Text";</para>
                          
                  <para>//Set Color</para>
@@ -31113,7 +31113,7 @@
                  <para>ICommentShape comment1 = worksheet.Range["A1"].AddComment();</para>
                  <para>ICommentShape comment2 = worksheet.Range["B1"].AddComment();</para>
                          
-                 <para>//Set comment text</para>
+                 <para>//Set comment layer</para>
                  <para>comment1.Text = "Comment1";</para>
                  <para>comment2.Text = "Comment2";</para>
                  
@@ -31271,7 +31271,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet.Range["A1"].Text = "Hello";</para>
                  
                  <para>//Check the cell.Output will be true.</para>
@@ -31828,8 +31828,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["C2"].Value = "Sample text";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["C2"].Value = "Sample layer";</para>
                          
                  <para>//Set Style</para>
                  <para>CellStyle style = workbook.Styles.Add("CustomStyle");</para>
@@ -31856,8 +31856,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "Sample layer in cell";</para>
                  
                  <para>//Set auto fit</para>
                  <para>worksheet.AutoFitColumn(1);</para>
@@ -32137,8 +32137,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["A1"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["A1"].Text = "Sample layer in cell";</para>
                          
                  <para>//Set auto fit</para>
                  <para>worksheet.AutoFitColumn(1);</para>
@@ -32164,8 +32164,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["C2"].Text = "Sample text";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["C2"].Text = "Sample layer";</para>
                  <para>worksheet["C2"].Style.Font.Size = 18;</para>
                          
                  <para>//Set auto fit</para>
@@ -32422,7 +32422,7 @@
         </member>
         <member name="M:Spire.Xls.Core.IWorksheet.SetText(System.Int32,System.Int32,System.String)">
             <summary>
-            Sets text in the specified cell.
+            Sets layer in the specified cell.
             </summary>
             <param name="iRow">One-based row index  of the cell to set value.</param>
             <param name="iColumn">One-based column index of the cell to set value.</param>
@@ -32892,12 +32892,12 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartCategoryAxis.Font">
             <summary>
-            Gets font used for axis text displaying.
+            Gets font used for axis layer displaying.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartCategoryAxis.TitleArea">
             <summary>
-            Returns text area for the axis title. Read-only.
+            Returns layer area for the axis title. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartCategoryAxis.MajorGridLines">
@@ -32917,7 +32917,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartDataLabels.TextArea">
             <summary>
-            Gets or sets text area.
+            Gets or sets layer area.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartDataPoint.DataFormat">
@@ -32957,7 +32957,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartLegend.TextArea">
             <summary>
-            Return text area of legend.
+            Return layer area of legend.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartLegend.LegendEntries">
@@ -32967,7 +32967,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartLegendEntry.TextArea">
             <summary>
-            Returns text area. Read-only.
+            Returns layer area. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartPlotArea.Interior">
@@ -33017,7 +33017,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartSeriesAxis.Font">
             <summary>
-            Returns font used for axis text displaying. Read-only.
+            Returns font used for axis layer displaying. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartSeriesAxis.MajorGridLines">
@@ -33032,7 +33032,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartSeriesAxis.TitleArea">
             <summary>
-            Returns text area for the axis title. Read-only.
+            Returns layer area for the axis title. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartTextArea.OColor">
@@ -33082,7 +33082,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartTextArea.NumberFormat">
             <summary>
-            Gets or sets number format for the text area.
+            Gets or sets number format for the layer area.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartTextArea.HasDataLabels">
@@ -33097,7 +33097,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartTextArea.IsTrend">
             <summary>
-            Indicates if current text assign to trend object.
+            Indicates if current layer assign to trend object.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartTextArea.NumberFormatIndex">
@@ -33112,7 +33112,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartValueAxis.Font">
             <summary>
-            Returns font used for axis text displaying. Read-only.
+            Returns font used for axis layer displaying. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartValueAxis.MajorGridLines">
@@ -33127,7 +33127,7 @@
         </member>
         <member name="P:Spire.Xls.Charts.ChartValueAxis.TitleArea">
             <summary>
-            Returns text area for the axis title. Read-only.
+            Returns layer area for the axis title. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Charts.ChartDataPointsCollection.DefaultDataPoint">
@@ -33347,7 +33347,7 @@
         </member>
         <member name="P:Spire.Xls.Collections.RangesCollection.RichText">
             <summary>
-            Returns a RichTextString object that represents the rich text style.
+            Returns a RichTextString object that represents the rich layer style.
             </summary>
         </member>
         <member name="P:Spire.Xls.Collections.RangesCollection.Style">
@@ -34388,7 +34388,7 @@
         </member>
         <member name="P:Spire.Xls.Chart.ChartTitleArea">
             <summary>
-            Gets title text area. Read-only.
+            Gets title layer area. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Chart.ChartArea">
@@ -34632,7 +34632,7 @@
         </member>
         <member name="P:Spire.Xls.ChartSheet.ChartTitleArea">
             <summary>
-            Gets title text area. Read-only.
+            Gets title layer area. Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.ChartSheet.ChartArea">
@@ -35092,7 +35092,7 @@
         </member>
         <member name="P:Spire.Xls.ExcelComment.RichText">
             <summary>
-            Comment rich text.
+            Comment rich layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.ExcelCommentObject.Author">
@@ -35122,13 +35122,13 @@
         </member>
         <member name="P:Spire.Xls.ExcelCommentObject.Text">
             <summary>
-            Comment text
+            Comment layer
             </summary>
         </member>
         <member name="P:Spire.Xls.ExcelCommentObject.AutoSize">
             <summary>
             Indicates whether the size of the specified object is changed automatically
-            to fit text within its boundaries. Read/write Boolean.
+            to fit layer within its boundaries. Read/write Boolean.
             </summary>
         </member>
         <member name="P:Spire.Xls.ExcelCommentObject.ResizeBehave">
@@ -35168,7 +35168,7 @@
         </member>
         <member name="P:Spire.Xls.ExcelCommentObject.AlternativeText">
             <summary>
-            Alternative text.
+            Alternative layer.
             </summary>
         </member>
         <member name="P:Spire.Xls.ExcelCommentObject.Rotation">
@@ -35492,7 +35492,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
                          
                  <para>//Set borders</para>
@@ -35521,7 +35521,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["C2"].Text = "Sample";</para>
                          
                  <para>//Add and set style</para>
@@ -35549,7 +35549,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text. The content contained by ![CDATA[]] will be expressed as plain text</para>
+                 <para>//Set layer. The content contained by ![CDATA[]] will be expressed as plain layer</para>
                  <para>List<![CDATA[CellRange]]> cells = worksheet["A1:E8"].CellList;</para>
                          
                  <para>//Do some manipulations</para>
@@ -35676,8 +35676,8 @@
         </member>
         <member name="P:Spire.Xls.CellRange.RichText">
              <summary>
-             Returns a RichTextString object that represents the rich text style.
-             <example>The following code illustrates how to set rich text formatting in the range:
+             Returns a RichTextString object that represents the rich layer style.
+             <example>The following code illustrates how to set rich layer formatting in the range:
              <code>
                  <para>//Create worksheet</para>
                  <para>Workbook workbook = new Workbook();</para>
@@ -35686,11 +35686,11 @@
                  <para>//Create style</para>
                  <para>IStyle style = workbook.Styles.Add("CustomStyle");</para>
             
-                 <para>//Set rich text</para>
+                 <para>//Set rich layer</para>
                  <para>IRichTextString richText = worksheet["C2"].RichText;</para>
-                 <para>richText.Text = "Sample text";</para>
+                 <para>richText.Text = "Sample layer";</para>
             
-                 <para>//Set rich text font</para>
+                 <para>//Set rich layer font</para>
                  <para>IFont font = style.Font;</para>
                  <para>font.IsBold = true;</para>
                  <para>richText.SetFont(0, 5, font);</para>
@@ -35722,8 +35722,8 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
-                 <para>worksheet["C2"].Text = "Sample text in cell";</para>
+                 <para>//Set layer</para>
+                 <para>worksheet["C2"].Text = "Sample layer in cell";</para>
             
                  <para>//Set merge</para>
                  <para>worksheet["C2:D3"].Merge();</para>
@@ -35756,7 +35756,7 @@
         </member>
         <member name="P:Spire.Xls.CellStyleObject.JustifyLast">
             <summary>
-            Represents justify text alignment
+            Represents justify layer alignment
             </summary>
         </member>
         <member name="P:Spire.Xls.CellStyleObject.NumberFormatLocal">
@@ -35863,12 +35863,12 @@
         </member>
         <member name="P:Spire.Xls.CellStyleObject.Rotation">
             <summary>
-            The text orientation. Can be an integer value from 1 to 180 degrees
+            The layer orientation. Can be an integer value from 1 to 180 degrees
             </summary>
         </member>
         <member name="P:Spire.Xls.CellStyleObject.ShrinkToFit">
             <summary>
-            True if text automatically shrinks to fit in the available column width.
+            True if layer automatically shrinks to fit in the available column width.
             </summary>
         </member>
         <member name="P:Spire.Xls.CellStyleObject.VerticalAlignment">
@@ -35878,7 +35878,7 @@
         </member>
         <member name="P:Spire.Xls.CellStyleObject.WrapText">
             <summary>
-            True if Microsoft Excel wraps the text in the object.
+            True if Microsoft Excel wraps the layer in the object.
             </summary>
         </member>
         <member name="P:Spire.Xls.CellStyleObject.ReadingOrder">
@@ -36691,7 +36691,7 @@
         </member>
         <member name="F:Spire.Xls.CellFormatType.Text">
             <summary>
-            Represents text number format.
+            Represents layer number format.
             </summary>
         </member>
         <member name="F:Spire.Xls.CellFormatType.Number">
@@ -37006,27 +37006,27 @@
         </member>
         <member name="T:Spire.Xls.FontVertialAlignmentType">
             <summary>
-            Defines the possible settings for vertical alignment of a run of text.
-            This is used to get superscript or subscript text without altering the
-            font size properties of the rest of the text run.
+            Defines the possible settings for vertical alignment of a run of layer.
+            This is used to get superscript or subscript layer without altering the
+            font size properties of the rest of the layer run.
             </summary>
         </member>
         <member name="F:Spire.Xls.FontVertialAlignmentType.Baseline">
             <summary>
-            Returns the text in this run to the baseline, default,
+            Returns the layer in this run to the baseline, default,
             alignment, and returns it to the original font size.
             </summary>
         </member>
         <member name="F:Spire.Xls.FontVertialAlignmentType.Superscript">
             <summary>
-            Specifies that this text should be superscript. Raises the text in this
+            Specifies that this layer should be superscript. Raises the layer in this
             run above the baseline and changes it to a smaller size, if a smaller
             size is available.
             </summary>
         </member>
         <member name="F:Spire.Xls.FontVertialAlignmentType.Subscript">
             <summary>
-            Specifies that this text should be subscript. Lowers the text in this
+            Specifies that this layer should be subscript. Lowers the layer in this
             run below the baseline and changes it to a smaller size, if a smaller
             size is available.
             </summary>
@@ -38439,32 +38439,32 @@
         </member>
         <member name="T:Spire.Xls.TextDirection">
             <summary>
-            Represents different text direction.
+            Represents different layer direction.
             </summary>
         </member>
         <member name="F:Spire.Xls.TextDirection.Horizontal">
             <summary>
-            Represents the horizontal text direction
+            Represents the horizontal layer direction
             </summary>
         </member>
         <member name="F:Spire.Xls.TextDirection.RotateAllText90">
             <summary>
-            Rotates the text by 90 degrees
+            Rotates the layer by 90 degrees
             </summary>
         </member>
         <member name="F:Spire.Xls.TextDirection.RotateAllText270">
             <summary>
-            Rotates the text by 270 degrees
+            Rotates the layer by 270 degrees
             </summary>
         </member>
         <member name="F:Spire.Xls.TextDirection.StackedLeftToRight">
             <summary>
-            Rotates the text from left to right
+            Rotates the layer from left to right
             </summary>
         </member>
         <member name="F:Spire.Xls.TextDirection.StackedRightToLeft">
             <summary>
-            Rotates the text from right to left
+            Rotates the layer from right to left
             </summary>
         </member>
         <member name="T:Spire.Xls.FontCollectionIndex">
@@ -39274,12 +39274,12 @@
         </member>
         <member name="F:Spire.Xls.TextVerticalValue.Horizontal">
             <summary>
-            Vertical text type enum(Horizontal)
+            Vertical layer type enum(Horizontal)
             </summary>
         </member>
         <member name="F:Spire.Xls.TextVerticalValue.Vertical">
             <summary>
-            Vertical text type enum(Vertical)
+            Vertical layer type enum(Vertical)
             </summary>
         </member>
         <member name="F:Spire.Xls.TextVerticalValue.RotateAllText90">
@@ -39309,22 +39309,22 @@
         </member>
         <member name="F:Spire.Xls.TextRotationType.LeftToRight">
             <summary>
-            Represents the LeftToRight text rotation.
+            Represents the LeftToRight layer rotation.
             </summary>
         </member>
         <member name="F:Spire.Xls.TextRotationType.TopToBottom">
             <summary>
-            Represents the TopToBottom text rotation.
+            Represents the TopToBottom layer rotation.
             </summary>
         </member>
         <member name="F:Spire.Xls.TextRotationType.CounterClockwise">
             <summary>
-            Represents the CounterClockwise text rotation.
+            Represents the CounterClockwise layer rotation.
             </summary>
         </member>
         <member name="F:Spire.Xls.TextRotationType.Clockwise">
             <summary>
-            Represents the Clockwise text rotation.
+            Represents the Clockwise layer rotation.
             </summary>
         </member>
         <member name="T:Spire.Xls.CheckState">
@@ -40439,22 +40439,22 @@
         </member>
         <member name="T:Spire.Xls.AxisTextDirectionType">
             <summary>
-            Represents axis text direction.
+            Represents axis layer direction.
             </summary>
         </member>
         <member name="F:Spire.Xls.AxisTextDirectionType.Context">
             <summary>
-            Represents context text direction.
+            Represents context layer direction.
             </summary>
         </member>
         <member name="F:Spire.Xls.AxisTextDirectionType.LeftToRight">
             <summary>
-            Represents Left-To-Right text direction.
+            Represents Left-To-Right layer direction.
             </summary>
         </member>
         <member name="F:Spire.Xls.AxisTextDirectionType.RightToLeft">
             <summary>
-            Represents Right-To-Left text direction.
+            Represents Right-To-Left layer direction.
             </summary>
         </member>
         <member name="T:Spire.Xls.CategoryType">
@@ -40990,7 +40990,7 @@
         </member>
         <member name="F:Spire.Xls.ChartParagraphType.RichText">
             <summary>
-            Rich text tag
+            Rich layer tag
             </summary>
         </member>
         <member name="T:Spire.Xls.ChartPieType">
@@ -42472,7 +42472,7 @@
         </member>
         <member name="P:Spire.Xls.RichTextObject.IsFormatted">
             <summary>
-            Indicates whether rich text string contains formatting Read-only.
+            Indicates whether rich layer string contains formatting Read-only.
             </summary>
         </member>
         <member name="P:Spire.Xls.Validation.DataRange">
@@ -43043,7 +43043,7 @@
                  <para>ICommentShape comment1 = worksheet.Range["A1"].AddComment();</para>
                  <para>ICommentShape comment2 = worksheet.Range["B1"].AddComment();</para>
                          
-                 <para>//Set comment text</para>
+                 <para>//Set comment layer</para>
                  <para>comment1.Text = "Comment1";</para>
                  <para>comment2.Text = "Comment2";</para>
                  
@@ -43098,7 +43098,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["B2"].Text = "Text";</para>
                          
                  <para>//Set Color</para>
@@ -43324,7 +43324,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["B2"].Text = "Text";</para>
                          
                  <para>//Set standard font</para>
@@ -43348,7 +43348,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>worksheet["B2"].Text = "Text";</para>
                          
                  <para>//Set standard font</para>
@@ -43589,36 +43589,36 @@
         </member>
         <member name="M:Spire.Xls.Workbook.LoadFromFile(System.String,System.String)">
             <summary>
-            Loads text files stream with user defined separator. 
+            Loads layer files stream with user defined separator. 
             </summary>
             <param name="fileName">File name</param>
-            <param name="separator">Delimiter of text file. </param>
+            <param name="separator">Delimiter of layer file. </param>
         </member>
         <member name="M:Spire.Xls.Workbook.LoadFromFile(System.String,System.String,System.Int32,System.Int32)">
             <summary>
-            Loads text files with user defined separator.
+            Loads layer files with user defined separator.
             </summary>
             <param name="fileName">File name.</param>
-            <param name="separator">Delimiter of text file.</param>
+            <param name="separator">Delimiter of layer file.</param>
             <param name="row">Start row.</param>
             <param name="column">Start column.</param>
         </member>
         <member name="M:Spire.Xls.Workbook.LoadFromFile(System.String,System.String,System.Int32,System.Int32,Spire.Xls.ExcelVersion)">
             <summary>
-            Loads text files with user defined separator.
+            Loads layer files with user defined separator.
             </summary>
             <param name="fileName">File name.</param>
-            <param name="separator">Delimiter of text file.</param>
+            <param name="separator">Delimiter of layer file.</param>
             <param name="row">Start row.</param>
             <param name="column">Start column.</param>
             <param name="version">workbook version</param>
         </member>
         <member name="M:Spire.Xls.Workbook.LoadFromFile(System.String,System.String,System.Int32,System.Int32,Spire.Xls.ExcelVersion,System.Text.Encoding)">
             <summary>
-            Loads text files with user defined separator.
+            Loads layer files with user defined separator.
             </summary>
             <param name="fileName">File name.</param>
-            <param name="separator">Delimiter of text file.</param>
+            <param name="separator">Delimiter of layer file.</param>
             <param name="row">Start row.</param>
             <param name="column">Start column.</param>
             <param name="version">workbook version</param>
@@ -43646,19 +43646,19 @@
         </member>
         <member name="M:Spire.Xls.Workbook.LoadFromStream(System.IO.Stream,System.String,System.Int32,System.Int32)">
             <summary>
-            Loads text files stream with user defined separator.max row 60000.
+            Loads layer files stream with user defined separator.max row 60000.
             </summary>
             <param name="stream">File stream.</param>
-            <param name="separator">Delimiter of text file.</param>
+            <param name="separator">Delimiter of layer file.</param>
             <param name="row">Start row.</param>
             <param name="column">Start column.</param>
         </member>
         <member name="M:Spire.Xls.Workbook.LoadFromStream(System.IO.Stream,System.String,System.Int32,System.Int32,Spire.Xls.ExcelVersion)">
             <summary>
-            Loads text files stream with user defined separator. Version2007 support 60000+ row 
+            Loads layer files stream with user defined separator. Version2007 support 60000+ row 
             </summary>
             <param name="stream">File stream.</param>
-            <param name="separator">Delimiter of text file.</param>
+            <param name="separator">Delimiter of layer file.</param>
             <param name="row">Start row.</param>
             <param name="column">Start column.</param>
             <param name="version">Excel version.</param>
@@ -43799,14 +43799,14 @@
             <summary>
             Computes the string formula
             </summary>
-            <param name="text"></param>
+            <param name="layer"></param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Workbook.CalculateFormulaValue(System.String)">
             <summary>
             Computes the string formula
             </summary>
-            <param name="text"></param>
+            <param name="layer"></param>
             <returns></returns>
         </member>
         <member name="M:Spire.Xls.Workbook.CalculateAllValue">
@@ -43896,7 +43896,7 @@
                  <para>Workbook workbook = new Workbook();</para>
                  <para>Worksheet worksheet = workbook.Worksheets[0];</para>
             
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>IRichTextString richText = worksheet["B2"].RichText;</para>
                  
                  <para>//Create font</para>
@@ -43905,7 +43905,7 @@
                  <para>//Set color</para>
                  <para>font.Color = Color.Red;</para>
                  
-                 <para>//Set text</para>
+                 <para>//Set layer</para>
                  <para>richText.Text = "Sample";</para>
                  
                  <para>//Set font</para>
@@ -44729,7 +44729,7 @@
         </member>
         <member name="F:Spire.Xls.Pdf.PdfConformanceLevel.Pdf_A1A">
             <summary>
-            PDF/A-1a ensures the preservation of a document's logical structure and con-tent text stream in natural reading order. 
+            PDF/A-1a ensures the preservation of a document's logical structure and con-tent layer stream in natural reading order. 
             </summary>
         </member>
         <member name="F:Spire.Xls.Pdf.PdfConformanceLevel.Pdf_A2A">
@@ -44831,7 +44831,7 @@
         </member>
         <member name="F:Spire.Xls.Pdf.Security.PdfPermissionsFlags.EditAnnotations">
             <summary>
-            Add or modify text annotations, fill in interactive form fields.
+            Add or modify layer annotations, fill in interactive form fields.
             </summary>
         </member>
         <member name="F:Spire.Xls.Pdf.Security.PdfPermissionsFlags.FillFields">
@@ -45170,7 +45170,7 @@
         </member>
         <member name="M:Spire.Xls.Pdf.Uof.UOFTranslator.GetTitleText(System.Xml.XmlNode,System.Xml.XmlNamespaceManager)">
             <summary>
-            get the title's text
+            get the title's layer
             </summary>
             <param name="paragraphNode">a:p</param>
             <param name="nm">name sapce</param>
@@ -45457,67 +45457,67 @@
         </member>
         <member name="T:Spire.Xls.Converters.DrawingML.TextWrappingStyle">
             <summary>
-            Specify text wrapping style for object.
+            Specify layer wrapping style for object.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingStyle.Inline">
             <summary>
-            Inline text wrapping style
+            Inline layer wrapping style
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingStyle.TopAndBottom">
             <summary>
-            TopAndBottom text wrapping style
+            TopAndBottom layer wrapping style
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingStyle.Square">
             <summary>
-            Square text wrapping style
+            Square layer wrapping style
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingStyle.InFrontOfText">
             <summary>
-            No text wrapping style
+            No layer wrapping style
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingStyle.Tight">
             <summary>
-            Tight text wrapping style
+            Tight layer wrapping style
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingStyle.Through">
             <summary>
-            Through text wrapping style
+            Through layer wrapping style
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingStyle.Behind">
             <summary>
-            Behind text wrapping style
+            Behind layer wrapping style
             </summary>
         </member>
         <member name="T:Spire.Xls.Converters.DrawingML.TextWrappingType">
             <summary>
-            Specify text wrapping type for textbox.
+            Specify layer wrapping type for textbox.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingType.Both">
             <summary>
-            Wrap text both sides
+            Wrap layer both sides
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingType.Left">
             <summary>
-            Wrap text left side
+            Wrap layer left side
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingType.Right">
             <summary>
-            Wrap text right side
+            Wrap layer right side
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.TextWrappingType.Largest">
             <summary>
-            Wrap text largest
+            Wrap layer largest
             </summary>
         </member>
         <member name="T:Spire.Xls.Converters.DrawingML.RectAlignment">
@@ -45934,7 +45934,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.LockText">
             <summary>
-            Do not edit text. Default false.
+            Do not edit layer. Default false.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.LockAdjustHandles">
@@ -45967,31 +45967,31 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxLeft">
             <summary>
-            int. margins relative to shape's inscribed text rectangle (in EMUs)
+            int. margins relative to shape's inscribed layer rectangle (in EMUs)
             Default 1/10inch
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxTop">
             <summary>
-            int. margins relative to shape's inscribed text rectangle (in EMUs)
+            int. margins relative to shape's inscribed layer rectangle (in EMUs)
             Default 1/20inch
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxRight">
             <summary>
-            int. margins relative to shape's inscribed text rectangle (in EMUs)
+            int. margins relative to shape's inscribed layer rectangle (in EMUs)
             Default 1/10inch
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxBottom">
             <summary>
-            int. margins relative to shape's inscribed text rectangle (in EMUs)
+            int. margins relative to shape's inscribed layer rectangle (in EMUs)
             Default 1/20inch
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxWrapMode">
             <summary>
-            Specifies how text wraps inside the shape. 
+            Specifies how layer wraps inside the shape. 
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxZoom">
@@ -46001,7 +46001,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxAnchor">
             <summary>
-            How to anchor the text. Default Top.
+            How to anchor the layer. Default Top.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxLayoutFlow">
@@ -46050,7 +46050,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxSelectText">
             <summary>
-            TRUE if single click selects text, FALSE if two clicks. Default true.
+            TRUE if single click selects layer, FALSE if two clicks. Default true.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxAutoTextMargin">
@@ -46060,27 +46060,27 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxRotateText">
             <summary>
-            Rotate text with shape. Default false.
+            Rotate layer with shape. Default false.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxFitShapeToText">
             <summary>
-            Size shape to fit text size. Default false.
+            Size shape to fit layer size. Default false.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.TextboxFitTextToShape">
             <summary>
-            Size text to fit shape size. Default false.
+            Size layer to fit shape size. Default false.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeoTextText">
             <summary>
-            UNICODE text string
+            UNICODE layer string
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeoTextRtf">
             <summary>
-            RTF text string
+            RTF layer string
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeoTextAlign">
@@ -46114,15 +46114,15 @@
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeoTextReverseRows">
             <summary>
             bool. Reverse row order. 
-            By default multiple rows of text are laid out with the first at the top for horizontal 
-            text and with the first at the left for vertical text, this flag reverses that behavior 
+            By default multiple rows of layer are laid out with the first at the top for horizontal 
+            layer and with the first at the left for vertical layer, this flag reverses that behavior 
             (bottom to top or right to left).
             Default false.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeoTextOn">
             <summary>
-            bool. True if the text effect properties (gtext*) are used. 
+            bool. True if the layer effect properties (gtext*) are used. 
             False if these properties are ignored.
             </summary>
         </member>
@@ -46153,7 +46153,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeoTextBestFit">
             <summary>
-            bool. Scale text-on-path
+            bool. Scale layer-on-path
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeoTextNormalize">
@@ -46416,7 +46416,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeometryPathTextBoxRects">
             <summary>
-            This property specifies an array of rectangles specifying how text should be inscribed 
+            This property specifies an array of rectangles specifying how layer should be inscribed 
             within this shape.
             2.3.6.28 pInscribe in the DOC SPEC.
             Array of <see cref="!:PathRectangle"/>. Corresponds to path.textboxrect in VML.
@@ -46448,7 +46448,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.GeometryGTextOK">
             <summary>
-            A bit that specifies whether to display the text aligned to this shape. 
+            A bit that specifies whether to display the layer aligned to this shape. 
             Default false.
             </summary>
         </member>
@@ -47555,7 +47555,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.CalloutTextBorder">
             <summary>
-            Bool. does callout have a text border
+            Bool. does callout have a layer border
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.CalloutMinusX">
@@ -47592,7 +47592,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.ShapeDescription">
             <summary>
-            Alternative text.
+            Alternative layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.HyperlinkAddress">
@@ -47603,28 +47603,28 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.WrapPolygonVertices">
             <summary>
-            Array of <see cref="!:PathPoint"/>. The polygon that text will be wrapped around (Word).
+            Array of <see cref="!:PathPoint"/>. The polygon that layer will be wrapped around (Word).
             In the DOC file this is actually just normal POINT array, but it is simpler for us to work with PathPoint.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DistanceLeft">
             <summary>
-            Left wrapping distance from text. Default 1/8 inch. EMUs.
+            Left wrapping distance from layer. Default 1/8 inch. EMUs.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DistanceTop">
             <summary>
-            Top wrapping distance from text. Default 0. EMUs.
+            Top wrapping distance from layer. Default 0. EMUs.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DistanceRight">
             <summary>
-            Right wrapping distance from text. Default 1/8 inch. EMUs.
+            Right wrapping distance from layer. Default 1/8 inch. EMUs.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DistanceBottom">
             <summary>
-            Bottom wrapping distance from text. Default 0. EMUs in Escher.
+            Bottom wrapping distance from layer. Default 0. EMUs in Escher.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.RegroupId">
@@ -47705,7 +47705,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.ScriptType">
             <summary>
-            String. Looks like "mime" type of the script. I've seen a value " type="text/javascript"".
+            String. Looks like "mime" type of the script. I've seen a value " type="layer/javascript"".
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.ScriptLanguage">
@@ -47816,7 +47816,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.BehindText">
             <summary>
-            Word-only (shape is behind text), default false.
+            Word-only (shape is behind layer), default false.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.OnDblClickNotify">
@@ -47881,7 +47881,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DiagramFontSize">
             <summary>
-            Int. Specifies the font size in points of text for new nodes in a diagram.
+            Int. Specifies the font size in points of layer for new nodes in a diagram.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DiagramConstrainBounds">
@@ -47891,8 +47891,8 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DiagramBaseTextScale">
             <summary>
-            This property specifies the amount to scale text. This property MAY be ignored.
-            A FixedPoint, as specified in [MS-OSHARED] section 2.2.1.6, that specifies the amount to scale text.
+            This property specifies the amount to scale layer. This property MAY be ignored.
+            A FixedPoint, as specified in [MS-OSHARED] section 2.2.1.6, that specifies the amount to scale layer.
             </summary>
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.DiagramAutoFormat">

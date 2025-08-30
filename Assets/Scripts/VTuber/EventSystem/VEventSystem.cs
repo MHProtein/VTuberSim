@@ -198,9 +198,12 @@ namespace VTuber.EventSystem
             }
             else if (_shouldEnterStore)
             {
-                storeObject.SetActive(true);
-                _store.EnterStore(_character);
-                _shouldEnterStore = false;
+                VEventSystemUI.Instance.PlayVideo(() =>
+                {
+                    storeObject.SetActive(true);
+                    _store.EnterStore(_character);
+                    _shouldEnterStore = false;
+                });
             }
             else
             {

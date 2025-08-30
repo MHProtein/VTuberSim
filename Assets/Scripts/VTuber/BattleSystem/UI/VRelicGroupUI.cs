@@ -22,7 +22,6 @@ namespace VTuber.BattleSystem.UI
 
         private List<VRelicSlotUI> displayingRelics;
         private List<VRelicSlotUI> hiddenRelics;
-
         private readonly VAnimationQueue _animationQueue = new VAnimationQueue();
 
         private GameObject _ellipsisObject;

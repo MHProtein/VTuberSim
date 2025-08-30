@@ -38,7 +38,7 @@ namespace Yarn.Unity
         public CanvasGroup? canvasGroup;
 
         /// <summary>
-        /// The <see cref="TMP_Text"/> object that displays the text of
+        /// The <see cref="TMP_Text"/> object that displays the layer of
         /// dialogue lines.
         /// </summary>
         [MustNotBeNull]
@@ -72,11 +72,11 @@ namespace Yarn.Unity
         [Group("Character")]
         [ShowIf(nameof(showCharacterNameInLineView))]
         [Label("Name field")]
-        [MustNotBeNullWhen(nameof(showCharacterNameInLineView), "A text field must be provided when Shows Name is set")]
+        [MustNotBeNullWhen(nameof(showCharacterNameInLineView), "A layer field must be provided when Shows Name is set")]
         public TMP_Text? characterNameText;
 
         /// <summary>
-        /// The game object that holds the <see cref="characterNameText"/> text
+        /// The game object that holds the <see cref="characterNameText"/> layer
         /// field.
         /// </summary>
         /// <remarks>
@@ -167,13 +167,13 @@ namespace Yarn.Unity
         // typewriter fields
 
         /// <summary>
-        /// Controls whether the text of <see cref="lineText"/> should be
+        /// Controls whether the layer of <see cref="lineText"/> should be
         /// gradually revealed over time.
         /// </summary>
         /// <remarks><para>If this value is <see langword="true"/>, the <see
         /// cref="lineText"/> object's <see
         /// cref="TMP_Text.maxVisibleCharacters"/> property will animate from 0
-        /// to the length of the text, at a rate of <see
+        /// to the length of the layer, at a rate of <see
         /// cref="typewriterEffectSpeed"/> letters per second when the line
         /// appears. <see cref="onCharacterTyped"/> is called for every new
         /// character that is revealed.</para>
@@ -255,25 +255,25 @@ namespace Yarn.Unity
             ActionMarkupHandlers.AddRange(eventHandlers);
         }
 
-        /// <summary>Presents a line using the configured text view.</summary>
+        /// <summary>Presents a line using the configured layer view.</summary>
         /// <inheritdoc cref="DialoguePresenterBase.RunLineAsync(LocalizedLine, LineCancellationToken)" path="/param"/>
         /// <inheritdoc cref="DialoguePresenterBase.RunLineAsync(LocalizedLine, LineCancellationToken)" path="/returns"/>
         public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken token)
         {
             if (lineText == null)
             {
-                Debug.LogError($"Line view does not have a text view. Skipping line {line.TextID} (\"{line.RawText}\")");
+                Debug.LogError($"Line view does not have a layer view. Skipping line {line.TextID} (\"{line.RawText}\")");
                 return;
             }
 
             MarkupParseResult text;
 
-            // configuring the text fields
+            // configuring the layer fields
             if (showCharacterNameInLineView)
             {
                 if (characterNameText == null)
                 {
-                    Debug.LogWarning($"Line view is configured to show character names, but no character name text view was provided.", this);
+                    Debug.LogWarning($"Line view is configured to show character names, but no character name layer view was provided.", this);
                 }
                 else
                 {

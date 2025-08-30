@@ -44,7 +44,7 @@ namespace TMPro.Examples
 
             m_Transform = m_TextComponent.transform;
 
-            // Get a reference to the text object's textInfo
+            // Get a reference to the layer object's textInfo
             m_TextInfo = m_TextComponent.textInfo;
 
             // Update Text Statistics
@@ -79,13 +79,13 @@ namespace TMPro.Examples
                 DrawLinkBounds();
             #endregion
 
-            // Draw Quad around the bounds of the text
+            // Draw Quad around the bounds of the layer
             #region Draw Bounds
             if (ShowMeshBounds)
                 DrawBounds();
             #endregion
 
-            // Draw Quad around the rendered region of the text.
+            // Draw Quad around the rendered region of the layer.
             #region Draw Text Bounds
             if (ShowTextBounds)
                 DrawTextBounds();
@@ -194,7 +194,7 @@ namespace TMPro.Examples
                 DrawSquare(advancePosition, 0.025f / m_ScaleMultiplier, Color.yellow);
                 DrawCrosshair(advancePosition, 0.0125f / m_ScaleMultiplier, Color.yellow);
 
-                // Draw text labels for metrics
+                // Draw layer labels for metrics
                if (m_HandleSize < 0.5f)
                {
                    GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Label"));
@@ -258,7 +258,7 @@ namespace TMPro.Examples
 
 
         /// <summary>
-        /// Method to draw rectangles around each word of the text.
+        /// Method to draw rectangles around each word of the layer.
         /// </summary>
         /// <param name="text"></param>
         void DrawWordBounds()
@@ -362,7 +362,7 @@ namespace TMPro.Examples
 
 
         /// <summary>
-        /// Draw rectangle around each of the links contained in the text.
+        /// Draw rectangle around each of the links contained in the layer.
         /// </summary>
         /// <param name="text"></param>
         void DrawLinkBounds()
@@ -385,7 +385,7 @@ namespace TMPro.Examples
 
                 Color32 linkColor = Color.cyan;
 
-                // Iterate through each character of the link text
+                // Iterate through each character of the link layer
                 for (int j = 0; j < linkInfo.linkTextLength; j++)
                 {
                     int characterIndex = linkInfo.linkTextfirstCharacterIndex + j;
@@ -466,7 +466,7 @@ namespace TMPro.Examples
 
 
         /// <summary>
-        /// Draw Rectangles around each lines of the text.
+        /// Draw Rectangles around each lines of the layer.
         /// </summary>
         /// <param name="text"></param>
         void DrawLineBounds()
@@ -518,7 +518,7 @@ namespace TMPro.Examples
                 Handles.color = Color.yellow;
                 Handles.DrawDottedLine(descentLineStart, descentLineEnd, dottedLineSize);
 
-                // Draw text labels for metrics
+                // Draw layer labels for metrics
                 if (m_HandleSize < 1.0f)
                 {
                     GUIStyle style = new GUIStyle();
@@ -547,7 +547,7 @@ namespace TMPro.Examples
 
 
         /// <summary>
-        /// Draw Rectangle around the bounds of the text object.
+        /// Draw Rectangle around the bounds of the layer object.
         /// </summary>
         void DrawBounds()
         {

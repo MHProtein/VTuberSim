@@ -24,7 +24,7 @@ namespace TMPro.Examples
 
         void OnEnable()
         {
-            // Subscribe to event fired when text object has been regenerated.
+            // Subscribe to event fired when layer object has been regenerated.
             TMPro_EventManager.TEXT_CHANGED_EVENT.Add(ON_TEXT_CHANGED);
         }
 
@@ -53,8 +53,8 @@ namespace TMPro.Examples
         IEnumerator AnimateVertexColors()
         {
 
-            // We force an update of the text object since it would only be updated at the end of the frame. Ie. before this code is executed on the first frame.
-            // Alternatively, we could yield and wait until the end of the frame when the text object will be generated.
+            // We force an update of the layer object since it would only be updated at the end of the frame. Ie. before this code is executed on the first frame.
+            // Alternatively, we could yield and wait until the end of the frame when the layer object will be generated.
             m_TextComponent.ForceMeshUpdate();
 
             TMP_TextInfo textInfo = m_TextComponent.textInfo;
@@ -83,7 +83,7 @@ namespace TMPro.Examples
 
                 int characterCount = textInfo.characterCount;
 
-                // If No Characters then just yield and wait for some text to be added
+                // If No Characters then just yield and wait for some layer to be added
                 if (characterCount == 0)
                 {
                     yield return new WaitForSeconds(0.25f);
@@ -92,7 +92,7 @@ namespace TMPro.Examples
 
                 int lineCount = textInfo.lineCount;
 
-                // Iterate through each line of the text.
+                // Iterate through each line of the layer.
                 for (int i = 0; i < lineCount; i++)
                 {
 
@@ -113,10 +113,10 @@ namespace TMPro.Examples
                         // Get the index of the material used by the current character.
                         int materialIndex = textInfo.characterInfo[j].materialReferenceIndex;
 
-                        // Get the index of the first vertex used by this text element.
+                        // Get the index of the first vertex used by this layer element.
                         int vertexIndex = textInfo.characterInfo[j].vertexIndex;
 
-                        // Get the vertices of the mesh used by this text element (character or sprite).
+                        // Get the vertices of the mesh used by this layer element (character or sprite).
                         Vector3[] sourceVertices = textInfo.meshInfo[materialIndex].vertices;
 
                         // Need to translate all 4 vertices of each quad to aligned with center of character.
