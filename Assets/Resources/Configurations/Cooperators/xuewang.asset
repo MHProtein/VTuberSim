@@ -28,24 +28,24 @@ MonoBehaviour:
   baseCoopEvent: 24
   _coopLevels:
   - from: 0
-    to: 25
+    to: 24
     levelName: "\u719F\u6089"
     levelIndex: 0
     eventType: 2
     upgradeEventID: 36
-  - from: 26
-    to: 50
+  - from: 25
+    to: 49
     levelName: "\u597D\u53CB"
     levelIndex: 1
     eventType: 2
     upgradeEventID: 37
-  - from: 51
-    to: 75
+  - from: 50
+    to: 74
     levelName: "\u631A\u53CB"
     levelIndex: 2
     eventType: 2
     upgradeEventID: 38
-  - from: 76
+  - from: 75
     to: 100
     levelName: "\u66A7\u6627"
     levelIndex: 3
