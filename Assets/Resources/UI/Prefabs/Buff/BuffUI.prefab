@@ -361,4 +361,5 @@ MonoBehaviour:
   id: 0
   isPermanent: 0
   layer: {fileID: 7820898563565316685}
+  icon: {fileID: 8768151929970311857}
   nameText: {fileID: 577985667179250264}

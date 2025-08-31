@@ -26,7 +26,12 @@ namespace VTuber.CoopSystem.UI
         [SerializeField] private RectTransform slotShowPos;
         [SerializeField] private Button showHideButton;
         [SerializeField] private RectTransform showHideSymbol;
-        
+
+        [Space(5)] [SerializeField] private Transform creationLevelPosition;
+        [SerializeField] private Transform executionLevelPosition;
+        [SerializeField] private Transform levelTransform;
+        [SerializeField] private float creationLevelScale;
+        [SerializeField] private float executionLevelScale;
         
         public VCooperator Cooperator => _cooperator;
         private VCooperator _cooperator;
@@ -97,12 +102,23 @@ namespace VTuber.CoopSystem.UI
             ShowSlot();
         }
         
-        public void ClearUpgradeEvent()
+        public void OnFinishScheduleCreationOrModification()
         {
+            creatorSlot.gameObject.SetActive(false);
+            Tween.Scale(levelTransform, Vector3.one * executionLevelScale, 0.3f);
+            Tween.Position(levelTransform, executionLevelPosition.position, 0.3f);
+            
             showHideButton.gameObject.SetActive(false);
             HideSlot(false);
             _slotShowable = false;
             upgradeEventScheduleSlot.DestroyItem();
+        }
+        
+        public void OnSwitchToScheduleCreationModify()
+        {
+            creatorSlot.gameObject.SetActive(true);
+            Tween.Scale(levelTransform, Vector3.one * creationLevelScale, 0.3f);
+            Tween.Position(levelTransform, creationLevelPosition.position, 0.3f);
         }
 
         public void ShowSlot()
@@ -163,5 +179,6 @@ namespace VTuber.CoopSystem.UI
             _selected = false;
             background.color = Color.white;
         }
+        
     }
 }
