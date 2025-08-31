@@ -17,7 +17,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private TMP_Text layer;
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text nameText;
-        [SerializeField] private VBuffDetailsUI detailsUI;
+        private VBuffDetailsUI _detailsUI;
         
         private VBuffItem _buffItem;
         public Action onClick;
@@ -26,14 +26,14 @@ namespace VTuber.BattleSystem.UI
         {
             id = buff.Id;
             _buffItem = buff;
-            detailsUI = details;
+            _detailsUI = details;
             isPermanent = buff.buff.IsPermanent;
             if(!buff.buff.IsStackable())
                 layer.gameObject.SetActive(false);
             nameText.text = buff.buff.GetBuffName();
-            //icon.sprite = buff.buff.Icon;
+            icon.sprite = buff.buff.Icon;
 
-            detailsUI.SetBuff(buff);
+            _detailsUI.SetBuff(buff);
         }
         
         public void SetText(int value)
@@ -41,12 +41,12 @@ namespace VTuber.BattleSystem.UI
             layer.text = value.ToString();
             if (_buffItem.buff.BuffType == BuffType.Persistent)
                 layer.text += "回合";
-            detailsUI.UpdateBuff(layer.text, _buffItem.buff.GetDescription(value));
+            _detailsUI.UpdateBuff(layer.text, _buffItem.buff.GetDescription(value));
         }
 
         public void Clear()
         {
-            Destroy(detailsUI.gameObject);
+            Destroy(_detailsUI.gameObject);
         }
 
 
