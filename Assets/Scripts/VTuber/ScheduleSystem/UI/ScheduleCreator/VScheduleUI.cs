@@ -76,9 +76,8 @@ namespace VTuber.ScheduleSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseEndingSelected, OnPhaseEndingSelected);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEndRun, OnEndRun);
         }
-
-
 
         protected override void OnDisable()
         {
@@ -87,6 +86,12 @@ namespace VTuber.ScheduleSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUISelected, OnEventUISelected);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventUIPlaced, OnEventUIPlaced);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseEndingSelected, OnPhaseEndingSelected);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEndRun, OnEndRun);
+        }
+        
+        private void OnEndRun(Dictionary<string, object> messagedict)
+        {
+            _kpiManager.ClearKPIs();
         }
         
         private void OnPhaseEndingSelected(Dictionary<string, object> messagedict)

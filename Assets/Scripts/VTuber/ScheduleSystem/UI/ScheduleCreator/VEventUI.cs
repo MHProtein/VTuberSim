@@ -43,6 +43,7 @@ namespace VTuber.ScheduleSystem.UI
         private Transform _disposePosition;
         
         private RectTransform _rectTransform;
+        private bool _hasInSchedule = false;
         
         protected override void Awake()
         {
@@ -130,12 +131,12 @@ namespace VTuber.ScheduleSystem.UI
                     transform.SetParent(parent);
                     transform.SetAsLastSibling();
                 }
-
-                parentBeforeDrag = parentSlots;
+                parentBeforeDrag.Clear();
                 _disposeSlots = parentSlots;
                 _disposePosition = parent;
             }
             _disposable = disposable;
+            _hasInSchedule = false;
         }
 
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
@@ -211,6 +212,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position, bool shouldTween)
         {
+            _hasInSchedule = true;
             parentBeforeDrag = parentSlots;
             parentSlots = parents;
             _lastPosition = position;
@@ -303,13 +305,16 @@ namespace VTuber.ScheduleSystem.UI
                     }
                 }
 
-                foreach (var result in results)
+                if ((!_disposable && _hasInSchedule) || _disposable)
                 {
-                    var slot = result.gameObject.GetComponent<VScheduleSlot>();
-                    if (slot is not null)
+                    foreach (var result in results)
                     {
-                        SetParentBeforeDrag();
-                        return;
+                        var slot = result.gameObject.GetComponent<VScheduleSlot>();
+                        if (slot is not null)
+                        {
+                            SetParentBeforeDrag();
+                            return;
+                        }
                     }
                 }
 

@@ -31,6 +31,7 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnCooperatorValueUpdated, OnCooperatorValueUpdated);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSetCoopUpgradeEvent, OnSetCoopUpgradeEvent);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnFinishScheduleCreationOrModification, OnFinishScheduleCreationOrModification);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEndRun, OnEndRun);
         }
 
         protected override void OnDisable()
@@ -41,8 +42,18 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnCooperatorValueUpdated, OnCooperatorValueUpdated);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSetCoopUpgradeEvent, OnSetCoopUpgradeEvent);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnFinishScheduleCreationOrModification, OnFinishScheduleCreationOrModification);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEndRun, OnEndRun);
         }
         
+        private void OnEndRun(Dictionary<string, object> messagedict)
+        {
+            foreach (var ui in uis)
+            {
+                ui.ClearUpgradeEvent();
+                Destroy(ui.gameObject);
+            }
+            uis.Clear();
+        }
         
         private void OnFinishScheduleCreationOrModification(Dictionary<string, object> messagedict)
         {
