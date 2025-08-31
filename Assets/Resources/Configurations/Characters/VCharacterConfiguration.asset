@@ -22,7 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   characterName: "\u96C5\u5C3E\u58A8\u6CAB"
-  description: "\u539F\u6559\u65E8\u7CFBv\uFF08\u65E0\u611F\u60C5\u7CFB\u865A\u62DF\u9F9F\u9F9F\u3002\u6CA1\u4E8B\u53BB\u6574\u70B9\u85AF\u6761"
+  description: "\u539F\u6559\u65E8\u7CFBv\uFF08\u65E0\u611F\u60C5\u7CFB\u865A\u62DF\u9F9F\u9F9F\u3002\u6CA1\u4E8B\u53BB\u6574\u70B9\u85AF\u6761\n\u4E00\u822C\u5927\u5B66\u6BD5\u4E1A\u751F\uFF0C\u6CA1\u4EC0\u4E48\u76F4\u64AD\u7279\u957F"
   liveType: C
   initialCardId: 67
   initialRelicId: 11
@@ -34,25 +34,25 @@ MonoBehaviour:
   pressureMinValue: 1
   pressureMaxValue: 5
   pressureEffects:
-  - id: 0
-    parameter: 1
-    upgradedParameter: 1
+  - id: 3
+    parameter: 2
+    upgradedParameter: 
     level: 0
-  - id: 0
+  - id: 3
     parameter: 1
-    upgradedParameter: 1
+    upgradedParameter: 
     level: 0
-  - id: 0
-    parameter: 1
-    upgradedParameter: 1
+  - id: 3
+    parameter: 0
+    upgradedParameter: 
     level: 0
-  - id: 0
-    parameter: 1
-    upgradedParameter: 1
+  - id: 3
+    parameter: -1
+    upgradedParameter: 
     level: 0
-  - id: 0
-    parameter: 1
-    upgradedParameter: 1
+  - id: 3
+    parameter: -2
+    upgradedParameter: 
     level: 0
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100

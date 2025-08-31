@@ -58,30 +58,30 @@ MonoBehaviour:
   successBonus: 0
   scoreLevels:
   - low: 0
-    high: 5000
+    high: 2000
     name: F
-  - low: 5000
-    high: 10000
+  - low: 2000
+    high: 4000
     name: E
-  - low: 10000
-    high: 15000
+  - low: 4000
+    high: 6000
     name: D
-  - low: 15000
-    high: 20000
+  - low: 6000
+    high: 8000
     name: C
-  - low: 20000
-    high: 25000
+  - low: 8000
+    high: 10000
     name: B
-  - low: 25000
-    high: 30000
+  - low: 10000
+    high: 12000
     name: A
-  - low: 30000
-    high: 35000
+  - low: 12000
+    high: 14000
     name: S
-  - low: 35000
-    high: 40000
+  - low: 14000
+    high: 16000
     name: SS
-  - low: 40000
+  - low: 16000
     high: -1
     name: SSS
   kpis:

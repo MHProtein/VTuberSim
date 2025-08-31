@@ -49,7 +49,7 @@ MonoBehaviour:
       Data: 3
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 40
+      Data: 35
     - Name: cardRarityRequirements
       Entry: 7
       Data: 3|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -107,7 +107,7 @@ MonoBehaviour:
       Data: 1
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 10
+      Data: 5
     - Name: cardRarityRequirements
       Entry: 7
       Data: 7|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -141,7 +141,7 @@ MonoBehaviour:
       Data: 1
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 15
+      Data: 5
     - Name: cardRarityRequirements
       Entry: 7
       Data: 9|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -175,7 +175,7 @@ MonoBehaviour:
       Data: 1
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 20
+      Data: 8
     - Name: cardRarityRequirements
       Entry: 7
       Data: 11|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -209,7 +209,7 @@ MonoBehaviour:
       Data: 2
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 25
+      Data: 12
     - Name: cardRarityRequirements
       Entry: 7
       Data: 13|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -255,7 +255,7 @@ MonoBehaviour:
       Data: 2
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 30
+      Data: 15
     - Name: cardRarityRequirements
       Entry: 7
       Data: 16|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -301,7 +301,7 @@ MonoBehaviour:
       Data: 2
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 35
+      Data: 20
     - Name: cardRarityRequirements
       Entry: 7
       Data: 19|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -347,7 +347,7 @@ MonoBehaviour:
       Data: 3
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 45
+      Data: 40
     - Name: cardRarityRequirements
       Entry: 7
       Data: 22|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -405,7 +405,7 @@ MonoBehaviour:
       Data: 4
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 50
+      Data: 45
     - Name: cardRarityRequirements
       Entry: 7
       Data: 26|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
