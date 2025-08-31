@@ -166,7 +166,7 @@ MonoBehaviour:
   revenueShareRateMinValue: 0
   revenueShareRateMaxValue: 100
   revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
-  skipEventStaminaRecoveryInitialValue: 4
+  skipEventStaminaRecoveryInitialValue: 5
   skipEventStaminaRecoveryMinValue: 0
   skipEventStaminaRecoveryMaxValue: 100
   skipEventStaminaRecoveryConfiguration: {fileID: 11400000, guid: e5847616bad94904e90a2ca50333ea9c, type: 2}
