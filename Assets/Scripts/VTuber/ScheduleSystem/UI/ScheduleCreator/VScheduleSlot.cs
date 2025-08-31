@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
@@ -30,6 +32,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image redCross;
         [SerializeField] private Image pfp;
         [SerializeField] private List<Image> eventIcons;
+        [SerializeField] private TMP_Text effectText;
+        [SerializeField] private Image effectImage;
         
         public bool Available
         {
@@ -79,6 +83,16 @@ namespace VTuber.ScheduleSystem.UI
                     eventItem.e.eventTypes[i].abilityIndex != -1)
                 {
                     eventIcons[i].color = VRaisingUI.Instance.abilityColors[eventItem.e.eventTypes[i].abilityIndex];
+                }
+                
+                foreach (var effect in _coopEventEffects)
+                {
+                    if (effect is IAttributeEffect attributeEffect)
+                    {
+                        effectText.text = "+" + effect.GetParameter();
+                        effectImage.GetComponentInChildren<Image>().sprite =
+                            VUIUtils.Instance.GetAttributeIcon(attributeEffect.AttributeName);
+                    }
                 }
             }
         }
