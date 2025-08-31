@@ -76,8 +76,8 @@ namespace VTuber.BattleSystem.UI
             
             if (card.CostType == CostType.Buff)
             {
-                var buff = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId);
-                cost.text = buff.buffName + " x " + card.Cost.ToString();
+                costImage.sprite = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId).icon;
+                cost.text = card.Cost.ToString();
             }
             else
             {

@@ -65,6 +65,10 @@ namespace VTuber.ScheduleSystem.UI
         [Space(3)]
         [Header("EndingUI")]
         [SerializeField] private VEndingUI endingUI;
+
+        [Space(3)] [Header("Attributes")]
+        [SerializeField] private GameObject staminaUI;
+        [SerializeField] private GameObject membershipUI;
         
         public List<Color> abilityColors = new List<Color>();
 
@@ -77,6 +81,12 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+
+        public void SwitchAttributesUIBattle(bool active)
+        {
+            staminaUI.SetActive(active);
+            membershipUI.SetActive(active);
         }
 
         public void InitializeEndingUI(string characterName, string ratingLevel, int score, VAccount account)
