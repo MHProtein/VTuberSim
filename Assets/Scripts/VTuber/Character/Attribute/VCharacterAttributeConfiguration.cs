@@ -27,8 +27,6 @@ namespace VTuber.Character.Attribute
         
         [ShowIf("isConvertToBattleAttribute")] public bool isBattleAttributePercentage = false;
         [ShowIf("isConvertToBattleAttribute")] public VBattleEventKey battleEventKey = VBattleEventKey.Default;
-        [ShowIf("isConvertToBattleAttribute")] public int minValue = 0;
-        [ShowIf("isConvertToBattleAttribute")] public int maxValue = int.MaxValue;
         
         
         [StringToEnum("BattleAttributes")] public string battleAttributeNameWhenConvertBack;

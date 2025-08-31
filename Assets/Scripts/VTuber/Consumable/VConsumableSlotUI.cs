@@ -56,6 +56,15 @@ namespace VTuber.Consumable
             descriptionText.text = consumable.Description;
         }
 
+        public void Clear()
+        {
+            consumableUI.Clear();
+            consumableUI.gameObject.SetActive(false);
+            _slots.CloseSubMenu();
+            nameText.text = "";
+            descriptionText.text = "";
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {          
             if (_slots.IsSubMenuActive)
@@ -104,6 +113,11 @@ namespace VTuber.Consumable
             if (_slots.IsSubMenuActive)
                 return;
             descriptionPanel.gameObject.SetActive(false);
+        }
+
+        public VConsumable GetConsumable()
+        {
+            return consumableUI.consumable;
         }
     }
 }

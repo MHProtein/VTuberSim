@@ -6,6 +6,7 @@ using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.Character.Attributes
 {
@@ -55,7 +56,7 @@ namespace VTuber.Character.Attributes
                     gainEfficiency = value / 100f;
                 }
                 
-                delta = (int)(delta * gainEfficiency);
+                delta = VMathUtils.FloatToInt(delta * gainEfficiency);
             }
 
             Value = Mathf.Clamp(delta + Value, _minValue, _maxValue);

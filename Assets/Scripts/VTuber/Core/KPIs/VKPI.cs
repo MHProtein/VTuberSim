@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using VTuber.BattleSystem.Core.KPIs.UI;
 using VTuber.Core.KPIs.UI;
+using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.BattleSystem.Core.KPIs
@@ -38,38 +39,16 @@ namespace VTuber.BattleSystem.Core.KPIs
             RequiredAmount = requiredAmount;
             EventType = eventType;
             IsPermanent = isPermanent;
+            AbilityIndex = abilityIndex;
 
             if (eventType == VEventType.Stream)
             {
-                if (abilityIndex == 0) AbilityName = "歌力";
-                if (abilityIndex == 1) AbilityName = "游戏力";
-                if (abilityIndex == 2) AbilityName = "杂谈力";
+                if (abilityIndex == 0) AbilityName = "歌回";
+                if (abilityIndex == 1) AbilityName = "游戏";
+                if (abilityIndex == 2) AbilityName = "杂谈";
             }
-            
-            switch (EventType)
-            {
-                case VEventType.Stream:
-                    EventName = "直播";
-                    break;
-                case VEventType.Practice:
-                    EventName = "练习";
-                    break;
-                case VEventType.Coop:
-                    EventName = "协助";
-                    break;
-                case VEventType.Outside:
-                    EventName = "外出";
-                    break;
-                case VEventType.Work:
-                    EventName = "工作";
-                    break;
-                case VEventType.Rest:
-                    EventName = "休息";
-                    break;
-                case VEventType.Other:
-                    EventName = "其他";
-                    break;
-            }
+
+            EventName = VUIUtils.Instance.GetEventName(eventType);
         }
 
         public void OnAdded(uint id)

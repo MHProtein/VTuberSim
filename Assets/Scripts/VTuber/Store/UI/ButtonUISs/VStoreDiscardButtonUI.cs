@@ -8,7 +8,7 @@ namespace VTuber.Store.UI
     public class VStoreDiscardButtonUI : VStoreButtonUI
     {
         [SerializeField] private VCardViewSelectionUI discardCardLibraryUI;
-        
+
         public override void OnClick()
         {
             discardCardLibraryUI.gameObject.SetActive(true);
@@ -23,7 +23,8 @@ namespace VTuber.Store.UI
                             { "DeletedCard", card }
                         });
                     discardCardLibraryUI.Close();
-                    discardCardLibraryUI.gameObject.SetActive(false);     
+                    discardCardLibraryUI.gameObject.SetActive(false);    
+                    
                     Buy();
                 },
                 returnAction: () =>

@@ -35,7 +35,7 @@ namespace VTuber.Reincarnation
 
             foreach (var requirement in config.cardLevels[ratingLevel].cardRarityRequirements)
             {
-                cards.AddRange(cardLibrary.Where(card => card.Rarity == requirement.rarity)
+                cards.AddRange(cardLibrary.Where(card => (int)card.Rarity >= (int)requirement.rarity)
                     .OrderBy(r => Random.Range(0f, 1f))
                     .Take(requirement.count));
             }
@@ -99,7 +99,7 @@ namespace VTuber.Reincarnation
             {
                 if (streamEvents.Contains(relicInfo.eventID))
                 {
-                    relicIDs.Add(relicInfo.relicID);
+                    relicIDs.Add(relicInfo.relicIDs[Random.Range(0, relicInfo.relicIDs.Count)]);
                 }
             }
             
@@ -132,27 +132,31 @@ namespace VTuber.Reincarnation
 
             foreach (var requirement in ratingLevelInfo.streamEffectsRequirements)
             {
-                var effectInfo = config.streamAttributeEffects[Random.Range(0, config.streamAttributeEffects.Count)];
-                while (streamEffectInfos.Find(info => info.ability == effectInfo.ability) != null)
+                for (int i = 0; i < requirement.count; i++)
                 {
-                    effectInfo = config.streamAttributeEffects[Random.Range(0, config.streamAttributeEffects.Count)];
-                }
-                
-                var param = effectInfo.levelInfos[requirement.level].levelParam;
-                
-                streamEffects.Add(new VEffectItem()
-                {
-                    id = effectInfo.effect,
-                    parameter = param,
-                    upgradedParameter = param,
-                    level = requirement.level
-                });
-                
-                streamEffectInfos.Add(effectInfo);
-                capacity += config.effectCapacities[requirement.level];
+                    var effectInfo = config.streamAttributeEffects[Random.Range(0, config.streamAttributeEffects.Count)];
+                    while (streamEffectInfos.Find(info => info.ability == effectInfo.ability) != null)
+                    {
+                        effectInfo = config.streamAttributeEffects[Random.Range(0, config.streamAttributeEffects.Count)];
+                    }
 
-                if (streamEffects.Count + 0 >= count) // already at max effects
-                    return streamEffects; 
+                    var level = Random.Range(requirement.level, config.effectCapacities.Count - 1);
+                    var param = effectInfo.levelInfos[level].levelParam;
+                
+                    streamEffects.Add(new VEffectItem()
+                    {
+                        id = effectInfo.effect,
+                        parameter = param,
+                        upgradedParameter = param,
+                        level = level
+                    });
+                
+                    streamEffectInfos.Add(effectInfo);
+                    capacity += config.effectCapacities[requirement.level];
+
+                    if (streamEffects.Count + 0 >= count) // already at max effects
+                        return streamEffects; 
+                }
             }
 
             while (streamEffects.Count < 2 && streamEffects.Count < count)
@@ -183,24 +187,31 @@ namespace VTuber.Reincarnation
 
             // OtherAttributes
             List<VEffectItem> otherEffects = new List<VEffectItem>();
+            List<VAttributeEffectInfo> otherEffectInfos = new List<VAttributeEffectInfo>();
             foreach (var requirement in ratingLevelInfo.attributeEffectsRequirements)
             {
-                var effectInfos = config.attributeEffects.OrderBy(r => Random.Range(0f, 1f))
-                    .Take(requirement.count);
-                foreach (var effectInfo in effectInfos)
+                for (int i = 0; i < requirement.count; i++)
                 {
-                    if (streamEffects.Count + otherEffects.Count >= count) 
+                    var effectInfo = config.attributeEffects[Random.Range(0, config.attributeEffects.Count)];
+                    while (otherEffectInfos.Find(info => info.effect == effectInfo.effect) != null)
+                    {
+                        effectInfo = config.attributeEffects[Random.Range(0, config.attributeEffects.Count)];
+                    }
+           
+                    if (streamEffects.Count + otherEffects.Count >= count)
                         return otherEffects.Union(streamEffects).ToList();
+                    var level = Random.Range(0, effectInfo.levelInfos.Count - 1);
+                    var param = effectInfo.levelInfos[level].levelParam;
 
-                    var param = effectInfo.levelInfos[requirement.level].levelParam;
-                    
                     otherEffects.Add(new VEffectItem()
                     {
                         id = effectInfo.effect,
                         parameter = param,
                         upgradedParameter = param,
-                        level = requirement.level
-                    });;
+                        level = level
+                    });
+                    otherEffectInfos.Add(effectInfo);
+                    
                     capacity += config.effectCapacities[requirement.level];
                 }
             }

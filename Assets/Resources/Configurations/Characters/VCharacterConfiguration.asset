@@ -21,7 +21,11 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  characterName: "\u96C5\u5C3E\u58A8\u6CAB"
+  description: "\u539F\u6559\u65E8\u7CFBv\uFF08\u65E0\u611F\u60C5\u7CFB\u865A\u62DF\u9F9F\u9F9F\u3002\u6CA1\u4E8B\u53BB\u6574\u70B9\u85AF\u6761\n\u4E00\u822C\u5927\u5B66\u6BD5\u4E1A\u751F\uFF0C\u6CA1\u4EC0\u4E48\u76F4\u64AD\u7279\u957F"
   liveType: C
+  initialCardId: 67
+  initialRelicId: 11
   staminaInitialValue: 50
   staminaMinValue: 0
   staminaMaxValue: 50
@@ -29,7 +33,27 @@ MonoBehaviour:
   pressureInitialValue: 3
   pressureMinValue: 1
   pressureMaxValue: 5
-  pressureBuffs: 0000000001000000020000000300000004000000
+  pressureEffects:
+  - id: 3
+    parameter: 2
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: 1
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: 0
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: -1
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: -2
+    upgradedParameter: 
+    level: 0
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100
   singingAbilityMinValue: 0
@@ -79,32 +103,62 @@ MonoBehaviour:
   chattingAbilityConversionRatioMinValue: 0
   chattingAbilityConversionRatioMaxValue: -1
   chattingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: 9c44347f16d4a6845bab07b4623f7f2e, type: 2}
-  singingAbilityGainEfficiencyInitialValue: 100
+  singingAbilityGainEfficiencyInitialValue: 105
   singingAbilityGainEfficiencyMinValue: 0
   singingAbilityGainEfficiencyMaxValue: -1
   singingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 0d92ba3c5867c5142a5408b59bbdb238, type: 2}
-  gamingAbilityGainEfficiencyInitialValue: 100
+  gamingAbilityGainEfficiencyInitialValue: 105
   gamingAbilityGainEfficiencyMinValue: 0
   gamingAbilityGainEfficiencyMaxValue: -1
   gamingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: e4bca2514f94f2c48b494fbbbba6c54b, type: 2}
-  chattingAbilityGainEfficiencyInitialValue: 100
+  chattingAbilityGainEfficiencyInitialValue: 105
   chattingAbilityGainEfficiencyMinValue: 0
   chattingAbilityGainEfficiencyMaxValue: -1
   chattingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 478411c7b94b699408da8eb08cbbc77a, type: 2}
-  followerCountInitialValue: 100
+  followerCountInitialValue: 500
   followerCountMinValue: 0
   followerCountMaxValue: -1
   followerCountConfiguration: {fileID: 11400000, guid: c8b885d17b6be9949a31e594be5ccccd, type: 2}
   membershipCountInitialValue: 0
   membershipCountMinValue: 0
   membershipCountMaxValue: -1
-  membershipBuffs: []
+  membershipBuffs:
+  - from: 0
+    to: 10
+    value: 23
+  - from: 11
+    to: 20
+    value: 24
+  - from: 21
+    to: 30
+    value: 25
+  - from: 31
+    to: 40
+    value: 26
+  - from: 41
+    to: 50
+    value: 27
+  - from: 51
+    to: 60
+    value: 28
+  - from: 61
+    to: 70
+    value: 29
+  - from: 71
+    to: 80
+    value: 30
+  - from: 81
+    to: 90
+    value: 31
+  - from: 91
+    to: 100
+    value: 32
   membershipCountConfiguration: {fileID: 11400000, guid: 4cb43862c41bf544093f4dd19cc1a990, type: 2}
   followerToViewerRatioInitialValue: 1
   followerToViewerRatioMinValue: 0
   followerToViewerRatioMaxValue: -1
   followerToViewerRatioConfiguration: {fileID: 11400000, guid: a5f460326b6f9ed45b2015e071c4edbc, type: 2}
-  moneyInitialValue: 100
+  moneyInitialValue: 150
   moneyMinValue: 0
   moneyMaxValue: -1
   moneyConfiguration: {fileID: 11400000, guid: ef98052a793634040af651ed3bf119ee, type: 2}
@@ -112,11 +166,11 @@ MonoBehaviour:
   revenueShareRateMinValue: 0
   revenueShareRateMaxValue: 100
   revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
-  skipEventStaminaRecoveryInitialValue: 5
+  skipEventStaminaRecoveryInitialValue: 4
   skipEventStaminaRecoveryMinValue: 0
   skipEventStaminaRecoveryMaxValue: 100
   skipEventStaminaRecoveryConfiguration: {fileID: 11400000, guid: e5847616bad94904e90a2ca50333ea9c, type: 2}
-  skipTurnStaminaRecoveryInitialValue: 5
+  skipTurnStaminaRecoveryInitialValue: 2
   skipTurnStaminaRecoveryMinValue: 0
   skipTurnStaminaRecoveryMaxValue: 100
   skipTurnStaminaRecoveryConfiguration: {fileID: 11400000, guid: e2f2234de9cc3ea4bba5ddab3a15de3e, type: 2}

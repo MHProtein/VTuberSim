@@ -9,6 +9,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Reincarnation;
 using Yarn.Unity;
 using VTuber.ScheduleSystem.UI;
 
@@ -59,6 +60,11 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField]private GameObject consumableUIParent;
         [SerializeField]private GameObject consumableUIBattleParent;
         [SerializeField]private GameObject consumableUI;
+        [SerializeField]private Transform uiWrapper;
+        
+        [Space(3)]
+        [Header("EndingUI")]
+        [SerializeField] private VEndingUI endingUI;
         
         public List<Color> abilityColors = new List<Color>();
 
@@ -71,6 +77,16 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+        }
+
+        public void InitializeEndingUI(string characterName, string ratingLevel, int score, VAccount account)
+        {
+            endingUI.Initialize(characterName, ratingLevel, score, account);
+        }
+
+        public void ShowEndingUI()
+        {
+            endingUI.Show();
         }
 
         public void InitializeCardLibraryUI(List<VCard> cards)
@@ -87,7 +103,7 @@ namespace VTuber.ScheduleSystem.UI
         
         public void SetPauseText(bool shouldPause)
         {
-            pauseText.text = shouldPause ? "Pause After This" : "Pause Schedule";
+            pauseText.text = shouldPause ? "此事件后暂停" : "暂停周表";
         }
         
         private void OnNotifyEventDescriptionChange(Dictionary<string, object> messagedict)
@@ -160,14 +176,17 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SetConsumableToBattle()
         {
+            consumableUI.transform.SetParent(uiWrapper.transform);
             consumableUI.transform.SetParent(consumableUIBattleParent.transform);
             consumableUI.transform.localPosition = Vector3.zero;
+            consumableUI.transform.localScale = Vector3.one;
         }
         
         public void SetConsumableToRaising()
         {
             consumableUI.transform.SetParent(consumableUIParent.transform);
             consumableUI.transform.localPosition = Vector3.zero;
+            consumableUI.transform.localScale = Vector3.one;
         }
     }
 }

@@ -42,6 +42,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] public Image typeImage;
         [SerializeField] public Image popularityImage;
         [SerializeField] public Image shieldImage;
+        [SerializeField] public Image costImage;
         
         [FormerlySerializedAs("Name")] [SerializeField] public TMP_Text name;
         [FormerlySerializedAs("Description")] [SerializeField] public TMP_Text description;
@@ -59,22 +60,20 @@ namespace VTuber.BattleSystem.UI
             nameImage.sprite = nameSprites[(int)card.Rarity];
             typeImage.sprite = typeSprites[(int)card.Rarity];
             
-            
-            if(card.Facade)
-                icon.sprite = card.Facade;
+            if(card.Icon)
+                icon.sprite = card.Icon;
 
             name.text = card.CardName;
             description.text = card.GetDescription();
             if(card.IsExhaust)
                 description.text += "\nExhaust.";
             typeText.text = card.CardType;
-            
-            // foreach (var effect in card.Effects)
-            // {
-            //     string effectDescription = effect.Name + ": " + effect.Description;
-            //     description.text += "\n" + effectDescription;
-            // }
 
+            if (card.CostType == CostType.TrueStamina)
+            {
+                costImage.color = Color.red;
+            }
+            
             if (card.CostType == CostType.Buff)
             {
                 var buff = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId);
@@ -84,7 +83,6 @@ namespace VTuber.BattleSystem.UI
             {
                 cost.text = card.Cost.ToString();
             }
-            
             
             if (card.IsUpgraded)
             {

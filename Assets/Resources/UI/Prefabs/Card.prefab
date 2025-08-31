@@ -177,15 +177,15 @@ RectTransform:
   m_GameObject: {fileID: 1463331683278908673}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1132940557669143015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 55.22058, y: 0.4}
-  m_SizeDelta: {x: 168.9278, y: 50}
+  m_AnchoredPosition: {x: 95.560936, y: 0.4}
+  m_SizeDelta: {x: 257.8498, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7948546009812042070
 CanvasRenderer:
@@ -655,12 +655,13 @@ MonoBehaviour:
   gamingColor: {r: 0.29411766, g: 0.34509805, b: 1, a: 1}
   chattingColor: {r: 1, g: 0.69803923, b: 0, a: 1}
   background: {fileID: 5418081280116854409}
-  icon: {fileID: 492576563808840563}
+  icon: {fileID: 1854077458432877146}
   descriptionImage: {fileID: 9155409624160156474}
   nameImage: {fileID: 1597430812531397724}
   typeImage: {fileID: 2039202165101778702}
   popularityImage: {fileID: 1296972818887279486}
   shieldImage: {fileID: 2929790270933716188}
+  costImage: {fileID: 6832644472111513667}
   name: {fileID: 3601492734164757646}
   description: {fileID: 3844727032169294534}
   cost: {fileID: 4540963570463774130}

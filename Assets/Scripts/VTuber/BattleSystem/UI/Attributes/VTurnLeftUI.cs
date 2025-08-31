@@ -33,9 +33,9 @@ namespace VTuber.BattleSystem.UI
                 () =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);
-                    turnLeftText.faceColor = Color.white;
+                    turnLeftText.color = Color.white;
                 })));
-            turnLeftText.faceColor = delta > 0 ? Color.green : Color.red;
+            turnLeftText.color = delta > 0 ? Color.green : Color.red;
         }
     }
 }

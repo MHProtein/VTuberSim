@@ -39,6 +39,7 @@ namespace VTuber.CoopSystem
             public int abilityIndex;
         }
         public uint id;
+        public string eventName;
         public int unlockLevel;
         public float probability;
         public List<VRaisingEffect>  effects;
@@ -47,6 +48,7 @@ namespace VTuber.CoopSystem
         public VCoopEvent(CellRange row)
         {
             id = uint.Parse(row.Columns[VCoopEventHeaderIndex.Id].Value);
+            eventName = row.Columns[VCoopEventHeaderIndex.Name].Value;
             unlockLevel = int.Parse(row.Columns[VCoopEventHeaderIndex.UnlockLevel].Value);
             probability = float.Parse(row.Columns[VCoopEventHeaderIndex.Probability].Value);
             
@@ -94,8 +96,13 @@ namespace VTuber.CoopSystem
         
         public readonly VCooperatorConfiguration configuration;
         
+        public int CoopValue => _coopValue;
+        
+        public int CurrentLevel => _currentLevelIndex;
         private int _currentLevelIndex;
         private int _coopValue;
+        
+        public List<VCoopEvent> CoopEvents => _coopEvents;
         private List<VCoopEvent> _coopEvents;
 
         private bool _hasExecutedUpgradeEventThisWeek;
@@ -201,7 +208,13 @@ namespace VTuber.CoopSystem
                     position = new Vector2Int(GetDay(), GetTime());
                 }
 
-                var e = GetEvent();
+                VDebug.Log(position);
+
+                VCoopEvent e = null;
+                while (e is null)
+                {
+                    e = GetEvent();
+                }
                 events.Add(new VCoopEventItem()
                 {
                     e = e,
@@ -216,6 +229,8 @@ namespace VTuber.CoopSystem
         public VCoopEvent GetEvent()
         {
             List<VCoopEvent> events = _coopEvents.Where(x => x.unlockLevel <= _currentLevelIndex).ToList();
+            if (events.Count == 1)
+                return events.FirstOrDefault();
             float probabilitySum = events.Sum(x => x.probability);
             if (probabilitySum <= 0)
             {
@@ -270,5 +285,6 @@ namespace VTuber.CoopSystem
         }
         
         #endregion
+
     }
 }

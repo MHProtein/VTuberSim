@@ -7,17 +7,14 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingSkipEventEffect : VRaisingEffect
     {
-        private VUpgradableValue<int> _staminaRecovery;
-        public VRaisingSkipEventEffect(VRaisingEffectConfiguration configuration, int staminaRecovery) : base(configuration)
+        public VRaisingSkipEventEffect(VRaisingEffectConfiguration configuration) : base(configuration)
         {
-            _staminaRecovery = new VUpgradableValue<int>(staminaRecovery, staminaRecovery);
         }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSkipEvent, new Dictionary<string, object>()
             {
-                {"StaminaRecovery", _staminaRecovery}
             });
         }
 

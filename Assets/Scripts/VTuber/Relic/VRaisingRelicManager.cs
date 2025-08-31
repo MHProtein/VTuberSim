@@ -21,18 +21,29 @@ namespace VTuber.Relic
             if (relic == null)
                 return;
 
+            if (_relics.Contains(relic))
+                return;
             _relics.Add(relic);
             relic.Initialize(idDistributor++, this);
-            relic.OnRelicAdded();
+            relic.OnRelicAddedInRaising();
         }
 
         public void Remove(VRaisingRelic relic)
         {
             if (_relics.Contains(relic))
             {
-                relic.OnRelicRemoved();
+                relic.OnRelicRemovedInRaising();
                 _relics.Remove(relic);
             }
+        }
+
+        public void Clear()
+        {
+            foreach (var relic in _relics)
+            {
+                relic.OnRelicRemovedInRaising();
+            }
+            _relics.Clear();
         }
     }
 }

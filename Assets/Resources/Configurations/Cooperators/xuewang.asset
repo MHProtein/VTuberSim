@@ -23,32 +23,36 @@ MonoBehaviour:
     SerializationNodes: []
   id: 1
   cooperatorName: "\u81F3\u5C0A\u8840\u738B"
-  description: "\u96EA\u738B"
+  description: "\u59CB\u6E90\u7684\u5976P,\u4F4E\u77EE\u7684\u690D\u7269,\u6613\u7206\u7684\u70AE\u4ED7"
   icon: {fileID: 21300000, guid: 8aaf071ea4d51a24ea562fdba64ef62f, type: 3}
   baseCoopEvent: 24
   _coopLevels:
   - from: 0
     to: 25
-    levelName: "\u8BA4\u8BC6"
+    levelName: "\u719F\u6089"
+    levelIndex: 0
     eventType: 2
-    upgradeEventID: 24
+    upgradeEventID: 36
   - from: 26
     to: 50
-    levelName: "\u719F\u6089"
+    levelName: "\u597D\u53CB"
+    levelIndex: 1
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 37
   - from: 51
     to: 75
-    levelName: "\u597D\u53CB"
+    levelName: "\u631A\u53CB"
+    levelIndex: 2
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 38
   - from: 76
     to: 100
-    levelName: "\u631A\u53CB"
+    levelName: "\u66A7\u6627"
+    levelIndex: 3
     eventType: 2
-    upgradeEventID: 0
+    upgradeEventID: 39
   minEvents: 2
-  maxEvents: 4
+  maxEvents: 3
   _dayTimeProbabilities:
   - 0.4
   - 0.1

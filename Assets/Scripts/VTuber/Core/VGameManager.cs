@@ -25,7 +25,7 @@ using VTuber.Store.UI;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VGameManager : VMonoBehaviour
+    public class VGameManager : VSingletonMonobehaviour<VGameManager>
     {
         [SerializeField] private bool dev;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
@@ -64,11 +64,14 @@ namespace VTuber.BattleSystem.Core
         private VCharacter _character;
         private VStateMachine _stateMachine;
         private VScript _script;
+
+        private List<VAccount> _accounts;
         
         protected override void Awake()
         {
             base.Awake();
             VDataLoader loader;
+            _accounts = new List<VAccount>();
             if (dev)
             {
                 loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
@@ -84,17 +87,17 @@ namespace VTuber.BattleSystem.Core
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
             
+            VResourcesManager.Instance.LoadSprites();
             loader.Load();
-            VResourcesManager.Instance.Load();
+            VResourcesManager.Instance.LoadDialogs();
             
             VSave save = VSaveSystem.Load();
-            List<VAccount> accounts = new List<VAccount>();
             if(save != null)
             {
-                accounts = save.LoadAccounts();
+                _accounts = save.LoadAccounts();
             }
             
-            _mainMenu.Initialize(scripts, characters, accounts, InitializeGame);
+            ChangeToMainMenu();
         }
 
         protected override void OnEnable()
@@ -105,20 +108,23 @@ namespace VTuber.BattleSystem.Core
         protected override void OnDisable()
         {
             base.OnDisable();
-            _stateMachine.OnDisable();
-            _character.OnDisable();
+            if(_stateMachine is not null)
+                _stateMachine.OnDisable();
+            if(_character is not null)
+                _character.OnDisable();
         }
 
         protected override void Start()
         {
             base.Start();
-            
+            _mainMenu.gameObject.SetActive(true);
         }
 
         public void InitializeGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
         {
             _script = new VScript(scriptConfig);
             _character = new VCharacter(characterConfiguration);
+            _character.Initialize();
 
             foreach (var account in accounts)
             {
@@ -132,13 +138,12 @@ namespace VTuber.BattleSystem.Core
 
             foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
             {
-                if((config.liveType == "F" || config.liveType == _character.LiveType))
+                if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
                     _character.CardLibrary.AddCard(config.CreateCard());
             }
 
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
             _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
-            
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
@@ -167,7 +172,13 @@ namespace VTuber.BattleSystem.Core
             }
             
             _mainMenu.gameObject.SetActive(false);
-            
+        }
+
+        public void AddAccount(VAccount account)
+        {
+            _accounts.Add(account);
+            var save = new VSave(_accounts);
+            VSaveSystem.Save(save);
         }
         
         public void ModifySchedule()
@@ -238,6 +249,12 @@ namespace VTuber.BattleSystem.Core
             {
                 _stateMachine.SwitchState(VStateType.Pause);
             }
+        }
+
+        public void ChangeToMainMenu()
+        {
+            _mainMenu.gameObject.SetActive(true);
+            _mainMenu.Initialize(scripts, characters, _accounts, InitializeGame);
         }
     }
 }

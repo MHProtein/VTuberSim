@@ -23,7 +23,7 @@ namespace VTuber.BattleSystem.Effect
         protected VBattle _battle;
         protected int _layer = 0;
         public float MultiplyByLayer => _configuration.multiplyByLayer;
-        public bool TriggeredInFirstTurn;
+        public bool Triggered;
         
         public VEffect(VEffectConfiguration configuration)
         {
@@ -76,8 +76,8 @@ namespace VTuber.BattleSystem.Effect
         {
             if (CanApply(_battle, dict))
             {
-                if (!TriggeredInFirstTurn)
-                    TriggeredInFirstTurn = true;
+                if (!Triggered)
+                    Triggered = true;
                 ApplyEffect(_battle, _layer);
             }
         }

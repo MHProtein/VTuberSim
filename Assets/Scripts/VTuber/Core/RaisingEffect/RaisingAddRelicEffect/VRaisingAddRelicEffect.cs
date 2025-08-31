@@ -7,6 +7,7 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddRelicEffect : VRaisingEffect
     {
+        public uint RelicId => _relicId;
         private uint _relicId;
         public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {

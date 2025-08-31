@@ -9,14 +9,14 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VSelectcConsumableUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+    public class VSelectConsumableUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
-        public VConsumable Card => _consumableUI.consumable;
+        public VConsumable Consumable => _consumableUI.consumable;
         private VConsumableUI _consumableUI;
         private bool _selectable = true;
-        private Action<VSelectcConsumableUI> _selectAction;
+        private Action<VSelectConsumableUI> _selectAction;
         
-        public void Initialize(VConsumableUI consumableUI, bool selectable, Action<VSelectcConsumableUI> selectAction)
+        public void Initialize(VConsumableUI consumableUI, bool selectable, Action<VSelectConsumableUI> selectAction)
         {
             _consumableUI = consumableUI;
             _selectable = selectable;

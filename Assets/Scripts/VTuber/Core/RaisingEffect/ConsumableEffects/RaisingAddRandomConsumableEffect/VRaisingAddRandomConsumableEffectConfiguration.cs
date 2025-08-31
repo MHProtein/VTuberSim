@@ -10,7 +10,7 @@ namespace VTuber.Core.RaisingEffect
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            throw new System.NotImplementedException();
+            return new VRaisingAddRandomConsumableEffect(this);
         }
     }
 }

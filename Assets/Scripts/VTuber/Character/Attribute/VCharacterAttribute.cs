@@ -81,8 +81,7 @@ namespace VTuber.Character.Attribute
                     Value,
                     _configuration.isBattleAttributePercentage,
                     _configuration.battleEventKey,
-                    _configuration.maxValue,
-                    _configuration.minValue));
+                    _maxValue, _minValue));
         }
 
         public virtual void ConvertToAttribute(Dictionary<string, VBattleAttribute> battleAttributes)
@@ -147,8 +146,9 @@ namespace VTuber.Character.Attribute
         
         protected virtual void SetValue(int value)
         {
+            var delta = value - Value;
             Value = Mathf.Clamp(value, _minValue, _maxValue);
-            SendEvent(Value, value - Value);
+            SendEvent(Value, delta);
         }
         
         public void SendEvent(int newValue, int delta)  
@@ -165,7 +165,7 @@ namespace VTuber.Character.Attribute
         public void AddMaxValue(int value)
         {
             _maxValue += value;
-            SendEvent(Value, 0);
+            AddTo(value);
             VDebug.Log("Added max value: " + value + " to " + _configuration.attributeName + ", new max value: " + _maxValue);
         }
     }

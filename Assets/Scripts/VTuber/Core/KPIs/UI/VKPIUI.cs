@@ -37,7 +37,7 @@ namespace VTuber.BattleSystem.Core.KPIs.UI
         {
             if(count == this.count) return;
             this.count = count;
-            text.text = $"安排{_abilityName}{_eventName}事件数: {count}/{_requiredAmount}";
+            text.text = $"安排{_abilityName}{_eventName}: {count}/{_requiredAmount}";
             if (satisfied)
                 text.color = Color.green;
             else
@@ -48,7 +48,7 @@ namespace VTuber.BattleSystem.Core.KPIs.UI
         
         public void ResetText()
         {
-            text.text = $"安排{_abilityName}{_eventName}事件数: 0/{_requiredAmount}";
+            text.text = $"安排{_abilityName}{_eventName}: 0/{_requiredAmount}";
             text.color = Color.red;
             count = 0;
         }

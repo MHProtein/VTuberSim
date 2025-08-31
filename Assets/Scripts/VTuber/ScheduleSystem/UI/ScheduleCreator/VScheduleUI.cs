@@ -55,7 +55,7 @@ namespace VTuber.ScheduleSystem.UI
                 for (int x = 0; x < slotSize.x; x++)
                 {    
                     slots[y, x] = slotList[i++];
-                    slots[y, x].Initialize(new Vector2Int(x, y), this);
+                    slots[y, x].Initialize(new Vector2Int(x, y), this, false);
                 }
             }
             _eventCount = new Dictionary<VEventType, int>();
@@ -100,7 +100,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             foreach (var slot in slots)
             {
-                slot.SetPlaceable(false, false);
+                slot.SetPlaceable(false, false, -1);
             }
         }
 
@@ -129,7 +129,7 @@ namespace VTuber.ScheduleSystem.UI
                         }
                     }
                 }
-                slot.SetPlaceable(isPlaceable, isPlaceable);
+                slot.SetPlaceable(isPlaceable, isPlaceable, -1);
             }
         }
 
@@ -151,7 +151,7 @@ namespace VTuber.ScheduleSystem.UI
             foreach (var slot in slots)
             {
                 slot.RemoveCoopEvent();
-                slot.SetPlaceable(true, false);
+                slot.SetPlaceable(true, false, -1);
             }
             DestroyAllItems();
             var specialEvents = script.GetSpecialEvents(weekIndex);
@@ -170,12 +170,12 @@ namespace VTuber.ScheduleSystem.UI
                 e.IsPhaseStart = specialEvent.isPhaseStart;
                 e.IsSpecialEvent = true;
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
-                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex]);
+                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], true);
                 ui.SetFixed(true);
             }
             foreach (var slot in slots)
             {
-                slot.SetPlaceable(false, false);
+                slot.SetPlaceable(false, false, -1);
             }
             
             List<Vector2Int> occupiedPositions = new List<Vector2Int>();
@@ -308,7 +308,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             foreach (var slot in slots)
             {
-                slot.SetPlaceable(true, false);
+                slot.SetPlaceable(true, false, -1);
             }
             for (int x = 0; x < slotSize.x; x++)
             {
@@ -332,7 +332,7 @@ namespace VTuber.ScheduleSystem.UI
                                 eventId = size2Id;
                             var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                             e.IsSpecialEvent = true;
-                            eventUIObject.Initialize(e, slots[yy, x]);
+                            eventUIObject.Initialize(e, slots[yy, x], true);
                             
                             emptyCount = 0;
                         }
@@ -351,12 +351,12 @@ namespace VTuber.ScheduleSystem.UI
                         eventId = size3Id;
                     var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                     e.IsSpecialEvent = true;
-                    eventUIObject.Initialize(e, slots[yy, x]);
+                    eventUIObject.Initialize(e, slots[yy, x], true);
                 }
             }
             foreach (var slot in slots)
             {
-                slot.SetPlaceable(false, false);
+                slot.SetPlaceable(false, false, -1);
             }
         }
         public void RecordEvent(VScheduleEvent e)

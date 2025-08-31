@@ -18,7 +18,7 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            var card = GetRandomCards(1, _condition).FirstOrDefault();
+            var card = GetRandomCards(1, _condition, character.LiveType).FirstOrDefault();
             
             character.CardLibrary.AddCard(card);
             VDebug.Log("Added random card: " + card.CardName);

@@ -22,7 +22,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         public TimeOfDay timeOfDay;
         public VEventType eventType;
         public uint eventID;
-        public VPhase phase;
+        [HideInInspector] public VPhase phase;
         public bool isPhaseStart;
         
         public void SetWeekDay(int weekIndex, int dayIndex)

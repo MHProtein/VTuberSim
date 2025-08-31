@@ -18,8 +18,22 @@ namespace VTuber.BattleSystem.BattleAttribute
             SetValue(value, isFromCard, shouldPlayTwice);
         }
 
-        public override void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)
+        public override void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)
         {
+            var messageDict = new Dictionary<string, object>
+            {
+                { "Name", AttributeName },
+                { "NewValue", newValue },
+                { "Delta", delta },
+                { "IsFromCard", isFromCard },
+                { "ShouldPlayTwice", shouldPlayTwice },
+                { "MaxValue", _maxValue }
+            };
+            VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
+            
+            messageDict.Add("AttributeName", AttributeName);
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnAttributeValueChange, messageDict);
         }
+
     }
 }

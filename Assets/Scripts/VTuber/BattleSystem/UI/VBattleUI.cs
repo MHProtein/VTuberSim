@@ -9,11 +9,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
+using VTuber.Dialogue.UI;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -26,7 +30,6 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private Transform drawPileTransform;
         
         [FormerlySerializedAs("cardSlots")] [SerializeField] private RectTransform handSlotsContent;
-        [SerializeField] private VBattleMultiplierUI multiplierUI;
         
         [Space(3)]
         [Header("PickCard Menu")]
@@ -42,14 +45,11 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
-        [SerializeField] private Transform battleUIWrapper;
-        [SerializeField] private Transform backgroundUIWrapper;
+        [SerializeField] private RectTransform battleUIWrapper;
         [SerializeField] private GameObject battlePausePanel;
         
         
         [Space(3)]
-        [SerializeField] private TMP_Text targetPopularity;
-        [SerializeField] private TMP_Text extraTargetPopularityText;
         [SerializeField] private Button skipTurnButton;
         
         private float curve = 0.0f;
@@ -70,16 +70,6 @@ namespace VTuber.BattleSystem.UI
 
         private Coroutine _drawCardCoroutine;
         
-        public void SetExtraTargetPopularityText(int text)
-        {
-            extraTargetPopularityText.text = $"额外目标热度: {text}";
-        }
-        
-        public void SetTargetPopularity(int targetPopularity)
-        {
-            this.targetPopularity.text = $"目标热度: {targetPopularity}";
-        }
-
         public void Rearrange(int index)
         {
             if (_handSlotsCards.Count == 0)
@@ -101,12 +91,7 @@ namespace VTuber.BattleSystem.UI
             
             return cardUI;
         }
-        
-        public Tween SetBattleUIScale(float scale)
-        {
-            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
-            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
-        }
+
         
         public void Selected(bool value)
         {
@@ -118,7 +103,7 @@ namespace VTuber.BattleSystem.UI
 
         public void PickCardDebug()
         {
-            ShowPickCardMenu(VCardPileType.Deck, 3, false, false);
+            ShowPickCardMenu(VCardPileType.ALL, 3, false, false);
         }
         
         public void ShowPickCardMenu(VCardPileType cardPileType, int count, bool isFromCard, bool shouldPlayTwice)
@@ -138,6 +123,10 @@ namespace VTuber.BattleSystem.UI
                     break;
                 case VCardPileType.Deck:
                     cards = VBattle.Instance.CardPilesManager.Deck.ToList();
+                    break;
+                case VCardPileType.ALL:
+                    cards = VDataManager.Instance.GetAllCardConfigurations().Select(card => card.CreateCard())
+                        .ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cardPileType), cardPileType, null);
@@ -200,10 +189,7 @@ namespace VTuber.BattleSystem.UI
         
         public Tween SetBattlePause(bool paused)
         {
-            battlePausePanel.SetActive(paused);
-            float scale = paused ? 0.75f : 1.0f;
-            Tween.Scale(backgroundUIWrapper, Vector3.one * scale, 0.3f);
-            return Tween.Scale(battleUIWrapper, Vector3.one * scale, 0.3f);
+            return VEventSystemUI.Instance.SetFullScreen();
         }
         
         protected override void Awake()
@@ -248,7 +234,7 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            //SetBattleUIScale(0.75f).OnComplete(() => battleRoot.SetActive(false));
+            //SetFullScreen(0.75f).OnComplete(() => battleRoot.SetActive(false));
         }
 
         private void OnBattlePause(Dictionary<string, object> messagedict)
@@ -263,13 +249,6 @@ namespace VTuber.BattleSystem.UI
                 Destroy(card.gameObject);
             }
             _handSlotsCards.Clear();
-            SetBattleUIScale(1.0f);
-            SetTargetPopularity(messagedict["TargetPopularity"] as int? ?? 0);
-            SetExtraTargetPopularityText(messagedict["ExtraTargetPopularity"] as int? ?? 0);
-            
-            bool isPhaseEnding = messagedict["IsPhaseEnding"] as bool? ?? false;
-            multiplierUI.IsInUse(isPhaseEnding);
-            multiplierUI.gameObject.SetActive(isPhaseEnding);
         }
         
         private void OnBeginPickCardsFromPile(Dictionary<string, object> messagedict)

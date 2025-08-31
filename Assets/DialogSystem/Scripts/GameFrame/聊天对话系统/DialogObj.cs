@@ -14,6 +14,7 @@ public class DialogObj : MonoBehaviour
     public RectTransform contentTransform;
     public RectTransform contentDMTransform;
     public RectTransform contentGroupTransform;
+    public RectTransform WordBoxTransform;
     public Text words;
     public RectTransform rect;
     private Vector2 originSize;
@@ -29,7 +30,7 @@ public class DialogObj : MonoBehaviour
         originSize = rect.sizeDelta;
          // if (words)
          // {
-         //     oldText = words.text;
+         //     oldText = words.layer;
          // }
     }
 
@@ -49,11 +50,10 @@ public class DialogObj : MonoBehaviour
                 contentTransform.anchoredPosition = contentGroupTransform.anchoredPosition;
         }
         speakerIcon.sprite = Resources.Load<Sprite>($"Sprites/SpeakerIcons/{dc.iconId}");
-        print(dc.iconId);
         if (dc.ifImage)
         {
-            print(dc.imageId);
             wordsImage.sprite = Resources.Load<Sprite>($"Sprites/SpeakerImages/{dc.imageId}");
+            WordBoxTransform.localScale *= 1.2f;
         }
         else
         {
@@ -66,13 +66,13 @@ public class DialogObj : MonoBehaviour
 
     private void Update()
     {
-        // if (oldText != words.text)
+        // if (oldText != words.layer)
         // {
         //     once = true;
         // }
         // if (once)
         // {
-        //     string str=words.text;
+        //     string str=words.layer;
         //     string result = "";
         //     int point = 0;
         //     for (int i = 0; i < str.Length; i++)
@@ -85,9 +85,9 @@ public class DialogObj : MonoBehaviour
         //         result += str[i];
         //         point++;
         //     }     
-        //     words.text = result;
-        //     oldText = words.text;
-        //     int lines=Mathf.FloorToInt(words.text.Length/numToChangeLine);
+        //     words.layer = result;
+        //     oldText = words.layer;
+        //     int lines=Mathf.FloorToInt(words.layer.Length/numToChangeLine);
         //     rect.sizeDelta = new Vector2(rect.sizeDelta.x, originSize.y+lines*lineHeight);
         //     once = false;
         // }

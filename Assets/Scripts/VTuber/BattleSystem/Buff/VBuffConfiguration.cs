@@ -19,19 +19,21 @@ namespace VTuber.BattleSystem.Buff
     {
         public const int Id = 0;
         public const int Name = 1;
-        public const int BuffType = 2;
-        public const int Stackable = 3;
-        public const int Latency = 4;
-        public const int Effect1 = 5;
-        public const int E1Param = 6;
-        public const int Effect2 = 7;
-        public const int E2Param = 8;
-        public const int Effect3 = 9;
-        public const int E3Param = 10;
-        public const int Effect4 = 11;
-        public const int E4Param = 12;
-        public const int Effect5 = 13;
-        public const int E5Param = 14;
+        public const int Description = 2;
+        public const int BuffType = 3;
+        public const int Stackable = 4;
+        public const int Latency = 5;
+        public const int Icon = 6;
+        public const int Effect1 = 7;
+        public const int E1Param = 8;
+        public const int Effect2 = 9;
+        public const int E2Param = 10;
+        public const int Effect3 = 11;
+        public const int E3Param = 12;
+        public const int Effect4 = 13;
+        public const int E4Param = 14;
+        public const int Effect5 = 15;
+        public const int E5Param = 16;
     }
     
     //Buff 的配置数据通过 VBuffConfiguration 存储，并延迟用于创建实例
@@ -39,6 +41,7 @@ namespace VTuber.BattleSystem.Buff
     {
         public uint id;
         public string buffName;
+        public string description;
         public Sprite icon;
         public BuffType buffType;
         public bool stackable = true;
@@ -51,11 +54,13 @@ namespace VTuber.BattleSystem.Buff
         {
             id = Convert.ToUInt32(row.Columns[VBuffHeaderIndex.Id].Value);
             buffName = row.Columns[VBuffHeaderIndex.Name].Value;
-            //icon = csv.GetField<string>("Icon");
+            description = row.Columns[VBuffHeaderIndex.Description].Value;
             buffType = Enum.Parse<BuffType>(row.Columns[VBuffHeaderIndex.BuffType].Value);
             stackable =  Convert.ToInt32(row.Columns[VBuffHeaderIndex.Stackable].Value) == 1;
             effectItems = new List<VEffectItem>();
             latency = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Latency].Value);
+            icon = VResourcesManager.Instance.TryGetSprite(row.Columns[VBuffHeaderIndex.Icon].Value.Trim());
+            
             // 每两个字段为一组：EffectID + 参数
             for (int i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E5Param; i += 2)
             {               

@@ -20,6 +20,7 @@ namespace VTuber.BattleSystem.Card
         public uint configID => _configuration.id;
         public string CardName => _configuration.cardName;
         public bool IsExhaust => _configuration.isExhaust;
+        public bool IsUnique => _configuration.notRepeatable;
         public string CardType => _configuration.cardType;
    
         public string LiveType => _configuration.liveType;
@@ -32,9 +33,7 @@ namespace VTuber.BattleSystem.Card
         
         public int Cost => _cost.Value;
         private VUpgradableValue<int> _cost;
-        
-        public Sprite Background => _configuration.background;
-        public Sprite Facade => _configuration.facade;
+        public Sprite Icon => _configuration.icon;
         
         private List<VEffect> _effects;
         private List<VEffect> _newEffects;
@@ -146,9 +145,26 @@ namespace VTuber.BattleSystem.Card
 
         public void TestCondition(VBattle battle)
         {
+
+            bool costSatisfied = false;
+            if (CostType == CostType.Buff)
+            {
+                costSatisfied = battle.BuffManager.TestCost(CostBuffId, Cost);
+            }
+            else
+            {
+                costSatisfied = battle.BattleAttributeManager.StaminaManager.TestCost(Cost, CostType == CostType.TrueStamina);
+            }
+            
+            bool conditionSatisfied = false;
+
             if (condition == null)
-                return;
-            setPlayable?.Invoke(condition.IsTrue(battle, null));
+                conditionSatisfied = true;
+            else
+                conditionSatisfied = condition.IsTrue(battle, null);
+            
+            
+            setPlayable?.Invoke(costSatisfied && conditionSatisfied);
         }
 
         public void PreviewPopularity(VBattle battle, bool firstTime)
@@ -222,6 +238,10 @@ namespace VTuber.BattleSystem.Card
                 effect.Upgrade();
             }
             VDebug.Log("卡牌升级: " + CardName);
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardUpgraded, new Dictionary<string, object>()
+            {
+                { "Card", this }
+            });
         }
 
         public void Downgrade()

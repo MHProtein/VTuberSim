@@ -72,28 +72,20 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             _returnAction?.Invoke();
         }
 
-    public async void Spawn()
+        public void Spawn()
         {
-            try
-            {
-                _accountUIs = new List<VAccountUI>();
-                foreach (var account in _accounts)
-                {
-                    await SpawnAccount(account);
-                }
-            }
-            catch (Exception e)
-            {
-                VDebug.LogError(e.Message);
+            _accountUIs = new List<VAccountUI>();
+            foreach (var account in _accounts)
+            { 
+                SpawnAccount(account);
             }
         }
 
-        private Task SpawnAccount(VAccount account)
+        private void SpawnAccount(VAccount account)
         {
             var accountUI = Instantiate(accountPrefab, accountGrids).GetComponent<VAccountUI>();
             accountUI.Initialize(this, account);
             _accountUIs.Add(accountUI);
-            return Task.CompletedTask;
         }
 
         public void Show()
@@ -176,17 +168,29 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             }
             
             characterUI.SetAccounts(_selectedAccounts);
-            Tween.LocalPosition(accountUI.transform, unpickPosition.localPosition, 0.4f).OnComplete((() => accountUI.transform.SetParent(accountGrids)));
-            Tween.Scale(accountUI.transform, Vector3.one, 0.4f);
+            
+            accountUI.transform.localScale = Vector3.one;
+            Tween.LocalPosition(accountUI.transform, unpickPosition.localPosition, 0.4f);
+            Tween.Scale(accountUI.transform, Vector3.one, 0.35f).OnComplete((() => accountUI.transform.SetParent(accountGrids)));
         }
 
         public void Clear()
         {
+            foreach (var accountSlot in accountSlots)
+            {
+                accountSlot.RemoveAccountUI();
+            }
             foreach (var accountUI in _accountUIs)
             {
-                Destroy(accountUI);
+                Destroy(accountUI.gameObject);
+            }
+
+            foreach (var selectedAccount in _selectedAccounts)
+            {
+                Destroy(selectedAccount.gameObject);
             }
             _accountUIs.Clear();
+            _selectedAccounts.Clear();
         }
     }
 }

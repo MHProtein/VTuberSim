@@ -7,18 +7,47 @@ using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VValueModifier<T>
     {
+        public class ModifierItem
+        {
+            public T Value => _value;
+            private T _value;
+            public int TurnCount => _turnCount;
+            private int _turnCount;
+
+            public ModifierItem(T value, int turnCount)
+            {
+                _value = value;
+                _turnCount = turnCount;
+            }
+
+            public void SetValue(T value)
+            {
+                _value = value;
+            }
+
+            public bool DecreaseTurnCount()
+            {
+                if (_turnCount == -1)
+                    return false;
+                _turnCount--;
+                return _turnCount <= 0;
+            }
+            
+        }
+        
         public T DefaultValue => _defaultValue;
    
         private T _defaultValue;
         uint _idDistributor = 0;
         
-        public Dictionary<uint, T> Modifiers => _modifiers;
-        private Dictionary<uint, T> _modifiers = new Dictionary<uint, T>();
+        public Dictionary<uint, ModifierItem> Modifiers => _modifiers;
+        private Dictionary<uint, ModifierItem> _modifiers = new Dictionary<uint, ModifierItem>();
 
         private VBattleEventKey _eventKey = VBattleEventKey.Default;
         
@@ -32,9 +61,9 @@ namespace VTuber.BattleSystem.BattleAttribute
             _eventKey = eventKey;
         }
         
-        public uint AddModifier(T modifier)
+        public uint AddModifier(T modifier, int turnCount)
         {
-            _modifiers.Add(_idDistributor++, modifier);
+            _modifiers.Add(_idDistributor++, new ModifierItem(modifier, turnCount));
             SendEvent();
             return _idDistributor - 1;
         }
@@ -52,7 +81,7 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             if (_modifiers.ContainsKey(id))
             {
-                _modifiers[id] = newValue;
+                _modifiers[id].SetValue(newValue);
             }
             SendEvent();
         }
@@ -64,7 +93,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             int total = modifier.DefaultValue;
             foreach (var mod in modifier.Modifiers)
             {
-                total += mod.Value;
+                total += mod.Value.Value;
             }
             return total;
         }
@@ -76,7 +105,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             float total = modifier.DefaultValue;
             foreach (var mod in modifier.Modifiers)
             {
-                total += mod.Value;
+                total += mod.Value.Value;
             }
             return total;
         }
@@ -159,11 +188,9 @@ namespace VTuber.BattleSystem.BattleAttribute
         
         public virtual void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)
         {
-            if (delta == 0)
-                return;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue ));
+            int finalDelta = VMathUtils.FloatToInt((delta + gainPointsModifierValue) * (gainRateModifierValue ));
             if(delta < 0 && finalDelta > 0)
                 finalDelta = 0;
             SetValue(Mathf.Clamp(finalDelta + Value,
@@ -178,7 +205,7 @@ namespace VTuber.BattleSystem.BattleAttribute
                 return Value;
             int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
             float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = (int)((delta + gainPointsModifierValue) * (gainRateModifierValue));
+            int finalDelta = VMathUtils.FloatToInt((delta + gainPointsModifierValue) * (gainRateModifierValue));
             if(delta < 0 && finalDelta > 0)
                 finalDelta = 0;
             return Value + finalDelta;
@@ -200,23 +227,25 @@ namespace VTuber.BattleSystem.BattleAttribute
             SendEvent(Value, Value, isFromCard, shouldPlayTwice);
         }
         
-        protected virtual void SetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
+        public virtual void SetValue(int value, bool isFromCard, bool shouldPlayTwice = false, bool sendEvent = true)
         {
             var delta = value - Value;
             Value = Mathf.Clamp(value, _minValue, _maxValue);
             if (Value > HighestValue)
                 HighestValue = Value;
-            SendEvent(Value, delta, isFromCard, shouldPlayTwice);
+            if(sendEvent)
+                SendEvent(Value, delta, isFromCard, shouldPlayTwice);
         }
         
-        public void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)  
+        public virtual void SendEvent(int newValue, int delta, bool isFromCard, bool shouldPlayTwice = false)  
         {
             var messageDict = new Dictionary<string, object>
             {
                 { "NewValue", newValue },
                 { "Delta", delta },
                 {"IsFromCard", isFromCard },
-                {"ShouldPlayTwice", shouldPlayTwice }
+                {"ShouldPlayTwice", shouldPlayTwice },
+                {"MaxValue", _maxValue}
             };
             VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
             
@@ -226,12 +255,41 @@ namespace VTuber.BattleSystem.BattleAttribute
 
         public virtual void OnEnable()
         {
-            
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
         }
-        
+
+        protected virtual void OnTurnEnd(Dictionary<string, object> messagedict)
+        {
+            var removeIndices = new List<uint>();
+            foreach (var mod in gainPointsModifier.Modifiers)
+            {
+                if (mod.Value.DecreaseTurnCount())
+                {
+                    removeIndices.Add(mod.Key);
+                }
+            }
+            foreach (var index in removeIndices)
+            {
+                gainPointsModifier.RemoveModifier(index);
+            }
+            
+            removeIndices = new List<uint>();
+            foreach (var mod in gainRateModifier.Modifiers)
+            {
+                if (mod.Value.DecreaseTurnCount())
+                {
+                    removeIndices.Add(mod.Key);
+                }
+            }
+            foreach (var index in removeIndices)
+            {
+                gainRateModifier.RemoveModifier(index);
+            }
+        }
+
         public virtual void OnDisable()
         {
-            
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
         }
     }
 }

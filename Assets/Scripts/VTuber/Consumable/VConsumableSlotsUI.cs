@@ -27,6 +27,7 @@ namespace VTuber.Consumable
             clickDetectionPanel.onClick += CloseSubMenu;
             
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnAddConsumable, OnAddConsumable);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRemoveConsumable, OnRemoveConsumable);
         }
 
         protected override void OnDisable()
@@ -34,8 +35,16 @@ namespace VTuber.Consumable
             base.OnDisable();
             clickDetectionPanel.onClick -= CloseSubMenu;
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnAddConsumable, OnAddConsumable);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRemoveConsumable, OnRemoveConsumable);
         }
-        
+
+        private void OnRemoveConsumable(Dictionary<string, object> messagedict)
+        {
+            var consumable = messagedict["Consumable"] as VConsumable;
+            var slot = _slots.Find(slot => slot.GetConsumable() == consumable);
+            slot.Clear();
+        }
+
         private void OnAddConsumable(Dictionary<string, object> messagedict)
         {
             var consumable = messagedict["Consumable"] as VConsumable;

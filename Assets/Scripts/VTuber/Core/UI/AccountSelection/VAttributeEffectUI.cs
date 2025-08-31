@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 {

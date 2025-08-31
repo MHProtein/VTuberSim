@@ -30,19 +30,36 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image pfp;
         [SerializeField] private List<Image> eventIcons;
         
-        public bool Available => placeable && _item is null;
-        public bool placeable = true;
+        public bool Available
+        {
+            get
+            {
+                if (_placeable)
+                    return _item is null;
+                if (_allowedEventID == -1)
+                    return false;
+                return _item is null && _allowedEventID == _eventID;
+            }
+        }
+
+        private bool _placeable = true;
+        private bool _disposing = false;
+        private int _allowedEventID;
+        private int _eventID;
+        private bool _useThisTransformAsParent;
         
-        public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI)
+        public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI, bool useThisTransformAsParent)
         {
             _coordination = coordination;
             _scheduleUI = scheduleUI;
+            _useThisTransformAsParent = useThisTransformAsParent;
         }
 
-        public void SetPlaceable(bool isPlaceable, bool showFrame)
+        public void SetPlaceable(bool isPlaceable, bool showFrame, int allowedEventID)
         {
-            placeable = isPlaceable;
+            _placeable = isPlaceable;
             highlightFrame.SetActive(showFrame);
+            _allowedEventID = allowedEventID;
         }
 
         public void SetCoopEvent(VCoopEventItem eventItem)
@@ -265,12 +282,22 @@ namespace VTuber.ScheduleSystem.UI
         }
 
 
-        public bool FindPosition(int height, float offsetY, out List<VScheduleSlot> parents,
+        public bool FindPosition(int eventID, int height, float offsetY, out List<VScheduleSlot> parents,
             out Transform transformParent, out Vector3 position)
         {
+            _eventID = eventID;
             parents = null;
             transformParent = null;
             position = Vector3.zero;
+
+            if (_useThisTransformAsParent)
+            {
+                transformParent = transform;
+            }
+            else
+            {
+                transformParent = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect;
+            }
 
             if (!Available)
             {
@@ -283,7 +310,6 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     this
                 };
-                transformParent = transform;
                 position = transform.position;
                 return true;
             }
@@ -299,7 +325,6 @@ namespace VTuber.ScheduleSystem.UI
                             _scheduleUI.Slots[0, _coordination.x],
                             _scheduleUI.Slots[1, _coordination.x]
                         };
-                        transformParent = _scheduleUI.Slots[1, _coordination.x].transform;
                         position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
                                     _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
                         return true;
@@ -319,7 +344,6 @@ namespace VTuber.ScheduleSystem.UI
                                 _scheduleUI.Slots[0, _coordination.x],
                                 _scheduleUI.Slots[1, _coordination.x]
                             };
-                            transformParent = _scheduleUI.Slots[1, _coordination.x].transform;
                             position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
                                         _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
                             return true;
@@ -332,7 +356,6 @@ namespace VTuber.ScheduleSystem.UI
                                 _scheduleUI.Slots[1, _coordination.x],
                                 _scheduleUI.Slots[2, _coordination.x]
                             };
-                            transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
                             position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
                                         _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                             return true;
@@ -347,7 +370,6 @@ namespace VTuber.ScheduleSystem.UI
                                 _scheduleUI.Slots[1, _coordination.x],
                                 _scheduleUI.Slots[2, _coordination.x]
                             };
-                            transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
                             position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
                                         _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                             return true;
@@ -359,7 +381,6 @@ namespace VTuber.ScheduleSystem.UI
                                 _scheduleUI.Slots[0, _coordination.x],
                                 _scheduleUI.Slots[1, _coordination.x]
                             };
-                            transformParent = _scheduleUI.Slots[1, _coordination.x].transform;
                             position = (_scheduleUI.Slots[0, _coordination.x].transform.position +
                                         _scheduleUI.Slots[1, _coordination.x].transform.position) / 2f;
                             return true;
@@ -376,7 +397,6 @@ namespace VTuber.ScheduleSystem.UI
                             _scheduleUI.Slots[1, _coordination.x],
                             _scheduleUI.Slots[2, _coordination.x]
                         };
-                        transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
                         position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
                                     _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                         return true;
@@ -402,12 +422,16 @@ namespace VTuber.ScheduleSystem.UI
                     _scheduleUI.Slots[1, _coordination.x],
                     _scheduleUI.Slots[2, _coordination.x]
                 };
-                transformParent = _scheduleUI.Slots[2, _coordination.x].transform;
                 position = _scheduleUI.Slots[1, _coordination.x].transform.position;
                 return true;
             }
 
             return false;
+        }
+
+        public void SetUseThisTransformAsParent(bool b)
+        {
+            _useThisTransformAsParent = b;
         }
     }
 }

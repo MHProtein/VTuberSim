@@ -93,6 +93,8 @@ namespace VTuber.BattleSystem.Core
                 case VCardPileType.Deck:
                     _handPile.AddRange(pickedCards);
                     return;
+                case VCardPileType.ALL:
+                    return;
             }
             
             RemoveCardsFromPile(pile, pickedCards);

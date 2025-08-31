@@ -34,10 +34,10 @@ namespace VTuber.BattleSystem.UI
                 () =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);
-                    ParameterText.faceColor = Color.white;
+                    ParameterText.color = Color.white;
                 })));
             
-            ParameterText.faceColor = delta > 0 ? Color.green : Color.red;
+            ParameterText.color = delta > 0 ? Color.green : Color.red;
         }
         
     }

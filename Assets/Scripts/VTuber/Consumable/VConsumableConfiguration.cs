@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.Utilities;
 using Spire.Xls;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Managers;
@@ -17,12 +18,13 @@ namespace VTuber.Consumable
         public const int Type = 3;
         public const int LiveType = 4;
         public const int Rarity = 5;
-        public const int Effect1 = 6;
-        public const int E1Param = 7;
-        public const int Effect2 = 8;
-        public const int E2Param = 9;
-        public const int Effect3 = 10;
-        public const int E3Param = 11;
+        public const int Icon = 6;
+        public const int Effect1 = 7;
+        public const int E1Param = 8;
+        public const int Effect2 = 9;
+        public const int E2Param = 10;
+        public const int Effect3 = 11;
+        public const int E3Param = 12;
     }
     
     public class VRaisingConsumableConfiguration : VConsumableConfiguration
@@ -91,6 +93,7 @@ namespace VTuber.Consumable
         public VConsumableRarity rarity;
         protected uint idDistributor = 0;    
         public string liveType;
+        public Sprite icon;
 
         public VConsumableConfiguration(CellRange row)
         {
@@ -99,6 +102,7 @@ namespace VTuber.Consumable
             description = row.Columns[VConsumableHeaderIndex.Description].Value.Trim();
             rarity = Enum.Parse<VConsumableRarity>(row.Columns[VConsumableHeaderIndex.Rarity].Value.Trim());
             liveType = row.Columns[VConsumableHeaderIndex.LiveType].Value.Trim();
+            icon = VResourcesManager.Instance.TryGetSprite(row.Columns[VConsumableHeaderIndex.Icon].Value.Trim());
         }
         
         public virtual VConsumable CreateConsumable()

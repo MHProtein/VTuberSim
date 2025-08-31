@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.Character;
 using VTuber.Consumable;
@@ -14,13 +15,14 @@ namespace VTuber.Core.RaisingEffect
             rarityProbabilities = configuration.rarityProbabilities;
         }
         
-        public List<VConsumable> GetRandomConsumables(int count)
+        public List<VConsumable> GetRandomConsumables(int count, string liveType)
         {
             List<int> rarityCounts = new List<int>()
             {
                 0, 0, 0
             };
-            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations();
+            List<VConsumableConfiguration> consumables = VDataManager.Instance.
+                GetAllConsumableConfigurations().Where(configuration => (configuration.liveType == liveType || configuration.liveType == "F")).ToList();
             
             if (consumables.Count == 0)
                 return null;
@@ -51,7 +53,8 @@ namespace VTuber.Core.RaisingEffect
             
             List<VConsumable> selectedConsumables = new List<VConsumable>();
 
-            for (int i = 0; i < count; i++)
+            int i = 0;
+            while (i < count)
             {
                 float probability = Random.Range(0, 1.0f);
                 float totalProbability = 0;
@@ -60,8 +63,11 @@ namespace VTuber.Core.RaisingEffect
                     totalProbability += perConsumableProbabilityByRarity[(int)consumables[j].rarity];
                     if (probability <= totalProbability)
                     {
-                        var card = consumables[j].CreateConsumable();
-                        selectedConsumables.Add(card);
+                        var consumable = consumables[j].CreateConsumable();
+                        if (selectedConsumables.Find(vConsumable => vConsumable._configuration.id == consumable._configuration.id) != null)
+                            break;
+                        selectedConsumables.Add(consumable);
+                        ++i;
                         break;
                     }
                 }

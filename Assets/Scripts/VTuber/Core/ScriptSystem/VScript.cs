@@ -68,7 +68,7 @@ namespace VTuber.Core.ScriptSystem
             return null;
         }
 
-        public VScoreResult CalculateScore(VCharacter character, int popularity)
+        public VScoreResult CalculateScore(VCharacter character, int popularity, bool success)
         {
             int singingAbility = character.AttributeManager.Attributes["CASingingAbility"].Value;
             int gamingAbility = character.AttributeManager.Attributes["CAGamingAbility"].Value;
@@ -89,6 +89,8 @@ namespace VTuber.Core.ScriptSystem
                         follower * _configuration.followerCoefficient
                         + highestMembershipCount * _configuration.membershipCoefficient
                         + popularityCoefficient * popularity);
+            if(success)
+                score += _configuration.successBonus;
             
             var scoreLevel = _configuration.scoreLevels.Find(level => score >= level.low && score <= level.high);
             VDebug.Log("歌力： " + singingAbility);

@@ -72,6 +72,8 @@ namespace VTuber.BattleSystem.Core.UI
             
             _accountSelectionMenu.Hide();
             _startGame?.Invoke(_selectedCharacter, _selectedScript, selectedAccounts);
+            _scriptSelectionMenu.Clear();
+            _accountSelectionMenu.Clear();
         }
 
         public void AccountSelectionMenuReturn()

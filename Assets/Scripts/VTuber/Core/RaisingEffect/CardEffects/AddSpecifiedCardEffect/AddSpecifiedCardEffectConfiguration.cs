@@ -5,9 +5,9 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Core.RaisingEffect
 {
-    public class AddSpecifiedCardEffectConfiguration : VRaisingEffectConfiguration
+    public class VAddSpecifiedCardEffectConfiguration : VRaisingEffectConfiguration
     {
-        public AddSpecifiedCardEffectConfiguration(CellRange row) : base(row)
+        public VAddSpecifiedCardEffectConfiguration(CellRange row) : base(row)
         {
             
         }

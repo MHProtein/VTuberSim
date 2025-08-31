@@ -15,12 +15,16 @@ namespace VTuber.BattleSystem.Core.SaveSystem
         //5 Accounts in total
         //10-cards, 10-relics, 10-attributes
         public int accountCount;
+        public string[] accountNames;
         public int[,] accountData;
         public string[,] effectParameters;
-        
-        public VSave(VCharacter character)
+        public int[,] effectLevels;
+
+        public VSave(List<VAccount> accounts)
         {
+            accountCount = accounts.Count;
             accountData = new int[100, 30];
+            
             for (int i = 0; i < 100; i++)
             {
                 for (int j = 0; j < 30; j++)
@@ -28,12 +32,18 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                     accountData[i, j] = -1;
                 }
             }
+            
+            accountNames = new string[100];
+            for (int i = 0; i < accounts.Count; i++)
+            {
+                accountNames[i] = accounts[i].accountName;
+            }
 
             effectParameters = new string[100, 10];
-            accountCount = character.Accounts.Count;
-            for (int i = 0; i < character.Accounts.Count; i++)
+            effectLevels = new int[100, 10];
+            for (int i = 0; i < accounts.Count; i++)
             {
-                var account = character.Accounts[i];
+                var account = accounts[i];
                 for (int j = 0; j < account.Cards.Count; j++)
                 {
                     accountData[i, j] = (int)account.Cards[j].configID;
@@ -50,12 +60,13 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                 }
             }
             
-            for (int i = 0; i < character.Accounts.Count; i++)
+            for (int i = 0; i < accounts.Count; i++)
             {
-                var account = character.Accounts[i];
+                var account = accounts[i];
                 for (int j = 0; j < account.Effects.Count; j++)
                 {
-                    effectParameters[i, j] = account.EffectItems[j].parameter;
+                    effectParameters[i, j] = account.Effects[j].GetParameter();
+                    effectLevels[i, j] = account.EffectLevels[j];
                 }
             }
         }
@@ -63,11 +74,14 @@ namespace VTuber.BattleSystem.Core.SaveSystem
         public List<VAccount> LoadAccounts()
         {
             List<VAccount> accounts = new List<VAccount>();
+            
             for (int i = 0; i < accountCount; i++)
             {
                 List<VCard> cards = new List<VCard>();
                 List<VRelic> relics = new List<VRelic>();
                 List<VRaisingEffect> effects = new List<VRaisingEffect>();
+                List<int> effectLevel = new List<int>();
+                
                 for (int j = 0; j < 10; j++)
                 {
                     if (accountData[i, j] == -1)
@@ -88,10 +102,13 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                     if (accountData[i, j] == -1)
                         break;
                     effects.Add(VDataManager.Instance.CreateRaisingEffectByID
-                        ((uint)accountData[i, j], effectParameters[i, j], effectParameters[i, j]));
+                        ((uint)accountData[i, j], effectParameters[i, j - 20], effectParameters[i, j - 20]));
+                    effectLevel.Add(effectLevels[i, j - 20]);
                 }
-                
-                accounts.Add(new VAccount(cards, relics, effects));
+
+                var account = new VAccount(cards, relics, effects, effectLevel);
+                account.accountName = accountNames[i];
+                accounts.Add(account);
             }
             return accounts;
         }

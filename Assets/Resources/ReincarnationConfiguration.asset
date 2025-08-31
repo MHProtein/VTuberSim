@@ -34,7 +34,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 9
     - Name: 
       Entry: 7
       Data: 
@@ -49,7 +49,7 @@ MonoBehaviour:
       Data: 3
     - Name: cardTotalCapacity
       Entry: 3
-      Data: 50
+      Data: 35
     - Name: cardRarityRequirements
       Entry: 7
       Data: 3|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
@@ -94,6 +94,362 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: F
+    - Name: $v
+      Entry: 7
+      Data: 6|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 1
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 5
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 7|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: E
+    - Name: $v
+      Entry: 7
+      Data: 8|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 1
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 5
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 9|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: D
+    - Name: $v
+      Entry: 7
+      Data: 10|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 1
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 8
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 11|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: C
+    - Name: $v
+      Entry: 7
+      Data: 12|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 2
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 12
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 13|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 14|VTuber.Reincarnation.VCardRarityRequirement, Assembly-CSharp
+    - Name: rarity
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: B
+    - Name: $v
+      Entry: 7
+      Data: 15|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 2
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 15
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 16|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 17|VTuber.Reincarnation.VCardRarityRequirement, Assembly-CSharp
+    - Name: rarity
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: A
+    - Name: $v
+      Entry: 7
+      Data: 18|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 2
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 20
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 19|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 20|VTuber.Reincarnation.VCardRarityRequirement, Assembly-CSharp
+    - Name: rarity
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SS
+    - Name: $v
+      Entry: 7
+      Data: 21|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 3
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 40
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 22|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 23|VTuber.Reincarnation.VCardRarityRequirement, Assembly-CSharp
+    - Name: rarity
+      Entry: 3
+      Data: 3
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 24|VTuber.Reincarnation.VCardRarityRequirement, Assembly-CSharp
+    - Name: rarity
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SSS
+    - Name: $v
+      Entry: 7
+      Data: 25|VTuber.Reincarnation.VCardLevelInfo, Assembly-CSharp
+    - Name: cardCount
+      Entry: 3
+      Data: 4
+    - Name: cardTotalCapacity
+      Entry: 3
+      Data: 45
+    - Name: cardRarityRequirements
+      Entry: 7
+      Data: 26|System.Collections.Generic.List`1[[VTuber.Reincarnation.VCardRarityRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 27|VTuber.Reincarnation.VCardRarityRequirement, Assembly-CSharp
+    - Name: rarity
+      Entry: 3
+      Data: 3
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 28|VTuber.Reincarnation.VCardRarityRequirement, Assembly-CSharp
+    - Name: rarity
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -101,14 +457,14 @@ MonoBehaviour:
       Data: 
     - Name: relicCount
       Entry: 7
-      Data: 6|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32,
+      Data: 29|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Int32,
         mscorlib]], mscorlib
     - Name: comparer
       Entry: 9
       Data: 1
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 9
     - Name: 
       Entry: 7
       Data: 
@@ -117,7 +473,103 @@ MonoBehaviour:
       Data: S
     - Name: $v
       Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: A
+    - Name: $v
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: B
+    - Name: $v
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: C
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: D
+    - Name: $v
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: E
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SS
+    - Name: $v
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SSS
+    - Name: $v
+      Entry: 3
       Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: F
+    - Name: $v
+      Entry: 3
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -129,11 +581,11 @@ MonoBehaviour:
       Data: 
     - Name: effectCapacities
       Entry: 7
-      Data: 7|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Int32,
+      Data: 30|System.Collections.Generic.Dictionary`2[[System.Int32, mscorlib],[System.Int32,
         mscorlib]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 8|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
+      Data: 31|System.Collections.Generic.GenericEqualityComparer`1[[System.Int32,
         mscorlib]], mscorlib
     - Name: 
       Entry: 8
@@ -149,7 +601,7 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 3
-      Data: 5
+      Data: 4
     - Name: 
       Entry: 8
       Data: 
@@ -161,7 +613,7 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 3
-      Data: 10
+      Data: 8
     - Name: 
       Entry: 8
       Data: 
@@ -173,7 +625,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 3
-      Data: 15
+      Data: 14
     - Name: 
       Entry: 8
       Data: 
@@ -185,18 +637,18 @@ MonoBehaviour:
       Data: 
     - Name: attributeLevels
       Entry: 7
-      Data: 9|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[VTuber.Reincarnation.VEffectLevelInfo,
+      Data: 32|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[VTuber.Reincarnation.VEffectLevelInfo,
         Assembly-CSharp]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 10|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+      Data: 33|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
         mscorlib]], mscorlib
     - Name: 
       Entry: 8
       Data: 
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 9
     - Name: 
       Entry: 7
       Data: 
@@ -205,26 +657,51 @@ MonoBehaviour:
       Data: S
     - Name: $v
       Entry: 7
-      Data: 11|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 34|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 5
     - Name: capacity
       Entry: 3
-      Data: 70
+      Data: 40
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 12|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 35|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 36|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 37|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 13|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 38|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: count
       Entry: 3
       Data: 1
@@ -233,7 +710,266 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 14|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 39|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: F
+    - Name: $v
+      Entry: 7
+      Data: 40|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 3
+    - Name: capacity
+      Entry: 3
+      Data: 12
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 41|Antlr4.Runtime.Misc.ArrayList`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], Yarn.Antlr4.Runtime.Standard
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 42|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 43|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 44|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: E
+    - Name: $v
+      Entry: 7
+      Data: 45|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 3
+    - Name: capacity
+      Entry: 3
+      Data: 16
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 46|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 47|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 48|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 49|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: D
+    - Name: $v
+      Entry: 7
+      Data: 50|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 3
+    - Name: capacity
+      Entry: 3
+      Data: 20
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 51|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 52|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 53|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 54|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: B
+    - Name: $v
+      Entry: 7
+      Data: 55|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 4
+    - Name: capacity
+      Entry: 3
+      Data: 30
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 56|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 57|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
       Entry: 3
       Data: 1
@@ -251,17 +987,373 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 15|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 58|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 59|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 60|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: A
+    - Name: $v
+      Entry: 7
+      Data: 61|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 5
+    - Name: capacity
+      Entry: 3
+      Data: 34
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 62|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 16|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 63|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
       Entry: 3
       Data: 1
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 64|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 65|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SS
+    - Name: $v
+      Entry: 7
+      Data: 66|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 6
+    - Name: capacity
+      Entry: 3
+      Data: 46
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 67|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 68|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 69|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 70|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 71|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: SSS
+    - Name: $v
+      Entry: 7
+      Data: 72|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 6
+    - Name: capacity
+      Entry: 3
+      Data: 52
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 73|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 74|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 75|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 76|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 77|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 78|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: C
+    - Name: $v
+      Entry: 7
+      Data: 79|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+    - Name: count
+      Entry: 3
+      Data: 4
+    - Name: capacity
+      Entry: 3
+      Data: 24
+    - Name: streamEffectsRequirements
+      Entry: 7
+      Data: 80|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 81|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 82|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: attributeEffectsRequirements
+      Entry: 7
+      Data: 83|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 84|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 85|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
     - Name: count
       Entry: 3
       Data: 1
@@ -288,78 +1380,112 @@ MonoBehaviour:
       Data: 
   cardCapacities:
   - rarity: 1
-    capacity: 5
-    upgradeCapacity: 10
+    capacity: 4
+    upgradeCapacity: 6
   - rarity: 2
+    capacity: 6
+    upgradeCapacity: 9
+  - rarity: 3
     capacity: 10
     upgradeCapacity: 15
-  - rarity: 3
-    capacity: 15
-    upgradeCapacity: 20
   relicRewards:
-  - relicID: 0
-    eventID: 4
+  - eventID: 4
+    relicIDs: 0f000000
+  - eventID: 5
+    relicIDs: 10000000
+  - eventID: 6
+    relicIDs: 11000000
+  - eventID: 7
+    relicIDs: 16000000
+  - eventID: 8
+    relicIDs: 17000000
+  - eventID: 9
+    relicIDs: 18000000
+  - eventID: 10
+    relicIDs: 19000000
+  - eventID: 11
+    relicIDs: 1a000000
+  - eventID: 12
+    relicIDs: 1b000000
+  - eventID: 13
+    relicIDs: 1c000000
+  - eventID: 14
+    relicIDs: 1d000000
+  - eventID: 15
+    relicIDs: 2a000000
+  - eventID: 16
+    relicIDs: 2b000000
+  - eventID: 17
+    relicIDs: 2c000000
+  - eventID: 18
+    relicIDs: 270000002800000029000000
+  - eventID: 19
+    relicIDs: 240000002500000026000000
+  - eventID: 20
+    relicIDs: 210000002200000023000000
+  - eventID: 21
+    relicIDs: 2d000000
   streamAttributeEffects:
-  - effect: 0
+  - effect: 28
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 30
+    - levelParam: 60
+    - levelParam: 90
     ability: 0
-    isGainEfficiency: 0
-  - effect: 1
-    levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
-    ability: 1
-    isGainEfficiency: 0
-  - effect: 2
-    levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
-    ability: 2
     isGainEfficiency: 0
   - effect: 9
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 2
+    - levelParam: 4
+    - levelParam: 6
     ability: 0
     isGainEfficiency: 1
+  - effect: 29
+    levelInfos:
+    - levelParam: 30
+    - levelParam: 60
+    - levelParam: 90
+    ability: 1
+    isGainEfficiency: 0
   - effect: 10
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 2
+    - levelParam: 4
+    - levelParam: 6
     ability: 1
     isGainEfficiency: 1
+  - effect: 30
+    levelInfos:
+    - levelParam: 30
+    - levelParam: 60
+    - levelParam: 90
+    ability: 2
+    isGainEfficiency: 0
   - effect: 11
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 2
+    - levelParam: 4
+    - levelParam: 6
     ability: 2
     isGainEfficiency: 1
   attributeEffects:
   - effect: 15
     levelInfos:
-    - levelParam: 10
-    - levelParam: 20
-    - levelParam: 40
+    - levelParam: 100
+    - levelParam: 200
+    - levelParam: 400
   - effect: 16
     levelInfos:
+    - levelParam: 5
     - levelParam: 10
     - levelParam: 20
-    - levelParam: 40
   - effect: 5
     levelInfos:
     - levelParam: 100
     - levelParam: 200
-    - levelParam: 400
-  - effect: 4
+    - levelParam: 350
+  - effect: 44
     levelInfos:
-    - levelParam: -1
-    - levelParam: -2
-    - levelParam: -3
+    - levelParam: 3
+    - levelParam: 5
+    - levelParam: 8

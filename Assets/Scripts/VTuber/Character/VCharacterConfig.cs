@@ -5,12 +5,15 @@ using VTuber.Core.Foundation;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using VTuber.BattleSystem.Card;
 using VTuber.Character.Attributes;
 
 namespace VTuber.Character
 {
     public class VCharacterConfiguration : VScriptableObject
     {
+        public string characterName;
+        [TextArea] public string description;
         public string liveType;
         public uint initialCardId;
         public uint initialRelicId;
@@ -50,16 +53,9 @@ namespace VTuber.Character
         [Header("")]
         [LabelText("最大值")]
         public int pressureMaxValue;
-
-        [LabelText("压力Buff表")]
-        [DictionaryDrawerSettings(KeyLabel = "BuffID", ValueLabel = "Layer",
-            DisplayMode = DictionaryDisplayOptions.OneLine)]
-        public List<int> pressureBuffs = new List<int>();
         
         [LabelText("压力效果表")]
-        [DictionaryDrawerSettings(KeyLabel = "效果ID", ValueLabel = "参数",
-            DisplayMode = DictionaryDisplayOptions.OneLine)]
-        public Dictionary<uint, string> pressureEffects = new ();
+        public List<VEffectItem> pressureEffects = new ();
         
         [PropertySpace(10)]
         [LabelText("Config文件")]

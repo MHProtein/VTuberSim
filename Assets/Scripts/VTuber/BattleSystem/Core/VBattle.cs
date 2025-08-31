@@ -8,9 +8,11 @@ using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Dialogue.UI;
 using VTuber.Relic;
 
 namespace VTuber.BattleSystem.Core
@@ -86,49 +88,62 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding);
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
             _buffManager = new VBuffManager(this);
-            _battleRelicManager = new VBattleRelicManager(this, relics);
             
             _battleAttributeManager.OnEnable();
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
             
-            _battleAttributeManager.AttributesConversion(_characterAttributeManager);
-            _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
-            _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
+            VEventSystemUI.Instance.OpenBattleUI();
             
-            _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
-            _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
-            
-            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
-            _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
-            
-            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
-            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
-            
-            if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+            VEventSystemUI.Instance.PlayVideo(() =>
             {
-                viewerCountAttribute.AddTo(initialViewers, false);
-            }
+                _battleAttributeManager.AttributesConversion(_characterAttributeManager);
+                _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
+                _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
 
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
-            {
-                { "TurnLeft", TurnLeft },
-                { "TargetPopularity", targetPopularity },
-                { "ExtraTargetPopularity", extraTargetPopularity },
-                { "IsPhaseEnding", isPhaseEnding },
-                { "CharacterAttributeManager", characterAttributeManager },
-                { "BattleAttributeManager", _battleAttributeManager }
+                if (!isPhaseEnding)
+                {
+                    _battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
+                    attribute.SetValue(100, false, false, false);
+                    _battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
+                    attribute.SetValue(100, false, false, false);
+                    _battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
+                    attribute.SetValue(100, false, false, false);
+                }
+            
+                _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
+                _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
+            
+                _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
+                _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
+            
+                _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+                _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
+                
+                _battleRelicManager = new VBattleRelicManager(this, relics);
+                if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+                {
+                    viewerCountAttribute.AddTo(initialViewers, false);
+                }
+                _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
+                {
+                    { "TurnLeft", TurnLeft },
+                    { "TargetPopularity", targetPopularity },
+                    { "ExtraTargetPopularity", extraTargetPopularity },
+                    { "IsPhaseEnding", isPhaseEnding },
+                    { "CharacterAttributeManager", characterAttributeManager },
+                    { "BattleAttributeManager", _battleAttributeManager }
+                });
+            
+                foreach (var buff in characterAttributeManager.GetBuffs())
+                {
+                    if(buff is not null)
+                        _buffManager.AddBuff(buff, 1, false, false);
+                }
+            
+                InitializeTurn();
             });
-            
-            _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
-            
-            foreach (var buff in characterAttributeManager.GetBuffs())
-            {
-                if(buff is not null)
-                    _buffManager.AddBuff(buff, 1, false, false);
-            }
-            
-            InitializeTurn();
         }
         
         public void SetShouldNextCardPlayTwice(bool value)
@@ -180,10 +195,8 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnPopularityChange, OnPopularityChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
-    
         }
         
-
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -204,8 +217,6 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnPopularityChange, OnPopularityChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
         }
-        
-
         
         private void OnShieldModifierChanged(Dictionary<string, object> messagedict)
         {
@@ -272,18 +283,6 @@ namespace VTuber.BattleSystem.Core
         {
             VCard card = messagedict["Card"] as VCard;
             
-            switch (card.CostType)
-            {
-                case CostType.Stamina:
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
-                    break;
-                case CostType.TrueStamina:
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
-                    break;
-                case CostType.Buff:
-                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
-                    break;
-            }
             card.TestCondition(this);
             card.PreviewPopularity(this, true);
             card.PreviewShield(this, true);
@@ -304,8 +303,6 @@ namespace VTuber.BattleSystem.Core
         {
             foreach (var card in _cardPilesManager.HandPile)
             {
-                if(card.CostType == CostType.Buff)
-                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
                 card.PreviewPopularity(this, false);
             } 
@@ -316,9 +313,9 @@ namespace VTuber.BattleSystem.Core
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if(card.CostType == CostType.Stamina)
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost));
+                    card.TestCondition(this);
                 if(card.CostType == CostType.TrueStamina)
-                    card.setPlayable?.Invoke(_battleAttributeManager.StaminaManager.TestCost(card.Cost, true));
+                    card.TestCondition(this);
             }
         }
         
@@ -432,8 +429,8 @@ namespace VTuber.BattleSystem.Core
             }
             if (popularity >= _targetPopularity)
             {
-                attributeGain = (int)(_abiliyBonus * 0.5f + _abiliyBonus * 0.5f * 
-                    (popularity - _targetPopularity) / (_extraTargetPopularity - _targetPopularity));
+                attributeGain = Mathf.CeilToInt((_abiliyBonus * 0.5f + _abiliyBonus * 0.5f * 
+                    (popularity - _targetPopularity) / (_extraTargetPopularity - _targetPopularity)));
             }
             return attributeGain;
         }

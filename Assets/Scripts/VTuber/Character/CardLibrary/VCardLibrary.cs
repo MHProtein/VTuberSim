@@ -26,6 +26,11 @@ namespace VTuber.Character
         {
             if (card != null)
             {
+                if (cards.Exists(c => c.configID == card.configID))
+                {
+                    if (card.IsUnique)
+                        return;
+                }
                 cards.Add(card);
                 VDebug.Log("Card added: " + card.CardName);
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardAdded, new Dictionary<string, object>()
@@ -66,6 +71,11 @@ namespace VTuber.Character
                     { "ReplacedCard", selectedCard }
                 });
             }
+        }
+
+        public void Clear()
+        {
+            cards.Clear();
         }
     }
 }

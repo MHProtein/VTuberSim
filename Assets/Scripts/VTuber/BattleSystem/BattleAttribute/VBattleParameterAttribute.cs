@@ -28,6 +28,5 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             SetValue(0, false);
         }
-        
     }
 }

@@ -7,6 +7,7 @@ using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
@@ -19,6 +20,7 @@ namespace VTuber.Character
         public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
         private readonly VRaisingRelicManager _raisingRelicManager;
         
+        private uint _battleRelicIdDistributor = 0;
         private List<VBattleRelic> _battleRelics;
 
         public VCharacterRelicManager(VCharacter character)
@@ -36,7 +38,11 @@ namespace VTuber.Character
         {
             if (relic is VBattleRelic battleRelic)
             {
+                if (_battleRelics.Contains(battleRelic))
+                    return;
                 _battleRelics.Add(battleRelic);
+                battleRelic.Initialize(_battleRelicIdDistributor++);
+                battleRelic.OnRelicAddedInRaising();
             }
             else
             {
@@ -45,11 +51,36 @@ namespace VTuber.Character
             VDebug.Log("Added Relic " + relic.GetRelicName());
             
         }
+
+        public void RemoveRelic(VRelic relic)
+        {
+            if (relic is VBattleRelic battleRelic)
+            {
+                if (_battleRelics.Contains(battleRelic))
+                    return;
+                _battleRelics.Remove(battleRelic);
+                battleRelic.OnRelicRemovedInRaising();
+            }
+            else
+            {
+                _raisingRelicManager.Remove(relic as VRaisingRelic);
+            }
+        }
+
+        public void Clear()
+        {
+            foreach (var battleRelic in _battleRelics)
+            {
+                battleRelic.OnRelicRemovedInRaising();
+            }
+            _battleRelics.Clear();
+            _raisingRelicManager.Clear();
+        }
     }
     
     public class VCharacter
     {
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
         public string LiveType => _characterConfig.liveType;
         
@@ -76,19 +107,22 @@ namespace VTuber.Character
         public List<VScheduleEvent> eventsCompleted;
         public List<VScheduleEvent> succeededStreams;
         
-        public List<VAccount> Accounts => _accounts;
-        private List<VAccount> _accounts = new List<VAccount>();
-        
         public VCharacter(VCharacterConfiguration characterConfig)
+        {
+            Name = characterConfig.characterName;
+            InitializeAttributes(characterConfig);
+        }
+
+        public void Initialize()
         {
             _cardLibrary = new VCardLibrary();
             _cooperatorManager = new VCooperatorManager();
             _consumableManager = new VConsumableManager(this);
-            InitializeAttributes(characterConfig);
             _characterRelicManager = new VCharacterRelicManager(this);
             eventsCompleted = new List<VScheduleEvent>();
             succeededStreams = new List<VScheduleEvent>();
-            _accounts = new List<VAccount>();
+            _cardLibrary.AddCard(VDataManager.Instance.CreateCardByID(_characterConfig.initialCardId));
+            _characterRelicManager.AddRelic(VDataManager.Instance.CreateRelicByID(_characterConfig.initialRelicId));
         }
         
         public void OnEnable()
@@ -101,18 +135,6 @@ namespace VTuber.Character
         {
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventBeginExecute, OnEventExecuted);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnDayEnd, OnDayEnd);
-        }
-        
-        public void AddAccount(VAccount account)
-        {
-            _accounts.Add(account);
-            VSave save = new VSave(this);
-            VSaveSystem.Save(save);
-        }
-        
-        public void LoadCharacterData(VSave save)
-        {
-            _accounts = save.LoadAccounts();
         }
         
         private void OnDayEnd(Dictionary<string, object> messagedict)
@@ -134,7 +156,6 @@ namespace VTuber.Character
             
             AttributeManager.AddAttribute("CAPressure",
                 new VPressureAttribute(characterConfig.pressureConfiguration, 
-                    characterConfig.pressureBuffs,
                     characterConfig.pressureEffects,
                     characterConfig.pressureInitialValue, 
                     VRaisingEventKey.OnPressureChanged, 
@@ -294,6 +315,13 @@ namespace VTuber.Character
             AttributeManager.TryGetAttribute("CAStamina", out var stamina);
             AttributeManager.TryGetAttribute("CASkipTurnStaminaRecovery", out var recoveryAmount);
             stamina.AddTo(recoveryAmount.Value);
+        }
+
+        public void EndRun()
+        {
+            _consumableManager.Clear();
+            _characterRelicManager.Clear();
+            _cardLibrary.Clear();
         }
     }
 }

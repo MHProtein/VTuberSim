@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
+using VTuber.Core.UI;
 
 namespace VTuber.Character.Attributes
 {
@@ -27,11 +28,11 @@ namespace VTuber.Character.Attributes
             
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
                 (VBattleAttribute)Activator.CreateInstance(BattleAttributeType,
-                    (int)(value * conversionRate * 100f),
+                    VMathUtils.FloatToInt(Value * conversionRate),
                     _configuration.isBattleAttributePercentage,
                     _configuration.battleEventKey,
-                    _configuration.maxValue,
-                    _configuration.minValue));
+                    _maxValue,
+                    _minValue));
         }
     }
 }

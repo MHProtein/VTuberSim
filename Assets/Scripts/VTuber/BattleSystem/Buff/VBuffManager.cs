@@ -42,7 +42,8 @@ namespace VTuber.BattleSystem.Buff
                 { "Delta", -1 },
                 { "Latency", buff.latency},
                 { "IsFromCard", false },
-                { "ShouldPlayTwice", false }
+                { "ShouldPlayTwice", false },
+                { "Buff", this }
             });
             
             VDebug.Log($"{buff.GetBuffName()} 延迟减少到 {buff.latency}");
@@ -67,7 +68,7 @@ namespace VTuber.BattleSystem.Buff
                 bool shouldSkipDecrement = true;
                 foreach (var effect in buff.Effects)
                 {
-                    if (effect.TriggeredInFirstTurn)
+                    if (effect.Triggered)
                     {
                         shouldSkipDecrement = false;
                         break;
@@ -96,7 +97,8 @@ namespace VTuber.BattleSystem.Buff
                 { "Delta", -1 },
                 { "Latency", buff.latency},
                 { "IsFromCard", false },
-                { "ShouldPlayTwice", false }
+                { "ShouldPlayTwice", false },
+                { "Buff", this }
             });
             
             // 通知效果层数变化
@@ -121,7 +123,8 @@ namespace VTuber.BattleSystem.Buff
                 { "Delta", addValue},
                 { "Latency", buff.latency},
                 { "IsFromCard", isFromCard },
-                { "ShouldPlayTwice", shouldPlayTwice }
+                { "ShouldPlayTwice", shouldPlayTwice },
+                { "Buff", this }
             });
             
             foreach (var effect in buff.Effects)
@@ -181,7 +184,8 @@ namespace VTuber.BattleSystem.Buff
                 { "Delta", cost},
                 { "Latency", buff.latency},
                 { "IsFromCard", false },
-                { "ShouldPlayTwice", false }
+                { "ShouldPlayTwice", false },
+                { "Buff", this }
             });
             
             foreach (var effect in buff.Effects)
@@ -311,7 +315,8 @@ namespace VTuber.BattleSystem.Buff
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffRemoved, new Dictionary<string, object>
             {
-                { "Id", buffItem.Id }
+                { "Id", buffItem.Id },
+                { "Buff", this }
             });
         }
         
@@ -349,6 +354,7 @@ namespace VTuber.BattleSystem.Buff
                     { "Value", value},
                     { "IsFromCard",  isFromCard},
                     { "ShouldPlayTwice", shouldPlayTwice },
+                    { "Buff", buffItem }
                 });
             }
         }

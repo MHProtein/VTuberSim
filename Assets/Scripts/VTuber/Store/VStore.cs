@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
@@ -64,6 +65,8 @@ namespace VTuber.Store
 
         public void EnterStore(VCharacter character)
         {
+            _cards.Clear();
+            _consumables.Clear();
             _character = character;
 
             LoadItems();
@@ -94,16 +97,10 @@ namespace VTuber.Store
             
             _isGlobalDiscount = false;
         }
-
-        public void ExitStore()
-        {
-            _cards.Clear();
-            _consumables.Clear();
-        }
         
         public void LoadCards()
         {
-            var cards = GetRandomCards(_storeConfig.cardCount);
+            var cards = GetRandomCards(_storeConfig.cardCount, _character.LiveType);
             
             var slot = new VStoreCardSlot(true, false, _storeConfig.cardPrices[(int)(cards[0].Rarity - 1)], 
                 Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount) * (_isGlobalDiscount ? _globalDiscount : 1.0f), cards[0]);
@@ -119,9 +116,9 @@ namespace VTuber.Store
         
         public void LoadConsumables()
         {
-            var consumables = GetRandomConsumables(_storeConfig.consumableCount);
+            var consumables = GetRandomConsumables(_storeConfig.consumableCount, _character.LiveType);
             
-            var slot = new VStoreConsumableSlot(true, false, _storeConfig.cardPrices[(int)consumables[0].Rarity], 
+            var slot = new VStoreConsumableSlot(true, false, _storeConfig.consumablePrices[(int)consumables[0].Rarity], 
                 Random.Range(_storeConfig.minDiscount, _storeConfig.maxDiscount) * (_isGlobalDiscount ? _globalDiscount : 1.0f), consumables[0]);
             _consumables.Add(slot);
             
@@ -135,13 +132,14 @@ namespace VTuber.Store
         
         #region GetItems
         
-        public List<VCard> GetRandomCards(int count)
+        public List<VCard> GetRandomCards(int count, string liveType)
         {
             List<int> rarityCounts = new List<int>()
             {
                 0, 0, 0
             };
-            List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations();
+            List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations().
+                Where(card => (card.liveType == liveType || card.liveType == "F") && card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special).ToList();
 
             foreach (var card in cards)
             {
@@ -171,8 +169,9 @@ namespace VTuber.Store
             }
             
             List<VCard> selectedCards = new List<VCard>();
-
-            for (int i = 0; i < count; i++)
+            
+            int i = 0;
+            while (i < count)
             {
                 float probability = Random.Range(0, 1.0f);
                 float totalProbability = 0;
@@ -182,10 +181,13 @@ namespace VTuber.Store
                     if (probability <= totalProbability)
                     {
                         var card = cards[j].CreateCard();
+                        if(selectedCards.Exists(c => c.configID == card.configID))
+                            break;
                         float upgradeProbability = Random.Range(0, 1.0f);
                         if(upgradeProbability <= CardRarityUpgradeProbabilities[(int)card.Rarity - 1])
                             card.Upgrade(false);
                         selectedCards.Add(card);
+                        ++i;
                         break;
                     }
                 }
@@ -193,13 +195,14 @@ namespace VTuber.Store
             return selectedCards;
         }
 
-        public List<VConsumable> GetRandomConsumables(int count)
+        public List<VConsumable> GetRandomConsumables(int count, string liveType)
         {
             List<int> rarityCounts = new List<int>()
             {
                 0, 0, 0
             };
-            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations();
+            List<VConsumableConfiguration> consumables = VDataManager.Instance.GetAllConsumableConfigurations().
+                Where(consumable => (consumable.liveType == liveType || consumable.liveType == "F")).ToList();
             
             if (consumables.Count == 0)
                 return null;
@@ -230,7 +233,8 @@ namespace VTuber.Store
             
             List<VConsumable> selectedConsumables = new List<VConsumable>();
 
-            for (int i = 0; i < count; i++)
+            int i = 0;
+            while (i < count)
             {
                 float probability = Random.Range(0, 1.0f);
                 float totalProbability = 0;
@@ -239,8 +243,11 @@ namespace VTuber.Store
                     totalProbability += perConsumableProbabilityByRarity[(int)consumables[j].rarity];
                     if (probability <= totalProbability)
                     {
-                        var card = consumables[j].CreateConsumable();
-                        selectedConsumables.Add(card);
+                        var consumable = consumables[j].CreateConsumable();
+                        if (selectedConsumables.Exists(c => c.ConfigId == consumable.ConfigId))
+                            break;
+                        selectedConsumables.Add(consumable);
+                        i++;
                         break;
                     }
                 }

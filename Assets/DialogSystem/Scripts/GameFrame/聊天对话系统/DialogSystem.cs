@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -193,7 +194,11 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             while (option.ifOption)
             {
                 options.Add(option);
-                option = currentDialog.contentDic[option.nextId];
+                if (option.nextId == -1)
+                {
+                    break;
+                }
+                option = currentDialog.contentDic[++currentDialog.index];
             }
 
             var showingOptions = new List<DialogContent>();
@@ -239,11 +244,11 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         {
             if (dc.ifImage)
             {
-                dialogObj = Instantiate(dialogPrefab_R_Image,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_R_Image, canvas, false);
             }
             else
             {
-                dialogObj=Instantiate(dialogPrefab_R,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_R, canvas, false);
             }
 
             
@@ -252,17 +257,18 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         {
             if (dc.ifImage)
             {
-                dialogObj = Instantiate(dialogPrefab_L_Image,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_L_Image, canvas, false);
             }
             else
             {
-                dialogObj=Instantiate(dialogPrefab_L,canvas,false);
+                dialogObj = Instantiate(dialogPrefab_L, canvas, false);
             }
         }
         
         currentDialogObj = dialogObj.GetComponent<DialogObj>();
         currentDialogObj.ShowDialog(dc);
         currentDialogObj.transform.SetParent(dialogRoot);    
+        currentDialogObj.transform.localScale = Vector3.one * 0.85f;  
         Canvas.ForceUpdateCanvases();
         
         AdjustScrollView();
@@ -287,6 +293,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         optionBtnObj.SetActive(true);
         optionBtnObj.transform.SetParent(optionBtnRoot);
         optionBtnObj.GetComponent<OptionBtn>().SetBtn(dc, _character);
+        optionBtnObj.transform.localScale = Vector3.one * 0.85f;  
         currentDialog.index++;
     }
 

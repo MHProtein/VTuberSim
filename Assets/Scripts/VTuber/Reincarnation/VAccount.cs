@@ -8,15 +8,16 @@ namespace VTuber.Reincarnation
 {
     public class VAccount
     {
+        public string accountName;
         public List<VCard> Cards => cards;
         public List<VRelic> Relics => relics;
         public List<VRaisingEffect> Effects => effects;
-        public List<VEffectItem> EffectItems => effectItems;
+        public List<int> EffectLevels => effectLevels;
         
         private List<VCard> cards;
         private List<VRelic> relics;
         private List<VRaisingEffect> effects;
-        private List<VEffectItem> effectItems;
+        private List<int> effectLevels;
         
         public VAccount(List<VCard> cards, List<VRelic> relics, List<VEffectItem> effects)
         {
@@ -29,15 +30,20 @@ namespace VTuber.Reincarnation
                 this.effects.Add(effect.CreateRaisingEffect());
             }
 
-            effectItems = effects;
+            effectLevels = new List<int>();
+            foreach (var effect in effects)
+            {
+                effectLevels.Add(effect.level);
+            }
         }
 
-        public VAccount(List<VCard> cards, List<VRelic> relics, List<VRaisingEffect> effects)
+        public VAccount(List<VCard> cards, List<VRelic> relics, List<VRaisingEffect> effects, List<int> effectLevels)
         {
             this.cards = cards;
             this.relics = relics;
 
             this.effects = effects;
+            this.effectLevels = effectLevels;
         }
         
         public void Print()

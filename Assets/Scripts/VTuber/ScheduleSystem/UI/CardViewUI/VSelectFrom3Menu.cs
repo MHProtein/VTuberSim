@@ -22,7 +22,13 @@ namespace VTuber.ScheduleSystem.UI
 
         public List<Transform> positions;
         public Transform spawnPosition;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            confirmButton.onClick.AddListener(Confirm);
+        }
+
         public void Initialize(List<VCard> cards, Action<VCard> confirmAction)
         {
             confirmButton.interactable = false;
@@ -42,7 +48,7 @@ namespace VTuber.ScheduleSystem.UI
                 cardUI.transform.localScale = Vector3.zero;
                 cardUI.transform.position = spawnPosition.position;
                 Tween.Position(cardUI.transform, positions[i].position, 0.5f);
-                Tween.Scale(cardUI.transform, Vector3.one, 0.5f, Ease.OutBounce).OnComplete((() =>
+                Tween.Scale(cardUI.transform, Vector3.one * 1.5f, 0.5f, Ease.OutBounce).OnComplete((() =>
                 {
                     cardItem.SetSelectable(true);
                 }));

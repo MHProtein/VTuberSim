@@ -108,7 +108,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -158}
+  m_AnchoredPosition: {x: 7, y: -158}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9004366598408949347
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 1
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 59.2, y: 0}
+  m_Spacing: {x: 37, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
 --- !u!1 &2757545837833450585
@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dcf718967764dd59fd4512e1b506e60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nameText: {fileID: 2473863963848107564}
   icon: {fileID: 437252930962105097}
   background: {fileID: 778634756544982012}
   name: {fileID: 2473863963848107564}
@@ -388,7 +389,7 @@ MonoBehaviour:
   - {fileID: 8836940353067609219}
   - {fileID: 5785856241480084871}
   attributeGrids: {fileID: 5045051034505677821}
-  maxAttribtues: 5
+  maxAttribtues: 6
   attributePrefab: {fileID: 7076474653373748269, guid: b7cc17f6509701f438dec9e256c324fd, type: 3}
   ellipsisIcon: {fileID: -468953493, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
 --- !u!1 &6006217123552666170

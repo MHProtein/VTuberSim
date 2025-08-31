@@ -14,7 +14,7 @@ namespace TMPro.Examples
         {
             if (TextEventHandler != null)
             {
-                // Get a reference to the text component
+                // Get a reference to the layer component
                 m_TextComponent = TextEventHandler.GetComponent<TMP_Text>();
                 
                 TextEventHandler.onCharacterSelection.AddListener(OnCharacterSelection);

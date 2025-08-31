@@ -41,11 +41,15 @@ namespace VTuber.EventSystem
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e)
         {
-            _character = character;
-            _currentEvent = e;
-            dialogueSystem.LoadDialog(e.dialogueNode);
-            dialogueSystem.ShowMe(character);
-            dialogueSystem.ContinueDialog();
+            VEventSystemUI.Instance.PlayVideo(() =>
+            {
+                _character = character;
+                _currentEvent = e;
+                VEventSystemUI.Instance.OpenEventUI();
+                dialogueSystem.LoadDialog(e.dialogueNode);
+                dialogueSystem.ShowMe(character);
+                dialogueSystem.ContinueDialog();
+            });
         }
 
         protected override void OnEnable()
@@ -71,6 +75,7 @@ namespace VTuber.EventSystem
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnShowAddConsumable, OnShowAddConsumable);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectConsumableFrom3, OnBeginSelectConsumableFrom3);
         }
         
         private void OnShowAddConsumable(Dictionary<string, object> messagedict)
@@ -193,9 +198,12 @@ namespace VTuber.EventSystem
             }
             else if (_shouldEnterStore)
             {
-                storeObject.SetActive(true);
-                _store.EnterStore(_character);
-                _shouldEnterStore = false;
+                VEventSystemUI.Instance.PlayVideo(() =>
+                {
+                    storeObject.SetActive(true);
+                    _store.EnterStore(_character);
+                    _shouldEnterStore = false;
+                });
             }
             else
             {

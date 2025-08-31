@@ -1,0 +1,48 @@
+﻿using System;
+using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
+using VTuber.Core.UI;
+
+namespace VTuber.BattleSystem.Effect
+{
+    public class VBuffModifyEffect : VEffect
+    {
+        VBuffModifyEffectConfiguration _configuration;
+        public VUpgradableValue<int> _addValue;
+ 
+        public override void Upgrade()
+        {
+            base.Upgrade();
+            _addValue.Upgrade();
+        }
+        
+        public override void Downgrade()
+        {
+            base.Downgrade();
+            _addValue.Downgrade();
+        }
+        
+        public VBuffModifyEffect(VBuffModifyEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+        {
+            _configuration = configuration;
+            VDebug.Log(configuration.id + " " + parameter + " " + upgradedParameter);
+            _addValue = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
+        }
+
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
+        {
+            int value = _addValue.Value;
+            if (MultiplyByLayer > 0.0f)
+                value *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
+            
+            battle.BuffManager.AddBuff(VDataManager.Instance.CreateBuffByID(_configuration.buffID), value, isFromCard, shouldApplyTwice);
+            VDebug.Log("效果 " + _configuration.effectName + " 为 Buff(ID: " + _configuration.buffID + ") 增加了 " + value + "。新数值: " + value);
+        }
+        
+        public override string GetValue()
+        {
+            return _addValue.Value.ToString();
+        }
+    }
+}
