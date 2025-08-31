@@ -42,10 +42,10 @@ MonoBehaviour:
       so: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}
   - key: Scripts
     value:
-    - name: Script
+    - name: "\u5E95\u8FB9"
       path: 
       so: {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-    - name: ShortScript
+    - name: GURA
       path: 
       so: {fileID: 11400000, guid: cf604c21659ff0a41b05dc922cb753de, type: 2}
   - key: Cooperators

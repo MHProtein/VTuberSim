@@ -21,8 +21,8 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  characterName: Superman
-  description: Kryptonian
+  characterName: "\u58A8\u6CAB\u5B8C\u5168\u4F53"
+  description: "\u5728\u53E6\u4E00\u4E2A\u65F6\u95F4\u7EBF\uFF0C\u58A8\u6CAB\u5DF2\u7ECF\u6210\u4E3A\u4E86bigbigV\u3002"
   liveType: C
   initialCardId: 67
   initialRelicId: 11
