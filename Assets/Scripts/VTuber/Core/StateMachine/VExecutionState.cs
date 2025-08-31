@@ -127,11 +127,6 @@ namespace VTuber.Core.StateMachine
             ExecuteEvent(e);
         }
 
-        public void SkipEvent()
-        {
-            ExecuteEvent(_currentEvent);
-        }
-
         public void ExecuteEvent(VScheduleEvent e)
         {
             if (e is null)
@@ -160,7 +155,15 @@ namespace VTuber.Core.StateMachine
                     var staminaNotEnoughEvent = VDataManager.Instance.CreateDialogueEventByID(8);
                     staminaNotEnoughEvent.SetDaySchedule(e.DaySchedule, -1 * Vector2Int.one);
                     staminaNotEnoughEvent.Execute(stateMachine.Character);
+                    
+                    VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventBeginExecute, new Dictionary<string, object>
+                    {
+                        { "Event", staminaNotEnoughEvent },
+                        { "Coordinate", e.Coordinate }
+                    });
+                    e.SetExecuted();
                 });
+                
             }
         }
         

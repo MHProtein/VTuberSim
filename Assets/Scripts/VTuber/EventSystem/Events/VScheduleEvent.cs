@@ -155,5 +155,10 @@ namespace VTuber.ScheduleSystem.Events
                     effect?.ForEach(x => x.ApplyEffect(character, null));
                 }
         }
+
+        public void SetExecuted()
+        {
+            IsExecuted = true;
+        }
     }
 }

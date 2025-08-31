@@ -66,15 +66,18 @@ namespace VTuber.Character.Attributes
         
         public override KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()
         {
-            int conversionRate = 0;
-            if (_attributeManager.TryGetAttributeValue(AttributeName + "ConversionRatio",
-                    out var value, out var isPercentage))
+            float conversionRate = 0;
+            if (_attributeManager.TryGetAttribute(AttributeName + "ConversionRatio",
+                    out var attribute))
             {
-                conversionRate = value;
+                if (attribute is VConversionRatioAttribute conversionRatioAttribute)
+                {
+                    conversionRate = conversionRatioAttribute.GetValue();
+                }
             }
             
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
-                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, Value * conversionRate, color));
+                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, VMathUtils.FloatToInt(Value * conversionRate * 100.0f), color));
         }
 
         public override void ConvertToAttribute(Dictionary<string, VBattleAttribute> battleAttributes)

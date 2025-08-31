@@ -25,6 +25,8 @@ namespace VTuber.Reincarnation
         [HorizontalGroup("VEffectLevelRequirement")]
         [LabelText("等级")] public int level;
         [HorizontalGroup("VEffectLevelRequirement")]
+        [LabelText("最高等级")] public int highestLevel;
+        [HorizontalGroup("VEffectLevelRequirement")]
         [LabelText("数量")] public int count;
     }
     
