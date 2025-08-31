@@ -141,9 +141,6 @@ namespace VTuber.BattleSystem.Core
                 if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
                     _character.CardLibrary.AddCard(config.CreateCard());
             }
-
-            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(0));
-            _character.ConsumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(1));
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,

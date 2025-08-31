@@ -81,7 +81,7 @@ namespace VTuber.BattleSystem.Core
         int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
         {
             _battleEnded = false;
-            VRaisingUI.Instance.SwitchAttributesUIBattle(true);
+            VRaisingUI.Instance.SwitchAttributesUIBattle(false);
             
             _mainAttributeIndex = mainAttributeIndex;
             _isPhaseEnding = isPhaseEnding;
