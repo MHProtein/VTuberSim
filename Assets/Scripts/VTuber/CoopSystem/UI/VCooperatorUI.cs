@@ -95,7 +95,7 @@ namespace VTuber.CoopSystem.UI
             }
             upgradeEventScheduleSlot.SetUseThisTransformAsParent(true);
             ShowSlot();
-        }                                                     
+        }
         
         public void ClearUpgradeEvent()
         {
