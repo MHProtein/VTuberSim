@@ -601,7 +601,7 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 3
-      Data: 4
+      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -613,7 +613,7 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 3
-      Data: 8
+      Data: 6
     - Name: 
       Entry: 8
       Data: 
@@ -625,7 +625,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 3
-      Data: 14
+      Data: 15
     - Name: 
       Entry: 8
       Data: 
@@ -767,10 +767,10 @@ MonoBehaviour:
       Data: 41|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
-      Data: 3
+      Data: 2
     - Name: capacity
       Entry: 3
-      Data: 12
+      Data: 8
     - Name: streamEffectsRequirements
       Entry: 7
       Data: 42|Antlr4.Runtime.Misc.ArrayList`1[[VTuber.Reincarnation.VEffectLevelRequirement,
@@ -862,7 +862,7 @@ MonoBehaviour:
       Data: 3
     - Name: capacity
       Entry: 3
-      Data: 16
+      Data: 12
     - Name: streamEffectsRequirements
       Entry: 7
       Data: 48|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
@@ -954,7 +954,7 @@ MonoBehaviour:
       Data: 3
     - Name: capacity
       Entry: 3
-      Data: 20
+      Data: 15
     - Name: streamEffectsRequirements
       Entry: 7
       Data: 54|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
@@ -1474,7 +1474,7 @@ MonoBehaviour:
       Data: 4
     - Name: capacity
       Entry: 3
-      Data: 24
+      Data: 16
     - Name: streamEffectsRequirements
       Entry: 7
       Data: 88|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
