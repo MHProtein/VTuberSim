@@ -11,9 +11,9 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 {
     public class VAccountUI : VUIBehaviour, IPointerClickHandler
     {
+        [SerializeField] private TMP_Text nameText;
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
-        [SerializeField] private TMP_Text name;
         [SerializeField] private List<Image> cardIcons;
 
         [SerializeField] private Transform attributeGrids;
@@ -36,6 +36,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             _selectable = true;
             _menu = menu;
             _account = account;
+            nameText.text = account.accountName;
             
             for (int i = 0; i < cardIcons.Count; i++)
             {

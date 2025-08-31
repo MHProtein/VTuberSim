@@ -11,17 +11,19 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
 {
     public class VCharacterDetailsUI : VUIBehaviour
     {
-        [SerializeField] public TMP_Text liveTypeText;
-        [SerializeField] public VCardUI card;
-        [SerializeField] public TMP_Text staminaText;
-        [SerializeField] public TMP_Text moneyText;
-        [SerializeField] public TMP_Text followerText;
-        [SerializeField] public TMP_Text singingAbilityValueText;
-        [SerializeField] public TMP_Text singingAbilityGainEfficiencyText;
-        [SerializeField] public TMP_Text gamingAbilityText;
-        [SerializeField] public TMP_Text gamingAbilityGainEfficiencyText;
-        [SerializeField] public TMP_Text chattingAbilityText;
-        [SerializeField] public TMP_Text chattingAbilityGainEfficiencyText;
+        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_Text descriptionText;
+        [SerializeField] private TMP_Text liveTypeText;
+        [SerializeField] private VCardUI card;
+        [SerializeField] private TMP_Text staminaText;
+        [SerializeField] private TMP_Text moneyText;
+        [SerializeField] private TMP_Text followerText;
+        [SerializeField] private TMP_Text singingAbilityValueText;
+        [SerializeField] private TMP_Text singingAbilityGainEfficiencyText;
+        [SerializeField] private TMP_Text gamingAbilityText;
+        [SerializeField] private TMP_Text gamingAbilityGainEfficiencyText;
+        [SerializeField] private TMP_Text chattingAbilityText;
+        [SerializeField] private TMP_Text chattingAbilityGainEfficiencyText;
 
         private Dictionary<uint, VCard> cardsCreated = new Dictionary<uint, VCard>();
         
@@ -52,6 +54,8 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
         
         public void SetDetails(VCharacterConfiguration characterConfig)
         {
+            nameText.text = characterConfig.characterName;
+            descriptionText.text = characterConfig.description;
             liveTypeText.text = GetLiveTypeText(characterConfig.liveType);
             if(cardsCreated.TryGetValue(characterConfig.initialCardId, out var value))
                 card.SetCard(value);

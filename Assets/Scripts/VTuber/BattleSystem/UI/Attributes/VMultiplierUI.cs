@@ -78,6 +78,7 @@ namespace VTuber.BattleSystem.UI
             if (!messagedict.ContainsKey("Color"))
                 return;
             MultiplierText.color = (Color)messagedict["Color"];
+            
         }
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
@@ -113,8 +114,10 @@ namespace VTuber.BattleSystem.UI
         public IEnumerator DelayMoveArrow()
         {
             yield return new WaitForSeconds(0.2f);
-            arrowSequence.Enqueue(Tween.Position(arrow.transform, 
-                colorObjects[arrowIndex].transform.position + 
+            if(arrowIndex >= colorObjects.Count)
+                yield break;
+            arrowSequence.Enqueue(Tween.LocalPosition(arrow.transform, 
+                colorObjects[arrowIndex].transform.localPosition + 
                 new Vector3(0, -arrowHeight, 0), 0.2f));
         }
         
@@ -122,7 +125,6 @@ namespace VTuber.BattleSystem.UI
         {
             Tween.Delay(0.1f, () =>
             {
-                arrowIndex++;
                 arrow.transform.position = colorObjects[0].transform.position + new Vector3(0, -arrowHeight, 0);
                 initSize = colorObjects[0].rectTransform.rect.width * colorObjects.Count;
                 blockHeight = colorObjects[0].rectTransform.rect.height;
@@ -148,6 +150,11 @@ namespace VTuber.BattleSystem.UI
                 image.color = colors[i];
                 colorObjects.Add(image);
             }
+            arrowIndex++;
+            if(arrowIndex >= colorObjects.Count)
+                return;
+            
+            StartCoroutine(DelayMoveArrow());
         }
         
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
@@ -165,9 +172,7 @@ namespace VTuber.BattleSystem.UI
             if(arrowIndex >= colorObjects.Count)
                 return;
             
-            arrowSequence.Enqueue(Tween.Position(arrow.transform,
-                colorObjects[arrowIndex].transform.position + 
-                new Vector3(0, -arrowHeight, 0), 0.2f));
+            StartCoroutine(DelayMoveArrow());
         }
     }
 }

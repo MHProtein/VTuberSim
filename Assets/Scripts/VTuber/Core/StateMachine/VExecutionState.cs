@@ -210,6 +210,7 @@ namespace VTuber.Core.StateMachine
             
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(true);
             stateMachine.ScheduleUI.SwitchToExecution();
+            VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseText(false);
             if (state.StateType == VStateType.ScheduleCreation)
             {            
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>

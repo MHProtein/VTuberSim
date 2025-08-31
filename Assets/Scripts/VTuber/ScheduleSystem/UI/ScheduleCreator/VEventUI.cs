@@ -146,7 +146,7 @@ namespace VTuber.ScheduleSystem.UI
             _bgColor = background.color;
             _initPosition = initPosition;
             icon.raycastTarget = false;
-            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect);
+            transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.EventParent);
             _isSelected = true;
             icon.transform.localScale = Vector3.zero;
             background.transform.localScale = Vector3.zero;

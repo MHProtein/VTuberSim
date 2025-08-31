@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DG.Tweening;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -27,20 +26,23 @@ namespace VTuber.BattleSystem.UI
             bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
             bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
             int delta = messagedict["Delta"] as int ? ?? 0;
-            PlayLeftText.text = $"{messagedict["NewValue"] as int? ?? 0}";
+            var value = messagedict["NewValue"] as int? ?? 0;
+
+            PlayLeftText.gameObject.SetActive(value > 1);
+            
+            PlayLeftText.text = $"{value}";
+            
             if(delta == 0)
                 return;
             
-            transform.DOKill();
-
-            PlayLeftText.color = delta > 0 ? Color.green : Color.red;
-
-            transform.DOPunchScale(Vector3.one * 0.3f, 0.4f, vibrato: 1)
-                .OnComplete(() =>
+            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
+                () =>
                 {
                     RaiseEvents(isFromCard, shouldPlayTwice);
-                    PlayLeftText.color = Color.white;
-                });
+                    PlayLeftText.faceColor = Color.white;
+                })));
+
+            PlayLeftText.faceColor = delta > 0 ? Color.green : Color.red;
         }
         
     }
