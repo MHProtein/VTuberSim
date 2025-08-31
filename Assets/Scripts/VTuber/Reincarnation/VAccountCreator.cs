@@ -129,6 +129,9 @@ namespace VTuber.Reincarnation
             // StreamAttributes
             List<VAbilityEffectInfo> streamEffectInfos = new List<VAbilityEffectInfo>();
             List<VEffectItem> streamEffects = new List<VEffectItem>();
+            
+            int avgCapacity = ratingLevelInfo.capacity / (ratingLevelInfo.streamEffectsRequirements.Sum(requirement => requirement.count) + 
+                              ratingLevelInfo.attributeEffectsRequirements.Sum(requirement => requirement.count));
 
             foreach (var requirement in ratingLevelInfo.streamEffectsRequirements)
             {
@@ -140,7 +143,7 @@ namespace VTuber.Reincarnation
                         effectInfo = config.streamAttributeEffects[Random.Range(0, config.streamAttributeEffects.Count)];
                     }
 
-                    var level = Random.Range(requirement.level, config.effectCapacities.Count - 1);
+                    var level = Random.Range(requirement.level, config.effectCapacities.Count);
                     var param = effectInfo.levelInfos[level].levelParam;
                 
                     streamEffects.Add(new VEffectItem()
@@ -200,7 +203,7 @@ namespace VTuber.Reincarnation
            
                     if (streamEffects.Count + otherEffects.Count >= count)
                         return otherEffects.Union(streamEffects).ToList();
-                    var level = Random.Range(0, effectInfo.levelInfos.Count - 1);
+                    var level = Random.Range(0, effectInfo.levelInfos.Count);
                     var param = effectInfo.levelInfos[level].levelParam;
 
                     otherEffects.Add(new VEffectItem()

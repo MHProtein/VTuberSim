@@ -87,6 +87,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             coopEventGameObject.SetActive(false);
             checkmark.gameObject.SetActive(false);
+            redCross.gameObject.SetActive(false);
             IsCoopEventSlot = false;
             foreach (var icon in eventIcons)
             {

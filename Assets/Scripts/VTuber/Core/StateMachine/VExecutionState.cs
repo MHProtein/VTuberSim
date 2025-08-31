@@ -113,6 +113,7 @@ namespace VTuber.Core.StateMachine
             VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, result.scoreLevelName, result.score, account);
             VRaisingUI.Instance.ShowEndingUI();
             stateMachine.Character.EndRun();
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEndRun, new Dictionary<string, object>());
         }
 
         private void NextEvent()
