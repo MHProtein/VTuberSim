@@ -78,6 +78,7 @@ namespace VTuber.BattleSystem.UI
             if (!messagedict.ContainsKey("Color"))
                 return;
             MultiplierText.color = (Color)messagedict["Color"];
+            StartCoroutine(DelayMoveArrow());
         }
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
