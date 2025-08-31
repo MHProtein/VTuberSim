@@ -68,6 +68,7 @@ namespace VTuber.BattleSystem.Core
         
         private List<AnimationCurve> _decayCurves;
         private List<int> _abilityTurnCounts;
+        private bool _shouldEndBattle = false;
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
@@ -237,7 +238,7 @@ namespace VTuber.BattleSystem.Core
             {
                 if (value >= _extraTargetPopularity)
                 {
-                    EndBattle();
+                    _shouldEndBattle = true;
                 }
             }
         }
@@ -366,6 +367,12 @@ namespace VTuber.BattleSystem.Core
             {
                 EndTurn();
                 if (_shouldRedraw) _shouldRedraw = false;
+            }
+
+            if (_shouldEndBattle)
+            {
+                _shouldEndBattle = false;
+                EndBattle();
             }
         }
         

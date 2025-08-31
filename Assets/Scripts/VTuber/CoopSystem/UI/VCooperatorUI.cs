@@ -86,6 +86,7 @@ namespace VTuber.CoopSystem.UI
         {
             _slotShowable = true;
             showHideButton.gameObject.SetActive(true);
+            upgradeEventScheduleSlot.SetPlaceable(true, false, 0);
             _upgradeEventUI = Instantiate(upgradeEventUIPrefab, upgradeEventScheduleSlot.transform).GetComponent<VEventUI>();
             _upgradeEventUI.Initialize(scheduleEvent, upgradeEventScheduleSlot, false, upgradeEventScheduleSlot.transform);
             upgradeEventScheduleSlot.SetPlaceable(false, false, (int)_upgradeEventUI.Event.EventID);
@@ -98,8 +99,7 @@ namespace VTuber.CoopSystem.UI
             showHideButton.gameObject.SetActive(false);
             HideSlot(false);
             _slotShowable = false;
-            if(upgradeEventScheduleSlot.Item is not null)
-                Destroy(upgradeEventScheduleSlot.Item.gameObject); 
+            upgradeEventScheduleSlot.DestroyItem();
         }
 
         public void ShowSlot()

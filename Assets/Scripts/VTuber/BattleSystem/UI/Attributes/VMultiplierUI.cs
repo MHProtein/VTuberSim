@@ -114,6 +114,8 @@ namespace VTuber.BattleSystem.UI
         public IEnumerator DelayMoveArrow()
         {
             yield return new WaitForSeconds(0.2f);
+            if(arrowIndex >= colorObjects.Count)
+                yield break;
             arrowSequence.Enqueue(Tween.LocalPosition(arrow.transform, 
                 colorObjects[arrowIndex].transform.localPosition + 
                 new Vector3(0, -arrowHeight, 0), 0.2f));
@@ -166,11 +168,11 @@ namespace VTuber.BattleSystem.UI
         
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
+            arrowIndex++;
             if(arrowIndex >= colorObjects.Count)
                 return;
             
             StartCoroutine(DelayMoveArrow());
-            arrowIndex++;
         }
     }
 }
