@@ -10,6 +10,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
+using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Dialogue.UI;
@@ -467,14 +468,19 @@ namespace VTuber.BattleSystem.Core
                 string attributeKey = GetAbilityKey(_mainAttributeIndex);
                 
                 _characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
-                attribute.AddTo(attributeGain);
+                if (attribute is VAbilityAttribute abilityAttribute)
+                {
+                    abilityAttribute.AddAbility(attributeGain, true);
+                }
             }
             else
             {
                 string attributeKey = GetAbilityKey(_mainAttributeIndex);
-                _characterAttributeManager.TryGetAttribute(attributeKey, out var ability);
-                ability.AddTo((int)_decayCurves[0].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(_mainAttributeIndex)]));
-
+                _characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
+                if (attribute is VAbilityAttribute abilityAttribute)
+                {
+                    abilityAttribute.AddAbility((int)_decayCurves[0].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(_mainAttributeIndex)]), true);
+                }
                 int index1, index2;
                 if (_mainAttributeIndex == 0)
                 {
@@ -496,15 +502,30 @@ namespace VTuber.BattleSystem.Core
                 _characterAttributeManager.TryGetAttribute(GetAbilityKey(index2), out var ability2);
                 if(_abilityTurnCounts[index1] <= _abilityTurnCounts[index2])
                 {
-                    ability1.AddTo((int)_decayCurves[2].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]));
-                    ability2.AddTo((int)_decayCurves[1].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]));
+                    if (ability1 is VAbilityAttribute abilityAttribute1)
+                    {
+                        abilityAttribute1.AddAbility((int)_decayCurves[2].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]), true);
+                    }
+                    if (ability2 is VAbilityAttribute abilityAttribute2)
+                    {
+                        abilityAttribute2.AddAbility((int)_decayCurves[1].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]), true);
+                    }
                 }
                 else if(_abilityTurnCounts[index1] > _abilityTurnCounts[index2])
                 {
-                    ability1.AddTo((int)_decayCurves[1].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]));
-                    ability2.AddTo((int)_decayCurves[2].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]));
+                    if (ability1 is VAbilityAttribute abilityAttribute1)
+                    {
+                        abilityAttribute1.AddAbility((int)_decayCurves[1].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]), true);
+                    }
+                    if (ability2 is VAbilityAttribute abilityAttribute2)
+                    {
+                        abilityAttribute2.AddAbility((int)_decayCurves[2].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]), true);
+                    }
                 }
-
             }
                 
             _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
