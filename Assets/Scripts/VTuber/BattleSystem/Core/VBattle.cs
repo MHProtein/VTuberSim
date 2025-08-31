@@ -71,6 +71,7 @@ namespace VTuber.BattleSystem.Core
         private List<AnimationCurve> _decayCurves;
         private List<int> _abilityTurnCounts;
         private bool _shouldEndBattle = false;
+        private bool _battleEnded = false;
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
@@ -79,6 +80,7 @@ namespace VTuber.BattleSystem.Core
             VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
         int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
         {
+            _battleEnded = false;
             VRaisingUI.Instance.SwitchAttributesUIBattle(true);
             
             _mainAttributeIndex = mainAttributeIndex;
@@ -462,6 +464,9 @@ namespace VTuber.BattleSystem.Core
         
         private void EndBattle()
         {
+            if (_battleEnded)
+                return;
+            _battleEnded = true;
             _battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
             var popularityAttribute = battleAttribute as VBattlePopularityAttribute;
             if (!_isPhaseEnding)

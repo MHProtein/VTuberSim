@@ -300,6 +300,7 @@ namespace VTuber.BattleSystem.UI
             Rearrange(index);
             
             StartCoroutine(DelayNotifyCardMovedToPlayPosition(cardMoveAfterPlayingTime + cardApplyTime, cardUI));
+            skipTurnButton.interactable = false;
         }
         
         IEnumerator DelayNotifyCardMovedToPlayPosition(float delayTime, VHandCardUI cardUI)
@@ -403,10 +404,7 @@ namespace VTuber.BattleSystem.UI
                 {
                     {"Card", cardUI.card}
                 });
-            }
-            else
-            {
-                
+                skipTurnButton.interactable = true;
             }
         }
         

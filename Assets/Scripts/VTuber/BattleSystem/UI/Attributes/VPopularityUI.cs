@@ -67,18 +67,23 @@ namespace VTuber.BattleSystem.UI
                     popularityText.color = Color.white;
                 })));
 
-            if (value <= _target)
+            if (!_isPhaseEnding)
             {
-                Tween.UIFillAmount(bar, Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
-                targetText.text = _target.ToString();
-            }
-            else
-            {
-                if (!_isPhaseEnding)
+                if (value <= _target)
+                {
+                    Tween.UIFillAmount(bar, Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
+                    targetText.text = _target.ToString();
+                }
+                else
                 {
                     Tween.UIFillAmount(bar, Mathf.Clamp((float)(value - _target) / (_extraTarget - _target), 0.0f, 1.0f), 0.3f);
                     targetText.text = _extraTarget.ToString();
                 }
+            }
+            else
+            {
+                Tween.UIFillAmount(bar, Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
+                targetText.text = _target.ToString();
             }
         }
     }

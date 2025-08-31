@@ -114,7 +114,7 @@ namespace VTuber.BattleSystem.UI
         public IEnumerator DelayMoveArrow()
         {
             yield return new WaitForSeconds(0.2f);
-            if(arrowIndex >= colorObjects.Count)
+            if(arrowIndex >= colorObjects.Count || arrowIndex < 0)
                 yield break;
             arrowSequence.Enqueue(Tween.LocalPosition(arrow.transform, 
                 colorObjects[arrowIndex].transform.localPosition + 

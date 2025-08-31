@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
@@ -40,8 +41,11 @@ namespace VTuber.Core.ScriptSystem
 
         public VScheduleEvent BeginScript()
         {
+            for (int i = 0; i < Phases.Count - 1; i++)
+            {
+                Phases[i].nextPhase = Phases[i + 1];
+            }
             _currentPhase = Phases[0];
-            _currentPhase.nextPhase = Phases.Count > 1 ? Phases[1] : null;
             return _currentPhase.GetStartEvent();
         }
         
@@ -58,6 +62,8 @@ namespace VTuber.Core.ScriptSystem
 
         public VScheduleEvent NextWeek(int weekIndex)
         {
+            if (_currentPhase.nextPhase is null)
+                return null;
             if (_currentPhase.nextPhase.IsInPhase(weekIndex))
             {
                 _currentPhase = _currentPhase.nextPhase;

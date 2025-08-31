@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73b1393968f147f79d506ac36817e430, type: 3}
+  m_Name: Superman
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  characterName: Superman
+  description: Kryptonian
+  liveType: C
+  initialCardId: 67
+  initialRelicId: 11
+  staminaInitialValue: 5000
+  staminaMinValue: 0
+  staminaMaxValue: 5000
+  staminaConfiguration: {fileID: 11400000, guid: 0b8b1877b943de74184ef7428f6c6787, type: 2}
+  pressureInitialValue: 3
+  pressureMinValue: 1
+  pressureMaxValue: 5
+  pressureEffects:
+  - id: 3
+    parameter: 2
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: 1
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: 0
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: -1
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: -2
+    upgradedParameter: 
+    level: 0
+  pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
+  singingAbilityInitialValue: 10000
+  singingAbilityMinValue: 0
+  singingAbilityMaxValue: 3000
+  singingAbilityColor: {r: 1, g: 0.12941177, b: 0.37647063, a: 1}
+  singingAbilityGainFromBattleRates:
+  - from: 0
+    to: 5000
+    value: 0
+  - from: 5001
+    to: -1
+    value: 0
+  singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
+  gamingAbilityInitialValue: 10000
+  gamingAbilityMinValue: 0
+  gamingAbilityMaxValue: 3000
+  gamingAbilityColor: {r: 0.29411766, g: 0.34509805, b: 1, a: 1}
+  gamingAbilityGainFromBattleRates:
+  - from: 0
+    to: 5000
+    value: 0
+  - from: 5001
+    to: -1
+    value: 0
+  gamingAbilityConfiguration: {fileID: 11400000, guid: 9f3418b693f0bd74faf5ef1c80bcabc3, type: 2}
+  chattingAbilityInitialValue: 10000
+  chattingAbilityMinValue: 0
+  chattingAbilityMaxValue: 3000
+  chattingAbilityColor: {r: 0.776, g: 0.651, b: 0.349, a: 1}
+  chattingAbilityGainFromBattleRates:
+  - from: 0
+    to: 5000
+    value: 0
+  - from: 5001
+    to: -1
+    value: 0
+  chattingAbilityConfiguration: {fileID: 11400000, guid: 47886f19849f4124695d0c1850eaf5a3, type: 2}
+  singingAbilityConversionRatioInitialValue: 10.5
+  singingAbilityConversionRatioMinValue: 0
+  singingAbilityConversionRatioMaxValue: -1
+  singingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: f1d5cae603766dc428a71c8a9e8459da, type: 2}
+  gamingAbilityConversionRatioInitialValue: 10.5
+  gamingAbilityConversionRatioMinValue: 0
+  gamingAbilityConversionRatioMaxValue: -1
+  gamingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: 8d3a6f23e1c9fb248bcdf4e3c097e2ed, type: 2}
+  chattingAbilityConversionRatioInitialValue: 10.5
+  chattingAbilityConversionRatioMinValue: 0
+  chattingAbilityConversionRatioMaxValue: -1
+  chattingAbilityConversionRatioConfiguration: {fileID: 11400000, guid: 9c44347f16d4a6845bab07b4623f7f2e, type: 2}
+  singingAbilityGainEfficiencyInitialValue: 1050
+  singingAbilityGainEfficiencyMinValue: 0
+  singingAbilityGainEfficiencyMaxValue: -1
+  singingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 0d92ba3c5867c5142a5408b59bbdb238, type: 2}
+  gamingAbilityGainEfficiencyInitialValue: 1050
+  gamingAbilityGainEfficiencyMinValue: 0
+  gamingAbilityGainEfficiencyMaxValue: -1
+  gamingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: e4bca2514f94f2c48b494fbbbba6c54b, type: 2}
+  chattingAbilityGainEfficiencyInitialValue: 1050
+  chattingAbilityGainEfficiencyMinValue: 0
+  chattingAbilityGainEfficiencyMaxValue: -1
+  chattingAbilityGainEfficiencyConfiguration: {fileID: 11400000, guid: 478411c7b94b699408da8eb08cbbc77a, type: 2}
+  followerCountInitialValue: 50000
+  followerCountMinValue: 0
+  followerCountMaxValue: -1
+  followerCountConfiguration: {fileID: 11400000, guid: c8b885d17b6be9949a31e594be5ccccd, type: 2}
+  membershipCountInitialValue: 0
+  membershipCountMinValue: 0
+  membershipCountMaxValue: -1
+  membershipBuffs:
+  - from: 0
+    to: 10
+    value: 23
+  - from: 11
+    to: 20
+    value: 24
+  - from: 21
+    to: 30
+    value: 25
+  - from: 31
+    to: 40
+    value: 26
+  - from: 41
+    to: 50
+    value: 27
+  - from: 51
+    to: 60
+    value: 28
+  - from: 61
+    to: 70
+    value: 29
+  - from: 71
+    to: 80
+    value: 30
+  - from: 81
+    to: 90
+    value: 31
+  - from: 91
+    to: 100
+    value: 32
+  membershipCountConfiguration: {fileID: 11400000, guid: 4cb43862c41bf544093f4dd19cc1a990, type: 2}
+  followerToViewerRatioInitialValue: 1
+  followerToViewerRatioMinValue: 0
+  followerToViewerRatioMaxValue: -1
+  followerToViewerRatioConfiguration: {fileID: 11400000, guid: a5f460326b6f9ed45b2015e071c4edbc, type: 2}
+  moneyInitialValue: 15000
+  moneyMinValue: 0
+  moneyMaxValue: -1
+  moneyConfiguration: {fileID: 11400000, guid: ef98052a793634040af651ed3bf119ee, type: 2}
+  revenueShareRateInitialValue: 5000
+  revenueShareRateMinValue: 0
+  revenueShareRateMaxValue: 100
+  revenueShareRateConfiguration: {fileID: 11400000, guid: a27cf6a6ff15e2847b5104f45f764ef2, type: 2}
+  skipEventStaminaRecoveryInitialValue: 500
+  skipEventStaminaRecoveryMinValue: 0
+  skipEventStaminaRecoveryMaxValue: 100
+  skipEventStaminaRecoveryConfiguration: {fileID: 11400000, guid: e5847616bad94904e90a2ca50333ea9c, type: 2}
+  skipTurnStaminaRecoveryInitialValue: 200
+  skipTurnStaminaRecoveryMinValue: 0
+  skipTurnStaminaRecoveryMaxValue: 100
+  skipTurnStaminaRecoveryConfiguration: {fileID: 11400000, guid: e2f2234de9cc3ea4bba5ddab3a15de3e, type: 2}
+  fillingEventIDDuration1: 3
+  fillingEventIDDuration2: 4
+  fillingEventIDDuration3: 5
