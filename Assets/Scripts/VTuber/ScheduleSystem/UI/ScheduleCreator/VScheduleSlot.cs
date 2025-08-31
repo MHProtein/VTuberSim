@@ -132,7 +132,7 @@ namespace VTuber.ScheduleSystem.UI
                 checkmark.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
                 item.Event.SetCoopEffects(this, _coopEventEffects);
             }
-            else
+            else if(IsCoopEventSlot)
             {
                 redCross.gameObject.SetActive(true);
                 redCross.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);

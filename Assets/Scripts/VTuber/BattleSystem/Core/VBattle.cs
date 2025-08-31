@@ -388,7 +388,7 @@ namespace VTuber.BattleSystem.Core
             InitializeTurn();
         }
 
-        public void InitializeTurn()
+        private protected void InitializeTurn()
         {
             if (TurnLeft <= 0)
             {
@@ -405,7 +405,7 @@ namespace VTuber.BattleSystem.Core
             });
         }
 
-        public void EndTurn()
+        private void EndTurn()
         {
             Debug.Log("回合结束: " + TurnLeft);
             _turnAttribute.AddTo(-1, false);
@@ -425,8 +425,8 @@ namespace VTuber.BattleSystem.Core
             });
             
         }
-        
-        public int CalculateAbilityGain(int popularity)
+
+        private int CalculateAbilityGain(int popularity)
         {
             int attributeGain = 0;
             if (popularity >= _extraTargetPopularity)
@@ -442,15 +442,14 @@ namespace VTuber.BattleSystem.Core
             return attributeGain;
         }
 
-        public string GetAbilityKey(int index)
+        private string GetAbilityKey(int index)
         {
-            
             if(index == 0) return "CASingingAbility";
             else if(index == 1) return "CAGamingAbility";
             else return "CAChattingAbility";
         }
-        
-        public string GetBattleAbilityKey(int index)
+
+        private string GetBattleAbilityKey(int index)
         {
             if(index == 0) return "BASingingMultiplier";
             else if(index == 1) return "BAGamingMultiplier";
@@ -575,10 +574,7 @@ namespace VTuber.BattleSystem.Core
             if (effects is null || effects.Count == 0)
             {
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>()
-                    {
-
-                    });
+                    new Dictionary<string, object>());
                 return;
             }
             
@@ -600,20 +596,15 @@ namespace VTuber.BattleSystem.Core
             if (!effectApplied)
             {
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>()
-                    {
-
-                    });
+                    new Dictionary<string, object>());
                 return;
             }
-            
-            if (_shouldRedraw)
-            {
-                _shouldRedraw = false;
-                if (PlayLeft == 0)
-                    return;
-                Redraw();
-            }
+
+            if (!_shouldRedraw) return;
+            _shouldRedraw = false;
+            if (PlayLeft == 0)
+                return;
+            Redraw();
         }
     }
 }
