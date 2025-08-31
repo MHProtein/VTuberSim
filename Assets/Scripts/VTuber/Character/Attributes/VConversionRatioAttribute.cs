@@ -6,10 +6,17 @@ namespace VTuber.Character.Attributes
 {
     public class VConversionRatioAttribute : VCharacterAttribute
     {
-        public VConversionRatioAttribute(VCharacterAttributeConfiguration configuration, int initialValue,
-            VRaisingEventKey eventKey = VRaisingEventKey.Default, int maxValue = Int32.MaxValue, int minValue = 0)
-            : base(configuration, initialValue, eventKey, maxValue, minValue, true, false)
+        public float fraction;
+        public VConversionRatioAttribute(VCharacterAttributeConfiguration configuration, float initialValue,
+            VRaisingEventKey eventKey, int maxValue, int minValue)
+            : base(configuration, (int)initialValue, eventKey, maxValue, minValue, true, false)
         {
+            fraction = initialValue - (int)initialValue;
+        }
+
+        public float GetValue()
+        {
+            return (Value + fraction) / 100.0f;
         }
     }
 }
