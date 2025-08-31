@@ -94,6 +94,7 @@ namespace VTuber.ScheduleSystem.UI
             _typeDropdown.value = 0; // Reset to "All"
             _rarityDropdown.value = 0; // Reset to "Common"
             _isUpgraded.isOn = false; // Reset to unchecked
+            previewCardUI.gameObject.SetActive(false);
         }
         
         public void OnTypeChanged(int value)

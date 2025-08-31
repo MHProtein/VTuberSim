@@ -18,7 +18,7 @@ namespace VTuber.Reincarnation
     {
         public static VAccount CreateAccount(VReincarnationConfiguration config, string ratingLevel, VCharacter character)
         {
-            VAccount account = new VAccount(GetCards(config, ratingLevel, character),
+            VAccount account = new VAccount(ratingLevel, GetCards(config, ratingLevel, character),
                 GetRelics(config, ratingLevel, character),
                 GetEffects(config, ratingLevel, character));
             return account;

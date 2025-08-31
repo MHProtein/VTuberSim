@@ -3,6 +3,7 @@ using PrimeTween;
 using Sirenix.Utilities;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
@@ -10,6 +11,7 @@ using VTuber.BattleSystem.Core.UI.VAccountSelection;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.UI;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.Relic.UI;
@@ -19,7 +21,7 @@ namespace VTuber.ScheduleSystem.UI
     public class VEndingUI : VUIBehaviour
     {
         [SerializeField] private GameObject ui;
-        [SerializeField] private TMP_Text ratingLevelText;
+        [SerializeField] private Image ratingLevelImage;
         [SerializeField] private TMP_Text scoreText;
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private GameObject relicPrefab;
@@ -46,7 +48,7 @@ namespace VTuber.ScheduleSystem.UI
             _account = account;
             inputField.text = characterName;
             inputField.characterLimit = 10;
-            ratingLevelText.text = ratingLevel;
+            ratingLevelImage.sprite = VUIUtils.Instance.GetScoreLevelSprite(ratingLevel);
             scoreText.text = score.ToString();
             
             _cards = new List<VCardUI>();
@@ -71,7 +73,7 @@ namespace VTuber.ScheduleSystem.UI
         public void Show()
         {
             ui.SetActive(true);
-            Tween.PunchScale(ratingLevelText.transform, Vector3.one * 1.3f, 0.5f);
+            Tween.PunchScale(ratingLevelImage.transform, Vector3.one * 1.3f, 0.5f);
         }
 
         public void Hide()
