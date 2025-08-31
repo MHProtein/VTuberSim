@@ -138,8 +138,9 @@ namespace VTuber.Store
             {
                 0, 0, 0
             };
+            var cardLibrary = _character.CardLibrary.GetCards().Where(card => card.IsUnique).ToList();
             List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations().
-                Where(card => (card.liveType == liveType || card.liveType == "F") && card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special).ToList();
+                Where(card => !cardLibrary.Exists(c => c.configID == card.id) && (card.liveType == liveType || card.liveType == "F") && card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special).ToList();
 
             foreach (var card in cards)
             {

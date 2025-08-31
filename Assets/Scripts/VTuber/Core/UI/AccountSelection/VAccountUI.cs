@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.UI;
 using VTuber.Reincarnation;
 
 namespace VTuber.BattleSystem.Core.UI.VAccountSelection
@@ -12,6 +13,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
     public class VAccountUI : VUIBehaviour, IPointerClickHandler
     {
         [SerializeField] private TMP_Text nameText;
+        [SerializeField] private Image scoreLevelImage;
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
         [SerializeField] private List<Image> cardIcons;
@@ -37,6 +39,8 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             _menu = menu;
             _account = account;
             nameText.text = account.accountName;
+            
+            scoreLevelImage.sprite = VUIUtils.Instance.GetScoreLevelSprite(account.ScoreLevel);
             
             for (int i = 0; i < cardIcons.Count; i++)
             {

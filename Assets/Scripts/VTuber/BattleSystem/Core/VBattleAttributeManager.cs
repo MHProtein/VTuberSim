@@ -341,7 +341,7 @@ namespace VTuber.BattleSystem.Core
             }
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterChange, OnParameterChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnViewerCountChange, OnViewerCountChange);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnViewerCountChange, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             _multiplierManager.OnDisable();
         }
 
@@ -358,7 +358,7 @@ namespace VTuber.BattleSystem.Core
 
             foreach (var multiplier in _multiplierManager.Multipliers)
             {
-                multiplier.AddTo(VMathUtils.FloatToInt(delta * 0.1f), false, false);
+                multiplier.AddTo(VMathUtils.FloatToInt(delta * 0.2f), false, false);
             }
         }
 

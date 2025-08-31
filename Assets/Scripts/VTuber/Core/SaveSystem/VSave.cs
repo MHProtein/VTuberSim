@@ -16,6 +16,7 @@ namespace VTuber.BattleSystem.Core.SaveSystem
         //10-cards, 10-relics, 10-attributes
         public int accountCount;
         public string[] accountNames;
+        public string[] accountRatingLevels;
         public int[,] accountData;
         public string[,] effectParameters;
         public int[,] effectLevels;
@@ -38,7 +39,13 @@ namespace VTuber.BattleSystem.Core.SaveSystem
             {
                 accountNames[i] = accounts[i].accountName;
             }
-
+            
+            accountRatingLevels = new string[100];
+            for (int i = 0; i < accounts.Count; i++)
+            {
+                accountRatingLevels[i] = accounts[i].ScoreLevel;
+            }
+            
             effectParameters = new string[100, 10];
             effectLevels = new int[100, 10];
             for (int i = 0; i < accounts.Count; i++)
@@ -106,7 +113,7 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                     effectLevel.Add(effectLevels[i, j - 20]);
                 }
 
-                var account = new VAccount(cards, relics, effects, effectLevel);
+                var account = new VAccount(accountRatingLevels[i], cards, relics, effects, effectLevel);
                 account.accountName = accountNames[i];
                 accounts.Add(account);
             }

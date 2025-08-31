@@ -76,12 +76,13 @@ namespace VTuber.BattleSystem.UI
             
             if (card.CostType == CostType.Buff)
             {
-                var buff = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId);
-                cost.text = buff.buffName + " x " + card.Cost.ToString();
+                costImage.sprite = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId).icon;
+                cost.text = "-" + card.Cost;
+                cost.transform.localPosition = new Vector3(cost.transform.localPosition.x, -40f, 0f);
             }
             else
             {
-                cost.text = card.Cost.ToString();
+                cost.text = "-" + card.Cost;
             }
             
             if (card.IsUpgraded)

@@ -15,6 +15,7 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Dialogue.UI;
 using VTuber.Relic;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -78,6 +79,8 @@ namespace VTuber.BattleSystem.Core
             VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
         int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
         {
+            VRaisingUI.Instance.SwitchAttributesUIBattle(true);
+            
             _mainAttributeIndex = mainAttributeIndex;
             _isPhaseEnding = isPhaseEnding;
             cardTypeHistory = new Dictionary<string, int>();

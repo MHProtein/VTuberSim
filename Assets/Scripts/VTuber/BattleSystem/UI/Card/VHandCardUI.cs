@@ -308,29 +308,39 @@ namespace VTuber.BattleSystem.UI
         {
             if (originalValue == 0)
             {
-                cardUI.popularityText.gameObject.SetActive(false);
-                cardUI.popularityImage.gameObject.SetActive(false);
+                if(cardUI.popularityText != null)
+                    cardUI.popularityText.gameObject.SetActive(false);
+                if(cardUI.popularityImage is not null)
+                    cardUI.popularityImage.gameObject.SetActive(false);
                 return;
             }
 
             if (isFirstTime)
             {
-                cardUI.popularityText.gameObject.SetActive(true);
-                cardUI.popularityImage.gameObject.SetActive(true);
-                if(VBattle.Instance.BattleAttributeManager.MultiplierManager is not null)
+                if (cardUI.popularityText != null)
+                {
+                    cardUI.popularityText.gameObject.SetActive(true);
+                    cardUI.popularityText.text = originalValue.ToString();
+                    _popularityPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.popularityText.transform, Vector3.one, 0.5f).OnComplete(
+                        () =>
+                        {
+                            cardUI.popularityText.text = finalValue.ToString();
+                            if (finalValue != originalValue)
+                                Tween.PunchScale(cardUI.popularityText.transform, Vector3.one * 1.3f, 0.3f);
+                        }));
+                }
+                
+                if(cardUI.popularityImage != null)
+                    cardUI.popularityImage.gameObject.SetActive(true);
+                if(VBattle.Instance.BattleAttributeManager.MultiplierManager != null)
                     cardUI.SetPopularityImage(VBattle.Instance.BattleAttributeManager.MultiplierManager.Multiplier.AttributeName);
-                cardUI.popularityText.text = originalValue.ToString();
     
-                _popularityPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.popularityText.transform, Vector3.one, 0.5f).OnComplete(
-                    () =>
-                    {
-                        cardUI.popularityText.text = finalValue.ToString();
-                        if (finalValue != originalValue)
-                            Tween.PunchScale(cardUI.popularityText.transform, Vector3.one * 1.3f, 0.3f);
-                    }));
+      
             }
             else
             {
+                if (cardUI.popularityText == null)
+                    return;
                 if (cardUI.popularityText.text == finalValue.ToString())
                     return;
                 cardUI.popularityText.text = finalValue.ToString();
@@ -342,30 +352,41 @@ namespace VTuber.BattleSystem.UI
         {
             if (originalValue == 0)
             {
-                cardUI.shieldText.gameObject.SetActive(false);
-                cardUI.shieldImage.gameObject.SetActive(false);
+                if (cardUI.shieldText != null)
+                    cardUI.shieldText.gameObject.SetActive(false);
+                if (cardUI.shieldImage != null)
+                    cardUI.shieldImage.gameObject.SetActive(false);
                 return;
             }
 
             if (isFirstTime)
             {
-                cardUI.shieldText.gameObject.SetActive(true);
-                cardUI.shieldImage.gameObject.SetActive(true);
-                cardUI.shieldText.text = originalValue.ToString();
-                _shieldPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.shieldText.transform, Vector3.one, 0.5f).OnComplete(
-                    () =>
-                    {
-                        cardUI.shieldText.text = finalValue.ToString();
-                        if(finalValue != originalValue)
-                            Tween.PunchScale(cardUI.shieldText.transform, Vector3.one * 1.3f, 0.3f);
-                    }));
+                if (cardUI.shieldText != null)
+                {
+                    cardUI.shieldText.gameObject.SetActive(true);
+                    cardUI.shieldText.text = originalValue.ToString();
+                    _shieldPreviewAnimationQueue.Enqueue(Tween.Scale(cardUI.shieldText.transform, Vector3.one, 0.5f).OnComplete(
+                        () =>
+                        {
+                            cardUI.shieldText.text = finalValue.ToString();
+                            if(finalValue != originalValue)
+                                Tween.PunchScale(cardUI.shieldText.transform, Vector3.one * 1.3f, 0.3f);
+                        }));
+                    
+                }
+                if (cardUI.shieldImage != null)
+                    cardUI.shieldImage.gameObject.SetActive(true);
             }
             else
             {
-                if (cardUI.shieldText.text == finalValue.ToString())
-                    return;
-                cardUI.shieldText.text = finalValue.ToString();
-                _shieldPreviewAnimationQueue.Enqueue(Tween.PunchScale(cardUI.shieldText.transform, Vector3.one * 1.3f, 0.3f));
+                if (cardUI.shieldText != null)
+                {
+                    if (cardUI.shieldText.text == finalValue.ToString())
+                        return;
+                    cardUI.shieldText.text = finalValue.ToString();
+                    _shieldPreviewAnimationQueue.Enqueue(Tween.PunchScale(cardUI.shieldText.transform,
+                        Vector3.one * 1.3f, 0.3f));
+                }
             }
         }
     }

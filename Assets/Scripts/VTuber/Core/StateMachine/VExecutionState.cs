@@ -54,6 +54,8 @@ namespace VTuber.Core.StateMachine
             _lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
             if(_isLastStreamSuccess)
                 stateMachine.Character.succeededStreams.Add(_currentEvent);
+            
+            VRaisingUI.Instance.SwitchAttributesUIBattle(true);
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
@@ -192,7 +194,6 @@ namespace VTuber.Core.StateMachine
         {
             AddEventToCurrentEvent((VEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
         }
-        
         
         private void OnBeginEnding(Dictionary<string, object> messagedict)
         {
