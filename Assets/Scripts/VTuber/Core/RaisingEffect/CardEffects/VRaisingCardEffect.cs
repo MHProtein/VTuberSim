@@ -19,16 +19,17 @@ namespace VTuber.Core.RaisingEffect
             _upgradeProbabilities = configuration.upgradeProbabilities;
         }
 
-        public List<VCard> GetRandomCards(int count, VCardCondition condition, string liveType)
+        public List<VCard> GetRandomCards(int count, VCardCondition condition, string liveType, VCharacter character)
         {
             List<int> rarityCounts = new List<int>()
             {
                 0, 0, 0
             };
+            var cardLibrary = character.CardLibrary.GetCards().Where(card => card.IsUnique).ToList();
             List<VCardConfiguration> cards = VDataManager.Instance.GetAllCardConfigurations().
                 Where(card =>
                 {
-                    if (card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special &&
+                    if (!cardLibrary.Exists(c => c.configID == card.id) && card.rarity != VCardRarity.Basic && card.rarity != VCardRarity.Special &&
                         (card.liveType == liveType || card.liveType == "F"))
                     {
                         if (condition is null)
