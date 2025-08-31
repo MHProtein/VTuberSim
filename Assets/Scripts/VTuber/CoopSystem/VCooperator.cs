@@ -135,8 +135,7 @@ namespace VTuber.CoopSystem
         
         private void OnSwitchToScheduleCreation(Dictionary<string, object> messagedict)
         { 
-            _hasExecutedUpgradeEventThisWeek = false;
-            if (_upgradeEvent != null)
+            if (!_hasExecutedUpgradeEventThisWeek && _upgradeEvent != null)
             {
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSetCoopUpgradeEvent, new Dictionary<string, object>()
                 {
@@ -191,6 +190,8 @@ namespace VTuber.CoopSystem
                 {"Cooperator", this},
                 {"Level", _currentLevelIndex}
             });
+            _upgradeEvent = null;
+            _hasExecutedUpgradeEventThisWeek = true;
         }
 
         #region CoopEventGeneration

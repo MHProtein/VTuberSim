@@ -129,7 +129,7 @@ namespace VTuber.BattleSystem.Core
         private void OnCardDisposed(Dictionary<string, object> args)
         {
             VCard card = args["Card"] as VCard;
-            DisposeCard(card);
+            DisposeCard(card, (bool)args["IsUsed"]);
         }
 
         private void OnRequestDrawCards(Dictionary<string, object> messagedict)
@@ -228,12 +228,12 @@ namespace VTuber.BattleSystem.Core
             }
         }
         
-        private void DisposeCard(VCard card)
+        private void DisposeCard(VCard card, bool isUsed)
         {
             if(card is null)
                 return;
             
-            if(card.IsExhaust)
+            if(card.IsExhaust && isUsed)
             {
                 _exhaustPile.Add(card);
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardEnterExaustPile,
