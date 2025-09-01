@@ -89,5 +89,15 @@ namespace VTuber.BattleSystem.Core.KPIs
         {
             return permanentKPIs.Count > 0 || phaseKPIs.Count > 0;
         }
+
+        public void ClearKPIs()
+        {
+            foreach (var kpi in permanentKPIs)
+            {
+                kpi.OnRemoved();
+            }
+            permanentKPIs.Clear();
+            ClearPhaseKPIs();
+        }
     }
 }

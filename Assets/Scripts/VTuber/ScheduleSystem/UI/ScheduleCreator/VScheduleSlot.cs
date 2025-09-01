@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
@@ -27,8 +29,11 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private GameObject highlightFrame;
         [SerializeField] private Image checkmark;
+        [SerializeField] private Image redCross;
         [SerializeField] private Image pfp;
         [SerializeField] private List<Image> eventIcons;
+        [SerializeField] private TMP_Text effectText;
+        [SerializeField] private Image effectImage;
         
         public bool Available
         {
@@ -79,6 +84,16 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     eventIcons[i].color = VRaisingUI.Instance.abilityColors[eventItem.e.eventTypes[i].abilityIndex];
                 }
+                
+                foreach (var effect in _coopEventEffects)
+                {
+                    if (effect is IAttributeEffect attributeEffect)
+                    {
+                        effectText.text = "+" + effect.GetParameter();
+                        effectImage.GetComponentInChildren<Image>().sprite =
+                            VUIUtils.Instance.GetAttributeIcon(attributeEffect.AttributeName);
+                    }
+                }
             }
         }
         
@@ -86,6 +101,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             coopEventGameObject.SetActive(false);
             checkmark.gameObject.SetActive(false);
+            redCross.gameObject.SetActive(false);
             IsCoopEventSlot = false;
             foreach (var icon in eventIcons)
             {
@@ -128,13 +144,23 @@ namespace VTuber.ScheduleSystem.UI
             if (IsCoopEventSlot && (_coopEventTypes.Count == 0 || IsInCoopEventTypes(item)))
             {
                 checkmark.gameObject.SetActive(true);
+                checkmark.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
                 item.Event.SetCoopEffects(this, _coopEventEffects);
+            }
+            else if(IsCoopEventSlot)
+            {
+                redCross.gameObject.SetActive(true);
+                redCross.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
             }
         }
 
         public void RemoveItem()
         {
+            checkmark.transform.SetParent(transform);
             checkmark.gameObject.SetActive(false);
+            
+            redCross.transform.SetParent(transform);
+            redCross.gameObject.SetActive(false);
 
             if (_item is not null && _item.Event is not null)
             {
@@ -296,7 +322,7 @@ namespace VTuber.ScheduleSystem.UI
             }
             else
             {
-                transformParent = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.ScheduleUIRect;
+                transformParent = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.EventParent;
             }
 
             if (!Available)

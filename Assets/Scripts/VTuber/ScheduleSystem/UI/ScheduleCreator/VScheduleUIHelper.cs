@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 
@@ -9,12 +10,14 @@ namespace VTuber.ScheduleSystem.UI
     public class VScheduleUIHelper : VSingletonMonobehaviour<VScheduleUIHelper>
     {
         public RectTransform CanvasRect => canvasRect;
-        public RectTransform ScheduleUIRect => scheduleUIRect;
+        public RectTransform EventParent => eventParent;
+        public RectTransform CheckMarkParent => checkMarkParent;
         [SerializeField] GraphicRaycaster m_Raycaster;
         PointerEventData m_PointerEventData;
         [SerializeField] UnityEngine.EventSystems.EventSystem m_EventSystem;
         [SerializeField] RectTransform canvasRect;
-        [SerializeField] RectTransform scheduleUIRect;
+        [SerializeField] RectTransform eventParent;
+        [SerializeField] RectTransform checkMarkParent;
 
         public List<RaycastResult> RaycastFromMouse()
         {

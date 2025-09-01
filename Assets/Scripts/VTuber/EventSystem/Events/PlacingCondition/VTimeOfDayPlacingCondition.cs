@@ -20,7 +20,7 @@ namespace VTuber.EventSystem.Events
 
         public override bool IsTrue(VCharacter character, VScheduleSlot slot)
         {
-            return requiredValue.Contains(slot.Coordination.x);
+            return requiredValue.Contains(slot.Coordination.y + 1);
         }
     }
 }

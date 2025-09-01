@@ -18,7 +18,7 @@ namespace VTuber.BattleSystem.Core.UI
         public void ShowScript(VScriptConfiguration script)
         {
             icon.sprite = script.icon;
-            name.text = script.name;
+            name.text = script.scriptName;
             description.text = script.description;
             foreach (var coop in script.coops)
             {

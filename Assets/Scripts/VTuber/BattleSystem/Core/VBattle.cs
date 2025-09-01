@@ -10,10 +10,12 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
+using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Dialogue.UI;
 using VTuber.Relic;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -68,6 +70,8 @@ namespace VTuber.BattleSystem.Core
         
         private List<AnimationCurve> _decayCurves;
         private List<int> _abilityTurnCounts;
+        private bool _shouldEndBattle = false;
+        private bool _battleEnded = false;
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
@@ -76,6 +80,9 @@ namespace VTuber.BattleSystem.Core
             VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
         int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
         {
+            _battleEnded = false;
+            VRaisingUI.Instance.SwitchAttributesUIBattle(false);
+            
             _mainAttributeIndex = mainAttributeIndex;
             _isPhaseEnding = isPhaseEnding;
             cardTypeHistory = new Dictionary<string, int>();
@@ -237,7 +244,7 @@ namespace VTuber.BattleSystem.Core
             {
                 if (value >= _extraTargetPopularity)
                 {
-                    EndBattle();
+                    _shouldEndBattle = true;
                 }
             }
         }
@@ -367,6 +374,12 @@ namespace VTuber.BattleSystem.Core
                 EndTurn();
                 if (_shouldRedraw) _shouldRedraw = false;
             }
+
+            if (_shouldEndBattle)
+            {
+                _shouldEndBattle = false;
+                EndBattle();
+            }
         }
         
         private void OnNotifyTurnBeginDelay(Dictionary<string, object> messagedict)
@@ -381,7 +394,7 @@ namespace VTuber.BattleSystem.Core
             InitializeTurn();
         }
 
-        public void InitializeTurn()
+        private protected void InitializeTurn()
         {
             if (TurnLeft <= 0)
             {
@@ -398,7 +411,7 @@ namespace VTuber.BattleSystem.Core
             });
         }
 
-        public void EndTurn()
+        private void EndTurn()
         {
             Debug.Log("回合结束: " + TurnLeft);
             _turnAttribute.AddTo(-1, false);
@@ -418,8 +431,8 @@ namespace VTuber.BattleSystem.Core
             });
             
         }
-        
-        public int CalculateAbilityGain(int popularity)
+
+        private int CalculateAbilityGain(int popularity)
         {
             int attributeGain = 0;
             if (popularity >= _extraTargetPopularity)
@@ -435,15 +448,14 @@ namespace VTuber.BattleSystem.Core
             return attributeGain;
         }
 
-        public string GetAbilityKey(int index)
+        private string GetAbilityKey(int index)
         {
-            
             if(index == 0) return "CASingingAbility";
             else if(index == 1) return "CAGamingAbility";
             else return "CAChattingAbility";
         }
-        
-        public string GetBattleAbilityKey(int index)
+
+        private string GetBattleAbilityKey(int index)
         {
             if(index == 0) return "BASingingMultiplier";
             else if(index == 1) return "BAGamingMultiplier";
@@ -452,6 +464,9 @@ namespace VTuber.BattleSystem.Core
         
         private void EndBattle()
         {
+            if (_battleEnded)
+                return;
+            _battleEnded = true;
             _battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
             var popularityAttribute = battleAttribute as VBattlePopularityAttribute;
             if (!_isPhaseEnding)
@@ -461,14 +476,19 @@ namespace VTuber.BattleSystem.Core
                 string attributeKey = GetAbilityKey(_mainAttributeIndex);
                 
                 _characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
-                attribute.AddTo(attributeGain);
+                if (attribute is VAbilityAttribute abilityAttribute)
+                {
+                    abilityAttribute.AddAbility(attributeGain, true);
+                }
             }
             else
             {
                 string attributeKey = GetAbilityKey(_mainAttributeIndex);
-                _characterAttributeManager.TryGetAttribute(attributeKey, out var ability);
-                ability.AddTo((int)_decayCurves[0].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(_mainAttributeIndex)]));
-
+                _characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
+                if (attribute is VAbilityAttribute abilityAttribute)
+                {
+                    abilityAttribute.AddAbility((int)_decayCurves[0].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(_mainAttributeIndex)]), true);
+                }
                 int index1, index2;
                 if (_mainAttributeIndex == 0)
                 {
@@ -490,15 +510,30 @@ namespace VTuber.BattleSystem.Core
                 _characterAttributeManager.TryGetAttribute(GetAbilityKey(index2), out var ability2);
                 if(_abilityTurnCounts[index1] <= _abilityTurnCounts[index2])
                 {
-                    ability1.AddTo((int)_decayCurves[2].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]));
-                    ability2.AddTo((int)_decayCurves[1].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]));
+                    if (ability1 is VAbilityAttribute abilityAttribute1)
+                    {
+                        abilityAttribute1.AddAbility((int)_decayCurves[2].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]), true);
+                    }
+                    if (ability2 is VAbilityAttribute abilityAttribute2)
+                    {
+                        abilityAttribute2.AddAbility((int)_decayCurves[1].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]), true);
+                    }
                 }
                 else if(_abilityTurnCounts[index1] > _abilityTurnCounts[index2])
                 {
-                    ability1.AddTo((int)_decayCurves[1].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]));
-                    ability2.AddTo((int)_decayCurves[2].Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]));
+                    if (ability1 is VAbilityAttribute abilityAttribute1)
+                    {
+                        abilityAttribute1.AddAbility((int)_decayCurves[1].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index1)]), true);
+                    }
+                    if (ability2 is VAbilityAttribute abilityAttribute2)
+                    {
+                        abilityAttribute2.AddAbility((int)_decayCurves[2].
+                            Evaluate(popularityAttribute.ScoreForAbilities[GetBattleAbilityKey(index2)]), true);
+                    }
                 }
-
             }
                 
             _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
@@ -568,10 +603,7 @@ namespace VTuber.BattleSystem.Core
             if (effects is null || effects.Count == 0)
             {
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>()
-                    {
-
-                    });
+                    new Dictionary<string, object>());
                 return;
             }
             
@@ -593,20 +625,15 @@ namespace VTuber.BattleSystem.Core
             if (!effectApplied)
             {
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>()
-                    {
-
-                    });
+                    new Dictionary<string, object>());
                 return;
             }
-            
-            if (_shouldRedraw)
-            {
-                _shouldRedraw = false;
-                if (PlayLeft == 0)
-                    return;
-                Redraw();
-            }
+
+            if (!_shouldRedraw) return;
+            _shouldRedraw = false;
+            if (PlayLeft == 0)
+                return;
+            Redraw();
         }
     }
 }

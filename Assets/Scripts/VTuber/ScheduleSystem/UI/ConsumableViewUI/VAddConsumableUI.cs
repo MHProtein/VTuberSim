@@ -25,6 +25,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             base.Awake();
             confirmButton.onClick.AddListener(Confirm);
+            returnButton.onClick.AddListener(Return);
         }
 
         public void Initialize(VCharacter character, VConsumable consumable, Action<VConsumable> confirmAction)
@@ -77,6 +78,13 @@ namespace VTuber.ScheduleSystem.UI
         {
             _confirmAction?.Invoke(_consumableUI.Consumable);
             
+            Destroy(_consumableUI.gameObject);
+            
+            _consumableUI = null;
+        }
+
+        public void Return()
+        {
             Destroy(_consumableUI.gameObject);
             
             _consumableUI = null;

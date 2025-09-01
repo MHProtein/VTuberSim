@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sirenix.Utilities;
 using UnityEngine;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Core;
@@ -78,6 +79,15 @@ namespace VTuber.Core.UI
             }
 
             return "";
+        }
+
+        public Sprite GetScoreLevelSprite(string level)
+        {
+            if (level.IsNullOrWhitespace())
+            {
+                return VResourcesManager.Instance.TryGetSprite("ScoreLevel_SSS");
+            }
+            return VResourcesManager.Instance.TryGetSprite("ScoreLevel_" + level);
         }
     }
 }

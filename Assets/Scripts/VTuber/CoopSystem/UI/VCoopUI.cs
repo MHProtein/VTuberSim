@@ -31,6 +31,9 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnCooperatorValueUpdated, OnCooperatorValueUpdated);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSetCoopUpgradeEvent, OnSetCoopUpgradeEvent);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnFinishScheduleCreationOrModification, OnFinishScheduleCreationOrModification);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEndRun, OnEndRun);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreationModify);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToScheduleCreationModify);
         }
 
         protected override void OnDisable()
@@ -41,14 +44,34 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnCooperatorValueUpdated, OnCooperatorValueUpdated);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSetCoopUpgradeEvent, OnSetCoopUpgradeEvent);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnFinishScheduleCreationOrModification, OnFinishScheduleCreationOrModification);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEndRun, OnEndRun);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreationModify);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToScheduleCreationModify);
         }
         
+        private void OnEndRun(Dictionary<string, object> messagedict)
+        {
+            foreach (var ui in uis)
+            {
+                ui.OnFinishScheduleCreationOrModification();
+                Destroy(ui.gameObject);
+            }
+            uis.Clear();
+        }
+        
+        private void OnSwitchToScheduleCreationModify(Dictionary<string, object> messagedict)
+        {
+            foreach (var ui in uis)
+            {
+                ui.OnSwitchToScheduleCreationModify();
+            }
+        }
         
         private void OnFinishScheduleCreationOrModification(Dictionary<string, object> messagedict)
         {
             foreach (var ui in uis)
             {
-                ui.ClearUpgradeEvent();
+                ui.OnFinishScheduleCreationOrModification();
             }
         }
         

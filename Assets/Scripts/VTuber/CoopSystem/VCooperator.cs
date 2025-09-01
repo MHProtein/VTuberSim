@@ -119,7 +119,7 @@ namespace VTuber.CoopSystem
 
         public void OnEnable()
         {
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnWeekStart, OnWeekStart);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnWeekEnd, OnWeekEnd);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreation);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
@@ -127,7 +127,7 @@ namespace VTuber.CoopSystem
 
         public void OnDisable()
         {
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnWeekStart, OnWeekStart);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnWeekEnd, OnWeekEnd);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToModifySchedule);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreation);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
@@ -135,8 +135,7 @@ namespace VTuber.CoopSystem
         
         private void OnSwitchToScheduleCreation(Dictionary<string, object> messagedict)
         { 
-            _hasExecutedUpgradeEventThisWeek = false;
-            if (_upgradeEvent != null)
+            if (!_hasExecutedUpgradeEventThisWeek && _upgradeEvent != null)
             {
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSetCoopUpgradeEvent, new Dictionary<string, object>()
                 {
@@ -156,8 +155,9 @@ namespace VTuber.CoopSystem
             }
         }
         
-        private void OnWeekStart(Dictionary<string, object> messagedict)
+        private void OnWeekEnd(Dictionary<string, object> messagedict)
         {
+            _hasExecutedUpgradeEventThisWeek = false;
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
@@ -191,6 +191,14 @@ namespace VTuber.CoopSystem
                 {"Cooperator", this},
                 {"Level", _currentLevelIndex}
             });
+            if (_coopValue - CurrentCoopLevel.to >= 0)
+            {
+                if (CurrentCoopLevel.eventType == VEventType.Stream)
+                    _upgradeEvent = VDataManager.Instance.CreateStreamEventByID(CurrentCoopLevel.upgradeEventID);
+                else
+                    _upgradeEvent = VDataManager.Instance.CreateDialogueEventByID(CurrentCoopLevel.upgradeEventID);
+            }
+            _hasExecutedUpgradeEventThisWeek = true;
         }
 
         #region CoopEventGeneration

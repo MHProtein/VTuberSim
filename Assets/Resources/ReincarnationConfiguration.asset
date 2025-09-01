@@ -601,7 +601,7 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 3
-      Data: 4
+      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -613,7 +613,7 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 3
-      Data: 8
+      Data: 6
     - Name: 
       Entry: 8
       Data: 
@@ -625,7 +625,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 3
-      Data: 14
+      Data: 15
     - Name: 
       Entry: 8
       Data: 
@@ -670,16 +670,34 @@ MonoBehaviour:
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
       Data: 36|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
       Entry: 3
       Data: 2
-    - Name: count
+    - Name: highestLevel
       Entry: 3
       Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 37|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -691,17 +709,20 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 37|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 38|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 38|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 39|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
       Entry: 3
       Data: 1
+    - Name: highestLevel
+      Entry: 3
+      Data: 2
     - Name: count
       Entry: 3
       Data: 1
@@ -710,8 +731,11 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 39|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 40|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count
@@ -740,29 +764,47 @@ MonoBehaviour:
       Data: F
     - Name: $v
       Entry: 7
-      Data: 40|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 41|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
-      Data: 3
+      Data: 2
     - Name: capacity
       Entry: 3
-      Data: 12
+      Data: 8
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 41|Antlr4.Runtime.Misc.ArrayList`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 42|Antlr4.Runtime.Misc.ArrayList`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], Yarn.Antlr4.Runtime.Standard
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 42|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 43|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count
       Entry: 3
-      Data: 2
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 44|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -774,15 +816,18 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 43|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 45|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 44|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 46|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count
@@ -811,29 +856,47 @@ MonoBehaviour:
       Data: E
     - Name: $v
       Entry: 7
-      Data: 45|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 47|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 3
     - Name: capacity
       Entry: 3
-      Data: 16
+      Data: 12
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 46|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 48|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 47|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 49|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 50|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -845,15 +908,18 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 48|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 51|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 49|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 52|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count
@@ -882,29 +948,47 @@ MonoBehaviour:
       Data: D
     - Name: $v
       Entry: 7
-      Data: 50|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 53|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 3
     - Name: capacity
       Entry: 3
-      Data: 20
+      Data: 15
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 51|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 54|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 52|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 55|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 1
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 56|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -916,17 +1000,20 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 53|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 57|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 54|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 58|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
       Entry: 3
       Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 1
     - Name: count
       Entry: 3
       Data: 1
@@ -953,7 +1040,7 @@ MonoBehaviour:
       Data: B
     - Name: $v
       Entry: 7
-      Data: 55|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 59|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 4
@@ -962,15 +1049,18 @@ MonoBehaviour:
       Data: 30
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 56|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 60|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 57|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 61|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
@@ -987,15 +1077,18 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 58|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 62|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 59|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 63|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
@@ -1006,10 +1099,13 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 60|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 64|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
       Entry: 3
       Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 1
     - Name: count
       Entry: 3
       Data: 1
@@ -1036,7 +1132,7 @@ MonoBehaviour:
       Data: A
     - Name: $v
       Entry: 7
-      Data: 61|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 65|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 5
@@ -1045,20 +1141,38 @@ MonoBehaviour:
       Data: 34
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 62|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 66|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 63|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 67|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 68|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -1070,15 +1184,18 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 64|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 69|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 65|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 70|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
@@ -1107,7 +1224,7 @@ MonoBehaviour:
       Data: SS
     - Name: $v
       Entry: 7
-      Data: 66|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 71|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 6
@@ -1116,15 +1233,18 @@ MonoBehaviour:
       Data: 46
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 67|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 72|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 68|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 73|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 2
+    - Name: highestLevel
       Entry: 3
       Data: 2
     - Name: count
@@ -1135,8 +1255,11 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 69|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 74|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
@@ -1153,20 +1276,38 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 70|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 75|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 7
-      Data: 71|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 76|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
+      Entry: 3
+      Data: 2
+    - Name: count
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 77|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
       Entry: 3
-      Data: 2
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -1190,7 +1331,7 @@ MonoBehaviour:
       Data: SSS
     - Name: $v
       Entry: 7
-      Data: 72|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 78|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 6
@@ -1199,15 +1340,18 @@ MonoBehaviour:
       Data: 52
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 73|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 79|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 7
-      Data: 74|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 80|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 2
+    - Name: highestLevel
       Entry: 3
       Data: 2
     - Name: count
@@ -1218,13 +1362,31 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 75|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 81|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
       Entry: 3
-      Data: 2
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 82|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -1236,15 +1398,18 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 76|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 83|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 7
-      Data: 77|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 84|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 2
+    - Name: highestLevel
       Entry: 3
       Data: 2
     - Name: count
@@ -1255,13 +1420,31 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 78|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 85|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
       Entry: 3
-      Data: 2
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 86|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+    - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
+      Entry: 3
+      Data: 0
+    - Name: count
+      Entry: 3
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -1285,24 +1468,27 @@ MonoBehaviour:
       Data: C
     - Name: $v
       Entry: 7
-      Data: 79|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
+      Data: 87|VTuber.Reincarnation.VEffectLevelInfo, Assembly-CSharp
     - Name: count
       Entry: 3
       Data: 4
     - Name: capacity
       Entry: 3
-      Data: 24
+      Data: 16
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 80|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 88|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 81|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 89|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
@@ -1313,8 +1499,11 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 82|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 90|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count
@@ -1331,15 +1520,18 @@ MonoBehaviour:
       Data: 
     - Name: attributeEffectsRequirements
       Entry: 7
-      Data: 83|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+      Data: 91|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
     - Name: 
       Entry: 7
-      Data: 84|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 92|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 1
+    - Name: highestLevel
       Entry: 3
       Data: 1
     - Name: count
@@ -1350,8 +1542,11 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 7
-      Data: 85|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
+      Data: 93|VTuber.Reincarnation.VEffectLevelRequirement, Assembly-CSharp
     - Name: level
+      Entry: 3
+      Data: 0
+    - Name: highestLevel
       Entry: 3
       Data: 0
     - Name: count

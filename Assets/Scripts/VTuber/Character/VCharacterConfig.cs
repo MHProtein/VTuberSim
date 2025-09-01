@@ -136,7 +136,7 @@ namespace VTuber.Character
         [HorizontalGroup("SingingRatioGroup", Gap = 10)]
         [Header("歌力转化率%")]
         [LabelText("初始值")]
-        public int singingAbilityConversionRatioInitialValue;
+        public float singingAbilityConversionRatioInitialValue;
 
         [HorizontalGroup("SingingRatioGroup")]
         [Header("")]
@@ -156,7 +156,7 @@ namespace VTuber.Character
         [HorizontalGroup("GamingRatioGroup", Gap = 10)]
         [Header("游戏力转化率%")]
         [LabelText("初始值")]
-        public int gamingAbilityConversionRatioInitialValue;
+        public float gamingAbilityConversionRatioInitialValue;
 
         [HorizontalGroup("GamingRatioGroup")]
         [Header("")]
@@ -176,7 +176,7 @@ namespace VTuber.Character
         [HorizontalGroup("ChattingRatioGroup", Gap = 10)]
         [Header("杂谈力转化率%")]
         [LabelText("初始值")]
-        public int chattingAbilityConversionRatioInitialValue;
+        public float chattingAbilityConversionRatioInitialValue;
 
         [HorizontalGroup("ChattingRatioGroup")]
         [Header("")]

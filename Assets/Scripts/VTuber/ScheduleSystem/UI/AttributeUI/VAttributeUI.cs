@@ -36,7 +36,14 @@ namespace VTuber.ScheduleSystem.UI
             int delta = messagedict["Delta"] as int ? ?? 0;
             text.text = $"{name}{messagedict["NewValue"] as int? ?? 0}";
             if (isPercentage)
+            {
+                text.text = $"{name}{(messagedict["NewValue"] as int? ?? 0) - 100}";
                 text.text += "%";
+            }
+            else
+            {
+                text.text = $"{name}{messagedict["NewValue"] as int? ?? 0}";
+            }
             if(delta == 0)
                 return;
             

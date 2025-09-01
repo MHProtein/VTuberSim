@@ -21,7 +21,7 @@ namespace VTuber.Core.RaisingEffect
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             _character = character;
-            List<VCard> cardsToAdd = GetRandomCards(3, _condition, character.LiveType);
+            List<VCard> cardsToAdd = GetRandomCards(3, _condition, character.LiveType, character);
             
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCardFrom3, new Dictionary<string, object>()
             {

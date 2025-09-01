@@ -54,6 +54,8 @@ namespace VTuber.Core.StateMachine
             _lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
             if(_isLastStreamSuccess)
                 stateMachine.Character.succeededStreams.Add(_currentEvent);
+            
+            VRaisingUI.Instance.SwitchAttributesUIBattle(true);
         }
         
         private void OnEventEnd(Dictionary<string, object> messagedict)
@@ -113,6 +115,7 @@ namespace VTuber.Core.StateMachine
             VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, result.scoreLevelName, result.score, account);
             VRaisingUI.Instance.ShowEndingUI();
             stateMachine.Character.EndRun();
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEndRun, new Dictionary<string, object>());
         }
 
         private void NextEvent()
@@ -124,11 +127,6 @@ namespace VTuber.Core.StateMachine
                 return;
             }
             ExecuteEvent(e);
-        }
-
-        public void SkipEvent()
-        {
-            ExecuteEvent(_currentEvent);
         }
 
         public void ExecuteEvent(VScheduleEvent e)
@@ -159,7 +157,15 @@ namespace VTuber.Core.StateMachine
                     var staminaNotEnoughEvent = VDataManager.Instance.CreateDialogueEventByID(8);
                     staminaNotEnoughEvent.SetDaySchedule(e.DaySchedule, -1 * Vector2Int.one);
                     staminaNotEnoughEvent.Execute(stateMachine.Character);
+                    
+                    VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventBeginExecute, new Dictionary<string, object>
+                    {
+                        { "Event", staminaNotEnoughEvent },
+                        { "Coordinate", e.Coordinate }
+                    });
+                    e.SetExecuted();
                 });
+                
             }
         }
         
@@ -189,7 +195,6 @@ namespace VTuber.Core.StateMachine
             AddEventToCurrentEvent((VEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
         }
         
-        
         private void OnBeginEnding(Dictionary<string, object> messagedict)
         {
             _shouldEndGame = true;
@@ -210,6 +215,7 @@ namespace VTuber.Core.StateMachine
             
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(true);
             stateMachine.ScheduleUI.SwitchToExecution();
+            VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseText(false);
             if (state.StateType == VStateType.ScheduleCreation)
             {            
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>

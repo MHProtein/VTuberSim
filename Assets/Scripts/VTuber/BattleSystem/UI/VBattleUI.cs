@@ -133,7 +133,7 @@ namespace VTuber.BattleSystem.UI
             }
 
             var cardUIs = ShowCardScroll(cards, pickCardContent);
-            
+            _displayingCards = cardUIs;
             pickCardMenuScroll.SetActive(true);
             _pickCardMenu.BeginPickCard(cardUIs, count, cardPileType, isFromCard, shouldPlayTwice);
         }
@@ -152,24 +152,24 @@ namespace VTuber.BattleSystem.UI
         public void ShowDrawPile()
         {
             cardPileScrollView.SetActive(true);
-            ShowCardScroll(VBattle.Instance.CardPilesManager.DrawPile, cardPileContent);
+            _displayingCards = ShowCardScroll(VBattle.Instance.CardPilesManager.DrawPile, cardPileContent);
         }        
         public void ShowDiscard()
         {
             cardPileScrollView.SetActive(true);
-            ShowCardScroll(VBattle.Instance.CardPilesManager.DiscardPile, cardPileContent);
+            _displayingCards = ShowCardScroll(VBattle.Instance.CardPilesManager.DiscardPile, cardPileContent);
         }
         
         public void ShowDeck()
         {
             cardPileScrollView.SetActive(true);
-            ShowCardScroll(VBattle.Instance.CardPilesManager.Deck, cardPileContent);
+            _displayingCards = ShowCardScroll(VBattle.Instance.CardPilesManager.Deck, cardPileContent);
         }
 
         public void ShowExhaustPile()
         {
             cardPileScrollView.SetActive(true);
-            ShowCardScroll(VBattle.Instance.CardPilesManager.ExhaustPile, cardPileContent);
+            _displayingCards = ShowCardScroll(VBattle.Instance.CardPilesManager.ExhaustPile, cardPileContent);
         }
         public void ShowExit()
         {
@@ -300,6 +300,7 @@ namespace VTuber.BattleSystem.UI
             Rearrange(index);
             
             StartCoroutine(DelayNotifyCardMovedToPlayPosition(cardMoveAfterPlayingTime + cardApplyTime, cardUI));
+            skipTurnButton.interactable = false;
         }
         
         IEnumerator DelayNotifyCardMovedToPlayPosition(float delayTime, VHandCardUI cardUI)
@@ -393,7 +394,8 @@ namespace VTuber.BattleSystem.UI
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardDisposed, new Dictionary<string, object>
             {
-                {"Card", cardUI.card}
+                {"Card", cardUI.card},
+                {"IsUsed", isUsed}
             });
 
             if (isUsed)
@@ -402,6 +404,7 @@ namespace VTuber.BattleSystem.UI
                 {
                     {"Card", cardUI.card}
                 });
+                skipTurnButton.interactable = true;
             }
         }
         
