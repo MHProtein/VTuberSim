@@ -69,7 +69,8 @@ namespace VTuber.BattleSystem.UI
         private VHandCardUI cardToDispose;
 
         private Coroutine _drawCardCoroutine;
-        
+        private bool disposingAll = false;
+
         public void Rearrange(int index)
         {
             if (_handSlotsCards.Count == 0)
@@ -212,7 +213,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRedrawCards, OnRedrawCards);
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnCardBeginDespose);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnCardBeginDispose);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
         }
@@ -227,7 +228,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRedrawCards, OnRedrawCards);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnCardBeginDespose);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnNotifyBeginDisposeCard, OnCardBeginDispose);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBeginPickCardsFromPile, OnBeginPickCardsFromPile);
         }
@@ -244,6 +245,7 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
+            disposingAll = false;
             foreach (var card in _handSlotsCards)
             {
                 Destroy(card.gameObject);
@@ -265,7 +267,7 @@ namespace VTuber.BattleSystem.UI
                 (bool)messagedict["ShouldPlayTwice"]));
         }
         
-        private void OnCardBeginDespose(Dictionary<string, object> messagedict)
+        private void OnCardBeginDispose(Dictionary<string, object> messagedict)
         {
             if (cardToDispose is not null)
             {
@@ -281,7 +283,8 @@ namespace VTuber.BattleSystem.UI
         }
 
         private void OnCardPlayed(Dictionary<string, object> messagedict)
-        {
+        {      
+            SetSkipTurnButtonInteractable(false);
             _isCardApplying = true;
             foreach (var handCardUI in _handSlotsCards)
             {
@@ -300,7 +303,6 @@ namespace VTuber.BattleSystem.UI
             Rearrange(index);
             
             StartCoroutine(DelayNotifyCardMovedToPlayPosition(cardMoveAfterPlayingTime + cardApplyTime, cardUI));
-            skipTurnButton.interactable = false;
         }
         
         IEnumerator DelayNotifyCardMovedToPlayPosition(float delayTime, VHandCardUI cardUI)
@@ -311,6 +313,11 @@ namespace VTuber.BattleSystem.UI
             {
                 {"Card", cardUI.card},
             });
+        }
+
+        public void SetSkipTurnButtonInteractable(bool interactable)
+        {
+            skipTurnButton.interactable = interactable;
         }
         
         private VHandCardUI GetCardById(uint cardId)
@@ -361,6 +368,8 @@ namespace VTuber.BattleSystem.UI
 
         public void DisposeAllCards()
         {
+            disposingAll = true;
+            SetSkipTurnButtonInteractable(false);
             for (int i = _handSlotsCards.Count - 1; i >= 0; i--)
             {
                 DisposeCard(_handSlotsCards[i], false);
@@ -385,6 +394,8 @@ namespace VTuber.BattleSystem.UI
         
         IEnumerator DelayNotifyCardDisposed(float delayTime, VHandCardUI cardUI, bool isUsed)
         {
+            if(isUsed)
+                SetSkipTurnButtonInteractable(false);
             yield return new WaitForSeconds(delayTime);
             
             foreach (var handSlotsCard in _handSlotsCards)
@@ -404,7 +415,8 @@ namespace VTuber.BattleSystem.UI
                 {
                     {"Card", cardUI.card}
                 });
-                skipTurnButton.interactable = true;
+                if(!disposingAll)
+                    SetSkipTurnButtonInteractable(true);
             }
         }
         
@@ -433,6 +445,8 @@ namespace VTuber.BattleSystem.UI
         
         private IEnumerator DrawCard(IEnumerable<VCard> cards, bool isFromCard, bool shouldPlayTwice)
         {
+            disposingAll = false;
+            SetSkipTurnButtonInteractable(false);
             arrangingHandSlots = true;
             foreach (var card in cards)
             {
@@ -480,7 +494,7 @@ namespace VTuber.BattleSystem.UI
                 });
             }
 
-            skipTurnButton.interactable = true;
+            SetSkipTurnButtonInteractable(true);
         }
         
         private (Vector3 position, Vector3 rotation, Vector3 scale) ReserveSpaceForNewCard()

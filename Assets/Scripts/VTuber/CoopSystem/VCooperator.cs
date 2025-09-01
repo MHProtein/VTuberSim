@@ -191,6 +191,11 @@ namespace VTuber.CoopSystem
                 {"Cooperator", this},
                 {"Level", _currentLevelIndex}
             });
+            if (_currentLevelIndex == configuration.CoopLevels.Count - 1)
+            {
+                _upgradeEvent = null;
+                return;
+            }
             if (_coopValue - CurrentCoopLevel.to >= 0)
             {
                 if (CurrentCoopLevel.eventType == VEventType.Stream)

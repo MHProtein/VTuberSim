@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Character;
@@ -12,6 +13,7 @@ namespace VTuber.BattleSystem.Core.UI
     public class VMainMenu : VUIBehaviour
     {
         [SerializeField] private Button _startButton;
+        [SerializeField] private TMP_Text _startButtonText;
         [SerializeField] private Button _optionButton;
         [SerializeField] private Button _exitButton;
         [SerializeField] private VGameConfigSelection gameConfigSelection;
@@ -40,9 +42,19 @@ namespace VTuber.BattleSystem.Core.UI
             gameConfigSelection.Begin(_scripts, _characters, _accounts, _startGame);
         }
 
-        public void Initialize(List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
+        public void Initialize(bool isReturn, List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
             List<VAccount> accounts, Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> startGame)
         {
+            if (isReturn)
+            {
+                _startButtonText.text = "Continue";
+                _startButton.onClick.RemoveListener(StartGame);
+                _startButton.onClick.AddListener(Continue);
+                return;
+            }
+            _startButtonText.text = "Start Game";
+            _startButton.onClick.AddListener(StartGame);
+            _startButton.onClick.RemoveListener(Continue);
             _scripts = scriptConfig;
             _characters = characterConfiguration;
             _startGame = startGame;
@@ -50,6 +62,11 @@ namespace VTuber.BattleSystem.Core.UI
             _accounts = accounts;
         }
 
+        public void Continue()
+        {
+            gameManager.ContinueFromMainMenu();
+        }
+        
         private void OpenOptionMenu()
         {
             

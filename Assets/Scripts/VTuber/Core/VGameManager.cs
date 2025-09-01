@@ -251,7 +251,18 @@ namespace VTuber.BattleSystem.Core
         public void ChangeToMainMenu()
         {
             _mainMenu.gameObject.SetActive(true);
-            _mainMenu.Initialize(scripts, characters, _accounts, InitializeGame);
+            _mainMenu.Initialize(false, scripts, characters, _accounts, InitializeGame);
+        }
+
+        public void ReturnToMainMenu()
+        {
+            _mainMenu.gameObject.SetActive(true);
+            _mainMenu.Initialize(true, scripts, characters, _accounts, InitializeGame);
+        }
+
+        public void ContinueFromMainMenu()
+        {
+            _mainMenu.gameObject.SetActive(false);
         }
     }
 }

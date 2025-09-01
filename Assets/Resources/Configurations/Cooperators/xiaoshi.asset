@@ -29,28 +29,34 @@ MonoBehaviour:
   _coopLevels:
   - from: 0
     to: 24
-    levelName: "\u719F\u6089"
+    levelName: "\u521D\u8BC6"
     levelIndex: 0
     eventType: 2
     upgradeEventID: 32
   - from: 25
     to: 49
-    levelName: "\u597D\u53CB"
+    levelName: "\u719F\u6089"
     levelIndex: 1
     eventType: 2
     upgradeEventID: 33
   - from: 50
     to: 74
-    levelName: "\u631A\u53CB"
+    levelName: "\u597D\u53CB"
     levelIndex: 2
     eventType: 2
     upgradeEventID: 34
   - from: 75
     to: 100
-    levelName: "\u66A7\u6627"
+    levelName: "\u631A\u53CB"
     levelIndex: 3
     eventType: 2
     upgradeEventID: 35
+  - from: 101
+    to: -1
+    levelName: "\u66A7\u6627"
+    levelIndex: 0
+    eventType: 0
+    upgradeEventID: 0
   minEvents: 2
   maxEvents: 3
   _dayTimeProbabilities:

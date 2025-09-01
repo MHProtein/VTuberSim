@@ -169,6 +169,8 @@ namespace VTuber.BattleSystem.Core
                 else
                 {
                     DiscardToDraw();
+                    if(drawCount > _drawPile.Count)
+                        drawCount = _drawPile.Count;
                     cards.AddRange(DrawFromDrawPile(drawCount));
                 }
             }
