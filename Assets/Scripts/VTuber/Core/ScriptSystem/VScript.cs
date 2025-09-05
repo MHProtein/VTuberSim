@@ -98,7 +98,7 @@ namespace VTuber.Core.ScriptSystem
             if(success)
                 score += _configuration.successBonus;
             
-            var scoreLevel = _configuration.scoreLevels.Find(level => score >= level.low && score <= level.high);
+            var scoreLevel = _configuration.scoreLevels.Find(level=> level.InLevel(score));
             VDebug.Log("歌力： " + singingAbility);
             VDebug.Log("游戏力： " + gamingAbility);
             VDebug.Log("杂谈力： " + chattingAbility);
