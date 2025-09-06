@@ -94,7 +94,7 @@ MonoBehaviour:
     startEventWeekIndex: 1
     startEventType: 1
     startEventID: 9
-    endEventWeekIndex: 4
+    endEventWeekIndex: 3
     endEventIDs: 040000000500000006000000
     specialEventData:
     - timeOfDay: 0
@@ -229,10 +229,10 @@ MonoBehaviour:
       m_RotationOrder: 4
   - phaseName: "\u7B2C\u4E8C\u9636\u6BB5"
     description: "\u7B2C\u4E8C\u9636\u6BB5"
-    startEventWeekIndex: 5
+    startEventWeekIndex: 4
     startEventType: 6
     startEventID: 10
-    endEventWeekIndex: 8
+    endEventWeekIndex: 6
     endEventIDs: 0700000008000000090000000a000000
     specialEventData:
     - timeOfDay: 0
@@ -367,10 +367,10 @@ MonoBehaviour:
       m_RotationOrder: 4
   - phaseName: "\u7B2C\u4E09\u9636\u6BB5"
     description: "\u7B2C\u4E09\u9636\u6BB5"
-    startEventWeekIndex: 9
+    startEventWeekIndex: 7
     startEventType: 6
     startEventID: 22
-    endEventWeekIndex: 12
+    endEventWeekIndex: 9
     endEventIDs: 0b0000000c0000000d0000000e000000
     specialEventData: []
     decayCurve1:
@@ -379,24 +379,24 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 0
         value: 0
-        inSlope: 0.008
-        outSlope: 0.008
+        inSlope: 0.01
+        outSlope: 0.01
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 10000
-        value: 80
-        inSlope: 0.0009999999
-        outSlope: 0.0009999999
+        time: 4000
+        value: 40
+        inSlope: 0.0053333333
+        outSlope: 0.0053333333
         tangentMode: 136
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 40000
-        value: 90
+        time: 15000
+        value: 80
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -474,10 +474,10 @@ MonoBehaviour:
       m_RotationOrder: 4
   - phaseName: "\u6700\u540E\u9636\u6BB5"
     description: "\u6700\u540E\u9636\u6BB5"
-    startEventWeekIndex: 13
+    startEventWeekIndex: 10
     startEventType: 6
     startEventID: 23
-    endEventWeekIndex: 16
+    endEventWeekIndex: 12
     endEventIDs: 0f0000001000000011000000
     specialEventData: []
     decayCurve1:
