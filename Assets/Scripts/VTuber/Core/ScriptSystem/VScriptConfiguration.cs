@@ -19,6 +19,13 @@ namespace VTuber.Core.ScriptSystem
         public int high;
         [HorizontalGroup("ScoreLevel", Gap = 10)]
         public string name;
+
+        public bool InLevel(int score)
+        {
+            if(high == -1)
+                return score >= low;
+            return score >= low && score <= high;
+        }
     }
     public class VScriptConfiguration : VScriptableObject
     {
