@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -309,6 +310,60 @@ namespace VTuber.ScheduleSystem.UI
             return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
         }
 
+        public List<VScheduleSlot> GetUDSlots(VScheduleSlot slot)
+        {
+            int down = slot.Coordination.y - 1;
+            int up = slot.Coordination.y + 1;
+            List<VScheduleSlot> ret = new List<VScheduleSlot>();
+            if (down >= 0)
+                ret.Add(slots[down, slot.Coordination.x]);
+            if (up < slotSize.y)
+                ret.Add(slots[up, slot.Coordination.x]);
+            return ret;
+        }
+        
+        public List<VScheduleSlot> GetLRSlots(VScheduleSlot slot)
+        {
+            int left = slot.Coordination.x - 1;
+            int right = slot.Coordination.x + 1;
+            List<VScheduleSlot> ret = new List<VScheduleSlot>();
+            if (left >= 0)
+                ret.Add(slots[slot.Coordination.y, left]);
+            if (right < slotSize.x)
+                ret.Add(slots[slot.Coordination.y, right]);
+            return ret;
+        }
+        
+        public List<VScheduleSlot> GetUDLRSlots(VScheduleSlot slot)
+        {
+            return GetUDSlots(slot).Concat(GetLRSlots(slot)).ToList();
+        }
+        
+        public List<VScheduleSlot> GetSurroundingSlots(VScheduleSlot slot)
+        {
+            int down = slot.Coordination.y - 1;
+            int up = slot.Coordination.y + 1;
+            int left = slot.Coordination.x - 1;
+            int right = slot.Coordination.x + 1;
+            List<VScheduleSlot> ret = new List<VScheduleSlot>();
+
+            for (int i = down; i <= up; i++)
+            {
+                if(i < 0 || i >= slotSize.y)
+                    continue;
+                for (int j = left; j <= right; j++)
+                {
+                    if(j < 0 || j >= slotSize.x)
+                        continue;
+                    if (slots[i, j] != slot)
+                    {
+                        ret.Add(slots[i, j]);
+                    }
+                }
+            }
+            return ret;
+        }
+        
         public void CompleteSchedule(uint size1Id, uint size2Id, uint size3Id)
         {
             foreach (var slot in slots)

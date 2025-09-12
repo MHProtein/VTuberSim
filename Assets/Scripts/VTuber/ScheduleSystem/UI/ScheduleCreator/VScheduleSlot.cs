@@ -59,6 +59,14 @@ namespace VTuber.ScheduleSystem.UI
             _scheduleUI = scheduleUI;
             _useThisTransformAsParent = useThisTransformAsParent;
         }
+        
+        public List<VScheduleSlot> GetUDSlots() => _scheduleUI.GetUDSlots(this);
+        
+        public List<VScheduleSlot> GetLRSlots() => _scheduleUI.GetLRSlots(this);
+        
+        public List<VScheduleSlot> GetUDLRSlots() => _scheduleUI.GetUDLRSlots(this);
+        
+        public List<VScheduleSlot> GetSurroundingSlots() => _scheduleUI.GetSurroundingSlots(this);
 
         public void SetPlaceable(bool isPlaceable, bool showFrame, int allowedEventID)
         {
