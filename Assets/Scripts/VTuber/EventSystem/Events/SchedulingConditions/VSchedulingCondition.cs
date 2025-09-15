@@ -68,22 +68,26 @@ namespace VTuber.ScheduleSystem.Events
             if (!placingConditionStr.IsNullOrWhitespace())
                 _placingCondition = VDataManager.Instance.GetPlacingCondtionByID(uint.Parse(placingConditionStr));
 
-            _positionPattern = Enum.Parse<VSchedulingConditionPositionPatterns>(row.Columns[VSchedulingConditionHeaderIndex.Pattern].Value);
-            _type = Enum.Parse<VSchedulingConditionType>(row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value);
-
-            switch (_type)
+            string typeStr = row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value;
+            if (!typeStr.IsNullOrWhitespace())
             {
-                case VSchedulingConditionType.ID:
-                    _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
-                    break;
-                case VSchedulingConditionType.Type:
-                    _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
-                    break;
-                case VSchedulingConditionType.SameType:
-                    break;
-                case VSchedulingConditionType.ExcludeType:
-                    _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
-                    break;
+                _positionPattern = Enum.Parse<VSchedulingConditionPositionPatterns>(row.Columns[VSchedulingConditionHeaderIndex.Pattern].Value);
+                _type = Enum.Parse<VSchedulingConditionType>(typeStr);
+
+                switch (_type)
+                {
+                    case VSchedulingConditionType.ID:
+                        _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        break;
+                    case VSchedulingConditionType.Type:
+                        _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        break;
+                    case VSchedulingConditionType.SameType:
+                        break;
+                    case VSchedulingConditionType.ExcludeType:
+                        _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        break;
+                }
             }
             
             _effects = new List<VRaisingEffect>();
