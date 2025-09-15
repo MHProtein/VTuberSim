@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.Utilities;
 using Spire.Xls;
 using VTuber.Character;
+using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
@@ -26,19 +28,73 @@ namespace VTuber.ScheduleSystem.Events
         All,
     }
     
+    public class VSchedulingConditionHeaderIndex
+    {
+        public const int Id = 0;
+        public const int Name = 1;
+        public const int Description = 2;
+        public const int PlacingCondition = 3;
+        public const int Pattern = 4;
+        public const int TargetType = 5;
+        public const int TargetValue = 6;
+        public const int Effect1 = 7;
+        public const int E1Param = 8;
+        public const int Effect2 = 9;
+        public const int E2Param = 10;
+        public const int Effect3 = 11;
+        public const int E3Param = 12;
+    }
+    
     public class VSchedulingCondition
     {
-        VPlacingCondition _placingCondition;
-        private VSchedulingConditionPositionPatterns _positionPatternType;
-        VSchedulingConditionType _type;
-        List<VRaisingEffect> _effects;
+        public uint Id => _id;
+        private uint _id;
         
-        uint _targetID;
-        VEventType _targetType;
+        private VPlacingCondition _placingCondition;
+        private VSchedulingConditionPositionPatterns _positionPattern;
+        private VSchedulingConditionType _type;
+        
+        public List<VRaisingEffect> Effects => _effects;
+        private List<VRaisingEffect> _effects;
+        
+        private uint _targetID;
+        private VEventType _targetType;
 
         public VSchedulingCondition(CellRange row)
         {
+            _id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
             
+            string placingConditionStr = row.Columns[VSchedulingConditionHeaderIndex.PlacingCondition].Value;
+            if (!placingConditionStr.IsNullOrWhitespace())
+                _placingCondition = VDataManager.Instance.GetPlacingCondtionByID(uint.Parse(placingConditionStr));
+
+            _positionPattern = Enum.Parse<VSchedulingConditionPositionPatterns>(row.Columns[VSchedulingConditionHeaderIndex.Pattern].Value);
+            _type = Enum.Parse<VSchedulingConditionType>(row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value);
+
+            switch (_type)
+            {
+                case VSchedulingConditionType.ID:
+                    _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                    break;
+                case VSchedulingConditionType.Type:
+                    _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                    break;
+                case VSchedulingConditionType.SameType:
+                    break;
+                case VSchedulingConditionType.ExcludeType:
+                    _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                    break;
+            }
+            
+            _effects = new List<VRaisingEffect>();
+            for (int i = VSchedulingConditionHeaderIndex.Effect1; i <= VSchedulingConditionHeaderIndex.E3Param; i += 2)
+            {
+                var effectIDStr = row.Columns[i].Value;
+                if (effectIDStr.IsNullOrWhitespace())
+                    continue;
+                _effects.Add(VDataManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr.Trim()),
+                    row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
+            }
         }
 
         public bool IsTrue(VCharacter character, VScheduleSlot slot)
@@ -50,7 +106,7 @@ namespace VTuber.ScheduleSystem.Events
             
             List<VScheduleSlot> slots = null;
 
-            switch (_positionPatternType)
+            switch (_positionPattern)
             {
                 case VSchedulingConditionPositionPatterns.None:
                     return false;

@@ -14,9 +14,6 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.Events
 {
-    /// <summary>
-    /// 运行时事件类，由配置生成，包含执行逻辑
-    /// </summary>
     public class VScheduleEvent
     {
         public uint EventID => _config.id;
@@ -25,7 +22,6 @@ namespace VTuber.ScheduleSystem.Events
         public VEventType Type => _config.type;
         public string Icon => _config.icon;
         public Color BackgroundColor => _config.backgroundColor;
-        
         public VEventCostType CostType => _config.costType;
         public int Cost => _config.cost;
         //adding duration to meet event may last across 2 times period
@@ -56,6 +52,11 @@ namespace VTuber.ScheduleSystem.Events
 
         public bool isFollowUp = false;
         
+        public VSchedulingCondition SchedulingCondition => _schedulingCondition;
+        private VSchedulingCondition _schedulingCondition;
+
+        private bool _isSchedulingConditionMet;
+        
         public VScheduleEvent(VScheduleEventConfiguration config)
         {
             _config = config;
@@ -66,6 +67,12 @@ namespace VTuber.ScheduleSystem.Events
             {
                 _placingConditions.Add(VDataManager.Instance.GetPlacingCondtionByID(conditionId));
             }
+            _schedulingCondition = config.schedulingCondition;
+        }
+
+        public void SetSchedulingConditionMet(bool value)
+        {
+            _isSchedulingConditionMet = value;
         }
         
         public void SetCoopEffects(VScheduleSlot slot, List<VRaisingEffect> coopEffects)
@@ -94,17 +101,10 @@ namespace VTuber.ScheduleSystem.Events
             _config.SetDuration(duration);
         }
 
-        /// <summary>
-        /// 判断玩家状态是否允许执行
-        /// </summary>
         public virtual bool CanExecute(VCharacter player)
         {
             return true;
         }
-
-        /// <summary>
-        /// 执行事件逻辑
-        /// </summary>
 
         public virtual bool Execute(VCharacter player)
         {
@@ -147,13 +147,21 @@ namespace VTuber.ScheduleSystem.Events
             }
         }
 
-        public void ExecuteCoopEvents(VCharacter character)
+        public void ExecuteAppendedEffects(VCharacter character)
         {
             if(CoopEffects is not null && character is not null)
                 foreach (var effect in CoopEffects.Values)
                 {
                     effect?.ForEach(x => x.ApplyEffect(character, null));
                 }
+
+            if (_isSchedulingConditionMet)
+            {
+                foreach (var effect in _schedulingCondition.Effects)
+                {
+                    effect?.ApplyEffect(character, null);
+                }
+            }
         }
 
         public void SetExecuted()

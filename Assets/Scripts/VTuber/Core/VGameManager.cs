@@ -141,6 +141,18 @@ namespace VTuber.BattleSystem.Core
                 if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
                     _character.CardLibrary.AddCard(config.CreateCard());
             }
+
+            if (scriptConfig.cardIDs.TryGetValue(_character.LiveType, out var cardIDs))
+            {
+                foreach (var cardID in cardIDs)
+                {
+                    _character.CardLibrary.AddCard(VDataManager.Instance.GetCardConfigurationByID(cardID).CreateCard());
+                }
+            }
+            else
+            {
+                VDebug.LogError("liveType not found in scriptConfig.cardIDs");
+            }
             
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
                 battleRoot, battle, eventSystemRoot, eventSystemSystem,
@@ -225,6 +237,7 @@ namespace VTuber.BattleSystem.Core
                     {
                         var evt = slot.Item.Event;
                         slot.Item.SetInteractive(false);
+                        slot.TestSchedulingCondition(true);
                         _weeklySchedule.SetEvent(x, (TimeOfDay)y, evt);
                         y += evt.Duration;
                     }
