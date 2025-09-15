@@ -61,7 +61,7 @@ namespace VTuber.Core.StateMachine
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
             stateMachine.EventSystemRoot.SetActive(false); 
-            _currentEvent.ExecuteCoopEvents(stateMachine.Character);
+            _currentEvent.ExecuteAppendedEffects(stateMachine.Character);
             
             if (_shouldEndGame)
             { 

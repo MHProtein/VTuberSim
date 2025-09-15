@@ -48,7 +48,6 @@ namespace VTuber.ScheduleSystem.UI
         }
 
         private bool _placeable = true;
-        private bool _disposing = false;
         private int _allowedEventID;
         private int _eventID;
         private bool _useThisTransformAsParent;
@@ -175,6 +174,7 @@ namespace VTuber.ScheduleSystem.UI
                 if(_scheduleUI is not null)
                     _scheduleUI.UnrecordEvent(_item.Event);
                 _item.Event.RemoveCoopEffects(this);
+                _item.Event.SetSchedulingConditionMet(false);
             }
             _item = null;
         }
@@ -466,6 +466,22 @@ namespace VTuber.ScheduleSystem.UI
         public void SetUseThisTransformAsParent(bool b)
         {
             _useThisTransformAsParent = b;
+        }
+
+        public bool TestSchedulingCondition(bool appendEffects)
+        {
+            if (Item is not null && Item.Event.SchedulingCondition is not null)
+            {
+                bool isConditionMet = _item.Event.SchedulingCondition.IsTrue(_scheduleUI.Character, this);
+
+                if (appendEffects)
+                {
+                    _item.Event.SetSchedulingConditionMet(isConditionMet);
+                }
+                return isConditionMet;
+            }
+
+            return false;
         }
     }
 }

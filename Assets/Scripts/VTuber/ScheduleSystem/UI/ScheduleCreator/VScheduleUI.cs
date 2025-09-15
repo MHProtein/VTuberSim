@@ -30,6 +30,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] protected Image indicatorRight;
         [SerializeField] protected Button continueButton; 
         private Vector2Int _currentIndicatorCoord = Vector2Int.zero;
+        
+        public VCharacter Character => _character;
         private VCharacter _character;
         
         public VScheduleSlot[,] Slots => slots;
@@ -432,6 +434,7 @@ namespace VTuber.ScheduleSystem.UI
             }
             continueButton.interactable = _kpiManager.CheckKPIs(_eventCount, _streamCount);
         }
+        
         public void UnrecordEvent(VScheduleEvent e)
         {
             if (!_events.Contains(e))

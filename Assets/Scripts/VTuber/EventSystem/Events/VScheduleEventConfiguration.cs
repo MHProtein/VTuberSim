@@ -5,6 +5,7 @@ using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 
@@ -28,6 +29,7 @@ namespace VTuber.ScheduleSystem.Events
         public const int Icon = 7;
         public const int BackGroundColor = 8;
         public const int PlacingCondition = 9;
+        public const int SchedulingCondition = 10;
     }
     
     public class VScheduleEventConfiguration
@@ -48,6 +50,8 @@ namespace VTuber.ScheduleSystem.Events
         public VEventCostType costType;
         public int cost;
         public List<uint> placingConditions;
+        public VSchedulingCondition schedulingCondition;
+        
         public VScheduleEventConfiguration(CellRange row)
         {
             id = uint.Parse(row.Columns[VEventHeaderIndex.Id].Value);
@@ -66,6 +70,10 @@ namespace VTuber.ScheduleSystem.Events
             {
                 placingConditions = new List<uint>();
             }
+            
+            string schedulingConditionStr = row.Columns[VEventHeaderIndex.SchedulingCondition].Value;
+            if (!schedulingConditionStr.IsNullOrWhitespace())
+                schedulingCondition = VDataManager.Instance.GetSchedulingConditionByID(uint.Parse(schedulingConditionStr));
             
             ColorUtility.TryParseHtmlString(row.Columns[VEventHeaderIndex.BackGroundColor].Value, 
                 out backgroundColor);
