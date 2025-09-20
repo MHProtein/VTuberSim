@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SlayTheSpire.System.SavingSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
@@ -25,7 +26,7 @@ using VTuber.Store.UI;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VGameManager : VSingletonMonobehaviour<VGameManager>
+    public class VGameManager : VSingletonMonobehaviour<VGameManager>, IDataPersistence
     {
         [SerializeField] private bool dev;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
@@ -66,6 +67,8 @@ namespace VTuber.BattleSystem.Core
         private VScript _script;
 
         private List<VAccount> _accounts;
+
+        private bool _newGame = false;
         
         protected override void Awake()
         {
@@ -90,7 +93,7 @@ namespace VTuber.BattleSystem.Core
             VResourcesManager.Instance.LoadSprites();
             loader.Load();
             VResourcesManager.Instance.LoadDialogs();
-            
+            DataPersistenceManager.Instance.Initialize();
             VSave save = VSaveSystem.Load();
             if(save != null)
             {
@@ -276,6 +279,17 @@ namespace VTuber.BattleSystem.Core
         public void ContinueFromMainMenu()
         {
             _mainMenu.gameObject.SetActive(false);
+        }
+
+        public void Load(GameData data)
+        {
+            
+            _accounts = data.accounts;
+        }
+
+        public void Save(GameData data)
+        {
+            data.accounts = _accounts;
         }
     }
 }
