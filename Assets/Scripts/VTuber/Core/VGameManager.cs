@@ -28,7 +28,7 @@ namespace VTuber.BattleSystem.Core
 {
     public class VGameManager : VSingletonMonobehaviour<VGameManager>, IDataPersistence
     {
-        [SerializeField] private bool dev;
+        [SerializeField] private bool useDevData;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
         [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
         [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
@@ -75,7 +75,7 @@ namespace VTuber.BattleSystem.Core
             base.Awake();
             VDataLoader loader;
             _accounts = new List<VAccount>();
-            if (dev)
+            if (useDevData)
             {
                 loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Raising.xlsx"),
@@ -127,7 +127,7 @@ namespace VTuber.BattleSystem.Core
         {
             _script = new VScript(scriptConfig);
             _character = new VCharacter(characterConfiguration);
-            _character.Initialize();
+            _character.Initialize(false);
 
             foreach (var account in accounts)
             {
@@ -138,12 +138,12 @@ namespace VTuber.BattleSystem.Core
             }
             
             _weeklySchedule = new VWeeklySchedule(_character);
-
-            foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
-            {
-                if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
-                    _character.CardLibrary.AddCard(config.CreateCard());
-            }
+            
+            // foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
+            // {
+            //     if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
+            //         _character.CardLibrary.AddCard(config.CreateCard());
+            // }
 
             if (scriptConfig.cardIDs.TryGetValue(_character.LiveType, out var cardIDs))
             {
@@ -283,13 +283,22 @@ namespace VTuber.BattleSystem.Core
 
         public void Load(GameData data)
         {
+            foreach (var saveData in data.accounts)
+            {
+                _accounts.Add(new VAccount(saveData));
+            }
             
-            _accounts = data.accounts;
+            _character.Load(data);
         }
 
         public void Save(GameData data)
         {
-            data.accounts = _accounts;
+            foreach (var account in _accounts)
+            {
+                data.accounts.Add(account.Save());
+            }
+            
+            _character.Save(data);
         }
     }
 }

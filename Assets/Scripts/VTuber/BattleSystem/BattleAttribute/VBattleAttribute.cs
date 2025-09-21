@@ -11,6 +11,7 @@ using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
+    [Serializable]
     public class VValueModifier<T>
     {
         public class ModifierItem

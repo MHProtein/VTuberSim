@@ -53,7 +53,7 @@ namespace VTuber.Core.StateMachine
             VRaisingUI.Instance.SetConsumableToRaising();
             _lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
             if(_isLastStreamSuccess)
-                stateMachine.Character.succeededStreams.Add(_currentEvent);
+                stateMachine.Character.succeededStreams.Add(_currentEvent.EventID);
             
             VRaisingUI.Instance.SwitchAttributesUIBattle(true);
         }
