@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
@@ -15,6 +16,12 @@ namespace VTuber.Core.ScriptSystem
     {
         public int score;
         public string scoreLevelName;
+    }
+
+    public struct VScriptSaveData
+    {
+        public string scriptConfigurationPath;
+        public int currentPhaseIndex;
     }
     
     public class VScript
@@ -37,6 +44,22 @@ namespace VTuber.Core.ScriptSystem
             {
                 kpis.Add(new VKPI(kpi.EventType, kpi.RequiredAmount, kpi.AbilityIndex, true));
             }
+        }
+
+        public VScriptSaveData Save()
+        {
+            return new VScriptSaveData
+            {
+                scriptConfigurationPath = AssetDatabase.GetAssetPath(_configuration),
+                currentPhaseIndex = Phases.IndexOf(_currentPhase)
+            };
+        }
+
+        public static VScript Load(VScriptSaveData data)
+        {
+            VScript script = new VScript(AssetDatabase.LoadAssetAtPath<VScriptConfiguration>(data.scriptConfigurationPath));
+            script._currentPhase = script.Phases[data.currentPhaseIndex];
+            return script;
         }
 
         public VScheduleEvent BeginScript()

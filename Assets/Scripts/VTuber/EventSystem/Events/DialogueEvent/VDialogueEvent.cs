@@ -6,7 +6,6 @@ namespace VTuber.ScheduleSystem.Events.DialogueEvent
 {
     public class VDialogueEvent : VScheduleEvent
     {
-        
         public string dialogueNode;
 
         public VDialogueEvent(VDialogueEventConfiguration config) : base(config)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
@@ -17,6 +18,14 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
+    public class VStateMachineSaveData
+    {
+        public int weekIndex;
+        public VStateType currentStateType;
+        public VStateType lastStateType;
+        public List<VStateSaveData> stateSaveDataList;
+    }
+    
     public class VStateMachine
     {
         public bool IsInitialized { get; private set; }
@@ -38,9 +47,6 @@ namespace VTuber.Core.StateMachine
         
         public GameObject BattleRoot => _battleRoot;
         private GameObject _battleRoot;
-        
-        public VBattle Battle => _battle;
-        private VBattle _battle;
         
         public GameObject EventSystemRoot => _eventSystemRoot;
         private GameObject _eventSystemRoot;
@@ -65,20 +71,43 @@ namespace VTuber.Core.StateMachine
         
         public VStateMachine(VScheduleUI scheduleUI,
             VWeeklySchedule weeklySchedule,
-            GameObject battleRoot, VBattle battle,
+            GameObject battleRoot,
             GameObject eventSystemRoot, VEventSystem eventSystemSystem,
             VCharacter character, VScript script, VReincarnationConfiguration reincarnationConfiguration)
         {
             _scheduleUI = scheduleUI;
             _weeklySchedule = weeklySchedule;
             _battleRoot = battleRoot;
-            _battle = battle;
             _eventSystemRoot = eventSystemRoot;
             _eventSystemSystem = eventSystemSystem;
             _character = character;
             _script = script;
             IsInitialized = true;
             _reincarnationConfiguration = reincarnationConfiguration;
+        }
+
+        public VStateMachineSaveData Save()
+        {
+            return new VStateMachineSaveData
+            {
+                weekIndex = _weekIndex,
+                currentStateType = currentState.StateType,
+                lastStateType = lastState.StateType,
+                stateSaveDataList = RegisteredStateList.Select(state => state.Save()).ToList()
+            };
+        }
+
+        public void Load(VStateMachineSaveData saveData)
+        {
+            _weekIndex = saveData.weekIndex;
+            
+            lastState = RegisteredStateList.Find(state => state.StateType == saveData.lastStateType);
+            
+            SwitchState(currentState.StateType);
+            foreach (var state in RegisteredStateList)
+            {
+                state.Load(saveData.stateSaveDataList.Find(saveData => saveData.stateType == state.StateType));
+            }
         }
 
         public void OnEnable()

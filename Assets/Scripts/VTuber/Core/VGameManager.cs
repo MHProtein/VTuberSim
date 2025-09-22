@@ -60,7 +60,6 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private List<VScriptConfiguration> scripts;
         [SerializeField] private List<VCharacterConfiguration> characters;
         
-        
         public VCharacter Character => _character;
         private VCharacter _character;
         private VStateMachine _stateMachine;
@@ -137,7 +136,7 @@ namespace VTuber.BattleSystem.Core
                 }
             }
             
-            _weeklySchedule = new VWeeklySchedule(_character);
+            _weeklySchedule = new VWeeklySchedule();
             
             // foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
             // {
@@ -157,14 +156,7 @@ namespace VTuber.BattleSystem.Core
                 VDebug.LogError("liveType not found in scriptConfig.cardIDs");
             }
             
-            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
-                battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character, _script, reincarnationConfiguration);
-            _stateMachine.RegisterState(new VScheduleCreationState());
-            _stateMachine.RegisterState(new VExecutionState());
-            _stateMachine.RegisterState(new VPauseState());
-            _stateMachine.RegisterState(new VScheduleModifyState());
-            _stateMachine.RegisterState(new VPhaseStartState());
+            InitializeStateMachine();
             
             _stateMachine.OnEnable();
             _character.OnEnable();
@@ -211,6 +203,18 @@ namespace VTuber.BattleSystem.Core
         public void InitializeCardLibraryUI()
         {
             VRaisingUI.Instance.InitializeCardLibraryUI(_character.CardLibrary.GetCards());
+        }
+        
+        public void InitializeStateMachine()
+        {
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
+                battleRoot, eventSystemRoot, eventSystemSystem,
+                _character, _script, reincarnationConfiguration);
+            _stateMachine.RegisterState(new VScheduleCreationState());
+            _stateMachine.RegisterState(new VExecutionState());
+            _stateMachine.RegisterState(new VPauseState());
+            _stateMachine.RegisterState(new VScheduleModifyState());
+            _stateMachine.RegisterState(new VPhaseStartState());
         }
         
         public void CloseCardLibraryUI()
@@ -280,7 +284,7 @@ namespace VTuber.BattleSystem.Core
         {
             _mainMenu.gameObject.SetActive(false);
         }
-
+        
         public void Load(GameData data)
         {
             foreach (var saveData in data.accounts)
@@ -289,6 +293,15 @@ namespace VTuber.BattleSystem.Core
             }
             
             _character.Load(data);
+            _weeklySchedule = VWeeklySchedule.Load(data.weeklySchedule);
+            
+            _script = VScript.Load(data.script);
+            
+            InitializeStateMachine();
+            _stateMachine.Load(data.stateMachine);
+            
+            _stateMachine.OnEnable();
+            _character.OnEnable();
         }
 
         public void Save(GameData data)
@@ -299,6 +312,9 @@ namespace VTuber.BattleSystem.Core
             }
             
             _character.Save(data);
+            data.weeklySchedule = _weeklySchedule.Save();
+            data.stateMachine = _stateMachine.Save();
+            data.script = _script.Save();
         }
     }
 }

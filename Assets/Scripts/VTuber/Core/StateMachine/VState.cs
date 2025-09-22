@@ -10,6 +10,12 @@ namespace VTuber.Core.StateMachine
         ScheduleModify,
         PhaseStart,
     }
+
+    public class VStateSaveData
+    {
+        public VStateType stateType;
+    }
+    
     public abstract class VState
     {
         public VStateType StateType => stateType;
@@ -35,5 +41,12 @@ namespace VTuber.Core.StateMachine
         public virtual void Update() { }
         public virtual void FixedUpdate() { }
         public virtual void LateUpdate() { }
+        
+        public virtual VStateSaveData Save() { return new VStateSaveData { stateType = stateType }; }
+
+        public virtual void Load(VStateSaveData saveData)
+        {
+            stateType = saveData.stateType;
+        }
     }
 }

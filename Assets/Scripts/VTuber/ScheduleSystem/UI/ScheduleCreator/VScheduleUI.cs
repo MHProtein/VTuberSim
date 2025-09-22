@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
+using SlayTheSpire.System.SavingSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,11 +18,17 @@ using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
+using VTuber.ScheduleSystem.Schedule;
 
 namespace VTuber.ScheduleSystem.UI
 {
+    public class VScheduleUISaveData
+    {
+        public Vector2Int currentIndicatorCoord;
+        public VKPIManagerSaveData kpiManagerSaveData;
+    }
     
-    public class VScheduleUI : VUIBehaviour
+    public class VScheduleUI : VUIBehaviour, IDataPersistence
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject itemPrefab;
@@ -70,6 +77,32 @@ namespace VTuber.ScheduleSystem.UI
             {
                 0, 0, 0
             };
+        }
+        
+        public void Load(GameData data)
+        {
+            _currentIndicatorCoord = data.scheduleUISaveData.currentIndicatorCoord;
+            _kpiManager.Load(data.scheduleUISaveData.kpiManagerSaveData);
+        }
+
+        public void Save(GameData data)
+        {
+            data.scheduleUISaveData = new VScheduleUISaveData()
+            {
+                currentIndicatorCoord = _currentIndicatorCoord,
+                kpiManagerSaveData = _kpiManager.Save()
+            };
+        }
+
+        public void LoadEvents(VWeeklySchedule schedule)
+        {
+            foreach (var daySchedule in schedule.GetAllDays())
+            {
+                foreach (var evt in daySchedule.GetAllEvents())
+                {
+                    //slots[evt.Coordinate.y, evt.Coordinate.x].
+                }
+            }
         }
         
         protected override void OnEnable()
@@ -238,6 +271,7 @@ namespace VTuber.ScheduleSystem.UI
                 }
             }
             ChangeIndicatorColor(Color.yellow);
+            MoveIndicator(_currentIndicatorCoord);
         }
 
         public void Initialize(VCharacter character, VScript script)

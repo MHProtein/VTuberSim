@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
@@ -13,22 +14,58 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
+    public class VExecutionStateSaveData : VStateSaveData
+    {
+        public bool shouldSwitchToModifySchedule;
+        public List<VScheduleEventSaveData> dayEndEvents;
+        public bool shouldEndGame;
+        public int lastStreamPopularity;
+        public bool isLastStreamSuccess;
+    }
+    
     public class VExecutionState : VState
     {
         private VScheduleEvent _currentEvent;
         private bool _shouldSwitchToModifySchedule = false;
-        private VScheduleEvent _skipToEvent;
         private Queue<VScheduleEvent> _dayEndEvents;
         private bool _shouldEndGame = false;
         private int _lastStreamPopularity = 0;
         private bool _isLastStreamSuccess = false;
-        
+
         public VExecutionState()
         {
             stateType = VStateType.Execution;
             _dayEndEvents = new Queue<VScheduleEvent>();
         }
-        
+
+        public override VStateSaveData Save()
+        {
+            var data = new VExecutionStateSaveData();
+            data.stateType = stateType;
+            data.shouldSwitchToModifySchedule = _shouldSwitchToModifySchedule;
+            data.dayEndEvents = _dayEndEvents.Select(evt => evt.Save()).ToList();
+            data.shouldEndGame = _shouldEndGame;
+            data.lastStreamPopularity = _lastStreamPopularity;
+            data.isLastStreamSuccess = _isLastStreamSuccess;
+            return data;
+        }
+
+        public override void Load(VStateSaveData saveData)
+        {
+            base.Load(saveData);
+            var data = saveData as VExecutionStateSaveData;
+            _currentEvent = stateMachine.WeeklySchedule.GetCurrentEvent();
+            _shouldSwitchToModifySchedule = data.shouldSwitchToModifySchedule;
+            _dayEndEvents = new Queue<VScheduleEvent>();
+            foreach (var eventSaveData in data.dayEndEvents)
+            {
+                _dayEndEvents.Enqueue(VScheduleEvent.Load(eventSaveData));
+            }
+            _shouldEndGame = data.shouldEndGame;
+            _lastStreamPopularity = data.lastStreamPopularity;
+            _isLastStreamSuccess = data.isLastStreamSuccess;
+        }
+
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
         {
             _shouldSwitchToModifySchedule = true;

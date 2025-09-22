@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.ScheduleSystem.Core;
@@ -7,17 +8,20 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.Schedule
 {
-    /// <summary>
-    /// 一整周的安排，包含 7 天
-    /// </summary>
+    public class VWeeklyScheduleSaveData
+    {
+        public List<VDayScheduleSaveData> days;
+        public int currentDayIndex;
+    }
+
     public class VWeeklySchedule
     {
-        private readonly List<VDaySchedule> _days = new();
+        private List<VDaySchedule> _days = new();
         private int _currentDayIndex = 0;
-        public VWeeklySchedule(VCharacter character)
+        public VWeeklySchedule()
         {
             for (int i = 0; i < 7; i++)
-                _days.Add(new VDaySchedule(this, character, i));
+                _days.Add(new VDaySchedule(this, i));
         }
         
         private List<TimeOfDay> GetTimeRange(TimeOfDay start, int duration)
@@ -54,36 +58,18 @@ namespace VTuber.ScheduleSystem.Schedule
 
             foreach (var time in times)
             {
-                day.SetEvent(time, evt, time == startTime);
+                day.SetEvent(time, evt);
             }
-        }
-        
-        public bool CanScheduleEvent(int dayIndex, TimeOfDay startTime, int duration)
-        {
-            var timeValues = (TimeOfDay[])System.Enum.GetValues(typeof(TimeOfDay));
-
-            if ((int)startTime + duration > timeValues.Length)
-            {
-                VDebug.Log($"<color=red>无法安排：day{dayIndex}，startTime {startTime}，duration 超出时间范围</color>");
-                return false;
-            }
-
-            var day = GetDay(dayIndex);
-            foreach (var time in GetTimeRange(startTime, duration))
-            {
-                if (day.GetEvent(time) != null)
-                {
-                    VDebug.Log($"<color=red>无法安排：day{dayIndex}，startTime {startTime}，时间段 {time} 已被占用</color>");
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         public VScheduleEvent GetEvent(int dayIndex, TimeOfDay timeOfDay)
         {
             return GetDay(dayIndex).GetEvent(timeOfDay);
+        }
+
+        public VScheduleEvent GetCurrentEvent()
+        {
+            return GetDay(_currentDayIndex).GetCurrentEvent();
         }
 
         public VScheduleEvent BeginExecution()
@@ -118,7 +104,6 @@ namespace VTuber.ScheduleSystem.Schedule
                         { "DayIndex", _currentDayIndex },
                     });
             }
-            VDebug.Log("<color=green>Day " + _currentDayIndex + " ended.</color>");
             _currentDayIndex++;
         }
 
@@ -127,6 +112,23 @@ namespace VTuber.ScheduleSystem.Schedule
             if (_currentDayIndex >= _days.Count)
                 return null;
             return _days[_currentDayIndex].GetNextEvent();
+        }
+
+        public VWeeklyScheduleSaveData Save()
+        {
+            return new VWeeklyScheduleSaveData
+            {
+                days = _days.Select(day => day.Save()).ToList(),
+                currentDayIndex = _currentDayIndex,
+            };
+        }
+        
+        public static VWeeklySchedule Load(VWeeklyScheduleSaveData saveData)
+        {
+            VWeeklySchedule weeklySchedule = new();
+            weeklySchedule._days = saveData.days.Select(day => VDaySchedule.Load(day, weeklySchedule)).ToList();
+            weeklySchedule._currentDayIndex = saveData.currentDayIndex;
+            return weeklySchedule;
         }
     }
 }

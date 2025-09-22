@@ -12,6 +12,11 @@ using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
+    public class VScheduleSlotSaveData
+    {
+        private Vector2Int _coordination;
+        
+    }
     public class VScheduleSlot : VUIBehaviour
     {
         public VEventUI Item => _item;

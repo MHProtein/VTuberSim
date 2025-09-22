@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.EventSystem.Events;
@@ -14,6 +11,15 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.Events
 {
+    public class VScheduleEventSaveData
+    {
+        public uint id;
+        public Vector2Int coordinate;
+        public bool isExecuted;
+        public bool isFollowUp;
+        public VScheduleEventSaveData followUpEventSaveData;
+        public bool isStream;
+    }
     public class VScheduleEvent
     {
         public uint EventID => _config.id;
@@ -167,6 +173,38 @@ namespace VTuber.ScheduleSystem.Events
         public void SetExecuted()
         {
             IsExecuted = true;
+        }
+
+        public VScheduleEventSaveData Save()
+        {
+            return new VScheduleEventSaveData
+            {
+                id = EventID,
+                coordinate = Coordinate,
+                isExecuted = IsExecuted,
+                isFollowUp = isFollowUp,
+                followUpEventSaveData = _followUpEvent?.Save()
+            };
+        }
+
+        public static VScheduleEvent Load(VScheduleEventSaveData saveData)
+        { 
+            VScheduleEventConfiguration config;
+            if (saveData.isStream)
+            {
+                config = VDataManager.Instance.GetStreamEventConfigurationByID(saveData.id);
+            }
+            else
+            {
+                config = VDataManager.Instance.GetDialogueEventConfigurationByID(saveData.id);
+            }
+            VScheduleEvent eventInstance = config.CreateEvent();
+            eventInstance.Coordinate = saveData.coordinate;
+            eventInstance.IsExecuted = saveData.isExecuted;
+            eventInstance.isFollowUp = saveData.isFollowUp;
+            if(saveData.followUpEventSaveData is not null)
+                eventInstance._followUpEvent = Load(saveData.followUpEventSaveData);
+            return eventInstance;
         }
     }
 }
