@@ -4,6 +4,7 @@ using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
@@ -19,6 +20,10 @@ namespace VTuber.ScheduleSystem.Events
         public bool isFollowUp;
         public VScheduleEventSaveData followUpEventSaveData;
         public bool isStream;
+        public bool isSpecialEvent;
+        public bool isPhaseStart;
+        public bool isPhaseEndingEvent;
+        public int phase;
     }
     public class VScheduleEvent
     {
@@ -175,7 +180,7 @@ namespace VTuber.ScheduleSystem.Events
             IsExecuted = true;
         }
 
-        public VScheduleEventSaveData Save()
+        public VScheduleEventSaveData Save(VScript script)
         {
             return new VScheduleEventSaveData
             {
@@ -183,11 +188,15 @@ namespace VTuber.ScheduleSystem.Events
                 coordinate = Coordinate,
                 isExecuted = IsExecuted,
                 isFollowUp = isFollowUp,
-                followUpEventSaveData = _followUpEvent?.Save()
+                followUpEventSaveData = _followUpEvent?.Save(script),
+                isSpecialEvent = IsSpecialEvent,
+                isPhaseStart = IsPhaseStart,
+                isPhaseEndingEvent = IsPhaseEndingEvent,
+                phase = Phase is null ? -1 : script.GetPhaseIndex(Phase)
             };
         }
 
-        public static VScheduleEvent Load(VScheduleEventSaveData saveData)
+        public static VScheduleEvent Load(VScheduleEventSaveData saveData, VScript script)
         { 
             VScheduleEventConfiguration config;
             if (saveData.isStream)
@@ -202,8 +211,13 @@ namespace VTuber.ScheduleSystem.Events
             eventInstance.Coordinate = saveData.coordinate;
             eventInstance.IsExecuted = saveData.isExecuted;
             eventInstance.isFollowUp = saveData.isFollowUp;
+            eventInstance.IsSpecialEvent = saveData.isSpecialEvent;
+            eventInstance.IsPhaseStart = saveData.isPhaseStart;
+            eventInstance.IsPhaseEndingEvent = saveData.isPhaseEndingEvent;
+            if(saveData.phase != -1)
+                eventInstance.Phase = script.GetPhase(saveData.phase);
             if(saveData.followUpEventSaveData is not null)
-                eventInstance._followUpEvent = Load(saveData.followUpEventSaveData);
+                eventInstance._followUpEvent = Load(saveData.followUpEventSaveData, script);
             return eventInstance;
         }
     }

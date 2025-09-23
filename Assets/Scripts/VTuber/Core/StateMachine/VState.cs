@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Core.StateMachine
 {
@@ -9,11 +11,19 @@ namespace VTuber.Core.StateMachine
         Pause,
         ScheduleModify,
         PhaseStart,
+        None,
     }
 
     public class VStateSaveData
     {
         public VStateType stateType;
+        
+        // Execution state
+        public bool shouldSwitchToModifySchedule;
+        public List<VScheduleEventSaveData> dayEndEvents;
+        public bool shouldEndGame;
+        public int lastStreamPopularity;
+        public bool isLastStreamSuccess;
     }
     
     public abstract class VState

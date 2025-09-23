@@ -25162,14 +25162,13 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  dev: 0
+  useDevData: 0
   cooperatorConfigurations:
   - {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}
   - {fileID: 11400000, guid: fb654f61535c5754d99938109dfde960, type: 2}
   - {fileID: 11400000, guid: 8e77808f3b45fb34b8fe3e111d0517c1, type: 2}
   - {fileID: 11400000, guid: aba6c02083194394d8c00739e47ac72b, type: 2}
   - {fileID: 11400000, guid: 2b8aa29a530a517498bdd4298770c0a4, type: 2}
-  scriptConfiguration: {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
   reincarnationConfiguration: {fileID: 11400000, guid: 334dd11ca5f61594bbc19a30617cfd99, type: 2}
   scheduleUI: {fileID: 4800499513803145797}
   scheduleCreator: {fileID: 9180115723338920156}
@@ -25181,13 +25180,11 @@ MonoBehaviour:
   eventSystemSystem: {fileID: 908957579}
   _storeUI: {fileID: 2014909021}
   storeConfiguration: {fileID: 11400000, guid: 7007008a95323e340a43046bbfb9d1f8, type: 2}
-  _mainMenu: {fileID: 1567595154}
-  scripts:
-  - {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-  - {fileID: 11400000, guid: cf604c21659ff0a41b05dc922cb753de, type: 2}
-  characters:
-  - {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
-  - {fileID: 11400000, guid: 3906dc5cf0ddd294ea8ea68fae029fe1, type: 2}
+  scriptLabel:
+    m_LabelString: Scripts
+  characterLabel:
+    m_LabelString: Character
+  mainMenu: {fileID: 1567595154}
 --- !u!4 &507292049
 Transform:
   m_ObjectHideFlags: 0
@@ -114035,6 +114032,10 @@ PrefabInstance:
       propertyPath: itemPrefab
       value: 
       objectReference: {fileID: 1328888101914423096, guid: 984e5b3ca7709a140b66d069b86fb39c, type: 3}
+    - target: {fileID: 8580091062451762123, guid: 35b427d225a132041bfe71116c3561bb, type: 3}
+      propertyPath: eventUIPrefab
+      value: 
+      objectReference: {fileID: 1328888101914423096, guid: 2e229b23f5c424c42ab5ffd3bc7d727c, type: 3}
     - target: {fileID: 8580091062451762123, guid: 35b427d225a132041bfe71116c3561bb, type: 3}
       propertyPath: indicatorLeft
       value: 

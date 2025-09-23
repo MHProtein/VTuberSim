@@ -8,6 +8,7 @@ using UnityEngine;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.ScriptSystem;
 
 namespace VTuber.ScheduleSystem.Schedule
 {
@@ -106,23 +107,23 @@ namespace VTuber.ScheduleSystem.Schedule
             }
         }
 
-        public VDayScheduleSaveData Save()
+        public VDayScheduleSaveData Save(VScript script)
         {
             return new VDayScheduleSaveData
             {
-                events = _events.Select(e => e.Save()).ToList(),
+                events = _events.Select(e => e.Save(script)).ToList(),
                 dayIndex = _dayIndex,
                 eventIndex = eventIndex,
                 currentTimeOfDay = currentTimeOfDay
             };
         }
 
-        public static VDaySchedule Load(VDayScheduleSaveData saveData, VWeeklySchedule weeklySchedule)
+        public static VDaySchedule Load(VDayScheduleSaveData saveData, VWeeklySchedule weeklySchedule, VScript script)
         {
             VDaySchedule daySchedule = new(weeklySchedule, saveData.dayIndex);
             daySchedule.eventIndex = saveData.eventIndex;
             daySchedule.currentTimeOfDay = saveData.currentTimeOfDay;
-            daySchedule._events = saveData.events.Select(VScheduleEvent.Load).ToList();
+            daySchedule._events = saveData.events.Select(eventSaveData => VScheduleEvent.Load(eventSaveData, script)).ToList();
             return daySchedule;
         }
 

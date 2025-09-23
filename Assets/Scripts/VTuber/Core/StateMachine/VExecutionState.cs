@@ -14,15 +14,6 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
-    public class VExecutionStateSaveData : VStateSaveData
-    {
-        public bool shouldSwitchToModifySchedule;
-        public List<VScheduleEventSaveData> dayEndEvents;
-        public bool shouldEndGame;
-        public int lastStreamPopularity;
-        public bool isLastStreamSuccess;
-    }
-    
     public class VExecutionState : VState
     {
         private VScheduleEvent _currentEvent;
@@ -40,10 +31,10 @@ namespace VTuber.Core.StateMachine
 
         public override VStateSaveData Save()
         {
-            var data = new VExecutionStateSaveData();
+            var data = new VStateSaveData();
             data.stateType = stateType;
             data.shouldSwitchToModifySchedule = _shouldSwitchToModifySchedule;
-            data.dayEndEvents = _dayEndEvents.Select(evt => evt.Save()).ToList();
+            data.dayEndEvents = _dayEndEvents.Select(evt => evt.Save(stateMachine.Script)).ToList();
             data.shouldEndGame = _shouldEndGame;
             data.lastStreamPopularity = _lastStreamPopularity;
             data.isLastStreamSuccess = _isLastStreamSuccess;
@@ -53,17 +44,16 @@ namespace VTuber.Core.StateMachine
         public override void Load(VStateSaveData saveData)
         {
             base.Load(saveData);
-            var data = saveData as VExecutionStateSaveData;
             _currentEvent = stateMachine.WeeklySchedule.GetCurrentEvent();
-            _shouldSwitchToModifySchedule = data.shouldSwitchToModifySchedule;
+            _shouldSwitchToModifySchedule = saveData.shouldSwitchToModifySchedule;
             _dayEndEvents = new Queue<VScheduleEvent>();
-            foreach (var eventSaveData in data.dayEndEvents)
+            foreach (var eventSaveData in saveData.dayEndEvents)
             {
-                _dayEndEvents.Enqueue(VScheduleEvent.Load(eventSaveData));
+                _dayEndEvents.Enqueue(VScheduleEvent.Load(eventSaveData, stateMachine.Script));
             }
-            _shouldEndGame = data.shouldEndGame;
-            _lastStreamPopularity = data.lastStreamPopularity;
-            _isLastStreamSuccess = data.isLastStreamSuccess;
+            _shouldEndGame = saveData.shouldEndGame;
+            _lastStreamPopularity = saveData.lastStreamPopularity;
+            _isLastStreamSuccess = saveData.isLastStreamSuccess;
         }
 
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
@@ -253,6 +243,10 @@ namespace VTuber.Core.StateMachine
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(true);
             stateMachine.ScheduleUI.SwitchToExecution();
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseText(false);
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
+            
+            if (state is null)
+                return;
             if (state.StateType == VStateType.ScheduleCreation)
             {            
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
@@ -269,7 +263,6 @@ namespace VTuber.Core.StateMachine
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().
                     OnComplete(() => NextEvent());
             }
-            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }
 
         public override void Exit(VState nextState)

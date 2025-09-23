@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace SlayTheSpire.System.SavingSystem
@@ -24,9 +25,11 @@ namespace SlayTheSpire.System.SavingSystem
         public void Initialize()
         {
             _dataPersistences = new List<IDataPersistence>();
-            _dataHandler = new FileDataHandler(Application.persistentDataPath, "player.vtuber");
+            _dataHandler = new FileDataHandler(Application.persistentDataPath, "player.vtb");
+            
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, EventSaveGame);
         }
-
+        
         private void Start()
         {
             LoadGame();
@@ -36,6 +39,11 @@ namespace SlayTheSpire.System.SavingSystem
         {
             _gameData = new GameData();
             //GameManager.Instance.newGame = true;
+        }
+
+        public bool SaveExists()
+        {
+            return _dataHandler.SaveExists();
         }
 
         public void LoadGame()
@@ -53,9 +61,14 @@ namespace SlayTheSpire.System.SavingSystem
             }
         }
 
+        public void EventSaveGame(Dictionary<string, object> message)
+        {
+            SaveGame();
+        }
+        
         public void SaveGame()
         {
-            SavePersistences();
+            SavePersistences().Wait();
             _dataHandler.Save(_gameData);
         }
 

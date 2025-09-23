@@ -26,12 +26,13 @@ namespace VTuber.ScheduleSystem.UI
     {
         public Vector2Int currentIndicatorCoord;
         public VKPIManagerSaveData kpiManagerSaveData;
+        public VScheduleSlotSaveData[,] slots;
     }
     
     public class VScheduleUI : VUIBehaviour, IDataPersistence
     {
         public Vector2Int slotSize;
-        [SerializeField] protected GameObject itemPrefab;
+        [SerializeField] protected GameObject eventUIPrefab;
         [SerializeField] protected Transform indicator;
         [SerializeField] protected Image indicatorLeft;
         [SerializeField] protected Image indicatorRight;
@@ -83,6 +84,14 @@ namespace VTuber.ScheduleSystem.UI
         {
             _currentIndicatorCoord = data.scheduleUISaveData.currentIndicatorCoord;
             _kpiManager.Load(data.scheduleUISaveData.kpiManagerSaveData);
+
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {
+                    slots[y, x].Load(data.scheduleUISaveData.slots[y, x]);
+                }
+            }
         }
 
         public void Save(GameData data)
@@ -92,6 +101,14 @@ namespace VTuber.ScheduleSystem.UI
                 currentIndicatorCoord = _currentIndicatorCoord,
                 kpiManagerSaveData = _kpiManager.Save()
             };
+            data.scheduleUISaveData.slots = new VScheduleSlotSaveData[slotSize.y, slotSize.x];
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {
+                    data.scheduleUISaveData.slots[y, x] = slots[y, x].Save();
+                }
+            }
         }
 
         public void LoadEvents(VWeeklySchedule schedule)
@@ -100,7 +117,9 @@ namespace VTuber.ScheduleSystem.UI
             {
                 foreach (var evt in daySchedule.GetAllEvents())
                 {
-                    //slots[evt.Coordinate.y, evt.Coordinate.x].
+                    var eventUI = Instantiate(eventUIPrefab, slots[evt.Coordinate.y, evt.Coordinate.x].
+                        transform).GetComponent<VEventUI>();
+                    eventUI.Initialize(evt, slots[evt.Coordinate.y, evt.Coordinate.x], true);
                 }
             }
         }
@@ -211,7 +230,7 @@ namespace VTuber.ScheduleSystem.UI
                 e.IsPhaseStart = specialEvent.isPhaseStart;
                 e.IsSpecialEvent = true;
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
-                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], true);
+                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], false);
                 ui.SetFixed(true);
             }
             foreach (var slot in slots)

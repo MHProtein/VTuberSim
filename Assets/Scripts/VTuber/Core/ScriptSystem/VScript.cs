@@ -20,7 +20,7 @@ namespace VTuber.Core.ScriptSystem
 
     public struct VScriptSaveData
     {
-        public string scriptConfigurationPath;
+        public string scriptConfigurationName;
         public int currentPhaseIndex;
     }
     
@@ -50,14 +50,14 @@ namespace VTuber.Core.ScriptSystem
         {
             return new VScriptSaveData
             {
-                scriptConfigurationPath = AssetDatabase.GetAssetPath(_configuration),
+                scriptConfigurationName = _configuration.name,
                 currentPhaseIndex = Phases.IndexOf(_currentPhase)
             };
         }
 
-        public static VScript Load(VScriptSaveData data)
+        public static VScript Load(VScriptSaveData data, VScriptConfiguration scriptConfig)
         {
-            VScript script = new VScript(AssetDatabase.LoadAssetAtPath<VScriptConfiguration>(data.scriptConfigurationPath));
+            VScript script = new VScript(scriptConfig);
             script._currentPhase = script.Phases[data.currentPhaseIndex];
             return script;
         }
@@ -135,6 +135,16 @@ namespace VTuber.Core.ScriptSystem
                 score = score,
                 scoreLevelName = scoreLevel.name
             };
+        }
+
+        public int GetPhaseIndex(VPhase phase)
+        {
+            return Phases.IndexOf(phase);
+        }
+
+        public VPhase GetPhase(int index)
+        {
+            return Phases[index];
         }
     }
 }

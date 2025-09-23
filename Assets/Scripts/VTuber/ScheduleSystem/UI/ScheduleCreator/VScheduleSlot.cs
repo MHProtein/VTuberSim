@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
@@ -14,9 +16,10 @@ namespace VTuber.ScheduleSystem.UI
 {
     public class VScheduleSlotSaveData
     {
-        private Vector2Int _coordination;
-        
+        public int coopEventID;
+        public string coopEventIconName;
     }
+    
     public class VScheduleSlot : VUIBehaviour
     {
         public VEventUI Item => _item;
@@ -30,6 +33,8 @@ namespace VTuber.ScheduleSystem.UI
         private VEventUI _item;
         private List<VRaisingEffect> _coopEventEffects;
         private List<VCoopEvent.VCoopEventType> _coopEventTypes;
+        private int _coopEventID;
+        private Sprite _coopEventIcon;
 
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private GameObject highlightFrame;
@@ -56,12 +61,35 @@ namespace VTuber.ScheduleSystem.UI
         private int _allowedEventID;
         private int _eventID;
         private bool _useThisTransformAsParent;
+
+        public VScheduleSlotSaveData Save()
+        {
+            return new VScheduleSlotSaveData()
+            {
+                coopEventID = _coopEventID,
+                coopEventIconName = _coopEventIcon?.name ?? ""
+            };
+        }
+
+        public void Load(VScheduleSlotSaveData saveData)
+        {
+            _coopEventID = saveData.coopEventID;
+            if (saveData.coopEventID == -1)
+                return;
+            _coopEventIcon = VResourcesManager.Instance.TryGetSprite(saveData.coopEventIconName);
+            SetCoopEvent(new VCoopEventItem()
+            {
+                e = VDataManager.Instance.GetCoopEventByID((uint)saveData.coopEventID),
+                pfp = _coopEventIcon
+            });
+        }
         
         public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI, bool useThisTransformAsParent)
         {
             _coordination = coordination;
             _scheduleUI = scheduleUI;
             _useThisTransformAsParent = useThisTransformAsParent;
+            _coopEventID = -1;
         }
         
         public List<VScheduleSlot> GetUDSlots() => _scheduleUI.GetUDSlots(this);
@@ -81,6 +109,8 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SetCoopEvent(VCoopEventItem eventItem)
         {
+            _coopEventID = (int)eventItem.e.id;
+            _coopEventIcon = eventItem.pfp;
             coopEventGameObject.SetActive(true);
             IsCoopEventSlot = true;
             pfp.sprite = eventItem.pfp;

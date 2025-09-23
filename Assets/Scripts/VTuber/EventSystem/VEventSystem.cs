@@ -15,7 +15,6 @@ using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
 using VTuber.Store;
-using Yarn.Unity;
 
 namespace VTuber.EventSystem
 {

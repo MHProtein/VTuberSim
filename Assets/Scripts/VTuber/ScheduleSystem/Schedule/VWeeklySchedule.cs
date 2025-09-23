@@ -5,6 +5,7 @@ using VTuber.Core.EventCenter;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.Core.Foundation;
+using VTuber.Core.ScriptSystem;
 
 namespace VTuber.ScheduleSystem.Schedule
 {
@@ -114,19 +115,19 @@ namespace VTuber.ScheduleSystem.Schedule
             return _days[_currentDayIndex].GetNextEvent();
         }
 
-        public VWeeklyScheduleSaveData Save()
+        public VWeeklyScheduleSaveData Save(VScript script)
         {
             return new VWeeklyScheduleSaveData
             {
-                days = _days.Select(day => day.Save()).ToList(),
+                days = _days.Select(day => day.Save(script)).ToList(),
                 currentDayIndex = _currentDayIndex,
             };
         }
         
-        public static VWeeklySchedule Load(VWeeklyScheduleSaveData saveData)
+        public static VWeeklySchedule Load(VWeeklyScheduleSaveData saveData, VScript script)
         {
             VWeeklySchedule weeklySchedule = new();
-            weeklySchedule._days = saveData.days.Select(day => VDaySchedule.Load(day, weeklySchedule)).ToList();
+            weeklySchedule._days = saveData.days.Select(day => VDaySchedule.Load(day, weeklySchedule, script)).ToList();
             weeklySchedule._currentDayIndex = saveData.currentDayIndex;
             return weeklySchedule;
         }

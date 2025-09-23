@@ -92,7 +92,7 @@ namespace VTuber.Core.StateMachine
             {
                 weekIndex = _weekIndex,
                 currentStateType = currentState.StateType,
-                lastStateType = lastState.StateType,
+                lastStateType = lastState?.StateType ?? VStateType.None,
                 stateSaveDataList = RegisteredStateList.Select(state => state.Save()).ToList()
             };
         }
@@ -103,7 +103,7 @@ namespace VTuber.Core.StateMachine
             
             lastState = RegisteredStateList.Find(state => state.StateType == saveData.lastStateType);
             
-            SwitchState(currentState.StateType);
+            SwitchState(saveData.currentStateType);
             foreach (var state in RegisteredStateList)
             {
                 state.Load(saveData.stateSaveDataList.Find(saveData => saveData.stateType == state.StateType));

@@ -20,7 +20,7 @@ namespace VTuber.Character
 {
     public class VCharacterSaveData
     {
-        public string characterConfigurationPath;
+        public string characterConfigurationName;
         public List<uint> cardIds;
         public List<uint> relicIds;
         public List<uint> consumables;
@@ -32,7 +32,7 @@ namespace VTuber.Character
     
     public class VCharacter
     {
-        public string Name { get; private set; }
+        public string Name => _characterConfig.characterName;
 
         public string LiveType => _characterConfig.liveType;
         
@@ -61,7 +61,8 @@ namespace VTuber.Character
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
-            Name = characterConfig.characterName;
+            if (characterConfig is null)
+                return;
             InitializeAttributes(characterConfig);
         }
 
@@ -279,11 +280,10 @@ namespace VTuber.Character
             _cardLibrary.Clear();
         }
 
-        public void Load(GameData data)
+        public void Load(GameData data, VCharacterConfiguration characterConfiguration)
         {
             var characterSaveData = data.characterSaveData;
-            _characterConfig =
-                AssetDatabase.LoadAssetAtPath<VCharacterConfiguration>(characterSaveData.characterConfigurationPath);
+            _characterConfig = characterConfiguration;
             InitializeAttributes(_characterConfig);
 
             foreach (var attributeSaveData in characterSaveData.attributes)
@@ -321,7 +321,7 @@ namespace VTuber.Character
         {
             var characterSaveData = new VCharacterSaveData
             {
-                characterConfigurationPath = AssetDatabase.GetAssetPath(_characterConfig),
+                characterConfigurationName = _characterConfig.name,
                 cardIds = _cardLibrary.GetCards().Select(card => card.configID).ToList(),
                 attributes = AttributeManager.GetAttributes().Select(attribute => attribute.Save()).ToList(),
                 relicIds = _characterRelicManager.GetRelics().Select(relic => relic.ConfigId).ToList(),

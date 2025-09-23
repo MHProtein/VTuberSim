@@ -55,7 +55,7 @@ namespace VTuber.CoopSystem
             
             effects = new List<VRaisingEffect>();
             for (int i = VCoopEventHeaderIndex.Effect1; i <= VCoopEventHeaderIndex.E3Param; i += 2)
-            {               
+            {
                 var effectIDStr = row.Columns[i].Value;
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;

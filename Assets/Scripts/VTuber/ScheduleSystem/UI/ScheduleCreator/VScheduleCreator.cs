@@ -2,7 +2,6 @@
 using UnityEngine;
 using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Events;
-using Yarn.Unity;
 
 namespace VTuber.ScheduleSystem.UI
 {

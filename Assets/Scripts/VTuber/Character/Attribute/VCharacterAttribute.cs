@@ -72,7 +72,7 @@ namespace VTuber.Character.Attribute
         {
             return new VCharacterAttributeSaveData()
             {
-                attributeName = _configuration.attributeName,
+                attributeName = AttributeName,
                 value = Value,
                 gainRateModifier = gainRateModifier,
                 gainPointsModifier = gainPointsModifier

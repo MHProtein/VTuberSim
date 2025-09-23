@@ -28,11 +28,11 @@ namespace SlayTheSpire.System.SavingSystem
             
             try
             {
-                using (FileStream stream = new FileStream(path, FileMode.Create))
+                using (FileStream stream = new FileStream(path, FileMode.Open))
                 using (BsonDataReader reader = new BsonDataReader(stream))
                 {
                     JsonSerializer serializer = new JsonSerializer();
-                    serializer.Deserialize<GameData>(reader);
+                    loadedData = serializer.Deserialize<GameData>(reader);
                 }
             }
             catch (Exception e)
@@ -62,6 +62,12 @@ namespace SlayTheSpire.System.SavingSystem
             {
                 Debug.LogError("Failed to Save : " + e.Message);
             }
+        }
+
+        public bool SaveExists()
+        {
+            string path = Path.Combine(_dataDirectoryPath, _dataFileName);
+            return File.Exists(path);
         }
     }
 }
