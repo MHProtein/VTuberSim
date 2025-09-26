@@ -123,6 +123,8 @@ namespace VTuber.Core.StateMachine
                 return;
             }
 
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEndSave, new Dictionary<string, object>());
+
             if (stateMachine.ShouldPauseSchedule)
             {
                 stateMachine.SwitchState(VStateType.Pause);
@@ -244,9 +246,13 @@ namespace VTuber.Core.StateMachine
             stateMachine.ScheduleUI.SwitchToExecution();
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseText(false);
             stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
-            
+
             if (state is null)
+            {
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution();
+                NextEvent();
                 return;
+            }
             if (state.StateType == VStateType.ScheduleCreation)
             {            
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>

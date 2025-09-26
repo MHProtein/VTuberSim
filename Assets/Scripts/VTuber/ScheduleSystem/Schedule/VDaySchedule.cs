@@ -124,6 +124,10 @@ namespace VTuber.ScheduleSystem.Schedule
             daySchedule.eventIndex = saveData.eventIndex;
             daySchedule.currentTimeOfDay = saveData.currentTimeOfDay;
             daySchedule._events = saveData.events.Select(eventSaveData => VScheduleEvent.Load(eventSaveData, script)).ToList();
+            foreach (var scheduleEvent in daySchedule._events)
+            {
+                scheduleEvent.SetDaySchedule(daySchedule, scheduleEvent.Coordinate);
+            }
             return daySchedule;
         }
 

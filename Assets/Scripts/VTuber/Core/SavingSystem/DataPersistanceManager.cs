@@ -27,7 +27,7 @@ namespace SlayTheSpire.System.SavingSystem
             _dataPersistences = new List<IDataPersistence>();
             _dataHandler = new FileDataHandler(Application.persistentDataPath, "player.vtb");
             
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, EventSaveGame);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEndSave, EventSaveGame);
         }
         
         private void Start()

@@ -29,7 +29,7 @@ namespace VTuber.ScheduleSystem.UI
         public VScheduleSlotSaveData[,] slots;
     }
     
-    public class VScheduleUI : VUIBehaviour, IDataPersistence
+    public class VScheduleUI : VUIBehaviour
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject eventUIPrefab;
@@ -52,6 +52,7 @@ namespace VTuber.ScheduleSystem.UI
         private List<int> _streamCount = new();
         private VKPIManager _kpiManager;
         private VScript _script;
+        private bool _loadingEvents = false;
         
         protected override void Awake()
         {
@@ -113,15 +114,25 @@ namespace VTuber.ScheduleSystem.UI
 
         public void LoadEvents(VWeeklySchedule schedule)
         {
+            _loadingEvents = true;
             foreach (var daySchedule in schedule.GetAllDays())
             {
                 foreach (var evt in daySchedule.GetAllEvents())
                 {
-                    var eventUI = Instantiate(eventUIPrefab, slots[evt.Coordinate.y, evt.Coordinate.x].
-                        transform).GetComponent<VEventUI>();
+                    var eventUI = Instantiate(eventUIPrefab, VScheduleUIHelper.Instance.EventParent)
+                        .GetComponent<VEventUI>();
                     eventUI.Initialize(evt, slots[evt.Coordinate.y, evt.Coordinate.x], true);
+                    if (eventUI.Event.IsSpecialEvent || eventUI.Event.IsPhaseEndingEvent)
+                    {
+                        eventUI.SetFixed(true);
+                    }
                 }
+            }          
+            foreach (var slot in slots)
+            {
+                slot.SetPlaceable(false, false, -1);
             }
+            _loadingEvents = false;
         }
         
         protected override void OnEnable()
@@ -158,6 +169,8 @@ namespace VTuber.ScheduleSystem.UI
         
         private void OnEventUIPlaced(Dictionary<string, object> messagedict)
         {
+            if (_loadingEvents)
+                return;
             foreach (var slot in slots)
             {
                 slot.SetPlaceable(false, false, -1);

@@ -185,6 +185,7 @@ namespace VTuber.ScheduleSystem.Events
             return new VScheduleEventSaveData
             {
                 id = EventID,
+                isStream = this is VStreamEvent,
                 coordinate = Coordinate,
                 isExecuted = IsExecuted,
                 isFollowUp = isFollowUp,

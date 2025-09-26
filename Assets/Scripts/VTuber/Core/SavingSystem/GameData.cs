@@ -5,6 +5,7 @@ using VTuber.Core.StateMachine;
 using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using VTuber.Store;
 
 namespace SlayTheSpire.System.SavingSystem
 {
@@ -17,5 +18,6 @@ namespace SlayTheSpire.System.SavingSystem
         public VScriptSaveData script;
         
         public VScheduleUISaveData scheduleUISaveData;
+        public VStoreSaveData storeSaveData;
     }
 }

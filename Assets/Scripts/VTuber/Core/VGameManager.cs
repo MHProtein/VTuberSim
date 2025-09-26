@@ -119,7 +119,6 @@ namespace VTuber.BattleSystem.Core
             
             DataPersistenceManager.Instance.Initialize();
             DataPersistenceManager.Instance.Register(this);
-            DataPersistenceManager.Instance.Register(scheduleUI);
 
             _newGame = !DataPersistenceManager.Instance.SaveExists();
             
@@ -192,6 +191,11 @@ namespace VTuber.BattleSystem.Core
                 _stateMachine.OnEnable();
                 _character.OnEnable();
             
+                foreach (var configuration in cooperatorConfigurations)
+                {
+                    _character.CooperatorManager.AddCooperator(configuration);
+                }
+                
                 scheduleUI.Initialize(_character, _script);
                 _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
             }
@@ -202,10 +206,6 @@ namespace VTuber.BattleSystem.Core
 
             scheduleCreator.InitializeCreator(eventConfigs);
             
-            foreach (var configuration in cooperatorConfigurations)
-            {
-                _character.CooperatorManager.AddCooperator(configuration);
-            }
             
             mainMenu.gameObject.SetActive(false);
         }
@@ -335,6 +335,7 @@ namespace VTuber.BattleSystem.Core
             _weeklySchedule = VWeeklySchedule.Load(data.weeklySchedule, _script);
             
             scheduleUI.Initialize(_character, _script);
+            scheduleUI.Load(data);
             scheduleUI.LoadEvents(_weeklySchedule);
             
             InitializeStateMachine();
@@ -356,6 +357,7 @@ namespace VTuber.BattleSystem.Core
             data.weeklySchedule = _weeklySchedule.Save(_script);
             data.stateMachine = _stateMachine.Save();
             data.script = _script.Save();
+            scheduleUI.Save(data);
         }
     }
 }
