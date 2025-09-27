@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
@@ -14,6 +12,19 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.Events
 {
+    public class VScheduleEventSaveData
+    {
+        public uint id;
+        public Vector2Int coordinate;
+        public bool isExecuted;
+        public bool isFollowUp;
+        public VScheduleEventSaveData followUpEventSaveData;
+        public bool isStream;
+        public bool isSpecialEvent;
+        public bool isPhaseStart;
+        public bool isPhaseEndingEvent;
+        public int phase;
+    }
     public class VScheduleEvent
     {
         public uint EventID => _config.id;
@@ -167,6 +178,48 @@ namespace VTuber.ScheduleSystem.Events
         public void SetExecuted()
         {
             IsExecuted = true;
+        }
+
+        public VScheduleEventSaveData Save(VScript script)
+        {
+            return new VScheduleEventSaveData
+            {
+                id = EventID,
+                isStream = this is VStreamEvent,
+                coordinate = Coordinate,
+                isExecuted = IsExecuted,
+                isFollowUp = isFollowUp,
+                followUpEventSaveData = _followUpEvent?.Save(script),
+                isSpecialEvent = IsSpecialEvent,
+                isPhaseStart = IsPhaseStart,
+                isPhaseEndingEvent = IsPhaseEndingEvent,
+                phase = Phase is null ? -1 : script.GetPhaseIndex(Phase)
+            };
+        }
+
+        public static VScheduleEvent Load(VScheduleEventSaveData saveData, VScript script)
+        { 
+            VScheduleEventConfiguration config;
+            if (saveData.isStream)
+            {
+                config = VDataManager.Instance.GetStreamEventConfigurationByID(saveData.id);
+            }
+            else
+            {
+                config = VDataManager.Instance.GetDialogueEventConfigurationByID(saveData.id);
+            }
+            VScheduleEvent eventInstance = config.CreateEvent();
+            eventInstance.Coordinate = saveData.coordinate;
+            eventInstance.IsExecuted = saveData.isExecuted;
+            eventInstance.isFollowUp = saveData.isFollowUp;
+            eventInstance.IsSpecialEvent = saveData.isSpecialEvent;
+            eventInstance.IsPhaseStart = saveData.isPhaseStart;
+            eventInstance.IsPhaseEndingEvent = saveData.isPhaseEndingEvent;
+            if(saveData.phase != -1)
+                eventInstance.Phase = script.GetPhase(saveData.phase);
+            if(saveData.followUpEventSaveData is not null)
+                eventInstance._followUpEvent = Load(saveData.followUpEventSaveData, script);
+            return eventInstance;
         }
     }
 }

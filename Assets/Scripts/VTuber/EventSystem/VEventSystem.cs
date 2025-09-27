@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SlayTheSpire.System.SavingSystem;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
@@ -15,11 +16,10 @@ using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
 using VTuber.Store;
-using Yarn.Unity;
 
 namespace VTuber.EventSystem
 {
-    public class VEventSystem : VMonoBehaviour
+    public class VEventSystem : VMonoBehaviour, IDataPersistence
     {
         private VCharacter _character;
         private VDialogueEvent _currentEvent;
@@ -37,6 +37,7 @@ namespace VTuber.EventSystem
             base.Awake();
             dialogueSystem.OnDialogFinished += OnDialogueComplete;
             _store = new VStore(storeConfig);
+            DataPersistenceManager.Instance.Register(this);
         }
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e)
@@ -215,6 +216,16 @@ namespace VTuber.EventSystem
                 _currentEvent = null;
             }
             dialogueSystem.HideMe();
+        }
+
+        public void Load(GameData data)
+        {
+            _store.Load(data.storeSaveData);
+        }
+
+        public void Save(GameData data)
+        {
+            data.storeSaveData = _store.Save();
         }
     }
 }

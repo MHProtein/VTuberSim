@@ -1,15 +1,37 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core.KPIs.UI;
 using VTuber.Core.KPIs.UI;
+using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.BattleSystem.Core.KPIs
 {
+    public class VKPIManagerSaveData
+    {
+        public List<VKPI> phaseKPIs;
+    }
+    
     public class VKPIManager
     {
         protected List<VKPI> permanentKPIs = new List<VKPI>();
         protected List<VKPI> phaseKPIs = new List<VKPI>();
         public uint idDistributor = 0;
+
+        public VKPIManagerSaveData Save()
+        {
+            return new VKPIManagerSaveData
+            {
+                phaseKPIs = phaseKPIs
+            };
+        }
+
+        public void Load(VKPIManagerSaveData saveData)
+        {
+            foreach (var kpi in saveData.phaseKPIs)
+            {
+                AddPhaseKPI(kpi);
+            }
+        }
         
         public void AddPermanentKPI(VKPI kpi)
         {

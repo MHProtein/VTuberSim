@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
@@ -17,18 +18,44 @@ namespace VTuber.Core.StateMachine
     {
         private VScheduleEvent _currentEvent;
         private bool _shouldSwitchToModifySchedule = false;
-        private VScheduleEvent _skipToEvent;
         private Queue<VScheduleEvent> _dayEndEvents;
         private bool _shouldEndGame = false;
         private int _lastStreamPopularity = 0;
         private bool _isLastStreamSuccess = false;
-        
+
         public VExecutionState()
         {
             stateType = VStateType.Execution;
             _dayEndEvents = new Queue<VScheduleEvent>();
         }
-        
+
+        public override VStateSaveData Save()
+        {
+            var data = new VStateSaveData();
+            data.stateType = stateType;
+            data.shouldSwitchToModifySchedule = _shouldSwitchToModifySchedule;
+            data.dayEndEvents = _dayEndEvents.Select(evt => evt.Save(stateMachine.Script)).ToList();
+            data.shouldEndGame = _shouldEndGame;
+            data.lastStreamPopularity = _lastStreamPopularity;
+            data.isLastStreamSuccess = _isLastStreamSuccess;
+            return data;
+        }
+
+        public override void Load(VStateSaveData saveData)
+        {
+            base.Load(saveData);
+            _currentEvent = stateMachine.WeeklySchedule.GetCurrentEvent();
+            _shouldSwitchToModifySchedule = saveData.shouldSwitchToModifySchedule;
+            _dayEndEvents = new Queue<VScheduleEvent>();
+            foreach (var eventSaveData in saveData.dayEndEvents)
+            {
+                _dayEndEvents.Enqueue(VScheduleEvent.Load(eventSaveData, stateMachine.Script));
+            }
+            _shouldEndGame = saveData.shouldEndGame;
+            _lastStreamPopularity = saveData.lastStreamPopularity;
+            _isLastStreamSuccess = saveData.isLastStreamSuccess;
+        }
+
         private void OnSwitchToModifySchedule(Dictionary<string, object> messagedict)
         {
             _shouldSwitchToModifySchedule = true;
@@ -53,7 +80,7 @@ namespace VTuber.Core.StateMachine
             VRaisingUI.Instance.SetConsumableToRaising();
             _lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
             if(_isLastStreamSuccess)
-                stateMachine.Character.succeededStreams.Add(_currentEvent);
+                stateMachine.Character.succeededStreams.Add(_currentEvent.EventID);
             
             VRaisingUI.Instance.SwitchAttributesUIBattle(true);
         }
@@ -95,6 +122,8 @@ namespace VTuber.Core.StateMachine
                 ExecuteEvent(e);
                 return;
             }
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEndSave, new Dictionary<string, object>());
 
             if (stateMachine.ShouldPauseSchedule)
             {
@@ -216,6 +245,14 @@ namespace VTuber.Core.StateMachine
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetExecutionUIActive(true);
             stateMachine.ScheduleUI.SwitchToExecution();
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseText(false);
+            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
+
+            if (state is null)
+            {
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution();
+                NextEvent();
+                return;
+            }
             if (state.StateType == VStateType.ScheduleCreation)
             {            
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
@@ -232,7 +269,6 @@ namespace VTuber.Core.StateMachine
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().
                     OnComplete(() => NextEvent());
             }
-            stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }
 
         public override void Exit(VState nextState)

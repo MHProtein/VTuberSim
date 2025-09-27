@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using SlayTheSpire.System.SavingSystem;
+using UnityEditor;
 using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
@@ -15,72 +18,21 @@ using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Character
 {
-    public class VCharacterRelicManager
+    public class VCharacterSaveData
     {
-        public VRaisingRelicManager RaisingRelicManager => _raisingRelicManager;
-        private readonly VRaisingRelicManager _raisingRelicManager;
-        
-        private uint _battleRelicIdDistributor = 0;
-        private List<VBattleRelic> _battleRelics;
-
-        public VCharacterRelicManager(VCharacter character)
-        {
-            _battleRelics = new List<VBattleRelic>();
-            _raisingRelicManager = new VRaisingRelicManager(character);
-        }
-
-        public List<VBattleRelic> GetBattleRelics()
-        {
-            return _battleRelics;
-        }
-
-        public void AddRelic(VRelic relic)
-        {
-            if (relic is VBattleRelic battleRelic)
-            {
-                if (_battleRelics.Contains(battleRelic))
-                    return;
-                _battleRelics.Add(battleRelic);
-                battleRelic.Initialize(_battleRelicIdDistributor++);
-                battleRelic.OnRelicAddedInRaising();
-            }
-            else
-            {
-                _raisingRelicManager.AddRelic(relic as VRaisingRelic);
-            }
-            VDebug.Log("Added Relic " + relic.GetRelicName());
-            
-        }
-
-        public void RemoveRelic(VRelic relic)
-        {
-            if (relic is VBattleRelic battleRelic)
-            {
-                if (_battleRelics.Contains(battleRelic))
-                    return;
-                _battleRelics.Remove(battleRelic);
-                battleRelic.OnRelicRemovedInRaising();
-            }
-            else
-            {
-                _raisingRelicManager.Remove(relic as VRaisingRelic);
-            }
-        }
-
-        public void Clear()
-        {
-            foreach (var battleRelic in _battleRelics)
-            {
-                battleRelic.OnRelicRemovedInRaising();
-            }
-            _battleRelics.Clear();
-            _raisingRelicManager.Clear();
-        }
+        public string characterConfigurationName;
+        public List<uint> cardIds;
+        public List<uint> relicIds;
+        public List<uint> consumables;
+        public List<VCharacterAttributeSaveData> attributes;
+        public List<VCoopSaveData> cooperatorSaveData;
+        public Dictionary<VEventType, List<uint>> eventsCompleted;
+        public List<uint> succeededStreams;
     }
     
     public class VCharacter
     {
-        public string Name { get; private set; }
+        public string Name => _characterConfig.characterName;
 
         public string LiveType => _characterConfig.liveType;
         
@@ -104,23 +56,34 @@ namespace VTuber.Character
         public VConsumableManager ConsumableManager => _consumableManager;
         private VConsumableManager _consumableManager;
         
-        public List<VScheduleEvent> eventsCompleted;
-        public List<VScheduleEvent> succeededStreams;
+        public Dictionary<VEventType, List<uint>> eventsCompleted;
+        public List<uint> succeededStreams;
         
         public VCharacter(VCharacterConfiguration characterConfig)
         {
-            Name = characterConfig.characterName;
+            if (characterConfig is null)
+                return;
             InitializeAttributes(characterConfig);
         }
 
-        public void Initialize()
+        public void Initialize(bool isLoaded)
         {
             _cardLibrary = new VCardLibrary();
             _cooperatorManager = new VCooperatorManager();
             _consumableManager = new VConsumableManager(this);
             _characterRelicManager = new VCharacterRelicManager(this);
-            eventsCompleted = new List<VScheduleEvent>();
-            succeededStreams = new List<VScheduleEvent>();
+            eventsCompleted = new Dictionary<VEventType, List<uint>>();
+
+            foreach (var eventType in Enum.GetValues(typeof(VEventType)))
+            {
+                eventsCompleted.Add((VEventType)eventType, new List<uint>());
+            }
+
+            succeededStreams = new List<uint>();
+            
+            if (isLoaded)
+                return;
+
             _cardLibrary.AddCard(VDataManager.Instance.CreateCardByID(_characterConfig.initialCardId));
             _characterRelicManager.AddRelic(VDataManager.Instance.CreateRelicByID(_characterConfig.initialRelicId));
         }
@@ -295,19 +258,12 @@ namespace VTuber.Character
         private void OnEventExecuted(Dictionary<string, object> messagedict)
         {
             var e = messagedict["Event"] as VScheduleEvent;
-            eventsCompleted.Add(e);
+            eventsCompleted[e.Type].Add(e.EventID);
         }
         
         public bool HasCompletedEvent(VEventType type, uint eventID)
         {
-            foreach (var e in eventsCompleted)
-            {
-                if (e.Type == type && e.EventID == eventID)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return eventsCompleted[type].Contains(eventID);
         }
 
         public void SkipEventRecoverStamina()
@@ -323,18 +279,58 @@ namespace VTuber.Character
             _characterRelicManager.Clear();
             _cardLibrary.Clear();
         }
+
+        public void Load(GameData data, VCharacterConfiguration characterConfiguration)
+        {
+            var characterSaveData = data.characterSaveData;
+            _characterConfig = characterConfiguration;
+            InitializeAttributes(_characterConfig);
+
+            foreach (var attributeSaveData in characterSaveData.attributes)
+            {
+                AttributeManager.TryGetAttribute(attributeSaveData.attributeName, out var attribute);
+                attribute.Load(attributeSaveData);
+            }
+
+            Initialize(true);
+            foreach (var cardId in characterSaveData.cardIds)
+            {
+                _cardLibrary.AddCard(VDataManager.Instance.CreateCardByID(cardId));
+            }
+
+            foreach (var relicId in characterSaveData.relicIds)
+            {
+                _characterRelicManager.AddRelic(VDataManager.Instance.CreateRelicByID(relicId));
+            }
+
+            foreach (var consumableId in characterSaveData.consumables)
+            {
+                _consumableManager.AddConsumable(VDataManager.Instance.CreateConsumableByID(consumableId));
+            }
+
+            foreach (var cooperatorSaveData in characterSaveData.cooperatorSaveData)
+            {
+                _cooperatorManager.AddCooperator(VCooperator.Load(cooperatorSaveData));
+            }
+            
+            eventsCompleted = characterSaveData.eventsCompleted;
+            succeededStreams = characterSaveData.succeededStreams;
+        }
+
+        public void Save(GameData data)
+        {
+            var characterSaveData = new VCharacterSaveData
+            {
+                characterConfigurationName = _characterConfig.name,
+                cardIds = _cardLibrary.GetCards().Select(card => card.configID).ToList(),
+                attributes = AttributeManager.GetAttributes().Select(attribute => attribute.Save()).ToList(),
+                relicIds = _characterRelicManager.GetRelics().Select(relic => relic.ConfigId).ToList(),
+                consumables = _consumableManager.GetConsumables().Select(consumable => consumable.ConfigId).ToList(),
+                cooperatorSaveData = _cooperatorManager.GetCooperators().Select(cooperator => cooperator.Save()).ToList(),
+                eventsCompleted = eventsCompleted,
+                succeededStreams = succeededStreams,
+            };
+            data.characterSaveData = characterSaveData;
+        }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

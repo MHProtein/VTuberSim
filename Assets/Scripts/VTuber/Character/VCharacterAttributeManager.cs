@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
 using VTuber.Character.Attribute;
@@ -103,6 +104,11 @@ namespace VTuber.Character
             {
                 (pressure as VPressureAttribute).ApplyEffects(character);
             }
+        }
+
+        public List<VCharacterAttribute> GetAttributes()
+        {
+            return Attributes.Values.ToList();
         }
     }
 }

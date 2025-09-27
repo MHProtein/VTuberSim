@@ -1,11 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VTuber.BattleSystem.Card;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.Relic;
 
 namespace VTuber.Reincarnation
 {
+    public class VAccountSaveData
+    {
+        public string accountName;
+        public List<uint> cards;
+        public List<uint> relics;
+        public List<VEffectItem> effects;
+        public List<int> effectLevels;
+        public string scoreLevel;
+    }
+    
     public class VAccount
     {
         public string accountName;
@@ -20,6 +33,7 @@ namespace VTuber.Reincarnation
         private List<VRaisingEffect> _effects;
         private List<int> _effectLevels;
         private string _scoreLevel;
+        private List<VEffectItem> _effectItems;
         
         public VAccount(string scoreLevel, List<VCard> cards, List<VRelic> relics, List<VEffectItem> effects)
         {
@@ -27,6 +41,7 @@ namespace VTuber.Reincarnation
             this._relics = relics;
             
             this._scoreLevel = scoreLevel;
+            this._effectItems = effects;
             
             this._effects = new List<VRaisingEffect>();
             foreach (var effect in effects)
@@ -41,6 +56,21 @@ namespace VTuber.Reincarnation
             }
         }
 
+        public VAccount(VAccountSaveData data)
+        {
+            this.accountName = data.accountName;
+            this._scoreLevel = data.scoreLevel;
+            this._cards = data.cards.Select(card => VDataManager.Instance.CreateCardByID(card)).ToList();
+            this._relics = data.relics.Select(relic => VDataManager.Instance.CreateRelicByID(relic)).ToList();
+            this._effectLevels = data.effectLevels;
+            _effectItems = data.effects;
+            this._effects = new List<VRaisingEffect>();
+            foreach (var effect in this._effectItems)
+            {
+                this._effects.Add(effect.CreateRaisingEffect());
+            }
+        }
+
         public VAccount(string scoreLevel, List<VCard> cards, List<VRelic> relics, List<VRaisingEffect> effects, List<int> effectLevels)
         {
             this._scoreLevel = scoreLevel;
@@ -50,29 +80,18 @@ namespace VTuber.Reincarnation
             this._effects = effects;
             this._effectLevels = effectLevels;
         }
-        
-        public void Print()
+
+        public VAccountSaveData Save()
         {
-            string cardStr = "cards:";
-            foreach (var card in _cards)
+            return new VAccountSaveData
             {
-                cardStr += card.configID + ", ";
-            }
-            VDebug.Log(cardStr);
-            
-            string relicStr = "relics:";
-            foreach (var relic in _relics)
-            {
-                relicStr += relic.ConfigId + ", ";
-            }
-            VDebug.Log(relicStr);
-            
-            string effectStr = "effects:";
-            foreach (var effect in _effects)
-            {
-                effectStr += effect.Id + ", ";
-            }
-            VDebug.Log(effectStr);
+                accountName = accountName,
+                cards = _cards.Select(card => card.configID).ToList(),
+                relics = _relics.Select(relic => relic.ConfigId).ToList(),
+                effects = _effectItems,
+                effectLevels = _effectLevels,
+                scoreLevel = _scoreLevel
+            };
         }
     }
 }

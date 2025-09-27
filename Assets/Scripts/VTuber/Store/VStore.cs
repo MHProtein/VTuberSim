@@ -9,6 +9,10 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Store
 {
+    public class VStoreSaveData
+    {
+        public int refreshCount;
+    }
     public class VStore
     {
         private int _refreshCount = 0;
@@ -36,6 +40,19 @@ namespace VTuber.Store
             _upgradeButton = new VStoreUpgradeButton(storeConfig.upgradePrice, storeConfig.upgradePriceIncrease);
             
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStoreBeginRefresh, OnStoreBeginRefresh);
+        }
+
+        public VStoreSaveData Save()
+        {
+            return new VStoreSaveData()
+            {
+                refreshCount = _refreshCount,
+            };
+        }
+
+        public void Load(VStoreSaveData saveData)
+        {
+            _refreshCount = saveData.refreshCount;
         }
         
         public void SetGlobalDiscount(float discount)
