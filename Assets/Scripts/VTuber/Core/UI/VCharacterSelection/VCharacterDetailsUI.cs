@@ -18,12 +18,7 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
         [SerializeField] private TMP_Text staminaText;
         [SerializeField] private TMP_Text moneyText;
         [SerializeField] private TMP_Text followerText;
-        [SerializeField] private TMP_Text singingAbilityValueText;
-        [SerializeField] private TMP_Text singingAbilityGainEfficiencyText;
-        [SerializeField] private TMP_Text gamingAbilityText;
-        [SerializeField] private TMP_Text gamingAbilityGainEfficiencyText;
-        [SerializeField] private TMP_Text chattingAbilityText;
-        [SerializeField] private TMP_Text chattingAbilityGainEfficiencyText;
+        [SerializeField] private VAbilityDetails abilityDetails;
 
         private Dictionary<uint, VCard> cardsCreated = new Dictionary<uint, VCard>();
         
@@ -46,12 +41,6 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
             return null;
         }
         
-        public string GetPercentage(int value, int decimalPlaces)
-        {
-            var v = (value - 100f);
-            return v.ToString();
-        }
-        
         public void SetDetails(VCharacterConfiguration characterConfig)
         {
             nameText.text = characterConfig.characterName;
@@ -69,12 +58,8 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
             staminaText.text = $"{characterConfig.staminaInitialValue}/{characterConfig.staminaMaxValue}";
             moneyText.text = characterConfig.moneyInitialValue.ToString();
             followerText.text = characterConfig.followerCountInitialValue.ToString();
-            singingAbilityValueText.text = characterConfig.singingAbilityInitialValue.ToString();
-            gamingAbilityText.text = characterConfig.gamingAbilityInitialValue.ToString();
-            chattingAbilityText.text = characterConfig.chattingAbilityInitialValue.ToString();
-            singingAbilityGainEfficiencyText.text = "+" + GetPercentage(characterConfig.singingAbilityGainEfficiencyInitialValue, 1) + "%";
-            gamingAbilityGainEfficiencyText.text = "+" + GetPercentage(characterConfig.gamingAbilityGainEfficiencyInitialValue, 1) + "%";
-            chattingAbilityGainEfficiencyText.text = "+" + GetPercentage(characterConfig.chattingAbilityGainEfficiencyInitialValue, 1) + "%";
+            
+            abilityDetails.SetDetails(characterConfig);
         }
     }
 }

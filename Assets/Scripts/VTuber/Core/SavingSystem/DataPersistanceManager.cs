@@ -9,7 +9,7 @@ namespace SlayTheSpire.System.SavingSystem
 {
     public class DataPersistenceManager : VSingleton<DataPersistenceManager>
     {
-        public SaveData SaveData =>_saveData;
+        public SaveData SaveData => _saveData;
         private SaveData _saveData;
         
         public List<IDataPersistence> DataPersistences =>_dataPersistences;
@@ -40,6 +40,12 @@ namespace SlayTheSpire.System.SavingSystem
         {
             _saveData = new SaveData();
             //GameManager.Instance.newGame = true;
+        }
+
+        public void DeleteSave()
+        {
+            _saveData = null;
+            _dataHandler.Delete();
         }
 
         public bool SaveExists()

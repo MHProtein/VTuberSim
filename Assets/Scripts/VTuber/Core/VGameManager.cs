@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SlayTheSpire.System.SavingSystem;
@@ -74,6 +75,8 @@ namespace VTuber.BattleSystem.Core
         private List<VAccount> _accounts;
 
         private bool _newGame = false;
+        
+        private DateTime _startGameTime;
         
         protected override void Awake()
         {
@@ -156,12 +159,12 @@ namespace VTuber.BattleSystem.Core
 
             scheduleCreator.InitializeCreator(eventConfigs);
             
-            
             mainMenu.gameObject.SetActive(false);
         }
 
         public void NewGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
         {
+            _startGameTime = DateTime.Now;
             DataPersistenceManager.Instance.NewGame();
             _script = new VScript(scriptConfig);
             _character = new VCharacter(characterConfiguration);
@@ -312,13 +315,13 @@ namespace VTuber.BattleSystem.Core
         public void ChangeToMainMenu(SaveData data)
         {
             mainMenu.gameObject.SetActive(true);
-            mainMenu.Initialize(false, data, _scripts, _characterConfigs, _accounts, NewGame, LoadGame);
+            mainMenu.Initialize(false, _scripts, _characterConfigs, _accounts);
         }
 
         public void ReturnToMainMenu(SaveData data)
         {
             mainMenu.gameObject.SetActive(true);
-            mainMenu.Initialize(true, data, _scripts, _characterConfigs, _accounts, NewGame, LoadGame);
+            mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts);
         }
 
         public void ContinueFromMainMenu()
@@ -367,6 +370,16 @@ namespace VTuber.BattleSystem.Core
             data.stateMachine = _stateMachine.Save();
             data.script = _script.Save();
             scheduleUI.Save(data);
+        }
+
+        public VScriptConfiguration GetScriptConfig(string scriptScriptConfigurationName)
+        {
+            return _scripts.Find(config => config.name == scriptScriptConfigurationName);
+        }
+
+        public VCharacterConfiguration GetCharacterConfig(string characterConfigurationName)
+        {
+            return _characterConfigs.Find(config => config.name == characterConfigurationName);
         }
     }
 }

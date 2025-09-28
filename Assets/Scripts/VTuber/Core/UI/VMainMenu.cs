@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using SlayTheSpire.System.SavingSystem;
 using TMPro;
 using UnityEngine;
@@ -20,60 +21,83 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private Button _exitButton;
         [SerializeField] private VGameConfigSelection gameConfigSelection;
         [SerializeField] private VGameManager gameManager;
-
-        [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
+        [SerializeField] private VLoadSaveMenu loadSaveMenu;
+        [SerializeField] private VConfirmationMenu confirmationMenu;
+        
+        [Space(5)]
+        [Header("消息")]
+        [TextArea][LabelText("删除存档确认")][SerializeField] private string deleteSaveConfirmationText;
+        [TextArea][LabelText("新游戏确认")][SerializeField] private string newGameConfirmationText;
+        [TextArea][LabelText("新游戏二次确认")][SerializeField] private string newGameConfirmationTwiceText;
         
         private List<VScriptConfiguration> _scripts;
         private List<VCharacterConfiguration> _characters;
         private List<VAccount> _accounts;
-        private Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> _startGame;
 
         protected override void Awake()
         {
             base.Awake();
             
-            _startButton.onClick.AddListener(StartGame);
+            _startButton.onClick.AddListener(NewGame);
+            _loadGameButton.onClick.AddListener(OpenLoadMenu);
             _optionButton.onClick.AddListener(OpenOptionMenu);
             _exitButton.onClick.AddListener(ExitGame);
+            
+            loadSaveMenu.confirmButton.onClick.AddListener(ConfirmLoad);
+            loadSaveMenu.returnButton.onClick.AddListener(CloseLoadMenu);
+            loadSaveMenu.deleteSaveButton.onClick.AddListener(DeleteSave);
         }
 
-        private void StartGame()
+        private void DeleteSave()
+        {
+            confirmationMenu.Show("删除存档", new List<string> { deleteSaveConfirmationText }, () =>
+            {
+                DataPersistenceManager.Instance.DeleteSave();
+                CloseLoadMenu();
+                _loadGameButton.interactable = false;
+            });
+        }
+
+        private void OpenLoadMenu()
+        {
+            loadSaveMenu.gameObject.SetActive(true);
+            loadSaveMenu.SetDetails(DataPersistenceManager.Instance.SaveData);
+        }
+
+        private void CloseLoadMenu()
+        {
+            loadSaveMenu.gameObject.SetActive(false);
+        }
+
+        private void ConfirmLoad()
+        {
+            loadSaveMenu.gameObject.SetActive(false);
+            gameManager.LoadGame();
+        }
+
+        private void NewGame()
         {
             //VSave save = VSaveSystem.Load();
             
-            gameConfigSelection.Begin(_scripts, _characters, _accounts, _startGame);
+            confirmationMenu.Show("新游戏", new List<string> { newGameConfirmationText }, () =>
+            {
+                confirmationMenu.Show("新游戏", new List<string> { newGameConfirmationTwiceText }, () =>
+                {
+                    DataPersistenceManager.Instance.NewGame();
+                    gameConfigSelection.Begin(_scripts, _characters, _accounts);
+                });
+            });
         }
 
-        public void Initialize(bool isReturn, SaveData saveData, List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
-            List<VAccount> accounts, Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> startGame, Action loadGame)
+        public void Initialize(bool isReturn,  List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
+            List<VAccount> accounts)
         {
-            if (isReturn)
-            {
-                _startButtonText.text = "Continue";
-                _startButton.onClick.RemoveListener(StartGame);
-                _startButton.onClick.AddListener(Continue);
-                return;
-            }
-            _startButtonText.text = "Start Game";
-            _startButton.onClick.AddListener(StartGame);
-            _startButton.onClick.RemoveListener(Continue);
             _scripts = scriptConfig;
             _characters = characterConfiguration;
-            _startGame = startGame;
             
             _accounts = accounts;
 
-            _loadGameButton.interactable = saveData is not null;
-        }
-
-        private void OnLoadButtonClicked()
-        {
-            
-        }
-
-        public void Continue()
-        {
-            gameManager.ContinueFromMainMenu();
+            _loadGameButton.interactable = DataPersistenceManager.Instance.SaveData is not null;
         }
         
         private void OpenOptionMenu()

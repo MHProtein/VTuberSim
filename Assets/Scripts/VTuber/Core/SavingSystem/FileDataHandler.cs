@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using UnityEngine;
+using VTuber.Core.Foundation;
 
 namespace SlayTheSpire.System.SavingSystem
 {
@@ -68,6 +69,19 @@ namespace SlayTheSpire.System.SavingSystem
         {
             string path = Path.Combine(_dataDirectoryPath, _dataFileName);
             return File.Exists(path);
+        }
+
+        public void Delete()
+        {
+            string path = Path.Combine(_dataDirectoryPath, _dataFileName);
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception e)
+            {
+                VDebug.LogError(e.Message);
+            }
         }
     }
 }
