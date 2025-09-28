@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SlayTheSpire.System.SavingSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ namespace VTuber.BattleSystem.Core.UI
     {
         [SerializeField] private Button _startButton;
         [SerializeField] private TMP_Text _startButtonText;
+        [SerializeField] private Button _loadGameButton;
         [SerializeField] private Button _optionButton;
         [SerializeField] private Button _exitButton;
         [SerializeField] private VGameConfigSelection gameConfigSelection;
@@ -42,8 +44,8 @@ namespace VTuber.BattleSystem.Core.UI
             gameConfigSelection.Begin(_scripts, _characters, _accounts, _startGame);
         }
 
-        public void Initialize(bool isReturn, List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
-            List<VAccount> accounts, Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> startGame)
+        public void Initialize(bool isReturn, SaveData saveData, List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
+            List<VAccount> accounts, Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> startGame, Action loadGame)
         {
             if (isReturn)
             {
@@ -60,6 +62,13 @@ namespace VTuber.BattleSystem.Core.UI
             _startGame = startGame;
             
             _accounts = accounts;
+
+            _loadGameButton.interactable = saveData is not null;
+        }
+
+        private void OnLoadButtonClicked()
+        {
+            
         }
 
         public void Continue()

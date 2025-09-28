@@ -18,10 +18,10 @@ namespace SlayTheSpire.System.SavingSystem
             _dataFileName = dataFileName;
         }
         
-        public GameData Load()
+        public SaveData Load()
         {
             string path = Path.Combine(_dataDirectoryPath, _dataFileName);
-            GameData loadedData = new GameData();
+            SaveData loadedData = new SaveData();
             
             if (!File.Exists(path))
                 return null;
@@ -32,7 +32,7 @@ namespace SlayTheSpire.System.SavingSystem
                 using (BsonDataReader reader = new BsonDataReader(stream))
                 {
                     JsonSerializer serializer = new JsonSerializer();
-                    loadedData = serializer.Deserialize<GameData>(reader);
+                    loadedData = serializer.Deserialize<SaveData>(reader);
                 }
             }
             catch (Exception e)
@@ -43,7 +43,7 @@ namespace SlayTheSpire.System.SavingSystem
             return loadedData;
         }
         
-        public void Save(GameData data)
+        public void Save(SaveData data)
         {
             string path = Path.Combine(_dataDirectoryPath, _dataFileName);
 

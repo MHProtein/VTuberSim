@@ -218,12 +218,12 @@ namespace VTuber.EventSystem
             dialogueSystem.HideMe();
         }
 
-        public void Load(GameData data)
+        public void Load(SaveData data)
         {
             _store.Load(data.storeSaveData);
         }
 
-        public void Save(GameData data)
+        public void Save(SaveData data)
         {
             data.storeSaveData = _store.Save();
         }

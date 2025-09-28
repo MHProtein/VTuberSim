@@ -2,7 +2,7 @@
 {
     public interface IDataPersistence
     {
-        public void Load(GameData data);
-        public void Save(GameData data);
+        public void Load(SaveData data);
+        public void Save(SaveData data);
     }
 }

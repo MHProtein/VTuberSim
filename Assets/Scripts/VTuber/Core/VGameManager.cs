@@ -120,9 +120,10 @@ namespace VTuber.BattleSystem.Core
             DataPersistenceManager.Instance.Initialize();
             DataPersistenceManager.Instance.Register(this);
 
-            _newGame = !DataPersistenceManager.Instance.SaveExists();
+            var saveData = DataPersistenceManager.Instance.LoadSave();
             
-            ChangeToMainMenu();
+            _newGame = saveData == null;
+            ChangeToMainMenu(saveData);
         }
 
         protected override void OnEnable()
@@ -145,60 +146,68 @@ namespace VTuber.BattleSystem.Core
             mainMenu.gameObject.SetActive(true);
         }
 
-        public void InitializeGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
+        public void LoadGame()
         {
-            if (!_newGame)
+            DataPersistenceManager.Instance.LoadGame();
+            
+            List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
+            eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
+            eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
+
+            scheduleCreator.InitializeCreator(eventConfigs);
+            
+            
+            mainMenu.gameObject.SetActive(false);
+        }
+
+        public void NewGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
+        {
+            DataPersistenceManager.Instance.NewGame();
+            _script = new VScript(scriptConfig);
+            _character = new VCharacter(characterConfiguration);
+            _character.Initialize(false);
+
+            foreach (var account in accounts)
             {
-                DataPersistenceManager.Instance.LoadGame();
+                foreach (var effect in account.Effects)
+                {
+                    effect.ApplyEffect(_character, null);
+                }
+            }
+        
+            _weeklySchedule = new VWeeklySchedule();
+        
+            // foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
+            // {
+            //     if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
+            //         _character.CardLibrary.AddCard(config.CreateCard());
+            // }
+
+            if (scriptConfig.cardIDs.TryGetValue(_character.LiveType, out var cardIDs))
+            {
+                foreach (var cardID in cardIDs)
+                {
+                    _character.CardLibrary.AddCard(VDataManager.Instance.GetCardConfigurationByID(cardID).CreateCard());
+                }
             }
             else
             {
-                DataPersistenceManager.Instance.NewGame();
-                _script = new VScript(scriptConfig);
-                _character = new VCharacter(characterConfiguration);
-                _character.Initialize(false);
-
-                foreach (var account in accounts)
-                {
-                    foreach (var effect in account.Effects)
-                    {
-                        effect.ApplyEffect(_character, null);
-                    }
-                }
-            
-                _weeklySchedule = new VWeeklySchedule();
-            
-                // foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
-                // {
-                //     if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
-                //         _character.CardLibrary.AddCard(config.CreateCard());
-                // }
-
-                if (scriptConfig.cardIDs.TryGetValue(_character.LiveType, out var cardIDs))
-                {
-                    foreach (var cardID in cardIDs)
-                    {
-                        _character.CardLibrary.AddCard(VDataManager.Instance.GetCardConfigurationByID(cardID).CreateCard());
-                    }
-                }
-                else
-                {
-                    VDebug.LogError("liveType not found in scriptConfig.cardIDs");
-                }
-            
-                InitializeStateMachine();
-            
-                _stateMachine.OnEnable();
-                _character.OnEnable();
-            
-                foreach (var configuration in cooperatorConfigurations)
-                {
-                    _character.CooperatorManager.AddCooperator(configuration);
-                }
-                
-                scheduleUI.Initialize(_character, _script);
-                _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
+                VDebug.LogError("liveType not found in scriptConfig.cardIDs");
             }
+        
+            InitializeStateMachine();
+        
+            _stateMachine.OnEnable();
+            _character.OnEnable();
+        
+            foreach (var configuration in cooperatorConfigurations)
+            {
+                _character.CooperatorManager.AddCooperator(configuration);
+            }
+            
+            scheduleUI.Initialize(_character, _script);
+            _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
+            
 
             List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
             eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
@@ -300,16 +309,16 @@ namespace VTuber.BattleSystem.Core
             }
         }
 
-        public void ChangeToMainMenu()
+        public void ChangeToMainMenu(SaveData data)
         {
             mainMenu.gameObject.SetActive(true);
-            mainMenu.Initialize(false, _scripts, _characterConfigs, _accounts, InitializeGame);
+            mainMenu.Initialize(false, data, _scripts, _characterConfigs, _accounts, NewGame, LoadGame);
         }
 
-        public void ReturnToMainMenu()
+        public void ReturnToMainMenu(SaveData data)
         {
             mainMenu.gameObject.SetActive(true);
-            mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts, InitializeGame);
+            mainMenu.Initialize(true, data, _scripts, _characterConfigs, _accounts, NewGame, LoadGame);
         }
 
         public void ContinueFromMainMenu()
@@ -317,7 +326,7 @@ namespace VTuber.BattleSystem.Core
             mainMenu.gameObject.SetActive(false);
         }
         
-        public void Load(GameData data)
+        public void Load(SaveData data)
         {
             _accounts = new List<VAccount>();
             foreach (var saveData in data.accounts)
@@ -345,7 +354,7 @@ namespace VTuber.BattleSystem.Core
             _character.OnEnable();
         }
 
-        public void Save(GameData data)
+        public void Save(SaveData data)
         {
             data.accounts = new List<VAccountSaveData>();
             foreach (var account in _accounts)

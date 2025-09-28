@@ -9,7 +9,7 @@ using VTuber.Store;
 
 namespace SlayTheSpire.System.SavingSystem
 {
-    public class GameData
+    public class SaveData
     {
         public List<VAccountSaveData> accounts;
         public VCharacterSaveData characterSaveData;
