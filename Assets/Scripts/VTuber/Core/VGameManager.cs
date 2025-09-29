@@ -151,6 +151,7 @@ namespace VTuber.BattleSystem.Core
 
         public void LoadGame()
         {
+            _startGameTime = DateTime.UtcNow;
             DataPersistenceManager.Instance.LoadGame();
             
             List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
@@ -164,7 +165,7 @@ namespace VTuber.BattleSystem.Core
 
         public void NewGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
         {
-            _startGameTime = DateTime.Now;
+            _startGameTime = DateTime.UtcNow;
             DataPersistenceManager.Instance.NewGame();
             _script = new VScript(scriptConfig);
             _character = new VCharacter(characterConfiguration);
@@ -359,6 +360,7 @@ namespace VTuber.BattleSystem.Core
 
         public void Save(SaveData data)
         {
+            data.lastPlayTime = DateTime.UtcNow - _startGameTime;
             data.accounts = new List<VAccountSaveData>();
             foreach (var account in _accounts)
             {

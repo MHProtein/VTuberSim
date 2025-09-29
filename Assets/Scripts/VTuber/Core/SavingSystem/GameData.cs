@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VTuber.Character;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
@@ -19,5 +20,6 @@ namespace SlayTheSpire.System.SavingSystem
         
         public VScheduleUISaveData scheduleUISaveData;
         public VStoreSaveData storeSaveData;
+        public TimeSpan lastPlayTime;
     }
 }

@@ -78,6 +78,12 @@ namespace VTuber.BattleSystem.Core.UI
         private void NewGame()
         {
             //VSave save = VSaveSystem.Load();
+            if (DataPersistenceManager.Instance.SaveData is null)
+            {
+                DataPersistenceManager.Instance.NewGame();
+                gameConfigSelection.Begin(_scripts, _characters, _accounts);
+                return;
+            }
             
             confirmationMenu.Show("新游戏", new List<string> { newGameConfirmationText }, () =>
             {

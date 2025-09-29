@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Core.UI
 {
@@ -19,6 +20,7 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private TMP_Text characterName;
         [SerializeField] private TMP_Text currentPhase;
         [SerializeField] private TMP_Text currentWeek;
+        [SerializeField] private TMP_Text lastPlayTime;
         [SerializeField] private VAbilityDetails abilityDetails;
         
         public void SetDetails(SaveData saveData)
@@ -32,6 +34,8 @@ namespace VTuber.BattleSystem.Core.UI
 
             currentPhase.text = "当前阶段: " + scriptConfig.phases[saveData.script.currentPhaseIndex].phaseName;
             currentWeek.text = saveData.stateMachine.weekIndex + "/" + (scriptConfig.phases.Last().endEventWeekIndex + 1) + "周";
+            
+            lastPlayTime.text = VStringUtils.GetTime(saveData.lastPlayTime);
             
             abilityDetails.SetDetails(saveData.characterSaveData);
         }

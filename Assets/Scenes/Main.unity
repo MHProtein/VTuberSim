@@ -75476,7 +75476,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -30, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1380595593
@@ -77137,7 +77137,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 123, y: 476}
+  m_AnchoredPosition: {x: 108, y: 476}
   m_SizeDelta: {x: 616.12, y: 181.81}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1404118525
@@ -110898,6 +110898,7 @@ MonoBehaviour:
   characterName: {fileID: 1404118525}
   currentPhase: {fileID: 857614478}
   currentWeek: {fileID: 1536522613}
+  lastPlayTime: {fileID: 2091218413}
   abilityDetails: {fileID: 942283061}
 --- !u!1 &2145636659
 GameObject:
