@@ -157,8 +157,8 @@ namespace VTuber.BattleSystem.BattleAttribute
     public class VBattleAttribute
     {
         public string AttributeName;
-        public int Value { get; private set; }
-        public int HighestValue { get; private set; }
+        public int Value { get; protected set; }
+        public int HighestValue { get; protected set; }
         protected int _minValue;
         protected int _maxValue;
         

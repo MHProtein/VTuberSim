@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.Utilities;
 using SlayTheSpire.System.SavingSystem;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
@@ -32,6 +33,9 @@ namespace VTuber.EventSystem
         [SerializeField] private DialogSystem dialogueSystem;
         [SerializeField] private VStoreConfiguration storeConfig;
         
+        private bool _hasDialogue;
+        private bool _isSelecting;
+        
         protected override void Awake()
         {
             base.Awake();
@@ -42,6 +46,19 @@ namespace VTuber.EventSystem
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e)
         {
+            if (e.dialogueNode.IsNullOrWhitespace())
+            {
+                _hasDialogue = false;
+                _currentEvent = e;
+                VEventSystemUI.Instance.OpenEventUI();
+                foreach (var effect in e.effects)
+                {
+                    effect.ApplyEffect(character, null);
+                }
+                OnDialogueComplete(null);
+                return;
+            }
+            _hasDialogue = true;
             VEventSystemUI.Instance.PlayVideo(() =>
             {
                 _character = character;
@@ -81,24 +98,38 @@ namespace VTuber.EventSystem
         
         private void OnShowAddConsumable(Dictionary<string, object> messagedict)
         {
+            _isSelecting = true;
             VEventSystemUI.Instance.OpenAddConsumableUI(_character,
                 messagedict["Consumable"] as VConsumable,
                 messagedict["Action"] as Action<VConsumable>, 
                 () =>
                 {
-                    dialogueSystem.SetPaused(false);
+                    _isSelecting = false;
+                    if(_hasDialogue)
+                        dialogueSystem.SetPaused(false);
+                    else
+                    {
+                        OnDialogueComplete(null);
+                    }
                 });
             dialogueSystem.SetPaused(true);
         }
         
         private void OnBeginSelectConsumableFrom3(Dictionary<string, object> messagedict)
         {
+            _isSelecting = true;
             VEventSystemUI.Instance.OpenSelectFrom3ConsumablesMenu(_character,
                 messagedict["Consumables"] as List<VConsumable>,
                 messagedict["Action"] as Action<VConsumable>, 
                 () =>
-                {
-                    dialogueSystem.SetPaused(false);
+                {            
+                    _isSelecting = false;
+                    if(_hasDialogue)
+                        dialogueSystem.SetPaused(false);
+                    else
+                    {
+                        OnDialogueComplete(null);
+                    }
                 });
             dialogueSystem.SetPaused(true);
         }
@@ -115,30 +146,51 @@ namespace VTuber.EventSystem
         
         private void OnEventSelectUpgradeCard(Dictionary<string, object> messagedict)
         {
+            _isSelecting = true;
             VEventSystemUI.Instance.OpenUpgradeCard(_character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(),
                 () =>
                 {
-                    dialogueSystem.SetPaused(false);
+                    _isSelecting = false;
+                    if(_hasDialogue)
+                        dialogueSystem.SetPaused(false);
+                    else
+                    {
+                        OnDialogueComplete(null);
+                    }
                 });
             dialogueSystem.SetPaused(true);
         }
         
         private void OnBeginSelectCardFrom3(Dictionary<string, object> messagedict)
         {
+            _isSelecting = true;
             VEventSystemUI.Instance.OpenSelectFrom3Menu(messagedict["Cards"] as List<VCard>, messagedict["Action"] as Action<VCard>, 
                 () =>
                 {
-                    dialogueSystem.SetPaused(false);
+                    _isSelecting = false;
+                    if(_hasDialogue)
+                        dialogueSystem.SetPaused(false);
+                    else
+                    {
+                        OnDialogueComplete(null);
+                    }
                 });
             dialogueSystem.SetPaused(true);
         }
         
         private void OnBeginSelectCard(Dictionary<string, object> messagedict)
         {
+            _isSelecting = true;
             VEventSystemUI.Instance.OpenSelectCard(_character.CardLibrary.GetCards(), true, messagedict["Action"] as Action<VCard>,
                 () =>
                 {
-                    dialogueSystem.SetPaused(false);
+                    _isSelecting = false;
+                    if(_hasDialogue)
+                        dialogueSystem.SetPaused(false);
+                    else
+                    {
+                        OnDialogueComplete(null);
+                    }
                 });
             dialogueSystem.SetPaused(true);
         }
@@ -147,7 +199,7 @@ namespace VTuber.EventSystem
         {
             if (_currentEvent.Phase == null)
             {
-                VDebug.LogError("_currentEvent.Phase ist null, lass es reparieren");
+                VDebug.LogError("_currentEvent.Phase is null");
                 return;
             }
             VEventSystemUI.Instance.InitializePhaseEndingSelectionMenu(_currentEvent.Phase.GetPhaseEndingEvents(_character),
@@ -173,7 +225,7 @@ namespace VTuber.EventSystem
             int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves)
         {
             battleObject.SetActive(true);
-            battle.InitializeBattle(isPhaseEnding, _character.AttributeManager,
+            battle.InitializeBattle(false, isPhaseEnding, _character.AttributeManager,
                 _character.CardLibrary,
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
@@ -182,8 +234,10 @@ namespace VTuber.EventSystem
             VRaisingUI.Instance.SetConsumableToBattle();
         }
         
-        private void OnDialogueComplete(Dialog arg0)
+        private void OnDialogueComplete(Dialog dialog)
         {
+            if (!_hasDialogue && _isSelecting)
+                return;
             if (_currentEvent.Type == VEventType.Stream)
             {
                 var streamEvent = _currentEvent as VStreamEvent;
@@ -218,12 +272,12 @@ namespace VTuber.EventSystem
             dialogueSystem.HideMe();
         }
 
-        public void Load(GameData data)
+        public void Load(SaveData data)
         {
             _store.Load(data.storeSaveData);
         }
 
-        public void Save(GameData data)
+        public void Save(SaveData data)
         {
             data.storeSaveData = _store.Save();
         }

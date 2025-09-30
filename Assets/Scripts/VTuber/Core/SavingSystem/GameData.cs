@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VTuber.Character;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
@@ -9,7 +10,7 @@ using VTuber.Store;
 
 namespace SlayTheSpire.System.SavingSystem
 {
-    public class GameData
+    public class SaveData
     {
         public List<VAccountSaveData> accounts;
         public VCharacterSaveData characterSaveData;
@@ -19,5 +20,6 @@ namespace SlayTheSpire.System.SavingSystem
         
         public VScheduleUISaveData scheduleUISaveData;
         public VStoreSaveData storeSaveData;
+        public TimeSpan lastPlayTime;
     }
 }

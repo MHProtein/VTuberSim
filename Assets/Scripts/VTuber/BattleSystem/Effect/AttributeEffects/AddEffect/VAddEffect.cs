@@ -18,8 +18,16 @@ namespace VTuber.BattleSystem.Effect
         public VAddEffect(VAddEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
             _configuration = configuration;
-            
-            _addValue = new VUpgradableValue<int>(int.Parse(parameter), int.Parse(upgradedParameter));
+
+            try
+            {
+                _addValue = new VUpgradableValue<int>(int.Parse(parameter), int.Parse(upgradedParameter));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)

@@ -81,7 +81,7 @@ namespace VTuber.ScheduleSystem.UI
             };
         }
         
-        public void Load(GameData data)
+        public void Load(SaveData data)
         {
             _currentIndicatorCoord = data.scheduleUISaveData.currentIndicatorCoord;
             _kpiManager.Load(data.scheduleUISaveData.kpiManagerSaveData);
@@ -95,7 +95,7 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
-        public void Save(GameData data)
+        public void Save(SaveData data)
         {
             data.scheduleUISaveData = new VScheduleUISaveData()
             {

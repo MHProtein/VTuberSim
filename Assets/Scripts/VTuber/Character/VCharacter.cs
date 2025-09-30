@@ -280,7 +280,7 @@ namespace VTuber.Character
             _cardLibrary.Clear();
         }
 
-        public void Load(GameData data, VCharacterConfiguration characterConfiguration)
+        public void Load(SaveData data, VCharacterConfiguration characterConfiguration)
         {
             var characterSaveData = data.characterSaveData;
             _characterConfig = characterConfiguration;
@@ -317,7 +317,7 @@ namespace VTuber.Character
             succeededStreams = characterSaveData.succeededStreams;
         }
 
-        public void Save(GameData data)
+        public void Save(SaveData data)
         {
             var characterSaveData = new VCharacterSaveData
             {
