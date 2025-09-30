@@ -41,6 +41,12 @@ namespace VTuber.BattleSystem.Core.KPIs
             IsPermanent = isPermanent;
             AbilityIndex = abilityIndex;
 
+            if (abilityIndex == -1)
+            {
+                EventName = "";
+                return;
+            }
+            
             if (eventType == VEventType.Stream)
             {
                 if (abilityIndex == 0) AbilityName = "歌回";

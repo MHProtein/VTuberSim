@@ -72,16 +72,23 @@ namespace VTuber.BattleSystem.Core
         private List<int> _abilityTurnCounts;
         private bool _shouldEndBattle = false;
         private bool _battleEnded = false;
+        private bool _isDebugScene = false;
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
         
-        public virtual void InitializeBattle(bool isPhaseEnding, VCharacterAttributeManager characterAttributeManager,
+        public virtual void InitializeBattle(bool isDebugScene, bool isPhaseEnding, VCharacterAttributeManager characterAttributeManager,
             VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
         int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
         {
+            _isDebugScene = isDebugScene;
             _battleEnded = false;
-            VRaisingUI.Instance.SwitchAttributesUIBattle(false);
+
+            if (!isDebugScene)
+            {
+                VRaisingUI.Instance.SwitchAttributesUIBattle(false);
+                VEventSystemUI.Instance.OpenBattleUI();
+            }
             
             _mainAttributeIndex = mainAttributeIndex;
             _isPhaseEnding = isPhaseEnding;
@@ -100,57 +107,70 @@ namespace VTuber.BattleSystem.Core
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
             
-            VEventSystemUI.Instance.OpenBattleUI();
-            
+
+            if (isDebugScene)
+            {
+                InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
+                    mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity, characterAttributeManager);
+                return;
+            }
             VEventSystemUI.Instance.PlayVideo(() =>
             {
-                _battleAttributeManager.AttributesConversion(_characterAttributeManager);
-                _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
-                _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
-
-                if (!isPhaseEnding)
-                {
-                    _battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
-                    attribute.SetValue(100, false, false, false);
-                    _battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
-                    attribute.SetValue(100, false, false, false);
-                    _battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
-                    attribute.SetValue(100, false, false, false);
-                }
-            
-                _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
-                _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
-            
-                _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
-                _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
-            
-                _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
-                _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
-                
-                _battleRelicManager = new VBattleRelicManager(this, relics);
-                if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
-                {
-                    viewerCountAttribute.AddTo(initialViewers, false);
-                }
-                _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
-                {
-                    { "TurnLeft", TurnLeft },
-                    { "TargetPopularity", targetPopularity },
-                    { "ExtraTargetPopularity", extraTargetPopularity },
-                    { "IsPhaseEnding", isPhaseEnding },
-                    { "CharacterAttributeManager", characterAttributeManager },
-                    { "BattleAttributeManager", _battleAttributeManager }
-                });
-            
-                foreach (var buff in characterAttributeManager.GetBuffs())
-                {
-                    if(buff is not null)
-                        _buffManager.AddBuff(buff, 1, false, false);
-                }
-            
-                InitializeTurn();
+                InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
+                    mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity, characterAttributeManager);
             });
+        }
+
+        public void InitializeLogic(bool isPhaseEnding, int initialTurnCount, int initialViewers,
+            List<VBattleRelic> relics, int mainAttributeIndex, List<int> abilityTurnCounts, 
+            int targetPopularity, int extraTargetPopularity, VCharacterAttributeManager characterAttributeManager)
+        {
+            _battleAttributeManager.AttributesConversion(_characterAttributeManager);
+            _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
+            _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
+
+            if (!isPhaseEnding)
+            {
+                _battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
+                attribute.SetValue(100, false, false, false);
+                _battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
+                attribute.SetValue(100, false, false, false);
+                _battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
+                attribute.SetValue(100, false, false, false);
+            }
+        
+            _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
+            _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
+        
+            _battleAttributeManager.AddAttribute("BAShield", new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
+            _battleAttributeManager.AddAttribute("BARevenue", new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
+        
+            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
+            
+            _battleRelicManager = new VBattleRelicManager(this, relics);
+            if(_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+            {
+                viewerCountAttribute.AddTo(initialViewers, false);
+            }
+            _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
+            {
+                { "TurnLeft", TurnLeft },
+                { "TargetPopularity", targetPopularity },
+                { "ExtraTargetPopularity", extraTargetPopularity },
+                { "IsPhaseEnding", isPhaseEnding },
+                { "CharacterAttributeManager", characterAttributeManager },
+                { "BattleAttributeManager", _battleAttributeManager }
+            });
+        
+            foreach (var buff in characterAttributeManager.GetBuffs())
+            {
+                if(buff is not null)
+                    _buffManager.AddBuff(buff, 1, false, false);
+            }
+        
+            InitializeTurn();
         }
         
         public void SetShouldNextCardPlayTwice(bool value)
@@ -466,6 +486,24 @@ namespace VTuber.BattleSystem.Core
         {
             if (_battleEnded)
                 return;
+            if (_isDebugScene)
+            {
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
+                {
+                });
+                _buffManager.Clear();
+                _battleAttributeManager.Clear();
+                _cardPilesManager.Clear();
+
+                _battleAttributeManager.OnDisable();
+                _cardPilesManager.OnDisable();
+                _buffManager.OnDisable();
+            
+                _cardPilesManager = null;
+                _buffManager = null;
+                _battleAttributeManager = null;
+                return;
+            }
             _battleEnded = true;
             _battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
             var popularityAttribute = battleAttribute as VBattlePopularityAttribute;

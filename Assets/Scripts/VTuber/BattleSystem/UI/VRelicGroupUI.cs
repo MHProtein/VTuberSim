@@ -94,8 +94,9 @@ namespace VTuber.BattleSystem.UI
             
             if(hiddenRelics.Count == 0)
             {
-                _ellipsisObject = Instantiate(submenuRelicSlotPrefab, displayGroup);
-                _ellipsisObject.GetComponent<Button>().onClick.AddListener(OnEllipsisButtonClicked);
+                _ellipsisObject = Instantiate(subMenuButtonPrefab, displayGroup);
+                var button = _ellipsisObject.GetComponent<Button>();
+                button.onClick.AddListener(OnEllipsisButtonClicked);
             }
             var newRelicUI = SpawnRelicSlot(submenuRelicSlotPrefab, submenuRelicGroup);
             hiddenRelics.Add(newRelicUI);

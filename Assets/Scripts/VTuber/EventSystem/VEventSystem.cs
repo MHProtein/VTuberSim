@@ -225,7 +225,7 @@ namespace VTuber.EventSystem
             int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves)
         {
             battleObject.SetActive(true);
-            battle.InitializeBattle(isPhaseEnding, _character.AttributeManager,
+            battle.InitializeBattle(false, isPhaseEnding, _character.AttributeManager,
                 _character.CardLibrary,
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,

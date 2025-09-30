@@ -74,6 +74,8 @@ namespace VTuber.BattleSystem.UI
         
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            if(!messagedict.TryGetValue("CharacterAttributeManager", out var x))
+                return;
             var characterAttributesManager = messagedict["CharacterAttributeManager"] as VCharacterAttributeManager;
             var battleAttributeManager = messagedict["BattleAttributeManager"] as VBattleAttributeManager;
             
