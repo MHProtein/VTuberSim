@@ -21,7 +21,7 @@ namespace VTuber.Core.RaisingEffect
             _character = character;
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>()
             {
-                {"Action", new Action<VCard>(DeleteCard)}
+                {"ActionType", VCardActionType.Delete}
             });
         }
 
@@ -33,12 +33,7 @@ namespace VTuber.Core.RaisingEffect
         public override void DownGrade()
         {
         }
-
-        public void DeleteCard(VCard selectedCard)
-        {
-            _character.CardLibrary.RemoveCard(selectedCard);
-            
-        }
+        
         public override string GetParameter()
         {
             return "";

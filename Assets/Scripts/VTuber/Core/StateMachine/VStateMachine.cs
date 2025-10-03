@@ -103,11 +103,11 @@ namespace VTuber.Core.StateMachine
             
             lastState = RegisteredStateList.Find(state => state.StateType == saveData.lastStateType);
             
-            SwitchState(saveData.currentStateType);
             foreach (var state in RegisteredStateList)
             {
                 state.Load(saveData.stateSaveDataList.Find(saveData => saveData.stateType == state.StateType));
             }
+            SwitchState(saveData.currentStateType);
         }
 
         public void OnEnable()

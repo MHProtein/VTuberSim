@@ -51,7 +51,7 @@ namespace VTuber.BattleSystem.Core
         [Space(5)]
         [Header("EventSystem")]
         [SerializeField] private GameObject eventSystemRoot;
-        [FormerlySerializedAs("eventSystem")] [SerializeField] private VEventSystem eventSystemSystem;
+        [FormerlySerializedAs("eventSystemSystem")] [SerializeField] private VEventSystem eventSystem;
 
         [SerializeField] private VStoreUI _storeUI;
         [SerializeField] private VStoreConfiguration storeConfiguration;
@@ -124,6 +124,8 @@ namespace VTuber.BattleSystem.Core
             DataPersistenceManager.Instance.Register(this);
 
             var saveData = DataPersistenceManager.Instance.LoadSave();
+            
+            eventSystem.Initialize();
             
             _newGame = saveData == null;
             ChangeToMainMenu(saveData);
@@ -253,7 +255,7 @@ namespace VTuber.BattleSystem.Core
         public void InitializeStateMachine()
         {
             _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
-                battleRoot, eventSystemRoot, eventSystemSystem,
+                battleRoot, eventSystemRoot, eventSystem,
                 _character, _script, reincarnationConfiguration);
             _stateMachine.RegisterState(new VScheduleCreationState());
             _stateMachine.RegisterState(new VExecutionState());
@@ -351,8 +353,11 @@ namespace VTuber.BattleSystem.Core
             scheduleUI.Load(data);
             scheduleUI.LoadEvents(_weeklySchedule);
             
+            eventSystem.Load(data);
+            
             InitializeStateMachine();
             _stateMachine.Load(data.stateMachine);
+            
             
             _stateMachine.OnEnable();
             _character.OnEnable();
@@ -372,6 +377,7 @@ namespace VTuber.BattleSystem.Core
             data.stateMachine = _stateMachine.Save();
             data.script = _script.Save();
             scheduleUI.Save(data);
+            eventSystem.Save(data);
         }
 
         public VScriptConfiguration GetScriptConfig(string scriptScriptConfigurationName)

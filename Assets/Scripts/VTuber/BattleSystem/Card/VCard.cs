@@ -13,7 +13,12 @@ using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Card
 {
-
+    public class VCardSaveData
+    {
+        public uint configID;
+        public uint id;
+        public bool isUpgraded;
+    }
     public class VCard
     {
         public uint Id { get; private set; }
@@ -259,6 +264,23 @@ namespace VTuber.BattleSystem.Card
             {
                 effect.Downgrade();
             }
+        }
+
+        public VCardSaveData Save()
+        {
+            return new VCardSaveData()
+            {
+                configID = configID,
+                id = Id,
+                isUpgraded = _isUpgraded,
+            };
+        }
+
+        public void Load(VCardSaveData saveData)
+        {
+            Id = saveData.id;
+            if(saveData.isUpgraded)
+                Upgrade(false);
         }
     }
 }

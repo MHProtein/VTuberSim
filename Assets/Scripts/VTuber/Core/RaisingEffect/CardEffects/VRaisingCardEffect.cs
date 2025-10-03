@@ -6,7 +6,13 @@ using VTuber.Character;
 using VTuber.Core.Managers;
 
 namespace VTuber.Core.RaisingEffect
-{
+{    
+    public enum VCardActionType
+    {
+        Add,
+        Replace,
+        Delete,
+    }
     public abstract class VRaisingCardEffect : VRaisingEffect
     {
         private readonly List<float> _rarityProbabilities;
