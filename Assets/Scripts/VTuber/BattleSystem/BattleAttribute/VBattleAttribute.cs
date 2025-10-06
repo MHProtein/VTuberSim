@@ -153,6 +153,19 @@ namespace VTuber.BattleSystem.BattleAttribute
         }
     }
     
+    public class VBattleAttributeSaveData
+    {
+        public string AttributeName;
+        public int Value;
+        public int HighestValue;
+        public int MinValue;
+        public int MaxValue;
+        public VValueModifier<int> GainPointsModifier;
+        public VValueModifier<float> GainRateModifier;
+        //public VTemporaryValue TemporaryValue;
+        public bool IsPercentage;
+    }
+    
     //All the attributes treated as int type, if is percentage, it is multiplied by 100 and vice versa when used. 
     public class VBattleAttribute
     {
@@ -173,6 +186,33 @@ namespace VTuber.BattleSystem.BattleAttribute
         
         private bool _isPercentage;
         protected VBattleEventKey _eventKey;
+        
+        public void Save(out VBattleAttributeSaveData saveData)
+        {
+            saveData = new VBattleAttributeSaveData
+            {
+                AttributeName = AttributeName,
+                Value = Value,
+                HighestValue = HighestValue,
+                MinValue = _minValue,
+                MaxValue = _maxValue,
+                GainPointsModifier = gainPointsModifier,
+                GainRateModifier = gainRateModifier,
+                IsPercentage = _isPercentage
+            };
+        }
+
+        public VBattleAttribute(VBattleAttributeSaveData saveData)
+        {
+            AttributeName = saveData.AttributeName;
+            HighestValue = saveData.HighestValue;
+            _minValue = saveData.MinValue;
+            _maxValue = saveData.MaxValue;
+            InitSetValue(saveData.Value, false);
+            gainPointsModifier = saveData.GainPointsModifier;
+            gainRateModifier = saveData.GainRateModifier;
+            _isPercentage = saveData.IsPercentage;
+        }
         
         public VBattleAttribute(int value, bool isPercentage = false, VBattleEventKey eventKey = VBattleEventKey.Default, int maxValue = Int32.MaxValue, int minValue = 0)
         {

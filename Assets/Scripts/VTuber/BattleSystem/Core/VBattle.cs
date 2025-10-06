@@ -19,6 +19,11 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
 {
+    public class VBattleSaveData
+    {
+        public VBattleAttributeManagerSaveData attributeManagerSaveData;
+    }
+    
     public class VBattle : VSingletonMonobehaviour<VBattle>
     {
         [FormerlySerializedAs("_configuration")] [SerializeField] protected VBattleConfiguration configuration;
@@ -100,7 +105,7 @@ namespace VTuber.BattleSystem.Core
             _abilityTurnCounts = abilityTurnCounts;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding);
-            _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary); 
+            _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary, null); 
             _buffManager = new VBuffManager(this);
             
             _battleAttributeManager.OnEnable();

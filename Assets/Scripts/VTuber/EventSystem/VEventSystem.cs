@@ -116,8 +116,6 @@ namespace VTuber.EventSystem
             }
             
             EnterDialogEvent(character, e, false);
-            
-            
         }
 
         public void EnterDialogEvent(VCharacter character, VDialogueEvent e, bool loaded)
