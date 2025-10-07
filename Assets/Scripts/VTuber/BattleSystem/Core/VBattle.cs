@@ -21,7 +21,9 @@ namespace VTuber.BattleSystem.Core
 {
     public class VBattleSaveData
     {
+        public int battleLookUpIDDistributor;
         public VBattleAttributeManagerSaveData attributeManagerSaveData;
+        public VCardPilesManagerSaveData cardPilesManagerSaveData;
     }
     
     public class VBattle : VSingletonMonobehaviour<VBattle>

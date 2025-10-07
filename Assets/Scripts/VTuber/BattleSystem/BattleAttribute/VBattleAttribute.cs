@@ -14,6 +14,9 @@ namespace VTuber.BattleSystem.BattleAttribute
     [Serializable]
     public class VValueModifier<T>
     {
+        public int ID => _id;
+        private int _id;
+        
         public class ModifierItem
         {
             public T Value => _value;
@@ -55,6 +58,14 @@ namespace VTuber.BattleSystem.BattleAttribute
         public VValueModifier(T defaultValue)
         {
             this._defaultValue = defaultValue;
+            if (typeof(T) == typeof(float))
+            {
+                VBattleLookUpTables.Instance.AddGainRateModifier(this as VValueModifier<float>);
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                VBattleLookUpTables.Instance.AddGainValueModifier(this as VValueModifier<int>);
+            }
         }
         
         public void SetEventKey(VBattleEventKey eventKey)
@@ -120,6 +131,11 @@ namespace VTuber.BattleSystem.BattleAttribute
         public void SendEvent()
         {
             VBattleRootEventCenter.Instance.Raise(_eventKey, new Dictionary<string, object>());
+        }
+
+        public void SetID(int idDistributor)
+        {
+            _id = idDistributor;
         }
     }
     

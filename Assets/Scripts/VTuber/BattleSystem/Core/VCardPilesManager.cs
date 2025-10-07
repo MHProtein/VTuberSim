@@ -19,6 +19,7 @@ namespace VTuber.BattleSystem.Core
         public List<uint> HandPile;
         public List<uint> ExhaustPile;
     }
+    
     public class VCardPilesManager
     {
         public List<VCard> Deck => _deck;
