@@ -30,6 +30,7 @@ namespace VTuber.EventSystem
         public List<uint> consumablesToSelectConfigIDs;
         public uint replaceSelectedCardID;
         public VCardActionType cardActionType;
+        public bool isInBattle;
     }
 
     public enum VSelectionMenuType
@@ -68,6 +69,7 @@ namespace VTuber.EventSystem
         private List<VCard> _cardsToSelect;
         private VCard _replaceSelectedCard;
         private VCardActionType _cardActionType;
+        private bool _isInBattle = false;
         
         protected override void Awake()
         {
@@ -91,6 +93,20 @@ namespace VTuber.EventSystem
         {
             if (_loaded)
             {
+                _character = character;
+                if (_isInBattle)
+                {
+                    _isInBattle = true;
+                    battleObject.SetActive(true);
+                    _character.ConsumableManager.SetBattle(battle);
+                    VRaisingUI.Instance.SetConsumableToBattle();
+                    
+                    battle.InitializeBattle(DataPersistenceManager.Instance.SaveData.battleSaveData,
+                        e.Phase.DecayCurves,
+                        _character.AttributeManager,
+                        _character.CardLibrary);
+                    return;
+                }
                 EnterDialogEvent(character, e, true);
                 dialogueSystem.SkipTo(_executedLines);
                 return;
@@ -180,6 +196,7 @@ namespace VTuber.EventSystem
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectConsumableFrom3, OnBeginSelectConsumableFrom3);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnShowAddConsumable, OnShowAddConsumable);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
 
         protected override void OnDisable()
@@ -193,8 +210,14 @@ namespace VTuber.EventSystem
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnShowAddConsumable, OnShowAddConsumable);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectConsumableFrom3, OnBeginSelectConsumableFrom3);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
-        
+
+        private void OnBattleEnd(Dictionary<string, object> messagedict)
+        {
+            _isInBattle = false;
+        }
+
         private void OnRequestEnterStore(Dictionary<string, object> messagedict)
         {
             _shouldEnterStore = true;
@@ -368,6 +391,7 @@ namespace VTuber.EventSystem
             int extraTargetPopularity, int abilityBonus, int initialViewers,
             int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves)
         {
+            _isInBattle = true;
             battleObject.SetActive(true);
             battle.InitializeBattle(false, isPhaseEnding, _character.AttributeManager,
                 _character.CardLibrary,
@@ -418,6 +442,7 @@ namespace VTuber.EventSystem
 
         public void Load(SaveData data)
         {
+            _isInBattle = data.eventSystemSaveData.isInBattle;
             _store.Load(data.storeSaveData);
             _executedLines = data.eventSystemSaveData.executedLines;
             _loaded = true;
@@ -457,6 +482,7 @@ namespace VTuber.EventSystem
                 consumablesToSelectConfigIDs = _consumablesToSelect?.Select(consumable => consumable.ConfigId).ToList(),
                 replaceSelectedCardID = _replaceSelectedCard?.Id ?? 0,
                 cardActionType = _cardActionType,
+                isInBattle = _isInBattle,
             };
         }
     }

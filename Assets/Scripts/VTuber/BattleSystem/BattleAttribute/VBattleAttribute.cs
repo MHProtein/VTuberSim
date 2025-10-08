@@ -174,6 +174,7 @@ namespace VTuber.BattleSystem.BattleAttribute
     public class VBattleAttributeSaveData
     {
         public string AttributeName;
+        public string AttributeType;
         public int Value;
         public int HighestValue;
         public int MinValue;
@@ -182,6 +183,10 @@ namespace VTuber.BattleSystem.BattleAttribute
         public VValueModifier<float> GainRateModifier;
         //public VTemporaryValue TemporaryValue;
         public bool IsPercentage;
+        public VColorSaveData color;
+        public int defaultPlayCountPerTurn;      
+        public Dictionary<string, int> scoreForAbilities;
+        public int maxTurn;
     }
     
     //All the attributes treated as int type, if is percentage, it is multiplied by 100 and vice versa when used. 
@@ -205,11 +210,12 @@ namespace VTuber.BattleSystem.BattleAttribute
         private bool _isPercentage;
         protected VBattleEventKey _eventKey;
         
-        public void Save(out VBattleAttributeSaveData saveData)
+        public virtual VBattleAttributeSaveData Save()
         {
-            saveData = new VBattleAttributeSaveData
+            return new VBattleAttributeSaveData
             {
                 AttributeName = AttributeName,
+                AttributeType = GetType().ToString(),
                 Value = Value,
                 HighestValue = HighestValue,
                 MinValue = _minValue,

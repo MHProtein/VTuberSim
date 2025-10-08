@@ -39,12 +39,10 @@ namespace VTuber.BattleSystem.Core
             GenerateMultiplierSequence(turnAttribute.MaxTurn, maxConsecutiveMultiplierCount, mainAttributeIndex, abilityTurnCounts);
         }
         
-        public VMultiplierManager(int mainAttributeIndex, 
-            int maxConsecutiveMultiplierCount, List<int> abilityTurnCounts, 
-            VBattleMultiplierAttribute singingMultiplierAttribute, 
+        public VMultiplierManager(VBattleMultiplierAttribute singingMultiplierAttribute, 
             VBattleMultiplierAttribute gamingMultiplierAttribute,
             VBattleMultiplierAttribute chattingMultiplierAttribute,
-            VBattleTurnAttribute turnAttribute, VMultiplierManagerSaveData saveData)
+            VMultiplierManagerSaveData saveData)
         {
             multiplierSequence = saveData.multiplierSequence;
             _currentTurnIndex = saveData.currentTurnIndex;
@@ -68,7 +66,7 @@ namespace VTuber.BattleSystem.Core
                 });
         }
         
-        public VMultiplierManagerSaveData SaveData()
+        public VMultiplierManagerSaveData Save()
         {
             return new VMultiplierManagerSaveData
             {

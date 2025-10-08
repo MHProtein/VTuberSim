@@ -63,7 +63,20 @@ namespace VTuber.BattleSystem.Core
             _drawPile.AddRange(_deck);
             _isFirstTurn = true;
         }
-
+        
+        
+        public VCardPilesManagerSaveData Save()
+        {
+            return new VCardPilesManagerSaveData()
+            {
+                Deck = _deck.Select(card => card.Id).ToList(),
+                DrawPile = _drawPile.Select(card => card.Id).ToList(),
+                DiscardPile = _discardPile.Select(card => card.Id).ToList(),
+                HandPile = _handPile.Select(card => card.Id).ToList(),
+                ExhaustPile = _exhaustPile.Select(card => card.Id).ToList(),
+            };
+        }
+        
         private void Load(VCardLibrary cardLibrary, VCardPilesManagerSaveData saveData)
         {
             _deck.AddRange(saveData.Deck.Select(cardLibrary.GetCardByID));
@@ -296,6 +309,11 @@ namespace VTuber.BattleSystem.Core
             _discardPile.Clear();
             VDebug.Log($"弃牌堆已洗入抽牌堆。");
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnDiscardToDraw, null);
+        }
+
+        public VCard GetCardById(uint id)
+        {
+            return _deck.Find(card => card.Id == id);
         }
     }
 }

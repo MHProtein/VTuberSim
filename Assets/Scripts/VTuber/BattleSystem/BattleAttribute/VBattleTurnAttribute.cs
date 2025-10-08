@@ -13,6 +13,18 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             MaxTurn = maxTurn;
         }
+        
+        public VBattleTurnAttribute(VBattleAttributeSaveData saveData) : base(saveData)
+        {
+            MaxTurn = saveData.maxTurn;
+        }
+
+        public override VBattleAttributeSaveData Save()
+        {
+            var data = base.Save();
+            data.maxTurn = MaxTurn;
+            return data;
+        }
 
         protected override void InitSetValue(int value, bool isFromCard, bool shouldPlayTwice = false)
         {

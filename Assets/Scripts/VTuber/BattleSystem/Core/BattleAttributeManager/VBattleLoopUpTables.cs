@@ -8,10 +8,13 @@ namespace VTuber.BattleSystem.Core
     {
         private Dictionary<int, VValueModifier<int>> _gainValueModifiers;
         private Dictionary<int, VValueModifier<float>> _gainRateModifiers;
+        
+        public int IDDistributor => _idDistributor;
         private int _idDistributor = 0;
         public void Initialize(VBattleSaveData saveData)
         {
-            _idDistributor = saveData.battleLookUpIDDistributor;
+            if (saveData is not null)
+                _idDistributor = saveData.battleLookUpIDDistributor;
             _gainValueModifiers = new Dictionary<int, VValueModifier<int>>();
             _gainRateModifiers = new Dictionary<int, VValueModifier<float>>();
         }

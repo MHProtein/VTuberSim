@@ -378,6 +378,8 @@ namespace VTuber.BattleSystem.Core
             data.script = _script.Save();
             scheduleUI.Save(data);
             eventSystem.Save(data);
+            
+            data.battleSaveData = battle.Save();
         }
 
         public VScriptConfiguration GetScriptConfig(string scriptScriptConfigurationName)
