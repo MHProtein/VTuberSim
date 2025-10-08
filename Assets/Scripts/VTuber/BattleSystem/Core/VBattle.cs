@@ -97,6 +97,8 @@ namespace VTuber.BattleSystem.Core
                 VEventSystemUI.Instance.OpenBattleUI();
             }
             
+            VBattleLookUpTables.Instance.Initialize(null);
+            
             _mainAttributeIndex = mainAttributeIndex;
             _isPhaseEnding = isPhaseEnding;
             cardTypeHistory = new Dictionary<string, int>();
