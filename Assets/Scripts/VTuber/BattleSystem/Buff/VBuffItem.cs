@@ -1,16 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Buff
 {
-    public class VBuffItemSaveData
+    public class VBuffSaveData
     {
-        public uint id;
-        public int value;
-        
+        public uint configID;
+        public int layer;
+        public bool isFirstTurn;
+        public List<VModifierEffectSaveData> modifierEffectSaveDatas;
     }
+
     public class VBuffItem
     {
         public VBuff buff;
@@ -21,8 +25,8 @@ namespace VTuber.BattleSystem.Buff
         public uint ConfigId => buff.ConfigId;
 
         private VBattle _battle;
-        
-        private bool isFirstTurn = true;
+
+        private bool _isFirstTurn = true;
 
         public VBuffItem(VBuff buff, int value)
         {
@@ -30,7 +34,41 @@ namespace VTuber.BattleSystem.Buff
             this._value = value;
         }
         
-        // 每回合减少延迟计数
+        public VBuffItem(VBuffSaveData saveData)
+        {
+            _value = saveData.layer;
+            _isFirstTurn = saveData.isFirstTurn;
+            buff = VDataManager.Instance.CreateBuffByID(saveData.configID);
+            buff.RemoveModifierEffects();
+            foreach (var modifierEffectSaveData in saveData.modifierEffectSaveDatas)
+            {
+                var effect = VDataManager.Instance.CreateEffectByID(modifierEffectSaveData.modifierID, "", "");
+                (effect as VModifierEffect).Load(modifierEffectSaveData);
+                buff.AddEffect(effect);
+            }
+        }
+
+        public VBuffSaveData Save()
+        {
+            List<VModifierEffectSaveData> modifierEffectSaveDatas = new List<VModifierEffectSaveData>();
+            foreach (var effect in buff.Effects)
+            {
+                if (effect is VModifierEffect modifierEffect)
+                {
+                    modifierEffectSaveDatas.Add(modifierEffect.Save());
+                }
+            }
+
+            return new VBuffSaveData()
+            {
+                configID = ConfigId,
+                layer = _value,
+                isFirstTurn = _isFirstTurn,
+                modifierEffectSaveDatas = modifierEffectSaveDatas
+            };
+        }
+
+    // 每回合减少延迟计数
         public void DecrementLatency()
         {
             buff.latency -= 1;
@@ -64,9 +102,9 @@ namespace VTuber.BattleSystem.Buff
             if (buff.IsPermanent)
                 return false;
             
-            if (isFirstTurn)
+            if (_isFirstTurn)
             {
-                isFirstTurn = false;
+                _isFirstTurn = false;
                 // 如果该Buff没有在第一回合生效的效果，则跳过首次递减
                 bool shouldSkipDecrement = true;
                 foreach (var effect in buff.Effects)

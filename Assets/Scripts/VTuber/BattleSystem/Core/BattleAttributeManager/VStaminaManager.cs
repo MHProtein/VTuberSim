@@ -40,8 +40,8 @@ namespace VTuber.BattleSystem.Core
         {
             _staminaAttribute = staminaAttribute;
             _shieldAttribute = shieldAttribute;
-            consumePointsModifier = new VValueModifier<int>(0);
-            consumeRateModifier = new VValueModifier<float>(0.0f);
+            consumePointsModifier = new VValueModifier<int>(0, true);
+            consumeRateModifier = new VValueModifier<float>(0.0f, true);
         }
         
         public void ApplyCost(int cost, bool ignoreShield = false)

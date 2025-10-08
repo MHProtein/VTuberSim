@@ -14,6 +14,9 @@ namespace VTuber.BattleSystem.BattleAttribute
     [Serializable]
     public class VValueModifier<T>
     {
+        public int ID => _id;
+        private int _id = -1;
+        
         public class ModifierItem
         {
             public T Value => _value;
@@ -52,9 +55,19 @@ namespace VTuber.BattleSystem.BattleAttribute
 
         private VBattleEventKey _eventKey = VBattleEventKey.Default;
         
-        public VValueModifier(T defaultValue)
+        public VValueModifier(T defaultValue, bool isBattleAttribute = false)
         {
             this._defaultValue = defaultValue;
+            if (!isBattleAttribute)
+                return;
+            if (typeof(T) == typeof(float))
+            {
+                VBattleLookUpTables.Instance.AddGainRateModifier(this as VValueModifier<float>);
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                VBattleLookUpTables.Instance.AddGainValueModifier(this as VValueModifier<int>);
+            }
         }
         
         public void SetEventKey(VBattleEventKey eventKey)
@@ -120,6 +133,11 @@ namespace VTuber.BattleSystem.BattleAttribute
         public void SendEvent()
         {
             VBattleRootEventCenter.Instance.Raise(_eventKey, new Dictionary<string, object>());
+        }
+
+        public void SetID(int idDistributor)
+        {
+            _id = idDistributor;
         }
     }
     
@@ -222,8 +240,8 @@ namespace VTuber.BattleSystem.BattleAttribute
             InitSetValue(value, false);
             _isPercentage = isPercentage;
 
-            gainRateModifier = new VValueModifier<float>(1.0f);
-            gainPointsModifier = new VValueModifier<int>(0);
+            gainRateModifier = new VValueModifier<float>(1.0f, true);
+            gainPointsModifier = new VValueModifier<int>(0, true);
             _temporaryValue = new VTemporaryValue();
         }
         

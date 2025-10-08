@@ -21,7 +21,9 @@ namespace VTuber.BattleSystem.Core
 {
     public class VBattleSaveData
     {
+        public int battleLookUpIDDistributor;
         public VBattleAttributeManagerSaveData attributeManagerSaveData;
+        public VCardPilesManagerSaveData cardPilesManagerSaveData;
     }
     
     public class VBattle : VSingletonMonobehaviour<VBattle>
@@ -94,6 +96,8 @@ namespace VTuber.BattleSystem.Core
                 VRaisingUI.Instance.SwitchAttributesUIBattle(false);
                 VEventSystemUI.Instance.OpenBattleUI();
             }
+            
+            VBattleLookUpTables.Instance.Initialize(null);
             
             _mainAttributeIndex = mainAttributeIndex;
             _isPhaseEnding = isPhaseEnding;

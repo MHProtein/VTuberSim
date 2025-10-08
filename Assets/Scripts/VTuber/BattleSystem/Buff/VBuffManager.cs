@@ -8,9 +8,12 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
-
-
-    
+    public class VBuffManagerSaveData
+    {
+        public List<VBuffSaveData> buffSaveDatas;
+        public uint idDistributor;
+        public VBuffLayerModifierManager buffLayerModifierManager;
+    }
     
     public class VBuffManager
     {
@@ -22,6 +25,28 @@ namespace VTuber.BattleSystem.Buff
         public VBuffManager(VBattle battle)
         {
             _battle = battle;
+        }
+
+        public VBuffManager(VBattle battle, VBuffManagerSaveData buffManagerSaveData)
+        {
+            _battle = battle;
+            _idDistributor = buffManagerSaveData.idDistributor;
+            _buffLayerModifierManager = buffManagerSaveData.buffLayerModifierManager;
+            foreach (var buffSaveData in buffManagerSaveData.buffSaveDatas)
+            {
+                var buffItem = new VBuffItem(buffSaveData);
+                _buffs.Add(buffItem);
+            }
+        }
+        
+        public VBuffManagerSaveData Save()
+        {
+            return new VBuffManagerSaveData()
+            {
+                buffSaveDatas = _buffs.Select(buff => buff.Save()).ToList(),
+                idDistributor = _idDistributor,
+                buffLayerModifierManager = _buffLayerModifierManager
+            };
         }
 
         public void OnEnable()

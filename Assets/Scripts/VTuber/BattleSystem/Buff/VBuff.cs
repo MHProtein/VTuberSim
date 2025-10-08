@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
@@ -7,11 +8,6 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
-    public class VBuffSaveData
-    {
-        public int Value;
-        public int Latency;
-    }
     
     public class VBuff
     {
@@ -62,6 +58,16 @@ namespace VTuber.BattleSystem.Buff
         public string GetBuffName()
         {
             return _configuration.buffName;
+        }
+
+        public void RemoveModifierEffects()
+        {
+            _effects = _effects.Where(effect => effect is not VModifierEffect).ToList();
+        }
+
+        public void AddEffect(VEffect effect)
+        {
+            _effects.Add(effect);
         }
     }
 }

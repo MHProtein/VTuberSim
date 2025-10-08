@@ -15,6 +15,7 @@ namespace VTuber.BattleSystem.Effect
             turnCount = configuration.turnCount;
             deltaPoints = new VUpgradableValue<int>(int.Parse(parameter), int.Parse(upgradedParameter));
         }
+        
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
