@@ -107,7 +107,7 @@ MonoBehaviour:
   - from: 25000
     to: -1
     value: 0.01
-  successBonus: 0
+  successBonus: 1700
   scoreLevels:
   - low: 0
     high: 2000
