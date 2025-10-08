@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SlayTheSpire.System.SavingSystem;
 using UnityEditor;
+using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
@@ -21,7 +22,7 @@ namespace VTuber.Character
     public class VCharacterSaveData
     {
         public string characterConfigurationName;
-        public List<uint> cardIds;
+        public List<VCardSaveData> cardSaveDatas;
         public List<uint> relicIds;
         public List<uint> consumables;
         public List<VCharacterAttributeSaveData> attributes;
@@ -293,9 +294,11 @@ namespace VTuber.Character
             }
 
             Initialize(true);
-            foreach (var cardId in characterSaveData.cardIds)
+            foreach (var cardSave in characterSaveData.cardSaveDatas)
             {
-                _cardLibrary.AddCard(VDataManager.Instance.CreateCardByID(cardId));
+                var card = VDataManager.Instance.CreateCardByID(cardSave.configID);
+                card.Load(cardSave);
+                _cardLibrary.AddCard(card);
             }
 
             foreach (var relicId in characterSaveData.relicIds)
@@ -322,7 +325,7 @@ namespace VTuber.Character
             var characterSaveData = new VCharacterSaveData
             {
                 characterConfigurationName = _characterConfig.name,
-                cardIds = _cardLibrary.GetCards().Select(card => card.configID).ToList(),
+                cardSaveDatas = _cardLibrary.GetCards().Select(card => card.Save()).ToList(),
                 attributes = AttributeManager.GetAttributes().Select(attribute => attribute.Save()).ToList(),
                 relicIds = _characterRelicManager.GetRelics().Select(relic => relic.ConfigId).ToList(),
                 consumables = _consumableManager.GetConsumables().Select(consumable => consumable.ConfigId).ToList(),

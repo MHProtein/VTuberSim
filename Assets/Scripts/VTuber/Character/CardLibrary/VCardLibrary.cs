@@ -77,5 +77,10 @@ namespace VTuber.Character
         {
             cards.Clear();
         }
+
+        public VCard GetCardByID(uint id)
+        {
+            return cards.Find(card => card.Id == id);
+        }
     }
 }

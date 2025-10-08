@@ -123,7 +123,7 @@ namespace VTuber.Core.StateMachine
                 return;
             }
 
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEndSave, new Dictionary<string, object>());
+            //VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEndSave, new Dictionary<string, object>());
 
             if (stateMachine.ShouldPauseSchedule)
             {
@@ -218,7 +218,6 @@ namespace VTuber.Core.StateMachine
                 _currentEvent.AddFollowUpEvent(eventType, id);
         }
         
-        
         private void OnAddFollowUpEvent(Dictionary<string, object> messagedict)
         {
             AddEventToCurrentEvent((VEventType)messagedict["EventType"], (uint)messagedict["EventId"]);
@@ -250,7 +249,8 @@ namespace VTuber.Core.StateMachine
             if (state is null)
             {
                 VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution();
-                NextEvent();
+                //NextEvent();
+                ExecuteEvent(_currentEvent);
                 return;
             }
             if (state.StateType == VStateType.ScheduleCreation)

@@ -7,6 +7,12 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
+    public class VBuffSaveData
+    {
+        public int Value;
+        public int Latency;
+    }
+    
     public class VBuff
     {
         private VBuffConfiguration _configuration;
