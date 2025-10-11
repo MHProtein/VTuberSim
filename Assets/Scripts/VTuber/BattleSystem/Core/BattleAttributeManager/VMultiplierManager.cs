@@ -47,7 +47,6 @@ namespace VTuber.BattleSystem.Core
             multiplierSequence = saveData.multiplierSequence;
             _currentTurnIndex = saveData.currentTurnIndex;
             
-            
             _multiplierAttributes = new List<VBattleMultiplierAttribute>
             {
                 singingMultiplierAttribute, //red
@@ -57,13 +56,16 @@ namespace VTuber.BattleSystem.Core
             
             multiplierSequence = saveData.multiplierSequence;
             _currentTurnIndex = saveData.currentTurnIndex;
+            Multiplier = _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
             
             VBattleRootEventCenter.Instance.Raise(
                 VBattleEventKey.OnMultiplierSequenceCalculated,
                 new Dictionary<string, object>
                 {
-                    { "Colors", multiplierSequence.Select(index => _multiplierAttributes[index].color).ToList() }
+                    { "Colors", multiplierSequence.Select(index => _multiplierAttributes[index].color).ToList() },
+                    { "Index", _currentTurnIndex }
                 });
+            
         }
         
         public VMultiplierManagerSaveData Save()

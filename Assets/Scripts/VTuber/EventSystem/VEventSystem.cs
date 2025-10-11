@@ -101,6 +101,9 @@ namespace VTuber.EventSystem
                     _character.ConsumableManager.SetBattle(battle);
                     VRaisingUI.Instance.SetConsumableToBattle();
                     
+                    _executedLines.Clear();
+                    _loaded = false;
+                    
                     battle.InitializeBattle(DataPersistenceManager.Instance.SaveData.battleSaveData,
                         e.Phase.DecayCurves,
                         _character.AttributeManager,

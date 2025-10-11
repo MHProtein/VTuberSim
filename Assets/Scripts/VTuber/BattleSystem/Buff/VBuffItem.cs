@@ -42,7 +42,7 @@ namespace VTuber.BattleSystem.Buff
             buff.RemoveModifierEffects();
             foreach (var modifierEffectSaveData in saveData.modifierEffectSaveDatas)
             {
-                var effect = VDataManager.Instance.CreateEffectByID(modifierEffectSaveData.modifierID, "", "");
+                var effect = VDataManager.Instance.CreateEffectByID(modifierEffectSaveData.effectConfigID, "0", "0");
                 (effect as VModifierEffect).Load(modifierEffectSaveData);
                 buff.AddEffect(effect);
             }

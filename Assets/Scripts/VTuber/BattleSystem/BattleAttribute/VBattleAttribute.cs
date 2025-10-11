@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Sirenix.Utilities;
 using UnityEngine;
 using VTuber.BattleSystem.Buff;
@@ -11,135 +13,6 @@ using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
-    [Serializable]
-    public class VValueModifier<T>
-    {
-        public int ID => _id;
-        private int _id = -1;
-        
-        public class ModifierItem
-        {
-            public T Value => _value;
-            private T _value;
-            public int TurnCount => _turnCount;
-            private int _turnCount;
-
-            public ModifierItem(T value, int turnCount)
-            {
-                _value = value;
-                _turnCount = turnCount;
-            }
-
-            public void SetValue(T value)
-            {
-                _value = value;
-            }
-
-            public bool DecreaseTurnCount()
-            {
-                if (_turnCount == -1)
-                    return false;
-                _turnCount--;
-                return _turnCount <= 0;
-            }
-            
-        }
-        
-        public T DefaultValue => _defaultValue;
-   
-        private T _defaultValue;
-        uint _idDistributor = 0;
-        
-        public Dictionary<uint, ModifierItem> Modifiers => _modifiers;
-        private Dictionary<uint, ModifierItem> _modifiers = new Dictionary<uint, ModifierItem>();
-
-        private VBattleEventKey _eventKey = VBattleEventKey.Default;
-        
-        public VValueModifier(T defaultValue, bool isBattleAttribute = false)
-        {
-            this._defaultValue = defaultValue;
-            if (!isBattleAttribute)
-                return;
-            if (typeof(T) == typeof(float))
-            {
-                VBattleLookUpTables.Instance.AddGainRateModifier(this as VValueModifier<float>);
-            }
-            else if (typeof(T) == typeof(int))
-            {
-                VBattleLookUpTables.Instance.AddGainValueModifier(this as VValueModifier<int>);
-            }
-        }
-        
-        public void SetEventKey(VBattleEventKey eventKey)
-        {
-            _eventKey = eventKey;
-        }
-        
-        public uint AddModifier(T modifier, int turnCount)
-        {
-            _modifiers.Add(_idDistributor++, new ModifierItem(modifier, turnCount));
-            SendEvent();
-            return _idDistributor - 1;
-        }
-        
-        public void RemoveModifier(uint id)
-        {
-            if (_modifiers.ContainsKey(id))
-            {
-                _modifiers.Remove(id);
-            }
-            SendEvent();
-        }
-        
-        public void ChangeModifier(uint id, T newValue)
-        {
-            if (_modifiers.ContainsKey(id))
-            {
-                _modifiers[id].SetValue(newValue);
-            }
-            SendEvent();
-        }
-        
-        public static int GetModifierIntValue(VValueModifier<int> modifier)
-        {
-            if (modifier.Modifiers.Count == 0)
-                return modifier.DefaultValue;
-            int total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value.Value;
-            }
-            return total;
-        }
-        
-        public static float GetModifierFloatValue(VValueModifier<float> modifier)
-        {
-            if (modifier.Modifiers.Count == 0)
-                return modifier.DefaultValue;
-            float total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value.Value;
-            }
-            return total;
-        }
-
-        public void Reset()
-        {
-            _modifiers.Clear();
-            SendEvent();
-        }
-        
-        public void SendEvent()
-        {
-            VBattleRootEventCenter.Instance.Raise(_eventKey, new Dictionary<string, object>());
-        }
-
-        public void SetID(int idDistributor)
-        {
-            _id = idDistributor;
-        }
-    }
     
     public class VTemporaryValue
     {
@@ -179,8 +52,12 @@ namespace VTuber.BattleSystem.BattleAttribute
         public int HighestValue;
         public int MinValue;
         public int MaxValue;
-        public VValueModifier<int> GainPointsModifier;
-        public VValueModifier<float> GainRateModifier;
+        
+        [JsonConverter(typeof(StringEnumConverter))]
+        public VBattleEventKey eventKey;
+        
+        public VValueModifierSaveData<int> GainPointsModifier;
+        public VValueModifierSaveData<float> GainRateModifier;
         //public VTemporaryValue TemporaryValue;
         public bool IsPercentage;
         public VColorSaveData color;
@@ -220,8 +97,9 @@ namespace VTuber.BattleSystem.BattleAttribute
                 HighestValue = HighestValue,
                 MinValue = _minValue,
                 MaxValue = _maxValue,
-                GainPointsModifier = gainPointsModifier,
-                GainRateModifier = gainRateModifier,
+                eventKey = _eventKey,
+                GainPointsModifier = gainPointsModifier.Save(),
+                GainRateModifier = gainRateModifier.Save(),
                 IsPercentage = _isPercentage
             };
         }
@@ -232,9 +110,10 @@ namespace VTuber.BattleSystem.BattleAttribute
             HighestValue = saveData.HighestValue;
             _minValue = saveData.MinValue;
             _maxValue = saveData.MaxValue;
+            _eventKey = saveData.eventKey;
             InitSetValue(saveData.Value, false);
-            gainPointsModifier = saveData.GainPointsModifier;
-            gainRateModifier = saveData.GainRateModifier;
+            gainPointsModifier = saveData.GainPointsModifier.LoadModifier(true);
+            gainRateModifier = saveData.GainRateModifier.LoadModifier(true);
             _isPercentage = saveData.IsPercentage;
         }
         

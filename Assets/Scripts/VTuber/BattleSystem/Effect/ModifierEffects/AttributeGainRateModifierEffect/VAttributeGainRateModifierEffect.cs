@@ -119,6 +119,7 @@ namespace VTuber.BattleSystem.Effect
                     rateValue *= layer * MultiplyByLayer;
 
                 _modifierID = attribute.GainRateModifier.AddModifier(rateValue, -1);
+                _valueModifierID = attribute.GainRateModifier.ID;
                 _onBuffRemove = attribute.GainRateModifier.RemoveModifier;
                 _onBuffLayerChangeRate = attribute.GainRateModifier.ChangeModifier;
                 VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaRate.Value +

@@ -55,8 +55,10 @@ namespace VTuber.BattleSystem.Core
                     saveData.multiplierManagerSaveData
                 );
                 
+                _multiplierManager.OnEnable();
                 return;
             }
+
             _isPhaseEnding = isPhaseEnding;
             _battleAttributes = new Dictionary<string, VBattleAttribute>();
         }
@@ -133,7 +135,6 @@ namespace VTuber.BattleSystem.Core
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
-            
         }
         
         public void OnDisable()

@@ -2,17 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using SlayTheSpire.System.SavingSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
-using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Character.Attributes;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Dialogue.UI;
 using VTuber.Relic;
@@ -145,29 +142,40 @@ namespace VTuber.BattleSystem.Core
             _abilityBonus = saveData.abilityBonus;
             _abilityTurnCounts = saveData.abilityTurnCounts;
             _characterAttributeManager = characterAttributeManager;
-            _battleAttributeManager = new VBattleAttributeManager(_isPhaseEnding, saveData.attributeManagerSaveData);
-            _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary, saveData.cardPilesManagerSaveData); 
-            _buffManager = new VBuffManager(this, saveData.buffManagerSaveData);
             
             _shouldNextCardPlayTwice = saveData.shouldPlayNextCardTwice;
             _shouldEndBattle = saveData.shouldEndBattle;
             _battleEnded = saveData.battleEnded;
-            if (saveData.playTwiceCard != 0)
-                _playTwiceCard = _cardPilesManager.GetCardById(saveData.playTwiceCard);
-            _playTwiceMessageDict = saveData.playTwiceMessageDict;
             
-            _battleAttributeManager.OnEnable();
-            _cardPilesManager.OnEnable();
-            _buffManager.OnEnable();
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
+            {
+                { "TargetPopularity", _targetPopularity },
+                { "ExtraTargetPopularity", _extraTargetPopularity },
+                { "IsPhaseEnding", _isPhaseEnding },
+            });
             
             VEventSystemUI.Instance.PlayVideo(() =>
             {
+                _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary, saveData.cardPilesManagerSaveData); 
+                _battleAttributeManager = new VBattleAttributeManager(_isPhaseEnding, saveData.attributeManagerSaveData);
+                _buffManager = new VBuffManager(this, saveData.buffManagerSaveData);
+                
                 _turnAttribute = _battleAttributeManager.BattleAttributes["BATurn"] as VBattleTurnAttribute;
                 _playLeftAttribute = _battleAttributeManager.BattleAttributes["BAPlayLeft"] as VBattlePlayLeftAttribute;
                 _battleRelicManager = new VBattleRelicManager(this, saveData.battleRelicManagerSaveData);
                 _initialized = true;
+                
+                if (saveData.playTwiceCard != 0)
+                    _playTwiceCard = _cardPilesManager.GetCardById(saveData.playTwiceCard);
+                _playTwiceMessageDict = saveData.playTwiceMessageDict;
+            
+                _battleAttributeManager.OnEnable();
+                _cardPilesManager.OnEnable();
+                _buffManager.OnEnable();
+                
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
                 {
+                    { "IsLoadGame", true},
                     { "TurnLeft", TurnLeft },
                     { "TargetPopularity", _targetPopularity },
                     { "ExtraTargetPopularity", _extraTargetPopularity },
@@ -175,6 +183,7 @@ namespace VTuber.BattleSystem.Core
                     { "CharacterAttributeManager", characterAttributeManager },
                     { "BattleAttributeManager", _battleAttributeManager }
                 });
+                InitializeTurn();
             });
         }
         
@@ -217,7 +226,15 @@ namespace VTuber.BattleSystem.Core
                 InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
                     mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity, characterAttributeManager);
                 return;
-            }
+            }            
+            
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
+            {
+                { "TargetPopularity", _targetPopularity },
+                { "ExtraTargetPopularity", _extraTargetPopularity },
+                { "IsPhaseEnding", _isPhaseEnding },
+            });
+            
             VEventSystemUI.Instance.PlayVideo(() =>
             {
                 _initialized = true;
@@ -268,6 +285,8 @@ namespace VTuber.BattleSystem.Core
                 { "CharacterAttributeManager", characterAttributeManager },
                 { "BattleAttributeManager", _battleAttributeManager }
             });
+            
+            
         
             foreach (var buff in characterAttributeManager.GetBuffs())
             {
@@ -539,7 +558,7 @@ namespace VTuber.BattleSystem.Core
 
         private void EndTurn()
         {
-            Debug.Log("回合结束: " + TurnLeft);
+            VDebug.Log("回合结束: " + TurnLeft);
             _turnAttribute.AddTo(-1, false);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
             {

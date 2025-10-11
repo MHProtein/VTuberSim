@@ -123,6 +123,7 @@ namespace VTuber.BattleSystem.Effect
             if(battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
                 Triggered = true;
+                _applied = true;
                 float pointValue = _deltaPoints.Value;
                 if(MultiplyByLayer > 0.0f)
                     pointValue *= layer * MultiplyByLayer;
