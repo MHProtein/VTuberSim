@@ -39,16 +39,13 @@ namespace VTuber.BattleSystem.Core
             GenerateMultiplierSequence(turnAttribute.MaxTurn, maxConsecutiveMultiplierCount, mainAttributeIndex, abilityTurnCounts);
         }
         
-        public VMultiplierManager(int mainAttributeIndex, 
-            int maxConsecutiveMultiplierCount, List<int> abilityTurnCounts, 
-            VBattleMultiplierAttribute singingMultiplierAttribute, 
+        public VMultiplierManager(VBattleMultiplierAttribute singingMultiplierAttribute, 
             VBattleMultiplierAttribute gamingMultiplierAttribute,
             VBattleMultiplierAttribute chattingMultiplierAttribute,
-            VBattleTurnAttribute turnAttribute, VMultiplierManagerSaveData saveData)
+            VMultiplierManagerSaveData saveData)
         {
             multiplierSequence = saveData.multiplierSequence;
             _currentTurnIndex = saveData.currentTurnIndex;
-            
             
             _multiplierAttributes = new List<VBattleMultiplierAttribute>
             {
@@ -59,16 +56,19 @@ namespace VTuber.BattleSystem.Core
             
             multiplierSequence = saveData.multiplierSequence;
             _currentTurnIndex = saveData.currentTurnIndex;
+            Multiplier = _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
             
             VBattleRootEventCenter.Instance.Raise(
                 VBattleEventKey.OnMultiplierSequenceCalculated,
                 new Dictionary<string, object>
                 {
-                    { "Colors", multiplierSequence.Select(index => _multiplierAttributes[index].color).ToList() }
+                    { "Colors", multiplierSequence.Select(index => _multiplierAttributes[index].color).ToList() },
+                    { "Index", _currentTurnIndex }
                 });
+            
         }
         
-        public VMultiplierManagerSaveData SaveData()
+        public VMultiplierManagerSaveData Save()
         {
             return new VMultiplierManagerSaveData
             {

@@ -78,7 +78,6 @@ namespace VTuber.BattleSystem.UI
             if (!messagedict.ContainsKey("Color"))
                 return;
             MultiplierText.color = (Color)messagedict["Color"];
-            
         }
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
@@ -150,9 +149,17 @@ namespace VTuber.BattleSystem.UI
                 image.color = colors[i];
                 colorObjects.Add(image);
             }
-            arrowIndex++;
-            if(arrowIndex >= colorObjects.Count)
-                return;
+
+            if (messagedict.TryGetValue("Index", out object indexObj))
+            {
+                arrowIndex = (int)indexObj;
+            }
+            else
+            {
+                arrowIndex++;
+                if(arrowIndex >= colorObjects.Count)
+                    return;
+            }
             
             StartCoroutine(DelayMoveArrow());
         }

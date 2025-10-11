@@ -4,8 +4,8 @@ namespace VTuber.BattleSystem.Core
 {
     public class VStaminaManagerSaveData
     {
-        public VValueModifier<int> consumePointsModifier;
-        public  VValueModifier<float> consumeRateModifier;
+        public VValueModifierSaveData<int> consumePointsModifier;
+        public  VValueModifierSaveData<float> consumeRateModifier;
     }
     
     public class VStaminaManager
@@ -23,8 +23,8 @@ namespace VTuber.BattleSystem.Core
         {
             return new VStaminaManagerSaveData
             {
-                consumePointsModifier = consumePointsModifier,
-                consumeRateModifier = consumeRateModifier
+                consumePointsModifier = consumePointsModifier.Save(),
+                consumeRateModifier = consumeRateModifier.Save()
             };
         }
         
@@ -32,8 +32,8 @@ namespace VTuber.BattleSystem.Core
         {
             _staminaAttribute = staminaAttribute;
             _shieldAttribute = shieldAttribute;
-            consumePointsModifier = saveData.consumePointsModifier;
-            consumeRateModifier = saveData.consumeRateModifier;
+            consumePointsModifier = saveData.consumePointsModifier.LoadModifier(true);
+            consumeRateModifier = saveData.consumeRateModifier.LoadModifier(true);
         }
         
         public VStaminaManager(VBattleStaminaAttribute staminaAttribute, VBattleStaminaAttribute shieldAttribute)

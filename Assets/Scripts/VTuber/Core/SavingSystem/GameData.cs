@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VTuber.BattleSystem.Core;
 using VTuber.Character;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
@@ -18,6 +19,7 @@ namespace SlayTheSpire.System.SavingSystem
         public VStateMachineSaveData stateMachine;
         public VWeeklyScheduleSaveData weeklySchedule;
         public VScriptSaveData script;
+        public VBattleSaveData battleSaveData;
         
         public VScheduleUISaveData scheduleUISaveData;
         public VStoreSaveData storeSaveData;

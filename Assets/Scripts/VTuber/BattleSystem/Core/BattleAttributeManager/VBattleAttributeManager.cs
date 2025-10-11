@@ -30,10 +30,50 @@ namespace VTuber.BattleSystem.Core
         
         private bool _isPhaseEnding;
         
-        public VBattleAttributeManager(bool isPhaseEnding)
+        public VBattleAttributeManager(bool isPhaseEnding, VBattleAttributeManagerSaveData saveData)
         {
+            if (saveData is not null)
+            {
+                _isPhaseEnding = isPhaseEnding;
+                _battleAttributes = new Dictionary<string, VBattleAttribute>();
+                foreach (var attributeSaveData in saveData.attributeSaveDatas)
+                {
+                    var attribute = Activator.CreateInstance(Type.GetType(attributeSaveData.AttributeType), attributeSaveData) as VBattleAttribute;
+                    _battleAttributes.Add(attribute.AttributeName, attribute);
+                }
+                
+                _staminaManager = new VStaminaManager(
+                    _battleAttributes.TryGetValue("BAStamina", out var stamina) ? (VBattleStaminaAttribute)stamina : null,
+                    _battleAttributes.TryGetValue("BAShield", out var shield) ? (VBattleStaminaAttribute)shield : null,
+                saveData.staminaManagerSaveData
+                );
+                
+                _multiplierManager = new VMultiplierManager( 
+                    _battleAttributes.TryGetValue("BASingingMultiplier", out var singing) ? (VBattleMultiplierAttribute)singing : null,
+                    _battleAttributes.TryGetValue("BAGamingMultiplier", out var gaming) ? (VBattleMultiplierAttribute)gaming : null,
+                    _battleAttributes.TryGetValue("BAChattingMultiplier", out var chatting) ? (VBattleMultiplierAttribute)chatting : null,
+                    saveData.multiplierManagerSaveData
+                );
+                
+                _multiplierManager.OnEnable();
+                return;
+            }
+
             _isPhaseEnding = isPhaseEnding;
             _battleAttributes = new Dictionary<string, VBattleAttribute>();
+        }
+
+        public VBattleAttributeManagerSaveData Save()
+        {
+            var saveData = new VBattleAttributeManagerSaveData();
+            saveData.attributeSaveDatas = new List<VBattleAttributeSaveData>();
+            foreach (var attribute in _battleAttributes)
+            {
+                saveData.attributeSaveDatas.Add(attribute.Value.Save());
+            }
+            saveData.staminaManagerSaveData = _staminaManager.Save();
+            saveData.multiplierManagerSaveData = _multiplierManager.Save();
+            return saveData;
         }
 
         public void AttributesConversion(VCharacterAttributeManager characterAttributeManager)
@@ -95,7 +135,6 @@ namespace VTuber.BattleSystem.Core
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterChange, OnParameterChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
-            
         }
         
         public void OnDisable()

@@ -36,6 +36,19 @@ namespace VTuber.BattleSystem.Buff
             {
                 var buffItem = new VBuffItem(buffSaveData);
                 _buffs.Add(buffItem);
+                
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffAdded, new Dictionary<string, object>
+                {
+                    { "Id", buffItem.Id },
+                    { "BuffId", buffItem.ConfigId },
+                    { "BuffName", buffItem.buff.GetBuffName() }, 
+                    { "IsPermanent", buffItem.buff.IsPermanent },
+                    { "Latency", buffItem.buff.latency},
+                    { "Value", buffItem.Value},
+                    { "IsFromCard",  false},
+                    { "ShouldPlayTwice", false },
+                    { "Buff", buffItem }
+                });
             }
         }
         

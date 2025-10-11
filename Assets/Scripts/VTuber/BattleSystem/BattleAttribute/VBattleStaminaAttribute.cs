@@ -18,6 +18,10 @@ namespace VTuber.BattleSystem.BattleAttribute
             }
         }
         
+        public VBattleStaminaAttribute(VBattleAttributeSaveData saveData) : base(saveData)
+        {
+        }
+        
         public override void AddTo(int delta, bool isFromCard, bool shouldApplyTwice = false)
         {
             if (delta == 0)

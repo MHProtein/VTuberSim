@@ -11,6 +11,12 @@ namespace VTuber.BattleSystem.BattleAttribute
             gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
             gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
         }
+        
+        public VBattleParameterAttribute(VBattleAttributeSaveData saveData) : base(saveData)
+        {
+            gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
+            gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
+        }
 
         public override void OnEnable()
         {
