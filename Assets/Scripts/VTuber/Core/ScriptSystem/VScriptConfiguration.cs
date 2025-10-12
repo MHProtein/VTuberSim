@@ -34,7 +34,7 @@ namespace VTuber.Core.ScriptSystem
         public Sprite icon;
         public List<VCooperatorConfiguration> coops;
         [Header("基础卡牌")] 
-        [SerializeField] public List<uint> cardIDs;
+        [SerializeField] public Dictionary<string, List<uint>> cardIDs;
         
         [Space(5)]
         [Header("初始事件")] 

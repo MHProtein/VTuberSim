@@ -97,5 +97,10 @@ namespace VTuber.Consumable
             }
             consumables.Clear();
         }
+
+        public List<VConsumable> GetConsumables()
+        {
+            return consumables;
+        }
     }
 }

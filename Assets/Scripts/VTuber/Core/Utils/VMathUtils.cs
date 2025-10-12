@@ -24,5 +24,11 @@ namespace VTuber.Core.UI
             }
             return 0;
         }
+        
+        public static string GetPercentage(int value, int decimalPlaces)
+        {
+            var v = (value - 100f);
+            return v.ToString();
+        }
     }
 }

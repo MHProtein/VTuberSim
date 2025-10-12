@@ -45,5 +45,10 @@ namespace VTuber.Relic
             }
             _relics.Clear();
         }
+
+        public List<VRaisingRelic> GetRelics()
+        {
+            return _relics;
+        }
     }
 }

@@ -8,10 +8,17 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.Character.Attribute
 {
+    public class VCharacterAttributeSaveData
+    {
+        public string attributeName;
+        public int value;
+        public VValueModifier<float> gainRateModifier;
+        public VValueModifier<int> gainPointsModifier;
+    }
+    
     public class VCharacterAttribute
     {
         protected VCharacterAttributeConfiguration _configuration;
-        
         
         public string AttributeName { get; set; }
         
@@ -52,6 +59,24 @@ namespace VTuber.Character.Attribute
             ShouldBattleAttributeConvertTo = shouldBattleAttributeConvertTo;
             gainPointsModifier = new VValueModifier<int>(0);
             gainRateModifier = new VValueModifier<float>(1.0f);
+        }
+
+        public void Load(VCharacterAttributeSaveData saveData)
+        {
+            SetValue(saveData.value);
+            gainRateModifier = saveData.gainRateModifier;
+            gainPointsModifier = saveData.gainPointsModifier;
+        }
+
+        public VCharacterAttributeSaveData Save()
+        {
+            return new VCharacterAttributeSaveData()
+            {
+                attributeName = AttributeName,
+                value = Value,
+                gainRateModifier = gainRateModifier,
+                gainPointsModifier = gainPointsModifier
+            };
         }
 
         public void SetAttributeManager(VCharacterAttributeManager attributeManager)

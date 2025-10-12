@@ -12,12 +12,18 @@ namespace VTuber.CoopSystem
         public void AddCooperator(VCooperatorConfiguration configuration)
         {
             var cooperator = new VCooperator(configuration);
+            AddCooperator(cooperator);
+        }
+
+        public void AddCooperator(VCooperator cooperator)
+        {
             _cooperators.Add(cooperator);
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCooperatorAdded, new Dictionary<string, object> { { "Cooperator", cooperator } });
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCooperatorAdded,
+                new Dictionary<string, object> { { "Cooperator", cooperator } });
             cooperator.OnEnable();
         }
 
-        public List<VCoopEventItem> GetCoopEvents(List<Vector2Int> occupiedPositions)
+    public List<VCoopEventItem> GetCoopEvents(List<Vector2Int> occupiedPositions)
         {
             List<VCoopEventItem> events = new List<VCoopEventItem>();
             foreach (var cooperator in _cooperators)
@@ -29,6 +35,10 @@ namespace VTuber.CoopSystem
         }
         
         public VCooperator GetCooperator(uint id) => _cooperators.Find(x => x.Id == id);
-        
+
+        public List<VCooperator> GetCooperators()
+        {
+            return _cooperators;
+        }
     }
 }

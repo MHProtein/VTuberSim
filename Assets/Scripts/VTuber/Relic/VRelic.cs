@@ -28,7 +28,7 @@ namespace VTuber.Relic
             condition = config.condition;
             whenToApply = config.whenToApply;
         }
-
+        
         public override void OnRelicAddedInRaising()
         {
             base.OnRelicAddedInRaising();
@@ -246,6 +246,11 @@ namespace VTuber.Relic
             layer = config.layer;
             if (layer == -1)
                 _isPermanent = true;
+        }
+        
+        public void LoadLayer(int newLayer)
+        {
+            layer = newLayer;
         }
 
         public virtual void OnRelicAddedInRaising()

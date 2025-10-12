@@ -26,7 +26,6 @@ namespace VTuber.BattleSystem.Core.SaveSystem
                 
                 VSave save = formatter.Deserialize(stream) as VSave;
                 stream.Close();
-                
                 return save;
             }
             else

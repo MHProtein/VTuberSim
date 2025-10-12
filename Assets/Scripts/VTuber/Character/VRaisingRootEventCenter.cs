@@ -98,6 +98,8 @@ namespace VTuber.Core.EventCenter
         OnCardUpgraded = 68,
         
         OnEndRun = 69,
+        
+        OnEventEndSave = 70,
     }
     
     

@@ -10,7 +10,6 @@ using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Reincarnation;
-using Yarn.Unity;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.UI

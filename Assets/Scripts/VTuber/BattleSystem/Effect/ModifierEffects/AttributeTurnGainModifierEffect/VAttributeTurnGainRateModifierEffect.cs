@@ -1,5 +1,7 @@
-﻿using Spire.Xls;
+﻿using System;
+using Spire.Xls;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Foundation;
 using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
@@ -14,7 +16,15 @@ namespace VTuber.BattleSystem.Effect
         {
             attributeName = configuration.attributeName;
             turnCount = configuration.turnCount;
-            deltaRate = new VUpgradableValue<float>(int.Parse(parameter), int.Parse(upgradedParameter));
+            try
+            {
+                deltaRate = new VUpgradableValue<float>(float.Parse(parameter), float.Parse(upgradedParameter));
+            }
+            catch (Exception e)
+            {
+                VDebug.LogError("deltaRate in VAttributeTurnGainRateModifierEffect, id :" + configuration.id);
+                throw;
+            }
         }
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)

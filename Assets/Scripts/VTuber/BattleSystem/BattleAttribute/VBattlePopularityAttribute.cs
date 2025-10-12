@@ -22,6 +22,20 @@ namespace VTuber.BattleSystem.BattleAttribute
             gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
         }
         
+        public VBattlePopularityAttribute(VBattleAttributeSaveData saveData) : base(saveData)
+        {
+            _scoreForAbilities = saveData.scoreForAbilities;
+            gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
+            gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
+        }
+
+        public override VBattleAttributeSaveData Save()
+        {
+            var data = base.Save();
+            data.scoreForAbilities = _scoreForAbilities;
+            return data;
+        }
+        
         public void AddPopularity(int delta, string abilityName = "", bool isFromCard = false, bool shouldPlayTwice = false)
         {
             if (delta == 0)

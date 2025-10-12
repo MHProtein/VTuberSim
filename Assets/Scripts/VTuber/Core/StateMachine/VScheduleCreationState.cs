@@ -6,6 +6,7 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
+    
     public class VScheduleCreationState : VState
     {
         public VScheduleCreationState()

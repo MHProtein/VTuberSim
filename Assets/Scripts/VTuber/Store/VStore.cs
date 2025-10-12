@@ -9,33 +9,50 @@ using VTuber.Core.Managers;
 
 namespace VTuber.Store
 {
+    public class VStoreSaveData
+    {
+        public int refreshCount;
+    }
     public class VStore
     {
-        private int refreshCount = 0;
-        private List<VStoreCardSlot> _cards = new List<VStoreCardSlot>();
-        private List<VStoreConsumableSlot> _consumables = new List<VStoreConsumableSlot>();
+        private int _refreshCount = 0;
+        private readonly List<VStoreCardSlot> _cards = new List<VStoreCardSlot>();
+        private readonly List<VStoreConsumableSlot> _consumables = new List<VStoreConsumableSlot>();
 
         private VCharacter _character;
-        private VStoreConfiguration _storeConfig;
+        private readonly VStoreConfiguration _storeConfig;
 
         private List<float> CardRarityProbabilities => _storeConfig.cardRarityProbabilities;
         private List<float> CardRarityUpgradeProbabilities => _storeConfig.cardRarityUpgradeProbabilities;
         private List<float> ConsumableRarityProbabilities => _storeConfig.consumableRarityProbabilities;
         
-        private VStoreDiscardButton _discardButton;
-        private VStoreUpgradeButton _upgradeButton;
+        private readonly VStoreDiscardButton _discardButton;
+        private readonly VStoreUpgradeButton _upgradeButton;
         private bool _isGlobalDiscount = false;
         private float _globalDiscount = 0.0f;
         
         public VStore(VStoreConfiguration storeConfig)
         {
             _storeConfig = storeConfig;
-            refreshCount = storeConfig.defaultRefreshCount;
+            _refreshCount = storeConfig.defaultRefreshCount;
             
             _discardButton = new VStoreDiscardButton(storeConfig.discardCardPrice, storeConfig.discardCardPriceIncrease);
             _upgradeButton = new VStoreUpgradeButton(storeConfig.upgradePrice, storeConfig.upgradePriceIncrease);
             
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnStoreBeginRefresh, OnStoreBeginRefresh);
+        }
+
+        public VStoreSaveData Save()
+        {
+            return new VStoreSaveData()
+            {
+                refreshCount = _refreshCount,
+            };
+        }
+
+        public void Load(VStoreSaveData saveData)
+        {
+            _refreshCount = saveData.refreshCount;
         }
         
         public void SetGlobalDiscount(float discount)
@@ -46,7 +63,7 @@ namespace VTuber.Store
 
         private void OnStoreBeginRefresh(Dictionary<string, object> messagedict)
         { 
-            refreshCount--;
+            _refreshCount--;
             _cards.Clear();
             _consumables.Clear();
             
@@ -59,7 +76,7 @@ namespace VTuber.Store
                 { "ConsumableSlots", _consumables },
                 { "DiscardButton", _discardButton },
                 { "UpgradeButton", _upgradeButton },
-                { "RefreshCount", refreshCount },
+                { "RefreshCount", _refreshCount },
             });
         }
 
@@ -78,7 +95,7 @@ namespace VTuber.Store
                 { "ConsumableSlots", _consumables },
                 { "DiscardButton", _discardButton },
                 { "UpgradeButton", _upgradeButton },
-                { "RefreshCount", refreshCount },
+                { "RefreshCount", _refreshCount },
             });
         }
 
@@ -259,7 +276,7 @@ namespace VTuber.Store
 
         public void Reset()
         {
-            refreshCount = _storeConfig.defaultRefreshCount;
+            _refreshCount = _storeConfig.defaultRefreshCount;
             _discardButton.Reset();
             _upgradeButton.Reset();
         }

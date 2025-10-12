@@ -25,13 +25,9 @@ namespace VTuber.BattleSystem.Core.UI
         public List<VAccount> SelectedAccounts => _selectedAccounts;
         private List<VAccount> _selectedAccounts;
         private Action _returnAction;
-        
-        private Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> _startGame;
 
-        public void Begin(List<VScriptConfiguration> scripts, List<VCharacterConfiguration> characters, List<VAccount> accounts,
-            Action<VCharacterConfiguration, VScriptConfiguration, List<VAccount>> startGame)
+        public void Begin(List<VScriptConfiguration> scripts, List<VCharacterConfiguration> characters, List<VAccount> accounts)
         {
-            _startGame = startGame;
             _scriptSelectionMenu.Initialize(scripts, ScriptSelectionMenuConfirm, ScriptSelectionMenuReturn);
             _characterSelectionMenu.Initialize(characters, CharacterSelectionMenuConfirm, CharacterSelectionMenuReturn);
             _accountSelectionMenu.Initialize(this, accounts, AccountSelectionMenuConfirm, AccountSelectionMenuReturn);
@@ -71,7 +67,7 @@ namespace VTuber.BattleSystem.Core.UI
             _selectedAccounts = selectedAccounts;
             
             _accountSelectionMenu.Hide();
-            _startGame?.Invoke(_selectedCharacter, _selectedScript, selectedAccounts);
+            VGameManager.Instance.NewGame(_selectedCharacter, _selectedScript, selectedAccounts);
             _scriptSelectionMenu.Clear();
             _accountSelectionMenu.Clear();
         }

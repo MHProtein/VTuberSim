@@ -51,8 +51,9 @@ namespace VTuber.Character
             LoadEffects(cardWb);
             LoadBuffs(cardWb);
             LoadCardConditions(raisingWb);
-            LoadPlacingConditions(raisingWb);
             LoadRaisingEffects(raisingWb);
+            LoadPlacingConditions(raisingWb);
+            LoadSchedulingConditions(raisingWb);
             LoadDialogueEvents(raisingWb);
             LoadStreamEvents(raisingWb);
             LoadRelicConditions(relicsWb);
@@ -223,6 +224,23 @@ namespace VTuber.Character
             }
 
             VDataManager.Instance.SetPlacingConditon(list);
+        }
+
+        public void LoadSchedulingConditions(Workbook wb)
+        {
+            var sheet = Sheet(wb, "SchedulingConditions");
+            var list = new List<VSchedulingCondition>();
+            
+            for (int r = 1; r <= sheet.LastRow - 1; r++)
+            {
+                var row = sheet.Rows[r];
+                if(row.Columns[VCardConditionHeaderIndex.Id].Value.IsNullOrWhitespace())
+                    continue;
+                var condition = new VSchedulingCondition(row);
+                list.Add(condition);
+            }
+
+            VDataManager.Instance.SetSchedulingConditions(list);
         }
 
         public void LoadDialogueEvents(Workbook wb)

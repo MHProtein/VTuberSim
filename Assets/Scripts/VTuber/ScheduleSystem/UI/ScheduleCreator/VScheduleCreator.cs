@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.Core.Managers;
+using VTuber.Core.ScriptSystem;
 using VTuber.ScheduleSystem.Events;
-using Yarn.Unity;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -13,7 +14,7 @@ namespace VTuber.ScheduleSystem.UI
         
         protected VScheduleCreatorSlot[,] slots;
         
-        [SerializeField] private List<VScheduleEventConfiguration> eventDatas;
+        private List<VScheduleEventConfiguration> _eventDatas;
         protected override void Awake()
         {
             slots = new VScheduleCreatorSlot[slotSize.y, slotSize.x];
@@ -27,6 +28,13 @@ namespace VTuber.ScheduleSystem.UI
                     slots[y, x] = slotList[i++];
                 }
             }
+        }
+        
+        public void InitializeCreator(VScript script)
+        {
+            var events = script.EventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
+            events.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
+            _eventDatas = events;
         }
         
         VScheduleCreatorSlot GetAvailableSlot()
@@ -46,7 +54,7 @@ namespace VTuber.ScheduleSystem.UI
         protected override void Start()
         {
             base.Start(); 
-            foreach (var eventData in eventDatas)
+            foreach (var eventData in _eventDatas)
             {
                 var slot = GetAvailableSlot();
                 var eventObj = Instantiate(itemPrefab, slot.transform);
@@ -55,11 +63,6 @@ namespace VTuber.ScheduleSystem.UI
                 eventUI.Initialize(eventData);
                 slot.SetItem(eventUI);
             }
-        }
-
-        public void InitializeCreator(List<VScheduleEventConfiguration> configurations)
-        {
-            eventDatas = configurations;
         }
         
     }
