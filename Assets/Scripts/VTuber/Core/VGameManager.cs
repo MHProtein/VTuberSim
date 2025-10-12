@@ -11,6 +11,7 @@ using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
+using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -160,7 +161,7 @@ namespace VTuber.BattleSystem.Core
             eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
             eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
 
-            scheduleCreator.InitializeCreator(eventConfigs);
+            scheduleCreator.InitializeCreator(_script);
             
             mainMenu.gameObject.SetActive(false);
         }
@@ -212,15 +213,8 @@ namespace VTuber.BattleSystem.Core
             }
             
             scheduleUI.Initialize(_character, _script);
+            scheduleCreator.InitializeCreator(_script);
             _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
-            
-
-            List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
-            eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
-            eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
-
-            scheduleCreator.InitializeCreator(eventConfigs);
-            
             
             mainMenu.gameObject.SetActive(false);
         }
@@ -334,6 +328,8 @@ namespace VTuber.BattleSystem.Core
         
         public void Load(SaveData data)
         {
+            VCardConfiguration.LoadIDDistributor(data.cardIDDistributor);
+            VConsumableConfiguration.LoadIDDistributor(data.consumableIDDistributor);
             _accounts = new List<VAccount>();
             foreach (var saveData in data.accounts)
             {
@@ -358,7 +354,6 @@ namespace VTuber.BattleSystem.Core
             InitializeStateMachine();
             _stateMachine.Load(data.stateMachine);
             
-            
             _stateMachine.OnEnable();
             _character.OnEnable();
         }
@@ -380,6 +375,10 @@ namespace VTuber.BattleSystem.Core
             eventSystem.Save(data);
             
             data.battleSaveData = battle.Save();
+
+            data.cardIDDistributor = VCardConfiguration.IDDistributor;
+            data.consumableIDDistributor = VConsumableConfiguration.IDDistributor;
+            
         }
 
         public VScriptConfiguration GetScriptConfig(string scriptScriptConfigurationName)

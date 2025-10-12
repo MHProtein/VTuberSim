@@ -25,5 +25,8 @@ namespace SlayTheSpire.System.SavingSystem
         public VStoreSaveData storeSaveData;
         public VEventSystemSaveData eventSystemSaveData;
         public TimeSpan lastPlayTime;
+
+        public uint cardIDDistributor;
+        public uint consumableIDDistributor;
     }
 }

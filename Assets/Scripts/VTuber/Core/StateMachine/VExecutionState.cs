@@ -248,9 +248,10 @@ namespace VTuber.Core.StateMachine
 
             if (state is null)
             {
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution();
-                //NextEvent();
-                ExecuteEvent(_currentEvent);
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
+                {
+                    ExecuteEvent(_currentEvent);
+                });
                 return;
             }
             if (state.StateType == VStateType.ScheduleCreation)

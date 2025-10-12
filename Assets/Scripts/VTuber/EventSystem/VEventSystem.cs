@@ -70,6 +70,7 @@ namespace VTuber.EventSystem
         private VCard _replaceSelectedCard;
         private VCardActionType _cardActionType;
         private bool _isInBattle = false;
+        private bool _isPhaseStartEvent = false;
         
         protected override void Awake()
         {
@@ -85,12 +86,15 @@ namespace VTuber.EventSystem
 
         private void OnLineFinished(int line)
         {
+            if (_isPhaseStartEvent)
+                return;
             _executedLines.Add(line);
             DataPersistenceManager.Instance.SaveGame();
         }
 
-        public void InitializeEvent(VCharacter character, VDialogueEvent e)
+        public void InitializeEvent(VCharacter character, VDialogueEvent e, bool isPhaseStartEvent = false)
         {
+            _isPhaseStartEvent = isPhaseStartEvent;
             if (_loaded)
             {
                 _character = character;
@@ -134,10 +138,10 @@ namespace VTuber.EventSystem
                 return;
             }
             
-            EnterDialogEvent(character, e, false);
+            EnterDialogEvent(character, e, false, isPhaseStartEvent);
         }
 
-        public void EnterDialogEvent(VCharacter character, VDialogueEvent e, bool loaded)
+        public void EnterDialogEvent(VCharacter character, VDialogueEvent e, bool loaded, bool isPhaseStartEvent = false)
         {
             _hasDialogue = true;
             dialogueSystem.LoadDialog(e.dialogueNode);
