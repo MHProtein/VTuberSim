@@ -61,7 +61,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void Initialize(List<VCard> cards, bool isStore, bool select, bool preview, Action<VCard> confirmAction, Action returnAction = null, Action<VCard> previewAction = null)
         {
-            confirmButton.gameObject.SetActive(select);
+             confirmButton.gameObject.SetActive(select);
             returnButton.gameObject.SetActive(!select);
             if(isStore)
                 returnButton.gameObject.SetActive(true);

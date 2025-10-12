@@ -236,7 +236,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 
     public void CreateDialog(DialogContent dc, bool isLoadedSkip = false)
     {
-        if (!isLoadedSkip ||(!dc.ifOption && currentDialogObj != null))
+        if (!isLoadedSkip && (!dc.ifOption && currentDialogObj != null))
         {
             dc.AppleEffects(_character);
         }

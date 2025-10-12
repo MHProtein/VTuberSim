@@ -22,7 +22,75 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes:
     - Name: cardIDs
-      Entry: 6
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.UInt32,
+        mscorlib]], mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: C
+    - Name: $v
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[System.UInt32, mscorlib]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 10
+    - Name: 
+      Entry: 3
+      Data: 74
+    - Name: 
+      Entry: 3
+      Data: 74
+    - Name: 
+      Entry: 3
+      Data: 71
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
       Data: 
   scriptName: "\u6D4B\u8BD5\u5267\u672C"
   description: "\u521A\u529E\u5B8C\u51FA\u9053\u56DE\uFF0C\u521A\u521A\u8E0F\u5165\u865A\u62DF\u4E3B\u64AD\u884C\u4E1A\u7684\u4F60\u3002\u5C06\u5982\u4F55\u521B\u9020\u5C5E\u4E8E\u81EA\u5DF1\u7684\u76F4\u64AD\u98CE\u683C\uFF0C\u4ECE\u65E0\u6570\u5C0FV\u4E4B\u4E2D\u6740\u51FA\u91CD\u56F4\u3002"

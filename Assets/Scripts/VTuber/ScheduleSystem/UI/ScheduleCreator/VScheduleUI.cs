@@ -188,6 +188,7 @@ namespace VTuber.ScheduleSystem.UI
                     return;
                 }
             }
+            
             foreach (var slot in slots)
             {
                 bool isPlaceable = true;
@@ -213,7 +214,7 @@ namespace VTuber.ScheduleSystem.UI
             foreach (VEventType eventType in Enum.GetValues(typeof(VEventType)))
             {
                 _eventCount.Add(eventType, 0);
-            }     
+            }
             _streamCount = new List<int>()
             {
                 0, 0, 0
@@ -246,6 +247,7 @@ namespace VTuber.ScheduleSystem.UI
                 ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], false);
                 ui.SetFixed(true);
             }
+            
             foreach (var slot in slots)
             {
                 slot.SetPlaceable(false, false, -1);
@@ -461,7 +463,8 @@ namespace VTuber.ScheduleSystem.UI
                             var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                             e.IsSpecialEvent = true;
                             eventUIObject.Initialize(e, slots[yy, x], true);
-                            
+                            slots[yy, x].Item.SetInteractive(false);
+                            e.IsSpecialEvent = false;
                             emptyCount = 0;
                         }
                     }
@@ -480,6 +483,8 @@ namespace VTuber.ScheduleSystem.UI
                     var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                     e.IsSpecialEvent = true;
                     eventUIObject.Initialize(e, slots[yy, x], true);
+                    slots[yy, x].Item.SetInteractive(false);
+                    e.IsSpecialEvent = false;
                 }
             }
             foreach (var slot in slots)

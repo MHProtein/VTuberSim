@@ -8,6 +8,7 @@ namespace VTuber.Relic
     public class VBattleRelicManagerSaveData
     {
         public List<VBattleRelicSaveData> relics;
+        public uint idDistributor;
     }
 
     public class VBattleRelicSaveData
@@ -28,6 +29,7 @@ namespace VTuber.Relic
         {
             return new VBattleRelicManagerSaveData()
             {
+                idDistributor = idDistributor,
                 relics = relics.Select(relic => new VBattleRelicSaveData()
                 {
                     configID = relic.ConfigId,
@@ -40,6 +42,7 @@ namespace VTuber.Relic
         {
             _battle = battle;
             relics = new List<VBattleRelic>();
+            idDistributor = saveData.idDistributor;
             foreach (var relicSaveData in saveData.relics)
             {
                 var relic = VDataManager.Instance.CreateRelicByID(relicSaveData.configID) as VBattleRelic;
