@@ -34,8 +34,9 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEndRun, OnEndRun);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreationModify);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToScheduleCreationModify);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
         }
-
+        
         protected override void OnDisable()
         {
             base.OnDisable();
@@ -47,9 +48,20 @@ namespace VTuber.CoopSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEndRun, OnEndRun);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToScheduleCreation, OnSwitchToScheduleCreationModify);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToModifySchedule, OnSwitchToScheduleCreationModify);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
+        }
+        
+        private void OnSwitchToMainMenu(Dictionary<string, object> messagedict)
+        {
+            Clear();
         }
         
         private void OnEndRun(Dictionary<string, object> messagedict)
+        {
+            Clear();
+        }
+
+        public void Clear()
         {
             foreach (var ui in uis)
             {

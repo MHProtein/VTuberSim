@@ -43,17 +43,22 @@ namespace VTuber.BattleSystem.Effect
         
         public override VModifierEffectSaveData Save()
         {
-            return new VModifierEffectSaveData
+            var saveData = new VModifierEffectSaveData
             {
                 effectConfigID = _configuration.id,
                 valueModifierID = _valueModifierID,
                 modifierID = _modifierID,
                 applied = _applied,
-                parameterInt = _deltaPoints.Value,
-                upgradedParameterInt = _deltaPoints.UpgradedValue,
-                parameterFloat = _deltaRate.Value,
-                upgradedParameterFloat = _deltaRate.UpgradedValue,
             };
+            if(_modifiyType == VStaminaModifiyType.Points){
+                saveData.parameterInt = _deltaPoints.Value;
+                saveData.upgradedParameterInt = _deltaPoints.UpgradedValue;
+            }
+            else if(_modifiyType == VStaminaModifiyType.Rate){
+                saveData.parameterFloat = _deltaRate.Value;
+                saveData.upgradedParameterFloat = _deltaRate.UpgradedValue;
+            }
+            return saveData;
         }
 
         public override void Load(VModifierEffectSaveData data)

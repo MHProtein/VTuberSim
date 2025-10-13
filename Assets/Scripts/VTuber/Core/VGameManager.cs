@@ -129,7 +129,7 @@ namespace VTuber.BattleSystem.Core
             eventSystem.Initialize();
             
             _newGame = saveData == null;
-            ChangeToMainMenu(saveData);
+            ReturnToMainMenu(saveData);
         }
 
         protected override void OnEnable()
@@ -309,21 +309,38 @@ namespace VTuber.BattleSystem.Core
             }
         }
 
-        public void ChangeToMainMenu(SaveData data)
+        public void ReturnToMainMenu(SaveData data)
         {
+            if (_stateMachine is not null)
+            {
+                _stateMachine.CurrentState.Exit(null);
+                _stateMachine.OnDisable();
+            } 
+            if(_character is not null)
+                _character.OnDisable();
+            if(scheduleUI is not null)
+                scheduleUI.Clear();
+            
             mainMenu.gameObject.SetActive(true);
             mainMenu.Initialize(false, _scripts, _characterConfigs, _accounts);
         }
 
-        public void ReturnToMainMenu(SaveData data)
+        public void ReturnToMainMenu()
         {
+            if (_stateMachine is not null)
+            {
+                _stateMachine.CurrentState.Exit(null);
+                _stateMachine.OnDisable();
+            } 
+            if(_character is not null)
+                _character.OnDisable();
+            if(scheduleUI is not null)
+                scheduleUI.Clear();
+            
             mainMenu.gameObject.SetActive(true);
             mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts);
-        }
-
-        public void ContinueFromMainMenu()
-        {
-            mainMenu.gameObject.SetActive(false);
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToMainMenu, new Dictionary<string, object>());
         }
         
         public void Load(SaveData data)

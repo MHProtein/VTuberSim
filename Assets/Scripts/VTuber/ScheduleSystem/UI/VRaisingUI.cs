@@ -18,7 +18,9 @@ namespace VTuber.ScheduleSystem.UI
     {
         [SerializeField] private TMP_Text weekCountText;
         
-        [Header("Schedule")] [SerializeField] private Transform _scheduleUI;
+        [Header("Schedule")]
+        [SerializeField] private Transform _scheduleUI;
+        [SerializeField] private Transform initialScheduleUIPosition;
         [SerializeField] private GameObject eventUIPrefab;
         
         [Space(3)]
@@ -151,6 +153,11 @@ namespace VTuber.ScheduleSystem.UI
             return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f);
         }
         
+        public void SetScheduleUIPositionToInitial()
+        {
+            _scheduleUI.transform.position = initialScheduleUIPosition.position;
+        }
+        
         public Tween UpdateWeekCount(int weekCount)
         {
             weekCountText.text = $"周数：{weekCount}";
@@ -197,5 +204,7 @@ namespace VTuber.ScheduleSystem.UI
             consumableUI.transform.localPosition = Vector3.zero;
             consumableUI.transform.localScale = Vector3.one;
         }
+
+
     }
 }
