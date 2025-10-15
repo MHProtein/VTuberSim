@@ -2,6 +2,7 @@
 using UnityEngine;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.KPIs.UI;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.Core.KPIs.UI
@@ -10,6 +11,27 @@ namespace VTuber.Core.KPIs.UI
     {
         [SerializeField] private GameObject kpiUIPrefab;
         List<VKPIUI> kpiUIs = new List<VKPIUI>();
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
+        }
+
+        private void OnSwitchToMainMenu(Dictionary<string, object> messagedict)
+        {
+            foreach (var uI in kpiUIs)
+            {
+                Destroy(uI.gameObject);
+            }
+            kpiUIs.Clear();
+        }
 
         public void AddKPIUI(VKPI kpi)
         {

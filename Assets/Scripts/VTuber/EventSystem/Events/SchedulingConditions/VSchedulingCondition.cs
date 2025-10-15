@@ -17,6 +17,7 @@ namespace VTuber.ScheduleSystem.Events
         Type,
         SameType,
         ExcludeType,
+        ExcludeID,
     }
 
     public enum VSchedulingConditionPositionPatterns
@@ -87,6 +88,9 @@ namespace VTuber.ScheduleSystem.Events
                     case VSchedulingConditionType.ExcludeType:
                         _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
                         break;
+                    case VSchedulingConditionType.ExcludeID:
+                        _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        break;
                 }
             }
             
@@ -143,6 +147,20 @@ namespace VTuber.ScheduleSystem.Events
                 }
                 return true;
             }
+            
+            if (_type == VSchedulingConditionType.ExcludeID)
+            {
+                foreach (var s in slots)
+                {
+                    if (s.Item is not null)
+                    {
+                        if (s.Item.Event.EventID == _targetID)
+                            return false;
+                    }
+                }
+                return true;
+            }
+            
             foreach (var s in slots)
             {
                 if (s.Item is not null)

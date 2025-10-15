@@ -545,7 +545,8 @@ namespace VTuber.BattleSystem.Core
                 EndBattle();
                 return;
             }
-            DataPersistenceManager.Instance.SaveGame();
+            if(!_isDebugScene)
+                DataPersistenceManager.Instance.SaveGame();
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},

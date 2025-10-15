@@ -55278,6 +55278,7 @@ RectTransform:
   - {fileID: 1642484396}
   - {fileID: 1407222553}
   - {fileID: 1706758802}
+  - {fileID: 1765292046}
   - {fileID: 1370900052}
   - {fileID: 1070928067}
   - {fileID: 131576084}
@@ -55314,6 +55315,7 @@ MonoBehaviour:
     SerializationNodes: []
   weekCountText: {fileID: 1787199646}
   _scheduleUI: {fileID: 1370900052}
+  initialScheduleUIPosition: {fileID: 1765292046}
   eventUIPrefab: {fileID: 1328888101914423096, guid: 2e229b23f5c424c42ab5ffd3bc7d727c, type: 3}
   scheduleCreationUI: {fileID: 1706758801}
   eventNameUI: {fileID: 1396912219}
@@ -84137,7 +84139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1567595154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92154,6 +92156,41 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1765292045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1765292046}
+  m_Layer: 0
+  m_Name: InitialScheduleUIPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1765292046
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765292045}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 963543464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -2029.992, y: -47.003902}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!43 &1766206633
 Mesh:
   m_ObjectHideFlags: 0

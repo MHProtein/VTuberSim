@@ -93,11 +93,13 @@ namespace VTuber.BattleSystem.Core.UI
         {
             _index++;
             confirmButton.interactable = false;
-            nextButton.interactable = _index < _scripts.Count - 1;
-            prevButton.interactable = _index > 0;
+            nextButton.interactable = false;
+            prevButton.interactable = false;
             Tween.LocalPosition(content.transform, content.transform.localPosition - new Vector3(contentSpacing, 0, 0), 0.5f).OnComplete(
                 () =>
                 {
+                    nextButton.interactable = _index < _scripts.Count - 1;
+                    prevButton.interactable = _index > 0;
                     confirmButton.interactable = true;
                 });
         }
@@ -106,12 +108,14 @@ namespace VTuber.BattleSystem.Core.UI
         {
             _index--;
             confirmButton.interactable = false;
-            nextButton.interactable = _index < _scripts.Count - 1;
-            prevButton.interactable = _index > 0;
+            nextButton.interactable = false;
+            prevButton.interactable = false;
             Tween.LocalPosition(content.transform, content.transform.localPosition + new Vector3(contentSpacing, 0, 0), 0.5f).OnComplete(
                 () =>
                 {
                     confirmButton.interactable = true;
+                    nextButton.interactable = _index < _scripts.Count - 1;
+                    prevButton.interactable = _index > 0;
                 });
         }
 
