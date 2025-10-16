@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Spire.Xls;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.StringToEnum;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -17,52 +19,21 @@ namespace VTuber.BattleSystem.Effect.Conditions
         public const int TargetValue = 5;
         public const int TargetDelta = 6;
     }
-    
-    public enum VOperatorType
-    {
-        LessThan,
-        LessEqual,
-        Equal,
-        GreaterThan,
-        GreaterEqual,
-        NotEqual,
-    }
-    
+    [Serializable]
     public abstract class VEffectCondition
     {
-        public uint id;
-        VOperatorType _operatorType;
+        [HideInInspector] public uint id;
+        [SerializeField] protected VOperatorType operatorType;
         public string description;
 
         public VEffectCondition(CellRange row)
         {
             id = Convert.ToUInt32(row.Columns[VConditionHeaderIndex.Id].Value);
-            _operatorType = Enum.Parse<VOperatorType>(row.Columns[VConditionHeaderIndex.OperatorType].Value);
+            operatorType = Enum.Parse<VOperatorType>(row.Columns[VConditionHeaderIndex.OperatorType].Value);
             description = row.Columns[VConditionHeaderIndex.Description].Value;
         }
 
         public abstract bool IsTrue(VBattle battle, Dictionary<string, object> message);
-
-        protected bool Compare(int left, int right)
-        {
-            switch (_operatorType)
-            {
-                case VOperatorType.LessThan:
-                    return left < right;
-                case VOperatorType.LessEqual:
-                    return left <= right;
-                case VOperatorType.Equal:
-                    return left == right;
-                case VOperatorType.GreaterThan:
-                    return left > right;
-                case VOperatorType.GreaterEqual:
-                    return left >= right;
-                case VOperatorType.NotEqual:
-                    return left != right;
-            }
-
-            return false;
-        }
 
         protected int ToInt(string str)
         {

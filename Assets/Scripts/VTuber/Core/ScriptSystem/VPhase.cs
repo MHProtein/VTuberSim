@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Tutorial.Script;
 using UnityEngine;
+using UnityEngine.Serialization;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.Character;
 using VTuber.Core.Managers;
@@ -13,24 +15,24 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
     [Serializable]
     public class VSpecialEventData
     {
-        public int WeekIndex => weekIndex - 1;
-        protected int weekIndex;
+        public int WeekIndex => weekIndexForInspector - 1;
+        public int weekIndexForInspector;
         
-        public int DayIndex => dayIndex - 1;
-        protected int dayIndex;
+        public int DayIndex => dayIndexForInspector - 1;
+        [FormerlySerializedAs("dayIndex")] public int dayIndexForInspector;
         
         public TimeOfDay timeOfDay;
         public VEventType eventType;
-        public uint eventID;
+        [HideIf("eventType", VEventType.TutorialStream)] public uint eventID;
+        [ShowIf("eventType", VEventType.TutorialStream)] public VTutorialStreamEventConfiguration configuration;
         [HideInInspector] public VPhase phase;
         public bool isPhaseStart;
         
         public void SetWeekDay(int weekIndex, int dayIndex)
         {
-            this.weekIndex = weekIndex;
-            this.dayIndex = dayIndex;
+            this.weekIndexForInspector = weekIndex;
+            this.dayIndexForInspector = dayIndex;
         }
-        
     }
     
     [Serializable]

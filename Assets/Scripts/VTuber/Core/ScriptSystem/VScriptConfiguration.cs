@@ -58,4 +58,5 @@ namespace VTuber.Core.ScriptSystem
         [Header("阶段")]
         [SerializeField] public List<VPhase> phases;
     }
+    
 }

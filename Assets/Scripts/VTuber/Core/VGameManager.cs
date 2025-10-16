@@ -32,7 +32,8 @@ namespace VTuber.BattleSystem.Core
     public class VGameManager : VSingletonMonobehaviour<VGameManager>, IDataPersistence
     {
         [SerializeField] private bool useDevData;
-        [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
+        
+        public VReincarnationConfiguration ReincarnationConfiguration => reincarnationConfiguration;
         [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
         
         [FormerlySerializedAs("schedule")]
@@ -207,7 +208,7 @@ namespace VTuber.BattleSystem.Core
             _stateMachine.OnEnable();
             _character.OnEnable();
         
-            foreach (var configuration in cooperatorConfigurations)
+            foreach (var configuration in scriptConfig.coops)
             {
                 _character.CooperatorManager.AddCooperator(configuration);
             }

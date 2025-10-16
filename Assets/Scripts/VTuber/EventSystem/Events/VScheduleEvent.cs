@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Tutorial.Script;
 using UnityEngine;
 using VTuber.BattleSystem.Core.ScriptSystem;
+using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
@@ -68,6 +70,8 @@ namespace VTuber.ScheduleSystem.Events
 
         private bool _isSchedulingConditionMet;
         
+
+        
         public VScheduleEvent(VScheduleEventConfiguration config)
         {
             _config = config;
@@ -80,6 +84,8 @@ namespace VTuber.ScheduleSystem.Events
             }
             _schedulingCondition = config.schedulingCondition;
         }
+
+ 
 
         public void SetSchedulingConditionMet(bool value)
         {

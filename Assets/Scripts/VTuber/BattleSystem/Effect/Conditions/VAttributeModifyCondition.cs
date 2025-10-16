@@ -2,6 +2,7 @@
 using Spire.Xls;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -23,7 +24,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
                 VDebug.Log($"条件 {id} 未通过：消息中未找到 'NewValue' 或 'Delta' 键。");
                 return false;
             }
-            bool result = Compare((int)message["NewValue"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
+            bool result = VMathUtils.Compare((int)message["NewValue"], _targetValue, operatorType) && VMathUtils.Compare((int)message["Delta"], _targetDelta, operatorType);
             if (result)
             {
                 VDebug.Log($"条件 {id} 通过：属性新值为 {(int)message["NewValue"]}，变化量为 {(int)message["Delta"]}");

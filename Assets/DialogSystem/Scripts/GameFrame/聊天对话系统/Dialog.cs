@@ -9,6 +9,7 @@ using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.Relic;
 
 
 public class DialogContent
@@ -63,7 +64,7 @@ public class Dialog
         InitDialog();
     }
 
-    public VRaisingEffect GetEffect(string parameterStr)
+    private VRaisingEffect GetEffect(string parameterStr)
     {
         
         string[] parameters = parameterStr.Split('\\');
@@ -74,18 +75,45 @@ public class Dialog
         uint effectID = 0;
         try
         {
-
             effectID = uint.Parse(parameters[0].Trim());
-
         }
         catch(Exception e)
         {
-            VDebug.Log("");
-        };
+            VDebug.Log(e.Message);
+        }
         string effectParameter = "";
         if (parameters.Length == 2)
             effectParameter = parameters[1];
         return VDataManager.Instance.CreateRaisingEffectByID(effectID, effectParameter, effectParameter);
+    }
+
+    public List<VRelicConfiguration> GetRelics()
+    {
+        List<VRelicConfiguration> relics = new List<VRelicConfiguration>();
+        foreach (var line in contentDic.Values)
+        {
+            foreach (var effect in line.effects)
+            {
+                if (effect is VRaisingAddRelicEffect relicEffect)
+                {
+                    relics.Add(VDataManager.Instance.Relics[relicEffect.RelicId]);
+                }
+            }
+        }
+
+        return relics;
+    }
+    
+    public List<VRaisingEffect> GetEffects()
+    {
+        List<VRaisingEffect> effects = new List<VRaisingEffect>();
+        
+        foreach (var line in contentDic.Values)
+        {
+            effects.AddRange(line.effects);
+        }
+
+        return effects;
     }
 
     public void InitDialog()
@@ -93,10 +121,8 @@ public class Dialog
         loaded = true;
         string[] data = csvFile.text.Split(new char[] { '\n' });
 
-
         try
         {
-
             dialogName = data[0].Split(new char[] { ',' })[0];
         
             var rawCharacterInfos = data[1].Split(new char[] { ',' });

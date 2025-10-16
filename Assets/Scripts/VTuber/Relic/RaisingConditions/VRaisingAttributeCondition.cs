@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Spire.Xls;
 using VTuber.Character;
+using VTuber.Core.UI;
 
 namespace VTuber.Relic
 {
@@ -27,9 +28,9 @@ namespace VTuber.Relic
             switch (conditionType)
             {
                 case VRaisingAttributeConditionType.Value:
-                    return Compare((int)message["NewValue"], targetValue);
+                    return VMathUtils.Compare((int)message["NewValue"], targetValue, operatorType);
                 case VRaisingAttributeConditionType.Delta:
-                    return Compare((int)message["Delta"], targetValue);
+                    return VMathUtils.Compare((int)message["Delta"], targetValue, operatorType);
             }
 
             return false;

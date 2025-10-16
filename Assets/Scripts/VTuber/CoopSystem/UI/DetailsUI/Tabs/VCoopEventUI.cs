@@ -27,7 +27,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         {
             _conditions = new List<GameObject>();
             _effects = new List<GameObject>();
-                
+            
             eventName.text = coopEvent.eventName;
             unlockLevel.text = "解锁等级：" + cooperator.configuration.CoopLevels[coopEvent.unlockLevel].levelName;
             if (cooperator.CurrentCoopLevel.levelIndex >= coopEvent.unlockLevel)

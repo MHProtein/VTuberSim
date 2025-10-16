@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Tutorial.Script;
 using VTuber.BattleSystem.Core.KPIs;
+using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
@@ -25,7 +27,35 @@ namespace VTuber.ScheduleSystem.Events
         
         public List<VKPI> Kpis { get; private set; }
         
+        public bool IsTutorial => _isTutorial;
+        private bool _isTutorial;
+        
+        public List<VAttributeCondition> Conditions => _conditions;
+        private List<VAttributeCondition> _conditions;
+        
+        public List<uint> Deck => _deck;
+        private List<uint> _deck;
+        
+        public Dictionary<int, List<uint>> TurnHandCards => _turnHandCards;
+        private Dictionary<int, List<uint>> _turnHandCards;
+        
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
+        {
+            Initialize(config);
+            _isTutorial = false;
+        }
+        
+        public VStreamEvent(VTutorialStreamEventConfiguration config) : base(VDataManager.Instance.GetStreamEventConfigurationByID(config.baseEventID))
+        {
+            Initialize(_config as VStreamEventConfiguration);
+            _isTutorial = true;
+            
+            _conditions = config.conditions;
+            _deck = config.deck;
+            _turnHandCards = config.turnHandCards;
+        }
+
+        private void Initialize(VStreamEventConfiguration config)
         {
             InitialTurnCount = config.initialTurnCount;
             TargetPopularity = config.targetPopularity;

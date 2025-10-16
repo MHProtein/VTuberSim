@@ -41,7 +41,7 @@ namespace VTuber.BattleSystem.Core
     
     public class VBattle : VSingletonMonobehaviour<VBattle>
     {
-        [FormerlySerializedAs("_configuration")] [SerializeField] protected VBattleConfiguration configuration;
+        [FormerlySerializedAs("configuration")] [SerializeField] protected VBattleConfiguration configuration;
 
         #region Managers
 

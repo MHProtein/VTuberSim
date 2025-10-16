@@ -29,11 +29,8 @@ namespace VTuber.CoopSystem.UI.DetailsUI
                 .dialogueNode;
             var dialog = VResourcesManager.Instance.TryGetDialog(node);
 
-            var effects = new List<VRaisingEffect>();
-            foreach (var content in dialog.contentDic)
-            {
-                effects.AddRange(content.Value.effects);
-            }
+            List<VRaisingEffect> effects = dialog.GetEffects();
+            
 
             _currentEffects = new List<TMP_Text>();
             foreach (var effect in effects)
