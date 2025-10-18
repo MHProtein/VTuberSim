@@ -56,7 +56,6 @@ namespace VTuber.ScheduleSystem.UI
                 script.CurrentWeekEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
             eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
             _eventDatas = eventConfigs;
-            CreateEventObjects();
         }
         
         public void InitializeCreator(VScript script)
@@ -64,7 +63,6 @@ namespace VTuber.ScheduleSystem.UI
             var events = script.EventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
             events.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
             _eventDatas = events;
-            CreateEventObjects();
         }
         
         VScheduleCreatorSlot GetAvailableSlot()
@@ -79,6 +77,13 @@ namespace VTuber.ScheduleSystem.UI
             }
 
             return null;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            
+            CreateEventObjects();
         }
 
         private void CreateEventObjects()
