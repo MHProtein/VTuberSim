@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
@@ -12,6 +14,12 @@ using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
 {
+    public class VScheduleSlotSaveData
+    {
+        public int coopEventID;
+        public string coopEventIconName;
+    }
+    
     public class VScheduleSlot : VUIBehaviour
     {
         public VEventUI Item => _item;
@@ -25,6 +33,8 @@ namespace VTuber.ScheduleSystem.UI
         private VEventUI _item;
         private List<VRaisingEffect> _coopEventEffects;
         private List<VCoopEvent.VCoopEventType> _coopEventTypes;
+        private int _coopEventID;
+        private Sprite _coopEventIcon;
 
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private GameObject highlightFrame;
@@ -48,17 +58,47 @@ namespace VTuber.ScheduleSystem.UI
         }
 
         private bool _placeable = true;
-        private bool _disposing = false;
         private int _allowedEventID;
         private int _eventID;
         private bool _useThisTransformAsParent;
+
+        public VScheduleSlotSaveData Save()
+        {
+            return new VScheduleSlotSaveData()
+            {
+                coopEventID = _coopEventID,
+                coopEventIconName = _coopEventIcon?.name ?? ""
+            };
+        }
+
+        public void Load(VScheduleSlotSaveData saveData)
+        {
+            _coopEventID = saveData.coopEventID;
+            if (saveData.coopEventID == -1)
+                return;
+            _coopEventIcon = VResourcesManager.Instance.TryGetSprite(saveData.coopEventIconName);
+            SetCoopEvent(new VCoopEventItem()
+            {
+                e = VDataManager.Instance.GetCoopEventByID((uint)saveData.coopEventID),
+                pfp = _coopEventIcon
+            });
+        }
         
         public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI, bool useThisTransformAsParent)
         {
             _coordination = coordination;
             _scheduleUI = scheduleUI;
             _useThisTransformAsParent = useThisTransformAsParent;
+            _coopEventID = -1;
         }
+        
+        public List<VScheduleSlot> GetUDSlots() => _scheduleUI.GetUDSlots(this);
+        
+        public List<VScheduleSlot> GetLRSlots() => _scheduleUI.GetLRSlots(this);
+        
+        public List<VScheduleSlot> GetUDLRSlots() => _scheduleUI.GetUDLRSlots(this);
+        
+        public List<VScheduleSlot> GetSurroundingSlots() => _scheduleUI.GetSurroundingSlots(this);
 
         public void SetPlaceable(bool isPlaceable, bool showFrame, int allowedEventID)
         {
@@ -69,6 +109,8 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SetCoopEvent(VCoopEventItem eventItem)
         {
+            _coopEventID = (int)eventItem.e.id;
+            _coopEventIcon = eventItem.pfp;
             coopEventGameObject.SetActive(true);
             IsCoopEventSlot = true;
             pfp.sprite = eventItem.pfp;
@@ -167,6 +209,7 @@ namespace VTuber.ScheduleSystem.UI
                 if(_scheduleUI is not null)
                     _scheduleUI.UnrecordEvent(_item.Event);
                 _item.Event.RemoveCoopEffects(this);
+                _item.Event.SetSchedulingConditionMet(false);
             }
             _item = null;
         }
@@ -458,6 +501,22 @@ namespace VTuber.ScheduleSystem.UI
         public void SetUseThisTransformAsParent(bool b)
         {
             _useThisTransformAsParent = b;
+        }
+
+        public bool TestSchedulingCondition(bool appendEffects)
+        {
+            if (Item is not null && Item.Event.SchedulingCondition is not null)
+            {
+                bool isConditionMet = _item.Event.SchedulingCondition.IsTrue(_scheduleUI.Character, this);
+
+                if (appendEffects)
+                {
+                    _item.Event.SetSchedulingConditionMet(isConditionMet);
+                }
+                return isConditionMet;
+            }
+
+            return false;
         }
     }
 }

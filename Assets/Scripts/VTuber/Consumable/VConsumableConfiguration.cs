@@ -91,10 +91,16 @@ namespace VTuber.Consumable
         public string name;
         public string description;
         public VConsumableRarity rarity;
-        protected uint idDistributor = 0;    
+        protected static uint idDistributor = 0;    
         public string liveType;
         public Sprite icon;
 
+        public static uint IDDistributor => idDistributor;
+        public static void LoadIDDistributor(uint id)
+        {
+            idDistributor = id;
+        }
+        
         public VConsumableConfiguration(CellRange row)
         {
             id = Convert.ToUInt32(row.Columns[VConsumableHeaderIndex.Id].Value.Trim());

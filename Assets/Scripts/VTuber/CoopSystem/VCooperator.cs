@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.Utilities;
 using Spire.Xls;
+using UnityEditor;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Core.EventCenter;
@@ -54,7 +55,7 @@ namespace VTuber.CoopSystem
             
             effects = new List<VRaisingEffect>();
             for (int i = VCoopEventHeaderIndex.Effect1; i <= VCoopEventHeaderIndex.E3Param; i += 2)
-            {               
+            {
                 var effectIDStr = row.Columns[i].Value;
                 if(effectIDStr.IsNullOrWhitespace())
                     continue;
@@ -88,6 +89,15 @@ namespace VTuber.CoopSystem
         public Vector2Int position;
     }
     
+    public class VCoopSaveData
+    {
+        public string configurationPath;
+        public int currentLevelIndex;
+        public int coopValue;
+        public bool hasExecutedUpgradeEventThisWeek;
+        public int upgradeEvent;
+    }
+    
     public class VCooperator
     {
         public uint Id => configuration.Id;
@@ -115,6 +125,39 @@ namespace VTuber.CoopSystem
             _currentLevelIndex = 0;
             this.configuration = configuration;
             _coopEvents = this.configuration.CoopEvents.Select(@event => VDataManager.Instance.GetCoopEventByID(@event)).ToList();
+        }
+
+        public static VCooperator Load(VCoopSaveData saveData)
+        {
+            var configuration = AssetDatabase.LoadAssetAtPath<VCooperatorConfiguration>(saveData.configurationPath);
+            var cooperator = new VCooperator(configuration);
+            cooperator._currentLevelIndex = saveData.currentLevelIndex;
+            cooperator._coopValue = saveData.coopValue;
+            cooperator._hasExecutedUpgradeEventThisWeek = saveData.hasExecutedUpgradeEventThisWeek;
+            if (saveData.upgradeEvent != -1)
+            {
+                if (cooperator.CurrentCoopLevel.eventType == VEventType.Stream)
+                {
+                    cooperator._upgradeEvent = VDataManager.Instance.CreateStreamEventByID((uint)saveData.upgradeEvent);
+                }
+                else
+                {
+                    cooperator._upgradeEvent = VDataManager.Instance.CreateDialogueEventByID((uint)saveData.upgradeEvent);
+                }
+            }
+            return cooperator;
+        }
+
+        public VCoopSaveData Save()
+        {
+            return new VCoopSaveData()
+            {
+                configurationPath = AssetDatabase.GetAssetPath(configuration),
+                currentLevelIndex = _currentLevelIndex,
+                coopValue = _coopValue,
+                hasExecutedUpgradeEventThisWeek = _hasExecutedUpgradeEventThisWeek,
+                upgradeEvent = _upgradeEvent is not null ? (int)_upgradeEvent.EventID : -1
+            };
         }
 
         public void OnEnable()

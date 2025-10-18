@@ -5,12 +5,46 @@ using VTuber.Core.EventCenter;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
+    public class VColorSaveData
+    {
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+
+        public VColorSaveData() { }
+
+        public VColorSaveData(Color color)
+        {
+            r = color.r;
+            g = color.g;
+            b = color.b;
+            a = color.a;
+        }
+
+        public Color ToColor()
+        {
+            return new Color(r, g, b, a);
+        }
+    }
     public class VBattleMultiplierAttribute : VBattleAttribute
     {
         public readonly Color color;
         public VBattleMultiplierAttribute(int value, Color color) : base(value, true, VBattleEventKey.OnMultiplierChange)
         {
             this.color = color;
+        }
+
+        public VBattleMultiplierAttribute(VBattleAttributeSaveData saveData) : base(saveData)
+        {
+            color = saveData.color.ToColor();
+        }
+
+        public override VBattleAttributeSaveData Save()
+        {
+            var data = base.Save();
+            data.color = new VColorSaveData(color);
+            return data;
         }
 
         protected override void InitSetValue(int value, bool isFromCard, bool shouldPlayTwice = false)

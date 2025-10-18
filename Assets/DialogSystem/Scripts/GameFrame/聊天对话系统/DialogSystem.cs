@@ -1,14 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Character;
-using VTuber.Core.Managers;
 using Random = UnityEngine.Random;
 
 public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
@@ -31,6 +27,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     
     private UnityAction<Dialog> onDialogFinished;
     public event UnityAction<Dialog> OnDialogFinished;
+    public event UnityAction<int> OnLineFinished;
 
     public Text optionDescription;
     public GameObject descriptionObj;
@@ -112,6 +109,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         this.gameObject.SetActive(true);
         canContinue = true;
         _character = character;
+        AdjustScrollView();
         //StartCoroutine(StartDialog());
     }
 
@@ -217,10 +215,14 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
                 showingOptions = options;
             }
             
+            var tempIndex = currentDialog.index;
+            
             foreach (var op in showingOptions)
             {
                 CreateOptionBtn(op);
             }
+
+            currentDialog.index = tempIndex;
         }
         else
         {
@@ -232,9 +234,9 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         
     }
 
-    public void CreateDialog(DialogContent dc)
+    public void CreateDialog(DialogContent dc, bool isLoadedSkip = false)
     {
-        if (!dc.ifOption && currentDialogObj != null)
+        if (!isLoadedSkip && (!dc.ifOption && currentDialogObj != null))
         {
             dc.AppleEffects(_character);
         }
@@ -275,11 +277,15 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 
         ClearBtns();
         canContinue = true;
+        
+        if(!isLoadedSkip) 
+            OnLineFinished?.Invoke(dc.id);
+        
         if (dc.nextId == -1)
         {
             shouldEnd = true;
         }
-        currentDialog.index=dc.nextId;
+        currentDialog.index = dc.nextId;
     }
 
     public GameObject GetBtn()
@@ -406,5 +412,15 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             }
             ContinueDialog();
         }
+    }
+
+    public void SkipTo(List<int> executedLines)
+    {
+        foreach (var executedLine in executedLines)
+        {
+            CreateDialog(currentDialog.contentDic[executedLine], true);
+        }
+        currentDialog.index = currentDialog.contentDic[executedLines[executedLines.Count - 1]].nextId;
+        scrollRect.verticalNormalizedPosition = 0f;
     }
 }

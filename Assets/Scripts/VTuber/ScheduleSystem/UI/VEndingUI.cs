@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using PrimeTween;
 using Sirenix.Utilities;
+using SlayTheSpire.System.SavingSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -109,7 +110,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             _account.accountName = inputField.text;
             VGameManager.Instance.AddAccount(_account);
-            VGameManager.Instance.ChangeToMainMenu();
+            VGameManager.Instance.ChangeToMainMenu(DataPersistenceManager.Instance.LoadSave());
             
             Hide();
             

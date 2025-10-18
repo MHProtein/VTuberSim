@@ -30,16 +30,16 @@ namespace VTuber.BattleSystem.UI
         protected override void OnEnable()
         {
             base.OnEnable();
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
         }
         
-        private void OnBattleBegin(Dictionary<string, object> messagedict)
+        private void OnBattleUIInitialize(Dictionary<string, object> messagedict)
         {
             _isPhaseEnding = messagedict["IsPhaseEnding"] as bool? ?? false;
             _target = (int)messagedict["TargetPopularity"];
@@ -56,8 +56,6 @@ namespace VTuber.BattleSystem.UI
             int delta = messagedict["Delta"] as int ? ?? 0;
             var value = messagedict["NewValue"] as int? ?? 0;
             popularityText.text = $"{value}";
-            if(delta == 0)
-                return;
             
             popularityText.color = delta > 0 ? Color.green : Color.red;
             _animationQueue.Enqueue(Tween.PunchScale(popularityText.transform, Vector3.one * 1.3f, 0.4f).OnComplete((

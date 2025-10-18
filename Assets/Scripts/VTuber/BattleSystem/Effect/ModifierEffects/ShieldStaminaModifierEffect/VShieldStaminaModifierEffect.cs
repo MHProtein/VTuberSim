@@ -12,17 +12,19 @@ namespace VTuber.BattleSystem.Effect
         Rate,
         Points
     }
-    public class VShieldStaminaModifierEffect : VEffect
+    public class VShieldStaminaModifierEffect : VModifierEffect
     {
         private readonly VStaminaModifiyType _modifiyType;
-        private readonly VUpgradableValue<float> _deltaRate;
-        private readonly VUpgradableValue<int> _deltaPoints;
+        private VUpgradableValue<float> _deltaRate;
+        private VUpgradableValue<int> _deltaPoints;
         
+        private int _valueModifierID = -1;
         private Action<uint> _onBuffRemove;
         private Action<uint, float> _onBuffLayerChangeRate;
         private Action<uint, int> _onBuffLayerChangePoints;
         
-        private uint modifierID;
+        private uint _modifierID;
+        private bool _applied = false;
         
         public VShieldStaminaModifierEffect(VShieldStaminaModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
         {
@@ -36,6 +38,61 @@ namespace VTuber.BattleSystem.Effect
                 case VStaminaModifiyType.Points:
                     _deltaPoints = new VUpgradableValue<int>(Convert.ToInt32(parameter), Convert.ToInt32(upgradedParameter));
                     break;
+            }
+        }
+        
+        public override VModifierEffectSaveData Save()
+        {
+            return new VModifierEffectSaveData
+            {
+                effectConfigID = _configuration.id,
+                valueModifierID = _valueModifierID,
+                modifierID = _modifierID,
+                applied = _applied,
+                parameterInt = _deltaPoints.Value,
+                upgradedParameterInt = _deltaPoints.UpgradedValue,
+                parameterFloat = _deltaRate.Value,
+                upgradedParameterFloat = _deltaRate.UpgradedValue,
+            };
+        }
+
+        public override void Load(VModifierEffectSaveData data)
+        {
+            switch (_modifiyType)
+            {
+                case VStaminaModifiyType.Rate:
+                    _deltaRate = new VUpgradableValue<float>(data.parameterFloat, data.upgradedParameterFloat);
+                    break;
+                case VStaminaModifiyType.Points:
+                    _deltaPoints = new VUpgradableValue<int>(data.parameterInt, data.upgradedParameterInt);
+                    break;
+            }
+            if (data.applied)
+            {
+                _applied = true;
+                _valueModifierID = data.valueModifierID;
+                _modifierID = data.modifierID;
+
+                switch (_modifiyType)
+                {
+                    case VStaminaModifiyType.Rate:
+                    {
+                        var modifier = VBattleLookUpTables.Instance.GetGainRateModifier(_valueModifierID);
+                        _onBuffRemove = modifier.RemoveModifier;
+                        _onBuffLayerChangeRate = modifier.ChangeModifier;
+                        VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Rate Modifier，ID为: " + _modifierID);
+                        break;
+                    }
+                    case VStaminaModifiyType.Points:
+                    {
+                        
+                        var modifier = VBattleLookUpTables.Instance.GetGainValueModifier(_valueModifierID);
+                        _onBuffRemove = modifier.RemoveModifier;
+                        _onBuffLayerChangePoints = modifier.ChangeModifier;
+                        VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + _modifierID);
+                        break;
+                    }
+                }
             }
         }
 
@@ -69,6 +126,16 @@ namespace VTuber.BattleSystem.Effect
 
         public override void OnBuffAdded(VBattle battle, int layer)
         {            
+            _battle = battle;
+            Apply(battle, layer);
+        }
+
+        private void Apply(VBattle battle, int layer)
+        {       
+            if (_applied)
+                return;
+            if (!CanApply(battle, null))
+                return;
             switch (_modifiyType)
             {
                 case VStaminaModifiyType.Rate:
@@ -76,10 +143,11 @@ namespace VTuber.BattleSystem.Effect
                     if(MultiplyByLayer > 0.0f)
                         rateValue *= layer * MultiplyByLayer;
             
-                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.AddModifier(rateValue, -1);
+                    _valueModifierID = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.ID;
+                    _modifierID = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.AddModifier(rateValue, -1);
                     _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.RemoveModifier;
                     _onBuffLayerChangeRate = battle.BattleAttributeManager.StaminaManager.ConsumeRateModifier.ChangeModifier;
-                    VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaRate.Value} 获取RateModifier，ID：{modifierID}");
+                    VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaRate.Value} 获取RateModifier，ID：{_modifierID}");
                 
                     break;
                 case VStaminaModifiyType.Points:
@@ -87,12 +155,15 @@ namespace VTuber.BattleSystem.Effect
                     if(MultiplyByLayer > 0.0f)
                         pointsValue *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
             
-                    modifierID = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.AddModifier(pointsValue, -1);
+                    _valueModifierID = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.ID;
+                    _modifierID = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.AddModifier(pointsValue, -1);
                     _onBuffRemove = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.RemoveModifier;
                     _onBuffLayerChangePoints = battle.BattleAttributeManager.StaminaManager.ConsumePointsModifier.ChangeModifier;
-                    VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaPoints.Value} 获取PointsModifier，ID：{modifierID}");
+                    VDebug.Log($"效果 {_configuration.effectName} 添加了 {_deltaPoints.Value} 获取PointsModifier，ID：{_modifierID}");
                     break;
             }
+            Triggered = true;
+            _applied = true;
         }
         
 
@@ -107,7 +178,7 @@ namespace VTuber.BattleSystem.Effect
                         return;
                     float rateValue = _deltaRate.Value;
                     rateValue *= layer * MultiplyByLayer;
-                    _onBuffLayerChangeRate(modifierID, rateValue);
+                    _onBuffLayerChangeRate(_modifierID, rateValue);
                     VDebug.Log($"效果 {_configuration.effectName} 修改了RateModifier为 {rateValue}，层数：{layer}");
                     break;
                 case VStaminaModifiyType.Points:
@@ -115,7 +186,7 @@ namespace VTuber.BattleSystem.Effect
                         return;
                     int pointsValue = _deltaPoints.Value;
                     pointsValue *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
-                    _onBuffLayerChangePoints(modifierID, pointsValue);
+                    _onBuffLayerChangePoints(_modifierID, pointsValue);
                     VDebug.Log($"效果 {_configuration.effectName} 修改了PointsModifier为 {pointsValue}，层数：{layer}");
                     break;
                 default:
@@ -126,7 +197,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override void OnBuffRemove()
         {
-            _onBuffRemove(modifierID);
+            _onBuffRemove(_modifierID);
         }
         
         public override string GetValue()

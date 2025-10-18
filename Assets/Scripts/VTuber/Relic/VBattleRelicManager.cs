@@ -1,8 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VTuber.BattleSystem.Core;
+using VTuber.Core.Managers;
 
 namespace VTuber.Relic
 {
+    public class VBattleRelicManagerSaveData
+    {
+        public List<VBattleRelicSaveData> relics;
+        public uint idDistributor;
+    }
+
+    public class VBattleRelicSaveData
+    {
+        public uint configID;
+        public int layer;
+    }
+
     public class VBattleRelicManager
     {
         public VBattle Battle => _battle;
@@ -10,6 +24,32 @@ namespace VTuber.Relic
 
         public uint idDistributor = 0;
         private List<VBattleRelic> relics;
+
+        public VBattleRelicManagerSaveData Save()
+        {
+            return new VBattleRelicManagerSaveData()
+            {
+                idDistributor = idDistributor,
+                relics = relics.Select(relic => new VBattleRelicSaveData()
+                {
+                    configID = relic.ConfigId,
+                    layer = relic.Layer
+                }).ToList()
+            };
+        }
+
+        public VBattleRelicManager(VBattle battle, VBattleRelicManagerSaveData saveData)
+        {
+            _battle = battle;
+            relics = new List<VBattleRelic>();
+            idDistributor = saveData.idDistributor;
+            foreach (var relicSaveData in saveData.relics)
+            {
+                var relic = VDataManager.Instance.CreateRelicByID(relicSaveData.configID) as VBattleRelic;
+                relic.LoadLayer(relicSaveData.layer);
+                AddRelic(relic);
+            }
+        }
 
         public VBattleRelicManager(VBattle battle, List<VBattleRelic> initRelics)
         {

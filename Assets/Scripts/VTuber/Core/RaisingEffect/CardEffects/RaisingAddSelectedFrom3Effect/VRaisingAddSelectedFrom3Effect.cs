@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 
 namespace VTuber.Core.RaisingEffect
 {
+
     public class VRaisingAddSelectedFrom3Effect : VRaisingCardEffect
     {
         private VCardCondition _condition;
@@ -26,7 +27,7 @@ namespace VTuber.Core.RaisingEffect
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCardFrom3, new Dictionary<string, object>()
             {
                 {"Cards", cardsToAdd },
-                {"Action", new Action<VCard>(ReplaceCard)}
+                {"ActionType", VCardActionType.Add}
             });
         }
 
@@ -40,10 +41,7 @@ namespace VTuber.Core.RaisingEffect
         {
         }
 
-        public void ReplaceCard(VCard selectedCard)
-        {
-            _character.CardLibrary.AddCard(selectedCard);
-        }
+
         public override string GetParameter()
         {
             return "";

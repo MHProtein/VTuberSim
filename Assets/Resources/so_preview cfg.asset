@@ -27,28 +27,31 @@ MonoBehaviour:
     - name: EnumDatabase
       path: 
       so: {fileID: 11400000, guid: d3f0a9e886756b64b8bec297f2f59c9c, type: 2}
-  - key: CharacterConfigs
+  - key: "\u89D2\u8272"
     value:
-    - name: CharacterConfig
+    - name: "\u58A8\u6CAB"
       path: 
       so: {fileID: 11400000, guid: c1fb19fe6c05f64458e6c0dd3110203a, type: 2}
-    - name: Superman
+    - name: "\u58A8\u6CAB\u5B8C\u5168\u4F53"
       path: 
       so: {fileID: 11400000, guid: 3906dc5cf0ddd294ea8ea68fae029fe1, type: 2}
   - key: 
     value:
-    - name: BattleConfig
+    - name: "\u6218\u6597\u8BBE\u7F6E"
       path: 
       so: {fileID: 11400000, guid: 6a14fef992fc2db438d2730692106df0, type: 2}
-  - key: Scripts
+  - key: "\u5267\u672C"
     value:
+    - name: "\u51FA\u9053"
+      path: 
+      so: {fileID: 11400000, guid: 2b7a51cef32afd84481842f7961104c8, type: 2}
     - name: "\u5E95\u8FB9"
       path: 
       so: {fileID: 11400000, guid: 4c97a8fd68ebfae43824cec3cd43e14c, type: 2}
-    - name: GURA
+    - name: "\u6D4B\u8BD5\u5267\u672C"
       path: 
       so: {fileID: 11400000, guid: cf604c21659ff0a41b05dc922cb753de, type: 2}
-  - key: Cooperators
+  - key: "\u793E\u7FA4"
     value:
     - name: "\u5C0F\u5BA4"
       path: 

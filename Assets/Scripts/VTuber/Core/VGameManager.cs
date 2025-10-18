@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using SlayTheSpire.System.SavingSystem;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
+using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -25,11 +29,10 @@ using VTuber.Store.UI;
 
 namespace VTuber.BattleSystem.Core
 {
-    public class VGameManager : VSingletonMonobehaviour<VGameManager>
+    public class VGameManager : VSingletonMonobehaviour<VGameManager>, IDataPersistence
     {
-        [SerializeField] private bool dev;
+        [SerializeField] private bool useDevData;
         [SerializeField] private List<VCooperatorConfiguration> cooperatorConfigurations;
-        [FormerlySerializedAs("script")] [SerializeField] private VScriptConfiguration scriptConfiguration;
         [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
         
         [FormerlySerializedAs("schedule")]
@@ -49,16 +52,21 @@ namespace VTuber.BattleSystem.Core
         [Space(5)]
         [Header("EventSystem")]
         [SerializeField] private GameObject eventSystemRoot;
-        [FormerlySerializedAs("eventSystem")] [SerializeField] private VEventSystem eventSystemSystem;
+        [FormerlySerializedAs("eventSystemSystem")] [SerializeField] private VEventSystem eventSystem;
 
         [SerializeField] private VStoreUI _storeUI;
         [SerializeField] private VStoreConfiguration storeConfiguration;
 
-        [Space(5)] [Header("MainMenu")] [SerializeField]
-        private VMainMenu _mainMenu;
-        [SerializeField] private List<VScriptConfiguration> scripts;
-        [SerializeField] private List<VCharacterConfiguration> characters;
+        [Space(5)] [Header("MainMenu")]
+        [SerializeField] private AssetLabelReference scriptLabel;
+        [SerializeField] private AssetLabelReference characterLabel;
         
+        [FormerlySerializedAs("_mainMenu")]
+        [Space(5)] [Header("MainMenu")]
+        [SerializeField] private VMainMenu mainMenu;
+        
+        private List<VScriptConfiguration> _scripts;
+        private List<VCharacterConfiguration> _characterConfigs;
         
         public VCharacter Character => _character;
         private VCharacter _character;
@@ -66,13 +74,17 @@ namespace VTuber.BattleSystem.Core
         private VScript _script;
 
         private List<VAccount> _accounts;
+
+        private bool _newGame = false;
+        
+        private DateTime _startGameTime;
         
         protected override void Awake()
         {
             base.Awake();
             VDataLoader loader;
             _accounts = new List<VAccount>();
-            if (dev)
+            if (useDevData)
             {
                 loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Cards.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/dev/Raising.xlsx"),
@@ -86,18 +98,38 @@ namespace VTuber.BattleSystem.Core
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
                     Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             }
+
+            _scripts = new List<VScriptConfiguration>();
+            _characterConfigs = new List<VCharacterConfiguration>();
+            Addressables.LoadAssetsAsync<VScriptConfiguration>(scriptLabel, scriptConfig =>
+            {
+                _scripts.Add(scriptConfig);
+            }).Completed += handle => { };
+            
+            Addressables.LoadAssetsAsync<VCharacterConfiguration>(characterLabel, characterConfig =>
+            {
+                _characterConfigs.Add(characterConfig);
+            }).Completed += handle => { };
             
             VResourcesManager.Instance.LoadSprites();
             loader.Load();
             VResourcesManager.Instance.LoadDialogs();
-            
+            DataPersistenceManager.Instance.Initialize();
             VSave save = VSaveSystem.Load();
             if(save != null)
             {
                 _accounts = save.LoadAccounts();
             }
             
-            ChangeToMainMenu();
+            DataPersistenceManager.Instance.Initialize();
+            DataPersistenceManager.Instance.Register(this);
+
+            var saveData = DataPersistenceManager.Instance.LoadSave();
+            
+            eventSystem.Initialize();
+            
+            _newGame = saveData == null;
+            ChangeToMainMenu(saveData);
         }
 
         protected override void OnEnable()
@@ -117,14 +149,30 @@ namespace VTuber.BattleSystem.Core
         protected override void Start()
         {
             base.Start();
-            _mainMenu.gameObject.SetActive(true);
+            mainMenu.gameObject.SetActive(true);
         }
 
-        public void InitializeGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
+        public void LoadGame()
         {
+            _startGameTime = DateTime.UtcNow;
+            DataPersistenceManager.Instance.LoadGame();
+            
+            List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
+            eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
+            eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
+
+            scheduleCreator.InitializeCreator(_script);
+            
+            mainMenu.gameObject.SetActive(false);
+        }
+
+        public void NewGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
+        {
+            _startGameTime = DateTime.UtcNow;
+            DataPersistenceManager.Instance.NewGame();
             _script = new VScript(scriptConfig);
             _character = new VCharacter(characterConfiguration);
-            _character.Initialize();
+            _character.Initialize(false);
 
             foreach (var account in accounts)
             {
@@ -133,42 +181,42 @@ namespace VTuber.BattleSystem.Core
                     effect.ApplyEffect(_character, null);
                 }
             }
-            
-            _weeklySchedule = new VWeeklySchedule(_character);
+        
+            _weeklySchedule = new VWeeklySchedule();
+        
+            // foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
+            // {
+            //     if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
+            //         _character.CardLibrary.AddCard(config.CreateCard());
+            // }
 
-            foreach (var config in VDataManager.Instance.GetAllCardConfigurations())
+            if (scriptConfig.cardIDs.TryGetValue(_character.LiveType, out var cardIDs))
             {
-                if((config.liveType == "F" || config.liveType == _character.LiveType) && config.rarity == VCardRarity.Basic)
-                    _character.CardLibrary.AddCard(config.CreateCard());
+                foreach (var cardID in cardIDs)
+                {
+                    _character.CardLibrary.AddCard(VDataManager.Instance.GetCardConfigurationByID(cardID).CreateCard());
+                }
             }
-            
-            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
-                battleRoot, battle, eventSystemRoot, eventSystemSystem,
-                _character, _script, reincarnationConfiguration);
-            _stateMachine.RegisterState(new VScheduleCreationState());
-            _stateMachine.RegisterState(new VExecutionState());
-            _stateMachine.RegisterState(new VPauseState());
-            _stateMachine.RegisterState(new VScheduleModifyState());
-            _stateMachine.RegisterState(new VPhaseStartState());
-            
+            else
+            {
+                VDebug.LogError("liveType not found in scriptConfig.cardIDs");
+            }
+        
+            InitializeStateMachine();
+        
             _stateMachine.OnEnable();
             _character.OnEnable();
-            
-            scheduleUI.Initialize(_character, _script);
-            List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
-            eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
-            eventConfigs.AddRange(_script.StreamEventList.Select((id => VDataManager.Instance.GetStreamEventConfigurationByID(id))));
-            
-            scheduleCreator.InitializeCreator(eventConfigs);
-            
-            _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
-            
+        
             foreach (var configuration in cooperatorConfigurations)
             {
                 _character.CooperatorManager.AddCooperator(configuration);
             }
             
-            _mainMenu.gameObject.SetActive(false);
+            scheduleUI.Initialize(_character, _script);
+            scheduleCreator.InitializeCreator(_script);
+            _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
+            
+            mainMenu.gameObject.SetActive(false);
         }
 
         public void AddAccount(VAccount account)
@@ -198,6 +246,18 @@ namespace VTuber.BattleSystem.Core
             VRaisingUI.Instance.InitializeCardLibraryUI(_character.CardLibrary.GetCards());
         }
         
+        public void InitializeStateMachine()
+        {
+            _stateMachine = new VStateMachine(scheduleUI, _weeklySchedule,
+                battleRoot, eventSystemRoot, eventSystem,
+                _character, _script, reincarnationConfiguration);
+            _stateMachine.RegisterState(new VScheduleCreationState());
+            _stateMachine.RegisterState(new VExecutionState());
+            _stateMachine.RegisterState(new VPauseState());
+            _stateMachine.RegisterState(new VScheduleModifyState());
+            _stateMachine.RegisterState(new VPhaseStartState());
+        }
+        
         public void CloseCardLibraryUI()
         {
             VRaisingUI.Instance.CloseCardLibraryUI();
@@ -225,6 +285,7 @@ namespace VTuber.BattleSystem.Core
                     {
                         var evt = slot.Item.Event;
                         slot.Item.SetInteractive(false);
+                        slot.TestSchedulingCondition(true);
                         _weeklySchedule.SetEvent(x, (TimeOfDay)y, evt);
                         y += evt.Duration;
                     }
@@ -248,21 +309,86 @@ namespace VTuber.BattleSystem.Core
             }
         }
 
-        public void ChangeToMainMenu()
+        public void ChangeToMainMenu(SaveData data)
         {
-            _mainMenu.gameObject.SetActive(true);
-            _mainMenu.Initialize(false, scripts, characters, _accounts, InitializeGame);
+            mainMenu.gameObject.SetActive(true);
+            mainMenu.Initialize(false, _scripts, _characterConfigs, _accounts);
         }
 
-        public void ReturnToMainMenu()
+        public void ReturnToMainMenu(SaveData data)
         {
-            _mainMenu.gameObject.SetActive(true);
-            _mainMenu.Initialize(true, scripts, characters, _accounts, InitializeGame);
+            mainMenu.gameObject.SetActive(true);
+            mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts);
         }
 
         public void ContinueFromMainMenu()
         {
-            _mainMenu.gameObject.SetActive(false);
+            mainMenu.gameObject.SetActive(false);
+        }
+        
+        public void Load(SaveData data)
+        {
+            VCardConfiguration.LoadIDDistributor(data.cardIDDistributor);
+            VConsumableConfiguration.LoadIDDistributor(data.consumableIDDistributor);
+            _accounts = new List<VAccount>();
+            foreach (var saveData in data.accounts)
+            {
+                _accounts.Add(new VAccount(saveData));
+            }
+
+            _character = new VCharacter(null);
+            _character.Load(data, _characterConfigs.Find(config
+                => config.name == data.characterSaveData.characterConfigurationName));
+            
+            _script = VScript.Load(data.script, _scripts.Find(config
+                => config.name == data.script.scriptConfigurationName));
+            
+            _weeklySchedule = VWeeklySchedule.Load(data.weeklySchedule, _script);
+            
+            scheduleUI.Initialize(_character, _script);
+            scheduleUI.Load(data);
+            scheduleUI.LoadEvents(_weeklySchedule);
+            
+            eventSystem.Load(data);
+            
+            InitializeStateMachine();
+            _stateMachine.Load(data.stateMachine);
+            
+            _stateMachine.OnEnable();
+            _character.OnEnable();
+        }
+
+        public void Save(SaveData data)
+        {
+            data.lastPlayTime = DateTime.UtcNow - _startGameTime;
+            data.accounts = new List<VAccountSaveData>();
+            foreach (var account in _accounts)
+            {
+                data.accounts.Add(account.Save());
+            }
+            
+            _character.Save(data);
+            data.weeklySchedule = _weeklySchedule.Save(_script);
+            data.stateMachine = _stateMachine.Save();
+            data.script = _script.Save();
+            scheduleUI.Save(data);
+            eventSystem.Save(data);
+            
+            data.battleSaveData = battle.Save();
+
+            data.cardIDDistributor = VCardConfiguration.IDDistributor;
+            data.consumableIDDistributor = VConsumableConfiguration.IDDistributor;
+            
+        }
+
+        public VScriptConfiguration GetScriptConfig(string scriptScriptConfigurationName)
+        {
+            return _scripts.Find(config => config.name == scriptScriptConfigurationName);
+        }
+
+        public VCharacterConfiguration GetCharacterConfig(string characterConfigurationName)
+        {
+            return _characterConfigs.Find(config => config.name == characterConfigurationName);
         }
     }
 }

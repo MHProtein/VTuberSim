@@ -11,7 +11,18 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             _defaultPlayCountPerTurn = value;
         }
+        public VBattlePlayLeftAttribute(VBattleAttributeSaveData saveData) : base(saveData)
+        {
+            _defaultPlayCountPerTurn = saveData.defaultPlayCountPerTurn;
+        }
 
+        public override VBattleAttributeSaveData Save()
+        {
+            var data = base.Save();
+            data.defaultPlayCountPerTurn = _defaultPlayCountPerTurn;
+            return data;
+        }
+        
         public override void OnEnable()
         {
             base.OnEnable();

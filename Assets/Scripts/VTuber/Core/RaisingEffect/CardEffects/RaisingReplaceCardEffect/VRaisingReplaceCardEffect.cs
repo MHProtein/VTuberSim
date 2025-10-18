@@ -25,7 +25,7 @@ namespace VTuber.Core.RaisingEffect
 
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>()
             {
-                {"Action", new Action<VCard>(ReplaceCard)}
+                {"ActionType", VCardActionType.Replace}
             });
         }
 
@@ -37,12 +37,7 @@ namespace VTuber.Core.RaisingEffect
         public override void DownGrade()
         {
         }
-
-        public void ReplaceCard(VCard selectedCard)
-        {
-            _character.CardLibrary.ReplaceCard(cardToReplace, selectedCard);
-            
-        }
+        
         public override string GetParameter()
         {
             return "";

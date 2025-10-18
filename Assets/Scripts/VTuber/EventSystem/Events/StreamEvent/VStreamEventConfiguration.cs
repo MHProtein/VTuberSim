@@ -13,18 +13,18 @@ namespace VTuber.ScheduleSystem.Events
 {
     public class VStreamEventHeaderIndex
     {    
-        public const int TurnCount = 11;
-        public const int Target = 12;
-        public const int ExtraTarget = 13;
-        public const int InitialViewers = 14;
-        public const int MainAbility = 15;
-        public const int AbilityTurns = 16;
-        public const int SuccessEvent = 17;
-        public const int FailEvent = 18;
-        public const int AttributeBonus = 19;
-        public const int KPI1 = 20;
-        public const int KPI2 = 21;
-        public const int KPI3 = 22;
+        public const int TurnCount = 12;
+        public const int Target = 13;
+        public const int ExtraTarget = 14;
+        public const int InitialViewers = 15;
+        public const int MainAbility = 16;
+        public const int AbilityTurns = 17;
+        public const int SuccessEvent = 18;
+        public const int FailEvent = 19;
+        public const int AttributeBonus = 20;
+        public const int KPI1 = 21;
+        public const int KPI2 = 22;
+        public const int KPI3 = 23;
     }
     
     public class VStreamEventConfiguration : VDialogueEventConfiguration

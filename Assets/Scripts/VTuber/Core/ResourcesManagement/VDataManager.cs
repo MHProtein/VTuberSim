@@ -53,8 +53,12 @@ namespace VTuber.Core.Managers
         public Dictionary<uint, VPlacingCondition> PlacingConditions => _placingConditions;
         private Dictionary<uint, VPlacingCondition> _placingConditions;
         
+        public Dictionary<uint, VSchedulingCondition> SchedulingConditions => _schedulingConditions;
+        private Dictionary<uint, VSchedulingCondition> _schedulingConditions;
+        
         public Dictionary<uint, VConsumableConfiguration> ConsumableConfigurationss => _consumableConfigurations;
         private Dictionary<uint, VConsumableConfiguration> _consumableConfigurations;
+        
         
         public void SetCardConfigurations(List<VCardConfiguration> cardConfigurations)
         {
@@ -224,6 +228,23 @@ namespace VTuber.Core.Managers
                     _consumableConfigurations[consumableConfig.id] = consumableConfig;
                 }
             }
+        }
+
+        public void SetSchedulingConditions(List<VSchedulingCondition> conditions)
+        {
+            _schedulingConditions = new Dictionary<uint, VSchedulingCondition>();
+            foreach (var condition in conditions)
+            {
+                if (condition != null)
+                {
+                    _schedulingConditions[condition.Id] = condition;
+                }
+            }
+        }
+
+        public VSchedulingCondition GetSchedulingConditionByID(uint id)
+        {
+            return _schedulingConditions[id];
         }
 
         public VRelic CreateRelicByID(uint id)

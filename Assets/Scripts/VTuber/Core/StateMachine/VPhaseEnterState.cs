@@ -7,6 +7,7 @@ namespace VTuber.Core.StateMachine
 {
     public class VPhaseStartState : VState
     {
+        VDialogueEvent _currentEvent;
         public VPhaseStartState()
         {
             stateType = VStateType.PhaseStart;
@@ -15,16 +16,16 @@ namespace VTuber.Core.StateMachine
         public void InitializeEvent(VDialogueEvent e)
         {
             stateMachine.EventSystemRoot.SetActive(true);
-            stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, e);
+            stateMachine.EventSystemSystem.InitializeEvent(stateMachine.Character, e, true);
         }
 
         public override void Enter(VState state, params object[] enterParams)
         {
             base.Enter(state, enterParams);
             
-            VDialogueEvent e = enterParams[0] as VDialogueEvent;
+            _currentEvent = (VDialogueEvent)stateMachine.Script.CurrentPhase.GetStartEvent();
             
-            InitializeEvent(e);
+            InitializeEvent(_currentEvent);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }

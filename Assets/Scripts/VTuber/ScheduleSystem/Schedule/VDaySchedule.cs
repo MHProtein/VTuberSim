@@ -1,63 +1,48 @@
-﻿
-using System;
+﻿using System;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using UnityEngine;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.ScriptSystem;
 
 namespace VTuber.ScheduleSystem.Schedule
 {
-    /// <summary>
-    /// 表示一天中的三段时间安排
-    /// </summary>
+    public class VDayScheduleSaveData
+    {
+        public List<VScheduleEventSaveData> events;
+        public int dayIndex;
+        public int eventIndex;
+        public TimeOfDay currentTimeOfDay;
+        public uint currentEventIndex;
+    }
+    
     public class VDaySchedule
     {
-        private readonly List<VScheduleEvent> _events = new();
-        
-        private VCharacter _character;
+        private List<VScheduleEvent> _events = new();
         private VWeeklySchedule _weeklySchedule;
-        
-        private class ScheduledSlot
-        {
-            public VScheduleEvent Event;
-            public bool IsPrimarySlot; // 只在第一个时间段执行
-        }
-
-        private readonly Dictionary<TimeOfDay, ScheduledSlot> _slots = new();
-        
         private TimeOfDay currentTimeOfDay;
         private int _dayIndex = 0;
         private int eventIndex = 0;
+        private uint _currentEventIndex = 0;
 
-        public VDaySchedule(VWeeklySchedule weeklySchedule, VCharacter character, int index)
+        public VDaySchedule(VWeeklySchedule weeklySchedule, int index)
         {
             currentTimeOfDay = TimeOfDay.Morning;
-            _character = character;
             _weeklySchedule = weeklySchedule;
             _dayIndex = index;
         }
-        
-        public TimeOfDay NextTimeOfDay()
-        {
-            switch (currentTimeOfDay)
-            {
-                case TimeOfDay.Morning:
-                    return TimeOfDay.Afternoon;
-                case TimeOfDay.Afternoon:
-                    return TimeOfDay.Evening;
-                case TimeOfDay.Evening:
-                    return TimeOfDay.End;
-            }
 
-            return TimeOfDay.End;
-        }
-        
-        public void SetEvent(TimeOfDay timeOfDay, VScheduleEvent evt, bool isPrimary)
+        public void SetEvent(TimeOfDay timeOfDay, VScheduleEvent evt)
         {
+            // Avoid adding duplicates
+            if (_events.Any(e => (TimeOfDay)e.Coordinate.y == timeOfDay))
+                return;
+
             if (evt.DaySchedule is null)
             {
                 evt.SetDaySchedule(this, new Vector2Int(_dayIndex, (int)timeOfDay));
@@ -67,11 +52,9 @@ namespace VTuber.ScheduleSystem.Schedule
 
         public VScheduleEvent GetEvent(TimeOfDay timeOfDay)
         {
-            if (_slots.TryGetValue(timeOfDay, out var slot))
-                return slot?.Event;
-            return null;
+            return _events.FirstOrDefault(e => (TimeOfDay)e.Coordinate.y == timeOfDay);
         }
-        
+
         public List<VScheduleEvent> GetAllEvents()
         {
             return _events;
@@ -86,7 +69,7 @@ namespace VTuber.ScheduleSystem.Schedule
             {
                 int t = startInt + i;
                 if (t > (int)TimeOfDay.Evening)
-                    break; // 超出一天范围
+                    break; 
                 slots.Add((TimeOfDay)t);
             }
 
@@ -95,9 +78,9 @@ namespace VTuber.ScheduleSystem.Schedule
 
         public VScheduleEvent GetNextEvent()
         {
-            var e = _events[eventIndex];
-
-            return e;
+            if (eventIndex >= _events.Count) return null;
+            _currentEventIndex = (uint)eventIndex;
+            return _events[eventIndex];
         }
 
         public void OnEventExecuted(VScheduleEvent e)
@@ -117,12 +100,40 @@ namespace VTuber.ScheduleSystem.Schedule
                 e.Reset();
             }
             _events.Clear();
-            _slots.Clear();
             if (resetIndices)
             {
                 currentTimeOfDay = TimeOfDay.Morning;
                 eventIndex = 0;
             }
+        }
+
+        public VDayScheduleSaveData Save(VScript script)
+        {
+            return new VDayScheduleSaveData
+            {
+                events = _events.Select(e => e.Save(script)).ToList(),
+                dayIndex = _dayIndex,
+                eventIndex = eventIndex,
+                currentTimeOfDay = currentTimeOfDay
+            };
+        }
+
+        public static VDaySchedule Load(VDayScheduleSaveData saveData, VWeeklySchedule weeklySchedule, VScript script)
+        {
+            VDaySchedule daySchedule = new(weeklySchedule, saveData.dayIndex);
+            daySchedule.eventIndex = saveData.eventIndex;
+            daySchedule.currentTimeOfDay = saveData.currentTimeOfDay;
+            daySchedule._events = saveData.events.Select(eventSaveData => VScheduleEvent.Load(eventSaveData, script)).ToList();
+            foreach (var scheduleEvent in daySchedule._events)
+            {
+                scheduleEvent.SetDaySchedule(daySchedule, scheduleEvent.Coordinate);
+            }
+            return daySchedule;
+        }
+
+        public VScheduleEvent GetCurrentEvent()
+        {
+            return _events[(int)_currentEventIndex];
         }
     }
 }

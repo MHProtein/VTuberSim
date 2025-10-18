@@ -1,7 +1,9 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
+using SlayTheSpire.System.SavingSystem;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,19 +18,28 @@ using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
+using VTuber.ScheduleSystem.Schedule;
 
 namespace VTuber.ScheduleSystem.UI
 {
+    public class VScheduleUISaveData
+    {
+        public Vector2Int currentIndicatorCoord;
+        public VKPIManagerSaveData kpiManagerSaveData;
+        public VScheduleSlotSaveData[,] slots;
+    }
     
     public class VScheduleUI : VUIBehaviour
     {
         public Vector2Int slotSize;
-        [SerializeField] protected GameObject itemPrefab;
+        [SerializeField] protected GameObject eventUIPrefab;
         [SerializeField] protected Transform indicator;
         [SerializeField] protected Image indicatorLeft;
         [SerializeField] protected Image indicatorRight;
         [SerializeField] protected Button continueButton; 
         private Vector2Int _currentIndicatorCoord = Vector2Int.zero;
+        
+        public VCharacter Character => _character;
         private VCharacter _character;
         
         public VScheduleSlot[,] Slots => slots;
@@ -41,6 +52,7 @@ namespace VTuber.ScheduleSystem.UI
         private List<int> _streamCount = new();
         private VKPIManager _kpiManager;
         private VScript _script;
+        private bool _loadingEvents = false;
         
         protected override void Awake()
         {
@@ -67,6 +79,60 @@ namespace VTuber.ScheduleSystem.UI
             {
                 0, 0, 0
             };
+        }
+        
+        public void Load(SaveData data)
+        {
+            _currentIndicatorCoord = data.scheduleUISaveData.currentIndicatorCoord;
+            _kpiManager.Load(data.scheduleUISaveData.kpiManagerSaveData);
+
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {
+                    slots[y, x].Load(data.scheduleUISaveData.slots[y, x]);
+                }
+            }
+        }
+
+        public void Save(SaveData data)
+        {
+            data.scheduleUISaveData = new VScheduleUISaveData()
+            {
+                currentIndicatorCoord = _currentIndicatorCoord,
+                kpiManagerSaveData = _kpiManager.Save()
+            };
+            data.scheduleUISaveData.slots = new VScheduleSlotSaveData[slotSize.y, slotSize.x];
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {
+                    data.scheduleUISaveData.slots[y, x] = slots[y, x].Save();
+                }
+            }
+        }
+
+        public void LoadEvents(VWeeklySchedule schedule)
+        {
+            _loadingEvents = true;
+            foreach (var daySchedule in schedule.GetAllDays())
+            {
+                foreach (var evt in daySchedule.GetAllEvents())
+                {
+                    var eventUI = Instantiate(eventUIPrefab, VScheduleUIHelper.Instance.EventParent)
+                        .GetComponent<VEventUI>();
+                    eventUI.Initialize(evt, slots[evt.Coordinate.y, evt.Coordinate.x], true);
+                    if (eventUI.Event.IsSpecialEvent || eventUI.Event.IsPhaseEndingEvent)
+                    {
+                        eventUI.SetFixed(true);
+                    }
+                }
+            }          
+            foreach (var slot in slots)
+            {
+                slot.SetPlaceable(false, false, -1);
+            }
+            _loadingEvents = false;
         }
         
         protected override void OnEnable()
@@ -103,6 +169,8 @@ namespace VTuber.ScheduleSystem.UI
         
         private void OnEventUIPlaced(Dictionary<string, object> messagedict)
         {
+            if (_loadingEvents)
+                return;
             foreach (var slot in slots)
             {
                 slot.SetPlaceable(false, false, -1);
@@ -120,6 +188,7 @@ namespace VTuber.ScheduleSystem.UI
                     return;
                 }
             }
+            
             foreach (var slot in slots)
             {
                 bool isPlaceable = true;
@@ -145,7 +214,7 @@ namespace VTuber.ScheduleSystem.UI
             foreach (VEventType eventType in Enum.GetValues(typeof(VEventType)))
             {
                 _eventCount.Add(eventType, 0);
-            }     
+            }
             _streamCount = new List<int>()
             {
                 0, 0, 0
@@ -175,9 +244,10 @@ namespace VTuber.ScheduleSystem.UI
                 e.IsPhaseStart = specialEvent.isPhaseStart;
                 e.IsSpecialEvent = true;
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
-                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], true);
+                ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], false);
                 ui.SetFixed(true);
             }
+            
             foreach (var slot in slots)
             {
                 slot.SetPlaceable(false, false, -1);
@@ -235,6 +305,7 @@ namespace VTuber.ScheduleSystem.UI
                 }
             }
             ChangeIndicatorColor(Color.yellow);
+            MoveIndicator(_currentIndicatorCoord);
         }
 
         public void Initialize(VCharacter character, VScript script)
@@ -309,6 +380,60 @@ namespace VTuber.ScheduleSystem.UI
             return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
         }
 
+        public List<VScheduleSlot> GetUDSlots(VScheduleSlot slot)
+        {
+            int down = slot.Coordination.y - 1;
+            int up = slot.Coordination.y + 1;
+            List<VScheduleSlot> ret = new List<VScheduleSlot>();
+            if (down >= 0)
+                ret.Add(slots[down, slot.Coordination.x]);
+            if (up < slotSize.y)
+                ret.Add(slots[up, slot.Coordination.x]);
+            return ret;
+        }
+        
+        public List<VScheduleSlot> GetLRSlots(VScheduleSlot slot)
+        {
+            int left = slot.Coordination.x - 1;
+            int right = slot.Coordination.x + 1;
+            List<VScheduleSlot> ret = new List<VScheduleSlot>();
+            if (left >= 0)
+                ret.Add(slots[slot.Coordination.y, left]);
+            if (right < slotSize.x)
+                ret.Add(slots[slot.Coordination.y, right]);
+            return ret;
+        }
+        
+        public List<VScheduleSlot> GetUDLRSlots(VScheduleSlot slot)
+        {
+            return GetUDSlots(slot).Concat(GetLRSlots(slot)).ToList();
+        }
+        
+        public List<VScheduleSlot> GetSurroundingSlots(VScheduleSlot slot)
+        {
+            int down = slot.Coordination.y - 1;
+            int up = slot.Coordination.y + 1;
+            int left = slot.Coordination.x - 1;
+            int right = slot.Coordination.x + 1;
+            List<VScheduleSlot> ret = new List<VScheduleSlot>();
+
+            for (int i = down; i <= up; i++)
+            {
+                if(i < 0 || i >= slotSize.y)
+                    continue;
+                for (int j = left; j <= right; j++)
+                {
+                    if(j < 0 || j >= slotSize.x)
+                        continue;
+                    if (slots[i, j] != slot)
+                    {
+                        ret.Add(slots[i, j]);
+                    }
+                }
+            }
+            return ret;
+        }
+        
         public void CompleteSchedule(uint size1Id, uint size2Id, uint size3Id)
         {
             foreach (var slot in slots)
@@ -338,7 +463,8 @@ namespace VTuber.ScheduleSystem.UI
                             var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                             e.IsSpecialEvent = true;
                             eventUIObject.Initialize(e, slots[yy, x], true);
-                            
+                            slots[yy, x].Item.SetInteractive(false);
+                            e.IsSpecialEvent = false;
                             emptyCount = 0;
                         }
                     }
@@ -357,6 +483,8 @@ namespace VTuber.ScheduleSystem.UI
                     var e = VDataManager.Instance.CreateDialogueEventByID(eventId);
                     e.IsSpecialEvent = true;
                     eventUIObject.Initialize(e, slots[yy, x], true);
+                    slots[yy, x].Item.SetInteractive(false);
+                    e.IsSpecialEvent = false;
                 }
             }
             foreach (var slot in slots)
@@ -377,6 +505,7 @@ namespace VTuber.ScheduleSystem.UI
             }
             continueButton.interactable = _kpiManager.CheckKPIs(_eventCount, _streamCount);
         }
+        
         public void UnrecordEvent(VScheduleEvent e)
         {
             if (!_events.Contains(e))

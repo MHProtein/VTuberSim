@@ -133,10 +133,15 @@ namespace VTuber.BattleSystem.Card
         public List<VEffectItem> newEffects;
 
         public int conditionId;
-        
 
-        private static uint idDistributor = 0;
-        private bool spawned = false;
+
+        public static uint IDDistributor => _idDistributor;
+        private static uint _idDistributor = 0;
+
+        public static void LoadIDDistributor(uint id)
+        {
+            _idDistributor = id;
+        }
         public VCardConfiguration(CellRange row)
         {
             effects = new List<VEffectItem>();
@@ -223,10 +228,10 @@ namespace VTuber.BattleSystem.Card
         
         public VCard CreateCard()
         {
-        //     if (spawned)
+        //     if (_spawned)
         //         return null;
-        //     spawned = true;
-            return new VCard(this, idDistributor++, effects, newEffects, conditionId);
+        //     _spawned = true;
+            return new VCard(this, _idDistributor++, effects, newEffects, conditionId);
         }
     }
 }
