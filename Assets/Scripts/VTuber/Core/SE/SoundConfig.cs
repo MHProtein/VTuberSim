@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using VTuber.Core.Foundation;
 
 
 #if UNITY_EDITOR
@@ -11,7 +12,7 @@ using UnityEditor;
 namespace VTuber.Core.SE
 {
     [CreateAssetMenu(fileName = "SoundConfig", menuName = "Audio/Sound Configuration")]
-    public class SoundConfig : ScriptableObject
+    public class SoundConfig : VScriptableObject
     {
         [SerializeField] private AudioClip[] soundEffects;
         public AudioClip[] SoundEffects => soundEffects;
@@ -30,7 +31,7 @@ namespace VTuber.Core.SE
                 return;
             }
 
-            // È·±£Â·¾¶¸ñÊ½ÕýÈ·
+            // È·ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½È·
             soundFolderPath = soundFolderPath.Replace('\\', '/');
             if (!soundFolderPath.StartsWith("Assets/"))
             {
@@ -38,11 +39,11 @@ namespace VTuber.Core.SE
                 return;
             }
 
-            // »ñÈ¡ËùÓÐÒôÆµÎÄ¼þµÄÂ·¾¶
+            // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ä¼ï¿½ï¿½ï¿½Â·ï¿½ï¿½
             List<string> audioPaths = new List<string>();
             GetAllAudioPaths(soundFolderPath, includeSubfolders, audioPaths);
 
-            // ¼ÓÔØÒôÆµ¼ô¼­
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½ï¿½ï¿½ï¿½
             soundEffects = new AudioClip[audioPaths.Count];
             for (int i = 0; i < audioPaths.Count; i++)
             {
@@ -54,24 +55,24 @@ namespace VTuber.Core.SE
             EditorUtility.SetDirty(this);
         }
 
-        // µÝ¹é»ñÈ¡ËùÓÐÒôÆµÎÄ¼þÂ·¾¶
+        // ï¿½Ý¹ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ä¼ï¿½Â·ï¿½ï¿½
         private void GetAllAudioPaths(string folderPath, bool recursive, List<string> result)
         {
-            // »ñÈ¡µ±Ç°ÎÄ¼þ¼ÐÖÐµÄËùÓÐÒôÆµÎÄ¼þ
+            // ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ä¼ï¿½
             string[] guids = AssetDatabase.FindAssets("t:AudioClip", new[] { folderPath });
             foreach (string guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
-                if (!result.Contains(path)) // ±ÜÃâÖØ¸´Ìí¼Ó
+                if (!result.Contains(path)) // ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
                 {
                     result.Add(path);
                 }
             }
 
-            // Èç¹ûÐèÒªµÝ¹é£¬¼ÌÐøËÑË÷×ÓÎÄ¼þ¼Ð
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ý¹é£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
             if (recursive)
             {
-                // Ê¹ÓÃAssetDatabase»ñÈ¡×ÓÎÄ¼þ¼Ð
+                // Ê¹ï¿½ï¿½AssetDatabaseï¿½ï¿½È¡ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
                 string[] subFolders = AssetDatabase.GetSubFolders(folderPath);
                 foreach (string subFolder in subFolders)
                 {

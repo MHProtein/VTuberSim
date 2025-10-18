@@ -320,7 +320,7 @@ namespace VTuber.BattleSystem.Core
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
    
-            DrawCards(_handSize, true, (int)messagedict["CurrentTurnIndex"]);
+            DrawCards(_handSize, true, (int)messagedict["TurnIndex"]);
             VDebug.Log($"回合开始，抽取 {_handSize} 张卡牌。");
         }
         

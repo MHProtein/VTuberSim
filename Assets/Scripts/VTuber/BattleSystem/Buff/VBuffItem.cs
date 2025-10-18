@@ -4,6 +4,7 @@ using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.SE;
 
 namespace VTuber.BattleSystem.Buff
 {
@@ -198,7 +199,7 @@ namespace VTuber.BattleSystem.Buff
         {
             foreach (var effect in buff.Effects)
             {
-                effect.OnBuffAdded(_battle, _value);
+                effect.OnBuffAdded(_battle, _value, this);
             }
         }
 
@@ -239,6 +240,11 @@ namespace VTuber.BattleSystem.Buff
         public bool TestCost(int cost)
         {
             return Value >= cost;
+        }
+
+        public void OnEffectApplied()
+        {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Battle_BuffApply);
         }
     }
 

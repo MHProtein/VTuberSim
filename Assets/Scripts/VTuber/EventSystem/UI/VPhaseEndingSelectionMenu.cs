@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.Events;
 
@@ -15,7 +16,8 @@ namespace VTuber.EventSystem.UI
         
         [SerializeField] private Button confirmButton;
         [SerializeField] private Transform grid;
-        
+
+
         public void Initialize(GameObject endingPrefab, List<VStreamEvent> endings)
         {
             confirmButton.interactable = false;
@@ -31,6 +33,7 @@ namespace VTuber.EventSystem.UI
         
         public void SelectOption(VPhaseEndingOption option)
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             confirmButton.interactable = true;
             if(_selectedOption is not null)
                 _selectedOption.Unselect();

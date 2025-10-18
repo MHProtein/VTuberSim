@@ -65,6 +65,8 @@ namespace VTuber.Reincarnation
             this._effectLevels = data.effectLevels;
             _effectItems = data.effects;
             this._effects = new List<VRaisingEffect>();
+            if (_effectItems is null)
+                return;
             foreach (var effect in this._effectItems)
             {
                 this._effects.Add(effect.CreateRaisingEffect());

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
+using VTuber.Core.SE;
 using VTuber.Reincarnation;
 
 namespace VTuber.BattleSystem.Core.UI
@@ -73,6 +74,7 @@ namespace VTuber.BattleSystem.Core.UI
         {
             loadSaveMenu.gameObject.SetActive(false);
             gameManager.LoadGame();
+            AudioManager.Instance.StopSoundsByChannel(SoundChannel.Music);
         }
 
         private void NewGame()
@@ -95,7 +97,7 @@ namespace VTuber.BattleSystem.Core.UI
             });
         }
 
-        public void Initialize(bool isReturn,  List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
+        public void Initialize(bool isReturn, List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
             List<VAccount> accounts)
         {
             _scripts = scriptConfig;
@@ -104,6 +106,7 @@ namespace VTuber.BattleSystem.Core.UI
             _accounts = accounts;
 
             _loadGameButton.interactable = DataPersistenceManager.Instance.SaveData is not null;
+            VAudioPlayer.Instance.PlayBGM(VBGMType.MainMenu);
         }
         
         private void OpenOptionMenu()

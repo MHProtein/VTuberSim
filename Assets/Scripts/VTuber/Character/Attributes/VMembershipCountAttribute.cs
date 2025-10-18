@@ -18,9 +18,9 @@ namespace VTuber.Character.Attributes
             this._buffTable = buffTable;
         }
 
-        protected override void SetValue(int value)
+        protected override void SetValue(int value, bool shouldPlaySfx)
         {
-            base.SetValue(value);
+            base.SetValue(value, shouldPlaySfx);
             if (value > highestValue)
             {
                 highestValue = value;

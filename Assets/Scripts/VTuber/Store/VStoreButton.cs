@@ -74,7 +74,7 @@ namespace VTuber.Store
 
         public void Buy(VCharacter character)
         {
-            character.AttributeManager.Attributes["CAMoney"].AddTo(-Price);
+            character.AttributeManager.Attributes["CAMoney"].AddTo(-Price, true);
         }
         
         public void Reset()

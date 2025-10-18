@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Managers;
+using VTuber.Core.SE;
 
 public class OptionBtn:MonoBehaviour,IPointerEnterHandler,IPointerExitHandler 
 {
@@ -24,6 +25,7 @@ public class OptionBtn:MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         
         btn.onClick.AddListener(() =>
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             DialogSystem.Instance.CreateDialog(dc);
             DialogSystem.Instance.HideOptionDescription();
         });

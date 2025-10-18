@@ -79,8 +79,8 @@ namespace VTuber.BattleSystem.Core
         
         public int CalculateCost(int delta)
         {
-            delta = (int)(delta * (1.0f - VValueModifier<int>.GetModifierFloatValue(consumeRateModifier)))
-                    - VValueModifier<int>.GetModifierIntValue(consumePointsModifier);
+            delta = (int)(delta * (1.0f - VValueModifier<int>.GetModifierFloatValue(consumeRateModifier, false)))
+                    - VValueModifier<int>.GetModifierIntValue(consumePointsModifier, false);
 
             return delta;
         }
