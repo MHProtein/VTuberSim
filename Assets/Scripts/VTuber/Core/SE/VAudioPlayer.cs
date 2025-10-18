@@ -29,7 +29,8 @@ namespace VTuber.Core.SE
         Battle_PopularityIncrease,
         Battle_EffectApply,
         Raising_AttributeChange,
-        Battle_BuffApply
+        Battle_BuffApply,
+        Raising_PlaceEvent
     }
 
     public enum VBGMType
