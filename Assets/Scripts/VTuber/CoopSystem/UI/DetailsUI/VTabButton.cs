@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 
 namespace VTuber.CoopSystem.UI.DetailsUI
 {
@@ -33,6 +34,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
 
         public void Select()
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             _onClick?.Invoke(this);
             image.color = _color;
             tab.gameObject.SetActive(true);

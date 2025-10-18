@@ -22,7 +22,7 @@ namespace VTuber.Core.RaisingEffect
         {
             if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
             {
-                attribute.AddTo(_value.Value);
+                attribute.AddTo(_value.Value, true);
                 VDebug.Log("Added " + _value + " To " + _attributeName);
             }
         }

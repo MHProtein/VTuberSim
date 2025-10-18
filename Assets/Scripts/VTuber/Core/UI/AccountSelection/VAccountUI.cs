@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 using VTuber.Reincarnation;
 
@@ -91,9 +92,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
                 }
                 else
                 {
-                    _selected = true;
-                    background.color = Color.cyan;
-                    _menu.OnSelected(this);
+                    Select();
                 }
 
                 return;
@@ -110,10 +109,16 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             }
             else
             {
-                _selected = true;
-                background.color = Color.cyan;
-                _menu.OnSelected(this);
+                Select();
             }
+        }
+
+        private void Select()
+        {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            _selected = true;
+            background.color = Color.cyan;
+            _menu.OnSelected(this);
         }
         
         public void Deselect()

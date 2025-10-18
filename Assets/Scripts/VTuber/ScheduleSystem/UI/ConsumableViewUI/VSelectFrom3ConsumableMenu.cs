@@ -7,6 +7,7 @@ using VTuber.Character;
 using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
 
 namespace VTuber.ScheduleSystem.UI.ConsumableViewUI
@@ -109,6 +110,7 @@ namespace VTuber.ScheduleSystem.UI.ConsumableViewUI
         
         public void Select(VSelectConsumableUI consumableUI)
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             confirmButton.interactable = true;
             if (_selectedConsumableUI != null && _selectedConsumableUI == consumableUI)
                 return;

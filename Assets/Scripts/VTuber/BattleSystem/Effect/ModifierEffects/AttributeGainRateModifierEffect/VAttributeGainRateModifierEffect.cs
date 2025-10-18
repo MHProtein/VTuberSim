@@ -1,4 +1,5 @@
 ﻿using System;
+using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.UI;
@@ -46,8 +47,13 @@ namespace VTuber.BattleSystem.Effect
                 _modifierID = data.modifierID;
 
                 var modifier = VBattleLookUpTables.Instance.GetGainRateModifier(_valueModifierID);
-                _onBuffRemove = modifier.RemoveModifier;
                 _onBuffLayerChangeRate = modifier.ChangeModifier;
+                _onBuffRemove = id =>
+                {
+                    modifier.RemoveModifier(id);
+                    modifier.onModifierApply -= NotifyBuffItemEffectApply;
+                };
+                modifier.onModifierApply += NotifyBuffItemEffectApply;
                 VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaRate.Value +
                            " gain rate modifier with ID: " + _modifierID);
             }
@@ -65,9 +71,10 @@ namespace VTuber.BattleSystem.Effect
             _deltaRate.Downgrade();
         }
 
-        public override void OnBuffAdded(VBattle battle, int layer)
+        public override void OnBuffAdded(VBattle battle, int layer, VBuffItem buffItem)
         {
             _battle = battle;
+            _buffItem = buffItem;
             Apply(battle, layer);
         }
 
@@ -120,7 +127,12 @@ namespace VTuber.BattleSystem.Effect
 
                 _modifierID = attribute.GainRateModifier.AddModifier(rateValue, -1);
                 _valueModifierID = attribute.GainRateModifier.ID;
-                _onBuffRemove = attribute.GainRateModifier.RemoveModifier;
+                _onBuffRemove = id =>
+                {
+                    attribute.GainRateModifier.RemoveModifier(id);
+                    attribute.GainRateModifier.onModifierApply -= NotifyBuffItemEffectApply;
+                };
+                attribute.GainRateModifier.onModifierApply += NotifyBuffItemEffectApply;
                 _onBuffLayerChangeRate = attribute.GainRateModifier.ChangeModifier;
                 VDebug.Log("Effect " + _configuration.effectName + " added " + _deltaRate.Value +
                            " gain rate modifier with ID: " + _modifierID);

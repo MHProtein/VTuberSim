@@ -3,6 +3,7 @@ using PrimeTween;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.EventCenter;
+using VTuber.Core.SE;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -12,6 +13,8 @@ namespace VTuber.ScheduleSystem.UI
         
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
+            if((bool)messagedict["shouldPlaySFX"])
+                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_AttributeChange);
             int delta = messagedict["Delta"] as int ? ?? 0;
             var value = messagedict["NewValue"] as int? ?? 0;
             var maxValue = messagedict["MaxValue"] as int? ?? 0;

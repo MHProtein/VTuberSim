@@ -73,14 +73,14 @@ namespace VTuber.Character
                 case VEventCostType.Stamina:
                     if (TryGetAttribute("CAStamina", out var stamina))
                     {
-                        stamina.AddTo(-e.Cost);
+                        stamina.AddTo(-e.Cost, false);
                     }
 
                     break;
                 case VEventCostType.Money:
                     if (TryGetAttribute("CAMoney", out var money))
                     {
-                        money.AddTo(-e.Cost);
+                        money.AddTo(-e.Cost, false);
                     }
                     break;
             }

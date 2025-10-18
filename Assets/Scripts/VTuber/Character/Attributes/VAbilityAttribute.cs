@@ -61,7 +61,7 @@ namespace VTuber.Character.Attributes
 
             Value = Mathf.Clamp(delta + Value, _minValue, _maxValue);
             VDebug.Log($"Added {delta} to {AttributeName}, new value: {Value}");
-            SendEvent(Value, delta);
+            SendEvent(Value, delta, true);
         }
         
         public override KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()

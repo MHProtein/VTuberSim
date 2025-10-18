@@ -132,9 +132,9 @@ namespace VTuber.BattleSystem.BattleAttribute
         
         public virtual void AddTo(int delta, bool isFromCard, bool shouldPlayTwice = false)
         {
-            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
-            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
-            int finalDelta = VMathUtils.FloatToInt((delta + gainPointsModifierValue) * (gainRateModifierValue ));
+            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier, true);
+            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier, true);
+            int finalDelta = VMathUtils.FloatToInt((delta + gainPointsModifierValue) * (gainRateModifierValue));
             if(delta < 0 && finalDelta > 0)
                 finalDelta = 0;
             SetValue(Mathf.Clamp(finalDelta + Value,
@@ -147,8 +147,8 @@ namespace VTuber.BattleSystem.BattleAttribute
         {
             if (delta == 0)
                 return Value;
-            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier);
-            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier);
+            int gainPointsModifierValue = VValueModifier<int>.GetModifierIntValue(gainPointsModifier, false);
+            float gainRateModifierValue = VValueModifier<float>.GetModifierFloatValue(gainRateModifier, false);
             int finalDelta = VMathUtils.FloatToInt((delta + gainPointsModifierValue) * (gainRateModifierValue));
             if(delta < 0 && finalDelta > 0)
                 finalDelta = 0;

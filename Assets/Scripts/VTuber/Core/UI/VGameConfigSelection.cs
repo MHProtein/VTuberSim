@@ -6,6 +6,7 @@ using VTuber.BattleSystem.Core.UI.VCharacterSelection;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
+using VTuber.Core.SE;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 
@@ -68,6 +69,7 @@ namespace VTuber.BattleSystem.Core.UI
             
             _accountSelectionMenu.Hide();
             VGameManager.Instance.NewGame(_selectedCharacter, _selectedScript, selectedAccounts);
+            VAudioPlayer.Instance.StopBGM();
             _scriptSelectionMenu.Clear();
             _accountSelectionMenu.Clear();
         }

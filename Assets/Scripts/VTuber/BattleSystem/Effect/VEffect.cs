@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 
 namespace VTuber.BattleSystem.Effect
 {
@@ -24,6 +26,7 @@ namespace VTuber.BattleSystem.Effect
         protected int _layer = 0;
         public float MultiplyByLayer => _configuration.multiplyByLayer;
         public bool Triggered;
+        protected VBuffItem _buffItem;
         
         public VEffect(VEffectConfiguration configuration)
         {
@@ -35,7 +38,7 @@ namespace VTuber.BattleSystem.Effect
 
         public virtual void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
-            
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Battle_EffectApply);
         }
 
         public bool CanApply(VBattle battle, Dictionary<string, object> message)
@@ -79,14 +82,22 @@ namespace VTuber.BattleSystem.Effect
                 if (!Triggered)
                     Triggered = true;
                 ApplyEffect(_battle, _layer);
+                _buffItem.OnEffectApplied();
             }
         }
         
-        public virtual void OnBuffAdded(VBattle battle, int layer)
+        public virtual void OnBuffAdded(VBattle battle, int layer, VBuffItem buffItem)
         {
             _battle = battle;
             _layer = layer;
+            _buffItem = buffItem;
+            NotifyBuffItemEffectApply();
             VBattleRootEventCenter.Instance.RegisterListener(whenToApply, TryApply);
+        }
+
+        public void NotifyBuffItemEffectApply()
+        {
+            _buffItem.OnEffectApplied();
         }
         
         public virtual void OnBuffLayerChange(int layer)

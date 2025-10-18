@@ -36,7 +36,7 @@ namespace VTuber.Core.RaisingEffect
                 else
                 {
 
-                    attribute.AddTo(VMathUtils.FloatToInt(_percentage.Value * attribute.Value));
+                    attribute.AddTo(VMathUtils.FloatToInt(_percentage.Value * attribute.Value), true);
                 }
             }
         }

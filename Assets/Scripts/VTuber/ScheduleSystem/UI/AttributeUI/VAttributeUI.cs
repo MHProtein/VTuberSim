@@ -6,6 +6,7 @@ using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -33,6 +34,8 @@ namespace VTuber.ScheduleSystem.UI
         
         protected virtual void OnValueChanged(Dictionary<string, object> messagedict)
         {
+            if((bool)messagedict["shouldPlaySFX"])
+                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_AttributeChange);
             int delta = messagedict["Delta"] as int ? ?? 0;
             text.text = $"{name}{messagedict["NewValue"] as int? ?? 0}";
             if (isPercentage)

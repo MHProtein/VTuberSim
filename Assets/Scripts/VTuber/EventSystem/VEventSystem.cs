@@ -133,6 +133,7 @@ namespace VTuber.EventSystem
                 if (_loaded)
                 {
                     LoadedOpenSelectionMenu();
+                    _loaded = false;
                 }
                 
                 return;
@@ -411,7 +412,7 @@ namespace VTuber.EventSystem
         
         private void OnDialogueComplete(Dialog dialog)
         {
-            if (!_hasDialogue && _selectionMenuType == VSelectionMenuType.None)
+            if (!_hasDialogue && _selectionMenuType != VSelectionMenuType.None)
                 return;
             if (_currentEvent.Type == VEventType.Stream)
             {

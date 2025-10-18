@@ -201,6 +201,7 @@ namespace VTuber.BattleSystem.UI
             Deselect();
             SetInteractive(false);
             card.Play();
+            battleUI.PlayCardPlayedSFX();
         }
         
         private void DetectDeselect()
@@ -247,6 +248,7 @@ namespace VTuber.BattleSystem.UI
             cardUI.background.color = Color.cyan;
             battleUI.Selected(true);
             SetPosition(transform.localPosition + Vector3.up * 50, 0.1f, false);
+            battleUI.PlayCardSelectedSFX();
         }
         
         public void Deselect()

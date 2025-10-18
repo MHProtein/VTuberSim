@@ -3,6 +3,7 @@ using PrimeTween;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 
 namespace VTuber.ScheduleSystem.UI
@@ -12,6 +13,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Image icon;
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
+            if((bool)messagedict["shouldPlaySFX"])
+                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_AttributeChange);
             base.OnValueChanged(messagedict);
             int delta = messagedict["Delta"] as int ? ?? 0;
             var info = VUIUtils.Instance.GetPressureIcon((int)messagedict["NewValue"]);

@@ -16,6 +16,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.UI;
 
@@ -45,9 +46,16 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private float cardApplyTime = 0.2f;
         [SerializeField] [Range(-1, 1)] private float overlap = 0.2f;
 
+        [Space(3)]
+        [Header("CardPileButtons")] 
+        [SerializeField] private Button drawCardPileButton;
+        [SerializeField] private Button discardCardPileButton;
+        [SerializeField] private Button exaustCardPileButton;
+        [SerializeField] private Button deckCardPileButton;
+        [SerializeField] private Button pickCardButton;
+
         [SerializeField] private RectTransform battleUIWrapper;
         [SerializeField] private GameObject battlePausePanel;
-        
         
         [Space(3)]
         [SerializeField] private Button skipTurnButton;
@@ -70,6 +78,17 @@ namespace VTuber.BattleSystem.UI
 
         private Coroutine _drawCardCoroutine;
         private bool disposingAll = false;
+        
+        protected override void Awake()
+        {
+            base.Awake();
+            
+            _handSlotsCards = new List<VHandCardUI>();
+            _handSlotsSize = handSlotsContent.rect.size;
+            cardToDispose = null;
+            _pickCardMenu = pickCardMenuScroll.GetComponent<VPickCardMenu>();
+            
+        }
 
         public void Rearrange(int index)
         {
@@ -191,16 +210,6 @@ namespace VTuber.BattleSystem.UI
         public Tween SetBattlePause(bool paused)
         {
             return VEventSystemUI.Instance.SetFullScreen();
-        }
-        
-        protected override void Awake()
-        {
-            base.Awake();
-            
-            _handSlotsCards = new List<VHandCardUI>();
-            _handSlotsSize = handSlotsContent.rect.size;
-            cardToDispose = null;
-            _pickCardMenu = pickCardMenuScroll.GetComponent<VPickCardMenu>();
         }
 
         protected override void OnEnable()
@@ -686,6 +695,15 @@ namespace VTuber.BattleSystem.UI
                     cardUI.Deselect();
                 }
             }
+        }
+
+        public void PlayCardSelectedSFX()
+        {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+        }      
+        public void PlayCardPlayedSFX()
+        {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Battle_CardPlayed);
         }
     }
 }
