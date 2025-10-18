@@ -1,29 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Spire.Xls;
-using VTuber.BattleSystem.BattleAttribute;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
+    [Serializable]
     public class VAttributeCondition : VEffectCondition
     {
-        private string _attributeName;
-        private int _targetValue;
+        [SerializeField] public string attributeName;
+        [SerializeField] private int targetValue;
 
         public VAttributeCondition(CellRange row) : base(row)
         {
-            _attributeName = row.Columns[VConditionHeaderIndex.NameOrID].Value;
-            _targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
+            attributeName = row.Columns[VConditionHeaderIndex.NameOrID].Value;
+            targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
         }
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
-            if (battle.BattleAttributeManager.TryGetAttribute(_attributeName, out var attribute))
+            if (battle.BattleAttributeManager.TryGetAttribute(attributeName, out var attribute))
             {
-                return Compare(attribute.Value, _targetValue);
+                return VMathUtils.Compare(attribute.Value, targetValue, operatorType);
             }
 
-            VDebug.Log($"条件 {id} 未通过：战斗中未找到属性 {_attributeName}。");
+            VDebug.Log($"条件 {id} 未通过：战斗中未找到属性 {attributeName}。");
             return false;
         }
     }

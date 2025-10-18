@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Spire.Xls;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -21,7 +22,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             if (battle.BuffManager.TryGetBuff(buffId, out var buff))
             {
-                bool result = Compare(buff.Value, targetValue);
+                bool result = VMathUtils.Compare(buff.Value, targetValue, operatorType);
                 if (result)
                 {
                     VDebug.Log($"条件 {id} 通过：ID为 {buffId} 的Buff层数为 {buff.Value}");

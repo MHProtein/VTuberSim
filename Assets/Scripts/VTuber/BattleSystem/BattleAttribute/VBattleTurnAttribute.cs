@@ -9,6 +9,7 @@ namespace VTuber.BattleSystem.BattleAttribute
     public class VBattleTurnAttribute : VBattleAttribute
     {
         public int MaxTurn { get; private set; }
+        public int TurnIndex => MaxTurn - Value;
         public VBattleTurnAttribute(int maxTurn) : base(maxTurn, false, VBattleEventKey.OnTurnChange)
         {
             MaxTurn = maxTurn;

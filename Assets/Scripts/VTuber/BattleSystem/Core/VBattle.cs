@@ -8,6 +8,7 @@ using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
 using VTuber.Character.Attributes;
 using VTuber.Core.Foundation;
@@ -41,7 +42,7 @@ namespace VTuber.BattleSystem.Core
     
     public class VBattle : VSingletonMonobehaviour<VBattle>
     {
-        [FormerlySerializedAs("_configuration")] [SerializeField] protected VBattleConfiguration configuration;
+        [FormerlySerializedAs("configuration")] [SerializeField] protected VBattleConfiguration configuration;
 
         #region Managers
 
@@ -156,7 +157,8 @@ namespace VTuber.BattleSystem.Core
             
             VEventSystemUI.Instance.PlayVideo(() =>
             {
-                _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary, saveData.cardPilesManagerSaveData); 
+                _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary,
+                    null, null, saveData.cardPilesManagerSaveData); 
                 _battleAttributeManager = new VBattleAttributeManager(_isPhaseEnding, saveData.attributeManagerSaveData);
                 _buffManager = new VBuffManager(this, saveData.buffManagerSaveData);
                 
@@ -186,10 +188,15 @@ namespace VTuber.BattleSystem.Core
                 InitializeTurn();
             });
         }
-        
-        public virtual void InitializeBattle(bool isDebugScene, bool isPhaseEnding, VCharacterAttributeManager characterAttributeManager,
-            VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
-        int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers, List<VBattleRelic> relics)
+
+        public virtual void InitializeBattle(bool isDebugScene, bool isPhaseEnding,
+            VCharacterAttributeManager characterAttributeManager,
+            VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts,
+            List<AnimationCurve> decayCurves,
+            int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers,
+            List<VBattleRelic> relics,
+            bool isTutorial = false, List<VAttributeCondition> tutorialConditions = null,
+            List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null)
         {
             _initialized = true;
             _isDebugScene = isDebugScene;
@@ -213,7 +220,7 @@ namespace VTuber.BattleSystem.Core
             _abilityTurnCounts = abilityTurnCounts;
             _characterAttributeManager = characterAttributeManager;
             _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding, null);
-            _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary, null); 
+            _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary, tutorialDeck, tutorialTurnHandCards, null); 
             _buffManager = new VBuffManager(this);
             
             _battleAttributeManager.OnEnable();
@@ -550,6 +557,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
+                {"TurnIndex", _turnAttribute.TurnIndex},
                 {"HandSize", configuration.maxHandSize}
             });
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply, new Dictionary<string, object>

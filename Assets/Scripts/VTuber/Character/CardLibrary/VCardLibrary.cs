@@ -82,5 +82,10 @@ namespace VTuber.Character
         {
             return cards.Find(card => card.Id == id);
         }
+
+        public int GetCardLibrarySize()
+        {
+            return cards.Count;
+        }
     }
 }

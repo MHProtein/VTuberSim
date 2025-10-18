@@ -22,23 +22,27 @@ namespace VTuber.Core.ScriptSystem
     {
         public string scriptConfigurationName;
         public int currentPhaseIndex;
+        public int weekIndex;
     }
     
     public class VScript
     {
-        private List<VPhase> Phases => _configuration.phases;
-        private VScriptConfiguration _configuration;
+        protected List<VPhase> Phases => configuration.phases;
+        protected VScriptConfiguration configuration;
         
-        public VPhase CurrentPhase => _currentPhase;
-        private VPhase _currentPhase;
+        public VPhase CurrentPhase => currentPhase;
+        protected VPhase currentPhase;
 
-        public List<uint> EventList => _configuration.eventIDs;
-        public List<uint> StreamEventList => _configuration.streamEventIDs;
+        public int WeekIndex => _weekIndex;
+        protected int _weekIndex;
+
+        public List<uint> EventList => configuration.eventIDs;
+        public List<uint> StreamEventList => configuration.streamEventIDs;
         public List<VKPI> kpis;
 
         public VScript(VScriptConfiguration configuration)
         {
-            _configuration = configuration;
+            this.configuration = configuration;
             kpis = new List<VKPI>();
             foreach (var kpi in configuration.kpis)
             {
@@ -50,15 +54,17 @@ namespace VTuber.Core.ScriptSystem
         {
             return new VScriptSaveData
             {
-                scriptConfigurationName = _configuration.name,
-                currentPhaseIndex = Phases.IndexOf(_currentPhase)
+                scriptConfigurationName = configuration.name,
+                currentPhaseIndex = Phases.IndexOf(currentPhase),
+                weekIndex = _weekIndex
             };
         }
 
         public static VScript Load(VScriptSaveData data, VScriptConfiguration scriptConfig)
         {
             VScript script = new VScript(scriptConfig);
-            script._currentPhase = script.Phases[data.currentPhaseIndex];
+            script.currentPhase = script.Phases[data.currentPhaseIndex];
+            script._weekIndex = data.weekIndex;
             return script;
         }
 
@@ -68,8 +74,8 @@ namespace VTuber.Core.ScriptSystem
             {
                 Phases[i].nextPhase = Phases[i + 1];
             }
-            _currentPhase = Phases[0];
-            return _currentPhase.GetStartEvent();
+            currentPhase = Phases[0];
+            return currentPhase.GetStartEvent();
         }
         
         public List<VSpecialEventData> GetSpecialEvents(int weekIndex)
@@ -83,15 +89,16 @@ namespace VTuber.Core.ScriptSystem
             return events;
         }
 
-        public VScheduleEvent NextWeek(int weekIndex)
+        public virtual VScheduleEvent NextWeek()
         {
-            if (_currentPhase.nextPhase is null)
+            if (currentPhase.nextPhase is null)
                 return null;
-            if (_currentPhase.nextPhase.IsInPhase(weekIndex))
+            _weekIndex++;
+            if (currentPhase.nextPhase.IsInPhase(_weekIndex))
             {
-                _currentPhase = _currentPhase.nextPhase;
+                currentPhase = currentPhase.nextPhase;
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseBegin, new Dictionary<string, object>());
-                return _currentPhase.GetStartEvent();
+                return currentPhase.GetStartEvent();
             }
 
             return null;
@@ -106,7 +113,7 @@ namespace VTuber.Core.ScriptSystem
             int highestMembershipCount = (character.AttributeManager.Attributes["CAMembershipCount"] as VMembershipCountAttribute).highestValue;
 
             float popularityCoefficient = 0;
-            foreach (var range in _configuration.popularityCoefficient)
+            foreach (var range in configuration.popularityCoefficient)
             {
                 if (range.IsInRange(popularity))
                 {
@@ -114,14 +121,14 @@ namespace VTuber.Core.ScriptSystem
                 }
             }
             
-            int score = Mathf.CeilToInt((singingAbility + gamingAbility + chattingAbility) * _configuration.abilityCoefficient +
-                        follower * _configuration.followerCoefficient
-                        + highestMembershipCount * _configuration.membershipCoefficient
+            int score = Mathf.CeilToInt((singingAbility + gamingAbility + chattingAbility) * configuration.abilityCoefficient +
+                        follower * configuration.followerCoefficient
+                        + highestMembershipCount * configuration.membershipCoefficient
                         + popularityCoefficient * popularity);
             if(success)
-                score += _configuration.successBonus;
+                score += configuration.successBonus;
             
-            var scoreLevel = _configuration.scoreLevels.Find(level=> level.InLevel(score));
+            var scoreLevel = configuration.scoreLevels.Find(level=> level.InLevel(score));
             VDebug.Log("歌力： " + singingAbility);
             VDebug.Log("游戏力： " + gamingAbility);
             VDebug.Log("杂谈力： " + chattingAbility);

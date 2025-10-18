@@ -25345,12 +25345,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   useDevData: 0
-  cooperatorConfigurations:
-  - {fileID: 11400000, guid: d57eb0cd611e36c48b3a071631b4a3c2, type: 2}
-  - {fileID: 11400000, guid: fb654f61535c5754d99938109dfde960, type: 2}
-  - {fileID: 11400000, guid: 8e77808f3b45fb34b8fe3e111d0517c1, type: 2}
-  - {fileID: 11400000, guid: aba6c02083194394d8c00739e47ac72b, type: 2}
-  - {fileID: 11400000, guid: 2b8aa29a530a517498bdd4298770c0a4, type: 2}
   reincarnationConfiguration: {fileID: 11400000, guid: 334dd11ca5f61594bbc19a30617cfd99, type: 2}
   scheduleUI: {fileID: 4800499513803145797}
   scheduleCreator: {fileID: 9180115723338920156}

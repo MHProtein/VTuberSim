@@ -2,6 +2,7 @@
 using Spire.Xls;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect.Conditions
 {
@@ -33,7 +34,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
                 return false;
             }
 
-            bool result = Compare((int)message["Value"], _targetValue) && Compare((int)message["Delta"], _targetDelta);
+            bool result = VMathUtils.Compare((int)message["Value"], _targetValue, operatorType) && VMathUtils.Compare((int)message["Delta"], _targetDelta, operatorType);
             if (result)
             {
                 VDebug.Log($"条件 {id} 通过：Buff(ID: {_buffId}) 的数值为 {(int)message["Value"]}，变化量为 {(int)message["Delta"]}");
