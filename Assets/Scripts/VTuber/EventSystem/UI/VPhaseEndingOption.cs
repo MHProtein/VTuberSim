@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.EventSystem.UI;
 using VTuber.ScheduleSystem.Events;
@@ -21,7 +22,7 @@ namespace VTuber.Dialogue.UI
         private List<TMP_Text> conditionDescriptions;
         
         public void Initialize(VStreamEvent streamEvent, VPhaseEndingSelectionMenu menu)
-        {
+        {;
             e = streamEvent;
             _menu = menu;
             conditionDescriptions = new List<TMP_Text>();
@@ -54,6 +55,5 @@ namespace VTuber.Dialogue.UI
         public void OnPointerExit(PointerEventData eventData)
         {
         }
-
     }
 }

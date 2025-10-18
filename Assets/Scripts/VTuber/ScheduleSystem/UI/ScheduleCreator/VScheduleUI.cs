@@ -518,6 +518,28 @@ namespace VTuber.ScheduleSystem.UI
             }
             continueButton.interactable = _kpiManager.CheckKPIs(_eventCount, _streamCount);
         }
+
+        public void Clear()
+        {
+            _events.Clear();
+            _eventCount = new Dictionary<VEventType, int>();
+            foreach (VEventType eventType in Enum.GetValues(typeof(VEventType)))
+            {
+                _eventCount.Add(eventType, 0);
+            }
+            _streamCount = new List<int>()
+            {
+                0, 0, 0
+            };
+            continueButton.interactable = !_kpiManager.HasKPIs();
+            _kpiManager.ResetKPIUIs();
+            foreach (var slot in slots)
+            {
+                slot.RemoveCoopEvent();
+                slot.SetPlaceable(true, false, -1);
+            }
+            DestroyAllItems();
+        }
     }
 }
 

@@ -280,52 +280,56 @@ namespace VTuber.ScheduleSystem.UI
 
             if (_isSelected && Input.GetMouseButtonUp(0))
             {
-                _isSelected = false;
+                OnEndDragging();
+            }
+        }
+
+        public void OnEndDragging()
+        {
+            _isSelected = false;
+            icon.raycastTarget = true;
+            var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
+            if (TryPlaceEvent(results))
+            {
                 icon.raycastTarget = true;
-                var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
-                if (TryPlaceEvent(results))
+                _isSelected = false;
+                return;
+            }
+      
+            if(parentSlots is null || parentSlots.Count == 0)
+            {
+                if (_disposable)
                 {
-                    icon.raycastTarget = true;
-                    _isSelected = false;
+                    Despawn();
                     return;
                 }
-
-      
-                if(parentSlots is null || parentSlots.Count == 0)
+                else
                 {
-                    if (_disposable)
-                    {
-                        Despawn();
-                        return;
-                    }
-                    else
+                    SetParentBeforeDrag();
+                    return;
+                }
+            }
+
+            if ((!_disposable && _hasInSchedule) || _disposable)
+            {
+                foreach (var result in results)
+                {
+                    var slot = result.gameObject.GetComponent<VScheduleSlot>();
+                    if (slot is not null)
                     {
                         SetParentBeforeDrag();
                         return;
                     }
                 }
+            }
 
-                if ((!_disposable && _hasInSchedule) || _disposable)
-                {
-                    foreach (var result in results)
-                    {
-                        var slot = result.gameObject.GetComponent<VScheduleSlot>();
-                        if (slot is not null)
-                        {
-                            SetParentBeforeDrag();
-                            return;
-                        }
-                    }
-                }
-
-                if (!_disposable && _disposeSlots is not null)
-                {
-                    SetParentDisposeSlot();
-                }
-                else
-                {
-                    Despawn();
-                }
+            if (!_disposable && _disposeSlots is not null)
+            {
+                SetParentDisposeSlot();
+            }
+            else
+            {
+                Despawn();
             }
         }
 

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
+using Tutorial.Script;
 using UnityEngine;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
@@ -15,6 +17,7 @@ namespace VTuber.ScheduleSystem.UI
         protected VScheduleCreatorSlot[,] slots;
         
         private List<VScheduleEventConfiguration> _eventDatas;
+        private List<GameObject> _eventObjects = new List<GameObject>();
         protected override void Awake()
         {
             slots = new VScheduleCreatorSlot[slotSize.y, slotSize.x];
@@ -28,6 +31,31 @@ namespace VTuber.ScheduleSystem.UI
                     slots[y, x] = slotList[i++];
                 }
             }
+        }
+        
+        public void InitializeTutorialCreator(VTutorialScript script)
+        {
+            script.AddOnWeekAdvancedCallback((weekIndex) =>
+            {
+                _eventDatas.Clear();
+                var eventConfigs = 
+                    script.CurrentWeekEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
+                eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
+                _eventDatas = eventConfigs;
+
+                foreach (var eventObject in _eventObjects)
+                {
+                    Destroy(eventObject);
+                }
+                _eventObjects.Clear();
+                
+                CreateEventObjects();
+            });
+            
+            var eventConfigs = 
+                script.CurrentWeekEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
+            eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
+            _eventDatas = eventConfigs;
         }
         
         public void InitializeCreator(VScript script)
@@ -50,10 +78,16 @@ namespace VTuber.ScheduleSystem.UI
 
             return null;
         }
-        
+
         protected override void Start()
         {
-            base.Start(); 
+            base.Start();
+            
+            CreateEventObjects();
+        }
+
+        private void CreateEventObjects()
+        {
             foreach (var eventData in _eventDatas)
             {
                 var slot = GetAvailableSlot();
@@ -62,6 +96,7 @@ namespace VTuber.ScheduleSystem.UI
                 var eventUI = eventObj.GetComponent<VEventDataUI>();
                 eventUI.Initialize(eventData);
                 slot.SetItem(eventUI);
+                _eventObjects.Add(eventObj);
             }
         }
         

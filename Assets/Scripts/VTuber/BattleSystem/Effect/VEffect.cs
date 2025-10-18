@@ -13,8 +13,8 @@ namespace VTuber.BattleSystem.Effect
         public uint Id => _configuration.id;
         public string Name => _configuration.effectName;
         public string Description => _configuration.description;
-        //public string Icon => _configuration.icon;
-        //public string UpgradeIcon => _configuration.upgradeIcon;
+        //public string Icon => configuration.icon;
+        //public string UpgradeIcon => configuration.upgradeIcon;
         
         public List<VEffectCondition> conditions;
         public VBattleEventKey whenToApply;

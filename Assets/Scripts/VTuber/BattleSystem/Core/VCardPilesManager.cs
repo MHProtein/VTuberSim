@@ -41,8 +41,11 @@ namespace VTuber.BattleSystem.Core
         private int _maxHandSize;
         
         private bool _isFirstTurn;
-
-        public VCardPilesManager(int handSize, int maxHandSize, VCardLibrary cardLibrary, VCardPilesManagerSaveData saveData)
+        private bool _isTutorial;
+        private Dictionary<int, List<uint>> _tutorialTurnHandCards;
+        
+        public VCardPilesManager(int handSize, int maxHandSize, VCardLibrary cardLibrary,List<uint> tutorialDeck,
+            Dictionary<int, List<uint>> tutorialTurnHandCards, VCardPilesManagerSaveData saveData)
         {
             _handSize = handSize;
             _maxHandSize = maxHandSize;
@@ -52,18 +55,25 @@ namespace VTuber.BattleSystem.Core
             _discardPile = new List<VCard>();
             _handPile = new List<VCard>();
             _exhaustPile = new List<VCard>();
+
+            if (tutorialDeck is not null)
+            {
+                _deck.AddRange(tutorialDeck.Select(VDataManager.Instance.CreateCardByID));
+                _isTutorial = true;
+                return;
+            }
             
             if (saveData is not null)
             {
                 Load(cardLibrary, saveData);
                 return;
             }
+            _isTutorial = false;
             
             _deck.AddRange(cardLibrary.GetCards());
             _drawPile.AddRange(_deck);
             _isFirstTurn = true;
         }
-        
         
         public VCardPilesManagerSaveData Save()
         {
@@ -173,13 +183,13 @@ namespace VTuber.BattleSystem.Core
 
         private void OnRequestDrawCards(Dictionary<string, object> messagedict)
         {
-            DrawCards((int)messagedict["DrawCount"], (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]);
+            DrawCards((int)messagedict["DrawCount"], false, -1, (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]);
         }
 
-        public void DrawCards(int drawCount, bool isFromCard = false, bool shouldPlayTwice = false)
+        public void DrawCards(int drawCount, bool isTurnBegin, int currentTurnIndex, bool isFromCard = false, bool shouldPlayTwice = false)
         {      
             List<VCard> cards = new List<VCard>();
-            if (_isFirstTurn)
+            if (_isFirstTurn && !_isTutorial)
             {
                 _isFirstTurn = false;
                 var priorityCards = _drawPile.TakeWhile(card => card.IsPrioritized).ToList();
@@ -203,14 +213,14 @@ namespace VTuber.BattleSystem.Core
 
                 if (_drawPile.Count >= drawCount)
                 {
-                    cards.AddRange(DrawFromDrawPile(drawCount));
+                    cards.AddRange(DrawFromDrawPile(drawCount, isTurnBegin, currentTurnIndex));
                 }
                 else
                 {
                     DiscardToDraw();
                     if(drawCount > _drawPile.Count)
                         drawCount = _drawPile.Count;
-                    cards.AddRange(DrawFromDrawPile(drawCount));
+                    cards.AddRange(DrawFromDrawPile(drawCount, isTurnBegin, currentTurnIndex));
                 }
             }
             
@@ -222,9 +232,20 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnDrawCards, message);
         }
         
-        private List<VCard> DrawFromDrawPile(int n)
+        private List<VCard> DrawFromDrawPile(int n, bool isTurnBegin, int currentTurnIndex)
         {
             List<VCard> cards = new List<VCard>();
+            if (_isTutorial && isTurnBegin)
+            {
+                foreach (var cardIndex in _tutorialTurnHandCards[currentTurnIndex])
+                {
+                    var card = _drawPile.Find(card => card.configID == cardIndex);
+                    _drawPile.Remove(card);
+                    _handPile.Add(card);
+                    cards.Add(card);
+                }
+                return cards;
+            }
             HashSet<int> RGNs = new HashSet<int>();
             while (RGNs.Count < n)
             {
@@ -298,8 +319,8 @@ namespace VTuber.BattleSystem.Core
         
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
-            
-            DrawCards(_handSize);
+   
+            DrawCards(_handSize, true, (int)messagedict["CurrentTurnIndex"]);
             VDebug.Log($"回合开始，抽取 {_handSize} 张卡牌。");
         }
         

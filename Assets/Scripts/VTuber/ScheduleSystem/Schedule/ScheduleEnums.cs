@@ -23,7 +23,8 @@
         Outside,
         Work,
         Rest,
-        Other
+        Other,
+        TutorialStream,
     }
 
     /// <summary>

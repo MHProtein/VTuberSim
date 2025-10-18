@@ -100,6 +100,7 @@ namespace VTuber.Core.EventCenter
         OnEndRun = 69,
         
         OnEventEndSave = 70,
+        OnSwitchToMainMenu = 71,
     }
     
     

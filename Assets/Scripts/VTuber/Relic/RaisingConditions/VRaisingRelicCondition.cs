@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Spire.Xls;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
+using VTuber.Core.UI;
 
 namespace VTuber.Relic
 {
@@ -18,7 +19,7 @@ namespace VTuber.Relic
     }
     public abstract class VRaisingRelicCondition
     {
-        public VOperatorType _operatorType;
+        public VOperatorType operatorType;
         private readonly string _description;
         public uint Id => _id;
         private readonly uint _id;
@@ -27,31 +28,10 @@ namespace VTuber.Relic
         public VRaisingRelicCondition(CellRange row)
         {
             _id = Convert.ToUInt32(row.Columns[VRaisingRelicConditionHeaderIndex.Id].Value);
-            _operatorType = Enum.Parse<VOperatorType>(row.Columns[VRaisingRelicConditionHeaderIndex.Operator].Value);
+            operatorType = Enum.Parse<VOperatorType>(row.Columns[VRaisingRelicConditionHeaderIndex.Operator].Value);
             _description = row.Columns[VRaisingRelicConditionHeaderIndex.Description].Value;
         }
         
         public abstract bool IsTrue(VCharacter character, Dictionary<string, object> message);
-        
-        protected bool Compare(int left, int right)
-        {
-            switch (_operatorType)
-            {
-                case VOperatorType.LessThan:
-                    return left < right;
-                case VOperatorType.LessEqual:
-                    return left <= right;
-                case VOperatorType.Equal:
-                    return left == right;
-                case VOperatorType.GreaterThan:
-                    return left > right;
-                case VOperatorType.GreaterEqual:
-                    return left >= right;
-                case VOperatorType.NotEqual:
-                    return left != right;
-            }
-
-            return false;
-        }
     }
 }

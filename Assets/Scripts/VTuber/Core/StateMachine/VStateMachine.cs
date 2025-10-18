@@ -59,9 +59,6 @@ namespace VTuber.Core.StateMachine
         
         public bool ShouldPauseSchedule => shouldPauseSchedule;
         protected bool shouldPauseSchedule = false;
-        
-        public int WeekIndex => _weekIndex;
-        private int _weekIndex = 0;
 
         public VScript Script => _script;
         private VScript _script;
@@ -90,7 +87,6 @@ namespace VTuber.Core.StateMachine
         {
             return new VStateMachineSaveData
             {
-                weekIndex = _weekIndex,
                 currentStateType = currentState.StateType,
                 lastStateType = lastState?.StateType ?? VStateType.None,
                 stateSaveDataList = RegisteredStateList.Select(state => state.Save()).ToList()
@@ -99,8 +95,6 @@ namespace VTuber.Core.StateMachine
 
         public void Load(VStateMachineSaveData saveData)
         {
-            _weekIndex = saveData.weekIndex;
-            
             lastState = RegisteredStateList.Find(state => state.StateType == saveData.lastStateType);
             
             foreach (var state in RegisteredStateList)
@@ -211,11 +205,11 @@ namespace VTuber.Core.StateMachine
             ScheduleUI.ResetSchedule();
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleEnd, new Dictionary<string, object>()
             {
-                { "WeekIndex", _weekIndex },
+                { "WeekIndex", _script.WeekIndex },
             });
-            _weekIndex++;
-            VRaisingUI.Instance.UpdateWeekCount(_weekIndex + 1);
-            var e = _script.NextWeek(_weekIndex);
+            _script.NextWeek();
+            VRaisingUI.Instance.UpdateWeekCount(_script.WeekIndex + 1);
+            var e = _script.NextWeek();
             if (e is not null)
             {
                 Tween.Delay(0.1f, () =>

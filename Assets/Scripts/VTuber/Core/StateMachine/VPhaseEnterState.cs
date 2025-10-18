@@ -24,7 +24,7 @@ namespace VTuber.Core.StateMachine
             base.Enter(state, enterParams);
             
             _currentEvent = (VDialogueEvent)stateMachine.Script.CurrentPhase.GetStartEvent();
-            
+            VRaisingUI.Instance.SetScheduleUIPositionToInitial();
             InitializeEvent(_currentEvent);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);

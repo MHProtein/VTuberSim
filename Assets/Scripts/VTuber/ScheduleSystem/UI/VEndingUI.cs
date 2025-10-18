@@ -110,7 +110,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             _account.accountName = inputField.text;
             VGameManager.Instance.AddAccount(_account);
-            VGameManager.Instance.ChangeToMainMenu(DataPersistenceManager.Instance.LoadSave());
+            VGameManager.Instance.ReturnToMainMenu(DataPersistenceManager.Instance.LoadSave());
             
             Hide();
             
