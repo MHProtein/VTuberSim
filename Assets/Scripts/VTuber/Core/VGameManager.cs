@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SlayTheSpire.System.SavingSystem;
+using Tutorial.Script;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
@@ -79,6 +80,12 @@ namespace VTuber.BattleSystem.Core
         private bool _newGame = false;
         
         private DateTime _startGameTime;
+
+        public bool IsTutorial => _isTutorial;
+        private bool _isTutorial = false;
+        
+        public VTutorialScript TutorialScript => _tutorialScript;
+        private VTutorialScript _tutorialScript;
         
         protected override void Awake()
         {
@@ -171,7 +178,19 @@ namespace VTuber.BattleSystem.Core
         {
             _startGameTime = DateTime.UtcNow;
             DataPersistenceManager.Instance.NewGame();
-            _script = new VScript(scriptConfig);
+
+            if (scriptConfig is VTutorialScriptConfiguration)
+            {
+                _isTutorial = true;
+                _tutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
+                _script = _tutorialScript;
+            }
+            else
+            {
+                _script = new VScript(scriptConfig);
+                scheduleCreator.InitializeCreator(_script);
+            }
+            
             _character = new VCharacter(characterConfiguration);
             _character.Initialize(false);
 
@@ -214,7 +233,6 @@ namespace VTuber.BattleSystem.Core
             }
             
             scheduleUI.Initialize(_character, _script);
-            scheduleCreator.InitializeCreator(_script);
             _stateMachine.SwitchState(VStateType.PhaseStart, _script.BeginScript());
             
             mainMenu.gameObject.SetActive(false);
@@ -358,8 +376,21 @@ namespace VTuber.BattleSystem.Core
             _character.Load(data, _characterConfigs.Find(config
                 => config.name == data.characterSaveData.characterConfigurationName));
             
-            _script = VScript.Load(data.script, _scripts.Find(config
-                => config.name == data.script.scriptConfigurationName));
+            var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
+            
+            _script = VScript.Load(data.script, scriptConfig);
+            
+            // if (scriptConfig is VTutorialScriptConfiguration)
+            // {
+            //     _isTutorial = true;
+            //     _tutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
+            //     
+            //     _script = _tutorialScript;
+            // }
+            // else
+            // {
+            //     _script = VScript.Load(data.script, scriptConfig);
+            // }
             
             _weeklySchedule = VWeeklySchedule.Load(data.weeklySchedule, _script);
             

@@ -403,7 +403,7 @@ namespace VTuber.EventSystem
             battle.InitializeBattle(false, isPhaseEnding, _character.AttributeManager,
                 _character.CardLibrary,
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
-                targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
+                targetPopularity, extraTargetPopularity, abilityBonus, initialViewers, 
                 _character.CharacterRelicManager.GetBattleRelics());
             _character.ConsumableManager.SetBattle(battle);
             VRaisingUI.Instance.SetConsumableToBattle();
