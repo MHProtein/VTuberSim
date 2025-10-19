@@ -271,7 +271,7 @@ namespace VTuber.Character
         {
             AttributeManager.TryGetAttribute("CAStamina", out var stamina);
             AttributeManager.TryGetAttribute("CASkipTurnStaminaRecovery", out var recoveryAmount);
-            stamina.AddTo(recoveryAmount.Value);
+            stamina.AddTo(recoveryAmount.Value, true);
         }
 
         public void EndRun()

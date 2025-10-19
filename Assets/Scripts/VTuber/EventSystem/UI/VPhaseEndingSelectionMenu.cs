@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.Events;
 
@@ -16,6 +17,8 @@ namespace VTuber.EventSystem.UI
         [SerializeField] private Button confirmButton;
         [SerializeField] private Transform grid;
         
+        // --- REMOVED: The fields for relicUiPrefab and the containers have been deleted ---
+
         public void Initialize(GameObject endingPrefab, List<VStreamEvent> endings)
         {
             confirmButton.interactable = false;
@@ -24,6 +27,7 @@ namespace VTuber.EventSystem.UI
             {
                 GameObject endingGo = Instantiate(endingPrefab, grid);
                 VPhaseEndingOption option = endingGo.GetComponent<VPhaseEndingOption>();
+                // This call now handles the relic display internally
                 option.Initialize(ending, this);
                 _options.Add(option);
             }
@@ -31,10 +35,13 @@ namespace VTuber.EventSystem.UI
         
         public void SelectOption(VPhaseEndingOption option)
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             confirmButton.interactable = true;
             if(_selectedOption is not null)
                 _selectedOption.Unselect();
             _selectedOption = option;
+            
+            // --- REMOVED: The call to DisplayRelicsForOption() has been deleted ---
         }
 
         public void Confirm()
@@ -55,5 +62,6 @@ namespace VTuber.EventSystem.UI
             VEventSystemUI.Instance.ClosePhaseEndingSelectionMenu();
         }
         
+        // --- REMOVED: The DisplayRelicsForOption() and ClearRelicDisplays() methods have been deleted ---
     }
 }

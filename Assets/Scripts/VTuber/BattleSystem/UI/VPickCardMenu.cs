@@ -8,6 +8,7 @@ using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -43,6 +44,7 @@ namespace VTuber.BattleSystem.UI
         
         public bool SelectCard(VCard pickCard)
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             if (_pickedCards.Count >= _maxPickCount)
                 return false;
             

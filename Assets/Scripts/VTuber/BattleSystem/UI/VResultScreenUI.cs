@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -113,6 +114,7 @@ namespace VTuber.BattleSystem.UI
             {
                 failureText.SetActive(true);
                 _isBattleSuccess = false;
+                VAudioPlayer.Instance.PlayBGM(VBGMType.StreamFailure);
             }
             Show();
         }
@@ -138,6 +140,7 @@ namespace VTuber.BattleSystem.UI
         {
             Hide().OnComplete((() =>
             {
+                VAudioPlayer.Instance.StopBGM();
                 hugeSuccessText.SetActive(false);
                 successText.SetActive(false);
                 failureText.SetActive(false);

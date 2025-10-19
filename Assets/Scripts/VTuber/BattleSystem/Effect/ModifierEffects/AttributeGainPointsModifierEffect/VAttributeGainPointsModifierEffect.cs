@@ -1,5 +1,6 @@
 ﻿using System;
 using VTuber.BattleSystem.BattleAttribute;
+using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 
@@ -59,8 +60,13 @@ namespace VTuber.BattleSystem.Effect
                 _modifierID = data.modifierID;
 
                 var modifier = VBattleLookUpTables.Instance.GetGainValueModifier(_valueModifierID);
-                _onBuffRemove = modifier.RemoveModifier;
+                _onBuffRemove = (id)=>
+                {
+                    modifier.RemoveModifier(id);
+                    modifier.onModifierApply -= NotifyBuffItemEffectApply;
+                };
                 _onBuffLayerChangePoints = modifier.ChangeModifier;
+                modifier.onModifierApply += NotifyBuffItemEffectApply;
                 VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + _modifierID);
             }
         }
@@ -77,9 +83,10 @@ namespace VTuber.BattleSystem.Effect
             _deltaPoints.Downgrade();
         }
         
-        public override void OnBuffAdded(VBattle battle, int layer)
+        public override void OnBuffAdded(VBattle battle, int layer, VBuffItem buffItem)
         {
             _battle = battle;
+            _buffItem = buffItem;
             Apply(battle, layer);
         }
 
@@ -106,7 +113,7 @@ namespace VTuber.BattleSystem.Effect
                 VDebug.LogError("OnBuffRemove 为 null，_modifierID: " + _modifierID + "，属性: " + _attributeName + "，请检查属性名");
                 return;
             }
-            _onBuffRemove(_modifierID);
+            _onBuffRemove?.Invoke(_modifierID);
             VDebug.Log("效果 " + _configuration.effectName + " 移除了获取Points Modifier，ID为: " + _modifierID);
         }
         public override string GetValue()
@@ -130,8 +137,13 @@ namespace VTuber.BattleSystem.Effect
 
                 _valueModifierID = attribute.GainPointsModifier.ID;
                 _modifierID = attribute.GainPointsModifier.AddModifier((int)pointValue, -1);
-                _onBuffRemove = attribute.GainPointsModifier.RemoveModifier;
+                _onBuffRemove = (id) =>
+                {
+                    attribute.GainPointsModifier.RemoveModifier(id);
+                    attribute.GainPointsModifier.onModifierApply -= NotifyBuffItemEffectApply;
+                };
                 _onBuffLayerChangePoints = attribute.GainPointsModifier.ChangeModifier;
+                attribute.GainPointsModifier.onModifierApply += NotifyBuffItemEffectApply;
                 VDebug.Log("效果 " + _configuration.effectName + " 添加了 " + _deltaPoints.Value + " 获取Points Modifier，ID为: " + _modifierID);
             }
             else

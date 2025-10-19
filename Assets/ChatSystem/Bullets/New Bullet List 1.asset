@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 403ae2dd693bb1d4b924f6b8d206b053, type: 3}
-  m_Name: Assets.fadeMotionList
+  m_Script: {fileID: 11500000, guid: c6f134aac3c8e9f40b28b81026952af4, type: 3}
+  m_Name: New Bullet List 1
   m_EditorClassIdentifier: 
-  MotionInstanceIds: 4a81ffff
-  CubismFadeMotionObjects:
-  - {fileID: 11400000, guid: b3ec69324a4f9d14fa8089b0cabc6700, type: 2}
+  csvFile: {fileID: 4900000, guid: 7988a30b6f50a8a458849666ca3dd011, type: 3}
+  bulletType: 1

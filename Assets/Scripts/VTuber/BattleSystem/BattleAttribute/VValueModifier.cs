@@ -25,9 +25,6 @@ public class VValueModifierSaveData<T>
     [Serializable]
     public class VValueModifier<T>
     {
-        public int ID => _id;
-        private int _id = -1;
-        
         public class ModifierItem
         {
             public T Value => _value;
@@ -56,6 +53,9 @@ public class VValueModifierSaveData<T>
             
         }
         
+        public int ID => _id;
+        private int _id = -1;
+        public Action onModifierApply;
         public T DefaultValue => _defaultValue;
    
         private T _defaultValue;
@@ -130,7 +130,7 @@ public class VValueModifierSaveData<T>
             SendEvent();
         }
         
-        public static int GetModifierIntValue(VValueModifier<int> modifier)
+        public static int GetModifierIntValue(VValueModifier<int> modifier, bool addValue)
         {
             if (modifier.Modifiers.Count == 0)
                 return modifier.DefaultValue;
@@ -139,10 +139,12 @@ public class VValueModifierSaveData<T>
             {
                 total += mod.Value.Value;
             }
+            if(addValue)
+                modifier.onModifierApply?.Invoke();
             return total;
         }
         
-        public static float GetModifierFloatValue(VValueModifier<float> modifier)
+        public static float GetModifierFloatValue(VValueModifier<float> modifier, bool addValue)
         {
             if (modifier.Modifiers.Count == 0)
                 return modifier.DefaultValue;
@@ -151,6 +153,8 @@ public class VValueModifierSaveData<T>
             {
                 total += mod.Value.Value;
             }
+            if(addValue)
+                modifier.onModifierApply?.Invoke();
             return total;
         }
 

@@ -21,7 +21,7 @@ namespace VTuber.Character.Attributes
             if (battleAttributes.TryGetValue("BARevenueShareRate", out var revenueShareRate) && 
                 battleAttributes.TryGetValue("BARevenue", out var revenue))
             {
-                AddTo((int)((revenueShareRate.Value * revenue.Value) / 100.0f));
+                AddTo((int)((revenueShareRate.Value * revenue.Value) / 100.0f), false);
                 VDebug.Log("Money attribute converted from battle attributes: " +
                            $"Revenue Share Rate: {revenueShareRate.Value}, Revenue: {revenue.Value}, " +
                            $"Converted Value: {(int)((revenueShareRate.Value * revenue.Value) / 100.0f)}");

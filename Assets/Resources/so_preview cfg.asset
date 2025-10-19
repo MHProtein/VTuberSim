@@ -27,6 +27,9 @@ MonoBehaviour:
     - name: EnumDatabase
       path: 
       so: {fileID: 11400000, guid: d3f0a9e886756b64b8bec297f2f59c9c, type: 2}
+    - name: "SFX\u914D\u7F6E"
+      path: 
+      so: {fileID: 11400000, guid: 810ab08d42b9147439112be644f3b065, type: 2}
   - key: "\u89D2\u8272"
     value:
     - name: "\u58A8\u6CAB"

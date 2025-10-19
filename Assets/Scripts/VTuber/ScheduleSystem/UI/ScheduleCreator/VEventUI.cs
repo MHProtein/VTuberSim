@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.ScheduleSystem.UI
@@ -177,6 +178,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 { "Event", _event }
             });
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
         }
         
         public void SetParentBeforeDrag()
@@ -234,6 +236,7 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     { "Event", _event }
                 });
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_PlaceEvent);
         }
         
         public bool TryPlaceEvent(List<RaycastResult> results)
@@ -385,6 +388,7 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     { "Event", _event }
                 });
+                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             }
         }
         

@@ -7,6 +7,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
 
 namespace VTuber.ScheduleSystem.UI
@@ -71,6 +72,7 @@ namespace VTuber.ScheduleSystem.UI
         
         public void Select(VSelectCardCardUI cardUI)
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             confirmButton.interactable = true;
             if (_selectedCardUI != null && _selectedCardUI == cardUI)
                 return;

@@ -32,6 +32,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
+            base.ApplyEffect(battle, layer, isFromCard, shouldApplyTwice);
             int value = _addValue.Value;
             if (MultiplyByLayer > 0.0f)
                 value *= VMathUtils.FloatToInt(layer * MultiplyByLayer);

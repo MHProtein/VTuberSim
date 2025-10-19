@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -58,6 +59,7 @@ namespace VTuber.BattleSystem.UI
             popularityText.text = $"{value}";
             
             popularityText.color = delta > 0 ? Color.green : Color.red;
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Battle_PopularityIncrease);
             _animationQueue.Enqueue(Tween.PunchScale(popularityText.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
                 () =>
                 {

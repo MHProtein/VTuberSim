@@ -32,9 +32,9 @@ namespace VTuber.BattleSystem.Effect
 
         public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
         {
+            base.ApplyEffect(battle, layer, isFromCard, shouldApplyTwice);
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
-
                 int value = VMathUtils.FloatToInt((_percentage.Value) * buff.Value);
                 
                 if (_configuration.multiplyByLayer > 0.0f)
