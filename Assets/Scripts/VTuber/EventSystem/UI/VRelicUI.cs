@@ -1,20 +1,32 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using VTuber.Relic; // Add this using statement
-// using TMPro; 
+using VTuber.Relic;
+using TMPro;
 
-public class VRelicUI : MonoBehaviour 
+public class VRelicUI : MonoBehaviour
 {
     [SerializeField] private Image relicIcon;
     [SerializeField] private TextMeshProUGUI relicNameText;
 
-    // The parameter is now the correct type
-    public void Initialize(VRelic relicData) // <-- Use the base class here
+    public void Initialize(VRelic relicData)
     {
-        if (relicData != null)
+        // === DEBUG STEP 5: Is the prefab's UI script working? ===
+        Debug.Log($"[DEBUG] VRelicUI.Initialize called for '{relicData.GetRelicName()}' on GameObject: {this.name}");
+
+        if (relicIcon == null)
         {
-            relicIcon.sprite = relicData.Icon;
+            Debug.LogError("[DEBUG] VRelicUI Error: The 'relicIcon' Image is NOT ASSIGNED in the prefab's Inspector!", this.gameObject);
+            return;
+        }
+        
+        if (relicData.Icon == null)
+        {
+            Debug.LogWarning($"[DEBUG] Relic '{relicData.GetRelicName()}' has a NULL icon sprite!");
+        }
+
+        relicIcon.sprite = relicData.Icon;
+        if (relicNameText != null)
+        {
             relicNameText.text = relicData.GetRelicName();
         }
     }
