@@ -21,7 +21,8 @@ namespace VTuber.Dialogue.UI
         // --- NEW FIELDS: Add these for relic display ---
         [Header("Relic Display")]
         [SerializeField] private GameObject relicUiPrefab; // The prefab for a single relic icon
-        [SerializeField] private Transform relicsGrid;     // The grid inside this option to hold the relics
+        [SerializeField] private Transform characterRelicsGrid;   // 用于角色遗物
+        [SerializeField] private Transform inheritableRelicsGrid; // 用于可继承遗物
         
         [SerializeField] private Image backgroundImage;
         [SerializeField] private TMP_Text titleText;
@@ -50,7 +51,7 @@ namespace VTuber.Dialogue.UI
         {
             if (relicUiPrefab == null || e == null) return;
 
-            // 1. Character Relics
+            // 1. 角色遗物 (Character Relics)
             Dialog dialog = VResourcesManager.Instance.TryGetDialog(e.dialogueNode);
             if (dialog != null)
             {
@@ -62,13 +63,14 @@ namespace VTuber.Dialogue.UI
                         VRelic relicData = config.CreateRelic();
                         if (relicData != null)
                         {
-                            Instantiate(relicUiPrefab, relicsGrid).GetComponent<VRelicUI>().Initialize(relicData);
+                         
+                            Instantiate(relicUiPrefab, characterRelicsGrid).GetComponent<VRelicUI>().Initialize(relicData);
                         }
                     }
                 }
             }
 
-            // 2. Inheritable Relics
+            // 2. 可继承遗物 (Inheritable Relics)
             var inheritableRelicReward = VGameManager.Instance.ReincarnationConfiguration.relicRewards.Find(x => e.EventID == x.eventID);
             if (inheritableRelicReward != null)
             {
@@ -77,7 +79,8 @@ namespace VTuber.Dialogue.UI
                     VRelic relicData = VDataManager.Instance.CreateRelicByID(relicId);
                     if (relicData != null)
                     {
-                        Instantiate(relicUiPrefab, relicsGrid).GetComponent<VRelicUI>().Initialize(relicData);
+                        
+                        Instantiate(relicUiPrefab, inheritableRelicsGrid).GetComponent<VRelicUI>().Initialize(relicData);
                     }
                 }
             }

@@ -103555,9 +103555,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   confirmButton: {fileID: 862266386}
   grid: {fileID: 950825631}
-  relicUiPrefab: {fileID: 4437894317815930435, guid: 8506106f1bd350c479249a71dfbdd742, type: 3}
-  characterRelicsContainer: {fileID: 1946957587}
-  inheritableRelicsContainer: {fileID: 511557432}
 --- !u!222 &1972509706
 CanvasRenderer:
   m_ObjectHideFlags: 0
