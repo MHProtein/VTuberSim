@@ -17,8 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: ae3f799ae42e0a749bce1ca58185c93f
   m_SerializeEntries:
-  - m_GUID: 2b7a51cef32afd84481842f7961104c8
-    m_Address: Assets/Configurations/Scripts/Script_frist.asset
+  - m_GUID: 060802b71e05a2c46ab27a29a26e512c
+    m_Address: Assets/Configurations/Scripts/TutorialScript.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scripts

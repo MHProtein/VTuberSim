@@ -12,10 +12,14 @@ namespace SlayTheSpire.System.SavingSystem
         public SaveData SaveData => _saveData;
         private SaveData _saveData;
         
+        public SaveData TutorialSaveData => _saveData;
+        private SaveData _tutorialSaveData;
+        
         public List<IDataPersistence> DataPersistences =>_dataPersistences;
         private List<IDataPersistence> _dataPersistences;
 
         private FileDataHandler _dataHandler;
+        private FileDataHandler _tutorialDataHandler;
         
         public void Register(IDataPersistence data)
         {
@@ -26,6 +30,7 @@ namespace SlayTheSpire.System.SavingSystem
         {
             _dataPersistences = new List<IDataPersistence>();
             _dataHandler = new FileDataHandler(Application.persistentDataPath, "player.vtb");
+            _tutorialDataHandler = new FileDataHandler(Application.persistentDataPath, "player_tutorial.vtb");
             
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEndSave, EventSaveGame);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEndRun, EventSaveGame);
@@ -92,6 +97,33 @@ namespace SlayTheSpire.System.SavingSystem
             {
                 dataPersistence.Save(_saveData);
                 await Task.CompletedTask;
+            }
+        }
+
+        public void SaveGameTutorial()
+        {
+            SavePersistences().Wait();
+            _tutorialDataHandler.Save(_saveData);
+        }
+
+        public SaveData LoadTutorialSave()
+        {
+            _tutorialSaveData = _tutorialDataHandler.Load();
+            return _tutorialSaveData;
+        }
+        
+        public void LoadTutorialGame()
+        {
+            if(_tutorialSaveData is null) 
+                _tutorialSaveData = _tutorialDataHandler.Load();
+            if (_tutorialSaveData is null)
+            {
+                VDebug.LogError("No tutorial save data was found.");
+            }
+
+            foreach (var dataPersistence in _dataPersistences)
+            {
+                dataPersistence.Load(_tutorialSaveData);
             }
         }
     }
