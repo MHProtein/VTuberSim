@@ -10,7 +10,7 @@ using VTuber.ScheduleSystem.Events;
 // --- Add these new using statements ---
 using VTuber.Core.Managers;
 using VTuber.Relic;
-
+using VTuber.Relic.UI;
 namespace VTuber.Dialogue.UI
 {
     public class VPhaseEndingOption : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
@@ -63,8 +63,12 @@ namespace VTuber.Dialogue.UI
                         VRelic relicData = config.CreateRelic();
                         if (relicData != null)
                         {
-                         
-                            Instantiate(relicUiPrefab, characterRelicsGrid).GetComponent<VRelicUI>().Initialize(relicData);
+                            // --- 核心修改点 2：实例化到 characterRelicsGrid ---
+                            // Instantiate the prefab
+                            GameObject relicGo = Instantiate(relicUiPrefab, characterRelicsGrid);
+                            // Get the VRelicSlotUI component and initialize it
+                            relicGo.GetComponent<VRelicSlotUI>().Initialize(relicData, false); // displayValue is false as we don't need the layer text
+                            // --- END OF CHANGE ---
                         }
                     }
                 }
@@ -79,8 +83,11 @@ namespace VTuber.Dialogue.UI
                     VRelic relicData = VDataManager.Instance.CreateRelicByID(relicId);
                     if (relicData != null)
                     {
-                        
-                        Instantiate(relicUiPrefab, inheritableRelicsGrid).GetComponent<VRelicUI>().Initialize(relicData);
+                        // --- 核心修改点 3：实例化到 inheritableRelicsGrid ---
+                        // Instantiate the prefab
+                        GameObject relicGo = Instantiate(relicUiPrefab, inheritableRelicsGrid);
+                        // Get the VRelicSlotUI component and initialize it
+                        relicGo.GetComponent<VRelicSlotUI>().Initialize(relicData, false);
                     }
                 }
             }

@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 4041706991917040368}
   - component: {fileID: 1931368222116944301}
   m_Layer: 5
-  m_Name: RelicDisplay
+  m_Name: RelicDisplay(dispute))
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
