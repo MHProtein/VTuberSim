@@ -10,7 +10,7 @@ public class VRelicUI : MonoBehaviour
 
     public void Initialize(VRelic relicData)
     {
-        // === DEBUG STEP 5: Is the prefab's UI script working? ===
+
         Debug.Log($"[DEBUG] VRelicUI.Initialize called for '{relicData.GetRelicName()}' on GameObject: {this.name}");
 
         if (relicIcon == null)
