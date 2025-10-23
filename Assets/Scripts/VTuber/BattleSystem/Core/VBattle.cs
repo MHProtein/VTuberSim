@@ -97,6 +97,7 @@ namespace VTuber.BattleSystem.Core
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
         protected Dictionary<string, int> cardTypeHistory;
         
+        private List<VAttributeCondition> _tutorialConditions;
         public VBattleSaveData Save()
         {
             if (!_initialized)
@@ -198,6 +199,11 @@ namespace VTuber.BattleSystem.Core
             bool isTutorial = false, List<VAttributeCondition> tutorialConditions = null,
             List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null)
         {
+            if (isTutorial)
+            {
+                DataPersistenceManager.Instance.SaveGameTutorial();
+            }
+            
             _initialized = true;
             _isDebugScene = isDebugScene;
             _battleEnded = false;
@@ -222,6 +228,7 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding, null);
             _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary, tutorialDeck, tutorialTurnHandCards, null); 
             _buffManager = new VBuffManager(this);
+            _tutorialConditions = tutorialConditions;
             
             _battleAttributeManager.OnEnable();
             _cardPilesManager.OnEnable();
@@ -638,6 +645,13 @@ namespace VTuber.BattleSystem.Core
                 _battleAttributeManager = null;
                 return;
             }
+
+            if (!TestTutorialConditions())
+            {
+                ReloadBattle();
+                return;
+            }
+            
             _battleEnded = true;
             _battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
             var popularityAttribute = battleAttribute as VBattlePopularityAttribute;
@@ -732,7 +746,29 @@ namespace VTuber.BattleSystem.Core
             _buffManager = null;
             _battleAttributeManager = null;
         }
-        
+
+        private void ReloadBattle()
+        {
+            var save = DataPersistenceManager.Instance.LoadTutorialSave();
+            InitializeBattle(save.battleSaveData, _decayCurves, _characterAttributeManager, null);
+        }
+
+        private bool TestTutorialConditions()
+        {
+            if (_tutorialConditions is not null)
+            {
+                foreach (var condition in _tutorialConditions)
+                {
+                    if (!condition.IsTrue(this, null))
+                        return false;
+                }
+
+                return true;
+            }
+
+            return true;
+        }
+
         private void OnCardPlayed(Dictionary<string, object> messagedict)
         {
             VDebug.Log(messagedict is null ? "卡牌消息为空" : "卡牌消息有效");

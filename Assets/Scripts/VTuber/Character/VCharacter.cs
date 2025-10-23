@@ -4,7 +4,6 @@ using System.Linq;
 using SlayTheSpire.System.SavingSystem;
 using UnityEditor;
 using VTuber.BattleSystem.Card;
-using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
 using VTuber.Consumable;

@@ -8,12 +8,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Card;
-using VTuber.BattleSystem.Core.SaveSystem;
-using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
 using VTuber.Consumable;
-using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -123,11 +120,6 @@ namespace VTuber.BattleSystem.Core
             loader.Load();
             VResourcesManager.Instance.LoadDialogs();
             DataPersistenceManager.Instance.Initialize();
-            VSave save = VSaveSystem.Load();
-            if(save != null)
-            {
-                _accounts = save.LoadAccounts();
-            }
             
             DataPersistenceManager.Instance.Initialize();
             DataPersistenceManager.Instance.Register(this);
@@ -241,8 +233,6 @@ namespace VTuber.BattleSystem.Core
         public void AddAccount(VAccount account)
         {
             _accounts.Add(account);
-            var save = new VSave(_accounts);
-            VSaveSystem.Save(save);
         }
         
         public void ModifySchedule()

@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
 using VTuber.BattleSystem.Core;
-using VTuber.BattleSystem.Core.SaveSystem;
 using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
 using VTuber.CoopSystem;
