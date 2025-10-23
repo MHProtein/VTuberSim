@@ -46,7 +46,7 @@ MonoBehaviour:
       Data: 2|System.Collections.Generic.List`1[[System.UInt32, mscorlib]], mscorlib
     - Name: 
       Entry: 12
-      Data: 4
+      Data: 9
     - Name: 
       Entry: 3
       Data: 0
@@ -59,6 +59,21 @@ MonoBehaviour:
     - Name: 
       Entry: 3
       Data: 1
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 3
+      Data: 10
+    - Name: 
+      Entry: 3
+      Data: 74
+    - Name: 
+      Entry: 3
+      Data: 71
+    - Name: 
+      Entry: 3
+      Data: 75
     - Name: 
       Entry: 13
       Data: 
@@ -110,30 +125,30 @@ MonoBehaviour:
   successBonus: 1700
   scoreLevels:
   - low: 0
-    high: 2000
+    high: 3000
     name: F
-  - low: 2000
-    high: 4000
-    name: E
-  - low: 4000
+  - low: 3000
     high: 6000
-    name: D
+    name: E
   - low: 6000
-    high: 8000
-    name: C
-  - low: 8000
-    high: 10000
-    name: B
-  - low: 10000
+    high: 9000
+    name: D
+  - low: 9000
     high: 12000
-    name: A
+    name: C
   - low: 12000
-    high: 14000
+    high: 15000
+    name: B
+  - low: 15000
+    high: 18000
+    name: A
+  - low: 18000
+    high: 21000
     name: S
-  - low: 14000
-    high: 16000
+  - low: 21000
+    high: 24000
     name: SS
-  - low: 16000
+  - low: 24000
     high: -1
     name: SSS
   kpis:
@@ -149,9 +164,12 @@ MonoBehaviour:
     endEventWeekIndex: 2
     endEventIDs: 040000000500000006000000
     specialEventData:
-    - timeOfDay: 0
+    - weekIndexForInspector: 0
+      dayIndexForInspector: 0
+      timeOfDay: 0
       eventType: 0
       eventID: 0
+      configuration: {fileID: 0}
       phase:
         phaseName: 
         description: 
@@ -287,9 +305,12 @@ MonoBehaviour:
     endEventWeekIndex: 5
     endEventIDs: 0700000008000000090000000a000000
     specialEventData:
-    - timeOfDay: 0
+    - weekIndexForInspector: 0
+      dayIndexForInspector: 0
+      timeOfDay: 0
       eventType: 0
       eventID: 0
+      configuration: {fileID: 0}
       phase:
         phaseName: 
         description: 
@@ -422,7 +443,7 @@ MonoBehaviour:
     startEventWeekIndex: 6
     startEventType: 6
     startEventID: 22
-    endEventWeekIndex: 7
+    endEventWeekIndex: 8
     endEventIDs: 0b0000000c0000000d0000000e000000
     specialEventData: []
     decayCurve1:
@@ -526,7 +547,7 @@ MonoBehaviour:
       m_RotationOrder: 4
   - phaseName: "\u6700\u540E\u9636\u6BB5"
     description: "\u6700\u540E\u9636\u6BB5"
-    startEventWeekIndex: 8
+    startEventWeekIndex: 9
     startEventType: 6
     startEventID: 23
     endEventWeekIndex: 10
