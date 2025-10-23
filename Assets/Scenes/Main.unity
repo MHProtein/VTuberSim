@@ -59632,7 +59632,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1037709410}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -77875,7 +77875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e69708da7f08f4eae766deed3a7f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScrollSpeed: 100
+  ScrollSpeed: 200
   maxBulletOnScreen: 50
   enableAutoClear: 1
   trackManager: {fileID: 1394044701}
@@ -77894,9 +77894,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   container: {fileID: 1394044699}
   BulletItemPrefab: {fileID: 3822140535218603681, guid: 7d405bc50b1f2064eaec21ccf0c621f7, type: 3}
-  trackCount: 8
+  trackCount: 4
   trackHeight: 40
-  minSpacing: 1000
+  minSpacing: 500
 --- !u!222 &1394044702
 CanvasRenderer:
   m_ObjectHideFlags: 0

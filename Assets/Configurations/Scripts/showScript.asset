@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6facdafa42f4786a94ddb931c83b5ca, type: 3}
-  m_Name: ShortScript
+  m_Name: showScript
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -167,9 +167,12 @@ MonoBehaviour:
     endEventWeekIndex: 2
     endEventIDs: 040000000500000006000000
     specialEventData:
-    - timeOfDay: 0
+    - weekIndexForInspector: 0
+      dayIndexForInspector: 0
+      timeOfDay: 0
       eventType: 0
       eventID: 0
+      configuration: {fileID: 0}
       phase:
         phaseName: 
         description: 
@@ -305,9 +308,12 @@ MonoBehaviour:
     endEventWeekIndex: 4
     endEventIDs: 0700000008000000090000000a000000
     specialEventData:
-    - timeOfDay: 0
+    - weekIndexForInspector: 0
+      dayIndexForInspector: 0
+      timeOfDay: 0
       eventType: 0
       eventID: 0
+      configuration: {fileID: 0}
       phase:
         phaseName: 
         description: 
@@ -336,220 +342,6 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       isPhaseStart: 0
-    decayCurve1:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0.04
-        outSlope: 0.04
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1000
-        value: 40
-        inSlope: 0.016
-        outSlope: 0.016
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5000
-        value: 80
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    decayCurve2:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1500
-        value: 30
-        inSlope: 0.01
-        outSlope: 0.01
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5000
-        value: 50
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    decayCurve3:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1500
-        value: 30
-        inSlope: 0.01
-        outSlope: 0.01
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5000
-        value: 50
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - phaseName: "\u7B2C\u4E09\u9636\u6BB5"
-    description: "\u7B2C\u4E09\u9636\u6BB5"
-    startEventWeekIndex: 5
-    startEventType: 6
-    startEventID: 22
-    endEventWeekIndex: 6
-    endEventIDs: 0b0000000c0000000d0000000e000000
-    specialEventData: []
-    decayCurve1:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0.04
-        outSlope: 0.04
-        tangentMode: 34
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1000
-        value: 40
-        inSlope: 0.016
-        outSlope: 0.016
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5000
-        value: 80
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    decayCurve2:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1500
-        value: 30
-        inSlope: 0.01
-        outSlope: 0.01
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5000
-        value: 50
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    decayCurve3:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1500
-        value: 30
-        inSlope: 0.01
-        outSlope: 0.01
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 5000
-        value: 50
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 136
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  - phaseName: "\u6700\u540E\u9636\u6BB5"
-    description: "\u6700\u540E\u9636\u6BB5"
-    startEventWeekIndex: 7
-    startEventType: 6
-    startEventID: 23
-    endEventWeekIndex: 8
-    endEventIDs: 0f0000001000000011000000
-    specialEventData: []
     decayCurve1:
       serializedVersion: 2
       m_Curve:
