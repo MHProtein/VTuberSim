@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
@@ -8,11 +9,13 @@ using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using Random = UnityEngine.Random;
 
 namespace VTuber.BattleSystem.Core
 {
     public class VCardPilesManagerSaveData
     {
+        public bool isTutorial;
         public List<uint> Deck;
         public List<uint> DrawPile;
         public List<uint> DiscardPile;
@@ -59,7 +62,9 @@ namespace VTuber.BattleSystem.Core
             if (tutorialDeck is not null)
             {
                 _deck.AddRange(tutorialDeck.Select(VDataManager.Instance.CreateCardByID));
+                _drawPile.AddRange(_deck);
                 _isTutorial = true;
+                _tutorialTurnHandCards = tutorialTurnHandCards;
                 return;
             }
             
@@ -76,9 +81,20 @@ namespace VTuber.BattleSystem.Core
         }
         
         public VCardPilesManagerSaveData Save()
-        {
+        {         
+            if(_isTutorial)
+                return new VCardPilesManagerSaveData()
+                {
+                    isTutorial = _isTutorial,
+                    Deck = _deck.Select(card => card.configID).ToList(),
+                    DrawPile = _drawPile.Select(card => card.configID).ToList(),
+                    DiscardPile = _discardPile.Select(card => card.configID).ToList(),
+                    HandPile = _handPile.Select(card => card.configID).ToList(),
+                    ExhaustPile = _exhaustPile.Select(card => card.configID).ToList(),
+                };
             return new VCardPilesManagerSaveData()
             {
+                isTutorial = _isTutorial,
                 Deck = _deck.Select(card => card.Id).ToList(),
                 DrawPile = _drawPile.Select(card => card.Id).ToList(),
                 DiscardPile = _discardPile.Select(card => card.Id).ToList(),
@@ -89,13 +105,29 @@ namespace VTuber.BattleSystem.Core
         
         private void Load(VCardLibrary cardLibrary, VCardPilesManagerSaveData saveData)
         {
+            Clear();
+            _isTutorial = saveData.isTutorial;
+            if (_isTutorial)
+            {
+                _deck.AddRange(saveData.Deck.Select(VDataManager.Instance.CreateCardByID));
+                _drawPile.AddRange(saveData.DrawPile.Select(GetCardByIDFromDeck));
+                _discardPile.AddRange(saveData.DiscardPile.Select(GetCardByIDFromDeck));
+                _handPile.AddRange(saveData.HandPile.Select(GetCardByIDFromDeck));
+                _exhaustPile.AddRange(saveData.ExhaustPile.Select(GetCardByIDFromDeck));
+                return;
+            }
+            
             _deck.AddRange(saveData.Deck.Select(cardLibrary.GetCardByID));
             _drawPile.AddRange(saveData.DrawPile.Select(cardLibrary.GetCardByID));
             _discardPile.AddRange(saveData.DiscardPile.Select(cardLibrary.GetCardByID));
             _handPile.AddRange(saveData.HandPile.Select(cardLibrary.GetCardByID));
             _exhaustPile.AddRange(saveData.ExhaustPile.Select(cardLibrary.GetCardByID));
         }
-
+        
+        public VCard GetCardByIDFromDeck(uint id)
+        {
+            return _deck.Find(card => card.configID == id);
+        }
         public void OnEnable()
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
@@ -235,17 +267,30 @@ namespace VTuber.BattleSystem.Core
         private List<VCard> DrawFromDrawPile(int n, bool isTurnBegin, int currentTurnIndex)
         {
             List<VCard> cards = new List<VCard>();
-            if (_isTutorial && isTurnBegin)
+            if (_isTutorial && currentTurnIndex != -1 && _tutorialTurnHandCards.Count > currentTurnIndex)
             {
                 foreach (var cardIndex in _tutorialTurnHandCards[currentTurnIndex])
                 {
                     var card = _drawPile.Find(card => card.configID == cardIndex);
-                    _drawPile.Remove(card);
-                    _handPile.Add(card);
-                    cards.Add(card);
+                    if(card is not null)
+                        _drawPile.Remove(card);
+                    
+                    if (card is null)
+                    {
+                        card = _discardPile.Find(card => card.configID == cardIndex);
+                        if(card is not null)
+                            _discardPile.Remove(card);
+                    }
+
+                    if (card is not null)
+                    {
+                        _handPile.Add(card);
+                        cards.Add(card);
+                    }
                 }
                 return cards;
             }
+            
             HashSet<int> RGNs = new HashSet<int>();
             while (RGNs.Count < n)
             {

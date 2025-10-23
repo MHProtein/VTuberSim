@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "ScriptableObjects/BulletList")]
-public class BulletList:ScriptableObject
+using VTuber.Core.Foundation;
+
+public class BulletList : VScriptableObject
 {
     public TextAsset csvFile;
     public List<BulletInfo> bullets=new List<BulletInfo>();

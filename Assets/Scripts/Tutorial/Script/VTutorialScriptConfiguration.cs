@@ -14,6 +14,7 @@ namespace Tutorial.Script
     {
         public int weekID;
         [LabelText("每周可使用事件")] public List<uint> eventIDs;
+        [LabelText("每周可使用直播事件")] public List<uint> streamEventIDs;
         [LabelText("周结束条件")] public List<VTutorialWeekCondition> conditions;
         
         public bool IsAllConditionsTrue(VCharacter character)

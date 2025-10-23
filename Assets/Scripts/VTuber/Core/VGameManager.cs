@@ -176,6 +176,7 @@ namespace VTuber.BattleSystem.Core
                 _isTutorial = true;
                 _tutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
                 _script = _tutorialScript;
+                scheduleCreator.InitializeTutorialCreator(_tutorialScript);
             }
             else
             {

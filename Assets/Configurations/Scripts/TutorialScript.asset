@@ -157,12 +157,12 @@ MonoBehaviour:
     endEventWeekIndex: 2
     endEventIDs: 040000000500000006000000
     specialEventData:
-    - weekIndexForInspector: 0
-      dayIndexForInspector: 0
+    - weekIndexForInspector: 1
+      dayIndexForInspector: 1
       timeOfDay: 0
       eventType: 7
       eventID: 0
-      configuration: {fileID: 11400000, guid: 24fee718a9eee4f4fbb8f777b4ec0e7d, type: 2}
+      tutorialStreamConfig: {fileID: 11400000, guid: 24fee718a9eee4f4fbb8f777b4ec0e7d, type: 2}
       phase:
         phaseName: 
         description: 
@@ -303,7 +303,7 @@ MonoBehaviour:
       timeOfDay: 0
       eventType: 0
       eventID: 0
-      configuration: {fileID: 0}
+      tutorialStreamConfig: {fileID: 0}
       phase:
         phaseName: 
         description: 
@@ -648,7 +648,9 @@ MonoBehaviour:
   weeks:
   - weekID: 0
     eventIDs: 0000000001000000020000000300000004000000050000000b0000000c0000001f0000001e0000000d00000034000000
+    streamEventIDs: 000000000100000002000000
     conditions: []
   - weekID: 1
     eventIDs: 000000000100000002000000030000000400000005000000
+    streamEventIDs: 000000000100000002000000
     conditions: []

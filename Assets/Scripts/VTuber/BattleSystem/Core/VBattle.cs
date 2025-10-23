@@ -186,7 +186,8 @@ namespace VTuber.BattleSystem.Core
                     { "CharacterAttributeManager", characterAttributeManager },
                     { "BattleAttributeManager", _battleAttributeManager }
                 });
-                InitializeTurn();
+                InitializeTurn();                
+   
             });
         }
 
@@ -199,11 +200,6 @@ namespace VTuber.BattleSystem.Core
             bool isTutorial = false, List<VAttributeCondition> tutorialConditions = null,
             List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null)
         {
-            if (isTutorial)
-            {
-                DataPersistenceManager.Instance.SaveGameTutorial();
-            }
-            
             _initialized = true;
             _isDebugScene = isDebugScene;
             _battleEnded = false;
@@ -254,6 +250,10 @@ namespace VTuber.BattleSystem.Core
                 _initialized = true;
                 InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
                     mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity, characterAttributeManager);
+                if (isTutorial)
+                {
+                    DataPersistenceManager.Instance.SaveGameTutorial();
+                }
             });
         }
 
@@ -389,6 +389,8 @@ namespace VTuber.BattleSystem.Core
                 return;
             foreach (var card in _cardPilesManager.HandPile)
             {
+                if (card is null)
+                    continue;
                 card.PreviewShield(this, false);
             }
         }
@@ -423,6 +425,8 @@ namespace VTuber.BattleSystem.Core
                 return;
             foreach (var card in _cardPilesManager.HandPile)
             {
+                if(card is null)
+                    continue;
                 card.TestCondition(this);
             }
         }
@@ -457,6 +461,8 @@ namespace VTuber.BattleSystem.Core
         {
             foreach (var card in _cardPilesManager.HandPile)
             {
+                if (card is null)
+                    continue;
                 if(card.CostType == CostType.Buff)
                     card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
@@ -468,6 +474,8 @@ namespace VTuber.BattleSystem.Core
         {
             foreach (var card in _cardPilesManager.HandPile)
             {
+                if (card is null)
+                    continue;
                 card.TestCondition(this);
                 card.PreviewPopularity(this, false);
             } 
@@ -477,6 +485,8 @@ namespace VTuber.BattleSystem.Core
         {
             foreach (var card in _cardPilesManager.HandPile)
             {
+                if (card is null)
+                    continue;
                 if(card.CostType == CostType.Stamina)
                     card.TestCondition(this);
                 if(card.CostType == CostType.TrueStamina)

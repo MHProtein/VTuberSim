@@ -6,6 +6,7 @@ using SlayTheSpire.System.SavingSystem;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
 using VTuber.Consumable;
 using VTuber.Core.EventCenter;
@@ -397,7 +398,9 @@ namespace VTuber.EventSystem
         
         public void InitializeBattle(bool isPhaseEnding, int initialTurnCount, int targetPopularity, 
             int extraTargetPopularity, int abilityBonus, int initialViewers,
-            int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves)
+            int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
+            bool isTutorial, List<VAttributeCondition> tutorialConditions,
+            List<uint> tutorialDeck, Dictionary<int, List<uint>> tutorialTurnHandCards)
         {
             _isInBattle = true;
             battleObject.SetActive(true);
@@ -405,7 +408,7 @@ namespace VTuber.EventSystem
                 _character.CardLibrary,
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers, 
-                _character.CharacterRelicManager.GetBattleRelics());
+                _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck, tutorialTurnHandCards);
             _character.ConsumableManager.SetBattle(battle);
             VRaisingUI.Instance.SetConsumableToBattle();
         }
@@ -425,7 +428,11 @@ namespace VTuber.EventSystem
                     streamEvent.InitialViewers,
                     streamEvent.MainAttributeIndex,
                     streamEvent.AbilityTurnCounts,
-                    _currentEvent.Phase.DecayCurves);
+                    _currentEvent.Phase.DecayCurves,
+                    streamEvent.IsTutorial,
+                    streamEvent.TutorialConditions,
+                    streamEvent.TutorialDeck,
+                    streamEvent.TutorialTurnHandCards);
             }
             else if (_shouldEnterStore)
             {

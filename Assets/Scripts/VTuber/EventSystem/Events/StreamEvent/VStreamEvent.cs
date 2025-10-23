@@ -30,14 +30,14 @@ namespace VTuber.ScheduleSystem.Events
         public bool IsTutorial => _isTutorial;
         private bool _isTutorial;
         
-        public List<VAttributeCondition> Conditions => _conditions;
-        private List<VAttributeCondition> _conditions;
+        public List<VAttributeCondition> TutorialConditions => _tutorialConditions;
+        private List<VAttributeCondition> _tutorialConditions;
         
-        public List<uint> Deck => _deck;
-        private List<uint> _deck;
+        public List<uint> TutorialDeck => _tutorialDeck;
+        private List<uint> _tutorialDeck;
         
-        public Dictionary<int, List<uint>> TurnHandCards => _turnHandCards;
-        private Dictionary<int, List<uint>> _turnHandCards;
+        public Dictionary<int, List<uint>> TutorialTurnHandCards => _tutorialTurnHandCards;
+        private Dictionary<int, List<uint>> _tutorialTurnHandCards;
         
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
         {
@@ -50,9 +50,9 @@ namespace VTuber.ScheduleSystem.Events
             Initialize(_config as VStreamEventConfiguration);
             _isTutorial = true;
             
-            _conditions = config.conditions;
-            _deck = config.deck;
-            _turnHandCards = config.turnHandCards;
+            _tutorialConditions = config.conditions;
+            _tutorialDeck = config.deck;
+            _tutorialTurnHandCards = config.turnHandCards;
         }
 
         private void Initialize(VStreamEventConfiguration config)

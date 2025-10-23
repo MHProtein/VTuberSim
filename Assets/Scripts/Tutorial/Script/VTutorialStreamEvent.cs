@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Foundation;
+using VTuber.ScheduleSystem.Events;
 
 namespace Tutorial.Script
 {
