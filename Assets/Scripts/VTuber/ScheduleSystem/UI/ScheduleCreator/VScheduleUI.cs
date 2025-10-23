@@ -236,6 +236,10 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     e = VDataManager.Instance.CreateStreamEventByID(specialEvent.eventID);
                 }
+                else if (specialEvent.eventType == VEventType.TutorialStream)
+                {
+                    e = new VStreamEvent(specialEvent.tutorialStreamConfig);
+                }
                 else
                 {
                     e = VDataManager.Instance.CreateDialogueEventByID(specialEvent.eventID);

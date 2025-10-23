@@ -24,7 +24,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
         public TimeOfDay timeOfDay;
         public VEventType eventType;
         [HideIf("eventType", VEventType.TutorialStream)] public uint eventID;
-        [ShowIf("eventType", VEventType.TutorialStream)] public VTutorialStreamEventConfiguration configuration;
+        [FormerlySerializedAs("configuration")] [ShowIf("eventType", VEventType.TutorialStream)] public VTutorialStreamEventConfiguration tutorialStreamConfig;
         [HideInInspector] public VPhase phase;
         public bool isPhaseStart;
         

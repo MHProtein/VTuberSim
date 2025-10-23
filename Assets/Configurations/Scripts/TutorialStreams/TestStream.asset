@@ -112,10 +112,10 @@ MonoBehaviour:
       Data: 6
     - Name: 
       Entry: 3
-      Data: 7
+      Data: 8
     - Name: 
       Entry: 3
-      Data: 8
+      Data: 9
     - Name: 
       Entry: 13
       Data: 
@@ -202,10 +202,10 @@ MonoBehaviour:
       Data: 6
     - Name: 
       Entry: 3
-      Data: 7
+      Data: 8
     - Name: 
       Entry: 3
-      Data: 8
+      Data: 9
     - Name: 
       Entry: 13
       Data: 
@@ -292,10 +292,10 @@ MonoBehaviour:
       Data: 6
     - Name: 
       Entry: 3
-      Data: 7
+      Data: 8
     - Name: 
       Entry: 3
-      Data: 8
+      Data: 9
     - Name: 
       Entry: 13
       Data: 
@@ -318,4 +318,4 @@ MonoBehaviour:
     description: 
     attributeName: BAPopularity
     targetValue: 50000
-  deck: 000000000100000002000000030000000400000005000000060000000700000008000000
+  deck: 000000000100000002000000030000000400000005000000060000000800000009000000

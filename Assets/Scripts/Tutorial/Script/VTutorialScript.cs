@@ -8,7 +8,8 @@ namespace Tutorial.Script
 {
     public class VTutorialScript : VScript
     {
-        public List<uint> CurrentWeekEventList => Configuration.weeks[_weekIndex].eventIDs;
+        public List<uint> CurrentWeekDialogEventList => Configuration.weeks[_weekIndex].eventIDs;
+        public List<uint> CurrentWeekStreamEventList => Configuration.weeks[_weekIndex].streamEventIDs;
         public List<VTutorialWeekCondition> CurrentWeekConditions => Configuration.weeks[_weekIndex].conditions;
         public VTutorialScriptConfiguration Configuration => _tutorialConfiguration;
         private VTutorialScriptConfiguration _tutorialConfiguration;

@@ -12,5 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f134aac3c8e9f40b28b81026952af4, type: 3}
   m_Name: New Bullet List 1
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: bullets
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[BulletInfo, Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   csvFile: {fileID: 4900000, guid: 7988a30b6f50a8a458849666ca3dd011, type: 3}
-  bulletType: 1

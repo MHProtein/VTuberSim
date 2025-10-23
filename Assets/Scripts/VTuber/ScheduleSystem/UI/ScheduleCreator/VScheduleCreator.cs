@@ -39,7 +39,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 _eventDatas.Clear();
                 var eventConfigs = 
-                    script.CurrentWeekEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
+                    script.CurrentWeekDialogEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
                 eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
                 _eventDatas = eventConfigs;
 
@@ -53,8 +53,8 @@ namespace VTuber.ScheduleSystem.UI
             });
             
             var eventConfigs = 
-                script.CurrentWeekEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
-            eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
+                script.CurrentWeekDialogEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
+            eventConfigs.AddRange(script.CurrentWeekStreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
             _eventDatas = eventConfigs;
         }
         
