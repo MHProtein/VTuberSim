@@ -11,6 +11,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
 using VTuber.Character.Attributes;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Dialogue.UI;
 using VTuber.Relic;
@@ -158,10 +159,10 @@ namespace VTuber.BattleSystem.Core
             
             VEventSystemUI.Instance.PlayVideo(() =>
             {
-                _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary,
-                    null, null, saveData.cardPilesManagerSaveData); 
                 _battleAttributeManager = new VBattleAttributeManager(_isPhaseEnding, saveData.attributeManagerSaveData);
                 _buffManager = new VBuffManager(this, saveData.buffManagerSaveData);
+                _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary,
+                    null, null, saveData.cardPilesManagerSaveData); 
                 
                 _turnAttribute = _battleAttributeManager.BattleAttributes["BATurn"] as VBattleTurnAttribute;
                 _playLeftAttribute = _battleAttributeManager.BattleAttributes["BAPlayLeft"] as VBattlePlayLeftAttribute;
@@ -186,8 +187,7 @@ namespace VTuber.BattleSystem.Core
                     { "CharacterAttributeManager", characterAttributeManager },
                     { "BattleAttributeManager", _battleAttributeManager }
                 });
-                InitializeTurn();                
-   
+                InitializeTurn();
             });
         }
 
@@ -252,7 +252,7 @@ namespace VTuber.BattleSystem.Core
                     mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity, characterAttributeManager);
                 if (isTutorial)
                 {
-                    DataPersistenceManager.Instance.SaveGameTutorial();
+                    VDataPersistenceManager.Instance.SaveGameTutorial();
                 }
             });
         }
@@ -360,6 +360,9 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnPopularityChange, OnPopularityChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRestartBattle, ReloadBattle);
+            
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
         }
         
         protected override void OnDisable()
@@ -381,8 +384,33 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnParameterPopularityModifierChanged, OnParameterPopularityModifierChanged);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnPopularityChange, OnPopularityChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnShieldModifierChanged, OnShieldModifierChanged);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRestartBattle, ReloadBattle);
+            
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
         }
-        
+
+        private void OnSwitchToMainMenu(Dictionary<string, object> messagedict)
+        {
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
+            {
+                { "IsReturnToMainMenu", true },
+            });
+            
+            _initialized = false;
+            _buffManager.Clear();
+            _battleAttributeManager.Clear();
+            _cardPilesManager.Clear();
+
+            _battleAttributeManager.OnDisable();
+            _cardPilesManager.OnDisable();
+            _buffManager.OnDisable();
+            
+            _cardPilesManager = null;
+            _buffManager = null;
+            _battleAttributeManager = null;
+        }
+
         private void OnShieldModifierChanged(Dictionary<string, object> messagedict)
         {
             if (_cardPilesManager is null)
@@ -459,6 +487,8 @@ namespace VTuber.BattleSystem.Core
         
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
         {
+            if (_cardPilesManager is null)
+                return;
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if (card is null)
@@ -472,6 +502,8 @@ namespace VTuber.BattleSystem.Core
 
         private void OnBuffAdded(Dictionary<string, object> messagedict)
         {
+            if (_cardPilesManager is null)
+                return;
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if (card is null)
@@ -483,6 +515,8 @@ namespace VTuber.BattleSystem.Core
         
         private void OnStaminaChange(Dictionary<string, object> messagedict)
         {
+            if (_cardPilesManager is null)
+                return;
             foreach (var card in _cardPilesManager.HandPile)
             {
                 if (card is null)
@@ -570,7 +604,7 @@ namespace VTuber.BattleSystem.Core
                 return;
             }
             if(!_isDebugScene)
-                DataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGame();
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBegin, new Dictionary<string, object>
             {
                 {"TurnLeft", TurnLeft},
@@ -656,11 +690,8 @@ namespace VTuber.BattleSystem.Core
                 return;
             }
 
-            if (!TestTutorialConditions())
-            {
-                ReloadBattle();
-                return;
-            }
+ 
+            bool isTutorialConditionsSatisfied = TestTutorialConditions();
             
             _battleEnded = true;
             _battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
@@ -731,11 +762,14 @@ namespace VTuber.BattleSystem.Core
                     }
                 }
             }
-                
-            _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
+            
+            if(isTutorialConditionsSatisfied)
+                _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
                 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
             {
+                { "IsTutorial", _tutorialConditions != null },
+                { "IsTutorialConditionsSatisfied", isTutorialConditionsSatisfied },
                 { "TurnLeft", TurnLeft },
                 { "CharacterAttributeManager", _characterAttributeManager },
                 { "BattleAttributeManager", _battleAttributeManager },
@@ -757,9 +791,10 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager = null;
         }
 
-        private void ReloadBattle()
+        private void ReloadBattle(Dictionary<string, object> messagedict)
         {
-            var save = DataPersistenceManager.Instance.LoadTutorialSave();
+            var save = VDataPersistenceManager.Instance.LoadTutorialSave();
+            
             InitializeBattle(save.battleSaveData, _decayCurves, _characterAttributeManager, null);
         }
 

@@ -13,6 +13,7 @@ namespace VTuber.ScheduleSystem.UI
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject itemPrefab;
+        private bool _isFirstTime = true;
         
         protected VScheduleCreatorSlot[,] slots;
         
@@ -32,6 +33,22 @@ namespace VTuber.ScheduleSystem.UI
                 }
             }
         }
+
+        private void Clear()
+        {       
+            for (int y = 0; y < slotSize.y; y++)
+            {
+                for (int x = 0; x < slotSize.x; x++)
+                {
+                    slots[y, x].RemoveItem();
+                }
+            }
+            foreach (var eventObject in _eventObjects)
+            {
+                Destroy(eventObject);
+            }
+            _eventObjects.Clear();
+        }
         
         public void InitializeTutorialCreator(VTutorialScript script)
         {
@@ -42,12 +59,6 @@ namespace VTuber.ScheduleSystem.UI
                     script.CurrentWeekDialogEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
                 eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
                 _eventDatas = eventConfigs;
-
-                foreach (var eventObject in _eventObjects)
-                {
-                    Destroy(eventObject);
-                }
-                _eventObjects.Clear();
                 
                 CreateEventObjects();
             });
@@ -56,13 +67,21 @@ namespace VTuber.ScheduleSystem.UI
                 script.CurrentWeekDialogEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
             eventConfigs.AddRange(script.CurrentWeekStreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
             _eventDatas = eventConfigs;
+            if (!_isFirstTime)
+            {
+                CreateEventObjects();
+            }
         }
         
         public void InitializeCreator(VScript script)
-        {
+        {               
             var events = script.EventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
             events.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
-            _eventDatas = events;
+            _eventDatas = events;       
+            if (!_isFirstTime)
+            {
+                CreateEventObjects();
+            }
         }
         
         VScheduleCreatorSlot GetAvailableSlot()
@@ -82,12 +101,13 @@ namespace VTuber.ScheduleSystem.UI
         protected override void Start()
         {
             base.Start();
-            
+            _isFirstTime = false;
             CreateEventObjects();
         }
 
         private void CreateEventObjects()
         {
+            Clear();
             foreach (var eventData in _eventDatas)
             {
                 var slot = GetAvailableSlot();

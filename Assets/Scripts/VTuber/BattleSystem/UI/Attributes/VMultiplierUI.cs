@@ -62,11 +62,7 @@ namespace VTuber.BattleSystem.UI
         {
             base.OnDisable();
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnMultiplierSequenceCalculated, OnMultiplierSequenceCalculated);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRotateMultiplier, OnRotateMultiplier);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+            
         }
 
         private void OnRotateMultiplier(Dictionary<string, object> messagedict)
@@ -82,6 +78,11 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRotateMultiplier, OnRotateMultiplier);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
             foreach (var colorObject in colorObjects)
             {
                 Destroy(colorObject.gameObject);

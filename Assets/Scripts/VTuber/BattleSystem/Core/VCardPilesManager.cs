@@ -21,6 +21,7 @@ namespace VTuber.BattleSystem.Core
         public List<uint> DiscardPile;
         public List<uint> HandPile;
         public List<uint> ExhaustPile;
+        public Dictionary<int, List<uint>> tutorialTurnHandCards;
     }
     
     public class VCardPilesManager
@@ -45,6 +46,7 @@ namespace VTuber.BattleSystem.Core
         
         private bool _isFirstTurn;
         private bool _isTutorial;
+        private bool _isLoad;
         private Dictionary<int, List<uint>> _tutorialTurnHandCards;
         
         public VCardPilesManager(int handSize, int maxHandSize, VCardLibrary cardLibrary,List<uint> tutorialDeck,
@@ -91,6 +93,7 @@ namespace VTuber.BattleSystem.Core
                     DiscardPile = _discardPile.Select(card => card.configID).ToList(),
                     HandPile = _handPile.Select(card => card.configID).ToList(),
                     ExhaustPile = _exhaustPile.Select(card => card.configID).ToList(),
+                    tutorialTurnHandCards = _tutorialTurnHandCards
                 };
             return new VCardPilesManagerSaveData()
             {
@@ -106,6 +109,7 @@ namespace VTuber.BattleSystem.Core
         private void Load(VCardLibrary cardLibrary, VCardPilesManagerSaveData saveData)
         {
             Clear();
+            _isLoad = true;
             _isTutorial = saveData.isTutorial;
             if (_isTutorial)
             {
@@ -114,6 +118,7 @@ namespace VTuber.BattleSystem.Core
                 _discardPile.AddRange(saveData.DiscardPile.Select(GetCardByIDFromDeck));
                 _handPile.AddRange(saveData.HandPile.Select(GetCardByIDFromDeck));
                 _exhaustPile.AddRange(saveData.ExhaustPile.Select(GetCardByIDFromDeck));
+                _tutorialTurnHandCards = saveData.tutorialTurnHandCards;
                 return;
             }
             
@@ -263,10 +268,16 @@ namespace VTuber.BattleSystem.Core
             message.Add("ShouldPlayTwice", shouldPlayTwice);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnDrawCards, message);
         }
-        
+
         private List<VCard> DrawFromDrawPile(int n, bool isTurnBegin, int currentTurnIndex)
         {
             List<VCard> cards = new List<VCard>();
+            if (_isLoad)
+            {
+                _isLoad = false;
+                cards.AddRange(_handPile);
+                return cards;
+            }
             if (_isTutorial && currentTurnIndex != -1 && _tutorialTurnHandCards.Count > currentTurnIndex)
             {
                 foreach (var cardIndex in _tutorialTurnHandCards[currentTurnIndex])

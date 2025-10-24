@@ -90,7 +90,7 @@ namespace VTuber.EventSystem
             if (_isPhaseStartEvent)
                 return;
             _executedLines.Add(line);
-            DataPersistenceManager.Instance.SaveGame();
+            VDataPersistenceManager.Instance.SaveGame();
         }
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e, bool isPhaseStartEvent = false)
@@ -109,7 +109,7 @@ namespace VTuber.EventSystem
                     _executedLines.Clear();
                     _loaded = false;
                     
-                    battle.InitializeBattle(DataPersistenceManager.Instance.SaveData.battleSaveData,
+                    battle.InitializeBattle(VDataPersistenceManager.Instance.SaveData.battleSaveData,
                         e.Phase.DecayCurves,
                         _character.AttributeManager,
                         _character.CardLibrary);

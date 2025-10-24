@@ -45,7 +45,7 @@ namespace VTuber.BattleSystem.Core
             VMultiplierManagerSaveData saveData)
         {
             multiplierSequence = saveData.multiplierSequence;
-            _currentTurnIndex = saveData.currentTurnIndex;
+            _currentTurnIndex = saveData.currentTurnIndex - 1;
             
             _multiplierAttributes = new List<VBattleMultiplierAttribute>
             {
@@ -55,7 +55,6 @@ namespace VTuber.BattleSystem.Core
             };
             
             multiplierSequence = saveData.multiplierSequence;
-            _currentTurnIndex = saveData.currentTurnIndex;
             Multiplier = _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
             
             VBattleRootEventCenter.Instance.Raise(

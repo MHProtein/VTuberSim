@@ -133,6 +133,8 @@ namespace VTuber.ScheduleSystem.Schedule
 
         public VScheduleEvent GetCurrentEvent()
         {
+            if (_events is null || _events.Count == 0)
+                return null;
             return _events[(int)_currentEventIndex];
         }
     }

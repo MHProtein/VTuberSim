@@ -29,6 +29,7 @@ namespace VTuber.Core.ScriptSystem
     }
     public class VScriptConfiguration : VScriptableObject
     {
+        public int index;
         public string scriptName;
         public string description;
         public Sprite icon;
