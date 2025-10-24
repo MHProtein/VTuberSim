@@ -7,7 +7,7 @@ using VTuber.Core.Foundation;
 
 namespace SlayTheSpire.System.SavingSystem
 {
-    public class DataPersistenceManager : VSingleton<DataPersistenceManager>
+    public class VDataPersistenceManager : VSingleton<VDataPersistenceManager>
     {
         public SaveData SaveData => _saveData;
         private SaveData _saveData;

@@ -17,5 +17,6 @@ namespace VTuber.ScheduleSystem.UI
         {
             _item = null;
         }
+
     }
 }

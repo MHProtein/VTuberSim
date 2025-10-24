@@ -34,7 +34,7 @@ namespace VTuber.BattleSystem.Buff
             _buffLayerModifierManager = buffManagerSaveData.buffLayerModifierManager;
             foreach (var buffSaveData in buffManagerSaveData.buffSaveDatas)
             {
-                var buffItem = new VBuffItem(buffSaveData);
+                var buffItem = new VBuffItem(buffSaveData, battle);
                 _buffs.Add(buffItem);
                 
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffAdded, new Dictionary<string, object>

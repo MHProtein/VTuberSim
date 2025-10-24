@@ -42,7 +42,7 @@ namespace VTuber.ScheduleSystem.Schedule
         public VDaySchedule GetDay(int index)
         {
             if (index < 0 || index >= 7)
-                throw new System.IndexOutOfRangeException("WeeklySchedule: index must be between 0 and 6.");
+                return null;
             return _days[index];
         }
 
@@ -70,7 +70,10 @@ namespace VTuber.ScheduleSystem.Schedule
 
         public VScheduleEvent GetCurrentEvent()
         {
-            return GetDay(_currentDayIndex).GetCurrentEvent();
+            var day = GetDay(_currentDayIndex);
+            if (day is null)
+                return null;
+            return day.GetCurrentEvent();
         }
 
         public VScheduleEvent BeginExecution()

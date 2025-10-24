@@ -119,12 +119,12 @@ namespace VTuber.BattleSystem.Core
             VResourcesManager.Instance.LoadSprites();
             loader.Load();
             VResourcesManager.Instance.LoadDialogs();
-            DataPersistenceManager.Instance.Initialize();
+            VDataPersistenceManager.Instance.Initialize();
             
-            DataPersistenceManager.Instance.Initialize();
-            DataPersistenceManager.Instance.Register(this);
+            VDataPersistenceManager.Instance.Initialize();
+            VDataPersistenceManager.Instance.Register(this);
 
-            var saveData = DataPersistenceManager.Instance.LoadSave();
+            var saveData = VDataPersistenceManager.Instance.LoadSave();
             
             eventSystem.Initialize();
             
@@ -154,8 +154,9 @@ namespace VTuber.BattleSystem.Core
 
         public void LoadGame()
         {
+            scheduleCreator.gameObject.SetActive(true);
             _startGameTime = DateTime.UtcNow;
-            DataPersistenceManager.Instance.LoadGame();
+            VDataPersistenceManager.Instance.LoadGame();
             
             List<VScheduleEventConfiguration> eventConfigs = new List<VScheduleEventConfiguration>();
             eventConfigs.AddRange(_script.EventList.Select((id => VDataManager.Instance.GetDialogueEventConfigurationByID(id))));
@@ -168,8 +169,9 @@ namespace VTuber.BattleSystem.Core
 
         public void NewGame(VCharacterConfiguration characterConfiguration, VScriptConfiguration scriptConfig, List<VAccount> accounts)
         {
+            scheduleCreator.gameObject.SetActive(true);
             _startGameTime = DateTime.UtcNow;
-            DataPersistenceManager.Instance.NewGame();
+            VDataPersistenceManager.Instance.NewGame();
 
             if (scriptConfig is VTutorialScriptConfiguration)
             {
@@ -346,6 +348,8 @@ namespace VTuber.BattleSystem.Core
                 _character.OnDisable();
             if(scheduleUI is not null)
                 scheduleUI.Clear();
+            
+            scheduleCreator.gameObject.SetActive(false);
             
             mainMenu.gameObject.SetActive(true);
             mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts);

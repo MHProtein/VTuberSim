@@ -27,6 +27,7 @@ namespace VTuber.BattleSystem.Core.UI
         public Action<VScriptConfiguration> _confirmAction;
         private Action _returnAction;
         private bool _firstTimeShow;
+        private Vector3 _originalPosition;
 
         protected override void Awake()
         {
@@ -36,6 +37,12 @@ namespace VTuber.BattleSystem.Core.UI
             prevButton.onClick.AddListener(Prev);
             confirmButton.onClick.AddListener(Confirm);
             returnButton.onClick.AddListener(Return);
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+            _originalPosition = content.transform.localPosition;
         }
 
         private void Confirm()
@@ -50,8 +57,10 @@ namespace VTuber.BattleSystem.Core.UI
 
         public void Initialize(List<VScriptConfiguration> scripts, Action<VScriptConfiguration> confirmAction, Action returnAction)
         {
+            content.transform.localPosition = _originalPosition;
             _firstTimeShow = true;
             _scripts = scripts;
+            _scripts.Sort((script1, script2) => script1.index.CompareTo(script2.index));
             _confirmAction = confirmAction;
             _returnAction = returnAction;
             _index = 0;
@@ -123,7 +132,7 @@ namespace VTuber.BattleSystem.Core.UI
         {
             foreach (var ui in _scriptUIs)
             {
-                Destroy(ui);
+                Destroy(ui.gameObject);
             }
             _scriptUIs.Clear();
         }

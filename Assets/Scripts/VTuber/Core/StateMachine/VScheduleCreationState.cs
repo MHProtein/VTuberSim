@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SlayTheSpire.System.SavingSystem;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -6,7 +7,6 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
 {
-    
     public class VScheduleCreationState : VState
     {
         public VScheduleCreationState()
@@ -23,6 +23,8 @@ namespace VTuber.Core.StateMachine
             {
                 stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script, stateMachine.Script.WeekIndex);
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToScheduleCreation, new Dictionary<string, object>());
+                VDataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGameTutorial();
             }));
         }
 

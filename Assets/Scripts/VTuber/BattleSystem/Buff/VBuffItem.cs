@@ -35,8 +35,9 @@ namespace VTuber.BattleSystem.Buff
             this._value = value;
         }
         
-        public VBuffItem(VBuffSaveData saveData)
+        public VBuffItem(VBuffSaveData saveData, VBattle battle)
         {
+            _battle = battle;
             _value = saveData.layer;
             _isFirstTurn = saveData.isFirstTurn;
             buff = VDataManager.Instance.CreateBuffByID(saveData.configID);
@@ -45,6 +46,7 @@ namespace VTuber.BattleSystem.Buff
             {
                 var effect = VDataManager.Instance.CreateEffectByID(modifierEffectSaveData.effectConfigID, "0", "0");
                 (effect as VModifierEffect).Load(modifierEffectSaveData);
+                effect.InitializeBuff(battle, this);
                 buff.AddEffect(effect);
             }
         }

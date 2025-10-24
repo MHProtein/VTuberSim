@@ -111,5 +111,11 @@ namespace VTuber.BattleSystem.Effect
         }
 
         public abstract string GetValue();
+
+        public void InitializeBuff(VBattle battle, VBuffItem buffItem)
+        {
+            _battle = battle;
+            _buffItem = buffItem;
+        }
     }
 }

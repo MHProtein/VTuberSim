@@ -53,7 +53,7 @@ namespace VTuber.BattleSystem.Core.UI
         {
             confirmationMenu.Show("删除存档", new List<string> { deleteSaveConfirmationText }, () =>
             {
-                DataPersistenceManager.Instance.DeleteSave();
+                VDataPersistenceManager.Instance.DeleteSave();
                 CloseLoadMenu();
                 _loadGameButton.interactable = false;
             });
@@ -62,7 +62,7 @@ namespace VTuber.BattleSystem.Core.UI
         private void OpenLoadMenu()
         {
             loadSaveMenu.gameObject.SetActive(true);
-            loadSaveMenu.SetDetails(DataPersistenceManager.Instance.SaveData);
+            loadSaveMenu.SetDetails(VDataPersistenceManager.Instance.SaveData);
         }
 
         private void CloseLoadMenu()
@@ -80,9 +80,9 @@ namespace VTuber.BattleSystem.Core.UI
         private void NewGame()
         {
             //VSave save = VSaveSystem.Load();
-            if (DataPersistenceManager.Instance.SaveData is null)
+            if (VDataPersistenceManager.Instance.SaveData is null)
             {
-                DataPersistenceManager.Instance.NewGame();
+                VDataPersistenceManager.Instance.NewGame();
                 gameConfigSelection.Begin(_scripts, _characters, _accounts);
                 return;
             }
@@ -91,7 +91,7 @@ namespace VTuber.BattleSystem.Core.UI
             {
                 confirmationMenu.Show("新游戏", new List<string> { newGameConfirmationTwiceText }, () =>
                 {
-                    DataPersistenceManager.Instance.NewGame();
+                    VDataPersistenceManager.Instance.NewGame();
                     gameConfigSelection.Begin(_scripts, _characters, _accounts);
                 });
             });
@@ -105,7 +105,7 @@ namespace VTuber.BattleSystem.Core.UI
             
             _accounts = accounts;
 
-            _loadGameButton.interactable = DataPersistenceManager.Instance.SaveData is not null;
+            _loadGameButton.interactable = VDataPersistenceManager.Instance.SaveData is not null;
             VAudioPlayer.Instance.PlayBGM(VBGMType.MainMenu);
         }
         
