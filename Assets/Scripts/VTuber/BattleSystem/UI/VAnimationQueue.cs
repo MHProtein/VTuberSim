@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PrimeTween;
-using UnityEngine;
 
 namespace VTuber.BattleSystem.UI
 {
     public class VAnimationQueue
     {
-        private readonly Queue<Sequence> queue = new Queue<Sequence>();
+        private readonly Queue<Sequence> queue = new();
 
         public void Enqueue(Tween tween)
         {
@@ -25,11 +23,7 @@ namespace VTuber.BattleSystem.UI
 
         public void Clear()
         {
-            while (queue.Count > 0)
-            {
-                queue.Dequeue().Stop();
-            }
+            while (queue.Count > 0) queue.Dequeue().Stop();
         }
     }
-
 }

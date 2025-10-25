@@ -15,7 +15,7 @@ namespace VTuber.BattleSystem.UI
 
         public void SetBuff(VBuffItem buff)
         {
-            if(!buff.buff.IsStackable())
+            if (!buff.buff.IsStackable())
                 layer.gameObject.SetActive(false);
             nameText.text = buff.buff.GetBuffName();
             icon.sprite = buff.buff.Icon;

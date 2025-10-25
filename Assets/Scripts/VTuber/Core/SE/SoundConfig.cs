@@ -1,9 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
+using UnityEngine;
 using VTuber.Core.Foundation;
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,8 +15,9 @@ namespace VTuber.Core.SE
         public AudioClip[] SoundEffects => soundEffects;
 
 #if UNITY_EDITOR
-        [Header("Editor Settings")]
-        [SerializeField] private string soundFolderPath = "Assets/Audio";
+        [Header("Editor Settings")] [SerializeField]
+        private string soundFolderPath = "Assets/Audio";
+
         [SerializeField] private bool includeSubfolders = true;
 
         [ContextMenu("Load Sound Effects")]
@@ -40,18 +38,16 @@ namespace VTuber.Core.SE
             }
 
             // ��ȡ������Ƶ�ļ���·��
-            List<string> audioPaths = new List<string>();
+            var audioPaths = new List<string>();
             GetAllAudioPaths(soundFolderPath, includeSubfolders, audioPaths);
 
             // ������Ƶ����
             soundEffects = new AudioClip[audioPaths.Count];
-            for (int i = 0; i < audioPaths.Count; i++)
-            {
+            for (var i = 0; i < audioPaths.Count; i++)
                 soundEffects[i] = AssetDatabase.LoadAssetAtPath<AudioClip>(audioPaths[i]);
-            }
 
             Debug.Log($"Loaded {soundEffects.Length} sound effects from {soundFolderPath}" +
-                     (includeSubfolders ? " (including subfolders)" : ""));
+                      (includeSubfolders ? " (including subfolders)" : ""));
             EditorUtility.SetDirty(this);
         }
 
@@ -59,25 +55,20 @@ namespace VTuber.Core.SE
         private void GetAllAudioPaths(string folderPath, bool recursive, List<string> result)
         {
             // ��ȡ��ǰ�ļ����е�������Ƶ�ļ�
-            string[] guids = AssetDatabase.FindAssets("t:AudioClip", new[] { folderPath });
-            foreach (string guid in guids)
+            var guids = AssetDatabase.FindAssets("t:AudioClip", new[] { folderPath });
+            foreach (var guid in guids)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var path = AssetDatabase.GUIDToAssetPath(guid);
                 if (!result.Contains(path)) // �����ظ�����
-                {
                     result.Add(path);
-                }
             }
 
             // �����Ҫ�ݹ飬�����������ļ���
             if (recursive)
             {
                 // ʹ��AssetDatabase��ȡ���ļ���
-                string[] subFolders = AssetDatabase.GetSubFolders(folderPath);
-                foreach (string subFolder in subFolders)
-                {
-                    GetAllAudioPaths(subFolder, true, result);
-                }
+                var subFolders = AssetDatabase.GetSubFolders(folderPath);
+                foreach (var subFolder in subFolders) GetAllAudioPaths(subFolder, true, result);
             }
         }
 #endif

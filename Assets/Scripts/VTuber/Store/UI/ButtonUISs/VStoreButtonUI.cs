@@ -14,13 +14,13 @@ namespace VTuber.Store.UI
         [SerializeField] protected GameObject discountObject;
         [SerializeField] protected TMP_Text discountText;
         [SerializeField] protected GameObject poorObject;
-        
-        protected VCharacter character;
-        protected bool canAfford = true;
-        protected bool hasBought = false;
-        protected VStoreButton storeButton;
         protected Button button;
-        
+        protected bool canAfford = true;
+
+        protected VCharacter character;
+        protected bool hasBought;
+        protected VStoreButton storeButton;
+
         protected override void Awake()
         {
             base.Awake();
@@ -28,13 +28,13 @@ namespace VTuber.Store.UI
             button.onClick.AddListener(OnClick);
         }
 
-        public virtual void SetButton(VStoreButton storeButton, VCharacter character) 
+        public virtual void SetButton(VStoreButton storeButton, VCharacter character)
         {
             hasBought = false;
             button.interactable = true;
             this.storeButton = storeButton;
             this.character = character;
-            
+
             this.character = character;
             soldOutObject.SetActive(false);
             priceText.text = storeButton.Price.ToString();
@@ -63,17 +63,14 @@ namespace VTuber.Store.UI
             button.interactable = false;
             storeButton.Buy(character);
         }
-        
+
         public void SetCanAfford()
         {
-            if(hasBought)
+            if (hasBought)
                 return;
             canAfford = storeButton.Affordable(character);
             poorObject.SetActive(!canAfford);
-            if (!canAfford)
-            {
-                priceText.color = Color.red;
-            }
+            if (!canAfford) priceText.color = Color.red;
         }
     }
 }

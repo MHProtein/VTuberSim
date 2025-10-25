@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using VTuber.BattleSystem.Core;
+﻿using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Effect
@@ -8,10 +7,10 @@ namespace VTuber.BattleSystem.Effect
     {
         public VRedrawEffect(VRedrawEffectConfiguration configuration) : base(configuration)
         {
-            
         }
 
-        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false,
+            bool shouldApplyTwice = false)
         {
             base.ApplyEffect(battle, layer, isFromCard, shouldApplyTwice);
             battle.RedrawRest();

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SlayTheSpire.System.SavingSystem;
-using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.UI;
@@ -13,19 +12,21 @@ namespace VTuber.Core.StateMachine
         {
             stateType = VStateType.ScheduleCreation;
         }
-        
+
         public override void Enter(VState state, params object[] enterParams)
         {
             base.Enter(state, enterParams);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
-        
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete((() =>
+
+            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete(() =>
             {
-                stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script, stateMachine.Script.WeekIndex);
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToScheduleCreation, new Dictionary<string, object>());
+                stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
+                    stateMachine.Script.WeekIndex);
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToScheduleCreation,
+                    new Dictionary<string, object>());
                 VDataPersistenceManager.Instance.SaveGame();
-                VDataPersistenceManager.Instance.SaveGameTutorial();
-            }));
+                VDataPersistenceManager.Instance.SaveGameTutorialWeek();
+            });
         }
 
         public override void Exit(VState nextState)

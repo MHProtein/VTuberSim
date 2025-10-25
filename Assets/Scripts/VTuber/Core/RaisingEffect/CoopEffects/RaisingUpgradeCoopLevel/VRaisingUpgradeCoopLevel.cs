@@ -6,7 +6,9 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingUpgradeCoopLevel : VRaisingEffect
     {
         public uint cooperatorID;
-        public VRaisingUpgradeCoopLevel(VRaisingUpgradeCoopLevelConfiguration configuration, string parameter) : base(configuration)
+
+        public VRaisingUpgradeCoopLevel(VRaisingUpgradeCoopLevelConfiguration configuration, string parameter) : base(
+            configuration)
         {
             cooperatorID = uint.Parse(parameter);
         }
@@ -18,12 +20,10 @@ namespace VTuber.Core.RaisingEffect
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()
         {
-            
         }
 
         public override string GetParameter()

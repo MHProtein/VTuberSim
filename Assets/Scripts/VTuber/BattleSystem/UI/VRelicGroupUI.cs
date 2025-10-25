@@ -19,14 +19,14 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private Transform submenuRelicGroup;
         [SerializeField] private GameObject submenuObject;
         [SerializeField] private VClickDetectionPanel detectionPanel;
+        private readonly VAnimationQueue _animationQueue = new();
+
+        private GameObject _ellipsisObject;
+        private bool _isSubmenuOpen;
 
         private List<VRelicSlotUI> displayingRelics;
         private List<VRelicSlotUI> hiddenRelics;
-        private readonly VAnimationQueue _animationQueue = new VAnimationQueue();
 
-        private GameObject _ellipsisObject;
-        private bool _isSubmenuOpen = false;
-        
         protected override void Awake()
         {
             base.Awake();
@@ -59,30 +59,24 @@ namespace VTuber.BattleSystem.UI
             submenuObject.SetActive(_isSubmenuOpen);
             detectionPanel.gameObject.SetActive(_isSubmenuOpen);
         }
-        
+
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            foreach (var ui in hiddenRelics)
-            {
-                Destroy(ui.gameObject);
-            }    
-            foreach (var ui in displayingRelics)
-            {
-                Destroy(ui.gameObject);
-            }
+            foreach (var ui in hiddenRelics) Destroy(ui.gameObject);
+            foreach (var ui in displayingRelics) Destroy(ui.gameObject);
             hiddenRelics.Clear();
             displayingRelics.Clear();
         }
 
         private VRelicSlotUI SpawnRelicSlot(GameObject prefab, Transform parent)
         {
-            var go = Instantiate(prefab, parent); 
+            var go = Instantiate(prefab, parent);
             return go.GetComponent<VRelicSlotUI>();
         }
-        
+
         private void OnRelicAdded(Dictionary<string, object> msg)
-        {                                                                                                                                                                                                                                       
-            VRelic relic = (VRelic)msg["Relic"];
+        {
+            var relic = (VRelic)msg["Relic"];
 
             if (displayingRelics.Count <= displayingRelicCount)
             {
@@ -91,13 +85,14 @@ namespace VTuber.BattleSystem.UI
                 relicUI.Initialize(relic, true);
                 return;
             }
-            
-            if(hiddenRelics.Count == 0)
+
+            if (hiddenRelics.Count == 0)
             {
                 _ellipsisObject = Instantiate(subMenuButtonPrefab, displayGroup);
                 var button = _ellipsisObject.GetComponent<Button>();
                 button.onClick.AddListener(OnEllipsisButtonClicked);
             }
+
             var newRelicUI = SpawnRelicSlot(submenuRelicSlotPrefab, submenuRelicGroup);
             hiddenRelics.Add(newRelicUI);
             newRelicUI.Initialize(relic, true);
@@ -105,21 +100,18 @@ namespace VTuber.BattleSystem.UI
 
         private void OnRelicValueUpdated(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
+            var id = (uint)msg["Id"];
 
             var relic = displayingRelics.Find(ui => ui.Relic.Id == id);
-            if (relic == null)
-            {
-                relic = hiddenRelics.Find(ui => ui.Relic.Id == id);
-            }
-            
+            if (relic == null) relic = hiddenRelics.Find(ui => ui.Relic.Id == id);
+
             relic.UpdateValue();
         }
 
         private void OnRelicRemoved(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
-            
+            var id = (uint)msg["Id"];
+
             var relic = displayingRelics.Find(ui => ui.Relic.Id == id);
             if (relic != null)
             {
@@ -132,7 +124,7 @@ namespace VTuber.BattleSystem.UI
                 {
                     displayingRelics.Remove(relic);
                     Destroy(relic.gameObject);
-                    
+
                     var hiddenRelic = hiddenRelics[0];
                     hiddenRelics.Remove(hiddenRelic);
 
@@ -145,12 +137,12 @@ namespace VTuber.BattleSystem.UI
                     {
                         _ellipsisObject.gameObject.transform.SetParent(null);
                     }
-                    
-                    var newDisplayingRelic =  SpawnRelicSlot(displayingRelicSlotPrefab, displayGroup);
+
+                    var newDisplayingRelic = SpawnRelicSlot(displayingRelicSlotPrefab, displayGroup);
                     newDisplayingRelic.Initialize(hiddenRelic.Relic, true);
                     displayingRelics.Add(newDisplayingRelic);
-                    
-                    if(_ellipsisObject != null)
+
+                    if (_ellipsisObject != null)
                         _ellipsisObject.gameObject.transform.SetParent(displayGroup);
                 }
             }

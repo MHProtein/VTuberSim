@@ -13,7 +13,6 @@ namespace VTuber.CoopSystem.UI
 {
     public class VCooperatorUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
-        public uint Id { get; private set; }
         [SerializeField] private Image pfp;
         [SerializeField] private Image background;
         [SerializeField] private TMP_Text cooperatorName;
@@ -32,38 +31,51 @@ namespace VTuber.CoopSystem.UI
         [SerializeField] private Transform levelTransform;
         [SerializeField] private float creationLevelScale;
         [SerializeField] private float executionLevelScale;
-        
-        public VCooperator Cooperator => _cooperator;
-        private VCooperator _cooperator;
+        private bool _isSlotShowing;
         private Action<VCooperatorUI> _onClicked;
-        
-        private VEventUI _upgradeEventUI;
+        private bool _selected;
+        private bool _shouldRecoverSlot;
         private bool _slotShowable;
-        private bool _isSlotShowing = false;
-        private bool _shouldRecoverSlot = false;
-        private bool _selected = false;
+
+        private VEventUI _upgradeEventUI;
+        public uint Id { get; private set; }
+
+        public VCooperator Cooperator { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
             (upgradeEventScheduleSlot.transform as RectTransform).anchoredPosition = slotHidePos.anchoredPosition;
-            showHideButton.onClick.AddListener((() =>
+            showHideButton.onClick.AddListener(() =>
             {
                 if (_isSlotShowing)
-                {
                     HideSlot(false);
-                }
                 else
-                {
                     ShowSlot();
-                }
-            }));
+            });
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (!_selected) _selected = true;
+            _onClicked?.Invoke(this);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            background.color = Color.cyan;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (!_selected)
+                background.color = Color.white;
         }
 
         public void SetCooperator(VCooperator cooperator, Action<VCooperatorUI> onClicked)
         {
             Id = cooperator.Id;
-            _cooperator = cooperator;
+            Cooperator = cooperator;
             _onClicked = onClicked;
             pfp.sprite = cooperator.configuration.Icon;
             cooperatorName.text = cooperator.configuration.Name;
@@ -86,7 +98,7 @@ namespace VTuber.CoopSystem.UI
         {
             coopLevel.text = cooperator.CurrentCoopLevel.levelName;
         }
-        
+
         public void SetUpgradeEvent(VScheduleEvent scheduleEvent)
         {
             _slotShowable = true;
@@ -94,26 +106,29 @@ namespace VTuber.CoopSystem.UI
             if (_upgradeEventUI == null || _upgradeEventUI.Event.EventID != scheduleEvent.EventID)
             {
                 upgradeEventScheduleSlot.SetPlaceable(true, false, 0);
-                _upgradeEventUI = Instantiate(upgradeEventUIPrefab, upgradeEventScheduleSlot.transform).GetComponent<VEventUI>();
-                _upgradeEventUI.Initialize(scheduleEvent, upgradeEventScheduleSlot, false, upgradeEventScheduleSlot.transform);
+                _upgradeEventUI = Instantiate(upgradeEventUIPrefab, upgradeEventScheduleSlot.transform)
+                    .GetComponent<VEventUI>();
+                _upgradeEventUI.Initialize(scheduleEvent, upgradeEventScheduleSlot, false,
+                    upgradeEventScheduleSlot.transform);
                 upgradeEventScheduleSlot.SetPlaceable(false, false, (int)_upgradeEventUI.Event.EventID);
             }
+
             upgradeEventScheduleSlot.SetUseThisTransformAsParent(true);
             ShowSlot();
         }
-        
+
         public void OnFinishScheduleCreationOrModification()
         {
             creatorSlot.gameObject.SetActive(false);
             Tween.Scale(levelTransform, Vector3.one * executionLevelScale, 0.3f);
             Tween.Position(levelTransform, executionLevelPosition.position, 0.3f);
-            
+
             showHideButton.gameObject.SetActive(false);
             HideSlot(false);
             _slotShowable = false;
             upgradeEventScheduleSlot.DestroyItem();
         }
-        
+
         public void OnSwitchToScheduleCreationModify()
         {
             creatorSlot.gameObject.SetActive(true);
@@ -127,7 +142,8 @@ namespace VTuber.CoopSystem.UI
                 return;
             _isSlotShowing = true;
             showHideSymbol.localScale = new Vector3(-1, 1, 1);
-            Tween.UIAnchoredPosition(upgradeEventScheduleSlot.transform as RectTransform, slotShowPos.anchoredPosition, 0.3f);
+            Tween.UIAnchoredPosition(upgradeEventScheduleSlot.transform as RectTransform, slotShowPos.anchoredPosition,
+                0.3f);
         }
 
         public Tween HideSlot(bool shouldRecover)
@@ -137,27 +153,8 @@ namespace VTuber.CoopSystem.UI
             _shouldRecoverSlot = shouldRecover;
             _isSlotShowing = false;
             showHideSymbol.localScale = new Vector3(1, 1, 1);
-            return Tween.UIAnchoredPosition(upgradeEventScheduleSlot.transform as RectTransform, slotHidePos.anchoredPosition, 0.3f);
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            background.color = Color.cyan;
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if(!_selected)
-                background.color = Color.white;
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (!_selected)
-            {
-                _selected = true;
-            }
-            _onClicked?.Invoke(this);
+            return Tween.UIAnchoredPosition(upgradeEventScheduleSlot.transform as RectTransform,
+                slotHidePos.anchoredPosition, 0.3f);
         }
 
         public void SetSlotShowable(bool value)
@@ -179,6 +176,5 @@ namespace VTuber.CoopSystem.UI
             _selected = false;
             background.color = Color.white;
         }
-        
     }
 }

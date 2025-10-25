@@ -8,20 +8,16 @@ namespace VTuber.Core.RaisingEffect
     {
         public VRaisingModifyScheduleEffect(VRaisingEffectConfiguration configuration) : base(configuration)
         {
-            
         }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToModifySchedule, new Dictionary<string, object>()
-            {
-            });
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToModifySchedule,
+                new Dictionary<string, object>());
         }
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()

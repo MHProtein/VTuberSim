@@ -2,86 +2,102 @@
 using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
-using VTuber.Character;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Reincarnation;
-using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {
     public class VRaisingUI : VSingletonMonobehaviour<VRaisingUI>
     {
         [SerializeField] private TMP_Text weekCountText;
-        
-        [Header("Schedule")]
-        [SerializeField] private Transform _scheduleUI;
+
+        [Header("Schedule")] [SerializeField] private Transform _scheduleUI;
         [SerializeField] private Transform initialScheduleUIPosition;
         [SerializeField] private GameObject eventUIPrefab;
-        
-        [Space(3)]
-        [Header("ScheduleCreation")] 
-        [SerializeField]
+
+        [Space(3)] [Header("ScheduleCreation")] [SerializeField]
         private GameObject scheduleCreationUI;
 
         [SerializeField] private TMP_Text eventNameUI;
         [SerializeField] private TMP_Text eventDescriptionUI;
-        
-        [SerializeField] 
-        private Transform creationSchedulePosition;
+
+        [SerializeField] private Transform creationSchedulePosition;
 
         [SerializeField] private VScheduleCreator scheduleCreatorUI;
 
-        [Space(3)] 
-        [Header("ExecutionUI")] 
-        [SerializeField] private GameObject executionUI;
+        [Space(3)] [Header("ExecutionUI")] [SerializeField]
+        private GameObject executionUI;
+
         [SerializeField] private TMP_Text pauseText;
 
         [SerializeField] private Transform executionSchedulePosition;
 
-        
-        [Space(3)] 
-        [Header("PauseUI")] 
-        [SerializeField] private GameObject pauseUI;
+
+        [Space(3)] [Header("PauseUI")] [SerializeField]
+        private GameObject pauseUI;
 
         [SerializeField] private Transform pauseSchedulePosition;
-        
-        [Space(3)] 
-        [Header("CardViewUI")] 
-        [SerializeField] private GameObject cardLibraryUIObject;
+
+        [Space(3)] [Header("CardViewUI")] [SerializeField]
+        private GameObject cardLibraryUIObject;
 
         [SerializeField] private VCardViewSelectionUI cardLibraryUI;
-        
-        [Space(3)]
-        [Header("ConsumableUI")]
-        [SerializeField]private GameObject consumableUIParent;
-        [SerializeField]private GameObject consumableUIBattleParent;
-        [SerializeField]private GameObject consumableUI;
-        [SerializeField]private Transform uiWrapper;
-        
-        [Space(3)]
-        [Header("EndingUI")]
-        [SerializeField] private VEndingUI endingUI;
 
-        [Space(3)] [Header("Attributes")]
-        [SerializeField] private GameObject staminaUI;
+        [Space(3)] [Header("ConsumableUI")] [SerializeField]
+        private GameObject consumableUIParent;
+
+        [SerializeField] private GameObject consumableUIBattleParent;
+        [SerializeField] private GameObject consumableUI;
+        [SerializeField] private Transform uiWrapper;
+
+        [Space(3)] [Header("EndingUI")] [SerializeField]
+        private VEndingUI endingUI;
+
+        [Space(3)] [Header("Attributes")] [SerializeField]
+        private GameObject staminaUI;
+
         [SerializeField] private GameObject membershipUI;
-        
-        public List<Color> abilityColors = new List<Color>();
+
+        [Space(3)] [Header("TutorialRestartWeekPanel")] [SerializeField]
+        private GameObject tutorialRestartWeekPanel;
+
+        [SerializeField] private Button tutorialRestartWeekButton;
+
+        public List<Color> abilityColors = new();
+
+        protected override void Awake()
+        {
+            base.Awake();
+            tutorialRestartWeekButton.onClick.AddListener(RestartWeek);
+        }
 
         protected override void OnEnable()
         {
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnNotifyEventDescriptionChange,
+                OnNotifyEventDescriptionChange);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange, OnNotifyEventDescriptionChange);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange,
+                OnNotifyEventDescriptionChange);
+        }
+
+        public void ShowRestartWeekUI()
+        {
+            tutorialRestartWeekPanel.SetActive(true);
+        }
+
+        private void RestartWeek()
+        {
+            VGameManager.Instance.TutorialRestartWeek();
+            tutorialRestartWeekPanel.SetActive(false);
         }
 
         public void SwitchAttributesUIBattle(bool active)
@@ -105,18 +121,18 @@ namespace VTuber.ScheduleSystem.UI
             cardLibraryUIObject.SetActive(true);
             cardLibraryUI.Initialize(cards, false, false, false, null);
         }
-        
+
         public void CloseCardLibraryUI()
         {
             cardLibraryUI.Close();
             cardLibraryUIObject.SetActive(false);
         }
-        
+
         public void SetPauseText(bool shouldPause)
         {
             pauseText.text = shouldPause ? "此事件后暂停" : "暂停周表";
         }
-        
+
         private void OnNotifyEventDescriptionChange(Dictionary<string, object> messagedict)
         {
             eventNameUI.text = messagedict["Name"] as string;
@@ -127,48 +143,48 @@ namespace VTuber.ScheduleSystem.UI
         {
             executionUI.SetActive(active);
         }
-        
+
         public void SetCreationUIActive(bool active)
         {
             scheduleCreationUI.SetActive(active);
         }
-        
+
         public void SetPauseUIActive(bool active)
         {
             pauseUI.SetActive(active);
         }
-        
+
         public Tween SetScheduleUIPositionToCreation()
         {
             return Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f);
         }
-        
+
         public Tween SetScheduleUIPositionToExecution()
         {
             return Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f);
         }
-        
+
         public Tween SetScheduleUIPositionToPause()
         {
             return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f);
         }
-        
+
         public void SetScheduleUIPositionToInitial()
         {
             _scheduleUI.transform.position = initialScheduleUIPosition.position;
         }
-        
+
         public Tween UpdateWeekCount(int weekCount)
         {
             weekCountText.text = $"周数：{weekCount}";
             return Tween.PunchScale(weekCountText.transform, Vector3.one * 1.3f, 0.3f);
         }
-        
+
         public void SwitchToScheduleCreation(Action onComplete = null)
         {
             executionUI.SetActive(false);
             scheduleCreationUI.SetActive(true);
-            Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f).OnComplete(()=>
+            Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f).OnComplete(() =>
             {
                 onComplete?.Invoke();
             });
@@ -177,12 +193,12 @@ namespace VTuber.ScheduleSystem.UI
         public void SwitchToExecution(Action onComplete = null)
         {
             executionUI.SetActive(true);
-            Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f).OnComplete(()=>
+            Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f).OnComplete(() =>
             {
                 onComplete?.Invoke();
             });
         }
-        
+
         public VEventUI CreateEventUI(Transform parent)
         {
             var eventUI = Instantiate(eventUIPrefab, parent);
@@ -197,14 +213,12 @@ namespace VTuber.ScheduleSystem.UI
             consumableUI.transform.localPosition = Vector3.zero;
             consumableUI.transform.localScale = Vector3.one;
         }
-        
+
         public void SetConsumableToRaising()
         {
             consumableUI.transform.SetParent(consumableUIParent.transform);
             consumableUI.transform.localPosition = Vector3.zero;
             consumableUI.transform.localScale = Vector3.one;
         }
-
-
     }
 }

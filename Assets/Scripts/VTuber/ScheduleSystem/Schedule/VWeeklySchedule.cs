@@ -1,44 +1,41 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using VTuber.Character;
 using VTuber.Core.EventCenter;
+using VTuber.Core.ScriptSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
-using VTuber.Core.Foundation;
-using VTuber.Core.ScriptSystem;
 
 namespace VTuber.ScheduleSystem.Schedule
 {
     public class VWeeklyScheduleSaveData
     {
-        public List<VDayScheduleSaveData> days;
         public int currentDayIndex;
+        public List<VDayScheduleSaveData> days;
     }
 
     public class VWeeklySchedule
     {
+        private int _currentDayIndex;
         private List<VDaySchedule> _days = new();
-        private int _currentDayIndex = 0;
+
         public VWeeklySchedule()
         {
-            for (int i = 0; i < 7; i++)
+            for (var i = 0; i < 7; i++)
                 _days.Add(new VDaySchedule(this, i));
         }
-        
+
         private List<TimeOfDay> GetTimeRange(TimeOfDay start, int duration)
         {
             var times = new List<TimeOfDay>();
-            var values = (TimeOfDay[])System.Enum.GetValues(typeof(TimeOfDay));
-            int startIndex = (int)start;
+            var values = (TimeOfDay[])Enum.GetValues(typeof(TimeOfDay));
+            var startIndex = (int)start;
 
-            for (int i = 0; i < duration && startIndex + i < values.Length; i++)
-            {
-                times.Add(values[startIndex + i]);
-            }
+            for (var i = 0; i < duration && startIndex + i < values.Length; i++) times.Add(values[startIndex + i]);
 
             return times;
         }
-        
+
         public VDaySchedule GetDay(int index)
         {
             if (index < 0 || index >= 7)
@@ -57,10 +54,7 @@ namespace VTuber.ScheduleSystem.Schedule
             var day = GetDay(dayIndex);
             var times = GetTimeRange(startTime, duration);
 
-            foreach (var time in times)
-            {
-                day.SetEvent(time, evt);
-            }
+            foreach (var time in times) day.SetEvent(time, evt);
         }
 
         public VScheduleEvent GetEvent(int dayIndex, TimeOfDay timeOfDay)
@@ -85,29 +79,24 @@ namespace VTuber.ScheduleSystem.Schedule
 
         public void Reset(bool resetIndices)
         {
-            foreach (var day in _days)
-            {
-                day.Reset(resetIndices);
-            }
-            if(resetIndices)
+            foreach (var day in _days) day.Reset(resetIndices);
+            if (resetIndices)
                 _currentDayIndex = 0;
         }
 
         public void NextDay()
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnDayEnd,
-                new Dictionary<string, object>()
+                new Dictionary<string, object>
                 {
-                    { "DayIndex", _currentDayIndex },
+                    { "DayIndex", _currentDayIndex }
                 });
             if (_currentDayIndex == 6)
-            {
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnWeekEnd,
-                    new Dictionary<string, object>()
+                    new Dictionary<string, object>
                     {
-                        { "DayIndex", _currentDayIndex },
+                        { "DayIndex", _currentDayIndex }
                     });
-            }
             _currentDayIndex++;
         }
 
@@ -123,10 +112,10 @@ namespace VTuber.ScheduleSystem.Schedule
             return new VWeeklyScheduleSaveData
             {
                 days = _days.Select(day => day.Save(script)).ToList(),
-                currentDayIndex = _currentDayIndex,
+                currentDayIndex = _currentDayIndex
             };
         }
-        
+
         public static VWeeklySchedule Load(VWeeklyScheduleSaveData saveData, VScript script)
         {
             VWeeklySchedule weeklySchedule = new();

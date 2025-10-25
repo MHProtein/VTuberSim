@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Unity.VisualScripting;
-using VTuber.BattleSystem.Core;
+﻿using VTuber.BattleSystem.Core;
 
 namespace VTuber.Core.EventCenter
 {
@@ -51,29 +49,29 @@ namespace VTuber.Core.EventCenter
         OnRelicAdded = 32,
         OnRelicRemoved = 33,
         OnRelicValueChanged = 34,
-        
+
         OnAddFollowUpEvent = 35,
         OnBeginEnding = 37,
-        
+
         OnCooperatorAdded = 38,
         OnCooperatorRemoved = 39,
         OnCooperatorValueUpdated = 40,
-        
+
         OnEventUISelected = 41,
         OnEventUIPlaced = 42,
-        
+
         OnWeekStart = 43,
         OnDayStart = 44,
-        
+
         OnSwitchToScheduleCreation = 45,
         OnSwitchToScheduleExecution = 46,
         OnFinishScheduleCreationOrModification = 47,
-        
+
         OnSetCoopUpgradeEvent = 48,
-        
+
         OnAddConsumable = 49,
         OnRemoveConsumable = 50,
-        
+
         OnEnterStore = 51,
         OnStoreBeginDiscardCard = 52,
         OnStoreEndDeleteCard = 53,
@@ -83,30 +81,28 @@ namespace VTuber.Core.EventCenter
         OnStoreEndRefresh = 57,
         OnStoreLoadItems = 58,
         OnRequestEnterStore = 59,
-        
+
         OnPhaseBegin = 60,
         OnPhaseEnd = 61,
-        
+
         OnEventSelectUpgradeCard = 62,
-        
+
         OnRevenueShareRateChanged = 63,
         OnSkipTurnStaminaChanged = 64,
         OnSkipEventStaminaChanged = 65,
-        
+
         OnBeginSelectConsumableFrom3 = 66,
         OnShowAddConsumable = 67,
         OnCardUpgraded = 68,
-        
+
         OnEndRun = 69,
-        
+
         OnEventEndSave = 70,
-        OnSwitchToMainMenu = 71,
+        OnReset = 71
     }
-    
-    
-    
+
+
     public class VRaisingRootEventCenter : VEventCenter<VRaisingRootEventCenter, VRaisingEventKey, FunctionWithADict>
     {
-        
     }
 }

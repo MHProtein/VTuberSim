@@ -2,7 +2,6 @@
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.UI;
-using VTuber.Core.EventCenter;
 using VTuber.Core.SE;
 
 namespace VTuber.ScheduleSystem.UI
@@ -10,24 +9,23 @@ namespace VTuber.ScheduleSystem.UI
     public class VStaminaUI : VAttributeUI
     {
         [SerializeField] private Image bar;
-        
+
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            if((bool)messagedict["shouldPlaySFX"])
+            if ((bool)messagedict["shouldPlaySFX"])
                 VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_AttributeChange);
-            int delta = messagedict["Delta"] as int ? ?? 0;
+            var delta = messagedict["Delta"] as int? ?? 0;
             var value = messagedict["NewValue"] as int? ?? 0;
             var maxValue = messagedict["MaxValue"] as int? ?? 0;
             text.text = $"{value}/{maxValue}";
-            if(delta == 0)
+            if (delta == 0)
                 return;
             Tween.UIFillAmount(bar, (float)value / maxValue, 0.3f);
             text.color = delta > 0 ? Color.green : Color.red;
-            _animationQueue.Enqueue(Tween.PunchScale(text.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
-                {
-                    text.color = Color.white;
-                })));
+            _animationQueue.Enqueue(Tween.PunchScale(text.transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
+            {
+                text.color = Color.white;
+            }));
         }
     }
 }

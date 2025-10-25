@@ -11,14 +11,15 @@ namespace VTuber.Core.StateMachine
         {
             stateType = VStateType.ScheduleModify;
         }
-        
+
         public override void Enter(VState state, params object[] enterParams)
         {
             base.Enter(state, enterParams);
-                
+
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete(() =>
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToModifySchedule, new Dictionary<string, object> { }));
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToModifySchedule,
+                    new Dictionary<string, object>()));
             stateMachine.ScheduleUI.SwitchToModify();
         }
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
@@ -11,7 +10,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
             gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
         }
-        
+
         public VBattleParameterAttribute(VBattleAttributeSaveData saveData) : base(saveData)
         {
             gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
@@ -30,7 +29,7 @@ namespace VTuber.BattleSystem.BattleAttribute
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
         }
 
-        void OnTurnEnd(Dictionary<string, object> messagedict)
+        private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
             SetValue(0, false);
         }

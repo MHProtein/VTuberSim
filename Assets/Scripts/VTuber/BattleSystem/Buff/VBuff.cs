@@ -1,52 +1,48 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
-using VTuber.Core.EventCenter;
-using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
-    
     public class VBuff
     {
-        private VBuffConfiguration _configuration;
-        
-        public List<VEffect> Effects => _effects;
-        private List<VEffect> _effects;
-        
-        public uint ConfigId => _configuration.id;
-        
-        public bool IsPermanent => _configuration.IsBuffPermanent();
-        
+        private readonly VBuffConfiguration _configuration;
+
         public int latency;
-        public BuffType BuffType => _configuration.buffType;
-        public Sprite Icon => _configuration.icon;
+
         public VBuff(VBuffConfiguration configuration, List<VEffect> effects)
         {
             _configuration = configuration;
-            _effects = effects;
+            Effects = effects;
             latency = _configuration.latency;
         }
 
+        public List<VEffect> Effects { get; private set; }
+
+        public uint ConfigId => _configuration.id;
+
+        public bool IsPermanent => _configuration.IsBuffPermanent();
+        public BuffType BuffType => _configuration.buffType;
+        public Sprite Icon => _configuration.icon;
+
         public string GetDescription(int layer)
         {
-            string des = _configuration.description; 
-            if(des.Contains("X1"))
-                des = des.Replace("X1", _effects[0].GetValue());
+            var des = _configuration.description;
+            if (des.Contains("X1"))
+                des = des.Replace("X1", Effects[0].GetValue());
             if (des.Contains("X2"))
-                des = des.Replace("X2", _effects[1].GetValue());
+                des = des.Replace("X2", Effects[1].GetValue());
             if (des.Contains("X3"))
-                des = des.Replace("X3", _effects[2].GetValue());
+                des = des.Replace("X3", Effects[2].GetValue());
             if (des.Contains("X4"))
-                des = des.Replace("X4", _effects[3].GetValue());
+                des = des.Replace("X4", Effects[3].GetValue());
             if (des.Contains("X5"))
-                des = des.Replace("X5", _effects[3].GetValue());
+                des = des.Replace("X5", Effects[3].GetValue());
 
             des = des.Replace("L", layer.ToString());
             des = des.Replace("D", latency.ToString());
-            
+
             return des;
         }
 
@@ -54,7 +50,7 @@ namespace VTuber.BattleSystem.Buff
         {
             return _configuration.stackable;
         }
-        
+
         public string GetBuffName()
         {
             return _configuration.buffName;
@@ -62,12 +58,12 @@ namespace VTuber.BattleSystem.Buff
 
         public void RemoveModifierEffects()
         {
-            _effects = _effects.Where(effect => effect is not VModifierEffect).ToList();
+            Effects = Effects.Where(effect => effect is not VModifierEffect).ToList();
         }
 
         public void AddEffect(VEffect effect)
         {
-            _effects.Add(effect);
+            Effects.Add(effect);
         }
     }
 }

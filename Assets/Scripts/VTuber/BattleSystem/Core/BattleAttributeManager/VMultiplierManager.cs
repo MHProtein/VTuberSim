@@ -3,70 +3,73 @@ using System.Collections.Generic;
 using System.Linq;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.Core.Foundation;
+using Random = UnityEngine.Random;
 
 namespace VTuber.BattleSystem.Core
 {
     public class VMultiplierManagerSaveData
     {
-        public List<int> multiplierSequence;
         public int currentTurnIndex;
+        public List<int> multiplierSequence;
     }
+
     public class VMultiplierManager
     {
-        public VBattleMultiplierAttribute Multiplier { get; private set; }
-        public List<VBattleMultiplierAttribute> Multipliers => _multiplierAttributes;
-        private List<VBattleMultiplierAttribute> _multiplierAttributes;
+        private int _currentTurnIndex;
         private List<int> multiplierSequence;
-        private int _currentTurnIndex = 0;
-        public VMultiplierManager(int mainAttributeIndex, 
-            int maxConsecutiveMultiplierCount, List<int> abilityTurnCounts, 
-            VBattleMultiplierAttribute singingMultiplierAttribute, 
+
+        public VMultiplierManager(int mainAttributeIndex,
+            int maxConsecutiveMultiplierCount, List<int> abilityTurnCounts,
+            VBattleMultiplierAttribute singingMultiplierAttribute,
             VBattleMultiplierAttribute gamingMultiplierAttribute,
             VBattleMultiplierAttribute chattingMultiplierAttribute,
             VBattleTurnAttribute turnAttribute)
         {
-            _multiplierAttributes = new List<VBattleMultiplierAttribute>
+            Multipliers = new List<VBattleMultiplierAttribute>
             {
                 singingMultiplierAttribute, //red
                 gamingMultiplierAttribute, //yellow
                 chattingMultiplierAttribute //blue
             };
-            
+
             multiplierSequence = new List<int>(new int[turnAttribute.MaxTurn]);
             multiplierSequence[0] = mainAttributeIndex;
             multiplierSequence[^1] = mainAttributeIndex;
 
-            GenerateMultiplierSequence(turnAttribute.MaxTurn, maxConsecutiveMultiplierCount, mainAttributeIndex, abilityTurnCounts);
+            GenerateMultiplierSequence(turnAttribute.MaxTurn, maxConsecutiveMultiplierCount, mainAttributeIndex,
+                abilityTurnCounts);
         }
-        
-        public VMultiplierManager(VBattleMultiplierAttribute singingMultiplierAttribute, 
+
+        public VMultiplierManager(VBattleMultiplierAttribute singingMultiplierAttribute,
             VBattleMultiplierAttribute gamingMultiplierAttribute,
             VBattleMultiplierAttribute chattingMultiplierAttribute,
             VMultiplierManagerSaveData saveData)
         {
             multiplierSequence = saveData.multiplierSequence;
             _currentTurnIndex = saveData.currentTurnIndex - 1;
-            
-            _multiplierAttributes = new List<VBattleMultiplierAttribute>
+
+            Multipliers = new List<VBattleMultiplierAttribute>
             {
                 singingMultiplierAttribute, //red
                 gamingMultiplierAttribute, //yellow
                 chattingMultiplierAttribute //blue
             };
-            
+
             multiplierSequence = saveData.multiplierSequence;
-            Multiplier = _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
-            
+            Multiplier = Multipliers[multiplierSequence[_currentTurnIndex]];
+
             VBattleRootEventCenter.Instance.Raise(
                 VBattleEventKey.OnMultiplierSequenceCalculated,
                 new Dictionary<string, object>
                 {
-                    { "Colors", multiplierSequence.Select(index => _multiplierAttributes[index].color).ToList() },
+                    { "Colors", multiplierSequence.Select(index => Multipliers[index].color).ToList() },
                     { "Index", _currentTurnIndex }
                 });
-            
         }
-        
+
+        public VBattleMultiplierAttribute Multiplier { get; private set; }
+        public List<VBattleMultiplierAttribute> Multipliers { get; private set; }
+
         public VMultiplierManagerSaveData Save()
         {
             return new VMultiplierManagerSaveData
@@ -75,7 +78,7 @@ namespace VTuber.BattleSystem.Core
                 currentTurnIndex = _currentTurnIndex
             };
         }
-        
+
         public void OnEnable()
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, OnTurnBegin);
@@ -90,32 +93,30 @@ namespace VTuber.BattleSystem.Core
 
         private void OnTurnChange(Dictionary<string, object> messagedict)
         {
-            int delta = (int)messagedict["Delta"];
+            var delta = (int)messagedict["Delta"];
             if (delta <= 0)
                 return;
 
             if (multiplierSequence is null)
                 return;
-            for (int i = 0; i < delta; i++)
-            {
-                multiplierSequence.Add(multiplierSequence.Last());
-            }
+            for (var i = 0; i < delta; i++) multiplierSequence.Add(multiplierSequence.Last());
         }
-        
+
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRotateMultiplier, new Dictionary<string, object>()
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRotateMultiplier, new Dictionary<string, object>
             {
-                { "Name", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].AttributeName },
-                { "NewValue", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].Value },
-                { "Color", _multiplierAttributes[multiplierSequence[_currentTurnIndex]].color },
+                { "Name", Multipliers[multiplierSequence[_currentTurnIndex]].AttributeName },
+                { "NewValue", Multipliers[multiplierSequence[_currentTurnIndex]].Value },
+                { "Color", Multipliers[multiplierSequence[_currentTurnIndex]].color }
             });
-            Multiplier = _multiplierAttributes[multiplierSequence[_currentTurnIndex]];
+            Multiplier = Multipliers[multiplierSequence[_currentTurnIndex]];
             if (_currentTurnIndex <= multiplierSequence.Count - 1)
             {
                 _currentTurnIndex++;
                 VDebug.Log("_currentTurnIndex: " + _currentTurnIndex);
             }
+
             VDebug.Log(Multiplier.AttributeName + " Value : " + Multiplier.Value);
         }
 
@@ -123,16 +124,16 @@ namespace VTuber.BattleSystem.Core
             int maxTurn,
             int maxConsecutiveMultiplierCount,
             int mainAttributeIndex,
-        List<int> abilityTurnCounts)
+            List<int> abilityTurnCounts)
         {
-            if (abilityTurnCounts.Count != _multiplierAttributes.Count)
+            if (abilityTurnCounts.Count != Multipliers.Count)
                 throw new ArgumentException("abilityTurnCounts must match the number of abilities.");
 
             if (abilityTurnCounts.Sum() != maxTurn)
                 throw new ArgumentException("Total turns from abilityTurnCounts must equal maxTurn.");
 
             const int maxRetries = 100;
-            int attempt = 0;
+            var attempt = 0;
 
             while (attempt++ < maxRetries)
             {
@@ -140,25 +141,23 @@ namespace VTuber.BattleSystem.Core
                 multiplierSequence[0] = mainAttributeIndex;
                 multiplierSequence[^1] = mainAttributeIndex;
 
-                List<int> remainingCounts = new List<int>(abilityTurnCounts);
+                var remainingCounts = new List<int>(abilityTurnCounts);
                 remainingCounts[mainAttributeIndex] -= 2;
 
-                bool success = true;
+                var success = true;
 
-                for (int i = 1; i < maxTurn - 1; i++)
+                for (var i = 1; i < maxTurn - 1; i++)
                 {
-                    int prev = multiplierSequence[i - 1];
-                    int consecutiveCount = 1;
+                    var prev = multiplierSequence[i - 1];
+                    var consecutiveCount = 1;
 
-                    for (int j = i - 2; j >= 0 && multiplierSequence[j] == prev; j--)
+                    for (var j = i - 2; j >= 0 && multiplierSequence[j] == prev; j--)
                         consecutiveCount++;
 
-                    List<int> candidates = new List<int>();
-                    for (int ability = 0; ability < remainingCounts.Count; ability++)
-                    {
+                    var candidates = new List<int>();
+                    for (var ability = 0; ability < remainingCounts.Count; ability++)
                         if (remainingCounts[ability] > 0)
                             candidates.Add(ability);
-                    }
 
                     if (consecutiveCount >= maxConsecutiveMultiplierCount)
                         candidates.Remove(prev);
@@ -172,7 +171,7 @@ namespace VTuber.BattleSystem.Core
                         break;
                     }
 
-                    int choice = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+                    var choice = candidates[Random.Range(0, candidates.Count)];
                     multiplierSequence[i] = choice;
                     remainingCounts[choice]--;
                 }
@@ -184,7 +183,7 @@ namespace VTuber.BattleSystem.Core
                         VBattleEventKey.OnMultiplierSequenceCalculated,
                         new Dictionary<string, object>
                         {
-                            { "Colors", multiplierSequence.Select(index => _multiplierAttributes[index].color).ToList() }
+                            { "Colors", multiplierSequence.Select(index => Multipliers[index].color).ToList() }
                         });
                     return;
                 }
@@ -192,15 +191,15 @@ namespace VTuber.BattleSystem.Core
 
             throw new InvalidOperationException("Unable to generate valid multiplier sequence after retries.");
         }
-        
+
 
         public void Reset()
         {
             Multiplier = null;
             multiplierSequence.Clear();
             multiplierSequence = null;
-            _multiplierAttributes.Clear();
-            _multiplierAttributes = null;
+            Multipliers.Clear();
+            Multipliers = null;
         }
     }
 }

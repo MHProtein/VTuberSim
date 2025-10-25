@@ -13,7 +13,7 @@ namespace VTuber.Core.TypeSerialization
         private TypeFilterAttribute _typeFilter;
         private string[] _typeNames, _typeFullNames;
 
-        void Initialize()
+        private void Initialize()
         {
             if (_typeFullNames != null)
                 return;
@@ -40,8 +40,8 @@ namespace VTuber.Core.TypeSerialization
                 _typeFullNames = new[] { string.Empty };
             }
         }
-        
-        static bool DefaultFilter(Type type)
+
+        private static bool DefaultFilter(Type type)
         {
             return !type.IsAbstract && !type.IsInterface && !type.IsGenericType;
         }
@@ -65,7 +65,6 @@ namespace VTuber.Core.TypeSerialization
                 typeIdProperty.stringValue = _typeFullNames[selectedIndex];
                 property.serializedObject.ApplyModifiedProperties();
             }
-
         }
     }
 }

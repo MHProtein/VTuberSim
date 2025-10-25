@@ -10,26 +10,23 @@ namespace VTuber.Core.KPIs.UI
     public class VKPIUIManager : VSingletonMonobehaviour<VKPIUIManager>
     {
         [SerializeField] private GameObject kpiUIPrefab;
-        List<VKPIUI> kpiUIs = new List<VKPIUI>();
+        private List<VKPIUI> kpiUIs = new();
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnReset, OnSwitchToMainMenu);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSwitchToMainMenu, OnSwitchToMainMenu);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnReset, OnSwitchToMainMenu);
         }
 
         private void OnSwitchToMainMenu(Dictionary<string, object> messagedict)
         {
-            foreach (var uI in kpiUIs)
-            {
-                Destroy(uI.gameObject);
-            }
+            foreach (var uI in kpiUIs) Destroy(uI.gameObject);
             kpiUIs.Clear();
         }
 
@@ -40,26 +37,23 @@ namespace VTuber.Core.KPIs.UI
             kpiUI.Initialize(kpi);
             kpiUIs.Add(kpiUI);
         }
-        
+
         public void RemoveKPIUI(VKPI kpi)
         {
             var kpiUI = kpiUIs.Find(kpiUI => kpiUI.ID == kpi.ID);
             kpiUIs.Remove(kpiUI);
             Destroy(kpiUI.gameObject);
         }
-        
+
         public void UpdateKPIUI(uint id, int count, bool satisfied)
         {
             var kpiUI = kpiUIs.Find(kpiUI => kpiUI.ID == id);
             kpiUI.SetText(count, satisfied);
         }
-        
+
         public void ResetKPIUIs()
         {
-            foreach (var kpiUI in kpiUIs)
-            {
-                kpiUI.ResetText();
-            }
+            foreach (var kpiUI in kpiUIs) kpiUI.ResetText();
         }
     }
 }

@@ -14,25 +14,22 @@ namespace VTuber.BattleSystem.Effect.Conditions
 
         public VBuffLayerCondition(CellRange row) : base(row)
         {
-            buffId =  Convert.ToUInt32(row.Columns[VConditionHeaderIndex.NameOrID].Value);
-            targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
+            buffId = Convert.ToUInt32(row.Columns[VConditionHeaderIndex.NameOrID].Value);
+            targetValue = ToInt(row.Columns[VConditionHeaderIndex.TargetValue].Value);
         }
 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
             if (battle.BuffManager.TryGetBuff(buffId, out var buff))
             {
-                bool result = VMathUtils.Compare(buff.Value, targetValue, operatorType);
+                var result = VMathUtils.Compare(buff.Value, targetValue, operatorType);
                 if (result)
-                {
                     VDebug.Log($"条件 {id} 通过：ID为 {buffId} 的Buff层数为 {buff.Value}");
-                }
                 else
-                {
                     VDebug.Log($"条件 {id} 未通过：ID为 {buffId} 的Buff层数为 {buff.Value}");
-                }
                 return result;
             }
+
             VDebug.Log($"条件 {id} 未通过：战斗中未找到ID为 {buffId} 的Buff。");
             return false;
         }

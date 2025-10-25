@@ -8,7 +8,8 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingUpgradeRandomCardEffect : VRaisingEffect
     {
-        public VRaisingUpgradeRandomCardEffect(VRaisingUpgradeRandomCardEffectConfiguration configuration) : base(configuration)
+        public VRaisingUpgradeRandomCardEffect(VRaisingUpgradeRandomCardEffectConfiguration configuration) : base(
+            configuration)
         {
         }
 
@@ -22,13 +23,12 @@ namespace VTuber.Core.RaisingEffect
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()
         {
-            
         }
+
         public override string GetParameter()
         {
             return "";

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -12,37 +11,41 @@ namespace VTuber.BattleSystem.Effect
         private readonly uint _buffID;
         private readonly VUpgradableValue<float> _percentage;
 
-        public VBuffAddPercentageEffect(VEffectConfiguration configuration, uint buffID, float percentage, float upgradedPercentage) : base(configuration)
+        public VBuffAddPercentageEffect(VEffectConfiguration configuration, uint buffID, float percentage,
+            float upgradedPercentage) : base(configuration)
         {
             _buffID = buffID;
             _percentage = new VUpgradableValue<float>(percentage, upgradedPercentage);
         }
-        
+
         public override void Upgrade()
         {
             base.Upgrade();
             _percentage.Upgrade();
         }
-        
+
         public override void Downgrade()
         {
             base.Downgrade();
             _percentage.Downgrade();
         }
 
-        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false,
+            bool shouldApplyTwice = false)
         {
             base.ApplyEffect(battle, layer, isFromCard, shouldApplyTwice);
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
-                int value = VMathUtils.FloatToInt((_percentage.Value) * buff.Value);
-                
+                var value = VMathUtils.FloatToInt(_percentage.Value * buff.Value);
+
                 if (_configuration.multiplyByLayer > 0.0f)
                     value *= VMathUtils.FloatToInt(layer * _configuration.multiplyByLayer);
-                value = value == 0 ? (_percentage.Value > 0.0f ? 1 : -1) : value;
-                
-                battle.BuffManager.AddBuff(VDataManager.Instance.CreateBuffByID(_buffID), value, isFromCard, shouldApplyTwice);
-                VDebug.Log("Effect " + _configuration.effectName + " added " + value + " to buff with ID: " + _buffID + ". New value: " + buff.Value);
+                value = value == 0 ? _percentage.Value > 0.0f ? 1 : -1 : value;
+
+                battle.BuffManager.AddBuff(VDataManager.Instance.CreateBuffByID(_buffID), value, isFromCard,
+                    shouldApplyTwice);
+                VDebug.Log("Effect " + _configuration.effectName + " added " + value + " to buff with ID: " + _buffID +
+                           ". New value: " + buff.Value);
             }
             else
             {
@@ -50,7 +53,7 @@ namespace VTuber.BattleSystem.Effect
                     new Dictionary<string, object>());
             }
         }
-        
+
         public override string GetValue()
         {
             return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";

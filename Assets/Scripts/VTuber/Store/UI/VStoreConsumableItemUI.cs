@@ -21,12 +21,12 @@ namespace VTuber.Store.UI
             nameText.text = consumableSlot.consumable.Name;
             descriptionText.text = consumableSlot.consumable.Description;
             base.SetSlot(slot, character);
-            AreSlotsFull(!base.character.ConsumableManager.CanAddConsumable());
+            AreSlotsFull(!this.character.ConsumableManager.CanAddConsumable());
         }
-        
+
         public void AreSlotsFull(bool areSlotsFull)
         {
-            if(hasBought) return;
+            if (hasBought) return;
             canBuy = !areSlotsFull;
             slotsFullObject.SetActive(areSlotsFull);
         }
@@ -36,7 +36,7 @@ namespace VTuber.Store.UI
             base.OnPointerEnter(eventData);
             descriptionPanel.gameObject.SetActive(true);
         }
-        
+
         public override void OnPointerExit(PointerEventData eventData)
         {
             base.OnPointerExit(eventData);

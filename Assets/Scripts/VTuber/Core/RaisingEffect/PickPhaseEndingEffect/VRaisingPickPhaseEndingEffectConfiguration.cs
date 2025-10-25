@@ -6,7 +6,6 @@ namespace VTuber.Core.RaisingEffect
     {
         public VRaisingPickPhaseEndingEffectConfiguration(CellRange row) : base(row)
         {
-            
         }
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using PrimeTween;
-using Sirenix.Utilities;
 using SlayTheSpire.System.SavingSystem;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
@@ -27,16 +25,16 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private GameObject relicPrefab;
         [SerializeField] private GameObject attributeEffectPrefab;
-        [SerializeField] private Transform relicGrid; 
-        [SerializeField] private Transform cardGrid; 
-        [SerializeField] private Transform attributeEffectGrid; 
+        [SerializeField] private Transform relicGrid;
+        [SerializeField] private Transform cardGrid;
+        [SerializeField] private Transform attributeEffectGrid;
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Button continueButton;
-        
+        private VAccount _account;
+        private List<VAttributeEffectUI> _attributeEffects;
+
         private List<VCardUI> _cards;
         private List<VRelicSlotUI> _relics;
-        private List<VAttributeEffectUI> _attributeEffects;
-        private VAccount _account;
 
         protected override void Awake()
         {
@@ -51,24 +49,16 @@ namespace VTuber.ScheduleSystem.UI
             inputField.characterLimit = 10;
             ratingLevelImage.sprite = VUIUtils.Instance.GetScoreLevelSprite(ratingLevel);
             scoreText.text = score.ToString();
-            
+
             _cards = new List<VCardUI>();
             _relics = new List<VRelicSlotUI>();
             _attributeEffects = new List<VAttributeEffectUI>();
-            
-            foreach (var card in account.Cards)
-            {
-                SpawnCard(card);
-            }
-            foreach (var relic in account.Relics)
-            {
-                SpawnRelic(relic);
-            }
 
-            for (int i = 0; i < account.Effects.Count; i++)
-            {
+            foreach (var card in account.Cards) SpawnCard(card);
+            foreach (var relic in account.Relics) SpawnRelic(relic);
+
+            for (var i = 0; i < account.Effects.Count; i++)
                 SpawnAttributeEffect(account.Effects[i], account.EffectLevels[i]);
-            }
         }
 
         public void Show()
@@ -111,24 +101,15 @@ namespace VTuber.ScheduleSystem.UI
             _account.accountName = inputField.text;
             VGameManager.Instance.AddAccount(_account);
             VGameManager.Instance.ReturnToMainMenu(VDataPersistenceManager.Instance.LoadSave());
-            
+
             Hide();
-            
-            foreach (var card in _cards)
-            {
-                Destroy(card.gameObject);
-            }
 
-            foreach (var relic in _relics)
-            {
-                Destroy(relic.gameObject);
-            }
+            foreach (var card in _cards) Destroy(card.gameObject);
 
-            foreach (var attributeEffect in _attributeEffects)
-            {
-                Destroy(attributeEffect.gameObject);
-            }
-            
+            foreach (var relic in _relics) Destroy(relic.gameObject);
+
+            foreach (var attributeEffect in _attributeEffects) Destroy(attributeEffect.gameObject);
+
             _cards.Clear();
             _relics.Clear();
             _attributeEffects.Clear();

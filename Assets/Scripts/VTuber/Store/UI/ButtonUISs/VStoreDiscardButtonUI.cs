@@ -13,26 +13,26 @@ namespace VTuber.Store.UI
         {
             discardCardLibraryUI.gameObject.SetActive(true);
             discardCardLibraryUI.Initialize(character.CardLibrary.GetCards(), true, true, false,
-                confirmAction: (card) =>
+                card =>
                 {
                     character.CardLibrary.RemoveCard(card);
                     VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreEndDeleteCard,
-                        new Dictionary<string, object>()
+                        new Dictionary<string, object>
                         {
                             { "Deleted", true },
                             { "DeletedCard", card }
                         });
                     discardCardLibraryUI.Close();
-                    discardCardLibraryUI.gameObject.SetActive(false);    
-                    
+                    discardCardLibraryUI.gameObject.SetActive(false);
+
                     Buy();
                 },
-                returnAction: () =>
+                () =>
                 {
                     VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreEndDeleteCard,
-                        new Dictionary<string, object>()
+                        new Dictionary<string, object>
                         {
-                            { "Deleted", false },
+                            { "Deleted", false }
                         });
                     discardCardLibraryUI.Close();
                     discardCardLibraryUI.gameObject.SetActive(false);

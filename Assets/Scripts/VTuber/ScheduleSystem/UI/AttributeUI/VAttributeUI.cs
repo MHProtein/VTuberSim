@@ -16,8 +16,8 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] protected bool isPercentage;
         [SerializeField] protected TMP_Text text;
         [SerializeField] protected VRaisingEventKey key = VRaisingEventKey.Default;
-        protected VAnimationQueue _animationQueue = new VAnimationQueue();
-        
+        protected VAnimationQueue _animationQueue = new();
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -25,18 +25,18 @@ namespace VTuber.ScheduleSystem.UI
             VDebug.Log(name + " " + key);
             VRaisingRootEventCenter.Instance.RegisterListener(key, OnValueChanged);
         }
-        
+
         protected override void OnDisable()
         {
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(key, OnValueChanged);
         }
-        
+
         protected virtual void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            if((bool)messagedict["shouldPlaySFX"])
+            if ((bool)messagedict["shouldPlaySFX"])
                 VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_AttributeChange);
-            int delta = messagedict["Delta"] as int ? ?? 0;
+            var delta = messagedict["Delta"] as int? ?? 0;
             text.text = $"{name}{messagedict["NewValue"] as int? ?? 0}";
             if (isPercentage)
             {
@@ -47,23 +47,21 @@ namespace VTuber.ScheduleSystem.UI
             {
                 text.text = $"{name}{messagedict["NewValue"] as int? ?? 0}";
             }
-            if(delta == 0)
+
+            if (delta == 0)
                 return;
-            
+
             text.color = delta > 0 ? Color.green : Color.red;
-            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
-                {
-                    text.color = Color.white;
-                })));
+            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
+            {
+                text.color = Color.white;
+            }));
         }
 
         protected virtual void RaiseEvents()
         {
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime, new Dictionary<string ,object>()
-            {
-                
-            });
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime,
+                new Dictionary<string, object>());
         }
 
         protected void SetFontStyle(TMP_Text text, FontStyles style)

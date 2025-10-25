@@ -2,7 +2,6 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 using VTuber.Character;
@@ -34,14 +33,14 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private TMP_Text chattingAbilityText;
         [SerializeField] private Button continueButton;
         [SerializeField] private Button restartButton;
+        private int _chattingAbilityDelta;
+        private int _gamingAbilityDelta;
+        private bool _isBattleSuccess;
+        private int _membershipDelta;
 
         private int _moneyDelta;
-        private int _membershipDelta;
-        private int _singingAbilityDelta;
-        private int _gamingAbilityDelta;
-        private int _chattingAbilityDelta;
         private int _popularity;
-        private bool _isBattleSuccess;
+        private int _singingAbilityDelta;
 
         protected override void Awake()
         {
@@ -76,7 +75,7 @@ namespace VTuber.BattleSystem.UI
         }
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
-        {          
+        {
             if (messagedict.ContainsKey("IsReturnToMainMenu"))
                 return;
             if (!messagedict.TryGetValue("CharacterAttributeManager", out var x))
@@ -116,10 +115,10 @@ namespace VTuber.BattleSystem.UI
                 Show();
                 return;
             }
-      
+
             restartButton.gameObject.SetActive(false);
             continueButton.gameObject.SetActive(true);
-            
+
 
             if ((bool)messagedict["ReachedExtraTarget"])
             {
@@ -147,25 +146,25 @@ namespace VTuber.BattleSystem.UI
             restartButton.interactable = false;
             continueButton.interactable = false;
             Tween.Position(attributes, attributesFinalPosition.position, 0.5f);
-            Tween.Position(abilities, abilitiesFinalPosition.position, 0.5f).OnComplete((() =>
+            Tween.Position(abilities, abilitiesFinalPosition.position, 0.5f).OnComplete(() =>
             {
                 restartButton.interactable = true;
                 continueButton.interactable = true;
-            }));
+            });
         }
 
         public Tween Hide()
         {
-            Tween.Position(attributes, attributesOriginalPosition.position, 0.5f).OnComplete((() =>
+            Tween.Position(attributes, attributesOriginalPosition.position, 0.5f).OnComplete(() =>
             {
                 ui.SetActive(false);
-            }));
+            });
             return Tween.Position(abilities, abilitiesOriginalPosition.position, 0.5f);
         }
 
         public void OnContinueButtonClicked()
         {
-            Hide().OnComplete((() =>
+            Hide().OnComplete(() =>
             {
                 VAudioPlayer.Instance.StopBGM();
                 hugeSuccessText.SetActive(false);
@@ -174,17 +173,15 @@ namespace VTuber.BattleSystem.UI
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEndNotify, new Dictionary<string, object>
                 {
                     { "IsTargetMet", _isBattleSuccess },
-                    { "Popularity", _popularity },
+                    { "Popularity", _popularity }
                 });
-            }));
+            });
         }
 
         public void OnRestartButtonClicked()
         {
             Hide();
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRestartBattle, new Dictionary<string, object>
-            {
-            });
+            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRestartBattle, new Dictionary<string, object>());
         }
     }
 }

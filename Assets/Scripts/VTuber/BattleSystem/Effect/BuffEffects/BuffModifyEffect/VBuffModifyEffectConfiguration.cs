@@ -1,14 +1,10 @@
 ﻿using System;
 using Spire.Xls;
-using UnityEngine.Serialization;
-using VTuber.BattleSystem.Buff;
-using VTuber.Core.Foundation;
-using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect
 {
     public class VBuffModifyEffectConfiguration : VEffectConfiguration
-    { 
+    {
         public uint buffID;
 
         public VBuffModifyEffectConfiguration(CellRange row) : base(row)

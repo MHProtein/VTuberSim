@@ -6,21 +6,21 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddAttributeMaxValueEffect : VRaisingEffect, IAttributeEffect
     {
-        public string AttributeName => _attributeName;
-        private string _attributeName;
-        private VUpgradableValue<int> _value;
-        public VRaisingAddAttributeMaxValueEffect(VRaisingAddAttributeMaxValueEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+        private readonly VUpgradableValue<int> _value;
+
+        public VRaisingAddAttributeMaxValueEffect(VRaisingAddAttributeMaxValueEffectConfiguration configuration,
+            string parameter, string upgradedParameter) : base(configuration)
         {
-            _attributeName = configuration.attributeName;
+            AttributeName = configuration.attributeName;
             _value = new VUpgradableValue<int>(int.Parse(parameter.Trim()), int.Parse(upgradedParameter.Trim()));
         }
 
+        public string AttributeName { get; }
+
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
-            {
-                attribute.AddMaxValue(_value.Value);   
-            }
+            if (character.AttributeManager.TryGetAttribute(AttributeName, out var attribute))
+                attribute.AddMaxValue(_value.Value);
         }
 
         public override void Upgrade()
@@ -32,11 +32,10 @@ namespace VTuber.Core.RaisingEffect
         {
             _value.Downgrade();
         }
-        
+
         public override string GetParameter()
         {
             return _value.Value.ToString();
         }
-
     }
 }

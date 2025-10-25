@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.Consumable;
 using VTuber.Core.Foundation;
@@ -9,8 +8,8 @@ namespace VTuber.Relic.UI
 {
     public class VRelicMenu : VUIBehaviour
     {
-        [SerializeField] List<VRelicUIManager> uiManagers;
-        [SerializeField] GameObject background;
+        [SerializeField] private List<VRelicUIManager> uiManagers;
+        [SerializeField] private GameObject background;
         [SerializeField] public Button showButton;
         [SerializeField] public VClickDetectionPanel detectionPanel;
         public bool isShowing;
@@ -27,10 +26,7 @@ namespace VTuber.Relic.UI
             isShowing = !isShowing;
             detectionPanel.gameObject.SetActive(isShowing);
             background.gameObject.SetActive(isShowing);
-            foreach (var uiManager in uiManagers)
-            {
-                uiManager.Show(isShowing);
-            }
+            foreach (var uiManager in uiManagers) uiManager.Show(isShowing);
         }
     }
 }

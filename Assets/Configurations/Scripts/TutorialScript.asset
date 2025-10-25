@@ -92,6 +92,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  index: 0
   scriptName: "\u51FA\u9053"
   description: "\u5728\u505A\u4E86\u5341\u8DB3\u7684\u51C6\u5907\u540E\uFF0C\u4F60\u51C6\u5907\u8E0F\u4E0A\u4E86\u865A\u62DF\u4E3B\u64AD\u4E4B\u8DEF\uFF0C"
   icon: {fileID: 21300000, guid: c344fe1d7bb00f6428dc6422ed14cf24, type: 3}
@@ -649,7 +650,11 @@ MonoBehaviour:
   - weekID: 0
     eventIDs: 0000000001000000020000000300000004000000050000000b0000000c0000001f0000001e0000000d00000034000000
     streamEventIDs: 000000000100000002000000
-    conditions: []
+    conditions:
+    - conditionType: 0
+      idOrName: CAMoney
+      operatorType: 3
+      targetValue: 100000
   - weekID: 1
     eventIDs: 000000000100000002000000030000000400000005000000
     streamEventIDs: 000000000100000002000000

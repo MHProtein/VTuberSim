@@ -1,17 +1,14 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
-using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.UI
 {
-    
     public class VCardUI : VUIBehaviour
     {
         /*
@@ -21,8 +18,9 @@ namespace VTuber.BattleSystem.UI
          * 4 - Epic
          * 5 - Special
          */
-        [Header("Card Resources")]
-        [SerializeField] protected List<Sprite> backgrounds;
+        [Header("Card Resources")] [SerializeField]
+        protected List<Sprite> backgrounds;
+
         [SerializeField] protected List<Sprite> descriptionSprites;
         [SerializeField] protected List<Sprite> nameSprites;
         [SerializeField] protected List<Sprite> typeSprites;
@@ -30,11 +28,11 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] protected Sprite singingSprite;
         [SerializeField] protected Sprite gamingSprite;
         [SerializeField] protected Sprite chattingSprite;
-        
+
         [SerializeField] protected Color singingColor;
         [SerializeField] protected Color gamingColor;
         [SerializeField] protected Color chattingColor;
-        
+
         [SerializeField] public Image background;
         [SerializeField] public Image icon;
         [SerializeField] public Image descriptionImage;
@@ -43,14 +41,18 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] public Image popularityImage;
         [SerializeField] public Image shieldImage;
         [SerializeField] public Image costImage;
-        
-        [FormerlySerializedAs("Name")] [SerializeField] public TMP_Text name;
-        [FormerlySerializedAs("Description")] [SerializeField] public TMP_Text description;
+
+        [FormerlySerializedAs("Name")] [SerializeField]
+        public TMP_Text name;
+
+        [FormerlySerializedAs("Description")] [SerializeField]
+        public TMP_Text description;
+
         [SerializeField] public TMP_Text cost;
         [SerializeField] public TMP_Text typeText;
         [SerializeField] public TMP_Text popularityText;
         [SerializeField] public TMP_Text shieldText;
-        
+
         public VCard Card { get; private set; }
 
         public void SetCard(VCard card)
@@ -59,21 +61,18 @@ namespace VTuber.BattleSystem.UI
             descriptionImage.sprite = descriptionSprites[(int)card.Rarity];
             nameImage.sprite = nameSprites[(int)card.Rarity];
             typeImage.sprite = typeSprites[(int)card.Rarity];
-            
-            if(card.Icon)
+
+            if (card.Icon)
                 icon.sprite = card.Icon;
 
             name.text = card.CardName;
             description.text = card.GetDescription();
-            if(card.IsExhaust)
+            if (card.IsExhaust)
                 description.text += "\nExhaust.";
             typeText.text = card.CardType;
 
-            if (card.CostType == CostType.TrueStamina)
-            {
-                costImage.color = Color.red;
-            }
-            
+            if (card.CostType == CostType.TrueStamina) costImage.color = Color.red;
+
             if (card.CostType == CostType.Buff)
             {
                 costImage.sprite = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId).icon;
@@ -84,14 +83,14 @@ namespace VTuber.BattleSystem.UI
             {
                 cost.text = "-" + card.Cost;
             }
-            
+
             if (card.IsUpgraded)
             {
-                name.text += "+"; 
+                name.text += "+";
                 ColorUtility.TryParseHtmlString("#0ac736", out var color);
                 name.color = color;
             }
-            
+
             Card = card;
         }
 

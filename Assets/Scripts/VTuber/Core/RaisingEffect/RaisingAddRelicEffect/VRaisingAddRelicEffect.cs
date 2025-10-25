@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
 using VTuber.Character;
-using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 
 namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddRelicEffect : VRaisingEffect
     {
-        public uint RelicId => _relicId;
-        private uint _relicId;
-        public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+        public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration, string parameter,
+            string upgradedParameter) : base(configuration)
         {
-            _relicId = uint.Parse(parameter);
+            RelicId = uint.Parse(parameter);
         }
+
+        public uint RelicId { get; }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CharacterRelicManager.AddRelic
-                (VDataManager.Instance.CreateRelicByID(_relicId));
+                (VDataManager.Instance.CreateRelicByID(RelicId));
         }
 
         public override void Upgrade()
@@ -30,7 +30,7 @@ namespace VTuber.Core.RaisingEffect
 
         public override string GetParameter()
         {
-            return VDataManager.Instance.Relics[_relicId].relicName;
+            return VDataManager.Instance.Relics[RelicId].relicName;
         }
     }
 }

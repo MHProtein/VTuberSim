@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Card;
 using VTuber.Core.EventCenter;
-using VTuber.Core.Foundation;                                                                                                               
+using VTuber.Core.Foundation;
 
 namespace VTuber.Character
 {
     public class VCardLibrary
     {
-        private List<VCard> cards;
-        
+        private readonly List<VCard> cards;
+
         public VCardLibrary()
         {
             cards = new List<VCard>();
@@ -16,43 +16,38 @@ namespace VTuber.Character
 
         public void AddCards(List<VCard> cards)
         {
-            foreach (var card in cards)
-            {
-                AddCard(card);
-            }
+            foreach (var card in cards) AddCard(card);
         }
-        
+
         public void AddCard(VCard card)
         {
             if (card != null)
             {
                 if (cards.Exists(c => c.configID == card.configID))
-                {
                     if (card.IsUnique)
                         return;
-                }
                 cards.Add(card);
                 VDebug.Log("Card added: " + card.CardName);
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardAdded, new Dictionary<string, object>()
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardAdded, new Dictionary<string, object>
                 {
                     { "Card", card }
                 });
             }
         }
-        
+
         public void RemoveCard(VCard card)
         {
             if (card != null && cards.Contains(card))
             {
                 cards.Remove(card);
                 VDebug.Log("Card removed: " + card.CardName);
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardRemoved, new Dictionary<string, object>()
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardRemoved, new Dictionary<string, object>
                 {
                     { "Card", card }
                 });
             }
         }
-        
+
         public List<VCard> GetCards()
         {
             return cards;
@@ -62,10 +57,10 @@ namespace VTuber.Character
         {
             if (cardToReplace != null && selectedCard != null)
             {
-                int index = cards.IndexOf(selectedCard);
+                var index = cards.IndexOf(selectedCard);
                 cards[index] = cardToReplace;
                 VDebug.Log("Card replaced: " + selectedCard.CardName + " with " + cardToReplace.CardName);
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardReplaced, new Dictionary<string, object>()
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardReplaced, new Dictionary<string, object>
                 {
                     { "CardToReplace", cardToReplace },
                     { "ReplacedCard", selectedCard }

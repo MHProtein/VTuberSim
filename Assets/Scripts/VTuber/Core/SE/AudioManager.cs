@@ -1,9 +1,9 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using System.Collections.Generic;
-using System.Linq;
 using VTuber.Core.SE;
-using System.Collections;
 
 public enum SoundChannel
 {
@@ -15,7 +15,7 @@ public enum SoundChannel
     Music
 }
 
-[System.Serializable]
+[Serializable]
 public class ChannelMixerGroup
 {
     public SoundChannel channel;
@@ -24,45 +24,35 @@ public class ChannelMixerGroup
 
 public class AudioManager : MonoBehaviour
 {
-    [Header("Configuration")]
-    [SerializeField] private string soundConfigPath = "Configurations/AudioConfig/SoundConfig";
+    [Header("Configuration")] [SerializeField]
+    private string soundConfigPath = "Configurations/AudioConfig/SoundConfig";
+
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private int maxConcurrentSounds = 20;
     [SerializeField] private float spatialBlend = 0.8f;
 
-    [Header("Mixer Groups")]
-    [SerializeField] private List<ChannelMixerGroup> channelMixerGroups = new List<ChannelMixerGroup>();
+    [Header("Mixer Groups")] [SerializeField]
+    private List<ChannelMixerGroup> channelMixerGroups = new();
 
-    private static AudioManager _instance;
-    private Dictionary<string, AudioClip> _soundDictionary = new Dictionary<string, AudioClip>();
-    private SoundConfig _soundConfig;
-    private Dictionary<SoundChannel, float> _channelVolumes = new Dictionary<SoundChannel, float>();
-    private Dictionary<string, int> _playingSounds = new Dictionary<string, int>();
+    private readonly List<PooledAudioSource> _audioSourcePool = new();
+    private readonly Dictionary<SoundChannel, float> _channelVolumes = new();
+    private readonly Dictionary<SoundChannel, AudioMixerGroup> _mixerGroupDictionary = new();
+    private readonly Dictionary<string, int> _playingSounds = new();
+    private readonly Dictionary<string, AudioClip> _soundDictionary = new();
     private Transform _listenerTransform;
-    private Dictionary<SoundChannel, AudioMixerGroup> _mixerGroupDictionary = new Dictionary<SoundChannel, AudioMixerGroup>();
+    private SoundConfig _soundConfig;
 
-    private class PooledAudioSource
-    {
-        public AudioSource source;
-        public SoundChannel channel;
-        public string soundName;
-        public bool isPlaying;
-        public bool isPaused;
-        public float pausedTime;
-    }
-    private List<PooledAudioSource> _audioSourcePool = new List<PooledAudioSource>();
-
-    public static AudioManager Instance => _instance;
+    public static AudioManager Instance { get; private set; }
 
     private void Awake()
     {
-        if (_instance == null)
+        if (Instance == null)
         {
-            _instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
             Init();
         }
-        else if (_instance != this)
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
@@ -70,36 +60,26 @@ public class AudioManager : MonoBehaviour
 
     private void Init()
     {
-        //ToDo£º´ýµ÷ÕûÎª×ßÅäÖÃ
-        foreach (SoundChannel channel in System.Enum.GetValues(typeof(SoundChannel)))
-        {
-            _channelVolumes[channel] = 1f;
-        }
+        //ToDoï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        foreach (SoundChannel channel in Enum.GetValues(typeof(SoundChannel))) _channelVolumes[channel] = 1f;
 
         foreach (var group in channelMixerGroups)
-        {
             if (!_mixerGroupDictionary.ContainsKey(group.channel))
-            {
                 _mixerGroupDictionary.Add(group.channel, group.mixerGroup);
-            }
-        }
 
-        for (int i = 0; i < maxConcurrentSounds; i++)
-        {
-            CreateAudioSource();
-        }
+        for (var i = 0; i < maxConcurrentSounds; i++) CreateAudioSource();
 
         _listenerTransform = FindObjectOfType<AudioListener>()?.transform;
         if (_listenerTransform == null)
         {
-            Debug.LogWarning("SoundEffectSystem:{Warning} AudioListener²»´æÔÚÓë³¡¾°ÖÐ");
+            Debug.LogWarning("SoundEffectSystem:{Warning} AudioListenerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë³¡ï¿½ï¿½ï¿½ï¿½");
             _listenerTransform = transform;
         }
 
         LoadSoundConfig();
 
 
-        //²âÊÔÂß¼­
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
         //SetChannelVolume(SoundChannel.Master, 0.8f);
         //SetChannelVolume(SoundChannel.SFX, 1f);
         //SetChannelVolume(SoundChannel.Music, 0.7f);
@@ -107,9 +87,9 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource CreateAudioSource()
     {
-        GameObject sourceObj = new GameObject($"AudioSource_{_audioSourcePool.Count}");
+        var sourceObj = new GameObject($"AudioSource_{_audioSourcePool.Count}");
         sourceObj.transform.SetParent(transform);
-        AudioSource source = sourceObj.AddComponent<AudioSource>();
+        var source = sourceObj.AddComponent<AudioSource>();
         source.spatialBlend = spatialBlend;
         source.playOnAwake = false;
         _audioSourcePool.Add(new PooledAudioSource
@@ -130,29 +110,33 @@ public class AudioManager : MonoBehaviour
 
         if (_soundConfig == null)
         {
-            Debug.LogError($"SoundEffectSystem:{{Error}} Î´ÕÒµ½ÒôÐ§ÅäÖÃ×ÊÔ´Â·¾¶:  {soundConfigPath}");
+            Debug.LogError($"SoundEffectSystem:{{Error}} Î´ï¿½Òµï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Â·ï¿½ï¿½:  {soundConfigPath}");
             return;
         }
 
-        foreach (AudioClip clip in _soundConfig.SoundEffects)
-        {
+        foreach (var clip in _soundConfig.SoundEffects)
             if (clip != null)
             {
-                string clipName = clip.name;
+                var clipName = clip.name;
 
                 if (!_soundDictionary.ContainsKey(clipName))
-                {
                     _soundDictionary.Add(clipName, clip);
-                }
                 else
-                {
-                    Debug.LogWarning($"SoundEffectSystem:{{Warning}} ÖØ¸´ÒôÐ§Ãû³Æ: {clipName}");
-                }
+                    Debug.LogWarning($"SoundEffectSystem:{{Warning}} ï¿½Ø¸ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½: {clipName}");
             }
-        }
     }
 
-    #region Í¨µÀ¹ÜÀí
+    private class PooledAudioSource
+    {
+        public SoundChannel channel;
+        public bool isPaused;
+        public bool isPlaying;
+        public float pausedTime;
+        public string soundName;
+        public AudioSource source;
+    }
+
+    #region Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     public void SetChannelVolume(SoundChannel channel, float volume)
     {
@@ -160,7 +144,7 @@ public class AudioManager : MonoBehaviour
 
         if (audioMixer != null)
         {
-            float dB = volume > 0.0001f ? 20f * Mathf.Log10(volume) : -80f;
+            var dB = volume > 0.0001f ? 20f * Mathf.Log10(volume) : -80f;
             audioMixer.SetFloat($"{channel}Volume", dB);
         }
     }
@@ -170,43 +154,41 @@ public class AudioManager : MonoBehaviour
         if (audioMixer != null)
         {
             float dB;
-            if (audioMixer.GetFloat($"{channel}Volume", out dB))
-            {
-                return Mathf.Pow(10f, dB / 20f);
-            }
+            if (audioMixer.GetFloat($"{channel}Volume", out dB)) return Mathf.Pow(10f, dB / 20f);
         }
+
         return _channelVolumes[channel];
     }
 
     #endregion
 
-    #region ¸ß¼¶²¥·Å½Ó¿Ú
+    #region ï¿½ß¼ï¿½ï¿½ï¿½ï¿½Å½Ó¿ï¿½
 
     public AudioSource PlaySound(string soundName, SoundChannel channel = SoundChannel.SFX,
         float volume = 1f, float pitch = 1f, bool loop = false, float delay = 0f)
     {
-        if (!_soundDictionary.TryGetValue(soundName, out AudioClip clip))
+        if (!_soundDictionary.TryGetValue(soundName, out var clip))
         {
-            Debug.LogWarning($"SoundEffectSystem:{{Warning}} Î´ÕÒµ½¸ÃÒôÐ§: {soundName}");
+            Debug.LogWarning($"SoundEffectSystem:{{Warning}} Î´ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½Ð§: {soundName}");
             return null;
         }
 
-        if (_playingSounds.TryGetValue(soundName, out int count) && count > 3)
+        if (_playingSounds.TryGetValue(soundName, out var count) && count > 3)
         {
-            Debug.Log($"SoundEffectSystem:{{Log}} ¹ý¶àÖØ¸´ÒôÐ§²¥·Å {soundName}, Ìø¹ý.");
+            Debug.Log($"SoundEffectSystem:{{Log}} ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ {soundName}, ï¿½ï¿½ï¿½ï¿½.");
             return null;
         }
 
         var pooledSource = GetAvailableAudioSource();
         if (pooledSource == null)
         {
-            Debug.LogWarning("SoundEffectSystem:{Warning} Ã»ÓÐ¿ÉÓÃµÄAudioSource");
+            Debug.LogWarning("SoundEffectSystem:{Warning} Ã»ï¿½Ð¿ï¿½ï¿½Ãµï¿½AudioSource");
             return null;
         }
 
         _playingSounds[soundName] = count + 1;
 
-        AudioSource source = pooledSource.source;
+        var source = pooledSource.source;
         source.clip = clip;
         source.volume = volume * _channelVolumes[channel] * _channelVolumes[SoundChannel.Master];
         source.pitch = Mathf.Clamp(pitch, 0.5f, 2f);
@@ -222,18 +204,11 @@ public class AudioManager : MonoBehaviour
         pooledSource.pausedTime = 0;
 
         if (delay > 0)
-        {
             source.PlayDelayed(delay);
-        }
         else
-        {
             source.Play();
-        }
 
-        if (!loop)
-        {
-            StartCoroutine(ReturnToPoolWhenFinished(pooledSource));
-        }
+        if (!loop) StartCoroutine(ReturnToPoolWhenFinished(pooledSource));
 
         return source;
     }
@@ -243,10 +218,8 @@ public class AudioManager : MonoBehaviour
         yield return new WaitWhile(() => pooledSource.source.isPlaying || pooledSource.isPaused);
 
         if (_playingSounds.ContainsKey(pooledSource.soundName))
-        {
             _playingSounds[pooledSource.soundName] =
                 Mathf.Max(0, _playingSounds[pooledSource.soundName] - 1);
-        }
 
         pooledSource.isPlaying = false;
         pooledSource.isPaused = false;
@@ -254,25 +227,25 @@ public class AudioManager : MonoBehaviour
         pooledSource.source.clip = null;
     }
 
-    //ToDO: ´ýµ÷Õû
+    //ToDO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void PlaySoundAtPosition(string soundName, Vector3 position,
         SoundChannel channel = SoundChannel.SFX, float volume = 1f,
         float spatialBlend = 1f)
     {
-        if (!_soundDictionary.TryGetValue(soundName, out AudioClip clip))
+        if (!_soundDictionary.TryGetValue(soundName, out var clip))
         {
-            Debug.LogWarning($"SoundEffectSystem:{{Warning}} Î´ÕÒµ½¸ÃÒôÐ§: {soundName}");
+            Debug.LogWarning($"SoundEffectSystem:{{Warning}} Î´ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½Ð§: {soundName}");
             return;
         }
 
         var pooledSource = GetAvailableAudioSource();
         if (pooledSource == null)
         {
-            Debug.LogWarning("SoundEffectSystem:{Warning} Ã»ÓÐ¿ÉÓÃµÄAudioSource");
+            Debug.LogWarning("SoundEffectSystem:{Warning} Ã»ï¿½Ð¿ï¿½ï¿½Ãµï¿½AudioSource");
             return;
         }
 
-        AudioSource source = pooledSource.source;
+        var source = pooledSource.source;
         source.spatialBlend = spatialBlend;
         source.transform.position = position;
         source.volume = volume * _channelVolumes[channel] * _channelVolumes[SoundChannel.Master];
@@ -292,14 +265,10 @@ public class AudioManager : MonoBehaviour
     private PooledAudioSource GetAvailableAudioSource()
     {
         foreach (var pooledSource in _audioSourcePool)
-        {
             if (!pooledSource.isPlaying)
-            {
                 return pooledSource;
-            }
-        }
 
-        Debug.LogWarning("SoundEffectSystem:{Warning} AudioSource¶ÔÏó³ØºÄ¾¡. ½«´´½¨ÐÂµÄAudioSource¶ÔÏó.");
+        Debug.LogWarning("SoundEffectSystem:{Warning} AudioSourceï¿½ï¿½ï¿½ï¿½ØºÄ¾ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½AudioSourceï¿½ï¿½ï¿½ï¿½.");
         CreateAudioSource();
         return _audioSourcePool[_audioSourcePool.Count - 1];
     }
@@ -307,21 +276,17 @@ public class AudioManager : MonoBehaviour
     private AudioMixerGroup GetMixerGroupForChannel(SoundChannel channel)
     {
         AudioMixerGroup group;
-        if (_mixerGroupDictionary.TryGetValue(channel, out group))
-        {
-            return group;
-        }
+        if (_mixerGroupDictionary.TryGetValue(channel, out group)) return group;
         return null;
     }
 
     #endregion
 
-    #region ¸ß¼¶¿ØÖÆ
+    #region ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
 
     public void StopAllSounds()
     {
         foreach (var pooledSource in _audioSourcePool)
-        {
             if (pooledSource.isPlaying || pooledSource.isPaused)
             {
                 pooledSource.source.Stop();
@@ -329,14 +294,13 @@ public class AudioManager : MonoBehaviour
                 pooledSource.isPaused = false;
                 pooledSource.pausedTime = 0;
             }
-        }
+
         _playingSounds.Clear();
     }
 
     public void StopSoundsByChannel(SoundChannel channel)
     {
         foreach (var pooledSource in _audioSourcePool)
-        {
             if ((pooledSource.isPlaying || pooledSource.isPaused) &&
                 pooledSource.channel == channel)
             {
@@ -346,18 +310,14 @@ public class AudioManager : MonoBehaviour
                 pooledSource.pausedTime = 0;
 
                 if (_playingSounds.ContainsKey(pooledSource.soundName))
-                {
                     _playingSounds[pooledSource.soundName] =
                         Mathf.Max(0, _playingSounds[pooledSource.soundName] - 1);
-                }
             }
-        }
     }
 
     public void PauseAllSounds(bool pause)
     {
         foreach (var pooledSource in _audioSourcePool)
-        {
             if (pooledSource.isPlaying)
             {
                 if (pause)
@@ -373,11 +333,10 @@ public class AudioManager : MonoBehaviour
                     pooledSource.isPaused = false;
                 }
             }
-        }
     }
 
 
-    //ToDO: ´ý²¹³ä
+    //ToDO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     //public void FadeOut(AudioSource source, float duration)
     //{
     //    StartCoroutine(FadeOutCoroutine(source, duration));
@@ -401,7 +360,9 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
-    #region ×ÊÔ´¹ÜÀí
-    //ToDO: ´ý²¹³ä
+    #region ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½
+
+    //ToDO: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
     #endregion
 }

@@ -5,7 +5,7 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VCardTypeCondition : VCardCondition
     {
-        string _cardType;
+        private readonly string _cardType;
 
         public VCardTypeCondition(CellRange row) : base(row)
         {

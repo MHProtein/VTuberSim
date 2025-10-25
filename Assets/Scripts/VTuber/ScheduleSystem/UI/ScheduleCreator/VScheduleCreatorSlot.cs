@@ -1,22 +1,19 @@
-﻿using UnityEngine.EventSystems;
-using VTuber.Core.Foundation;
+﻿using VTuber.Core.Foundation;
 
 namespace VTuber.ScheduleSystem.UI
 {
     public class VScheduleCreatorSlot : VUIBehaviour
     {
-        public VEventDataUI Item => _item;
-        private VEventDataUI _item;
-        
+        public VEventDataUI Item { get; private set; }
+
         public void SetItem(VEventDataUI item)
         {
-            _item = item;
+            Item = item;
         }
 
         public void RemoveItem()
         {
-            _item = null;
+            Item = null;
         }
-
     }
 }

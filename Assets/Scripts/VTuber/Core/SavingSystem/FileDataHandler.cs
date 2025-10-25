@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using UnityEngine;
@@ -10,29 +9,29 @@ namespace SlayTheSpire.System.SavingSystem
 {
     public class FileDataHandler
     {
-        private string _dataDirectoryPath = ""; 
-        private string _dataFileName = "";
+        private readonly string _dataDirectoryPath = "";
+        private readonly string _dataFileName = "";
 
         public FileDataHandler(string dataDirectoryPath, string dataFileName)
         {
             _dataDirectoryPath = dataDirectoryPath;
             _dataFileName = dataFileName;
         }
-        
+
         public SaveData Load()
         {
-            string path = Path.Combine(_dataDirectoryPath, _dataFileName);
-            SaveData loadedData = new SaveData();
-            
+            var path = Path.Combine(_dataDirectoryPath, _dataFileName);
+            var loadedData = new SaveData();
+
             if (!File.Exists(path))
                 return null;
-            
+
             try
             {
-                using (FileStream stream = new FileStream(path, FileMode.Open))
-                using (BsonDataReader reader = new BsonDataReader(stream))
+                using (var stream = new FileStream(path, FileMode.Open))
+                using (var reader = new BsonDataReader(stream))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    var serializer = new JsonSerializer();
                     loadedData = serializer.Deserialize<SaveData>(reader);
                 }
             }
@@ -43,19 +42,19 @@ namespace SlayTheSpire.System.SavingSystem
 
             return loadedData;
         }
-        
+
         public void Save(SaveData data)
         {
-            string path = Path.Combine(_dataDirectoryPath, _dataFileName);
+            var path = Path.Combine(_dataDirectoryPath, _dataFileName);
 
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-                using (FileStream stream = new FileStream(path, FileMode.Create))
-                using (BsonDataWriter writer = new BsonDataWriter(stream))
+                using (var stream = new FileStream(path, FileMode.Create))
+                using (var writer = new BsonDataWriter(stream))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
+                    var serializer = new JsonSerializer();
                     serializer.Serialize(writer, data);
                 }
             }
@@ -67,13 +66,13 @@ namespace SlayTheSpire.System.SavingSystem
 
         public bool SaveExists()
         {
-            string path = Path.Combine(_dataDirectoryPath, _dataFileName);
+            var path = Path.Combine(_dataDirectoryPath, _dataFileName);
             return File.Exists(path);
         }
 
         public void Delete()
         {
-            string path = Path.Combine(_dataDirectoryPath, _dataFileName);
+            var path = Path.Combine(_dataDirectoryPath, _dataFileName);
             try
             {
                 File.Delete(path);

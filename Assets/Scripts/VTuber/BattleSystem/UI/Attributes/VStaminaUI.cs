@@ -2,10 +2,8 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
@@ -14,7 +12,7 @@ namespace VTuber.BattleSystem.UI
     {
         [SerializeField] private TMP_Text staminaText;
         [SerializeField] private Image bar;
-        
+
         protected override void Awake()
         {
             base.Awake();
@@ -31,22 +29,21 @@ namespace VTuber.BattleSystem.UI
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-            bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
+            var isFromCard = messagedict["IsFromCard"] as bool? ?? false;
+            var shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
             var value = messagedict["NewValue"] as int? ?? 0;
             var maxValue = messagedict["MaxValue"] as int? ?? 0;
-            int delta = messagedict["Delta"] as int ? ?? 0;
+            var delta = messagedict["Delta"] as int? ?? 0;
             staminaText.text = $"{value}/{maxValue}";
-            if(delta == 0)
+            if (delta == 0)
                 return;
-            
+
             Tween.UIFillAmount(bar, (float)value / maxValue, 0.3f);
-            _animationQueue.Enqueue(Tween.PunchScale(staminaText.transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
-                {
-                    RaiseEvents(isFromCard, shouldPlayTwice);
-                    staminaText.color = Color.white;
-                })));
+            _animationQueue.Enqueue(Tween.PunchScale(staminaText.transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
+            {
+                RaiseEvents(isFromCard, shouldPlayTwice);
+                staminaText.color = Color.white;
+            }));
             staminaText.color = delta > 0 ? Color.green : Color.red;
         }
     }

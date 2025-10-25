@@ -11,11 +11,10 @@ namespace VTuber.EventSystem.UI
 {
     public class VPhaseEndingSelectionMenu : VUIBehaviour
     {
-        private List<VPhaseEndingOption> _options;
-        private VPhaseEndingOption _selectedOption;
-        
         [SerializeField] private Button confirmButton;
         [SerializeField] private Transform grid;
+        private List<VPhaseEndingOption> _options;
+        private VPhaseEndingOption _selectedOption;
 
 
         public void Initialize(GameObject endingPrefab, List<VStreamEvent> endings)
@@ -24,18 +23,18 @@ namespace VTuber.EventSystem.UI
             _options = new List<VPhaseEndingOption>();
             foreach (var ending in endings)
             {
-                GameObject endingGo = Instantiate(endingPrefab, grid);
-                VPhaseEndingOption option = endingGo.GetComponent<VPhaseEndingOption>();
+                var endingGo = Instantiate(endingPrefab, grid);
+                var option = endingGo.GetComponent<VPhaseEndingOption>();
                 option.Initialize(ending, this);
                 _options.Add(option);
             }
         }
-        
+
         public void SelectOption(VPhaseEndingOption option)
         {
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             confirmButton.interactable = true;
-            if(_selectedOption is not null)
+            if (_selectedOption is not null)
                 _selectedOption.Unselect();
             _selectedOption = option;
         }
@@ -45,18 +44,14 @@ namespace VTuber.EventSystem.UI
             confirmButton.interactable = false;
             _selectedOption.E.Phase.SetEndingEventID(_selectedOption.E.EventID);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseEndingSelected,
-                new Dictionary<string, object>()
+                new Dictionary<string, object>
                 {
                     { "KPIs", _selectedOption.E.Kpis }
                 });
-            foreach (var option in _options)
-            {
-                Destroy(option.gameObject);
-            }
+            foreach (var option in _options) Destroy(option.gameObject);
             _options.Clear();
             _selectedOption = null;
             VEventSystemUI.Instance.ClosePhaseEndingSelectionMenu();
         }
-        
     }
 }

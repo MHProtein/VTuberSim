@@ -19,14 +19,15 @@ namespace VTuber.Core.TypeSerialization
                 if (type == null)
                     return false;
             }
+
             return false;
         }
 
         private static Type ResolveGenericType(Type type)
         {
-            if (type is not { IsGenericType: true }) 
+            if (type is not { IsGenericType: true })
                 return type;
-            
+
             var genericType = type.GetGenericTypeDefinition();
             return genericType != type ? genericType : type;
         }
@@ -36,5 +37,4 @@ namespace VTuber.Core.TypeSerialization
             return type.GetInterfaces().Any(i => ResolveGenericType(i) == interfaceType);
         }
     }
-
 }

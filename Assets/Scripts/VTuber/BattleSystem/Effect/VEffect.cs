@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect.Conditions;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
 
@@ -11,23 +9,20 @@ namespace VTuber.BattleSystem.Effect
 {
     public abstract class VEffect
     {
+        protected VBattle _battle;
+        protected VBuffItem _buffItem;
         protected VEffectConfiguration _configuration;
-        public uint Id => _configuration.id;
-        public string Name => _configuration.effectName;
-        public string Description => _configuration.description;
+        protected bool _isUpgraded;
+
+        protected int _layer;
         //public string Icon => configuration.icon;
         //public string UpgradeIcon => configuration.upgradeIcon;
-        
+
         public List<VEffectCondition> conditions;
-        public VBattleEventKey whenToApply;
-        public bool upgradable = false;
-        protected bool _isUpgraded;
-        protected VBattle _battle;
-        protected int _layer = 0;
-        public float MultiplyByLayer => _configuration.multiplyByLayer;
         public bool Triggered;
-        protected VBuffItem _buffItem;
-        
+        public bool upgradable;
+        public VBattleEventKey whenToApply;
+
         public VEffect(VEffectConfiguration configuration)
         {
             _configuration = configuration;
@@ -36,7 +31,14 @@ namespace VTuber.BattleSystem.Effect
             upgradable = configuration.upgradable;
         }
 
-        public virtual void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
+        public uint Id => _configuration.id;
+        public string Name => _configuration.effectName;
+
+        public string Description => _configuration.description;
+        public float MultiplyByLayer => _configuration.multiplyByLayer;
+
+        public virtual void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false,
+            bool shouldApplyTwice = false)
         {
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Battle_EffectApply);
         }
@@ -50,27 +52,26 @@ namespace VTuber.BattleSystem.Effect
             }
 
             foreach (var condition in conditions)
-            {
                 if (!condition.IsTrue(battle, message))
                 {
                     VDebug.Log("效果 " + Name + " 因条件未满足无法生效: " + condition.id);
                     return false;
                 }
-            }
+
             VDebug.Log("效果 " + Name + " 可以生效。");
             return true;
         }
-        
+
         public virtual void Upgrade()
         {
-            if(!upgradable)
+            if (!upgradable)
                 return;
             _isUpgraded = true;
         }
-        
+
         public virtual void Downgrade()
-        {            
-            if(!upgradable)
+        {
+            if (!upgradable)
                 return;
             _isUpgraded = false;
         }
@@ -85,7 +86,7 @@ namespace VTuber.BattleSystem.Effect
                 _buffItem.OnEffectApplied();
             }
         }
-        
+
         public virtual void OnBuffAdded(VBattle battle, int layer, VBuffItem buffItem)
         {
             _battle = battle;
@@ -99,12 +100,12 @@ namespace VTuber.BattleSystem.Effect
         {
             _buffItem.OnEffectApplied();
         }
-        
+
         public virtual void OnBuffLayerChange(int layer)
         {
             _layer = layer;
         }
-        
+
         public virtual void OnBuffRemove()
         {
             VBattleRootEventCenter.Instance.RemoveListener(whenToApply, TryApply);

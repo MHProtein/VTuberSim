@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Spire.Xls;
-using VTuber.Character;
-using VTuber.Core.Managers;
+﻿using Spire.Xls;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -9,7 +6,6 @@ namespace VTuber.Core.RaisingEffect
     {
         public VAddSpecifiedCardEffectConfiguration(CellRange row) : base(row)
         {
-            
         }
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)

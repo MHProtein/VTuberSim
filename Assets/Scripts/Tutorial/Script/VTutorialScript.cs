@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NUnit.Framework;
+using VTuber.Character;
 using VTuber.Core.ScriptSystem;
 using VTuber.ScheduleSystem.Events;
 
@@ -8,17 +8,18 @@ namespace Tutorial.Script
 {
     public class VTutorialScript : VScript
     {
+        private Action<int> _onWeekAdvanced;
+
+        public VTutorialScript(VScriptConfiguration configuration) : base(configuration)
+        {
+            Configuration = configuration as VTutorialScriptConfiguration;
+        }
+
         public List<uint> CurrentWeekDialogEventList => Configuration.weeks[_weekIndex].eventIDs;
         public List<uint> CurrentWeekStreamEventList => Configuration.weeks[_weekIndex].streamEventIDs;
         public List<VTutorialWeekCondition> CurrentWeekConditions => Configuration.weeks[_weekIndex].conditions;
-        public VTutorialScriptConfiguration Configuration => _tutorialConfiguration;
-        private VTutorialScriptConfiguration _tutorialConfiguration;
-        private Action<int> _onWeekAdvanced;
-        public VTutorialScript(VScriptConfiguration configuration) : base(configuration)
-        {
-            _tutorialConfiguration = configuration as VTutorialScriptConfiguration;
-        }
-        
+        public VTutorialScriptConfiguration Configuration { get; }
+
         public void AddOnWeekAdvancedCallback(Action<int> callback)
         {
             _onWeekAdvanced += callback;
@@ -29,6 +30,14 @@ namespace Tutorial.Script
             var e = base.NextWeek();
             _onWeekAdvanced?.Invoke(_weekIndex);
             return e;
+        }
+
+        public bool CheckCurrentWeekConditions(VCharacter character)
+        {
+            foreach (var condition in CurrentWeekConditions)
+                if (!condition.IsTrue(character))
+                    return false;
+            return true;
         }
     }
 }

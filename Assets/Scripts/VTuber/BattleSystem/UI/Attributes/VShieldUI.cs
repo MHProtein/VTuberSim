@@ -2,10 +2,7 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
-using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -24,19 +21,18 @@ namespace VTuber.BattleSystem.UI
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-            bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
-            int delta = messagedict["Delta"] as int ? ?? 0;
+            var isFromCard = messagedict["IsFromCard"] as bool? ?? false;
+            var shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
+            var delta = messagedict["Delta"] as int? ?? 0;
             shieldText.text = $"{messagedict["NewValue"] as int? ?? 0}";
-            if(delta == 0)
+            if (delta == 0)
                 return;
-            
-            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
-                {
-                    RaiseEvents(isFromCard, shouldPlayTwice);
-                    shieldText.color = Color.white;
-                })));
+
+            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
+            {
+                RaiseEvents(isFromCard, shouldPlayTwice);
+                shieldText.color = Color.white;
+            }));
             shieldText.color = delta > 0 ? Color.green : Color.red;
         }
     }

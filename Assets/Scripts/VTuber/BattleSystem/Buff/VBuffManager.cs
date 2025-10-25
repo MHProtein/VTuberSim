@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using VTuber.BattleSystem.Core;
-using VTuber.BattleSystem.Effect;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.Buff
 {
     public class VBuffManagerSaveData
     {
+        public VBuffLayerModifierManager buffLayerModifierManager;
         public List<VBuffSaveData> buffSaveDatas;
         public uint idDistributor;
-        public VBuffLayerModifierManager buffLayerModifierManager;
     }
-    
+
     public class VBuffManager
     {
-        private readonly List<VBuffItem> _buffs = new List<VBuffItem>();
-        private VBattle _battle;
-        private uint _idDistributor = 0;
-        private VBuffLayerModifierManager _buffLayerModifierManager = new VBuffLayerModifierManager();
+        private readonly VBattle _battle;
+        private readonly VBuffLayerModifierManager _buffLayerModifierManager = new();
+        private readonly List<VBuffItem> _buffs = new();
+        private uint _idDistributor;
 
         public VBuffManager(VBattle battle)
         {
@@ -36,25 +33,25 @@ namespace VTuber.BattleSystem.Buff
             {
                 var buffItem = new VBuffItem(buffSaveData, battle);
                 _buffs.Add(buffItem);
-                
+
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
                     { "Id", buffItem.Id },
                     { "BuffId", buffItem.ConfigId },
-                    { "BuffName", buffItem.buff.GetBuffName() }, 
+                    { "BuffName", buffItem.buff.GetBuffName() },
                     { "IsPermanent", buffItem.buff.IsPermanent },
-                    { "Latency", buffItem.buff.latency},
-                    { "Value", buffItem.Value},
-                    { "IsFromCard",  false},
+                    { "Latency", buffItem.buff.latency },
+                    { "Value", buffItem.Value },
+                    { "IsFromCard", false },
                     { "ShouldPlayTwice", false },
                     { "Buff", buffItem }
                 });
             }
         }
-        
+
         public VBuffManagerSaveData Save()
         {
-            return new VBuffManagerSaveData()
+            return new VBuffManagerSaveData
             {
                 buffSaveDatas = _buffs.Select(buff => buff.Save()).ToList(),
                 idDistributor = _idDistributor,
@@ -66,7 +63,7 @@ namespace VTuber.BattleSystem.Buff
         {
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
         }
-        
+
         public void OnDisable()
         {
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
@@ -76,43 +73,35 @@ namespace VTuber.BattleSystem.Buff
         {
             var buffsToRemove = new List<VBuffItem>();
             foreach (var buff in _buffs)
-            {
                 if (buff.DecrementDuration())
-                {
                     buffsToRemove.Add(buff);
-                }
-            }
-            foreach (var buffItem in buffsToRemove)
-            {
-                RemoveBuff(buffItem);
-            }
+
+            foreach (var buffItem in buffsToRemove) RemoveBuff(buffItem);
         }
 
         private void RemoveBuff(VBuffItem buffItem)
         {
             buffItem.OnBuffRemoved();
             _buffs.Remove(buffItem);
-            
+
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffRemoved, new Dictionary<string, object>
             {
                 { "Id", buffItem.Id },
                 { "Buff", this }
             });
         }
-        
+
         public void AddBuff(VBuff buff, int value, bool isFromCard, bool shouldPlayTwice)
         {
             if (buff == null || string.IsNullOrEmpty(buff.GetBuffName()))
                 return;
-            
+
             var existingBuff = _buffs.Find(b => b.ConfigId == buff.ConfigId);
             if (existingBuff != null && buff.IsStackable())
             {
                 if (existingBuff.Stack((int)(value * (1.0f + _buffLayerModifierManager.GetModifier(buff.ConfigId))),
                         isFromCard, shouldPlayTwice))
-                {
                     RemoveBuff(existingBuff);
-                }
             }
             else
             {
@@ -121,30 +110,27 @@ namespace VTuber.BattleSystem.Buff
                 var buffItem = new VBuffItem(buff, value);
                 _buffs.Add(buffItem);
                 buffItem.OnBuffAdded(_battle, _idDistributor++);
-                
+
                 VDebug.Log("Buff已添加: " + buff.GetBuffName() + ", 数值: " + value);
-                
+
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBuffAdded, new Dictionary<string, object>
                 {
                     { "Id", buffItem.Id },
                     { "BuffId", buff.ConfigId },
-                    { "BuffName", buff.GetBuffName() }, 
+                    { "BuffName", buff.GetBuffName() },
                     { "IsPermanent", buff.IsPermanent },
-                    { "Latency", buff.latency},
-                    { "Value", value},
-                    { "IsFromCard",  isFromCard},
+                    { "Latency", buff.latency },
+                    { "Value", value },
+                    { "IsFromCard", isFromCard },
                     { "ShouldPlayTwice", shouldPlayTwice },
                     { "Buff", buffItem }
                 });
             }
         }
-        
+
         public void Clear()
         {
-            foreach (var buff in _buffs)
-            {
-                buff.OnBuffRemoved();
-            }
+            foreach (var buff in _buffs) buff.OnBuffRemoved();
             _buffs.Clear();
         }
 
@@ -162,20 +148,14 @@ namespace VTuber.BattleSystem.Buff
         public void ApplyCost(uint id, int cost)
         {
             if (TryGetBuff(id, out var buffItem))
-            {
-                if(buffItem.ApplyCost(cost))
+                if (buffItem.ApplyCost(cost))
                     RemoveBuff(buffItem);
-            }
         }
 
         public bool TestCost(uint id, int cost)
         {
-            if (TryGetBuff(id, out var buffItem))
-            {
-                return buffItem.TestCost(cost);
-            }
+            if (TryGetBuff(id, out var buffItem)) return buffItem.TestCost(cost);
             return false;
         }
-        
     }
 }

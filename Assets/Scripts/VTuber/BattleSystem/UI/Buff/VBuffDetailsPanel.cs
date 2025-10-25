@@ -5,6 +5,5 @@ namespace VTuber.BattleSystem.UI
     public class VBuffDetailsPanel : VUIBehaviour
 
     {
-
     }
 }

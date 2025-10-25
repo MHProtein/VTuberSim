@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
-using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
-using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
@@ -16,7 +13,7 @@ using VTuber.Core.Managers;
 namespace VTuber.Relic
 {
     public static class VRelicHeaderIndex
-    {  
+    {
         public const int Id = 0;
         public const int Name = 1;
         public const int Description = 2;
@@ -35,34 +32,31 @@ namespace VTuber.Relic
         public const int E3Param = 15;
         public const int E3UpgradedParam = 16;
     }
-    
+
     public class VBattleRelicConfiguration : VRelicConfiguration
     {
-        public readonly List<VEffectItem> effectItems;
         public readonly VEffectCondition condition;
+        public readonly List<VEffectItem> effectItems;
         public readonly VBattleEventKey whenToApply;
+
         public VBattleRelicConfiguration(CellRange row) : base(row)
         {
             whenToApply = Enum.Parse<VBattleEventKey>(row.Columns[VRelicHeaderIndex.WhenToApply].Value.Trim());
-            string conditionStr = row.Columns[VRelicHeaderIndex.Condition].Value;
+            var conditionStr = row.Columns[VRelicHeaderIndex.Condition].Value;
             if (!string.IsNullOrEmpty(conditionStr))
-            {
                 condition = VDataManager.Instance.GetConditionByID(Convert.ToUInt32(conditionStr));
-            }
             else
-            {
                 condition = null;
-            }
 
             effectItems = new List<VEffectItem>();
-            for (int i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3UpgradedParam; i += 3)
+            for (var i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3UpgradedParam; i += 3)
             {
                 var effectIDStr = row.Columns[i].Value;
-                if(effectIDStr.IsNullOrWhitespace())
+                if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                uint effect = Convert.ToUInt32(effectIDStr);
-                
-                VDebug.Log(row.Columns[i + 1].Value + " "+ row.Columns[i + 2].Value);
+                var effect = Convert.ToUInt32(effectIDStr);
+
+                VDebug.Log(row.Columns[i + 1].Value + " " + row.Columns[i + 2].Value);
                 effectItems.Add(new VEffectItem
                 {
                     id = effect,
@@ -77,30 +71,29 @@ namespace VTuber.Relic
             return new VBattleRelic(this);
         }
     }
-    
+
     public class VRaisingRelicConfiguration : VRelicConfiguration
     {
-        public readonly List<VEffectItem> effectItems;
         public readonly VRaisingRelicCondition condition;
+        public readonly List<VEffectItem> effectItems;
         public readonly VRaisingEventKey whenToApply;
+
         public VRaisingRelicConfiguration(CellRange row) : base(row)
         {
             effectItems = new List<VEffectItem>();
-            
-            string conditionStr = row.Columns[VRelicHeaderIndex.Condition].Value;
+
+            var conditionStr = row.Columns[VRelicHeaderIndex.Condition].Value;
             whenToApply = Enum.Parse<VRaisingEventKey>(row.Columns[VRelicHeaderIndex.WhenToApply].Value.Trim());
             if (!string.IsNullOrEmpty(conditionStr))
-            {
                 condition = VDataManager.Instance.GetRaisingRelicCondition(Convert.ToUInt32(conditionStr));
-            }
-            
-            for (int i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3UpgradedParam; i += 3)
-            {               
+
+            for (var i = VRelicHeaderIndex.Effect1; i <= VRelicHeaderIndex.E3UpgradedParam; i += 3)
+            {
                 var effectIDStr = row.Columns[i].Value;
-                if(effectIDStr.IsNullOrWhitespace())
+                if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                uint effect = Convert.ToUInt32(effectIDStr);
-                
+                var effect = Convert.ToUInt32(effectIDStr);
+
                 effectItems.Add(new VEffectItem
                 {
                     id = effect,
@@ -115,15 +108,15 @@ namespace VTuber.Relic
             return new VRaisingRelic(this);
         }
     }
-    
+
     public class VRelicConfiguration
     {
-        public uint id;
-        public string relicName;
         public string description;
         public Sprite icon;
+        public uint id;
+        public bool isPermanent;
         public int layer;
-        public bool isPermanent = false;
+        public string relicName;
 
         public VRelicConfiguration(CellRange row)
         {
@@ -141,5 +134,4 @@ namespace VTuber.Relic
             return new VRelic(this);
         }
     }
-
 }

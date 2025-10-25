@@ -7,7 +7,7 @@ namespace VTuber.Core.TypeSerialization
     public class SerializableType : ISerializationCallbackReceiver
     {
         [SerializeField] private string assemblyQualifiedName = string.Empty;
-        
+
         public Type TypeToSerialize { get; private set; }
 
         void ISerializationCallbackReceiver.OnBeforeSerialize()
@@ -17,23 +17,25 @@ namespace VTuber.Core.TypeSerialization
 
         void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            if (!TryGetType(assemblyQualifiedName, out var type))
-            {
-                return;
-            }
+            if (!TryGetType(assemblyQualifiedName, out var type)) return;
 
             TypeToSerialize = type;
         }
 
-        static bool TryGetType(string typeString, out Type type)
+        private static bool TryGetType(string typeString, out Type type)
         {
             type = Type.GetType(typeString);
             return type != null || !string.IsNullOrEmpty(typeString);
         }
 
-        public static implicit operator Type(SerializableType sType) => sType.TypeToSerialize;
+        public static implicit operator Type(SerializableType sType)
+        {
+            return sType.TypeToSerialize;
+        }
 
-        public static implicit operator SerializableType(Type type) => new() { TypeToSerialize = type };
-
+        public static implicit operator SerializableType(Type type)
+        {
+            return new SerializableType { TypeToSerialize = type };
+        }
     }
 }

@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.Core.SE
@@ -17,8 +13,8 @@ namespace VTuber.Core.SE
         public SoundChannel channel = SoundChannel.SFX;
         public float volume = 1f;
         public float pitch = 1f;
-        public bool loop = false;
-        public float delay = 0f;
+        public bool loop;
+        public float delay;
     }
 
     public enum VSFXType
@@ -38,11 +34,12 @@ namespace VTuber.Core.SE
         MainMenu,
         StreamFailure
     }
-    
+
     public class VAudioPlayer : VSingletonMonobehaviour<VAudioPlayer>
     {
         [SerializeField] private Dictionary<VSFXType, List<VAudioPlayInfo>> sfxs;
         [SerializeField] private Dictionary<VBGMType, List<VAudioPlayInfo>> bgms;
+
         protected override void Awake()
         {
             base.Awake();
@@ -62,10 +59,7 @@ namespace VTuber.Core.SE
         {
             var sfx = sfxs[sfxType].First();
             AudioManager.Instance.PlaySound(sfx.soundName, sfx.channel, sfx.volume, sfx.pitch, sfx.loop, sfx.delay);
-            if ((sfxType == VSFXType.Battle_BuffApply))
-            {
-                VDebug.Log("Battle_BuffApply");
-            }
+            if (sfxType == VSFXType.Battle_BuffApply) VDebug.Log("Battle_BuffApply");
         }
 
         public void PlayBGM(VBGMType bgmType)

@@ -1,5 +1,4 @@
 ﻿using Spire.Xls;
-using VTuber.Core.Managers;
 
 namespace VTuber.BattleSystem.Effect
 {

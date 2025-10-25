@@ -1,48 +1,55 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
-using Spire.Xls;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
-using VTuber.Core.Managers;
 using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect
 {
     public class VAddParamsBuffPercentageEffect : VEffect, IVValuePreview
-    {        
-        public string AttributeName => "BAParameter";
+    {
         private readonly uint _buffID;
         private readonly VUpgradableValue<float> _percentage;
-        
-        public VAddParamsBuffPercentageEffect(VEffectConfiguration configuration, uint buffID, float percentage, float upgradedPercentage) : base(configuration)
+
+        public VAddParamsBuffPercentageEffect(VEffectConfiguration configuration, uint buffID, float percentage,
+            float upgradedPercentage) : base(configuration)
         {
             _buffID = buffID;
             _percentage = new VUpgradableValue<float>(percentage, upgradedPercentage);
         }
-        
+
+        public string AttributeName => "BAParameter";
+
+        public int GetValue(VBattle battle)
+        {
+            if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
+                return VMathUtils.FloatToInt(_percentage.Value * buff.Value);
+            return 0;
+        }
+
         public override void Upgrade()
         {
             base.Upgrade();
             _percentage.Upgrade();
         }
-        
+
         public override void Downgrade()
         {
             base.Downgrade();
             _percentage.Downgrade();
         }
 
-        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false,
+            bool shouldApplyTwice = false)
         {
             base.ApplyEffect(battle, layer, isFromCard, shouldApplyTwice);
-            
+
             if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
             {
-                int delta = VMathUtils.FloatToInt((_percentage.Value) * buff.Value);
-                
+                var delta = VMathUtils.FloatToInt(_percentage.Value * buff.Value);
+
                 if (MultiplyByLayer > 0.0f)
                     delta *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
-                
+
                 if (delta == 0 && isFromCard)
                 {
                     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
@@ -66,15 +73,6 @@ namespace VTuber.BattleSystem.Effect
         public override string GetValue()
         {
             return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";
-        }
-
-        public int GetValue(VBattle battle)
-        {
-            if (battle.BuffManager.TryGetBuff(_buffID, out var buff))
-            {
-                return VMathUtils.FloatToInt((_percentage.Value) * buff.Value);
-            }
-            return 0;
         }
     }
 }

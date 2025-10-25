@@ -1,5 +1,4 @@
-﻿using System;
-using PrimeTween;
+﻿using PrimeTween;
 using TMPro;
 using UnityEngine;
 using VTuber.Core.Foundation;
@@ -9,13 +8,13 @@ namespace VTuber.BattleSystem.Core.KPIs.UI
 {
     public class VKPIUI : VUIBehaviour
     {
-        public uint ID { get; private set; }
-        [SerializeField] TMP_Text text;
+        [SerializeField] private TMP_Text text;
+        private int _abilityIndex;
+        private string _abilityName;
         private string _eventName;
         private int _requiredAmount;
-        private int count = 0;
-        private string _abilityName;
-        private int _abilityIndex;
+        private int count;
+        public uint ID { get; private set; }
 
         public void Initialize(VKPI kpi)
         {
@@ -24,28 +23,25 @@ namespace VTuber.BattleSystem.Core.KPIs.UI
             _requiredAmount = kpi.RequiredAmount;
             _abilityName = kpi.AbilityName;
             _abilityIndex = kpi.AbilityIndex;
-            
-            if (kpi.EventType != VEventType.Stream)
-            {
-                _abilityName = "";
-            }
-            
+
+            if (kpi.EventType != VEventType.Stream) _abilityName = "";
+
             ResetText();
         }
-        
+
         public void SetText(int count, bool satisfied)
         {
-            if(count == this.count) return;
+            if (count == this.count) return;
             this.count = count;
             text.text = $"安排{_abilityName}{_eventName}: {count}/{_requiredAmount}";
             if (satisfied)
                 text.color = Color.green;
             else
                 text.color = Color.red;
-            
+
             Tween.PunchScale(transform, Vector3.one * 1.3f, 0.3f);
         }
-        
+
         public void ResetText()
         {
             text.text = $"安排{_abilityName}{_eventName}: 0/{_requiredAmount}";

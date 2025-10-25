@@ -6,7 +6,6 @@ namespace VTuber.Core.RaisingEffect
     {
         public VRaisingSkipEventEffectConfiguration(CellRange row) : base(row)
         {
-            
         }
 
         public override VRaisingEffect CreateEffect(string parameter, string upgradedParameter)

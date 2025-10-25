@@ -5,7 +5,8 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VCardLiveTypeCondition : VCardCondition
     {
-        private string _liveType;
+        private readonly string _liveType;
+
         public VCardLiveTypeCondition(CellRange row) : base(row)
         {
             _liveType = row.Columns[VCardConditionHeaderIndex.Condition].Value.Trim();

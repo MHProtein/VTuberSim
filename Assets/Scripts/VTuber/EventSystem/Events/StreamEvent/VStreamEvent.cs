@@ -2,58 +2,52 @@
 using Tutorial.Script;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Effect.Conditions;
-using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
-using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 
 namespace VTuber.ScheduleSystem.Events
 {
     public class VStreamEvent : VDialogueEvent
     {
-        public int InitialTurnCount { get; private set; }
-        public int TargetPopularity { get; private set; } = 0;
-        public int InitialViewers { get; private set; } = 0;
-        public int SuccessEvent { get; private set; } = 0;
-        public int FailureEvent { get; private set; } = 0;
-        
-        public int ExtraTargetPopularity { get; private set; }
-        public int AbilityBonus { get; private set; }
-        
-        public int MainAttributeIndex { get; private set; }
-        
-        public List<int> AbilityTurnCounts { get; private set; }
-        
-        public List<VKPI> Kpis { get; private set; }
-        
-        public bool IsTutorial => _isTutorial;
-        private bool _isTutorial;
-        
-        public List<VAttributeCondition> TutorialConditions => _tutorialConditions;
-        private List<VAttributeCondition> _tutorialConditions;
-        
-        public List<uint> TutorialDeck => _tutorialDeck;
-        private List<uint> _tutorialDeck;
-        
-        public Dictionary<int, List<uint>> TutorialTurnHandCards => _tutorialTurnHandCards;
-        private Dictionary<int, List<uint>> _tutorialTurnHandCards;
-        
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
         {
             Initialize(config);
-            _isTutorial = false;
+            IsTutorial = false;
         }
-        
-        public VStreamEvent(VTutorialStreamEventConfiguration config) : base(VDataManager.Instance.GetStreamEventConfigurationByID(config.baseEventID))
+
+        public VStreamEvent(VTutorialStreamEventConfiguration config) : base(
+            VDataManager.Instance.GetStreamEventConfigurationByID(config.baseEventID))
         {
             Initialize(_config as VStreamEventConfiguration);
-            _isTutorial = true;
-            
-            _tutorialConditions = config.conditions;
-            _tutorialDeck = config.deck;
-            _tutorialTurnHandCards = config.turnHandCards;
+            IsTutorial = true;
+
+            TutorialConditions = config.conditions;
+            TutorialDeck = config.deck;
+            TutorialTurnHandCards = config.turnHandCards;
         }
+
+        public int InitialTurnCount { get; private set; }
+        public int TargetPopularity { get; private set; }
+        public int InitialViewers { get; private set; }
+        public int SuccessEvent { get; private set; }
+        public int FailureEvent { get; private set; }
+
+        public int ExtraTargetPopularity { get; private set; }
+        public int AbilityBonus { get; private set; }
+
+        public int MainAttributeIndex { get; private set; }
+
+        public List<int> AbilityTurnCounts { get; private set; }
+
+        public List<VKPI> Kpis { get; private set; }
+
+        public bool IsTutorial { get; }
+
+        public List<VAttributeCondition> TutorialConditions { get; }
+
+        public List<uint> TutorialDeck { get; }
+
+        public Dictionary<int, List<uint>> TutorialTurnHandCards { get; }
 
         private void Initialize(VStreamEventConfiguration config)
         {

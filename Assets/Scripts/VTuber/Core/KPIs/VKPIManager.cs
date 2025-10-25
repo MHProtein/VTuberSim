@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using VTuber.BattleSystem.Core.KPIs.UI;
 using VTuber.Core.KPIs.UI;
-using VTuber.Core.Managers;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.BattleSystem.Core.KPIs
@@ -10,12 +8,12 @@ namespace VTuber.BattleSystem.Core.KPIs
     {
         public List<VKPI> phaseKPIs;
     }
-    
+
     public class VKPIManager
     {
-        protected List<VKPI> permanentKPIs = new List<VKPI>();
-        protected List<VKPI> phaseKPIs = new List<VKPI>();
-        public uint idDistributor = 0;
+        public uint idDistributor;
+        protected List<VKPI> permanentKPIs = new();
+        protected List<VKPI> phaseKPIs = new();
 
         public VKPIManagerSaveData Save()
         {
@@ -27,46 +25,37 @@ namespace VTuber.BattleSystem.Core.KPIs
 
         public void Load(VKPIManagerSaveData saveData)
         {
-            foreach (var kpi in saveData.phaseKPIs)
-            {
-                AddPhaseKPI(kpi);
-            }
+            foreach (var kpi in saveData.phaseKPIs) AddPhaseKPI(kpi);
         }
-        
+
         public void AddPermanentKPI(VKPI kpi)
         {
             permanentKPIs.Add(kpi);
             kpi.OnAdded(idDistributor++);
         }
-        
+
         public void AddPermanentKPI(List<VKPI> kpis)
         {
-            foreach (var kpi in kpis)
-            {
-                AddPermanentKPI(kpi);
-            }
+            foreach (var kpi in kpis) AddPermanentKPI(kpi);
         }
-        
+
         public void AddPhaseKPI(List<VKPI> kpis)
         {
-            foreach (var kpi in kpis)
-            {
-                AddPhaseKPI(kpi);
-            }
+            foreach (var kpi in kpis) AddPhaseKPI(kpi);
         }
-        
+
         public void AddPhaseKPI(VKPI kpi)
         {
             phaseKPIs.Add(kpi);
             kpi.OnAdded(idDistributor++);
         }
-        
+
         public void RemovePermanentKPI(VKPI kpi)
         {
             kpi.OnRemoved();
             permanentKPIs.Remove(kpi);
         }
-        
+
         public void RemovePhaseKPI(VKPI kpi)
         {
             kpi.OnRemoved();
@@ -75,33 +64,24 @@ namespace VTuber.BattleSystem.Core.KPIs
 
         public void ClearPhaseKPIs()
         {
-            foreach (var kpi in phaseKPIs)
-            {
-                kpi.OnRemoved();
-            }
+            foreach (var kpi in phaseKPIs) kpi.OnRemoved();
             phaseKPIs.Clear();
         }
-        
+
         public bool CheckKPIs(Dictionary<VEventType, int> events, List<int> streamEvents)
         {
-            bool satisfied = true;
+            var satisfied = true;
             foreach (var kpi in permanentKPIs)
-            {
                 if (!kpi.Check(events, streamEvents))
-                {
                     satisfied = false;
-                }
-            }
+
             foreach (var kpi in phaseKPIs)
-            {
                 if (!kpi.Check(events, streamEvents))
-                {
                     satisfied = false;
-                }
-            }
+
             return satisfied;
         }
-        
+
         public void ResetKPIUIs()
         {
             VKPIUIManager.Instance.ResetKPIUIs();
@@ -114,10 +94,7 @@ namespace VTuber.BattleSystem.Core.KPIs
 
         public void ClearKPIs()
         {
-            foreach (var kpi in permanentKPIs)
-            {
-                kpi.OnRemoved();
-            }
+            foreach (var kpi in permanentKPIs) kpi.OnRemoved();
             permanentKPIs.Clear();
             ClearPhaseKPIs();
         }

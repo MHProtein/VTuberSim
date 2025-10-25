@@ -13,13 +13,15 @@ namespace VTuber.Relic
             Value,
             Delta
         }
-        
+
         public VRaisingAttributeConditionType conditionType;
         public int targetValue;
 
         public VRaisingRelicAttributeCondition(CellRange row) : base(row)
         {
-            conditionType = Enum.Parse<VRaisingAttributeConditionType>(row.Columns[VRaisingRelicConditionHeaderIndex.ConditionType].Value.Trim());
+            conditionType =
+                Enum.Parse<VRaisingAttributeConditionType>(row.Columns[VRaisingRelicConditionHeaderIndex.ConditionType]
+                    .Value.Trim());
             targetValue = int.Parse(row.Columns[VRaisingRelicConditionHeaderIndex.Value].Value.Trim());
         }
 
@@ -35,7 +37,5 @@ namespace VTuber.Relic
 
             return false;
         }
-        
-        
     }
 }

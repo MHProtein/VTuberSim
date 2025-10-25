@@ -317,5 +317,5 @@ MonoBehaviour:
     operatorType: 3
     description: 
     attributeName: BAPopularity
-    targetValue: 50000
+    targetValue: 50
   deck: 000000000100000002000000030000000400000005000000060000000800000009000000

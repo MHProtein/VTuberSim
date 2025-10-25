@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Spire.Xls;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.Foundation;
-using VTuber.Core.StringToEnum;
 using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Effect.Conditions
@@ -19,6 +17,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
         public const int TargetValue = 5;
         public const int TargetDelta = 6;
     }
+
     [Serializable]
     public abstract class VEffectCondition
     {
@@ -39,6 +38,5 @@ namespace VTuber.BattleSystem.Effect.Conditions
         {
             return Convert.ToInt32(str);
         }
-        
     }
 }

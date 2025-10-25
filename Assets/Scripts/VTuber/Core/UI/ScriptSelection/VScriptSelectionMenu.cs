@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using PrimeTween;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
 
@@ -20,14 +18,14 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private Button confirmButton;
         [SerializeField] private Button returnButton;
         [SerializeField] private GameObject scriptUIPrefab;
-        private float contentSpacing;
+        public Action<VScriptConfiguration> _confirmAction;
+        private bool _firstTimeShow;
+        private int _index;
+        private Vector3 _originalPosition;
+        private Action _returnAction;
         private List<VScriptConfiguration> _scripts;
         private List<VScriptSelectionUI> _scriptUIs;
-        private int _index;
-        public Action<VScriptConfiguration> _confirmAction;
-        private Action _returnAction;
-        private bool _firstTimeShow;
-        private Vector3 _originalPosition;
+        private float contentSpacing;
 
         protected override void Awake()
         {
@@ -48,14 +46,15 @@ namespace VTuber.BattleSystem.Core.UI
         private void Confirm()
         {
             _confirmAction?.Invoke(_scripts[_index]);
-        }        
-        
+        }
+
         public void Return()
         {
             _returnAction?.Invoke();
         }
 
-        public void Initialize(List<VScriptConfiguration> scripts, Action<VScriptConfiguration> confirmAction, Action returnAction)
+        public void Initialize(List<VScriptConfiguration> scripts, Action<VScriptConfiguration> confirmAction,
+            Action returnAction)
         {
             content.transform.localPosition = _originalPosition;
             _firstTimeShow = true;
@@ -85,14 +84,12 @@ namespace VTuber.BattleSystem.Core.UI
             {
                 _firstTimeShow = false;
                 confirmButton.interactable = false;
-                Tween.LocalPosition(content.transform, content.transform.localPosition - new Vector3(contentSpacing, 0, 0), 0.5f).OnComplete(
-                    () =>
-                    {
-                        confirmButton.interactable = true;
-                    });
+                Tween.LocalPosition(content.transform,
+                    content.transform.localPosition - new Vector3(contentSpacing, 0, 0), 0.5f).OnComplete(
+                    () => { confirmButton.interactable = true; });
             }
         }
-        
+
         public void Hide()
         {
             ui.SetActive(false);
@@ -104,7 +101,8 @@ namespace VTuber.BattleSystem.Core.UI
             confirmButton.interactable = false;
             nextButton.interactable = false;
             prevButton.interactable = false;
-            Tween.LocalPosition(content.transform, content.transform.localPosition - new Vector3(contentSpacing, 0, 0), 0.5f).OnComplete(
+            Tween.LocalPosition(content.transform, content.transform.localPosition - new Vector3(contentSpacing, 0, 0),
+                0.5f).OnComplete(
                 () =>
                 {
                     nextButton.interactable = _index < _scripts.Count - 1;
@@ -119,7 +117,8 @@ namespace VTuber.BattleSystem.Core.UI
             confirmButton.interactable = false;
             nextButton.interactable = false;
             prevButton.interactable = false;
-            Tween.LocalPosition(content.transform, content.transform.localPosition + new Vector3(contentSpacing, 0, 0), 0.5f).OnComplete(
+            Tween.LocalPosition(content.transform, content.transform.localPosition + new Vector3(contentSpacing, 0, 0),
+                0.5f).OnComplete(
                 () =>
                 {
                     confirmButton.interactable = true;
@@ -130,10 +129,7 @@ namespace VTuber.BattleSystem.Core.UI
 
         public void Clear()
         {
-            foreach (var ui in _scriptUIs)
-            {
-                Destroy(ui.gameObject);
-            }
+            foreach (var ui in _scriptUIs) Destroy(ui.gameObject);
             _scriptUIs.Clear();
         }
     }

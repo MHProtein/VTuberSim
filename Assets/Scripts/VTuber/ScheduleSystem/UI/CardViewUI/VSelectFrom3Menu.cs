@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
-using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
@@ -15,14 +14,14 @@ namespace VTuber.ScheduleSystem.UI
     public class VSelectFrom3CardsMenu : VUIBehaviour, ISelectableCardMenu
     {
         [SerializeField] private GameObject cardPrefab;
-        private List<VSelectCardCardUI> _cardUIs;
-        private VSelectCardCardUI _selectedCardUI;
 
         [SerializeField] private Button confirmButton;
-        private Action<VCard> _confirmAction;
 
         public List<Transform> positions;
         public Transform spawnPosition;
+        private List<VSelectCardCardUI> _cardUIs;
+        private Action<VCard> _confirmAction;
+        private VSelectCardCardUI _selectedCardUI;
 
         protected override void Awake()
         {
@@ -30,11 +29,23 @@ namespace VTuber.ScheduleSystem.UI
             confirmButton.onClick.AddListener(Confirm);
         }
 
+        public void Select(VSelectCardCardUI cardUI)
+        {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            confirmButton.interactable = true;
+            if (_selectedCardUI != null && _selectedCardUI == cardUI)
+                return;
+
+            if (_selectedCardUI is not null)
+                _selectedCardUI.UnSelect();
+            _selectedCardUI = cardUI;
+        }
+
         public void Initialize(List<VCard> cards, Action<VCard> confirmAction)
         {
             confirmButton.interactable = false;
             _confirmAction = confirmAction;
-            int i = 0;
+            var i = 0;
             _cardUIs = new List<VSelectCardCardUI>();
             foreach (var card in cards)
             {
@@ -42,17 +53,17 @@ namespace VTuber.ScheduleSystem.UI
                 var cardItem = item.AddComponent<VSelectCardCardUI>();
                 var cardUI = cardItem.GetComponent<VCardUI>();
                 cardUI.SetCard(card);
-                
+
                 cardItem.Initialize(cardUI, this, false);
                 _cardUIs.Add(cardItem);
-                
+
                 cardUI.transform.localScale = Vector3.zero;
                 cardUI.transform.position = spawnPosition.position;
                 Tween.Position(cardUI.transform, positions[i].position, 0.5f);
-                Tween.Scale(cardUI.transform, Vector3.one * 1.5f, 0.5f, Ease.OutBounce).OnComplete((() =>
+                Tween.Scale(cardUI.transform, Vector3.one * 1.5f, 0.5f, Ease.OutBounce).OnComplete(() =>
                 {
                     cardItem.SetSelectable(true);
-                }));
+                });
                 i++;
             }
         }
@@ -60,26 +71,11 @@ namespace VTuber.ScheduleSystem.UI
         public void Confirm()
         {
             _confirmAction?.Invoke(_selectedCardUI.Card);
-            
-            foreach (var cardUI in _cardUIs)
-            {
-                Destroy(cardUI.gameObject);
-            }
+
+            foreach (var cardUI in _cardUIs) Destroy(cardUI.gameObject);
             _cardUIs.Clear();
             _selectedCardUI = null;
             VEventSystemUI.Instance.CloseSelectFrom3Menu();
-        }
-        
-        public void Select(VSelectCardCardUI cardUI)
-        {
-            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
-            confirmButton.interactable = true;
-            if (_selectedCardUI != null && _selectedCardUI == cardUI)
-                return;
-            
-            if(_selectedCardUI is not null)
-                _selectedCardUI.UnSelect();
-            _selectedCardUI = cardUI;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace VTuber.CoopSystem
 {
     public class VCooperatorManager
     {
-        List<VCooperator> _cooperators = new List<VCooperator>();
+        private readonly List<VCooperator> _cooperators = new();
 
         public void AddCooperator(VCooperatorConfiguration configuration)
         {
@@ -23,18 +23,22 @@ namespace VTuber.CoopSystem
             cooperator.OnEnable();
         }
 
-    public List<VCoopEventItem> GetCoopEvents(List<Vector2Int> occupiedPositions)
+        public List<VCoopEventItem> GetCoopEvents(List<Vector2Int> occupiedPositions)
         {
-            List<VCoopEventItem> events = new List<VCoopEventItem>();
+            var events = new List<VCoopEventItem>();
             foreach (var cooperator in _cooperators)
             {
                 events.AddRange(cooperator.GenerateCoopEventPositions(occupiedPositions));
                 occupiedPositions.AddRange(events.Select(x => x.position).ToList());
             }
+
             return events;
         }
-        
-        public VCooperator GetCooperator(uint id) => _cooperators.Find(x => x.Id == id);
+
+        public VCooperator GetCooperator(uint id)
+        {
+            return _cooperators.Find(x => x.Id == id);
+        }
 
         public List<VCooperator> GetCooperators()
         {

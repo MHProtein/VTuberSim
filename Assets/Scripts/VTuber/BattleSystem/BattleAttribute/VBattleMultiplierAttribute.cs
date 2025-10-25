@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VColorSaveData
     {
-        public float r;
-        public float g;
-        public float b;
         public float a;
+        public float b;
+        public float g;
+        public float r;
 
-        public VColorSaveData() { }
+        public VColorSaveData()
+        {
+        }
 
         public VColorSaveData(Color color)
         {
@@ -27,10 +28,13 @@ namespace VTuber.BattleSystem.BattleAttribute
             return new Color(r, g, b, a);
         }
     }
+
     public class VBattleMultiplierAttribute : VBattleAttribute
     {
         public readonly Color color;
-        public VBattleMultiplierAttribute(int value, Color color) : base(value, true, VBattleEventKey.OnMultiplierChange)
+
+        public VBattleMultiplierAttribute(int value, Color color) : base(value, true,
+            VBattleEventKey.OnMultiplierChange)
         {
             this.color = color;
         }
@@ -64,10 +68,9 @@ namespace VTuber.BattleSystem.BattleAttribute
                 { "MaxValue", _maxValue }
             };
             VBattleRootEventCenter.Instance.Raise(_eventKey, messageDict);
-            
+
             messageDict.Add("AttributeName", AttributeName);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnAttributeValueChange, messageDict);
         }
-
     }
 }

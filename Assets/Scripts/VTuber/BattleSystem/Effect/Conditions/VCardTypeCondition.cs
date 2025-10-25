@@ -8,7 +8,7 @@ namespace VTuber.BattleSystem.Effect.Conditions
 {
     public class VCardTypeCondition : VEffectCondition
     {
-        private string _targetValue;
+        private readonly string _targetValue;
 
         public VCardTypeCondition(CellRange row) : base(row)
         {
@@ -22,15 +22,12 @@ namespace VTuber.BattleSystem.Effect.Conditions
                 VDebug.Log($"条件 {id} 未通过：消息中未找到 'Card' 键。");
                 return false;
             }
-            bool result = _targetValue.Equals(((VCard)message["Card"]).CardType);
+
+            var result = _targetValue.Equals(((VCard)message["Card"]).CardType);
             if (result)
-            {
                 VDebug.Log($"条件 {id} 通过：卡牌类型为 {_targetValue}");
-            }
             else
-            {
                 VDebug.Log($"条件 {id} 未通过：卡牌类型不为 {_targetValue}");
-            }
             return result;
         }
     }

@@ -13,28 +13,26 @@ namespace VTuber.Character.Attributes
     [Serializable]
     public struct VRangeValueMap<T>
     {
-        [HorizontalGroup]
-        public int from;
-        [HorizontalGroup]
-        public int to;
-        [HorizontalGroup]
-        public T value;
-        
+        [HorizontalGroup] public int from;
+        [HorizontalGroup] public int to;
+        [HorizontalGroup] public T value;
+
         public bool IsInRange(int v)
         {
-            if(to == -1)
+            if (to == -1)
                 return v >= from;
             return v >= from && v <= to;
         }
     }
-    
+
     public class VAbilityAttribute : VCharacterAttribute
     {
         public readonly Color color;
         private List<VRangeValueMap<float>> _abilityGainFromBattleRates;
-        public VAbilityAttribute(VCharacterAttributeConfiguration configuration, 
-            List<VRangeValueMap<float>> abilityGainFromBattleRates, Color color, int initialValue, 
-            VRaisingEventKey eventKey = VRaisingEventKey.Default, int maxValue = Int32.MaxValue, 
+
+        public VAbilityAttribute(VCharacterAttributeConfiguration configuration,
+            List<VRangeValueMap<float>> abilityGainFromBattleRates, Color color, int initialValue,
+            VRaisingEventKey eventKey = VRaisingEventKey.Default, int maxValue = int.MaxValue,
             int minValue = 0, bool isPercentage = false)
             : base(configuration, initialValue, eventKey, maxValue, minValue, isPercentage)
         {
@@ -52,10 +50,8 @@ namespace VTuber.Character.Attributes
                 float gainEfficiency = 0;
                 if (_attributeManager.TryGetAttributeValue(AttributeName + "GainEfficiency",
                         out var value, out var isPercentage))
-                {
                     gainEfficiency = value / 100f;
-                }
-                
+
                 delta = VMathUtils.FloatToInt(delta * gainEfficiency);
             }
 
@@ -63,21 +59,18 @@ namespace VTuber.Character.Attributes
             VDebug.Log($"Added {delta} to {AttributeName}, new value: {Value}");
             SendEvent(Value, delta, true);
         }
-        
+
         public override KeyValuePair<string, VBattleAttribute> ConvertToBattleAttribute()
         {
             float conversionRate = 0;
             if (_attributeManager.TryGetAttribute(AttributeName + "ConversionRatio",
                     out var attribute))
-            {
                 if (attribute is VConversionRatioAttribute conversionRatioAttribute)
-                {
                     conversionRate = conversionRatioAttribute.GetValue();
-                }
-            }
-            
+
             return new KeyValuePair<string, VBattleAttribute>(_configuration.battleAttributeName,
-                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType, VMathUtils.FloatToInt(Value * conversionRate * 100.0f), color));
+                (VBattleAttribute)Activator.CreateInstance(BattleAttributeType,
+                    VMathUtils.FloatToInt(Value * conversionRate * 100.0f), color));
         }
 
         public override void ConvertToAttribute(Dictionary<string, VBattleAttribute> battleAttributes)

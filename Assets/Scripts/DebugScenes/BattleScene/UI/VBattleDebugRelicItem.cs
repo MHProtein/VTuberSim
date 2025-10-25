@@ -12,33 +12,32 @@ namespace DebugScenes.BattleScene.UI
         [SerializeField] private TMP_Text relicName;
         [SerializeField] private TMP_Text relicDescription;
         [SerializeField] private Image background;
-        
-        public VRelic Relic => _relic;
-        private VRelic _relic;
         private VBattleDebugRelicList _relicList;
-        
-        public bool IsSelected => _isSelected;
-        private bool _isSelected;
-        public void Initialize(VRelic relic, VBattleDebugRelicList relicList)
-        {
-            relicName.text = relic.GetRelicName();
-            relicDescription.text = relic.Description;
-            _relic = relic;
-        }
+
+        public VRelic Relic { get; private set; }
+
+        public bool IsSelected { get; private set; }
 
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            _isSelected = !_isSelected;
-            if(_isSelected)
+            IsSelected = !IsSelected;
+            if (IsSelected)
                 background.color = Color.cyan;
             else
                 background.color = Color.white;
         }
 
+        public void Initialize(VRelic relic, VBattleDebugRelicList relicList)
+        {
+            relicName.text = relic.GetRelicName();
+            relicDescription.text = relic.Description;
+            Relic = relic;
+        }
+
         public void Unselect()
         {
-            _isSelected = false;
+            IsSelected = false;
             background.color = Color.white;
         }
     }

@@ -4,7 +4,6 @@
     {
         protected VModifierEffect(VEffectConfiguration configuration) : base(configuration)
         {
-            
         }
 
         public abstract VModifierEffectSaveData Save();

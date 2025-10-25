@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 
@@ -13,20 +12,17 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSkipEvent, new Dictionary<string, object>()
-            {
-            });
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSkipEvent, new Dictionary<string, object>());
         }
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()
         {
-            
         }
+
         public override string GetParameter()
         {
             return "";

@@ -1,7 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 
@@ -22,6 +21,42 @@ namespace VTuber.Consumable
         {
             base.Awake();
             descriptionPanel.anchoredPosition = Vector3.zero;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (_slots.IsSubMenuActive)
+            {
+                _slots.CloseSubMenu();
+                return;
+            }
+
+            if (consumableUI.HasConsumable())
+            {
+                useButton.interactable = consumableUI.CanUse();
+                eventData.Use();
+
+                descriptionPanel.gameObject.SetActive(true);
+                descriptionPanel.transform.SetParent(subMenu.transform);
+                descriptionPanel.anchoredPosition = Vector3.zero;
+
+                subMenu.SetActive(true);
+                _slots.OnSubMenuOn();
+            }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (_slots.IsSubMenuActive)
+                return;
+            descriptionPanel.gameObject.SetActive(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (_slots.IsSubMenuActive)
+                return;
+            descriptionPanel.gameObject.SetActive(false);
         }
 
         public void Init(VConsumableSlotsUI slots)
@@ -65,32 +100,10 @@ namespace VTuber.Consumable
             descriptionText.text = "";
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {          
-            if (_slots.IsSubMenuActive)
-            {
-                _slots.CloseSubMenu();
-                return;
-            }
-
-            if (consumableUI.HasConsumable())
-            {
-                useButton.interactable = consumableUI.CanUse();
-                eventData.Use();
-                
-                descriptionPanel.gameObject.SetActive(true);
-                descriptionPanel.transform.SetParent(subMenu.transform);
-                descriptionPanel.anchoredPosition = Vector3.zero;
-                
-                subMenu.SetActive(true);
-                _slots.OnSubMenuOn();
-            }
-        }
-        
         public void SetSubMenuInactive()
         {
             subMenu.SetActive(false);
-            
+
             descriptionPanel.transform.SetParent(transform);
             descriptionPanel.anchoredPosition = Vector3.zero;
             descriptionPanel.gameObject.SetActive(false);
@@ -99,20 +112,6 @@ namespace VTuber.Consumable
         public bool HasConsumable()
         {
             return consumableUI.HasConsumable();
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            if (_slots.IsSubMenuActive)
-                return;
-            descriptionPanel.gameObject.SetActive(true);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            if (_slots.IsSubMenuActive)
-                return;
-            descriptionPanel.gameObject.SetActive(false);
         }
 
         public VConsumable GetConsumable()

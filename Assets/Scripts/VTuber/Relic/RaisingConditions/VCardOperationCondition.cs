@@ -14,13 +14,14 @@ namespace VTuber.Relic
             Rarity
         }
 
-        private VCardAttributeType _cardAttributeType;
-        private string _targetValue;
+        private readonly VCardAttributeType _cardAttributeType;
+        private readonly string _targetValue;
 
         public VCardOperationRelicCondition(CellRange row) : base(row)
         {
-            
-            _cardAttributeType = Enum.Parse<VCardAttributeType>(row.Columns[VRaisingRelicConditionHeaderIndex.ConditionType].Value.Trim());
+            _cardAttributeType =
+                Enum.Parse<VCardAttributeType>(
+                    row.Columns[VRaisingRelicConditionHeaderIndex.ConditionType].Value.Trim());
             _targetValue = row.Columns[VRaisingRelicConditionHeaderIndex.Value].Value.Trim();
         }
 

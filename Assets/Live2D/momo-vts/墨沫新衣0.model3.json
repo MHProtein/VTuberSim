@@ -1,27 +1,27 @@
 {
-	"Version": 3,
-	"FileReferences": {
-		"Moc": "墨沫新衣0.moc3",
-		"Textures": [
-			"墨沫新衣0.8192/texture_00.png",
-			"墨沫新衣0.8192/texture_01.png"
-		],
-		"Physics": "墨沫新衣0.physics3.json",
-		"DisplayInfo": "墨沫新衣0.cdi3.json"
-	},
-	"Groups": [
-		{
-			"Target": "Parameter",
-			"Name": "EyeBlink",
-			"Ids": [
-				"ParamEyeLOpen",
-				"ParamEyeROpen"
-			]
-		},
-		{
-			"Target": "Parameter",
-			"Name": "LipSync",
-			"Ids": []
-		}
-	]
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "墨沫新衣0.moc3",
+    "Textures": [
+      "墨沫新衣0.8192/texture_00.png",
+      "墨沫新衣0.8192/texture_01.png"
+    ],
+    "Physics": "墨沫新衣0.physics3.json",
+    "DisplayInfo": "墨沫新衣0.cdi3.json"
+  },
+  "Groups": [
+    {
+      "Target": "Parameter",
+      "Name": "EyeBlink",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen"
+      ]
+    },
+    {
+      "Target": "Parameter",
+      "Name": "LipSync",
+      "Ids": []
+    }
+  ]
 }
