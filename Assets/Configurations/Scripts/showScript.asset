@@ -94,7 +94,7 @@ MonoBehaviour:
       Data: 
   scriptName: "\u6D4B\u8BD5\u5267\u672C"
   description: "\u521A\u529E\u5B8C\u51FA\u9053\u56DE\uFF0C\u521A\u521A\u8E0F\u5165\u865A\u62DF\u4E3B\u64AD\u884C\u4E1A\u7684\u4F60\u3002\u5C06\u5982\u4F55\u521B\u9020\u5C5E\u4E8E\u81EA\u5DF1\u7684\u76F4\u64AD\u98CE\u683C\uFF0C\u4ECE\u65E0\u6570\u5C0FV\u4E4B\u4E2D\u6740\u51FA\u91CD\u56F4\u3002"
-  icon: {fileID: 21300000, guid: bfc7205db153a3c49a37d379ea8ab8de, type: 3}
+  icon: {fileID: 21300000, guid: 4940a119ad2217549b2747b7832072fe, type: 3}
   coops:
   - {fileID: 11400000, guid: aba6c02083194394d8c00739e47ac72b, type: 2}
   - {fileID: 11400000, guid: 2b8aa29a530a517498bdd4298770c0a4, type: 2}
@@ -156,7 +156,7 @@ MonoBehaviour:
     name: SSS
   kpis:
   - EventType: 0
-    RequiredAmount: 2
+    RequiredAmount: 1
     AbilityIndex: -1
   phases:
   - phaseName: "\u7B2C\u4E00\u9636\u6BB5"
@@ -164,7 +164,7 @@ MonoBehaviour:
     startEventWeekIndex: 1
     startEventType: 1
     startEventID: 9
-    endEventWeekIndex: 2
+    endEventWeekIndex: 3
     endEventIDs: 040000000500000006000000
     specialEventData:
     - weekIndexForInspector: 0
@@ -302,10 +302,10 @@ MonoBehaviour:
       m_RotationOrder: 4
   - phaseName: "\u7B2C\u4E8C\u9636\u6BB5"
     description: "\u7B2C\u4E8C\u9636\u6BB5"
-    startEventWeekIndex: 3
+    startEventWeekIndex: 4
     startEventType: 6
     startEventID: 10
-    endEventWeekIndex: 4
+    endEventWeekIndex: 6
     endEventIDs: 0700000008000000090000000a000000
     specialEventData:
     - weekIndexForInspector: 0
@@ -342,6 +342,113 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       isPhaseStart: 0
+    decayCurve1:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0.04
+        outSlope: 0.04
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1000
+        value: 40
+        inSlope: 0.016
+        outSlope: 0.016
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 5000
+        value: 80
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    decayCurve2:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1500
+        value: 30
+        inSlope: 0.01
+        outSlope: 0.01
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 5000
+        value: 50
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    decayCurve3:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1500
+        value: 30
+        inSlope: 0.01
+        outSlope: 0.01
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 5000
+        value: 50
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  - phaseName: "\u6700\u540E\u9636\u6BB5"
+    description: 
+    startEventWeekIndex: 7
+    startEventType: 0
+    startEventID: 22
+    endEventWeekIndex: 8
+    endEventIDs: 400000004100000042000000
+    specialEventData: []
     decayCurve1:
       serializedVersion: 2
       m_Curve:
