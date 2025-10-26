@@ -61,6 +61,9 @@ namespace VTuber.ScheduleSystem.UI
         private RectTransform _rectTransform;
         private bool _hasInSchedule = false;
         
+        // Add this field to your VEventUI class to keep track of the last slot hovered over.
+        private VScheduleSlot _lastHoveredSlot = null;
+        
         protected override void Awake()
         {
             parentSlots = new List<VScheduleSlot>();
@@ -281,36 +284,64 @@ namespace VTuber.ScheduleSystem.UI
         {
             if (!_interactable)
                 return;
-            base.UpdateImpl();            
+            base.UpdateImpl();
             if (_isSelected)
             {
+                // This part remains the same: move the UI with the mouse
                 Vector3 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition) + (Vector3)initOffset;
                 mousePosition.z = 0;
                 transform.position = mousePosition;
-                
+
+                // --- NEW AND IMPROVED LOGIC FOR REAL-TIME HIGHLIGHTING ---
                 var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
-                
+                VScheduleSlot currentHoveredSlot = null;
+
+                // Find the slot currently under the mouse
                 foreach (var result in results)
                 {
                     var slot = result.gameObject.GetComponent<VScheduleSlot>();
-                    if (slot is not null)
+                    if (slot != null)
                     {
+                        currentHoveredSlot = slot;
+                        // We also call the existing SetIndicator logic here
                         slot.SetIndicator(_event.Duration, initOffset.y);
                         break;
                     }
                 }
+
+                // Check if we have moved to a new slot
+                if (currentHoveredSlot != _lastHoveredSlot)
+                {
+                    // Turn off the highlight on the slot we just left
+                    _lastHoveredSlot?.HideHighlight();
+
+                    // Ask the new slot to check the condition and highlight itself if needed
+                    currentHoveredSlot?.CheckAndHighlight(_event);
+
+                    // Update the last hovered slot
+                    _lastHoveredSlot = currentHoveredSlot;
+                }
+                // --- END OF NEW LOGIC ---
             }
 
             if (_isSelected && Input.GetMouseButtonUp(0))
             {
+                // When we stop dragging, make sure to clear any active highlight
+                _lastHoveredSlot?.HideHighlight();
+                _lastHoveredSlot = null;
+        
                 OnEndDragging();
             }
         }
+        
+        
 
         public void OnEndDragging()
         {
             _isSelected = false;
             icon.raycastTarget = true;
+            _lastHoveredSlot?.HideHighlight();
+            _lastHoveredSlot = null;
             var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
             if (TryPlaceEvent(results))
             {

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+//dispute rightnow， using vIndicatorAnimationManager to control  BreathingLightEffect
 namespace VTuber.ScheduleSystem.UI.ScheduleCreator
 {
     [RequireComponent(typeof(CanvasGroup))]
