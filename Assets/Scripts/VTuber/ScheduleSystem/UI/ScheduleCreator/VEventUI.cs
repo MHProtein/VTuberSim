@@ -20,6 +20,21 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private TMP_Text costText;
         [SerializeField] private Image costIcon;
+        
+        //  Position Pattern for UI purposes
+        [Header("日程规划条件UI")]
+        [Tooltip("用于容纳所有位置指示器的父对象")]
+        [SerializeField] private GameObject conditionIndicatorsContainer; 
+        [Tooltip("上方向指示器")]
+        [SerializeField] private GameObject upIndicator;
+        [Tooltip("下方向指示器")]
+        [SerializeField] private GameObject downIndicator;
+        [Tooltip("左方向指示器")]
+        [SerializeField] private GameObject leftIndicator;
+        [Tooltip("右方向指示器")]
+        [SerializeField] private GameObject rightIndicator;
+        
+        
         [HideInInspector] public Vector2 initOffset;
         private bool _isSelected;
         private bool _interactable;
@@ -53,6 +68,11 @@ namespace VTuber.ScheduleSystem.UI
             _interactable = true;
             _camera = Camera.main;
             _rectTransform = GetComponent<RectTransform>();
+
+            if (conditionIndicatorsContainer != null)
+            {
+                conditionIndicatorsContainer.SetActive(false);
+            }
         }
 
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
@@ -355,7 +375,7 @@ namespace VTuber.ScheduleSystem.UI
             });
         }
         
-        public void OnPointerEnter(PointerEventData eventData)
+public void OnPointerEnter(PointerEventData eventData)
         {            
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
                 new Dictionary<string, object>()
@@ -363,7 +383,46 @@ namespace VTuber.ScheduleSystem.UI
                     {"Name", _event.EventName},
                     {"Description", _event.Description}
                 });
+
+            // --- MODIFIED LOGIC START ---
+            if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
+
+
+            var pattern = _event.SchedulingCondition.PositionPattern;
+            if (pattern == VSchedulingConditionPositionPatterns.None) return;
+
+            // Activate the main container
+            conditionIndicatorsContainer.SetActive(true);
+            
+            // Deactivate all indicators first to reset state
+            upIndicator?.SetActive(false);
+            downIndicator?.SetActive(false);
+            leftIndicator?.SetActive(false);
+            rightIndicator?.SetActive(false);
+            
+            // Activate indicators based on the pattern
+            switch (pattern)
+            {
+                case VSchedulingConditionPositionPatterns.UD:
+                    upIndicator?.SetActive(true);
+                    downIndicator?.SetActive(true);
+                    break;
+                case VSchedulingConditionPositionPatterns.LR:
+                    leftIndicator?.SetActive(true);
+                    rightIndicator?.SetActive(true);
+                    break;
+                case VSchedulingConditionPositionPatterns.UDLR:
+                case VSchedulingConditionPositionPatterns.All: // Treat 'All' as the 4 cardinal directions
+                    upIndicator?.SetActive(true);
+                    downIndicator?.SetActive(true);
+                    leftIndicator?.SetActive(true);
+                    rightIndicator?.SetActive(true);
+                    break;
+            }
+            // --- MODIFIED LOGIC END ---
         }
+
+
 
         public void OnPointerDown(PointerEventData eventData)
         {
