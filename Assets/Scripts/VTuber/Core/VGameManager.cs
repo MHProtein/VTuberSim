@@ -212,7 +212,7 @@ namespace VTuber.BattleSystem.Core
             if (isTutorialSave)
                 VDataPersistenceManager.Instance.LoadTutorialWeekGame();
             else
-                VDataPersistenceManager.Instance.LoadGame();
+                VDataPersistenceManager.Instance.LoadGame(IsTutorial);
 
             var eventConfigs = new List<VScheduleEventConfiguration>();
             eventConfigs.AddRange(_script.EventList.Select(id =>
@@ -230,7 +230,6 @@ namespace VTuber.BattleSystem.Core
         {
             scheduleCreator.gameObject.SetActive(true);
             _startGameTime = DateTime.UtcNow;
-            VDataPersistenceManager.Instance.NewGame();
 
             if (scriptConfig is VTutorialScriptConfiguration)
             {
@@ -244,6 +243,7 @@ namespace VTuber.BattleSystem.Core
                 _script = new VScript(scriptConfig);
                 scheduleCreator.InitializeCreator(_script);
             }
+            VDataPersistenceManager.Instance.NewGame(IsTutorial);
 
             Character = new VCharacter(characterConfiguration);
             Character.Initialize(false);

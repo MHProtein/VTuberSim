@@ -85,7 +85,7 @@ namespace VTuber.BattleSystem.Core.UI
             //VSave save = VSaveSystem.Load();
             if (VDataPersistenceManager.Instance.SaveData is null)
             {
-                VDataPersistenceManager.Instance.NewGame();
+                VDataPersistenceManager.Instance.NewGame(gameManager.IsTutorial);
                 gameConfigSelection.Begin(_scripts, _characters, _accounts);
                 return;
             }
@@ -94,7 +94,7 @@ namespace VTuber.BattleSystem.Core.UI
             {
                 confirmationMenu.Show("新游戏", new List<string> { newGameConfirmationTwiceText }, () =>
                 {
-                    VDataPersistenceManager.Instance.NewGame();
+                    VDataPersistenceManager.Instance.NewGame(gameManager.IsTutorial);
                     gameConfigSelection.Begin(_scripts, _characters, _accounts);
                 });
             });

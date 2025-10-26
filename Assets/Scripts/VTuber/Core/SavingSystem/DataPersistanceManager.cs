@@ -38,12 +38,14 @@ namespace SlayTheSpire.System.SavingSystem
 
         private void Start()
         {
-            LoadGame();
+            LoadGame(false);
         }
 
-        public void NewGame()
+        public void NewGame(bool isTutorial)
         {
             SaveData = new SaveData();
+            if (!isTutorial)
+                return;
             _tutorialBattleSaveData = new SaveData();
             _tutorialWeekSaveData = new SaveData();
             //GameManager.Instance.newGame = true;
@@ -60,14 +62,14 @@ namespace SlayTheSpire.System.SavingSystem
             return _dataHandler.SaveExists();
         }
 
-        public void LoadGame()
+        public void LoadGame(bool isTutorial)
         {
             if (SaveData is null)
                 SaveData = _dataHandler.Load();
             if (SaveData is null)
             {
                 Debug.Log("No data was found. Initializing data to defaults");
-                NewGame();
+                NewGame(isTutorial);
             }
 
             foreach (var dataPersistence in DataPersistences) dataPersistence.Load(SaveData);
@@ -99,7 +101,9 @@ namespace SlayTheSpire.System.SavingSystem
         }
 
         public void SaveGameTutorialBattle()
-        {
+        {            
+            if (_tutorialBattleSaveData is null)
+                return;
             SavePersistences(_tutorialBattleSaveData);
             _tutorialBattleDataHandler.Save(_tutorialBattleSaveData);
         }
@@ -121,6 +125,8 @@ namespace SlayTheSpire.System.SavingSystem
         
         public void SaveGameTutorialWeek()
         {
+            if (_tutorialWeekSaveData is null)
+                return;
             SavePersistences(_tutorialWeekSaveData);
             _tutorialWeekDataHandler.Save(_tutorialWeekSaveData);
         }

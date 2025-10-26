@@ -295,7 +295,8 @@ namespace VTuber.EventSystem
                     else
                         OnDialogueComplete(null);
                 });
-            dialogueSystem.SetPaused(true);
+            if (_hasDialogue)
+                dialogueSystem.SetPaused(true);
         }
 
         public void ShowSelectConsumableFrom3()
@@ -312,7 +313,8 @@ namespace VTuber.EventSystem
                     else
                         OnDialogueComplete(null);
                 });
-            dialogueSystem.SetPaused(true);
+            if (_hasDialogue)
+                dialogueSystem.SetPaused(true);
         }
 
         public void ShowUpgradeCard()
@@ -328,7 +330,8 @@ namespace VTuber.EventSystem
                     else
                         OnDialogueComplete(null);
                 });
-            dialogueSystem.SetPaused(true);
+            if (_hasDialogue)
+                dialogueSystem.SetPaused(true);
         }
 
         public void ShowSelectCardFrom3()
@@ -344,7 +347,8 @@ namespace VTuber.EventSystem
                     else
                         OnDialogueComplete(null);
                 });
-            dialogueSystem.SetPaused(true);
+            if (_hasDialogue)
+                dialogueSystem.SetPaused(true);
         }
 
         public void ShowSelectCard()
@@ -360,7 +364,8 @@ namespace VTuber.EventSystem
                     else
                         OnDialogueComplete(null);
                 });
-            dialogueSystem.SetPaused(true);
+            if (_hasDialogue)
+                dialogueSystem.SetPaused(true);
         }
 
         private void OnPickPhaseEndingBegin(Dictionary<string, object> messagedict)
@@ -374,7 +379,8 @@ namespace VTuber.EventSystem
             VEventSystemUI.Instance.InitializePhaseEndingSelectionMenu(
                 _currentEvent.Phase.GetPhaseEndingEvents(_character),
                 () => { dialogueSystem.SetPaused(false); });
-            dialogueSystem.SetPaused(true);
+            if (_hasDialogue)
+                dialogueSystem.SetPaused(true);
         }
 
         public void ExitStore()
