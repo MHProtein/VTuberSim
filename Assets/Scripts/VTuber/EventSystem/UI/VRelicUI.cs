@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using VTuber.Relic;
 using TMPro;
 
+//this script have benn dispute
 public class VRelicUI : MonoBehaviour
 {
     [SerializeField] private Image relicIcon;

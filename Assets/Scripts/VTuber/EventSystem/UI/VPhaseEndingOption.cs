@@ -12,6 +12,7 @@ using VTuber.Core.Managers;
 using VTuber.Relic;
 using VTuber.Relic.UI;
 namespace VTuber.Dialogue.UI
+
 {
     public class VPhaseEndingOption : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
