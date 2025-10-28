@@ -338,6 +338,11 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnEndDragging()
         {
+            // 新增：在拖拽结束时，也隐藏指示器
+            if (conditionIndicatorsContainer != null)
+            {
+                conditionIndicatorsContainer.SetActive(false);
+            }
             _isSelected = false;
             icon.raycastTarget = true;
             _lastHoveredSlot?.HideHighlight();
@@ -489,7 +494,11 @@ public void OnPointerEnter(PointerEventData eventData)
         
         public void OnPointerExit(PointerEventData eventData)
         {
-            
+            // 如果指示器容器存在，就将其设为非激活状态
+            if (conditionIndicatorsContainer != null)
+            {
+                conditionIndicatorsContainer.SetActive(false);
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
