@@ -17,6 +17,7 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
 {
+    [Serializable]
     public class VBattleSaveData
     {
         public int abilityBonus;

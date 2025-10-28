@@ -6,6 +6,7 @@ using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Core
 {
+    [Serializable]
     public class VBattleAttributeManagerSaveData
     {
         public List<VBattleAttributeSaveData> attributeSaveDatas;
