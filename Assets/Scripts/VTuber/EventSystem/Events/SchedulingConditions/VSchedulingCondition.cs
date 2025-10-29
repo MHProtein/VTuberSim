@@ -60,6 +60,10 @@ namespace VTuber.ScheduleSystem.Events
         
         private uint _targetID;
         private VEventType _targetType;
+        
+        // Add this line to expose the Position Pattern for UI purposes
+        public VSchedulingConditionPositionPatterns PositionPattern => _positionPattern;
+        
 
         public VSchedulingCondition(CellRange row)
         {
