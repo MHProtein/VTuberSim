@@ -6,6 +6,7 @@ using VTuber.Character;
 using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
+using VTuber.Core.SE;
 
 namespace VTuber.Store
 {
@@ -100,6 +101,7 @@ namespace VTuber.Store
                 { "UpgradeButton", _upgradeButton },
                 { "RefreshCount", _refreshCount }
             });
+            VAudioPlayer.Instance.PlayBGM(VBGMType.Store);
         }
 
         public void LoadItems()

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 
 namespace VTuber.Store.UI
 {

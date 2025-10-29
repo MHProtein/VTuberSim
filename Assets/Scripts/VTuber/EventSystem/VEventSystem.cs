@@ -12,6 +12,7 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.Core;
@@ -132,6 +133,7 @@ namespace VTuber.EventSystem
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e, bool isPhaseStartEvent = false)
         {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_EnterEvent);
             _isPhaseStartEvent = isPhaseStartEvent;
             if (_loaded)
             {
@@ -392,6 +394,7 @@ namespace VTuber.EventSystem
                     { "Event", _currentEvent }
                 });
             _currentEvent = null;
+            VAudioPlayer.Instance.StopBGM();
         }
 
         public void InitializeBattle(bool isPhaseEnding, int initialTurnCount, int targetPopularity,
@@ -499,6 +502,11 @@ namespace VTuber.EventSystem
                 cardActionType = _cardActionType,
                 isInBattle = _isInBattle
             };
+        }
+
+        public void CloseUI()
+        {
+            VEventSystemUI.Instance.CloseUI();
         }
     }
 }

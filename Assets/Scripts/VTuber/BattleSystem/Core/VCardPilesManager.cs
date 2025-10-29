@@ -19,6 +19,7 @@ namespace VTuber.BattleSystem.Core
         public List<uint> HandPile;
         public bool isTutorial;
         public Dictionary<int, List<uint>> tutorialTurnHandCards;
+        public bool isFirstTurn;
     }
 
     public class VCardPilesManager
@@ -81,21 +82,23 @@ namespace VTuber.BattleSystem.Core
                 return new VCardPilesManagerSaveData
                 {
                     isTutorial = _isTutorial,
-                    Deck = Deck.Select(card => card.configID).ToList(),
-                    DrawPile = DrawPile.Select(card => card.configID).ToList(),
-                    DiscardPile = DiscardPile.Select(card => card.configID).ToList(),
-                    HandPile = HandPile.Select(card => card.configID).ToList(),
-                    ExhaustPile = ExhaustPile.Select(card => card.configID).ToList(),
+                    isFirstTurn = _isFirstTurn,
+                    Deck = new List<uint>(Deck.Select(card => card.Id).ToList()) ,
+                    DrawPile = new List<uint>(DrawPile.Select(card => card.Id).ToList()),
+                    DiscardPile = new List<uint>(DiscardPile.Select(card => card.Id).ToList()),
+                    HandPile = new List<uint>(HandPile.Select(card => card.Id).ToList()),
+                    ExhaustPile = new List<uint>(ExhaustPile.Select(card => card.Id).ToList()),
                     tutorialTurnHandCards = _tutorialTurnHandCards
                 };
             return new VCardPilesManagerSaveData
             {
                 isTutorial = _isTutorial,
-                Deck = Deck.Select(card => card.Id).ToList(),
-                DrawPile = DrawPile.Select(card => card.Id).ToList(),
-                DiscardPile = DiscardPile.Select(card => card.Id).ToList(),
-                HandPile = HandPile.Select(card => card.Id).ToList(),
-                ExhaustPile = ExhaustPile.Select(card => card.Id).ToList()
+                isFirstTurn = _isFirstTurn,
+                Deck = new List<uint>(Deck.Select(card => card.Id).ToList()) ,
+                DrawPile = new List<uint>(DrawPile.Select(card => card.Id).ToList()),
+                DiscardPile = new List<uint>(DiscardPile.Select(card => card.Id).ToList()),
+                HandPile = new List<uint>(HandPile.Select(card => card.Id).ToList()),
+                ExhaustPile = new List<uint>(ExhaustPile.Select(card => card.Id).ToList()),
             };
         }
 
@@ -104,6 +107,7 @@ namespace VTuber.BattleSystem.Core
             Clear();
             _isLoad = true;
             _isTutorial = saveData.isTutorial;
+            _isFirstTurn = saveData.isFirstTurn;
             if (_isTutorial)
             {
                 Deck.AddRange(saveData.Deck.Select(VDataManager.Instance.CreateCardByID));

@@ -26,13 +26,20 @@ namespace VTuber.Core.SE
         Battle_EffectApply,
         Raising_AttributeChange,
         Battle_BuffApply,
-        Raising_PlaceEvent
+        Raising_PlaceEvent,
+        Raising_ZoomInOut,
+        Raising_EnterEvent,
     }
 
     public enum VBGMType
     {
         MainMenu,
-        StreamFailure
+        StreamFailure,
+        StreamSuccess,
+        StreamHugeSuccess,
+        Dialog,
+        ScheduleCreation,
+        Store,
     }
 
     public class VAudioPlayer : VSingletonMonobehaviour<VAudioPlayer>
@@ -57,15 +64,21 @@ namespace VTuber.Core.SE
 
         public void PlayStaticSFX(VSFXType sfxType)
         {
-            var sfx = sfxs[sfxType].First();
-            AudioManager.Instance.PlaySound(sfx.soundName, sfx.channel, sfx.volume, sfx.pitch, sfx.loop, sfx.delay);
-            if (sfxType == VSFXType.Battle_BuffApply) VDebug.Log("Battle_BuffApply");
+            if (sfxs.TryGetValue(sfxType, out var sfxList))
+            {
+                var sfx = sfxList.First();
+                AudioManager.Instance.PlaySound(sfx.soundName, sfx.channel, sfx.volume, sfx.pitch, sfx.loop, sfx.delay);
+                if (sfxType == VSFXType.Battle_BuffApply) VDebug.Log("Battle_BuffApply");
+            }
         }
 
         public void PlayBGM(VBGMType bgmType)
         {
-            var bgm = bgms[bgmType].First();
-            AudioManager.Instance.PlaySound(bgm.soundName, bgm.channel, bgm.volume, bgm.pitch, bgm.loop, bgm.delay);
+            if (bgms.TryGetValue(bgmType, out var bgmList))
+            {
+                var bgm = bgmList.First();
+                AudioManager.Instance.PlaySound(bgm.soundName, bgm.channel, bgm.volume, bgm.pitch, bgm.loop, bgm.delay);
+            }
         }
 
         public void StopBGM()

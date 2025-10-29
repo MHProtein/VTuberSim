@@ -8,6 +8,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Consumable;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.EventSystem.UI;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.UI;
@@ -58,6 +59,7 @@ namespace VTuber.Dialogue.UI
         public Tween SetFullScreen()
         {
             _isFullScreen = !_isFullScreen;
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_ZoomInOut);
             if (_isFullScreen)
             {
                 canvas.sortingOrder = 2;
@@ -181,6 +183,12 @@ namespace VTuber.Dialogue.UI
         {
             eventUIWrapper.gameObject.SetActive(false);
             battleUIWrapper.gameObject.SetActive(true);
+        }
+
+        public void CloseUI()
+        {
+            eventUIWrapper.gameObject.SetActive(false);
+            battleUIWrapper.gameObject.SetActive(false);
         }
     }
 }

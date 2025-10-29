@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Character;
+using VTuber.Core.SE;
 using Random = UnityEngine.Random;
 
 public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
@@ -111,13 +112,14 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         _character = character;
         AdjustScrollView();
         //StartCoroutine(StartDialog());
+        VAudioPlayer.Instance.PlayBGM(VBGMType.Dialog);
     }
 
     public void HideMe()
     {
         //StopCoroutine(StartDialog());
         this.gameObject.SetActive(false);
-        
+        VAudioPlayer.Instance.StopBGM();
     }
 
     public void LoadDialog(string dialogName)
