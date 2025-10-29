@@ -202,6 +202,10 @@ namespace VTuber.ScheduleSystem.UI
                 { "Event", _event }
             });
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            
+            
+            // 调用显示指示器
+            ShowConditionIndicators();
         }
         
         public void SetParentBeforeDrag()
@@ -420,42 +424,7 @@ public void OnPointerEnter(PointerEventData eventData)
                     {"Description", _event.Description}
                 });
 
-            // --- MODIFIED LOGIC START ---
-            if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
 
-
-            var pattern = _event.SchedulingCondition.PositionPattern;
-            if (pattern == VSchedulingConditionPositionPatterns.None) return;
-
-            // Activate the main container
-            conditionIndicatorsContainer.SetActive(true);
-            
-            // Deactivate all indicators first to reset state
-            upIndicator?.SetActive(false);
-            downIndicator?.SetActive(false);
-            leftIndicator?.SetActive(false);
-            rightIndicator?.SetActive(false);
-            
-            // Activate indicators based on the pattern
-            switch (pattern)
-            {
-                case VSchedulingConditionPositionPatterns.UD:
-                    upIndicator?.SetActive(true);
-                    downIndicator?.SetActive(true);
-                    break;
-                case VSchedulingConditionPositionPatterns.LR:
-                    leftIndicator?.SetActive(true);
-                    rightIndicator?.SetActive(true);
-                    break;
-                case VSchedulingConditionPositionPatterns.UDLR:
-                case VSchedulingConditionPositionPatterns.All: // Treat 'All' as the 4 cardinal directions
-                    upIndicator?.SetActive(true);
-                    downIndicator?.SetActive(true);
-                    leftIndicator?.SetActive(true);
-                    rightIndicator?.SetActive(true);
-                    break;
-            }
-            // --- MODIFIED LOGIC END ---
         }
 
 
@@ -472,13 +441,18 @@ public void OnPointerEnter(PointerEventData eventData)
                 transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
                 initOffset = transform.position - _camera.ScreenToWorldPoint(Input.mousePosition);
                 _isSelected = true;
-                
+
+                // --- 在这里添加新逻辑 ---
+                // 调用显示指示器的方法
+                ShowConditionIndicators(); 
+                // --- 新逻辑结束 ---
+
                 foreach (var parent in parentSlots)
                 {
                     parent.RemoveItem();
                 }
                 transform.SetAsLastSibling();
-                
+
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>()
                 {
                     { "Event", _event }
@@ -494,11 +468,11 @@ public void OnPointerEnter(PointerEventData eventData)
         
         public void OnPointerExit(PointerEventData eventData)
         {
-            // 如果指示器容器存在，就将其设为非激活状态
-            if (conditionIndicatorsContainer != null)
-            {
-                conditionIndicatorsContainer.SetActive(false);
-            }
+            // // 如果指示器容器存在，就将其设为非激活状态
+            // if (conditionIndicatorsContainer != null)
+            // {
+            //     conditionIndicatorsContainer.SetActive(false);
+            // }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -515,6 +489,43 @@ public void OnPointerEnter(PointerEventData eventData)
         {
             Debug.Log("EndDrag");
         }
-        
+        // VEventUI.cs (在类的任何地方添加这个新方法)
+
+        private void ShowConditionIndicators()
+        {
+            if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
+
+            var pattern = _event.SchedulingCondition.PositionPattern;
+            if (pattern == VSchedulingConditionPositionPatterns.None) return;
+
+            // 激活主容器
+            conditionIndicatorsContainer.SetActive(true);
+
+            // 先全部隐藏，重置状态
+            upIndicator?.SetActive(false);
+            downIndicator?.SetActive(false);
+            leftIndicator?.SetActive(false);
+            rightIndicator?.SetActive(false);
+
+            // 根据模式激活对应的指示器
+            switch (pattern)
+            {
+                case VSchedulingConditionPositionPatterns.UD:
+                    upIndicator?.SetActive(true);
+                    downIndicator?.SetActive(true);
+                    break;
+                case VSchedulingConditionPositionPatterns.LR:
+                    leftIndicator?.SetActive(true);
+                    rightIndicator?.SetActive(true);
+                    break;
+                case VSchedulingConditionPositionPatterns.UDLR:
+                case VSchedulingConditionPositionPatterns.All:
+                    upIndicator?.SetActive(true);
+                    downIndicator?.SetActive(true);
+                    leftIndicator?.SetActive(true);
+                    rightIndicator?.SetActive(true);
+                    break;
+            }
+        }
     }
 }
