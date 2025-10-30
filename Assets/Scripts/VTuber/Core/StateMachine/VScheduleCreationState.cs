@@ -2,6 +2,7 @@
 using SlayTheSpire.System.SavingSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
@@ -18,6 +19,8 @@ namespace VTuber.Core.StateMachine
             base.Enter(state, enterParams);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
 
+            if(stateMachine.isTutorial)
+                VRaisingUI.Instance.SetTips(stateMachine.TutorialScript.CurrentWeekTip);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete(() =>
             {
                 stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
@@ -26,6 +29,7 @@ namespace VTuber.Core.StateMachine
                     new Dictionary<string, object>());
                 VDataPersistenceManager.Instance.SaveGame();
                 VDataPersistenceManager.Instance.SaveGameTutorialWeek();
+                VAudioPlayer.Instance.PlayBGM(VBGMType.ScheduleCreation);
             });
         }
 
@@ -33,6 +37,7 @@ namespace VTuber.Core.StateMachine
         {
             base.Exit(nextState);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(false);
+            VAudioPlayer.Instance.StopBGM();
         }
     }
 }

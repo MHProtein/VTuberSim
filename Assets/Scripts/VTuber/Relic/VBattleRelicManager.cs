@@ -21,6 +21,7 @@ namespace VTuber.Relic
     {
         private readonly List<VBattleRelic> relics;
         public uint idDistributor;
+        
 
         public VBattleRelicManager(VBattle battle, VBattleRelicManagerSaveData saveData)
         {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using SlayTheSpire.System.SavingSystem;
+using Tutorial.Script;
 using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
@@ -17,6 +18,7 @@ using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
 {
+    [Serializable]
     public class VBattleSaveData
     {
         public int abilityBonus;
@@ -71,6 +73,36 @@ namespace VTuber.BattleSystem.Core
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
 
+        #region Managers
+
+        public VBattleAttributeManager BattleAttributeManager => _battleAttributeManager;
+        protected VBattleAttributeManager _battleAttributeManager;
+
+        public VCardPilesManager CardPilesManager => _cardPilesManager;
+        protected VCardPilesManager _cardPilesManager;
+
+        public VBuffManager BuffManager => _buffManager;
+        protected VBuffManager _buffManager;
+
+        public VBattleRelicManager BattleRelicManager { get; private set; }
+
+        #endregion
+
+        #region Attributes
+
+        protected VBattleTurnAttribute _turnAttribute;
+
+        protected VBattlePlayLeftAttribute _playLeftAttribute;
+
+        // private VBattlePopularityAttribute _popularityAttribute;
+        // private VBattleParameterAttribute _parameterAttribute;
+        // private VBattleAttribute _shieldAttribute;
+
+        #endregion
+        
+        private bool _isTutorial;
+        private VTipConfig _tipConfig;
+        
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -166,7 +198,7 @@ namespace VTuber.BattleSystem.Core
 
         public void InitializeBattle(VBattleSaveData saveData, List<AnimationCurve> decayCurves,
             VCharacterAttributeManager characterAttributeManager,
-            VCardLibrary cardLibrary)
+            VCardLibrary cardLibrary, VTipConfig tipConfig)
         {
             VRaisingUI.Instance.SwitchAttributesUIBattle(false);
             VEventSystemUI.Instance.OpenBattleUI();
@@ -187,11 +219,15 @@ namespace VTuber.BattleSystem.Core
             _shouldEndBattle = saveData.shouldEndBattle;
             _battleEnded = saveData.battleEnded;
 
+            _isTutorial = _tutorialConditions is not null;
+            _tipConfig = tipConfig;
+            
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
             {
                 { "TargetPopularity", _targetPopularity },
                 { "ExtraTargetPopularity", _extraTargetPopularity },
-                { "IsPhaseEnding", _isPhaseEnding }
+                { "IsPhaseEnding", _isPhaseEnding },
+                { "TipConfig", tipConfig }
             });
 
             VEventSystemUI.Instance.PlayVideo(() =>
@@ -205,7 +241,6 @@ namespace VTuber.BattleSystem.Core
 
                 _turnAttribute = _battleAttributeManager.BattleAttributes["BATurn"] as VBattleTurnAttribute;
                 _playLeftAttribute = _battleAttributeManager.BattleAttributes["BAPlayLeft"] as VBattlePlayLeftAttribute;
-                BattleRelicManager = new VBattleRelicManager(this, saveData.battleRelicManagerSaveData);
                 _initialized = true;
 
                 if (saveData.playTwiceCard != 0)
@@ -226,7 +261,8 @@ namespace VTuber.BattleSystem.Core
                     { "CharacterAttributeManager", characterAttributeManager },
                     { "BattleAttributeManager", _battleAttributeManager }
                 });
-                InitializeTurn();
+                BattleRelicManager = new VBattleRelicManager(this, saveData.battleRelicManagerSaveData);
+                InitializeTurn(true);
             });
         }
 
@@ -237,7 +273,7 @@ namespace VTuber.BattleSystem.Core
             int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers,
             List<VBattleRelic> relics,
             bool isTutorial = false, List<VAttributeCondition> tutorialConditions = null,
-            List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null)
+            List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null, VTipConfig tipConfig = null)
         {
             _initialized = true;
             _isDebugScene = isDebugScene;
@@ -269,7 +305,9 @@ namespace VTuber.BattleSystem.Core
             _battleAttributeManager.OnEnable();
             _cardPilesManager.OnEnable();
             _buffManager.OnEnable();
+            _tipConfig = tipConfig;
 
+            _isTutorial = _tutorialConditions is not null;
 
             if (isDebugScene)
             {
@@ -283,7 +321,8 @@ namespace VTuber.BattleSystem.Core
             {
                 { "TargetPopularity", _targetPopularity },
                 { "ExtraTargetPopularity", _extraTargetPopularity },
-                { "IsPhaseEnding", _isPhaseEnding }
+                { "IsPhaseEnding", _isPhaseEnding },
+                { "TipConfig", tipConfig }
             });
 
             VEventSystemUI.Instance.PlayVideo(() =>
@@ -339,12 +378,11 @@ namespace VTuber.BattleSystem.Core
                 { "BattleAttributeManager", _battleAttributeManager }
             });
 
-
             foreach (var buff in characterAttributeManager.GetBuffs())
                 if (buff is not null)
                     _buffManager.AddBuff(buff, 1, false, false);
 
-            InitializeTurn();
+            InitializeTurn(false);
         }
 
         public void SetShouldNextCardPlayTwice(bool value)
@@ -438,7 +476,6 @@ namespace VTuber.BattleSystem.Core
                 card.TestCondition(this);
             }
         }
-
 
         private void OnRequestPickCardsFromPile(Dictionary<string, object> messagedict)
         {
@@ -568,10 +605,10 @@ namespace VTuber.BattleSystem.Core
         {
             yield return new WaitForSeconds(delayTime);
 
-            InitializeTurn();
+            InitializeTurn(false);
         }
 
-        private protected void InitializeTurn()
+        private protected void InitializeTurn(bool isLoad)
         {
             if (TurnLeft <= 0)
             {
@@ -579,16 +616,18 @@ namespace VTuber.BattleSystem.Core
                 return;
             }
 
-            if (!_isDebugScene)
-                VDataPersistenceManager.Instance.SaveGame();
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBegin, new Dictionary<string, object>
             {
                 { "TurnLeft", TurnLeft },
                 { "TurnIndex", _turnAttribute.TurnIndex },
                 { "HandSize", configuration.maxHandSize }
             });
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply,
-                new Dictionary<string, object>());
+            
+            if(!isLoad && !_isTutorial)
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply,
+                    new Dictionary<string, object>());
+            if (!_isDebugScene)
+                VDataPersistenceManager.Instance.SaveGame();
         }
 
         private void EndTurn()
@@ -742,6 +781,7 @@ namespace VTuber.BattleSystem.Core
                 { "ReachedExtraTarget", popularityAttribute.Value >= _extraTargetPopularity }
             });
 
+            _tipConfig = null;
             _initialized = false;
             _buffManager.Clear();
             _battleAttributeManager.Clear();
@@ -760,7 +800,7 @@ namespace VTuber.BattleSystem.Core
         {
             var save = VDataPersistenceManager.Instance.LoadTutorialBattleSave();
 
-            InitializeBattle(save.battleSaveData, _decayCurves, _characterAttributeManager, null);
+            InitializeBattle(save.battleSaveData, _decayCurves, _characterAttributeManager, null, _tipConfig);
         }
 
         private bool TestTutorialConditions()
@@ -851,30 +891,6 @@ namespace VTuber.BattleSystem.Core
             Redraw();
         }
 
-        #region Managers
 
-        public VBattleAttributeManager BattleAttributeManager => _battleAttributeManager;
-        protected VBattleAttributeManager _battleAttributeManager;
-
-        public VCardPilesManager CardPilesManager => _cardPilesManager;
-        protected VCardPilesManager _cardPilesManager;
-
-        public VBuffManager BuffManager => _buffManager;
-        protected VBuffManager _buffManager;
-
-        public VBattleRelicManager BattleRelicManager { get; private set; }
-
-        #endregion
-
-        #region Attributes
-
-        protected VBattleTurnAttribute _turnAttribute;
-
-        protected VBattlePlayLeftAttribute _playLeftAttribute;
-        // private VBattlePopularityAttribute _popularityAttribute;
-        // private VBattleParameterAttribute _parameterAttribute;
-        // private VBattleAttribute _shieldAttribute;
-
-        #endregion
     }
 }

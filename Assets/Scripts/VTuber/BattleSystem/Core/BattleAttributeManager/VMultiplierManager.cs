@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace VTuber.BattleSystem.Core
 {
+    [Serializable]
     public class VMultiplierManagerSaveData
     {
         public int currentTurnIndex;
@@ -74,7 +75,7 @@ namespace VTuber.BattleSystem.Core
         {
             return new VMultiplierManagerSaveData
             {
-                multiplierSequence = multiplierSequence,
+                multiplierSequence = new List<int>(multiplierSequence),
                 currentTurnIndex = _currentTurnIndex
             };
         }

@@ -8,12 +8,20 @@ using VTuber.Core.ScriptSystem;
 namespace Tutorial.Script
 {
     [Serializable]
+    public class VTipConfig
+    {
+        public string title;
+        [TextArea]public string description;
+        public Sprite image;
+    }
+    [Serializable]
     public class VTutorialWeek
     {
         public int weekID;
         [LabelText("每周可使用事件")] public List<uint> eventIDs;
         [LabelText("每周可使用直播事件")] public List<uint> streamEventIDs;
         [LabelText("周结束条件")] public List<VTutorialWeekCondition> conditions;
+        [LabelText("周提示")] public VTipConfig tip;
 
         public bool IsAllConditionsTrue(VCharacter character)
         {

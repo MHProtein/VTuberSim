@@ -105,7 +105,7 @@ namespace VTuber.BattleSystem.UI
             var relic = displayingRelics.Find(ui => ui.Relic.Id == id);
             if (relic == null) relic = hiddenRelics.Find(ui => ui.Relic.Id == id);
 
-            relic.UpdateValue();
+            if(relic is not null) relic.UpdateValue();
         }
 
         private void OnRelicRemoved(Dictionary<string, object> msg)

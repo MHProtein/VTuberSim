@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
+using Tutorial.Script;
+using Tutorial.UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -59,6 +61,7 @@ namespace VTuber.BattleSystem.UI
         [Space(3)] [SerializeField] private Button skipTurnButton;
 
         [SerializeField] private GameObject cardUIPrefab;
+        [SerializeField] private VTips tipUI;
 
         public Vector2 cardSize;
 
@@ -98,6 +101,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRedrawCards, OnRedrawCards);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnNotifyBeginDisposeCard,
                 OnCardBeginDispose);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnCardsPickedFromPile,
@@ -116,12 +120,30 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardPlayed, OnCardPlayed);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRedrawCards, OnRedrawCards);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnNotifyBeginDisposeCard,
                 OnCardBeginDispose);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile,
                 OnCardsPickedFromPile);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBeginPickCardsFromPile,
                 OnBeginPickCardsFromPile);
+        }
+
+        private void OnBattleUIInitialize(Dictionary<string, object> messagedict)
+        {
+            SetTips(messagedict["TipConfig"] as VTipConfig);
+        }
+
+        public void SetTips(VTipConfig tipConfig)
+        {
+            if (tipConfig is null)
+            {
+                tipUI.gameObject.SetActive(false);
+                return;
+            }
+            
+            tipUI.gameObject.SetActive(true);
+            tipUI.SetTips(tipConfig.title, tipConfig.description, tipConfig.image);
         }
 
         public void Rearrange(int index)

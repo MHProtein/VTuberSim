@@ -655,7 +655,15 @@ MonoBehaviour:
       idOrName: CAMoney
       operatorType: 3
       targetValue: 100000
+    tip:
+      title: "\u63D0\u793A"
+      description: safasdfasdfasfasfsadfasfdasfasdfasdfasdfasf
+      image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
   - weekID: 1
     eventIDs: 000000000100000002000000030000000400000005000000
     streamEventIDs: 000000000100000002000000
     conditions: []
+    tip:
+      title: dsaf
+      description: safasdfasdfasfasfsadfasfdasfasdfasdfasdfasf
+      image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}

@@ -122,11 +122,13 @@ namespace VTuber.BattleSystem.UI
 
             if ((bool)messagedict["ReachedExtraTarget"])
             {
+                VAudioPlayer.Instance.PlayBGM(VBGMType.StreamHugeSuccess);
                 hugeSuccessText.SetActive(true);
                 _isBattleSuccess = true;
             }
             else if ((bool)messagedict["ReachedTarget"])
             {
+                VAudioPlayer.Instance.PlayBGM(VBGMType.StreamSuccess);
                 successText.SetActive(true);
                 _isBattleSuccess = true;
             }
