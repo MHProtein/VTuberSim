@@ -2,6 +2,7 @@
 using System.Linq;
 using Sirenix.Utilities;
 using SlayTheSpire.System.SavingSystem;
+using Tutorial.Script;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
@@ -147,15 +148,15 @@ namespace VTuber.EventSystem
 
                     _executedLines.Clear();
                     _loaded = false;
-
+                    
                     battle.InitializeBattle(VDataPersistenceManager.Instance.SaveData.battleSaveData,
                         e.Phase.DecayCurves,
                         _character.AttributeManager,
-                        _character.CardLibrary);
+                        _character.CardLibrary, (e as VStreamEvent)?.TutorialTipConfig);
                     return;
                 }
 
-                EnterDialogEvent(character, e, true);
+                EnterDialogEvent(character, e, _loaded);
                 dialogueSystem.SkipTo(_executedLines);
                 return;
             }
@@ -401,7 +402,7 @@ namespace VTuber.EventSystem
             int extraTargetPopularity, int abilityBonus, int initialViewers,
             int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
             bool isTutorial, List<VAttributeCondition> tutorialConditions,
-            List<uint> tutorialDeck, Dictionary<int, List<uint>> tutorialTurnHandCards)
+            List<uint> tutorialDeck, Dictionary<int, List<uint>> tutorialTurnHandCards, VTipConfig tipConfig)
         {
             _isInBattle = true;
             battleObject.SetActive(true);
@@ -410,7 +411,7 @@ namespace VTuber.EventSystem
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck,
-                tutorialTurnHandCards);
+                tutorialTurnHandCards, tipConfig);
             _character.ConsumableManager.SetBattle(battle);
             VRaisingUI.Instance.SetConsumableToBattle();
         }
@@ -434,7 +435,8 @@ namespace VTuber.EventSystem
                     streamEvent.IsTutorial,
                     streamEvent.TutorialConditions,
                     streamEvent.TutorialDeck,
-                    streamEvent.TutorialTurnHandCards);
+                    streamEvent.TutorialTurnHandCards,
+                    streamEvent.TutorialTipConfig);
             }
             else if (_shouldEnterStore)
             {
@@ -506,7 +508,10 @@ namespace VTuber.EventSystem
 
         public void CloseUI()
         {
-            VEventSystemUI.Instance.CloseUI();
+            _loaded = false;
+            _executedLines = null;
+            if(VEventSystemUI.Instance)
+                VEventSystemUI.Instance.CloseUI();
         }
     }
 }

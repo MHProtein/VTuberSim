@@ -418,6 +418,8 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 
     public void SkipTo(List<int> executedLines)
     {
+        if (executedLines is null)
+            return;
         foreach (var executedLine in executedLines)
         {
             CreateDialog(currentDialog.contentDic[executedLine], true);

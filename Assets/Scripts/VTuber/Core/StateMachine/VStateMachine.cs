@@ -24,7 +24,7 @@ namespace VTuber.Core.StateMachine
 
     public class VStateMachine
     {
-        private readonly bool _isTutorial;
+        public readonly bool isTutorial;
         protected bool shouldPauseSchedule;
 
         public VStateMachine(bool isTutorial, VScheduleUI scheduleUI,
@@ -33,7 +33,7 @@ namespace VTuber.Core.StateMachine
             GameObject eventSystemRoot, VEventSystem eventSystemSystem,
             VCharacter character, VScript script, VReincarnationConfiguration reincarnationConfiguration)
         {
-            _isTutorial = isTutorial;
+            this.isTutorial = isTutorial;
 
             if (isTutorial) TutorialScript = script as VTutorialScript;
 
@@ -188,7 +188,7 @@ namespace VTuber.Core.StateMachine
 
         public void NextSchedule()
         {
-            if (_isTutorial && !TutorialScript.CheckCurrentWeekConditions(Character))
+            if (isTutorial && !TutorialScript.CheckCurrentWeekConditions(Character))
             {
                 VRaisingUI.Instance.ShowRestartWeekUI();
                 return;

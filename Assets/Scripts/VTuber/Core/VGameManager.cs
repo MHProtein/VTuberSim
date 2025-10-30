@@ -160,7 +160,7 @@ namespace VTuber.BattleSystem.Core
 
             // if (scriptConfig is VTutorialScriptConfiguration)
             // {
-            //     _isTutorial = true;
+            //     isTutorial = true;
             //     _tutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
             //     
             //     _script = _tutorialScript;
@@ -220,6 +220,7 @@ namespace VTuber.BattleSystem.Core
             eventConfigs.AddRange(
                 _script.StreamEventList.Select(id => VDataManager.Instance.GetStreamEventConfigurationByID(id)));
 
+            VRaisingUI.Instance.Initialize(IsTutorial);
             scheduleCreator.InitializeCreator(_script);
 
             mainMenu.gameObject.SetActive(false);
@@ -243,6 +244,7 @@ namespace VTuber.BattleSystem.Core
                 _script = new VScript(scriptConfig);
                 scheduleCreator.InitializeCreator(_script);
             }
+            VRaisingUI.Instance.Initialize(IsTutorial);
             VDataPersistenceManager.Instance.NewGame(IsTutorial);
 
             Character = new VCharacter(characterConfiguration);

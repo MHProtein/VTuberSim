@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
+using Tutorial.Script;
+using Tutorial.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
@@ -25,6 +27,10 @@ namespace VTuber.ScheduleSystem.UI
 
         [SerializeField] private TMP_Text eventNameUI;
         [SerializeField] private TMP_Text eventDescriptionUI;
+        [SerializeField] private Transform eventDescriptionUITransform;
+        [SerializeField] private Transform eventDescriptionUITransformPosition;
+        [SerializeField] private Transform eventDescriptionUITransformTutorialPosition;
+        [SerializeField] private VTips tipUI;
 
         [SerializeField] private Transform creationSchedulePosition;
 
@@ -87,6 +93,25 @@ namespace VTuber.ScheduleSystem.UI
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange,
                 OnNotifyEventDescriptionChange);
+        }
+
+        public void Initialize(bool isTutorial)
+        {
+            if (isTutorial)
+            {
+                eventDescriptionUITransform.position = eventDescriptionUITransformTutorialPosition.position;
+                tipUI.gameObject.SetActive(true);
+            }
+            else
+            {
+                eventDescriptionUITransform.position = eventDescriptionUITransformPosition.position;
+                tipUI.gameObject.SetActive(false);
+            }
+        }
+
+        public void SetTips(VTipConfig tipConfig)
+        {
+            tipUI.SetTips(tipConfig.title, tipConfig.description, tipConfig.image);
         }
 
         public void ShowRestartWeekUI()
