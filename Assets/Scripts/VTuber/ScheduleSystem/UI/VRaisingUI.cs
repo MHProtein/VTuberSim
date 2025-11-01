@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using TMPro;
 using Tutorial.Script;
@@ -8,8 +9,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
+using VTuber.Core.UI;
 using VTuber.Reincarnation;
 
 namespace VTuber.ScheduleSystem.UI
@@ -76,10 +81,18 @@ namespace VTuber.ScheduleSystem.UI
 
         public List<Color> abilityColors = new();
 
+        [Space(3)] [Header("AddCard")]
+        [SerializeField] private GameObject pickCardMenuScroll;
+        [SerializeField] private Transform pickCardMenuScrollContent;
+        [SerializeField] private VPickCardMenu pickCardMenu;
+        [SerializeField] private Button addCardButton;
+        [SerializeField] private GameObject cardUIPrefab;
+        
         protected override void Awake()
         {
             base.Awake();
             tutorialRestartWeekButton.onClick.AddListener(RestartWeek);
+            addCardButton.onClick.AddListener(OnAddCardButtonClicked);
         }
 
         protected override void OnEnable()
@@ -93,6 +106,21 @@ namespace VTuber.ScheduleSystem.UI
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange,
                 OnNotifyEventDescriptionChange);
+        }
+        
+        public void OnAddCardButtonClicked()
+        {
+            var cardUIs = new List<VCardUI>();
+            var cards = VDataManager.Instance.GetAllCardConfigurations().Select(card => card.CreateCard());
+            foreach (var card in cards) cardUIs.Add(VUIUtils.SpawnCardUI(cardUIPrefab, card, pickCardMenuScrollContent));
+            pickCardMenu.BeginPickCard(cardUIs, 1000, VCardPileType.ALL, false, false, OnCardPicked);
+            pickCardMenuScroll.SetActive(true);
+        }
+
+        private void OnCardPicked(List<VCard> cards)
+        {
+            VGameManager.Instance.AddCardsToCharacter(cards);
+            pickCardMenuScroll.SetActive(false);
         }
 
         public void Initialize(bool isTutorial)

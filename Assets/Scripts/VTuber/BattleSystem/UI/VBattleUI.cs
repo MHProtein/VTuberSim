@@ -14,6 +14,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.SE;
+using VTuber.Core.UI;
 using VTuber.Dialogue.UI;
 
 namespace VTuber.BattleSystem.UI
@@ -153,21 +154,7 @@ namespace VTuber.BattleSystem.UI
             _handSlotsCards.RemoveAt(index);
             Rearrange();
         }
-
-        public VCardUI SpawnCardUI(VCard card, Transform parent)
-        {
-            if (card == null)
-            {
-                VDebug.LogError("SpawnCardUI: Card is null");
-                return null;
-            }
-
-            var cardUI = Instantiate(cardUIPrefab, parent).GetComponent<VCardUI>();
-            cardUI.SetCard(card);
-
-            return cardUI;
-        }
-
+        
 
         public void Selected(bool value)
         {
@@ -208,13 +195,13 @@ namespace VTuber.BattleSystem.UI
             var cardUIs = ShowCardScroll(cards, pickCardContent);
             _displayingCards = cardUIs;
             pickCardMenuScroll.SetActive(true);
-            _pickCardMenu.BeginPickCard(cardUIs, count, cardPileType, isFromCard, shouldPlayTwice);
+            _pickCardMenu.BeginPickCard(cardUIs, count, cardPileType, isFromCard, shouldPlayTwice, null);
         }
 
         private List<VCardUI> ShowCardScroll(IEnumerable<VCard> cards, Transform content)
         {
             var cardUIs = new List<VCardUI>();
-            foreach (var card in cards) cardUIs.Add(SpawnCardUI(card, content));
+            foreach (var card in cards) cardUIs.Add(VUIUtils.SpawnCardUI(cardUIPrefab, card, content));
 
             return cardUIs;
         }

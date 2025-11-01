@@ -409,5 +409,10 @@ namespace VTuber.BattleSystem.Core
         {
             return _characterConfigs.Find(config => config.name == characterConfigurationName);
         }
+
+        public void AddCardsToCharacter(List<VCard> cards)
+        {
+            Character.CardLibrary.AddCards(cards);
+        }
     }
 }
