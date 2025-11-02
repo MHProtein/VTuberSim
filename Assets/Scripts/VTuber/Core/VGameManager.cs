@@ -18,6 +18,7 @@ using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
 using VTuber.Reincarnation;
+using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
@@ -413,6 +414,11 @@ namespace VTuber.BattleSystem.Core
         public void AddCardsToCharacter(List<VCard> cards)
         {
             Character.CardLibrary.AddCards(cards);
+        }
+
+        public void AddRelicsToCharacter(List<VRelic> relics)
+        {
+            Character.CharacterRelicManager.AddRelics(relics);
         }
     }
 }

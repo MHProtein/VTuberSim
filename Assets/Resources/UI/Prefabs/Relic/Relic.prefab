@@ -295,8 +295,8 @@ RectTransform:
   m_GameObject: {fileID: 3236594574543534703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.95, y: 0.95, z: 0.95}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3548740999604940512}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -512,6 +512,7 @@ MonoBehaviour:
   descriptionObject: {fileID: 8596794462785695221}
   description: {fileID: 8639555970414186303}
   icon: {fileID: 1536004373582375320}
+  background: {fileID: 4294131178260254258}
   layer: {fileID: 2372992816450295634}
 --- !u!1 &8596794462785695221
 GameObject:

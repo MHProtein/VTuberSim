@@ -16,6 +16,8 @@ using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.UI;
 using VTuber.Reincarnation;
+using VTuber.Relic;
+using VTuber.Relic.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -88,11 +90,16 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private Button addCardButton;
         [SerializeField] private GameObject cardUIPrefab;
         
+        [Space(3)] [Header("AddRelic")]
+        [SerializeField] private GameObject pickRelicMenuScroll;
+        [SerializeField] private VPickRelicMenu pickRelicMenu;
+        [SerializeField] private Button addRelicButton;
         protected override void Awake()
         {
             base.Awake();
             tutorialRestartWeekButton.onClick.AddListener(RestartWeek);
             addCardButton.onClick.AddListener(OnAddCardButtonClicked);
+            addRelicButton.onClick.AddListener(OnAddRelicButtonClicked);
         }
 
         protected override void OnEnable()
@@ -121,6 +128,19 @@ namespace VTuber.ScheduleSystem.UI
         {
             VGameManager.Instance.AddCardsToCharacter(cards);
             pickCardMenuScroll.SetActive(false);
+        }
+        
+        private void OnAddRelicButtonClicked()
+        {
+            var relics = VDataManager.Instance.Relics.Select(relic => relic.Value.CreateRelic()).ToList();
+            pickRelicMenu.BeginPickRelic(relics, 1000, OnRelicPicked);
+            pickRelicMenuScroll.SetActive(true);
+        }
+
+        private void OnRelicPicked(List<VRelic> relics)
+        {
+            VGameManager.Instance.AddRelicsToCharacter(relics);
+            pickRelicMenuScroll.SetActive(false);
         }
 
         public void Initialize(bool isTutorial)

@@ -17,7 +17,8 @@ namespace VTuber.Relic
         public VEffectCondition condition;
         public VBattleEventKey whenToApply;
         public List<VEffect> Effects { get; }
-        
+        public uint BattleID => _battleID;
+
         public VBattleRelic(VBattleRelicConfiguration config) : base(config)
         {
             Effects = new List<VEffect>();

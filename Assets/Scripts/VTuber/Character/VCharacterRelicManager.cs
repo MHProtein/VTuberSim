@@ -35,7 +35,7 @@ namespace VTuber.Character
         {
             if (relic is VBattleRelic battleRelic)
             {
-                if (_battleRelics.Contains(battleRelic))
+                if (_battleRelics.Find(relic => relic.ConfigId == battleRelic.ConfigId) != null)
                     return;
                 _battleRelics.Add(battleRelic);
                 battleRelic.Initialize(_battleRelicIdDistributor++);
@@ -70,6 +70,14 @@ namespace VTuber.Character
 
             _battleRelics.Clear();
             RaisingRelicManager.Clear();
+        }
+
+        public void AddRelics(List<VRelic> relics)
+        {
+            foreach (var relic in relics)
+            {
+                AddRelic(relic);
+            }
         }
     }
 }
