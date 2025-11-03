@@ -39,7 +39,7 @@ namespace VTuber.Store.UI
                     upgradeCardLibraryUI.Close();
                     upgradeCardLibraryUI.gameObject.SetActive(false);
                 },
-                card => card.Upgrade(false));
+                card => card.Upgrade(false, false));
         }
     }
 }

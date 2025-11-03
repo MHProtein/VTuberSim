@@ -622,10 +622,13 @@ namespace VTuber.BattleSystem.Core
                 { "TurnIndex", _turnAttribute.TurnIndex },
                 { "HandSize", configuration.maxHandSize }
             });
-            
-            if(!isLoad && !_isTutorial)
+
+            if (!isLoad)
+            {
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply,
                     new Dictionary<string, object>());
+            }
+            
             if (!_isDebugScene)
                 VDataPersistenceManager.Instance.SaveGame();
         }
