@@ -42,6 +42,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicRemoved, OnRelicRemoved);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnRelicValueChanged, OnRelicValueUpdated);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
         }
 
         protected override void OnDisable()
@@ -51,6 +52,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicRemoved, OnRelicRemoved);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRelicValueChanged, OnRelicValueUpdated);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
         }
 
         public void OnEllipsisButtonClicked()
@@ -61,6 +63,16 @@ namespace VTuber.BattleSystem.UI
         }
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
+        {
+            Clear();
+        }
+        
+        private void OnBattleUIInitialize(Dictionary<string, object> messagedict)
+        {
+            Clear();
+        }
+        
+        public void Clear()
         {
             foreach (var ui in hiddenRelics) Destroy(ui.gameObject);
             foreach (var ui in displayingRelics) Destroy(ui.gameObject);
@@ -149,6 +161,7 @@ namespace VTuber.BattleSystem.UI
             else
             {
                 var hiddenRelic = hiddenRelics.Find(ui => ui.BattleID == id);
+                if (hiddenRelic is null) return;
                 hiddenRelics.Remove(hiddenRelic);
                 Destroy(hiddenRelic.gameObject);
 
