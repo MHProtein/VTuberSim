@@ -26,9 +26,6 @@ MonoBehaviour:
   liveType: C
   initialCardId: 67
   initialRelicId: 11
-  fillingEventIDDuration1: 3
-  fillingEventIDDuration2: 4
-  fillingEventIDDuration3: 5
   staminaInitialValue: 5000
   staminaMinValue: 0
   staminaMaxValue: 5000
@@ -60,7 +57,7 @@ MonoBehaviour:
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 10000
   singingAbilityMinValue: 0
-  singingAbilityMaxValue: 100000
+  singingAbilityMaxValue: 3000
   singingAbilityColor: {r: 1, g: 0.12941177, b: 0.37647063, a: 1}
   singingAbilityGainFromBattleRates:
   - from: 0
@@ -72,7 +69,7 @@ MonoBehaviour:
   singingAbilityConfiguration: {fileID: 11400000, guid: 2e67da02a3184e94ca94938b76748007, type: 2}
   gamingAbilityInitialValue: 10000
   gamingAbilityMinValue: 0
-  gamingAbilityMaxValue: 100000
+  gamingAbilityMaxValue: 3000
   gamingAbilityColor: {r: 0.29411766, g: 0.34509805, b: 1, a: 1}
   gamingAbilityGainFromBattleRates:
   - from: 0
@@ -84,7 +81,7 @@ MonoBehaviour:
   gamingAbilityConfiguration: {fileID: 11400000, guid: 9f3418b693f0bd74faf5ef1c80bcabc3, type: 2}
   chattingAbilityInitialValue: 10000
   chattingAbilityMinValue: 0
-  chattingAbilityMaxValue: 100000
+  chattingAbilityMaxValue: 3000
   chattingAbilityColor: {r: 0.776, g: 0.651, b: 0.349, a: 1}
   chattingAbilityGainFromBattleRates:
   - from: 0
@@ -177,3 +174,6 @@ MonoBehaviour:
   skipTurnStaminaRecoveryMinValue: 0
   skipTurnStaminaRecoveryMaxValue: 100
   skipTurnStaminaRecoveryConfiguration: {fileID: 11400000, guid: e2f2234de9cc3ea4bba5ddab3a15de3e, type: 2}
+  fillingEventIDDuration1: 3
+  fillingEventIDDuration2: 4
+  fillingEventIDDuration3: 5

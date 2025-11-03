@@ -21,7 +21,7 @@ namespace VTuber.Relic
             if (relic == null)
                 return;
 
-            if (Relics.Find(r => r.ConfigId == relic.ConfigId) != null)
+            if (Relics.Contains(relic))
                 return;
             Relics.Add(relic);
             relic.Initialize(idDistributor++, this);

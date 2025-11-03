@@ -102,8 +102,8 @@ namespace VTuber.BattleSystem.UI
         {
             var id = (uint)msg["Id"];
 
-            var relic = displayingRelics.Find(ui => ui.BattleID == id);
-            if (relic == null) relic = hiddenRelics.Find(ui => ui.BattleID == id);
+            var relic = displayingRelics.Find(ui => ui.Relic.Id == id);
+            if (relic == null) relic = hiddenRelics.Find(ui => ui.Relic.Id == id);
 
             if(relic is not null) relic.UpdateValue();
         }
@@ -112,7 +112,7 @@ namespace VTuber.BattleSystem.UI
         {
             var id = (uint)msg["Id"];
 
-            var relic = displayingRelics.Find(ui => ui.BattleID == id);
+            var relic = displayingRelics.Find(ui => ui.Relic.Id == id);
             if (relic != null)
             {
                 if (hiddenRelics.Count == 0)
@@ -148,7 +148,7 @@ namespace VTuber.BattleSystem.UI
             }
             else
             {
-                var hiddenRelic = hiddenRelics.Find(ui => ui.BattleID == id);
+                var hiddenRelic = hiddenRelics.Find(ui => ui.Relic.Id == id);
                 hiddenRelics.Remove(hiddenRelic);
                 Destroy(hiddenRelic.gameObject);
 

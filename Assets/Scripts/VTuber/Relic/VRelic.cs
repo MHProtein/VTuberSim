@@ -16,8 +16,6 @@ namespace VTuber.Relic
         private VBattleRelicManager _manager;
         public VEffectCondition condition;
         public VBattleEventKey whenToApply;
-        public List<VEffect> Effects { get; }
-        public uint BattleID => _battleID;
 
         public VBattleRelic(VBattleRelicConfiguration config) : base(config)
         {
@@ -27,11 +25,8 @@ namespace VTuber.Relic
             whenToApply = config.whenToApply;
         }
 
-        public VBattleRelic Copy()
-        {
-            return new VBattleRelic(configuration as VBattleRelicConfiguration);
-        }
-        
+        public List<VEffect> Effects { get; }
+
         public override void OnRelicAddedInRaising()
         {
             base.OnRelicAddedInRaising();
@@ -68,7 +63,7 @@ namespace VTuber.Relic
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicAdded,
                 new Dictionary<string, object>
                 {
-                    { "Id", _battleID },
+                    { "Id", _id },
                     { "IsPermanent", IsPermanent },
                     { "Relic", this },
                     { "Value", Layer },
@@ -82,7 +77,7 @@ namespace VTuber.Relic
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicRemoved,
                 new Dictionary<string, object>
                 {
-                    { "Id", _battleID },
+                    { "Id", _id },
                     { "IsPermanent", IsPermanent },
                     { "Relic", this },
                     { "Value", Layer },
@@ -109,7 +104,7 @@ namespace VTuber.Relic
                     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRelicValueChanged,
                         new Dictionary<string, object>
                         {
-                            { "Id", _battleID },
+                            { "Id", _id },
                             { "IsPermanent", IsPermanent },
                             { "Value", Layer },
                             { "RelicName", GetRelicName() }
@@ -222,30 +217,30 @@ namespace VTuber.Relic
 
     public class VRelic
     {
-        protected readonly VRelicConfiguration configuration;
+        private readonly VRelicConfiguration _configuration;
         protected uint _id;
         protected int layer;
 
         public VRelic(VRelicConfiguration config)
         {
-            configuration = config;
+            _configuration = config;
             layer = config.layer;
             if (layer == -1)
                 IsPermanent = true;
         }
 
         public uint Id => _id;
-        public string Description => configuration.description;
-        public uint ConfigId => configuration.id;
+        public string Description => _configuration.description;
+        public uint ConfigId => _configuration.id;
 
-        public Sprite Icon => configuration.icon;
+        public Sprite Icon => _configuration.icon;
         public int Layer => layer;
 
         public bool IsPermanent { get; }
 
         public string GetRelicName()
         {
-            return configuration.relicName;
+            return _configuration.relicName;
         }
 
         public void LoadLayer(int newLayer)

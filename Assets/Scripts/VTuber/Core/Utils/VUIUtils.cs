@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sirenix.Utilities;
 using UnityEngine;
-using VTuber.BattleSystem.Card;
-using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Core;
 
@@ -88,20 +86,6 @@ namespace VTuber.Core.UI
         {
             if (level.IsNullOrWhitespace()) return VResourcesManager.Instance.TryGetSprite("ScoreLevel_SSS");
             return VResourcesManager.Instance.TryGetSprite("ScoreLevel_" + level);
-        }
-        
-        public static VCardUI SpawnCardUI(GameObject cardUIPrefab, VCard card, Transform parent)
-        {
-            if (card == null)
-            {
-                VDebug.LogError("SpawnCardUI: Card is null");
-                return null;
-            }
-
-            var cardUI = Instantiate(cardUIPrefab, parent).GetComponent<VCardUI>();
-            cardUI.SetCard(card);
-
-            return cardUI;
         }
     }
 }

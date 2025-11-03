@@ -223,7 +223,6 @@ namespace VTuber.ScheduleSystem.UI
             var coopEvents = character.CooperatorManager.GetCoopEvents(occupiedPositions);
             foreach (var coopEvent in coopEvents)
                 slots[coopEvent.position.y, coopEvent.position.x].SetCoopEvent(coopEvent);
-
         }
 
         public void SwitchToModify()

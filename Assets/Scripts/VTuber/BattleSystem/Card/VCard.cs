@@ -203,7 +203,7 @@ namespace VTuber.BattleSystem.Card
             shieldPreviewAction?.Invoke(firstTime, originalValue, finalValue);
         }
 
-        public void Upgrade(bool isTemporary, bool notify = true)
+        public void Upgrade(bool isTemporary)
         {
             if (IsUpgraded) return;
 
@@ -212,9 +212,6 @@ namespace VTuber.BattleSystem.Card
             _cost.Upgrade();
 
             foreach (var effect in _effects) effect.Upgrade();
-
-            if (!notify)
-                return;
             VDebug.Log("卡牌升级: " + CardName);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCardUpgraded, new Dictionary<string, object>
             {

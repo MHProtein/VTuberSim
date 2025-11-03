@@ -19,15 +19,15 @@ namespace VTuber.BattleSystem.Effect.Conditions
 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
         {
+            if ((message["Card"] as VCard).CardType != _cardType)
+                return false;
             if (_cardType == "")
             {
                 if (battle.CardTypeHistory.Values.Sum() % _targetValue == 0) return true;
+
                 return false;
             }
 
-            if ((message["Card"] as VCard).CardType != _cardType)
-                return false;
-            
             if (battle.CardTypeHistory.TryGetValue(_cardType, out var count))
             {
                 if (count % _targetValue == 0) return true;
