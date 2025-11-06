@@ -241,6 +241,7 @@ namespace VTuber.BattleSystem.Core
             }
             else
             {
+                IsTutorial = false;
                 _script = new VScript(scriptConfig);
                 scheduleCreator.InitializeCreator(_script);
             }
