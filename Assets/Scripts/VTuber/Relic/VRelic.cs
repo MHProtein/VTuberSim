@@ -193,7 +193,7 @@ namespace VTuber.Relic
             if (CanApply(messagedict))
             {
                 foreach (var effect in Effects)
-                    effect.ApplyEffect(_manager.Character, messagedict);
+                    effect.ApplyEffect(_manager.Character, messagedict, VInstigatorType.Relic, Icon);
                 if (!IsPermanent)
                 {
                     layer--;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
@@ -75,9 +76,9 @@ namespace VTuber.Consumable
             effects.ForEach(effect => effect.ApplyEffect(_battle));
         }
 
-        public void ApplyRaisingEffects(List<VRaisingEffect> effects)
+        public void ApplyRaisingEffects(List<VRaisingEffect> effects, Sprite icon)
         {
-            effects.ForEach(effect => effect.ApplyEffect(_character, null));
+            effects.ForEach(effect => effect.ApplyEffect(_character, null, VInstigatorType.Consumable, icon));
         }
 
         public void Remove(VConsumable consumable)

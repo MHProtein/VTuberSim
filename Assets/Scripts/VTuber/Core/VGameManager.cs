@@ -14,6 +14,7 @@ using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
@@ -253,8 +254,8 @@ namespace VTuber.BattleSystem.Core
             Character.Initialize(false);
 
             foreach (var account in accounts)
-            foreach (var effect in account.Effects)
-                effect.ApplyEffect(Character, null);
+                foreach (var effect in account.Effects)
+                    effect.ApplyEffect(Character, null, VInstigatorType.Account, null);
 
             _weeklySchedule = new VWeeklySchedule();
 

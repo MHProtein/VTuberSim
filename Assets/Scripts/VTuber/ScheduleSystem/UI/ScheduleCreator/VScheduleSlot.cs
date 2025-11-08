@@ -183,7 +183,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 checkmark.gameObject.SetActive(true);
                 checkmark.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
-                item.Event.SetCoopEffects(this, _coopEventEffects);
+                item.Event.SetCoopEffects(this, _coopEventEffects, _coopEventIcon);
             }
             else if (IsCoopEventSlot)
             {

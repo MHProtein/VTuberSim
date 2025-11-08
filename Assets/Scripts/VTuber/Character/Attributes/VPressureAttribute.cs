@@ -22,7 +22,7 @@ namespace VTuber.Character.Attributes
 
         public void ApplyEffects(VCharacter character)
         {
-            _effects[Value - 1].ApplyEffect(character, null);
+            _effects[Value - 1].ApplyEffect(character, null, VInstigatorType.Pressure, null);
         }
     }
 }

@@ -166,7 +166,7 @@ namespace VTuber.EventSystem
                 _hasDialogue = false;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
-                foreach (var effect in e.effects) effect.ApplyEffect(character, null);
+                foreach (var effect in e.effects) effect.ApplyEffect(character, null, VInstigatorType.Event, e.Icon);
                 OnDialogueComplete(null);
 
                 if (_loaded)

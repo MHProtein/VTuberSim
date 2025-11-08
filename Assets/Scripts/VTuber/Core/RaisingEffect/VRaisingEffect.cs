@@ -1,8 +1,19 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using VTuber.Character;
 
 namespace VTuber.Core.RaisingEffect
 {
+    public enum VInstigatorType
+    {
+        Buff,
+        Coop,
+        Event,
+        Relic,
+        Account,
+        Pressure,
+        Consumable
+    }
     public abstract class VRaisingEffect
     {
         protected VRaisingEffectConfiguration _configuration;
@@ -25,8 +36,9 @@ namespace VTuber.Core.RaisingEffect
             }
         }
 
-        public virtual void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        public virtual void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VInstigatorType instigatorType, Sprite icon, Dictionary<string, object> animationParams)
         {
+            
         }
 
         public abstract void Upgrade();
