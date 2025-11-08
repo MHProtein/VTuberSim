@@ -672,7 +672,7 @@ MonoBehaviour:
       m_RotationOrder: 4
   weeks:
   - weekID: 0
-    eventIDs: 000000000100000002000000
+    eventIDs: 00000000010000000200000003000000
     streamEventIDs: 000000000100000002000000
     conditions:
     - conditionType: 0
@@ -680,8 +680,8 @@ MonoBehaviour:
       operatorType: 3
       targetValue: 100000
     tip:
-      title: "\u63D0\u793A"
-      description: safasdfasdfasfasfsadfasfdasfasdfasdfasdfasf
+      title: "\u5148\u5B89\u6392\u5468\u8868\u5427"
+      description: "\u901A\u8FC7\u5728\u5468\u8868\u4E2D\u5B89\u6392\u4E8B\u4EF6\u8FDB\u884C"
       image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
   - weekID: 1
     eventIDs: 000000000100000002000000030000000400000005000000
