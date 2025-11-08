@@ -14,6 +14,7 @@ namespace VTuber.Relic.UI
         [SerializeField] private TMP_Text layer;
         public VRelic Relic { get; private set; }
 
+        public uint BattleID { get; private set; }
         public bool IsAdditional { get; private set; }
 
         protected override void Awake()
@@ -49,6 +50,7 @@ namespace VTuber.Relic.UI
             icon.sprite = relic.Icon;
             icon.gameObject.SetActive(true);
             description.text = Relic.Description;
+            BattleID = (relic as VBattleRelic)?.BattleID ?? 10000;
         }
 
         public bool HasRelic()
