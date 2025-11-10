@@ -8,11 +8,11 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VCardPoolCondition : VCardCondition
     {
-        List<uint> _cardIds;
+        private readonly List<uint> _cardIds;
 
         public VCardPoolCondition(CellRange row) : base(row)
         {
-            string str = row.Columns[VCardConditionHeaderIndex.Condition].Value;
+            var str = row.Columns[VCardConditionHeaderIndex.Condition].Value;
             _cardIds = str.Split(',').Select(cardId => Convert.ToUInt32(cardId)).ToList();
         }
 

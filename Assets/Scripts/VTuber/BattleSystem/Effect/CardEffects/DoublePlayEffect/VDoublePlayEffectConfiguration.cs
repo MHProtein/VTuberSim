@@ -1,5 +1,4 @@
-﻿using Sirenix.Utilities;
-using Spire.Xls;
+﻿using Spire.Xls;
 
 namespace VTuber.BattleSystem.Effect
 {

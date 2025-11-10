@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Tutorial.Script;
 using UnityEngine;
 using VTuber.Core.Managers;
@@ -13,81 +12,89 @@ namespace VTuber.ScheduleSystem.UI
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject itemPrefab;
-        
-        protected VScheduleCreatorSlot[,] slots;
-        
+        private readonly List<GameObject> _eventObjects = new();
+
         private List<VScheduleEventConfiguration> _eventDatas;
-        private List<GameObject> _eventObjects = new List<GameObject>();
+        private bool _isFirstTime = true;
+
+        protected VScheduleCreatorSlot[,] slots;
+
         protected override void Awake()
         {
             slots = new VScheduleCreatorSlot[slotSize.y, slotSize.x];
             var slotList = GetComponentsInChildren<VScheduleCreatorSlot>();
-            
-            int i = 0; 
-            for (int y = 0; y < slotSize.y; y++)
-            {
-                for (int x = 0; x < slotSize.x; x++)
-                {    
-                    slots[y, x] = slotList[i++];
-                }
-            }
-        }
-        
-        public void InitializeTutorialCreator(VTutorialScript script)
-        {
-            script.AddOnWeekAdvancedCallback((weekIndex) =>
-            {
-                _eventDatas.Clear();
-                var eventConfigs = 
-                    script.CurrentWeekEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
-                eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
-                _eventDatas = eventConfigs;
 
-                foreach (var eventObject in _eventObjects)
-                {
-                    Destroy(eventObject);
-                }
-                _eventObjects.Clear();
-                
-                CreateEventObjects();
-            });
-            
-            var eventConfigs = 
-                script.CurrentWeekEventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
-            eventConfigs.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
-            _eventDatas = eventConfigs;
-        }
-        
-        public void InitializeCreator(VScript script)
-        {
-            var events = script.EventList.Select(e => (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
-            events.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
-            _eventDatas = events;
-        }
-        
-        VScheduleCreatorSlot GetAvailableSlot()
-        {
-            for (int x = 0; x < slotSize.x; x++)
-            {
-                for (int y = 0; y < slotSize.y; y++)
-                {
-                    if (slots[y, x].Item is null)
-                        return slots[y, x];
-                }
-            }
-
-            return null;
+            var i = 0;
+            for (var y = 0; y < slotSize.y; y++)
+            for (var x = 0; x < slotSize.x; x++)
+                slots[y, x] = slotList[i++];
         }
 
         protected override void Start()
         {
             base.Start();
-            
+            _isFirstTime = false;
             CreateEventObjects();
+        }
+
+        private void Clear()
+        {
+            for (var y = 0; y < slotSize.y; y++)
+            for (var x = 0; x < slotSize.x; x++)
+                slots[y, x].RemoveItem();
+
+            foreach (var eventObject in _eventObjects) Destroy(eventObject);
+            _eventObjects.Clear();
+        }
+
+        public void InitializeTutorialCreator(VTutorialScript script)
+        {
+            script.AddOnWeekAdvancedCallback(weekIndex =>
+            {
+                _eventDatas.Clear();
+                var eventConfigs =
+                    script.CurrentWeekDialogEventList.Select(e =>
+                            (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e))
+                        .ToList();
+                eventConfigs.AddRange(script.StreamEventList
+                    .Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
+                _eventDatas = eventConfigs;
+
+                CreateEventObjects();
+            });
+
+            var eventConfigs =
+                script.CurrentWeekDialogEventList.Select(e =>
+                    (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
+            eventConfigs.AddRange(script.CurrentWeekStreamEventList
+                .Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
+            _eventDatas = eventConfigs;
+            if (!_isFirstTime) CreateEventObjects();
+        }
+
+        public void InitializeCreator(VScript script)
+        {
+            var events = script.EventList.Select(e =>
+                (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
+            events.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e))
+                .ToList());
+            _eventDatas = events;
+            if (!_isFirstTime) CreateEventObjects();
+        }
+
+        private VScheduleCreatorSlot GetAvailableSlot()
+        {
+            for (var x = 0; x < slotSize.x; x++)
+            for (var y = 0; y < slotSize.y; y++)
+                if (slots[y, x].Item is null)
+                    return slots[y, x];
+
+            return null;
         }
 
         private void CreateEventObjects()
         {
+            Clear();
             foreach (var eventData in _eventDatas)
             {
                 var slot = GetAvailableSlot();
@@ -99,6 +106,5 @@ namespace VTuber.ScheduleSystem.UI
                 _eventObjects.Add(eventObj);
             }
         }
-        
     }
 }

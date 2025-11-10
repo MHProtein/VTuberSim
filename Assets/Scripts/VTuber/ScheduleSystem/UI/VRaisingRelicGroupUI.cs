@@ -2,18 +2,17 @@
 using PrimeTween;
 using TMPro;
 using UnityEngine;
-using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
-    class VRaisingRelicUI
+    internal class VRaisingRelicUI
     {
-        public TMP_Text text;
         public GameObject gameObject;
         public bool isPermanent;
         public string relicName;
+        public TMP_Text text;
 
         public VRaisingRelicUI(GameObject go, bool isPermanent, string relicName)
         {
@@ -35,9 +34,9 @@ namespace VTuber.BattleSystem.UI
     public class VRaisingRelicGroupUI : VUIBehaviour
     {
         [SerializeField] private GameObject buffCellPrefab;
+        private readonly VAnimationQueue _animationQueue = new();
 
         private Dictionary<uint, VRaisingRelicUI> _buffUIs;
-        private readonly VAnimationQueue _animationQueue = new VAnimationQueue();
 
         protected override void Awake()
         {
@@ -60,30 +59,27 @@ namespace VTuber.BattleSystem.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicRemoved, OnBuffRemoved);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicValueChanged, OnBuffValueUpdated);
         }
-        
+
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
-            foreach (var ui in _buffUIs)
-            {
-                Destroy(ui.Value.gameObject);
-            }
+            foreach (var ui in _buffUIs) Destroy(ui.Value.gameObject);
             _buffUIs.Clear();
         }
-        
+
         private void OnBuffAdded(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
-            
-            if( _buffUIs.ContainsKey(id))
+            var id = (uint)msg["Id"];
+
+            if (_buffUIs.ContainsKey(id))
             {
                 OnBuffValueUpdated(msg);
                 return;
             }
-            
-            bool isPermanent = (bool)msg["IsPermanent"];
-            string buffName = (string)msg["RelicName"];
-            int value = (int)msg["Value"];
-            
+
+            var isPermanent = (bool)msg["IsPermanent"];
+            var buffName = (string)msg["RelicName"];
+            var value = (int)msg["Value"];
+
             // instantiate
             var go = Instantiate(buffCellPrefab, transform);
             var ui = new VRaisingRelicUI(go, isPermanent, buffName);
@@ -96,7 +92,7 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBuffValueUpdated(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
+            var id = (uint)msg["Id"];
             if (_buffUIs.TryGetValue(id, out var ui))
             {
                 ui.SetText((int)msg["Value"]);
@@ -108,7 +104,7 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBuffRemoved(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
+            var id = (uint)msg["Id"];
             if (_buffUIs.TryGetValue(id, out var ui))
             {
                 Destroy(ui.gameObject);

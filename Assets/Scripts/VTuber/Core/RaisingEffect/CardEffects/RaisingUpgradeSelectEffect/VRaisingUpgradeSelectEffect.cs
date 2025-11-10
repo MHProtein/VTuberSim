@@ -12,7 +12,8 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventSelectUpgradeCard, new Dictionary<string, object>());
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventSelectUpgradeCard,
+                new Dictionary<string, object>());
         }
 
         public override void Upgrade()
@@ -21,7 +22,8 @@ namespace VTuber.Core.RaisingEffect
 
         public override void DownGrade()
         {
-        }        
+        }
+
         public override string GetParameter()
         {
             return "";

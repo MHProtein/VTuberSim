@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
@@ -16,9 +15,10 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private TMP_Text content;
         [SerializeField] private Transform detailParent;
         [SerializeField] private GameObject detailPrefab;
-        
-        private List<GameObject> _details = new List<GameObject>();
+
+        private readonly List<GameObject> _details = new();
         private Action _confirmAction;
+
         protected override void Awake()
         {
             base.Awake();
@@ -42,16 +42,14 @@ namespace VTuber.BattleSystem.Core.UI
                 detail.GetComponent<TMP_Text>().text = detailStr;
                 _details.Add(detail);
             }
+
             _confirmAction = confirmAction;
         }
 
         public void Hide()
         {
             window.SetActive(false);
-            foreach (var detail in _details)
-            {
-                Destroy(detail.gameObject);
-            }
+            foreach (var detail in _details) Destroy(detail.gameObject);
             _details.Clear();
         }
     }

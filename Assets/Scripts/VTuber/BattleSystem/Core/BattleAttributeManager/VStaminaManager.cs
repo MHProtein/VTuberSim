@@ -5,19 +5,37 @@ namespace VTuber.BattleSystem.Core
     public class VStaminaManagerSaveData
     {
         public VValueModifierSaveData<int> consumePointsModifier;
-        public  VValueModifierSaveData<float> consumeRateModifier;
+        public VValueModifierSaveData<float> consumeRateModifier;
     }
-    
+
     public class VStaminaManager
     {
-        public VValueModifier<float> ConsumeRateModifier => consumeRateModifier;
-        protected VValueModifier<float> consumeRateModifier;
-        
-        public VValueModifier<int> ConsumePointsModifier => consumePointsModifier;
-        protected VValueModifier<int> consumePointsModifier;
+        private readonly VBattleStaminaAttribute _shieldAttribute;
 
-        VBattleStaminaAttribute _staminaAttribute;
-        VBattleStaminaAttribute _shieldAttribute;
+        private readonly VBattleStaminaAttribute _staminaAttribute;
+        protected VValueModifier<int> consumePointsModifier;
+        protected VValueModifier<float> consumeRateModifier;
+
+        public VStaminaManager(VBattleStaminaAttribute staminaAttribute, VBattleStaminaAttribute shieldAttribute,
+            VStaminaManagerSaveData saveData)
+        {
+            _staminaAttribute = staminaAttribute;
+            _shieldAttribute = shieldAttribute;
+            consumePointsModifier = saveData.consumePointsModifier.LoadModifier(true);
+            consumeRateModifier = saveData.consumeRateModifier.LoadModifier(true);
+        }
+
+        public VStaminaManager(VBattleStaminaAttribute staminaAttribute, VBattleStaminaAttribute shieldAttribute)
+        {
+            _staminaAttribute = staminaAttribute;
+            _shieldAttribute = shieldAttribute;
+            consumePointsModifier = new VValueModifier<int>(0, true);
+            consumeRateModifier = new VValueModifier<float>(0.0f, true);
+        }
+
+        public VValueModifier<float> ConsumeRateModifier => consumeRateModifier;
+
+        public VValueModifier<int> ConsumePointsModifier => consumePointsModifier;
 
         public VStaminaManagerSaveData Save()
         {
@@ -27,28 +45,12 @@ namespace VTuber.BattleSystem.Core
                 consumeRateModifier = consumeRateModifier.Save()
             };
         }
-        
-        public VStaminaManager(VBattleStaminaAttribute staminaAttribute, VBattleStaminaAttribute shieldAttribute, VStaminaManagerSaveData saveData)
-        {
-            _staminaAttribute = staminaAttribute;
-            _shieldAttribute = shieldAttribute;
-            consumePointsModifier = saveData.consumePointsModifier.LoadModifier(true);
-            consumeRateModifier = saveData.consumeRateModifier.LoadModifier(true);
-        }
-        
-        public VStaminaManager(VBattleStaminaAttribute staminaAttribute, VBattleStaminaAttribute shieldAttribute)
-        {
-            _staminaAttribute = staminaAttribute;
-            _shieldAttribute = shieldAttribute;
-            consumePointsModifier = new VValueModifier<int>(0, true);
-            consumeRateModifier = new VValueModifier<float>(0.0f, true);
-        }
-        
+
         public void ApplyCost(int cost, bool ignoreShield = false)
         {
-            int calculatedCost = CalculateCost(cost);
-            
-            int costAfterShield = calculatedCost;
+            var calculatedCost = CalculateCost(cost);
+
+            var costAfterShield = calculatedCost;
             if (!ignoreShield)
             {
                 costAfterShield = calculatedCost - _shieldAttribute.Value;
@@ -57,26 +59,26 @@ namespace VTuber.BattleSystem.Core
                 if (costAfterShield <= 0)
                     return;
             }
-            
+
             _staminaAttribute.AddTo(-costAfterShield >= 0 ? 0 : -costAfterShield, false);
         }
 
         public bool TestCost(int cost, bool ignoreShield = false)
         {
-            int calculatedCost = CalculateCost(cost);
+            var calculatedCost = CalculateCost(cost);
 
-            int costAfterShield = calculatedCost;
+            var costAfterShield = calculatedCost;
             if (!ignoreShield)
             {
                 costAfterShield = calculatedCost - _shieldAttribute.Value;
-            
+
                 if (costAfterShield <= 0)
                     return true;
             }
-            
+
             return _staminaAttribute.TestCost(-costAfterShield >= 0 ? 0 : -costAfterShield);
         }
-        
+
         public int CalculateCost(int delta)
         {
             delta = (int)(delta * (1.0f - VValueModifier<int>.GetModifierFloatValue(consumeRateModifier, false)))
@@ -94,19 +96,12 @@ namespace VTuber.BattleSystem.Core
         public void OnTurnEnd()
         {
             foreach (var mod in consumePointsModifier.Modifiers)
-            {
                 if (mod.Value.DecreaseTurnCount())
-                {
                     consumePointsModifier.RemoveModifier(mod.Key);
-                }
-            }
+
             foreach (var mod in consumeRateModifier.Modifiers)
-            {
                 if (mod.Value.DecreaseTurnCount())
-                {
                     consumeRateModifier.RemoveModifier(mod.Key);
-                }
-            }
         }
     }
 }

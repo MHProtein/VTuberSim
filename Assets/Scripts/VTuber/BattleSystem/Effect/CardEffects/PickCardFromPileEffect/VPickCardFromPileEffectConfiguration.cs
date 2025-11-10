@@ -2,7 +2,7 @@
 using Spire.Xls;
 
 namespace VTuber.BattleSystem.Effect
-{      
+{
     public enum VCardPileType
     {
         DrawPile,
@@ -11,11 +11,12 @@ namespace VTuber.BattleSystem.Effect
         Deck,
         ALL
     }
-    
+
     public class VPickCardFromPileEffectConfiguration : VEffectConfiguration
     {
-        public VCardPileType cardPileType;
         public int cardCount;
+        public VCardPileType cardPileType;
+
         public VPickCardFromPileEffectConfiguration(CellRange row) : base(row)
         {
             cardPileType = Enum.Parse<VCardPileType>(row.Columns[VEffectHeaderIndex.Parameter].Value);

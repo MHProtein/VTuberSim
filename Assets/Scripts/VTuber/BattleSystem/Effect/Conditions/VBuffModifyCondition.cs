@@ -8,16 +8,16 @@ namespace VTuber.BattleSystem.Effect.Conditions
 {
     public class VBuffModifyCondition : VEffectCondition
     {
-        private int _buffId;
-        private int _targetValue;
-        private int _targetDelta;
+        private readonly int _buffId;
+        private readonly int _targetDelta;
+        private readonly int _targetValue;
 
 
         public VBuffModifyCondition(CellRange row) : base(row)
         {
             _buffId = ToInt(row.Columns[VConditionHeaderIndex.NameOrID].Value);
-            _targetValue = ToInt( row.Columns[VConditionHeaderIndex.TargetValue].Value);
-            _targetDelta = ToInt( row.Columns[VConditionHeaderIndex.TargetDelta].Value);
+            _targetValue = ToInt(row.Columns[VConditionHeaderIndex.TargetValue].Value);
+            _targetDelta = ToInt(row.Columns[VConditionHeaderIndex.TargetDelta].Value);
         }
 
         public override bool IsTrue(VBattle battle, Dictionary<string, object> message)
@@ -34,15 +34,13 @@ namespace VTuber.BattleSystem.Effect.Conditions
                 return false;
             }
 
-            bool result = VMathUtils.Compare((int)message["Value"], _targetValue, operatorType) && VMathUtils.Compare((int)message["Delta"], _targetDelta, operatorType);
+            var result = VMathUtils.Compare((int)message["Value"], _targetValue, operatorType) &&
+                         VMathUtils.Compare((int)message["Delta"], _targetDelta, operatorType);
             if (result)
-            {
                 VDebug.Log($"条件 {id} 通过：Buff(ID: {_buffId}) 的数值为 {(int)message["Value"]}，变化量为 {(int)message["Delta"]}");
-            }
             else
-            {
-                VDebug.Log($"条件 {id} 未通过：Buff(ID: {_buffId}) 的数值为 {(int)message["Value"]}，变化量为 {(int)message["Delta"]}");
-            }
+                VDebug.Log(
+                    $"条件 {id} 未通过：Buff(ID: {_buffId}) 的数值为 {(int)message["Value"]}，变化量为 {(int)message["Delta"]}");
             return result;
         }
     }

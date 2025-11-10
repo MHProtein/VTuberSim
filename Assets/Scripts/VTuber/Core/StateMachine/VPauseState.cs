@@ -17,9 +17,8 @@ namespace VTuber.Core.StateMachine
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseUIActive(true);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToPause();
             stateMachine.ScheduleUI.SwitchToExecution();
-            
         }
-        
+
         public override void Exit(VState nextState)
         {
             base.Exit(nextState);

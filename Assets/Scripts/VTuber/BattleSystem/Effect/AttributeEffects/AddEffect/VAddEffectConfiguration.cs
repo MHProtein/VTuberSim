@@ -1,6 +1,4 @@
 ﻿using Spire.Xls;
-using UnityEngine.Serialization;
-using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.StringToEnum;
 
 namespace VTuber.BattleSystem.Effect

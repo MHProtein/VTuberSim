@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.Core.SE
@@ -17,8 +13,8 @@ namespace VTuber.Core.SE
         public SoundChannel channel = SoundChannel.SFX;
         public float volume = 1f;
         public float pitch = 1f;
-        public bool loop = false;
-        public float delay = 0f;
+        public bool loop;
+        public float delay;
     }
 
     public enum VSFXType
@@ -30,19 +26,27 @@ namespace VTuber.Core.SE
         Battle_EffectApply,
         Raising_AttributeChange,
         Battle_BuffApply,
-        Raising_PlaceEvent
+        Raising_PlaceEvent,
+        Raising_ZoomInOut,
+        Raising_EnterEvent,
     }
 
     public enum VBGMType
     {
         MainMenu,
-        StreamFailure
+        StreamFailure,
+        StreamSuccess,
+        StreamHugeSuccess,
+        Dialog,
+        ScheduleCreation,
+        Store,
     }
-    
+
     public class VAudioPlayer : VSingletonMonobehaviour<VAudioPlayer>
     {
         [SerializeField] private Dictionary<VSFXType, List<VAudioPlayInfo>> sfxs;
         [SerializeField] private Dictionary<VBGMType, List<VAudioPlayInfo>> bgms;
+
         protected override void Awake()
         {
             base.Awake();
@@ -60,18 +64,21 @@ namespace VTuber.Core.SE
 
         public void PlayStaticSFX(VSFXType sfxType)
         {
-            var sfx = sfxs[sfxType].First();
-            AudioManager.Instance.PlaySound(sfx.soundName, sfx.channel, sfx.volume, sfx.pitch, sfx.loop, sfx.delay);
-            if ((sfxType == VSFXType.Battle_BuffApply))
+            if (sfxs.TryGetValue(sfxType, out var sfxList))
             {
-                VDebug.Log("Battle_BuffApply");
+                var sfx = sfxList.First();
+                AudioManager.Instance.PlaySound(sfx.soundName, sfx.channel, sfx.volume, sfx.pitch, sfx.loop, sfx.delay);
+                if (sfxType == VSFXType.Battle_BuffApply) VDebug.Log("Battle_BuffApply");
             }
         }
 
         public void PlayBGM(VBGMType bgmType)
         {
-            var bgm = bgms[bgmType].First();
-            AudioManager.Instance.PlaySound(bgm.soundName, bgm.channel, bgm.volume, bgm.pitch, bgm.loop, bgm.delay);
+            if (bgms.TryGetValue(bgmType, out var bgmList))
+            {
+                var bgm = bgmList.First();
+                AudioManager.Instance.PlaySound(bgm.soundName, bgm.channel, bgm.volume, bgm.pitch, bgm.loop, bgm.delay);
+            }
         }
 
         public void StopBGM()

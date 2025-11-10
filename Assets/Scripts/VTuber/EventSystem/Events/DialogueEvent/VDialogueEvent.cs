@@ -12,22 +12,21 @@ namespace VTuber.ScheduleSystem.Events.DialogueEvent
 
         public VDialogueEvent(VDialogueEventConfiguration config) : base(config)
         {
-            this.dialogueNode = config.dialogueNode;
-            this.effects = config.effects;
+            dialogueNode = config.dialogueNode;
+            effects = config.effects;
         }
-        
+
         public override bool Execute(VCharacter player)
         {
             if (!CanExecute(player))
                 return false;
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventStart, new Dictionary<string, object>()
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventStart, new Dictionary<string, object>
             {
-                {"Event", this},
-                {"DialogueNode", dialogueNode}
+                { "Event", this },
+                { "DialogueNode", dialogueNode }
             });
             IsExecuted = true;
             return true;
         }
-        
     }
 }

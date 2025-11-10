@@ -1,5 +1,4 @@
 ﻿using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace VTuber.Core.Foundation
 {
@@ -7,12 +6,10 @@ namespace VTuber.Core.Foundation
     {
         protected virtual void Awake()
         {
-        
         }
 
         protected virtual void Start()
         {
-    
         }
 
         private void Update()
@@ -24,28 +21,22 @@ namespace VTuber.Core.Foundation
 
         protected virtual void OnEnable()
         {
-        
         }
-    
+
         protected virtual void OnDisable()
         {
-        
         }
-    
+
         protected virtual void OnUpdateBegin()
         {
-        
         }
-    
+
         protected virtual void OnUpdateEnd()
         {
-        
         }
 
         protected virtual void UpdateImpl()
         {
-        
         }
     }
 }
-

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
-using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
@@ -11,7 +10,7 @@ using VTuber.Core.RaisingEffect;
 namespace VTuber.Consumable
 {
     public class VConsumableHeaderIndex
-    {    
+    {
         public const int Id = 0;
         public const int Name = 1;
         public const int Description = 2;
@@ -26,7 +25,7 @@ namespace VTuber.Consumable
         public const int Effect3 = 11;
         public const int E3Param = 12;
     }
-    
+
     public class VRaisingConsumableConfiguration : VConsumableConfiguration
     {
         public List<VRaisingEffect> effects;
@@ -34,7 +33,7 @@ namespace VTuber.Consumable
         public VRaisingConsumableConfiguration(CellRange row) : base(row)
         {
             effects = new List<VRaisingEffect>();
-            for (int i = VConsumableHeaderIndex.Effect1; i <= VConsumableHeaderIndex.E3Param; i += 2)
+            for (var i = VConsumableHeaderIndex.Effect1; i <= VConsumableHeaderIndex.E3Param; i += 2)
             {
                 var effectIDStr = row.Columns[i].Value;
                 if (effectIDStr.IsNullOrWhitespace())
@@ -49,6 +48,7 @@ namespace VTuber.Consumable
             return new VRaisingConsumable(idDistributor++, this);
         }
     }
+
     public class VBattleConsumableConfiguration : VConsumableConfiguration
     {
         public List<VEffect> effects;
@@ -56,7 +56,7 @@ namespace VTuber.Consumable
         public VBattleConsumableConfiguration(CellRange row) : base(row)
         {
             effects = new List<VEffect>();
-            for (int i = VConsumableHeaderIndex.Effect1; i <= VConsumableHeaderIndex.E3Param; i += 2)
+            for (var i = VConsumableHeaderIndex.Effect1; i <= VConsumableHeaderIndex.E3Param; i += 2)
             {
                 var effectIDStr = row.Columns[i].Value;
                 if (effectIDStr.IsNullOrWhitespace())
@@ -71,12 +71,12 @@ namespace VTuber.Consumable
             return new VBattleConsumable(idDistributor++, this);
         }
     }
-    
+
     public enum VConsumableRarity
     {
         Common,
-        Rare, 
-        Epic,
+        Rare,
+        Epic
     }
 
     public enum VConsumableType
@@ -84,23 +84,17 @@ namespace VTuber.Consumable
         Stream,
         Raising
     }
-    
+
     public class VConsumableConfiguration
     {
-        public uint id;
-        public string name;
+        protected static uint idDistributor;
         public string description;
-        public VConsumableRarity rarity;
-        protected static uint idDistributor = 0;    
-        public string liveType;
         public Sprite icon;
+        public uint id;
+        public string liveType;
+        public string name;
+        public VConsumableRarity rarity;
 
-        public static uint IDDistributor => idDistributor;
-        public static void LoadIDDistributor(uint id)
-        {
-            idDistributor = id;
-        }
-        
         public VConsumableConfiguration(CellRange row)
         {
             id = Convert.ToUInt32(row.Columns[VConsumableHeaderIndex.Id].Value.Trim());
@@ -110,13 +104,17 @@ namespace VTuber.Consumable
             liveType = row.Columns[VConsumableHeaderIndex.LiveType].Value.Trim();
             icon = VResourcesManager.Instance.TryGetSprite(row.Columns[VConsumableHeaderIndex.Icon].Value.Trim());
         }
-        
+
+        public static uint IDDistributor => idDistributor;
+
+        public static void LoadIDDistributor(uint id)
+        {
+            idDistributor = id;
+        }
+
         public virtual VConsumable CreateConsumable()
         {
             return new VConsumable(0, this);
         }
-        
     }
-
-
 }

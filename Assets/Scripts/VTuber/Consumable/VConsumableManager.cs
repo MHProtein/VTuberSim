@@ -9,20 +9,20 @@ namespace VTuber.Consumable
 {
     public class VConsumableManager
     {
-        List<VConsumable> consumables = new List<VConsumable>();
-        private VCharacter _character;
+        private readonly VCharacter _character;
+        private readonly List<VConsumable> consumables = new();
         private VBattle _battle;
-        
-        public bool CanUseConsumable => _canUseConsumable || CanUseBattleConsumable();
         private bool _canUseConsumable;
-        
+
         public uint maxConsumableCount = 3;
-        
+
         public VConsumableManager(VCharacter character)
         {
             _character = character;
         }
-        
+
+        public bool CanUseConsumable => _canUseConsumable || CanUseBattleConsumable();
+
         public bool CanAddConsumable()
         {
             return consumables.Count < maxConsumableCount;
@@ -32,29 +32,29 @@ namespace VTuber.Consumable
         {
             consumables.Add(consumable);
             consumable.Initialize(this);
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddConsumable, new Dictionary<string, object>()
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddConsumable, new Dictionary<string, object>
             {
                 { "Consumable", consumable },
                 { "AreSlotsFull", !CanAddConsumable() }
             });
         }
-        
+
         public void RemoveConsumable(VConsumable consumable)
         {
             consumables.Remove(consumable);
-            
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable, new Dictionary<string, object>()
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable, new Dictionary<string, object>
             {
                 { "Consumable", consumable },
                 { "AreSlotsFull", !CanAddConsumable() }
             });
         }
-        
+
         public void SetBattle(VBattle battle)
         {
             _battle = battle;
         }
-        
+
         public void ClearBattle()
         {
             _battle = null;
@@ -74,7 +74,7 @@ namespace VTuber.Consumable
         {
             effects.ForEach(effect => effect.ApplyEffect(_battle));
         }
-        
+
         public void ApplyRaisingEffects(List<VRaisingEffect> effects)
         {
             effects.ForEach(effect => effect.ApplyEffect(_character, null));
@@ -88,13 +88,12 @@ namespace VTuber.Consumable
         public void Clear()
         {
             foreach (var consumable in consumables)
-            {
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable, new Dictionary<string, object>()
-                {
-                    { "Consumable", consumable },
-                    { "AreSlotsFull", !CanAddConsumable() }
-                });
-            }
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRemoveConsumable,
+                    new Dictionary<string, object>
+                    {
+                        { "Consumable", consumable },
+                        { "AreSlotsFull", !CanAddConsumable() }
+                    });
             consumables.Clear();
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using VTuber.Character.Attribute;
+﻿using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
 
 namespace VTuber.Character.Attributes
@@ -7,6 +6,7 @@ namespace VTuber.Character.Attributes
     public class VConversionRatioAttribute : VCharacterAttribute
     {
         public float fraction;
+
         public VConversionRatioAttribute(VCharacterAttributeConfiguration configuration, float initialValue,
             VRaisingEventKey eventKey, int maxValue, int minValue)
             : base(configuration, (int)initialValue, eventKey, maxValue, minValue, true, false)

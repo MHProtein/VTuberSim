@@ -6,14 +6,17 @@ using VTuber.BattleSystem.Core;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
-public class VValueModifierSaveData<T>
+    public class VValueModifierSaveData<T>
     {
-        public int ID;
         public T DefaultValue;
-        public Dictionary<uint, VValueModifier<T>.ModifierItem> Modifiers;
+
         [JsonConverter(typeof(StringEnumConverter))]
         public VBattleEventKey EventKey;
+
+        public int ID;
+
         public uint idDistributor;
+        public Dictionary<uint, VValueModifier<T>.ModifierItem> Modifiers;
 
         public VValueModifier<T> LoadModifier(bool isBattleAttribute = false)
         {
@@ -21,149 +24,102 @@ public class VValueModifierSaveData<T>
             return modifier;
         }
     }
-    
+
     [Serializable]
     public class VValueModifier<T>
     {
-        public class ModifierItem
-        {
-            public T Value => _value;
-            private T _value;
-            public int TurnCount => _turnCount;
-            private int _turnCount;
-
-            public ModifierItem(T value, int turnCount)
-            {
-                _value = value;
-                _turnCount = turnCount;
-            }
-
-            public void SetValue(T value)
-            {
-                _value = value;
-            }
-
-            public bool DecreaseTurnCount()
-            {
-                if (_turnCount == -1)
-                    return false;
-                _turnCount--;
-                return _turnCount <= 0;
-            }
-            
-        }
-        
-        public int ID => _id;
-        private int _id = -1;
-        public Action onModifierApply;
-        public T DefaultValue => _defaultValue;
-   
-        private T _defaultValue;
-        uint _idDistributor = 0;
-        
-        public Dictionary<uint, ModifierItem> Modifiers => _modifiers;
-        private Dictionary<uint, ModifierItem> _modifiers = new Dictionary<uint, ModifierItem>();
-
         private VBattleEventKey _eventKey = VBattleEventKey.Default;
-        private bool _isBattleAttribute = false;
-        
+        private uint _idDistributor;
+        private bool _isBattleAttribute;
+        public Action onModifierApply;
+
         [JsonConstructor]
         public VValueModifier(T defaultValue, bool isBattleAttribute = false)
         {
-            this._defaultValue = defaultValue;
+            DefaultValue = defaultValue;
             _isBattleAttribute = isBattleAttribute;
             AddToLookupTable();
         }
 
         public VValueModifier(VValueModifierSaveData<T> saveData, bool isBattleAttribute)
         {
-            _id = saveData.ID;
-            _defaultValue = saveData.DefaultValue;
-            _modifiers = saveData.Modifiers ?? new Dictionary<uint, ModifierItem>();
+            ID = saveData.ID;
+            DefaultValue = saveData.DefaultValue;
+            Modifiers = saveData.Modifiers ?? new Dictionary<uint, ModifierItem>();
             _eventKey = saveData.EventKey;
             _idDistributor = saveData.idDistributor;
             _isBattleAttribute = isBattleAttribute;
             AddToLookupTable();
         }
 
+        public int ID { get; private set; } = -1;
+
+        public T DefaultValue { get; }
+
+        public Dictionary<uint, ModifierItem> Modifiers { get; } = new();
+
         public void AddToLookupTable()
         {
             if (!_isBattleAttribute)
                 return;
             if (typeof(T) == typeof(float))
-            {
                 VBattleLookUpTables.Instance.AddGainRateModifier(this as VValueModifier<float>);
-            }
             else if (typeof(T) == typeof(int))
-            {
                 VBattleLookUpTables.Instance.AddGainValueModifier(this as VValueModifier<int>);
-            }
         }
-        
+
         public void SetEventKey(VBattleEventKey eventKey)
         {
             _eventKey = eventKey;
         }
-        
+
         public uint AddModifier(T modifier, int turnCount)
         {
-            _modifiers.Add(_idDistributor++, new ModifierItem(modifier, turnCount));
+            Modifiers.Add(_idDistributor++, new ModifierItem(modifier, turnCount));
             SendEvent();
             return _idDistributor - 1;
         }
-        
+
         public void RemoveModifier(uint id)
         {
-            if (_modifiers.ContainsKey(id))
-            {
-                _modifiers.Remove(id);
-            }
+            if (Modifiers.ContainsKey(id)) Modifiers.Remove(id);
             SendEvent();
         }
-        
+
         public void ChangeModifier(uint id, T newValue)
         {
-            if (_modifiers.ContainsKey(id))
-            {
-                _modifiers[id].SetValue(newValue);
-            }
+            if (Modifiers.ContainsKey(id)) Modifiers[id].SetValue(newValue);
             SendEvent();
         }
-        
+
         public static int GetModifierIntValue(VValueModifier<int> modifier, bool addValue)
         {
             if (modifier.Modifiers.Count == 0)
                 return modifier.DefaultValue;
-            int total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value.Value;
-            }
-            if(addValue)
+            var total = modifier.DefaultValue;
+            foreach (var mod in modifier.Modifiers) total += mod.Value.Value;
+            if (addValue)
                 modifier.onModifierApply?.Invoke();
             return total;
         }
-        
+
         public static float GetModifierFloatValue(VValueModifier<float> modifier, bool addValue)
         {
             if (modifier.Modifiers.Count == 0)
                 return modifier.DefaultValue;
-            float total = modifier.DefaultValue;
-            foreach (var mod in modifier.Modifiers)
-            {
-                total += mod.Value.Value;
-            }
-            if(addValue)
+            var total = modifier.DefaultValue;
+            foreach (var mod in modifier.Modifiers) total += mod.Value.Value;
+            if (addValue)
                 modifier.onModifierApply?.Invoke();
             return total;
         }
 
         public void Reset()
         {
-            _modifiers.Clear();
+            Modifiers.Clear();
             SendEvent();
         }
-        
+
         public void SendEvent()
         {
             VBattleRootEventCenter.Instance.Raise(_eventKey, new Dictionary<string, object>());
@@ -171,19 +127,45 @@ public class VValueModifierSaveData<T>
 
         public void SetID(int idDistributor)
         {
-            _id = idDistributor;
+            ID = idDistributor;
         }
 
         public VValueModifierSaveData<T> Save()
         {
             return new VValueModifierSaveData<T>
             {
-                ID = _id,
-                DefaultValue = _defaultValue,
-                Modifiers = _modifiers,
+                ID = ID,
+                DefaultValue = DefaultValue,
+                Modifiers = Modifiers,
                 EventKey = _eventKey,
                 idDistributor = _idDistributor
             };
+        }
+
+        public class ModifierItem
+        {
+            public ModifierItem(T value, int turnCount)
+            {
+                Value = value;
+                TurnCount = turnCount;
+            }
+
+            public T Value { get; private set; }
+
+            public int TurnCount { get; private set; }
+
+            public void SetValue(T value)
+            {
+                Value = value;
+            }
+
+            public bool DecreaseTurnCount()
+            {
+                if (TurnCount == -1)
+                    return false;
+                TurnCount--;
+                return TurnCount <= 0;
+            }
         }
     }
 }

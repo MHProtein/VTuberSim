@@ -16,7 +16,7 @@ namespace VTuber.BattleSystem.Core
         OnBattleEnd,
         OnBattleEndNotify,
         OnBattlePause,
-        
+
         OnDiscardToDraw,
         OnDrawCards,
         OnCardsAddedToDiscardPile,
@@ -26,7 +26,7 @@ namespace VTuber.BattleSystem.Core
         OnCardUsed, //when a card is played and disposed
         OnCardDisposed,
         OnTurnEndCardDisposed,
-        
+
         OnAttributeValueChange,
         OnPlayLeftChange,
         OnTurnChange,
@@ -39,43 +39,45 @@ namespace VTuber.BattleSystem.Core
         OnViewerCountChange,
         OnRevenueChange,
         OnSkipTurnStaminaChange,
-        
+
         OnParameterPopularityModifierChanged,
         OnShieldModifierChanged,
-        
+
         OnBuffAdded,
         OnBuffRemoved,
         OnBuffValueUpdated,
-        
+
         OnNotifyTurnBeginDelay,
-        
+
         OnRequestDrawCards,
         OnRedrawCards,
-        
+
         OnCardMovedToHandSlot,
         OnCardMovedToPlayPosition,
         OnNotifyBeginDisposeCard,
         OnPlayTheSecondTime,
         OnSkipTurnClicked,
-        
+
         OnRequestPickCardsFromPile,
         OnBeginPickCardsFromPile,
         OnCardsPickedFromPile,
-        
+
         OnMultiplierSequenceCalculated,
-        
+
         OnRelicAdded,
         OnRelicRemoved,
         OnRelicValueChanged,
-        
+
         OnCardEnterDiscardPile,
         OnCardEnterExaustPile,
-        
+
         OnRotateMultiplier,
-        OnBattleUIInitialize
+        OnBattleUIInitialize,
+        OnRestartBattle
     }
-    
+
     public delegate void FunctionWithADict(Dictionary<string, object> messageDict);
+
     public class VBattleRootEventCenter : VEventCenter<VBattleRootEventCenter, VBattleEventKey, FunctionWithADict>
     {
         public override bool Raise(VBattleEventKey key, params object[] args)

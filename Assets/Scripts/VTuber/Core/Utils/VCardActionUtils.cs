@@ -9,29 +9,21 @@ namespace VTuber.Core.UI
     {
         private static Action<VCard> GetAddCardAction(VCharacter character)
         {
-            return (card) =>
-            {
-                character.CardLibrary.AddCard(card);
-            };
+            return card => { character.CardLibrary.AddCard(card); };
         }
 
         private static Action<VCard> GetDeleteCardAction(VCharacter character)
         {
-            return (card) =>
-            {
-                character.CardLibrary.RemoveCard(card);
-            };
-        }
-        
-        private static Action<VCard> GetReplaceCardAction(VCharacter character, VCard selectedCard)
-        {
-            return (card) =>
-            {
-                character.CardLibrary.ReplaceCard(card, selectedCard);
-            };
+            return card => { character.CardLibrary.RemoveCard(card); };
         }
 
-        public static Action<VCard> GetAction(VCardActionType actionType, VCharacter character, VCard replaceSelectedCard = null)
+        private static Action<VCard> GetReplaceCardAction(VCharacter character, VCard selectedCard)
+        {
+            return card => { character.CardLibrary.ReplaceCard(card, selectedCard); };
+        }
+
+        public static Action<VCard> GetAction(VCardActionType actionType, VCharacter character,
+            VCard replaceSelectedCard = null)
         {
             switch (actionType)
             {
@@ -42,6 +34,7 @@ namespace VTuber.Core.UI
                 case VCardActionType.Delete:
                     return GetDeleteCardAction(character);
             }
+
             return null;
         }
     }

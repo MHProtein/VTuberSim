@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Spire.Xls;
-using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
 using VTuber.Core.UI;
 
@@ -17,21 +16,22 @@ namespace VTuber.Relic
         public const int ConditionType = 5;
         public const int Value = 6;
     }
+
     public abstract class VRaisingRelicCondition
     {
-        public VOperatorType operatorType;
         private readonly string _description;
-        public uint Id => _id;
-        private readonly uint _id;
+        public VOperatorType operatorType;
 
 
         public VRaisingRelicCondition(CellRange row)
         {
-            _id = Convert.ToUInt32(row.Columns[VRaisingRelicConditionHeaderIndex.Id].Value);
+            Id = Convert.ToUInt32(row.Columns[VRaisingRelicConditionHeaderIndex.Id].Value);
             operatorType = Enum.Parse<VOperatorType>(row.Columns[VRaisingRelicConditionHeaderIndex.Operator].Value);
             _description = row.Columns[VRaisingRelicConditionHeaderIndex.Description].Value;
         }
-        
+
+        public uint Id { get; }
+
         public abstract bool IsTrue(VCharacter character, Dictionary<string, object> message);
     }
 }

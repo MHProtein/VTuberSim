@@ -6,6 +6,7 @@ namespace VTuber.BattleSystem.Effect
     public class VShieldStaminaModifierEffectConfiguration : VEffectConfiguration
     {
         public VStaminaModifiyType modifyType;
+
         public VShieldStaminaModifierEffectConfiguration(CellRange row) : base(row)
         {
             modifyType = Enum.Parse<VStaminaModifiyType>(row.Columns[VEffectHeaderIndex.Parameter].Value);
@@ -13,8 +14,8 @@ namespace VTuber.BattleSystem.Effect
 
         public override VEffect CreateEffect(string parameter, string upgradedParameter)
         {
-            upgradable = (parameter != upgradedParameter);
-            
+            upgradable = parameter != upgradedParameter;
+
             return new VShieldStaminaModifierEffect(this, parameter, upgradedParameter);
         }
     }

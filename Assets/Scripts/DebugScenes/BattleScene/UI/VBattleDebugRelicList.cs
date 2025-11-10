@@ -10,20 +10,18 @@ namespace DebugScenes.BattleScene.UI
     {
         [SerializeField] private Transform content;
         [SerializeField] private GameObject relicItemPrefab;
-        List<VBattleDebugRelicItem> _relicItems;
+        private List<VBattleDebugRelicItem> _relicItems;
 
         public void Initialize(IEnumerable<VRelic> relics)
         {
             _relicItems = new List<VBattleDebugRelicItem>();
             if (relics is not null)
-            {
                 _relicItems.AddRange(relics.Where(relic => relic is VBattleRelic).Select(relic =>
                 {
                     var relicItem = Instantiate(relicItemPrefab, content).GetComponent<VBattleDebugRelicItem>();
                     relicItem.Initialize(relic, this);
                     return relicItem;
                 }));
-            }
         }
 
         public IEnumerable<VBattleDebugRelicItem> GetSelected()

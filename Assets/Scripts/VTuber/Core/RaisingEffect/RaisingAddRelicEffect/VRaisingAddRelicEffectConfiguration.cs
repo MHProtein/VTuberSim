@@ -5,6 +5,7 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingAddRelicEffectConfiguration : VRaisingEffectConfiguration
     {
         public uint relicId;
+
         public VRaisingAddRelicEffectConfiguration(CellRange row) : base(row)
         {
         }

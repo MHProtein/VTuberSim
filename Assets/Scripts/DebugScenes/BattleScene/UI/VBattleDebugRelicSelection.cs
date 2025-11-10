@@ -21,7 +21,7 @@ namespace DebugScenes.BattleScene.UI
             toRelicContent.onClick.AddListener(OnToRelicContentClick);
             toSelectedRelicContent.onClick.AddListener(OnToSelectedRelicContentClick);
             clearSelectRelicButton.onClick.AddListener(ClearSelectedRelic);
-            
+
             relicList.Initialize(VDataManager.Instance.Relics.Select(config => config.Value.CreateRelic()));
             selectedRelicList.Initialize(null);
         }

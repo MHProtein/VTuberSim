@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6f134aac3c8e9f40b28b81026952af4, type: 3}
-  m_Name: New Bullet List 1
+  m_Name: "\u76F4\u64AD\u5F00\u59CB\u5F39\u5E55\u5217\u8868"
   m_EditorClassIdentifier: 
   csvFile: {fileID: 4900000, guid: 7988a30b6f50a8a458849666ca3dd011, type: 3}
   bulletType: 1

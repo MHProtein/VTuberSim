@@ -9,8 +9,10 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddRandomConsumableEffect : VRaisingConsumableEffect
     {
-        VCharacter _character;
-        public VRaisingAddRandomConsumableEffect(VRaisingConsumableEffectConfiguration configuration) : base(configuration)
+        private VCharacter _character;
+
+        public VRaisingAddRandomConsumableEffect(VRaisingConsumableEffectConfiguration configuration) : base(
+            configuration)
         {
         }
 
@@ -25,7 +27,7 @@ namespace VTuber.Core.RaisingEffect
                     { "Action", new Action<VConsumable>(AddConsumable) }
                 });
         }
-        
+
         public void AddConsumable(VConsumable consumable)
         {
             _character.ConsumableManager.AddConsumable(consumable);
@@ -33,13 +35,12 @@ namespace VTuber.Core.RaisingEffect
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()
         {
-            
         }
+
         public override string GetParameter()
         {
             return "";

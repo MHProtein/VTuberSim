@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
-using PrimeTween;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -20,19 +20,18 @@ namespace VTuber.BattleSystem.UI
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-            bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
-            int delta = messagedict["Delta"] as int ? ?? 0;
+            var isFromCard = messagedict["IsFromCard"] as bool? ?? false;
+            var shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
+            var delta = messagedict["Delta"] as int? ?? 0;
             viewerCountText.text = $"{messagedict["NewValue"] as int? ?? 0}";
-            if(delta == 0)
+            if (delta == 0)
                 return;
-            
-            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
-                {
-                    RaiseEvents(isFromCard, shouldPlayTwice);
-                    viewerCountText.color = Color.white;
-                })));
+
+            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
+            {
+                RaiseEvents(isFromCard, shouldPlayTwice);
+                viewerCountText.color = Color.white;
+            }));
             viewerCountText.color = delta > 0 ? Color.green : Color.red;
         }
     }

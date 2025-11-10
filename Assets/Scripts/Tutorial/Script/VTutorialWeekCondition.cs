@@ -8,9 +8,9 @@ namespace Tutorial.Script
     {
         Attribute,
         CardLibrarySize,
-        CoopValue,
+        CoopValue
     }
-    
+
     [Serializable]
     public class VTutorialWeekCondition
     {
@@ -26,9 +26,7 @@ namespace Tutorial.Script
                 case VTutorialWeekConditionType.Attribute:
                 {
                     if (character.AttributeManager.TryGetAttribute(idOrName, out var attribute))
-                    {
                         return VMathUtils.Compare(attribute.Value, targetValue, operatorType);
-                    }
                     return false;
                 }
                 case VTutorialWeekConditionType.CardLibrarySize:
@@ -37,7 +35,8 @@ namespace Tutorial.Script
                 }
                 case VTutorialWeekConditionType.CoopValue:
                 {
-                    return VMathUtils.Compare(character.CooperatorManager.GetCooperator(uint.Parse(idOrName)).CoopValue, targetValue, operatorType);
+                    return VMathUtils.Compare(character.CooperatorManager.GetCooperator(uint.Parse(idOrName)).CoopValue,
+                        targetValue, operatorType);
                 }
                 default:
                     throw new ArgumentOutOfRangeException();

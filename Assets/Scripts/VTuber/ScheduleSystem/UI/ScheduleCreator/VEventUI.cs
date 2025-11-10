@@ -36,20 +36,28 @@ namespace VTuber.ScheduleSystem.UI
         
         
         [HideInInspector] public Vector2 initOffset;
-        private bool _isSelected;
+
+        private Color _bgColor;
+        private Camera _camera;
+        private bool _disposable = true;
+        private Transform _disposePosition;
+        private List<VScheduleSlot> _disposeSlots;
+        private bool _hasInSchedule;
+
+        private Vector2 _initPosition;
         private bool _interactable;
-        
-        public VScheduleEvent Event => _event;
-        private VScheduleEvent _event;
-        
-        private List<VScheduleSlot> parentBeforeDrag;
+        private bool _isSelected;
         private Vector2 _lastPosition;
+
+        private RectTransform _rectTransform;
+
+        private List<VScheduleSlot> parentBeforeDrag;
 
         private List<VScheduleSlot> parentSlots;
 
-        private Vector2 _initPosition;
-        
-        private Color _bgColor;
+        public VScheduleEvent Event { get; private set; }
+
+        public bool IsFixed { get; private set; }
 
         public bool IsFixed => _isFixed;
         private bool _isFixed = false;
@@ -78,6 +86,63 @@ namespace VTuber.ScheduleSystem.UI
             }
         }
 
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            Debug.Log("OnBeginDrag");
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            Debug.Log("EndDrag");
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!_interactable || IsFixed)
+                return;
+            if (!_isSelected && eventData.button
+                == PointerEventData.InputButton.Left)
+            {
+                icon.raycastTarget = false;
+                parentBeforeDrag = parentSlots;
+                transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
+                initOffset = transform.position - _camera.ScreenToWorldPoint(Input.mousePosition);
+                _isSelected = true;
+
+                foreach (var parent in parentSlots) parent.RemoveItem();
+                transform.SetAsLastSibling();
+
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected,
+                    new Dictionary<string, object>
+                    {
+                        { "Event", Event }
+                    });
+                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
+                new Dictionary<string, object>
+                {
+                    { "Name", Event.EventName },
+                    { "Description", Event.Description }
+                });
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+        }
+
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
         // {
         //     _eventData = eventData;
@@ -98,19 +163,19 @@ namespace VTuber.ScheduleSystem.UI
         {
             background.color = Color.grey;
         }
-        
+
         public void SetColorOriginal()
         {
             background.color = _bgColor;
             icon.color = Color.white;
         }
-        
+
         public void SetFixed(bool isFixed)
         {
-            _isFixed = isFixed;
+            IsFixed = isFixed;
             _interactable = isFixed;
         }
-        
+
         public void SetInteractive(bool interactable)
         {
             _interactable = interactable;
@@ -118,7 +183,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void Initialize(VScheduleEvent e, VScheduleSlot slot, bool disposable, Transform parent = null)
         {
-            _event = e;
+            Event = e;
             icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
             background.color = e.BackgroundColor;
             _bgColor = background.color;
@@ -126,7 +191,7 @@ namespace VTuber.ScheduleSystem.UI
             background.transform.localScale = Vector3.zero;
             nameText.text = e.EventName;
             nameIcon.color = e.BackgroundColor;
-            
+
             switch (e.CostType)
             {
                 case VEventCostType.Stamina:
@@ -136,15 +201,17 @@ namespace VTuber.ScheduleSystem.UI
                     costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Money");
                     break;
             }
-            
+
             costText.text = e.Cost.ToString();
-            
+
             Tween.Scale(icon.transform, Vector3.one, 0.3f);
             Tween.Scale(background.transform, Vector3.one, 0.3f);
-            var rectTransform = (background.transform as RectTransform);
-            Tween.UISizeDelta(rectTransform, new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
+            var rectTransform = background.transform as RectTransform;
+            Tween.UISizeDelta(rectTransform,
+                new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
 
-            if (slot.FindPosition((int)e.EventID, _event.Duration, initOffset.y, out var parents, out var transformParent,
+            if (slot.FindPosition((int)e.EventID, Event.Duration, initOffset.y, out var parents,
+                    out var transformParent,
                     out var position))
             {
                 SetNewParents(parents, transformParent, position,
@@ -155,17 +222,19 @@ namespace VTuber.ScheduleSystem.UI
                     transform.SetParent(parent);
                     transform.SetAsLastSibling();
                 }
+
                 parentBeforeDrag.Clear();
                 _disposeSlots = parentSlots;
                 _disposePosition = parent;
             }
+
             _disposable = disposable;
             _hasInSchedule = false;
         }
 
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
-            _event = e;
+            Event = e;
             icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
             background.color = e.BackgroundColor;
             _bgColor = background.color;
@@ -177,7 +246,7 @@ namespace VTuber.ScheduleSystem.UI
             background.transform.localScale = Vector3.zero;
             nameText.text = e.EventName;
             nameIcon.color = e.BackgroundColor;
-            
+
             switch (e.CostType)
             {
                 case VEventCostType.Stamina:
@@ -187,19 +256,20 @@ namespace VTuber.ScheduleSystem.UI
                     costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Money");
                     break;
             }
-            
+
             costText.text = e.Cost.ToString();
 
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
             Tween.Scale(background.transform, Vector3.one, 0.3f);
-            var rectTransform = (background.transform as RectTransform);
-            Tween.UISizeDelta(rectTransform, new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
+            var rectTransform = background.transform as RectTransform;
+            Tween.UISizeDelta(rectTransform,
+                new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
 
             transform.SetAsLastSibling();
 
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>()
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>
             {
-                { "Event", _event }
+                { "Event", Event }
             });
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             
@@ -207,78 +277,66 @@ namespace VTuber.ScheduleSystem.UI
             // 调用显示指示器
             ShowConditionIndicators();
         }
-        
+
         public void SetParentBeforeDrag()
         {
             parentSlots = parentBeforeDrag;
 
             Tween.Position(transform, _lastPosition, 0.2f);
             //transform.position = _lastPosition;
-            foreach (var parent in parentSlots)
+            foreach (var parent in parentSlots) parent.SetItem(this);
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
             {
-                parent.SetItem(this);
-            }
-            
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
-            {
-                { "Event", _event }
+                { "Event", Event }
             });
         }
-        
+
         public void SetParentDisposeSlot()
         {
             parentSlots = _disposeSlots;
 
             Tween.Position(transform, _disposePosition.position, 0.2f);
             //transform.position = _lastPosition;
-            foreach (var parent in parentSlots)
-            {
-                parent.SetItem(this);
-            }
+            foreach (var parent in parentSlots) parent.SetItem(this);
             transform.SetParent(_disposePosition);
-            
         }
 
-        public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position, bool shouldTween)
+        public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position,
+            bool shouldTween)
         {
             _hasInSchedule = true;
             parentBeforeDrag = parentSlots;
             parentSlots = parents;
             _lastPosition = position;
-            
-            foreach (var parent in parentSlots)
-            {
-                parent.SetItem(this);
-            }
-            if(shouldTween)
+
+            foreach (var parent in parentSlots) parent.SetItem(this);
+            if (shouldTween)
                 Tween.Position(transform, position, 0.2f);
             else
-            {
                 transform.position = position;
-            }
             transform.SetParent(transformParent);
             //transform.position = position;
-            if(!_event.IsSpecialEvent)
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+            if (!Event.IsSpecialEvent)
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
                 {
-                    { "Event", _event }
+                    { "Event", Event }
                 });
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_PlaceEvent);
         }
-        
+
         public bool TryPlaceEvent(List<RaycastResult> results)
         {
             foreach (var result in results)
             {
                 var slot = result.gameObject.GetComponent<VScheduleSlot>();
                 if (slot is not null)
-                {
-                    if(slot.FindPosition((int)_event.EventID, _event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
+                    if (slot.FindPosition((int)Event.EventID, Event.Duration, initOffset.y, out var parents,
+                            out var transformParent, out var position))
                     {
                         SetNewParents(parents, transformParent, position, true);
                         return true;
                     }
-                }
             }
 
             return false;
@@ -358,23 +416,20 @@ namespace VTuber.ScheduleSystem.UI
                 _isSelected = false;
                 return;
             }
-      
-            if(parentSlots is null || parentSlots.Count == 0)
+
+            if (parentSlots is null || parentSlots.Count == 0)
             {
                 if (_disposable)
                 {
                     Despawn();
                     return;
                 }
-                else
-                {
-                    SetParentBeforeDrag();
-                    return;
-                }
+
+                SetParentBeforeDrag();
+                return;
             }
 
             if ((!_disposable && _hasInSchedule) || _disposable)
-            {
                 foreach (var result in results)
                 {
                     var slot = result.gameObject.GetComponent<VScheduleSlot>();
@@ -384,34 +439,23 @@ namespace VTuber.ScheduleSystem.UI
                         return;
                     }
                 }
-            }
 
             if (!_disposable && _disposeSlots is not null)
-            {
                 SetParentDisposeSlot();
-            }
             else
-            {
                 Despawn();
-            }
         }
 
         public void Despawn()
         {
-            foreach (var slot in parentSlots)
-            {
-                slot.RemoveItem();
-            }
+            foreach (var slot in parentSlots) slot.RemoveItem();
             Tween.Scale(transform, Vector3.one * 0.2f, 0.28f);
             Tween.Position(transform, _initPosition, 0.3f)
-                .OnComplete(() =>
-                {
-                    Destroy(gameObject);
-                });
-            
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+                .OnComplete(() => { Destroy(gameObject); });
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
             {
-                { "Event", _event }
+                { "Event", Event }
             });
         }
         

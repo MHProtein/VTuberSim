@@ -20,32 +20,30 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         [SerializeField] private GameObject effectPrefab;
 
         private VCardUI _currentCard;
-        private VRelicSlotUI _currentRelic;
         private List<TMP_Text> _currentEffects;
-        
+        private VRelicSlotUI _currentRelic;
+
         public override void SetTab(VCooperator cooperator)
         {
-            var node = VDataManager.Instance.DialogueEventConfigs[cooperator.configuration.CoopLevels[level].upgradeEventID]
+            var node = VDataManager.Instance
+                .DialogueEventConfigs[cooperator.configuration.CoopLevels[level].upgradeEventID]
                 .dialogueNode;
             var dialog = VResourcesManager.Instance.TryGetDialog(node);
 
-            List<VRaisingEffect> effects = dialog.GetEffects();
-            
+            var effects = dialog.GetEffects();
+
 
             _currentEffects = new List<TMP_Text>();
             foreach (var effect in effects)
             {
                 if (effect is IAttributeEffect attributeEffect)
                 {
-                    string text = "";
+                    var text = "";
                     var effectText = Instantiate(effectPrefab, effectContainer).GetComponent<TMP_Text>();
-                    if (effect is VRaisingAddAttributeMaxValueEffect raisingAddAttributeMaxValueEffect)
-                    {
-                        text += "最大";
-                    }
+                    if (effect is VRaisingAddAttributeMaxValueEffect raisingAddAttributeMaxValueEffect) text += "最大";
 
                     text += VUIUtils.Instance.GetAttributeName(attributeEffect.AttributeName);
-                    
+
                     var parameter = effect.GetParameter();
                     if (parameter.Contains('-'))
                         text += parameter;
@@ -79,7 +77,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
                     _currentCard = cardUI;
                     continue;
                 }
-                
+
                 var otherEffectText = Instantiate(effectPrefab, effectContainer).GetComponent<TMP_Text>();
                 otherEffectText.text = effect.Name;
                 _currentEffects.Add(otherEffectText);
@@ -90,10 +88,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         {
             if (_currentEffects is not null)
             {
-                foreach (var effectText in _currentEffects)
-                {
-                    Destroy(effectText.gameObject);
-                }
+                foreach (var effectText in _currentEffects) Destroy(effectText.gameObject);
                 _currentEffects.Clear();
             }
 

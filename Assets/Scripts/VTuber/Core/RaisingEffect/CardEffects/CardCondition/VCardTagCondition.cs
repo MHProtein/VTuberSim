@@ -5,7 +5,8 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VCardTagCondition : VCardCondition
     {
-        private string _tag;
+        private readonly string _tag;
+
         public VCardTagCondition(CellRange row) : base(row)
         {
             _tag = row.Columns[VCardConditionHeaderIndex.Condition].Value.Trim();

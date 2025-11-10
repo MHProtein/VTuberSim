@@ -4,6 +4,5 @@ namespace VTuber.Relic.UI
 {
     public class VRelicUI : VUIBehaviour
     {
-        
     }
 }

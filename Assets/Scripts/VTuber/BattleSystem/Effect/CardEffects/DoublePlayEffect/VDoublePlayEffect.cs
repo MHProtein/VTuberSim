@@ -9,13 +9,14 @@ namespace VTuber.BattleSystem.Effect
         {
         }
 
-        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false,
+            bool shouldApplyTwice = false)
         {
             base.ApplyEffect(battle, layer, isFromCard, shouldApplyTwice);
             battle.NextCardPlayTwice();
             VDebug.Log($"效果 {_configuration.effectName} 已应用：下一张卡牌将被打出两次。");
-        }        
-        
+        }
+
         public override string GetValue()
         {
             return "";

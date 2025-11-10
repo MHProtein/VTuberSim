@@ -9,10 +9,11 @@ namespace VTuber.BattleSystem.Effect
     public class VAttributeTurnGainRateModifierEffect : VEffect
     {
         public string attributeName;
-        public int turnCount;
         public VUpgradableValue<float> deltaRate;
-        
-        public VAttributeTurnGainRateModifierEffect(VAttributeTurnGainRateModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+        public int turnCount;
+
+        public VAttributeTurnGainRateModifierEffect(VAttributeTurnGainRateModifierEffectConfiguration configuration,
+            string parameter, string upgradedParameter) : base(configuration)
         {
             attributeName = configuration.attributeName;
             turnCount = configuration.turnCount;
@@ -27,16 +28,17 @@ namespace VTuber.BattleSystem.Effect
             }
         }
 
-        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false, bool shouldApplyTwice = false)
+        public override void ApplyEffect(VBattle battle, int layer = 1, bool isFromCard = false,
+            bool shouldApplyTwice = false)
         {
             base.ApplyEffect(battle, layer, isFromCard, shouldApplyTwice);
-            
-            if(battle.BattleAttributeManager.TryGetAttribute(attributeName, out var attribute))
+
+            if (battle.BattleAttributeManager.TryGetAttribute(attributeName, out var attribute))
             {
-                float rateValue = deltaRate.Value;
-                if(MultiplyByLayer > 0.0f)
+                var rateValue = deltaRate.Value;
+                if (MultiplyByLayer > 0.0f)
                     rateValue *= layer * MultiplyByLayer;
-                
+
                 attribute.GainRateModifier.AddModifier(rateValue, turnCount);
             }
         }
@@ -51,6 +53,7 @@ namespace VTuber.BattleSystem.Effect
     {
         public string attributeName;
         public int turnCount;
+
         public VAttributeTurnGainRateModifierEffectConfiguration(CellRange row) : base(row)
         {
             var parameters = row.Columns[VEffectHeaderIndex.Parameter].Value.Split(',');

@@ -20,9 +20,7 @@ namespace VTuber.EventSystem.Events
         public override bool IsTrue(VCharacter character, VScheduleSlot slot)
         {
             if (character.AttributeManager.TryGetAttribute(attributeName, out var attribute))
-            {
                 return attribute.Value >= requiredValue;
-            }
             return false;
         }
     }

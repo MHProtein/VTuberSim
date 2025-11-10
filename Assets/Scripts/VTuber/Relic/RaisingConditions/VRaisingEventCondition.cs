@@ -17,10 +17,12 @@ namespace VTuber.Relic
 
         public VEventConditionType conditionType;
         public string targetValue;
-        
+
         public VRaisingEventCondition(CellRange row) : base(row)
         {
-            conditionType = Enum.Parse<VEventConditionType>(row.Columns[VRaisingRelicConditionHeaderIndex.ConditionType].Value.Trim());
+            conditionType =
+                Enum.Parse<VEventConditionType>(row.Columns[VRaisingRelicConditionHeaderIndex.ConditionType].Value
+                    .Trim());
             targetValue = row.Columns[VRaisingRelicConditionHeaderIndex.Value].Value.Trim();
         }
 

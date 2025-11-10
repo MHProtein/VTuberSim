@@ -1,8 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace VTuber.Core.UI
-{      
+{
     public enum VOperatorType
     {
         LessThan,
@@ -10,8 +9,9 @@ namespace VTuber.Core.UI
         Equal,
         GreaterThan,
         GreaterEqual,
-        NotEqual,
+        NotEqual
     }
+
     public static class VMathUtils
     {
         public enum RoundingType
@@ -20,7 +20,7 @@ namespace VTuber.Core.UI
             Floor,
             Round
         }
-        
+
         public static int FloatToInt(float value, RoundingType type = RoundingType.Ceil)
         {
             switch (type)
@@ -32,12 +32,13 @@ namespace VTuber.Core.UI
                 case RoundingType.Round:
                     return Mathf.RoundToInt(value);
             }
+
             return 0;
         }
-        
+
         public static string GetPercentage(int value, int decimalPlaces)
         {
-            var v = (value - 100f);
+            var v = value - 100f;
             return v.ToString();
         }
 
@@ -58,6 +59,7 @@ namespace VTuber.Core.UI
                 case VOperatorType.NotEqual:
                     return value != targetValue;
             }
+
             return false;
         }
     }

@@ -8,10 +8,10 @@ namespace VTuber.Core.UI
 {
     public class VUIUtils : VSingletonMonobehaviour<VUIUtils>
     {
-        [SerializeField] Dictionary<string, Sprite> attributeIcons;
-        [SerializeField] List<Sprite> pressureIcons;
-        [SerializeField] List<string> pressureNames;
-        [SerializeField] Sprite coopIcon; 
+        [SerializeField] private Dictionary<string, Sprite> attributeIcons;
+        [SerializeField] private List<Sprite> pressureIcons;
+        [SerializeField] private List<string> pressureNames;
+        [SerializeField] private Sprite coopIcon;
 
         public Sprite GetAttributeIcon(string attributeName)
         {
@@ -23,7 +23,7 @@ namespace VTuber.Core.UI
             return coopIcon;
         }
 
-        public KeyValuePair<string, Sprite>  GetPressureIcon(int i)
+        public KeyValuePair<string, Sprite> GetPressureIcon(int i)
         {
             return new KeyValuePair<string, Sprite>(pressureNames[i - 1], pressureIcons[i - 1]);
         }
@@ -47,6 +47,7 @@ namespace VTuber.Core.UI
                 case VEventType.Other:
                     return "其他";
             }
+
             return "";
         }
 
@@ -83,10 +84,7 @@ namespace VTuber.Core.UI
 
         public Sprite GetScoreLevelSprite(string level)
         {
-            if (level.IsNullOrWhitespace())
-            {
-                return VResourcesManager.Instance.TryGetSprite("ScoreLevel_SSS");
-            }
+            if (level.IsNullOrWhitespace()) return VResourcesManager.Instance.TryGetSprite("ScoreLevel_SSS");
             return VResourcesManager.Instance.TryGetSprite("ScoreLevel_" + level);
         }
     }

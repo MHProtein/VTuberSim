@@ -13,7 +13,7 @@ namespace VTuber.Relic.UI
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private bool areStreamingRelics;
         private List<VRelicSlotUI> _slotUIs;
-        
+
         protected override void Awake()
         {
             base.Awake();
@@ -21,17 +21,13 @@ namespace VTuber.Relic.UI
             _slotUIs = content.GetComponentsInChildren<VRelicSlotUI>().ToList();
         }
 
-        public void Show(bool show)
-        {
-            ui.SetActive(show);
-        }
-        
         protected override void OnEnable()
         {
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicAdded, OnRelicAdded);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicRemoved, OnRelicRemoved);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicValueChanged, OnRelicValueChanged);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicValueChanged,
+                OnRelicValueChanged);
         }
 
         protected override void OnDisable()
@@ -41,21 +37,26 @@ namespace VTuber.Relic.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicRemoved, OnRelicRemoved);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicValueChanged, OnRelicValueChanged);
         }
-        
+
+        public void Show(bool show)
+        {
+            ui.SetActive(show);
+        }
+
         private void OnRelicRemoved(Dictionary<string, object> messagedict)
         {
             if ((bool)messagedict["IsStreamRelic"] != areStreamingRelics)
                 return;
-            
+
             var relic = (VRelic)messagedict["Relic"];
             var slot = _slotUIs.FirstOrDefault(slot => slot.HasRelic() && slot.Relic.Id == relic.Id);
 
             if (!slot)
                 return;
             slot.Clear();
-            if(slot.IsAdditional)
+            if (slot.IsAdditional)
                 Destroy(slot);
-            else 
+            else
                 slot.transform.SetAsLastSibling();
         }
 
@@ -77,10 +78,9 @@ namespace VTuber.Relic.UI
                 _slotUIs.Add(slot);
             }
         }
-        
+
         private void OnRelicValueChanged(Dictionary<string, object> messagedict)
         {
-            
             if ((bool)messagedict["IsStreamRelic"] != areStreamingRelics)
                 return;
             var relic = (VRelic)messagedict["Relic"];
@@ -91,13 +91,12 @@ namespace VTuber.Relic.UI
         private bool TryGetEmptySlot(out VRelicSlotUI slot)
         {
             foreach (var slotUI in _slotUIs)
-            {
                 if (!slotUI.HasRelic())
                 {
                     slot = slotUI;
                     return true;
                 }
-            }
+
             slot = null;
             return false;
         }

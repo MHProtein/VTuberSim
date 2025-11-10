@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace VTuber.BattleSystem.Buff
     public enum BuffType
     {
         Permanent,
-        Persistent,
+        Persistent
     }
 
     public class VBuffHeaderIndex
@@ -35,20 +34,20 @@ namespace VTuber.BattleSystem.Buff
         public const int Effect5 = 15;
         public const int E5Param = 16;
     }
-    
+
     //Buff 的配置数据通过 VBuffConfiguration 存储，并延迟用于创建实例
     public class VBuffConfiguration
     {
-        public uint id;
         public string buffName;
-        public string description;
-        public Sprite icon;
         public BuffType buffType;
-        public bool stackable = true;
-        public int latency = 0;
-        
+        public string description;
+
         public List<VEffectItem> effectItems;
-            
+        public Sprite icon;
+        public uint id;
+        public int latency;
+        public bool stackable = true;
+
         // 解析表格数据构建配置
         public VBuffConfiguration(CellRange row)
         {
@@ -56,19 +55,19 @@ namespace VTuber.BattleSystem.Buff
             buffName = row.Columns[VBuffHeaderIndex.Name].Value;
             description = row.Columns[VBuffHeaderIndex.Description].Value;
             buffType = Enum.Parse<BuffType>(row.Columns[VBuffHeaderIndex.BuffType].Value);
-            stackable =  Convert.ToInt32(row.Columns[VBuffHeaderIndex.Stackable].Value) == 1;
+            stackable = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Stackable].Value) == 1;
             effectItems = new List<VEffectItem>();
             latency = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Latency].Value);
             icon = VResourcesManager.Instance.TryGetSprite(row.Columns[VBuffHeaderIndex.Icon].Value.Trim());
-            
+
             // 每两个字段为一组：EffectID + 参数
-            for (int i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E5Param; i += 2)
-            {               
+            for (var i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E5Param; i += 2)
+            {
                 var effectIDStr = row.Columns[i].Value;
-                if(effectIDStr.IsNullOrWhitespace())
+                if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                uint effect = Convert.ToUInt32(effectIDStr);
-                
+                var effect = Convert.ToUInt32(effectIDStr);
+
                 //每个 Buff 可绑定多个效果，通过 VEffectItem 创建出 VEffect
                 effectItems.Add(new VEffectItem
                 {
@@ -78,17 +77,18 @@ namespace VTuber.BattleSystem.Buff
                 });
             }
         }
+
         // 创建Buff实例
         public VBuff CreateBuff()
         {
             return new VBuff(this, effectItems.Select(item => item.CreateEffect()).ToList());
         }
-        
+
         public bool IsBuffPersistent()
         {
             return buffType == BuffType.Persistent;
         }
-        
+
         public bool IsBuffPermanent()
         {
             return buffType == BuffType.Permanent;

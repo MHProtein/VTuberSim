@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Core.StateMachine
@@ -11,48 +10,61 @@ namespace VTuber.Core.StateMachine
         Pause,
         ScheduleModify,
         PhaseStart,
-        None,
+        None
     }
 
     public class VStateSaveData
     {
-        public VStateType stateType;
-        
+        public List<VScheduleEventSaveData> dayEndEvents;
+        public bool isLastStreamSuccess;
+        public int lastStreamPopularity;
+        public bool shouldEndGame;
+
         // Execution state
         public bool shouldSwitchToModifySchedule;
-        public List<VScheduleEventSaveData> dayEndEvents;
-        public bool shouldEndGame;
-        public int lastStreamPopularity;
-        public bool isLastStreamSuccess;
+        public VStateType stateType;
     }
-    
+
     public abstract class VState
     {
-        public VStateType StateType => stateType;
-        
-        protected VStateType stateType;
-        
         protected VStateMachine stateMachine;
-        
+
+        protected VStateType stateType;
+        public VStateType StateType => stateType;
+
         public virtual void Register(VStateMachine vStateMachine)
         {
-            this.stateMachine = vStateMachine;
+            stateMachine = vStateMachine;
         }
-        
-        public virtual void Unregister() { }
-        
-        public virtual void Enter(VState state, params object[] enterParams) { }
-        
+
+        public virtual void Unregister()
+        {
+        }
+
+        public virtual void Enter(VState state, params object[] enterParams)
+        {
+        }
+
         public virtual void Exit(VState nextState)
         {
-            
         }
-        
-        public virtual void Update() { }
-        public virtual void FixedUpdate() { }
-        public virtual void LateUpdate() { }
-        
-        public virtual VStateSaveData Save() { return new VStateSaveData { stateType = stateType }; }
+
+        public virtual void Update()
+        {
+        }
+
+        public virtual void FixedUpdate()
+        {
+        }
+
+        public virtual void LateUpdate()
+        {
+        }
+
+        public virtual VStateSaveData Save()
+        {
+            return new VStateSaveData { stateType = stateType };
+        }
 
         public virtual void Load(VStateSaveData saveData)
         {

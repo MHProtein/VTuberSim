@@ -8,7 +8,6 @@ using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.SE;
 using VTuber.Reincarnation;
-using VTuber.Relic;
 
 namespace VTuber.BattleSystem.Core.UI
 {
@@ -17,17 +16,16 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private VScriptSelectionMenu _scriptSelectionMenu;
         [SerializeField] private VCharacterSelectionMenu _characterSelectionMenu;
         [SerializeField] private VAccountSelectionMenu _accountSelectionMenu;
-
-        public VScriptConfiguration SelectedScript => _selectedScript;
-        private VScriptConfiguration _selectedScript;
-        public VCharacterConfiguration SelectedCharacter => _selectedCharacter;
-        private VCharacterConfiguration _selectedCharacter;
-        
-        public List<VAccount> SelectedAccounts => _selectedAccounts;
-        private List<VAccount> _selectedAccounts;
         private Action _returnAction;
 
-        public void Begin(List<VScriptConfiguration> scripts, List<VCharacterConfiguration> characters, List<VAccount> accounts)
+        public VScriptConfiguration SelectedScript { get; private set; }
+
+        public VCharacterConfiguration SelectedCharacter { get; private set; }
+
+        public List<VAccount> SelectedAccounts { get; private set; }
+
+        public void Begin(List<VScriptConfiguration> scripts, List<VCharacterConfiguration> characters,
+            List<VAccount> accounts)
         {
             _scriptSelectionMenu.Initialize(scripts, ScriptSelectionMenuConfirm, ScriptSelectionMenuReturn);
             _characterSelectionMenu.Initialize(characters, CharacterSelectionMenuConfirm, CharacterSelectionMenuReturn);
@@ -37,8 +35,8 @@ namespace VTuber.BattleSystem.Core.UI
 
         public void ScriptSelectionMenuConfirm(VScriptConfiguration script)
         {
-            _selectedScript = script;
-            
+            SelectedScript = script;
+
             _scriptSelectionMenu.Hide();
             _characterSelectionMenu.Show();
         }
@@ -52,7 +50,7 @@ namespace VTuber.BattleSystem.Core.UI
 
         public void CharacterSelectionMenuConfirm(VCharacterConfiguration character)
         {
-            _selectedCharacter = character;
+            SelectedCharacter = character;
             _characterSelectionMenu.Hide();
             _accountSelectionMenu.Show();
         }
@@ -65,10 +63,10 @@ namespace VTuber.BattleSystem.Core.UI
 
         public void AccountSelectionMenuConfirm(List<VAccount> selectedAccounts)
         {
-            _selectedAccounts = selectedAccounts;
-            
+            SelectedAccounts = selectedAccounts;
+
             _accountSelectionMenu.Hide();
-            VGameManager.Instance.NewGame(_selectedCharacter, _selectedScript, selectedAccounts);
+            VGameManager.Instance.NewGame(SelectedCharacter, SelectedScript, selectedAccounts);
             VAudioPlayer.Instance.StopBGM();
             _scriptSelectionMenu.Clear();
             _accountSelectionMenu.Clear();

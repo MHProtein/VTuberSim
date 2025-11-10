@@ -3,97 +3,132 @@ using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Effect;
-using VTuber.BattleSystem.UI;
 using VTuber.Character;
-using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using Random = UnityEngine.Random;
 
 namespace VTuber.BattleSystem.Core
 {
     public class VCardPilesManagerSaveData
     {
         public List<uint> Deck;
-        public List<uint> DrawPile;
         public List<uint> DiscardPile;
-        public List<uint> HandPile;
+        public List<uint> DrawPile;
         public List<uint> ExhaustPile;
+        public List<uint> HandPile;
+        public bool isTutorial;
+        public Dictionary<int, List<uint>> tutorialTurnHandCards;
+        public bool isFirstTurn;
     }
-    
+
     public class VCardPilesManager
     {
-        public List<VCard> Deck => _deck;
-        private List<VCard> _deck = new List<VCard>();
+        private readonly int _handSize;
+        private readonly int _maxHandSize;
 
-        public List<VCard> DrawPile => _drawPile;
-        private List<VCard> _drawPile = new List<VCard>();
-
-        public List<VCard> DiscardPile => _discardPile;
-        private List<VCard> _discardPile = new List<VCard>();
-
-        public List<VCard> HandPile => _handPile;
-        private List<VCard> _handPile = new List<VCard>();
-        
-        public List<VCard> ExhaustPile => _exhaustPile;
-        private List<VCard> _exhaustPile = new List<VCard>();
-        
-        private int _handSize;
-        private int _maxHandSize;
-        
         private bool _isFirstTurn;
+        private bool _isLoad;
         private bool _isTutorial;
         private Dictionary<int, List<uint>> _tutorialTurnHandCards;
-        
-        public VCardPilesManager(int handSize, int maxHandSize, VCardLibrary cardLibrary,List<uint> tutorialDeck,
+
+        public VCardPilesManager(int handSize, int maxHandSize, VCardLibrary cardLibrary, List<uint> tutorialDeck,
             Dictionary<int, List<uint>> tutorialTurnHandCards, VCardPilesManagerSaveData saveData)
         {
             _handSize = handSize;
             _maxHandSize = maxHandSize;
-            
-            _deck = new List<VCard>();
-            _drawPile = new List<VCard>();
-            _discardPile = new List<VCard>();
-            _handPile = new List<VCard>();
-            _exhaustPile = new List<VCard>();
+
+            Deck = new List<VCard>();
+            DrawPile = new List<VCard>();
+            DiscardPile = new List<VCard>();
+            HandPile = new List<VCard>();
+            ExhaustPile = new List<VCard>();
 
             if (tutorialDeck is not null)
             {
-                _deck.AddRange(tutorialDeck.Select(VDataManager.Instance.CreateCardByID));
+                Deck.AddRange(tutorialDeck.Select(VDataManager.Instance.CreateCardByID));
+                DrawPile.AddRange(Deck);
                 _isTutorial = true;
+                _tutorialTurnHandCards = tutorialTurnHandCards;
                 return;
             }
-            
+
             if (saveData is not null)
             {
                 Load(cardLibrary, saveData);
                 return;
             }
+
             _isTutorial = false;
-            
-            _deck.AddRange(cardLibrary.GetCards());
-            _drawPile.AddRange(_deck);
+
+            Deck.AddRange(cardLibrary.GetCards());
+            DrawPile.AddRange(Deck);
             _isFirstTurn = true;
         }
-        
+
+        public List<VCard> Deck { get; } = new();
+
+        public List<VCard> DrawPile { get; } = new();
+
+        public List<VCard> DiscardPile { get; } = new();
+
+        public List<VCard> HandPile { get; } = new();
+
+        public List<VCard> ExhaustPile { get; } = new();
+
         public VCardPilesManagerSaveData Save()
         {
-            return new VCardPilesManagerSaveData()
+            if (_isTutorial)
+                return new VCardPilesManagerSaveData
+                {
+                    isTutorial = _isTutorial,
+                    isFirstTurn = _isFirstTurn,
+                    Deck = new List<uint>(Deck.Select(card => card.Id).ToList()) ,
+                    DrawPile = new List<uint>(DrawPile.Select(card => card.Id).ToList()),
+                    DiscardPile = new List<uint>(DiscardPile.Select(card => card.Id).ToList()),
+                    HandPile = new List<uint>(HandPile.Select(card => card.Id).ToList()),
+                    ExhaustPile = new List<uint>(ExhaustPile.Select(card => card.Id).ToList()),
+                    tutorialTurnHandCards = _tutorialTurnHandCards
+                };
+            return new VCardPilesManagerSaveData
             {
-                Deck = _deck.Select(card => card.Id).ToList(),
-                DrawPile = _drawPile.Select(card => card.Id).ToList(),
-                DiscardPile = _discardPile.Select(card => card.Id).ToList(),
-                HandPile = _handPile.Select(card => card.Id).ToList(),
-                ExhaustPile = _exhaustPile.Select(card => card.Id).ToList(),
+                isTutorial = _isTutorial,
+                isFirstTurn = _isFirstTurn,
+                Deck = new List<uint>(Deck.Select(card => card.Id).ToList()) ,
+                DrawPile = new List<uint>(DrawPile.Select(card => card.Id).ToList()),
+                DiscardPile = new List<uint>(DiscardPile.Select(card => card.Id).ToList()),
+                HandPile = new List<uint>(HandPile.Select(card => card.Id).ToList()),
+                ExhaustPile = new List<uint>(ExhaustPile.Select(card => card.Id).ToList()),
             };
         }
-        
+
         private void Load(VCardLibrary cardLibrary, VCardPilesManagerSaveData saveData)
         {
-            _deck.AddRange(saveData.Deck.Select(cardLibrary.GetCardByID));
-            _drawPile.AddRange(saveData.DrawPile.Select(cardLibrary.GetCardByID));
-            _discardPile.AddRange(saveData.DiscardPile.Select(cardLibrary.GetCardByID));
-            _handPile.AddRange(saveData.HandPile.Select(cardLibrary.GetCardByID));
-            _exhaustPile.AddRange(saveData.ExhaustPile.Select(cardLibrary.GetCardByID));
+            Clear();
+            _isLoad = true;
+            _isTutorial = saveData.isTutorial;
+            _isFirstTurn = saveData.isFirstTurn;
+            if (_isTutorial)
+            {
+                Deck.AddRange(saveData.Deck.Select(VDataManager.Instance.CreateCardByID));
+                DrawPile.AddRange(saveData.DrawPile.Select(GetCardByIDFromDeck));
+                DiscardPile.AddRange(saveData.DiscardPile.Select(GetCardByIDFromDeck));
+                HandPile.AddRange(saveData.HandPile.Select(GetCardByIDFromDeck));
+                ExhaustPile.AddRange(saveData.ExhaustPile.Select(GetCardByIDFromDeck));
+                _tutorialTurnHandCards = saveData.tutorialTurnHandCards;
+                return;
+            }
+
+            Deck.AddRange(saveData.Deck.Select(cardLibrary.GetCardByID));
+            DrawPile.AddRange(saveData.DrawPile.Select(cardLibrary.GetCardByID));
+            DiscardPile.AddRange(saveData.DiscardPile.Select(cardLibrary.GetCardByID));
+            HandPile.AddRange(saveData.HandPile.Select(cardLibrary.GetCardByID));
+            ExhaustPile.AddRange(saveData.ExhaustPile.Select(cardLibrary.GetCardByID));
+        }
+
+        public VCard GetCardByIDFromDeck(uint id)
+        {
+            return Deck.Find(card => card.configID == id);
         }
 
         public void OnEnable()
@@ -114,192 +149,204 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRequestDrawCards, OnRequestDrawCards);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardDisposed, OnCardDisposed);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardPlayed, OnRemoveCardFromHandPile);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardBeginDisposal, OnRemoveCardFromHandPile);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile, OnCardsPickedFromPile);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardBeginDisposal,
+                OnRemoveCardFromHandPile);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnCardsPickedFromPile,
+                OnCardsPickedFromPile);
         }
-        
+
         private void OnCardsPickedFromPile(Dictionary<string, object> messagedict)
         {
-            VCardPileType cardPileType = (VCardPileType)messagedict["CardPileType"];
-            List<VCard> pickedCards = messagedict["PickedCards"] as List<VCard>;
-            
+            var cardPileType = (VCardPileType)messagedict["CardPileType"];
+            var pickedCards = messagedict["PickedCards"] as List<VCard>;
+
             if (pickedCards == null || pickedCards.Count == 0)
                 return;
 
             List<VCard> pile = null;
-            
+
             switch (cardPileType)
             {
                 case VCardPileType.DrawPile:
-                    pile = _drawPile;
+                    pile = DrawPile;
                     break;
                 case VCardPileType.Discard:
-                    pile = _discardPile;
+                    pile = DiscardPile;
                     break;
                 case VCardPileType.Exhaust:
-                    pile = _exhaustPile;
+                    pile = ExhaustPile;
                     break;
                 case VCardPileType.Deck:
-                    _handPile.AddRange(pickedCards);
+                    HandPile.AddRange(pickedCards);
                     return;
                 case VCardPileType.ALL:
                     return;
             }
-            
+
             RemoveCardsFromPile(pile, pickedCards);
-            _handPile.AddRange(pickedCards);
+            HandPile.AddRange(pickedCards);
         }
 
         private void RemoveCardsFromPile(List<VCard> pile, List<VCard> cardsToRemove)
         {
-            foreach (var card in cardsToRemove)
-            {
-                RemoveCardFrom(pile, card);
-            }
+            foreach (var card in cardsToRemove) RemoveCardFrom(pile, card);
         }
-        
+
         private void RemoveCardFrom(List<VCard> pile, VCard card)
         {
-            for (int i = pile.Count - 1; i >= 0; i--)
-            {
-                if(pile[i] == card)
+            for (var i = pile.Count - 1; i >= 0; i--)
+                if (pile[i] == card)
                 {
                     pile.RemoveAt(i);
                     break;
                 }
-            }
         }
-        
+
         private void OnRemoveCardFromHandPile(Dictionary<string, object> messagedict)
         {
             RemoveFromHandPile(messagedict["Card"] as VCard);
-        }       
-        
+        }
+
         private void OnCardDisposed(Dictionary<string, object> args)
         {
-            VCard card = args["Card"] as VCard;
+            var card = args["Card"] as VCard;
             DisposeCard(card, (bool)args["IsUsed"]);
         }
 
         private void OnRequestDrawCards(Dictionary<string, object> messagedict)
         {
-            DrawCards((int)messagedict["DrawCount"], false, -1, (bool)messagedict["IsFromCard"], (bool)messagedict["ShouldPlayTwice"]);
+            DrawCards((int)messagedict["DrawCount"], false, -1, (bool)messagedict["IsFromCard"],
+                (bool)messagedict["ShouldPlayTwice"]);
         }
 
-        public void DrawCards(int drawCount, bool isTurnBegin, int currentTurnIndex, bool isFromCard = false, bool shouldPlayTwice = false)
-        {      
-            List<VCard> cards = new List<VCard>();
+        public void DrawCards(int drawCount, bool isTurnBegin, int currentTurnIndex, bool isFromCard = false,
+            bool shouldPlayTwice = false)
+        {
+            var cards = new List<VCard>();
             if (_isFirstTurn && !_isTutorial)
             {
                 _isFirstTurn = false;
-                var priorityCards = _drawPile.TakeWhile(card => card.IsPrioritized).ToList();
+                var priorityCards = DrawPile.TakeWhile(card => card.IsPrioritized).ToList();
                 if (priorityCards.Count > _maxHandSize)
-                {
                     cards = priorityCards.OrderBy(card => Random.Range(0f, 1f)).Take(_maxHandSize).ToList();
-                }
                 else
                     cards = priorityCards;
                 drawCount = Mathf.Max(0, drawCount - cards.Count);
             }
             else if (drawCount <= 0)
+            {
                 return;
+            }
 
             if (drawCount > 0)
             {
-                if (drawCount + _handPile.Count > _maxHandSize)
-                {
-                    drawCount = _maxHandSize - _handPile.Count;
-                }
+                if (drawCount + HandPile.Count > _maxHandSize) drawCount = _maxHandSize - HandPile.Count;
 
-                if (_drawPile.Count >= drawCount)
+                if (DrawPile.Count >= drawCount)
                 {
                     cards.AddRange(DrawFromDrawPile(drawCount, isTurnBegin, currentTurnIndex));
                 }
                 else
                 {
                     DiscardToDraw();
-                    if(drawCount > _drawPile.Count)
-                        drawCount = _drawPile.Count;
+                    if (drawCount > DrawPile.Count)
+                        drawCount = DrawPile.Count;
                     cards.AddRange(DrawFromDrawPile(drawCount, isTurnBegin, currentTurnIndex));
                 }
             }
-            
+
             VDebug.Log("Drawn Cards: " + cards.Count);
-            Dictionary<string, object> message = new Dictionary<string, object>();
+            var message = new Dictionary<string, object>();
             message.Add("Cards", cards);
             message.Add("IsFromCard", isFromCard);
             message.Add("ShouldPlayTwice", shouldPlayTwice);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnDrawCards, message);
         }
-        
+
         private List<VCard> DrawFromDrawPile(int n, bool isTurnBegin, int currentTurnIndex)
         {
-            List<VCard> cards = new List<VCard>();
-            if (_isTutorial && isTurnBegin)
+            var cards = new List<VCard>();
+            if (_isLoad)
+            {
+                _isLoad = false;
+                cards.AddRange(HandPile);
+                return cards;
+            }
+
+            if (_isTutorial && currentTurnIndex != -1 && _tutorialTurnHandCards.Count > currentTurnIndex)
             {
                 foreach (var cardIndex in _tutorialTurnHandCards[currentTurnIndex])
                 {
-                    var card = _drawPile.Find(card => card.configID == cardIndex);
-                    _drawPile.Remove(card);
-                    _handPile.Add(card);
-                    cards.Add(card);
+                    var card = DrawPile.Find(card => card.configID == cardIndex);
+                    if (card is not null)
+                        DrawPile.Remove(card);
+
+                    if (card is null)
+                    {
+                        card = DiscardPile.Find(card => card.configID == cardIndex);
+                        if (card is not null)
+                            DiscardPile.Remove(card);
+                    }
+
+                    if (card is not null)
+                    {
+                        HandPile.Add(card);
+                        cards.Add(card);
+                    }
                 }
+
                 return cards;
             }
-            HashSet<int> RGNs = new HashSet<int>();
+
+            var RGNs = new HashSet<int>();
             while (RGNs.Count < n)
             {
-                int num = Random.Range(0, _drawPile.Count);
+                var num = Random.Range(0, DrawPile.Count);
                 if (RGNs.Contains(num))
                     continue;
                 RGNs.Add(num);
-                _handPile.Add(_drawPile[num]);
-                cards.Add(_drawPile[num]);
+                HandPile.Add(DrawPile[num]);
+                cards.Add(DrawPile[num]);
             }
 
-            foreach (var card in _handPile)
-            {
-                _drawPile.Remove(card);
-            }
+            foreach (var card in HandPile) DrawPile.Remove(card);
 
             return cards;
         }
-        
+
         public void Clear()
         {
-            _deck.Clear();
-            _drawPile.Clear();
-            _discardPile.Clear();
-            _handPile.Clear();
-            _exhaustPile.Clear();
+            Deck.Clear();
+            DrawPile.Clear();
+            DiscardPile.Clear();
+            HandPile.Clear();
+            ExhaustPile.Clear();
         }
-        
+
         private void RemoveFromHandPile(VCard card)
         {
-            if(card is null)
+            if (card is null)
                 return;
-            
-            for (int i = 0; i < _handPile.Count; i++)
-            {
-                if (card == _handPile[i])
+
+            for (var i = 0; i < HandPile.Count; i++)
+                if (card == HandPile[i])
                 {
-                    _handPile.RemoveAt(i);
+                    HandPile.RemoveAt(i);
                     VDebug.Log($"已从手牌移除卡牌：{card.CardName}");
                     break;
                 }
-            }
         }
-        
+
         private void DisposeCard(VCard card, bool isUsed)
         {
-            if(card is null)
+            if (card is null)
                 return;
-            
-            if(card.IsExhaust && isUsed)
+
+            if (card.IsExhaust && isUsed)
             {
-                _exhaustPile.Add(card);
+                ExhaustPile.Add(card);
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardEnterExaustPile,
-                    new Dictionary<string, object>()
+                    new Dictionary<string, object>
                     {
                         { "Card", card }
                     });
@@ -307,34 +354,33 @@ namespace VTuber.BattleSystem.Core
             }
             else
             {
-                _discardPile.Add(card);
+                DiscardPile.Add(card);
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardEnterDiscardPile,
-                    new Dictionary<string, object>()
+                    new Dictionary<string, object>
                     {
                         { "Card", card }
                     });
                 VDebug.Log($"卡牌已移入弃牌堆：{card.CardName}");
             }
         }
-        
+
         private void OnTurnBegin(Dictionary<string, object> messagedict)
         {
-   
             DrawCards(_handSize, true, (int)messagedict["TurnIndex"]);
             VDebug.Log($"回合开始，抽取 {_handSize} 张卡牌。");
         }
-        
+
         private void DiscardToDraw()
         {
-            _drawPile.AddRange(_discardPile);
-            _discardPile.Clear();
-            VDebug.Log($"弃牌堆已洗入抽牌堆。");
+            DrawPile.AddRange(DiscardPile);
+            DiscardPile.Clear();
+            VDebug.Log("弃牌堆已洗入抽牌堆。");
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnDiscardToDraw, null);
         }
 
         public VCard GetCardById(uint id)
         {
-            return _deck.Find(card => card.Id == id);
+            return Deck.Find(card => card.Id == id);
         }
     }
 }

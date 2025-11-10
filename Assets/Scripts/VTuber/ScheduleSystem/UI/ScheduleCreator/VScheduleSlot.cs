@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.CoopSystem;
@@ -19,26 +18,12 @@ namespace VTuber.ScheduleSystem.UI
     
     public class VScheduleSlotSaveData
     {
-        public int coopEventID;
         public string coopEventIconName;
+        public int coopEventID;
     }
-    
+
     public class VScheduleSlot : VUIBehaviour
     {
-        public VEventUI Item => _item;
-        public bool IsCoopEventSlot {get; private set;}
-        /// <summary>
-        /// X=Day, Y=TimeOfDay
-        /// </summary>
-        public Vector2Int Coordination => _coordination;
-        private VScheduleUI _scheduleUI;
-        private Vector2Int _coordination;
-        private VEventUI _item;
-        private List<VRaisingEffect> _coopEventEffects;
-        private List<VCoopEvent.VCoopEventType> _coopEventTypes;
-        private int _coopEventID;
-        private Sprite _coopEventIcon;
-
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private GameObject highlightFrame;
         [SerializeField] private Image checkmark;
@@ -55,26 +40,42 @@ namespace VTuber.ScheduleSystem.UI
         
         
         
+        private int _allowedEventID;
+        private List<VRaisingEffect> _coopEventEffects;
+        private Sprite _coopEventIcon;
+        private int _coopEventID;
+        private List<VCoopEvent.VCoopEventType> _coopEventTypes;
+        private Vector2Int _coordination;
+        private int _eventID;
+
+        private bool _placeable = true;
+
+        private VScheduleUI _scheduleUI;
+        private bool _useThisTransformAsParent;
+        public VEventUI Item { get; private set; }
+
+        public bool IsCoopEventSlot { get; private set; }
+
+        /// <summary>
+        ///     X=Day, Y=TimeOfDay
+        /// </summary>
+        public Vector2Int Coordination => _coordination;
+
         public bool Available
         {
             get
             {
                 if (_placeable)
-                    return _item is null;
+                    return Item is null;
                 if (_allowedEventID == -1)
                     return false;
-                return _item is null && _allowedEventID == _eventID;
+                return Item is null && _allowedEventID == _eventID;
             }
         }
 
-        private bool _placeable = true;
-        private int _allowedEventID;
-        private int _eventID;
-        private bool _useThisTransformAsParent;
-
         public VScheduleSlotSaveData Save()
         {
-            return new VScheduleSlotSaveData()
+            return new VScheduleSlotSaveData
             {
                 coopEventID = _coopEventID,
                 coopEventIconName = _coopEventIcon?.name ?? ""
@@ -87,13 +88,13 @@ namespace VTuber.ScheduleSystem.UI
             if (saveData.coopEventID == -1)
                 return;
             _coopEventIcon = VResourcesManager.Instance.TryGetSprite(saveData.coopEventIconName);
-            SetCoopEvent(new VCoopEventItem()
+            SetCoopEvent(new VCoopEventItem
             {
                 e = VDataManager.Instance.GetCoopEventByID((uint)saveData.coopEventID),
                 pfp = _coopEventIcon
             });
         }
-        
+
         public void Initialize(Vector2Int coordination, VScheduleUI scheduleUI, bool useThisTransformAsParent)
         {
             _coordination = coordination;
@@ -101,14 +102,26 @@ namespace VTuber.ScheduleSystem.UI
             _useThisTransformAsParent = useThisTransformAsParent;
             _coopEventID = -1;
         }
-        
-        public List<VScheduleSlot> GetUDSlots() => _scheduleUI.GetUDSlots(this);
-        
-        public List<VScheduleSlot> GetLRSlots() => _scheduleUI.GetLRSlots(this);
-        
-        public List<VScheduleSlot> GetUDLRSlots() => _scheduleUI.GetUDLRSlots(this);
-        
-        public List<VScheduleSlot> GetSurroundingSlots() => _scheduleUI.GetSurroundingSlots(this);
+
+        public List<VScheduleSlot> GetUDSlots()
+        {
+            return _scheduleUI.GetUDSlots(this);
+        }
+
+        public List<VScheduleSlot> GetLRSlots()
+        {
+            return _scheduleUI.GetLRSlots(this);
+        }
+
+        public List<VScheduleSlot> GetUDLRSlots()
+        {
+            return _scheduleUI.GetUDLRSlots(this);
+        }
+
+        public List<VScheduleSlot> GetSurroundingSlots()
+        {
+            return _scheduleUI.GetSurroundingSlots(this);
+        }
 
         public void SetPlaceable(bool isPlaceable, bool showFrame, int allowedEventID)
         {
@@ -126,80 +139,65 @@ namespace VTuber.ScheduleSystem.UI
             pfp.sprite = eventItem.pfp;
             _coopEventEffects = eventItem.e.effects;
             _coopEventTypes = eventItem.e.eventTypes;
-            for (int i = 0; i < eventItem.e.eventTypes.Count; i++)
+            for (var i = 0; i < eventItem.e.eventTypes.Count; i++)
             {
                 eventIcons[i].gameObject.SetActive(true);
-                string x = eventItem.e.eventTypes[i].eventType.ToString();
+                var x = eventItem.e.eventTypes[i].eventType.ToString();
                 eventIcons[i].sprite = VResourcesManager.Instance.TryGetSprite(x);
                 if (eventItem.e.eventTypes[i].eventType == VEventType.Stream &&
                     eventItem.e.eventTypes[i].abilityIndex != -1)
-                {
                     eventIcons[i].color = VRaisingUI.Instance.abilityColors[eventItem.e.eventTypes[i].abilityIndex];
-                }
-                
+
                 foreach (var effect in _coopEventEffects)
-                {
                     if (effect is IAttributeEffect attributeEffect)
                     {
                         effectText.text = "+" + effect.GetParameter();
                         effectImage.GetComponentInChildren<Image>().sprite =
                             VUIUtils.Instance.GetAttributeIcon(attributeEffect.AttributeName);
                     }
-                }
             }
         }
-        
+
         public void RemoveCoopEvent()
         {
             coopEventGameObject.SetActive(false);
             checkmark.gameObject.SetActive(false);
             redCross.gameObject.SetActive(false);
             IsCoopEventSlot = false;
-            foreach (var icon in eventIcons)
-            {
-                icon.gameObject.SetActive(false);
-            }
+            foreach (var icon in eventIcons) icon.gameObject.SetActive(false);
         }
 
         public bool IsInCoopEventTypes(VEventUI item)
         {
             if (IsCoopEventSlot)
-            {
                 foreach (var coopEventType in _coopEventTypes)
-                {
                     if (coopEventType.eventType == VEventType.Stream && coopEventType.abilityIndex != -1)
                     {
                         if (item.Event is VStreamEvent streamEvent)
-                        {
                             if (streamEvent.MainAttributeIndex == coopEventType.abilityIndex)
-                            {
                                 return true;
-                            }
-                        }
                     }
                     else if (item.Event.Type == coopEventType.eventType)
                     {
                         return true;
                     }
-                }
-            }
 
             return false;
         }
 
         public void SetItem(VEventUI item)
         {
-            _item = item;
-            if(_scheduleUI is not null)
+            Item = item;
+            if (_scheduleUI is not null)
                 _scheduleUI.RecordEvent(item.Event);
-            
+
             if (IsCoopEventSlot && (_coopEventTypes.Count == 0 || IsInCoopEventTypes(item)))
             {
                 checkmark.gameObject.SetActive(true);
                 checkmark.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
                 item.Event.SetCoopEffects(this, _coopEventEffects);
             }
-            else if(IsCoopEventSlot)
+            else if (IsCoopEventSlot)
             {
                 redCross.gameObject.SetActive(true);
                 redCross.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
@@ -210,40 +208,52 @@ namespace VTuber.ScheduleSystem.UI
         {
             checkmark.transform.SetParent(transform);
             checkmark.gameObject.SetActive(false);
-            
+
             redCross.transform.SetParent(transform);
             redCross.gameObject.SetActive(false);
 
-            if (_item is not null && _item.Event is not null)
+            if (Item is not null && Item.Event is not null)
             {
-                if(_scheduleUI is not null)
-                    _scheduleUI.UnrecordEvent(_item.Event);
-                _item.Event.RemoveCoopEffects(this);
-                _item.Event.SetSchedulingConditionMet(false);
+                if (_scheduleUI is not null)
+                    _scheduleUI.UnrecordEvent(Item.Event);
+                Item.Event.RemoveCoopEffects(this);
+                Item.Event.SetSchedulingConditionMet(false);
             }
-            _item = null;
+
+            Item = null;
         }
 
         public void DespawnItem()
         {
-            if (_item is null)
+            if (Item is null)
                 return;
-            
-            _item.Despawn();
+
+            Item.Despawn();
         }
-        
+
         public void DestroyItem()
         {
-            if (_item is null)
+            if (Item is null)
                 return;
-            Destroy(_item.gameObject);
-            _item = null;
+            Destroy(Item.gameObject);
+            Item = null;
         }
-        
-        private void ChangeIndicatorScale(float scale) => _scheduleUI?.ChangeIndicatorScale(scale);
-        private void ChangeIndicatorPosition(Vector3 position) => _scheduleUI?.ChangeIndicatorPosition(position);
-        private void ChangeIndicatorColor(Color color) => _scheduleUI?.ChangeIndicatorColor(color);
-        
+
+        private void ChangeIndicatorScale(float scale)
+        {
+            _scheduleUI?.ChangeIndicatorScale(scale);
+        }
+
+        private void ChangeIndicatorPosition(Vector3 position)
+        {
+            _scheduleUI?.ChangeIndicatorPosition(position);
+        }
+
+        private void ChangeIndicatorColor(Color color)
+        {
+            _scheduleUI?.ChangeIndicatorColor(color);
+        }
+
 
         public void SetIndicator(int height, float offsetY)
         {
@@ -291,6 +301,7 @@ namespace VTuber.ScheduleSystem.UI
                             ChangeIndicatorPosition(position);
                             return;
                         }
+
                         if (_scheduleUI.Slots[2, _coordination.x].Available && Available)
                         {
                             var position = (_scheduleUI.Slots[1, _coordination.x].transform.position +
@@ -347,14 +358,12 @@ namespace VTuber.ScheduleSystem.UI
                 ChangeIndicatorScale(3.0f);
                 var position = _scheduleUI.Slots[1, _coordination.x].transform.position;
                 ChangeIndicatorPosition(position);
-                for (int y = 0; y < 3; y++)
-                {
+                for (var y = 0; y < 3; y++)
                     if (!_scheduleUI.Slots[y, _coordination.x].Available)
                     {
                         ChangeIndicatorColor(Color.red);
                         return;
                     }
-                }
 
                 ChangeIndicatorColor(Color.green);
             }
@@ -370,22 +379,15 @@ namespace VTuber.ScheduleSystem.UI
             position = Vector3.zero;
 
             if (_useThisTransformAsParent)
-            {
                 transformParent = transform;
-            }
             else
-            {
                 transformParent = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.EventParent;
-            }
 
-            if (!Available)
-            {
-                return false;
-            }
+            if (!Available) return false;
 
             if (height == 1)
             {
-                parents = new List<VScheduleSlot>()
+                parents = new List<VScheduleSlot>
                 {
                     this
                 };
@@ -399,7 +401,7 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     if (_scheduleUI.Slots[1, _coordination.x].Available)
                     {
-                        parents = new List<VScheduleSlot>()
+                        parents = new List<VScheduleSlot>
                         {
                             _scheduleUI.Slots[0, _coordination.x],
                             _scheduleUI.Slots[1, _coordination.x]
@@ -418,7 +420,7 @@ namespace VTuber.ScheduleSystem.UI
                     {
                         if (_scheduleUI.Slots[0, _coordination.x].Available)
                         {
-                            parents = new List<VScheduleSlot>()
+                            parents = new List<VScheduleSlot>
                             {
                                 _scheduleUI.Slots[0, _coordination.x],
                                 _scheduleUI.Slots[1, _coordination.x]
@@ -430,7 +432,7 @@ namespace VTuber.ScheduleSystem.UI
 
                         if (_scheduleUI.Slots[2, _coordination.x].Available)
                         {
-                            parents = new List<VScheduleSlot>()
+                            parents = new List<VScheduleSlot>
                             {
                                 _scheduleUI.Slots[1, _coordination.x],
                                 _scheduleUI.Slots[2, _coordination.x]
@@ -444,7 +446,7 @@ namespace VTuber.ScheduleSystem.UI
                     {
                         if (_scheduleUI.Slots[2, _coordination.x].Available)
                         {
-                            parents = new List<VScheduleSlot>()
+                            parents = new List<VScheduleSlot>
                             {
                                 _scheduleUI.Slots[1, _coordination.x],
                                 _scheduleUI.Slots[2, _coordination.x]
@@ -453,9 +455,10 @@ namespace VTuber.ScheduleSystem.UI
                                         _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                             return true;
                         }
+
                         if (_scheduleUI.Slots[0, _coordination.x].Available)
                         {
-                            parents = new List<VScheduleSlot>()
+                            parents = new List<VScheduleSlot>
                             {
                                 _scheduleUI.Slots[0, _coordination.x],
                                 _scheduleUI.Slots[1, _coordination.x]
@@ -468,10 +471,9 @@ namespace VTuber.ScheduleSystem.UI
                 }
 
                 if (_coordination.y == 2)
-                {
                     if (_scheduleUI.Slots[1, _coordination.x].Available)
                     {
-                        parents = new List<VScheduleSlot>()
+                        parents = new List<VScheduleSlot>
                         {
                             _scheduleUI.Slots[1, _coordination.x],
                             _scheduleUI.Slots[2, _coordination.x]
@@ -480,22 +482,17 @@ namespace VTuber.ScheduleSystem.UI
                                     _scheduleUI.Slots[2, _coordination.x].transform.position) / 2f;
                         return true;
                     }
-                }
 
                 return false;
             }
 
             if (height == 3)
             {
-                for (int y = 0; y < 3; y++)
-                {
+                for (var y = 0; y < 3; y++)
                     if (!_scheduleUI.Slots[y, _coordination.x].Available)
-                    {
                         return false;
-                    }
-                }
 
-                parents = new List<VScheduleSlot>()
+                parents = new List<VScheduleSlot>
                 {
                     _scheduleUI.Slots[0, _coordination.x],
                     _scheduleUI.Slots[1, _coordination.x],
@@ -517,12 +514,9 @@ namespace VTuber.ScheduleSystem.UI
         {
             if (Item is not null && Item.Event.SchedulingCondition is not null)
             {
-                bool isConditionMet = _item.Event.SchedulingCondition.IsTrue(_scheduleUI.Character, this);
+                var isConditionMet = Item.Event.SchedulingCondition.IsTrue(_scheduleUI.Character, this);
 
-                if (appendEffects)
-                {
-                    _item.Event.SetSchedulingConditionMet(isConditionMet);
-                }
+                if (appendEffects) Item.Event.SetSchedulingConditionMet(isConditionMet);
                 return isConditionMet;
             }
 
@@ -572,4 +566,3 @@ namespace VTuber.ScheduleSystem.UI
         #endregion
     }
 }
-

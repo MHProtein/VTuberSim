@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using VTuber.BattleSystem.Card;
+﻿using System.Collections.Generic;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 
@@ -9,8 +6,9 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingDeleteSelected : VRaisingEffect
     {
-        private VCardCondition _condition;
         private VCharacter _character;
+        private VCardCondition _condition;
+
         public VRaisingDeleteSelected(VRaisingDeleteSelectedConfiguration configuration) : base(configuration)
         {
             _condition = configuration.Condition;
@@ -19,21 +17,20 @@ namespace VTuber.Core.RaisingEffect
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
             _character = character;
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>()
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>
             {
-                {"ActionType", VCardActionType.Delete}
+                { "ActionType", VCardActionType.Delete }
             });
         }
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()
         {
         }
-        
+
         public override string GetParameter()
         {
             return "";

@@ -24,14 +24,14 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] public Button confirmButton;
         [SerializeField] public Button returnButton;
 
-        private List<VSelectCardCardUI> _cardUIs; 
-        private List<VSelectCardCardUI> _displayingCardUIs;
-        
-        private VSelectCardCardUI _selectedCardUI;
+        private List<VSelectCardCardUI> _cardUIs;
 
         private Action<VCard> _confirmAction;
+        private List<VSelectCardCardUI> _displayingCardUIs;
         private Action<VCard> _previewAction;
         private Action _returnAction;
+
+        private VSelectCardCardUI _selectedCardUI;
 
         protected override void Awake()
         {
@@ -40,12 +40,32 @@ namespace VTuber.ScheduleSystem.UI
             _typeDropdown.onValueChanged.AddListener(OnTypeChanged);
             _rarityDropdown.onValueChanged.AddListener(OnRarityChanged);
             _isUpgraded.onValueChanged.AddListener(OnIsUpgradedChanged);
-            
+
             _cardUIs = new List<VSelectCardCardUI>();
             _displayingCardUIs = new List<VSelectCardCardUI>();
             confirmButton.onClick.AddListener(Confirm);
-            if(previewCardUI)
+            if (previewCardUI)
                 previewCardUI.gameObject.SetActive(false);
+        }
+
+        public void Select(VSelectCardCardUI cardUI)
+        {
+            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            confirmButton.interactable = true;
+            if (_selectedCardUI != null && _selectedCardUI == cardUI)
+                return;
+
+            if (_selectedCardUI is not null)
+                _selectedCardUI.UnSelect();
+            _selectedCardUI = cardUI;
+
+            if (previewCardUI)
+            {
+                previewCardUI.gameObject.SetActive(true);
+                var previewCard = VDataManager.Instance.CreateCardByID(_selectedCardUI.Card.configID);
+                _previewAction?.Invoke(previewCard);
+                previewCardUI.SetCard(previewCard);
+            }
         }
 
         private void Confirm()
@@ -56,15 +76,16 @@ namespace VTuber.ScheduleSystem.UI
 
         public void Return()
         {
-            _returnAction?.Invoke();  
+            _returnAction?.Invoke();
             Close();
         }
 
-        public void Initialize(List<VCard> cards, bool isStore, bool select, bool preview, Action<VCard> confirmAction, Action returnAction = null, Action<VCard> previewAction = null)
+        public void Initialize(List<VCard> cards, bool isStore, bool select, bool preview, Action<VCard> confirmAction,
+            Action returnAction = null, Action<VCard> previewAction = null)
         {
-             confirmButton.gameObject.SetActive(select);
+            confirmButton.gameObject.SetActive(select);
             returnButton.gameObject.SetActive(!select);
-            if(isStore)
+            if (isStore)
                 returnButton.gameObject.SetActive(true);
             _confirmAction = confirmAction;
             _returnAction = returnAction;
@@ -75,19 +96,16 @@ namespace VTuber.ScheduleSystem.UI
                 var cardItem = item.AddComponent<VSelectCardCardUI>();
                 var cardUI = cardItem.GetComponent<VCardUI>();
                 cardUI.SetCard(card);
-                
+
                 cardItem.Initialize(cardUI, this, select);
                 _cardUIs.Add(cardItem);
                 _displayingCardUIs.Add(cardItem);
             }
         }
-        
+
         public void Close()
         {
-            foreach (var cardUI in _cardUIs)
-            {
-                Destroy(cardUI.gameObject);
-            }
+            foreach (var cardUI in _cardUIs) Destroy(cardUI.gameObject);
 
             _cardUIs.Clear();
             _selectedCardUI = null;
@@ -95,15 +113,15 @@ namespace VTuber.ScheduleSystem.UI
             _typeDropdown.value = 0; // Reset to "All"
             _rarityDropdown.value = 0; // Reset to "Common"
             _isUpgraded.isOn = false; // Reset to unchecked
-            if(previewCardUI)
+            if (previewCardUI)
                 previewCardUI.gameObject.SetActive(false);
         }
-        
+
         public void OnTypeChanged(int value)
         {
             OnValueChanged();
         }
-        
+
         public void OnRarityChanged(int value)
         {
             OnValueChanged();
@@ -111,54 +129,29 @@ namespace VTuber.ScheduleSystem.UI
 
         private void OnValueChanged()
         {
-            List<VSelectCardCardUI> uis = new List<VSelectCardCardUI>();
-            string type = _typeDropdown.options[_typeDropdown.value].text;
-            uis.AddRange(type == "All" ? _cardUIs : _cardUIs.Where((ui => ui.Card.CardType == type)));
-            string rarityStr = _rarityDropdown.options[_rarityDropdown.value].text;
+            var uis = new List<VSelectCardCardUI>();
+            var type = _typeDropdown.options[_typeDropdown.value].text;
+            uis.AddRange(type == "All" ? _cardUIs : _cardUIs.Where(ui => ui.Card.CardType == type));
+            var rarityStr = _rarityDropdown.options[_rarityDropdown.value].text;
             if (!rarityStr.Equals("All"))
             {
-                VCardRarity rarity = Enum.Parse<VCardRarity>(rarityStr);
-                uis = uis.Where((ui => ui.Card.Rarity == rarity)).ToList();
+                var rarity = Enum.Parse<VCardRarity>(rarityStr);
+                uis = uis.Where(ui => ui.Card.Rarity == rarity).ToList();
             }
+
             UpdateDisplayingCards(uis);
         }
-        
+
         private void UpdateDisplayingCards(List<VSelectCardCardUI> newCards)
         {
-            foreach (var cardUI in _displayingCardUIs)
-            {
-                cardUI.transform.SetParent(null);
-            }
+            foreach (var cardUI in _displayingCardUIs) cardUI.transform.SetParent(null);
             _displayingCardUIs = newCards;
-            foreach (var cardUI in _displayingCardUIs)
-            {
-                cardUI.transform.SetParent(grid);
-            }
+            foreach (var cardUI in _displayingCardUIs) cardUI.transform.SetParent(grid);
         }
-        
+
         public void OnIsUpgradedChanged(bool value)
         {
             Debug.Log($"Is Upgraded: {value}");
-        }
-
-        public void Select(VSelectCardCardUI cardUI)
-        {
-            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
-            confirmButton.interactable = true;
-            if (_selectedCardUI != null && _selectedCardUI == cardUI)
-                return;
-            
-            if(_selectedCardUI is not null)
-                _selectedCardUI.UnSelect();
-            _selectedCardUI = cardUI;
-
-            if (previewCardUI)
-            {
-                previewCardUI.gameObject.SetActive(true);
-                VCard previewCard = VDataManager.Instance.CreateCardByID(_selectedCardUI.Card.configID);
-                _previewAction?.Invoke(previewCard);
-                previewCardUI.SetCard(previewCard);
-            }
         }
     }
 }

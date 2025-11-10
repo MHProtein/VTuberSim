@@ -6,7 +6,7 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VCardRarityCondition : VCardCondition
     {
-        private VCardRarity _cardRarity;
+        private readonly VCardRarity _cardRarity;
 
         public VCardRarityCondition(CellRange row) : base(row)
         {
@@ -17,7 +17,7 @@ namespace VTuber.Core.RaisingEffect
         {
             return card.Rarity == _cardRarity;
         }
-        
+
         public override bool IsTrue(VCardConfiguration cardConfig)
         {
             return cardConfig.rarity == _cardRarity;

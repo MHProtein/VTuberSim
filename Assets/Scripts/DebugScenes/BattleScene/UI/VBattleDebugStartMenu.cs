@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,9 +16,9 @@ namespace DebugScenes.BattleScene.UI
         [SerializeField] private Toggle isMultiplyMultiplier;
         [SerializeField] private Button startBattleButton;
         [SerializeField] private VBattleDebugRelicSelection relicSelection;
+        private List<VCharacterConfiguration> _characterConfig;
 
         private List<VScriptConfiguration> _scriptConfig;
-        private List<VCharacterConfiguration> _characterConfig;
 
         protected override void Awake()
         {
@@ -33,36 +32,33 @@ namespace DebugScenes.BattleScene.UI
         {
             _scriptConfig = scriptConfigs;
             _characterConfig = characterConfigs;
-            
+
             foreach (var vCharacterConfiguration in characterConfigs)
-            { 
-                characterDropdown.options.Add(new TMP_Dropdown.OptionData()
+                characterDropdown.options.Add(new TMP_Dropdown.OptionData
                 {
                     text = vCharacterConfiguration.characterName
                 });
-            }
             characterDropdown.RefreshShownValue();
-            
+
 
             foreach (var vScriptConfiguration in scriptConfigs)
-            {
-                scriptDropdown.options.Add(new TMP_Dropdown.OptionData()
+                scriptDropdown.options.Add(new TMP_Dropdown.OptionData
                 {
                     text = vScriptConfiguration.scriptName
                 });
-            }
             scriptDropdown.RefreshShownValue();
-            
+
             relicSelection.Initialize();
         }
 
         public void StartBattle()
         {
-            VBattleDebugSceneManager.Instance.StartBattle(isMultiplyMultiplier.isOn, 
-                _characterConfig.Find(character => character.characterName == characterDropdown.options[characterDropdown.value].text),
+            VBattleDebugSceneManager.Instance.StartBattle(isMultiplyMultiplier.isOn,
+                _characterConfig.Find(character =>
+                    character.characterName == characterDropdown.options[characterDropdown.value].text),
                 int.Parse(turnCount.text),
                 relicSelection.GetSelected()
-                    );
+            );
         }
     }
 }

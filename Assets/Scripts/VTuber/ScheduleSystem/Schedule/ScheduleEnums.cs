@@ -1,9 +1,8 @@
 ﻿namespace VTuber.ScheduleSystem.Core
 {
     /// <summary>
-    /// 一天中的时间段
+    ///     一天中的时间段
     /// </summary>
-    /// 
     public enum TimeOfDay
     {
         Morning = 0,
@@ -13,7 +12,7 @@
     }
 
     /// <summary>
-    /// 可安排的事件类型
+    ///     可安排的事件类型
     /// </summary>
     public enum VEventType
     {
@@ -24,11 +23,11 @@
         Work,
         Rest,
         Other,
-        TutorialStream,
+        TutorialStream
     }
 
     /// <summary>
-    /// 执行失败的原因
+    ///     执行失败的原因
     /// </summary>
     public enum FailureReason
     {
@@ -37,7 +36,7 @@
     }
 
     /// <summary>
-    /// 当前所处的阶段状态
+    ///     当前所处的阶段状态
     /// </summary>
     public enum PhaseState
     {
