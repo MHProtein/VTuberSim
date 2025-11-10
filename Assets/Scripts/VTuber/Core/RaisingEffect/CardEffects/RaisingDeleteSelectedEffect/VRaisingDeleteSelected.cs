@@ -14,7 +14,7 @@ namespace VTuber.Core.RaisingEffect
             _condition = configuration.Condition;
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             _character = character;
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCard, new Dictionary<string, object>

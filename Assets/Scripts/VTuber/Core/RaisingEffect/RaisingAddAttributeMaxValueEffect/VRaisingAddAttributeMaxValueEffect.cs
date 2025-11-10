@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
+using VTuber.Core.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -17,7 +19,13 @@ namespace VTuber.Core.RaisingEffect
 
         public string AttributeName { get; }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
+        {
+            animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
+            base.ApplyEffect(character, messagedict, animationRequest);
+        }
+        
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             if (character.AttributeManager.TryGetAttribute(AttributeName, out var attribute))
                 attribute.AddMaxValue(_value.Value);

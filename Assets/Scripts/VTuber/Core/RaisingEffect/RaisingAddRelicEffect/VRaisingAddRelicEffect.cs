@@ -14,7 +14,7 @@ namespace VTuber.Core.RaisingEffect
 
         public uint RelicId { get; }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CharacterRelicManager.AddRelic
                 (VDataManager.Instance.CreateRelicByID(RelicId));

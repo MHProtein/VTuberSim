@@ -24,6 +24,7 @@ using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 using VTuber.Store;
 using VTuber.Store.UI;
 
@@ -255,7 +256,7 @@ namespace VTuber.BattleSystem.Core
 
             foreach (var account in accounts)
                 foreach (var effect in account.Effects)
-                    effect.ApplyEffect(Character, null, VInstigatorType.Account, null);
+                    effect.ApplyEffect(Character, null, null);
 
             _weeklySchedule = new VWeeklySchedule();
 

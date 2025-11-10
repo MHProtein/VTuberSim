@@ -80,7 +80,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 
             for (var i = 0; i < account.Cards.Count; i++)
             {
-                //cardIcons[i].sprite = account.Cards[i].icon;
+                //cardIcons[i].sprite = account.Cards[i].instigatorIcon;
                 cardIcons[i].gameObject.SetActive(true);
                 if (i == cardIcons.Count - 1 && i < account.Cards.Count - 1) cardIcons[i].sprite = ellipsisIcon;
             }

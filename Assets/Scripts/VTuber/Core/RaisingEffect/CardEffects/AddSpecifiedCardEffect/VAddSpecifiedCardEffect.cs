@@ -14,7 +14,7 @@ namespace VTuber.Core.RaisingEffect
 
         public uint CardId { get; }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CardLibrary.AddCard(VDataManager.Instance.CreateCardByID(CardId));
         }

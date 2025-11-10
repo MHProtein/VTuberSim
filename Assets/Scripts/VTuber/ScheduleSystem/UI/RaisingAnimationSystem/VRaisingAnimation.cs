@@ -7,6 +7,11 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem
     {
         public virtual void BeginAnimation(VAnimationRequest request, Action onComplete)
         {
+            request.effectApply?.Invoke();
+        }
+
+        public virtual void ResetAnimation()
+        {
             
         }
     }

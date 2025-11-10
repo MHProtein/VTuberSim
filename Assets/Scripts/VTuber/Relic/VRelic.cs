@@ -6,6 +6,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.EventCenter;
 using VTuber.Core.RaisingEffect;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Relic
 {
@@ -193,7 +194,7 @@ namespace VTuber.Relic
             if (CanApply(messagedict))
             {
                 foreach (var effect in Effects)
-                    effect.ApplyEffect(_manager.Character, messagedict, VInstigatorType.Relic, Icon);
+                    effect.ApplyEffect(_manager.Character, messagedict, VAnimationRequestFactory.Create(VInstigatorType.Relic, Icon, Description));
                 if (!IsPermanent)
                 {
                     layer--;

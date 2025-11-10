@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using VTuber.Character;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -10,13 +11,15 @@ namespace VTuber.Core.RaisingEffect
         Coop,
         Event,
         Relic,
-        Account,
         Pressure,
-        Consumable
+        Consumable,
+        Dialog
     }
+    
     public abstract class VRaisingEffect
     {
         protected VRaisingEffectConfiguration _configuration;
+        protected bool shouldPlayAnimation = true;
 
         public VRaisingEffect(VRaisingEffectConfiguration configuration)
         {
@@ -35,10 +38,28 @@ namespace VTuber.Core.RaisingEffect
                 return description.Replace("X", GetParameter());
             }
         }
-
-        public virtual void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VInstigatorType instigatorType, Sprite icon, Dictionary<string, object> animationParams)
+        
+        protected virtual void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
+        }
+        
+        public virtual void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
+        {
+            if (shouldPlayAnimation && animationRequest is not null)
+            {
+                animationRequest.effect = this;
+                animationRequest.value = GetPreviewValue(character);
+                animationRequest.effectApply = () => ApplyEffectImplement(character, messagedict);
             
+                VRaisingAnimationSystem.Instance.EnqueueAnimationRequest(animationRequest);
+                return;
+            }
+            ApplyEffectImplement(character, messagedict);
+        }
+
+        protected virtual int GetPreviewValue(VCharacter character)
+        {
+            return 0;
         }
 
         public abstract void Upgrade();

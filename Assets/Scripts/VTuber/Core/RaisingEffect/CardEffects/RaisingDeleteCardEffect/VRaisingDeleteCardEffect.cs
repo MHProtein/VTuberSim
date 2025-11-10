@@ -15,7 +15,7 @@ namespace VTuber.Core.RaisingEffect
             _condition = configuration.Condition;
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             var cards = character.CardLibrary.GetCards();
             if (_condition is not null)

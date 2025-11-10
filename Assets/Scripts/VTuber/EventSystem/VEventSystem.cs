@@ -20,6 +20,7 @@ using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 using VTuber.Store;
 
 namespace VTuber.EventSystem
@@ -166,7 +167,8 @@ namespace VTuber.EventSystem
                 _hasDialogue = false;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
-                foreach (var effect in e.effects) effect.ApplyEffect(character, null, VInstigatorType.Event, e.Icon);
+                foreach (var effect in e.effects)
+                    effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, e.Icon, e.Description));
                 OnDialogueComplete(null);
 
                 if (_loaded)

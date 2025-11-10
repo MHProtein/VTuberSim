@@ -18,7 +18,7 @@ namespace VTuber.Core.RaisingEffect
             eventId = uint.Parse(parameter.Trim());
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddFollowUpEvent, new Dictionary<string, object>
             {

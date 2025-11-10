@@ -13,7 +13,7 @@ namespace VTuber.Core.RaisingEffect
         {
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             var cards = character.CardLibrary.GetCards().Where(vCard => !vCard.IsUpgraded).ToList();
             var card = cards[Random.Range(0, cards.Count)];

@@ -9,6 +9,7 @@ using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.ScheduleSystem.Events
 {
@@ -41,7 +42,7 @@ namespace VTuber.ScheduleSystem.Events
         {
             foreach (var effect in effects)
             {
-                effect.ApplyEffect(character, null, VInstigatorType.Coop, pfp);
+                effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, pfp, "coop description place_holder"));
             }
         }
     }
@@ -179,7 +180,7 @@ namespace VTuber.ScheduleSystem.Events
         {
             if (_isSchedulingConditionMet && SchedulingCondition.ShouldExecuteBeforeEvent)
                 foreach (var effect in SchedulingCondition.Effects)
-                    effect?.ApplyEffect(character, null, VInstigatorType.Event, Icon);
+                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, Description));
         }
         
         public void ExecuteAppendedEffects(VCharacter character)
@@ -192,7 +193,7 @@ namespace VTuber.ScheduleSystem.Events
 
             if (_isSchedulingConditionMet && !SchedulingCondition.ShouldExecuteBeforeEvent)
                 foreach (var effect in SchedulingCondition.Effects)
-                    effect?.ApplyEffect(character, null, VInstigatorType.Event, Icon);
+                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, Description));
         }
 
         public void SetExecuted()

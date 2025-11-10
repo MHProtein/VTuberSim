@@ -13,7 +13,7 @@ namespace VTuber.Core.RaisingEffect
             cooperatorID = uint.Parse(parameter);
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CooperatorManager.GetCooperator(cooperatorID).UpgradeLevel();
         }

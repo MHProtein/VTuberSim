@@ -24,7 +24,7 @@ namespace VTuber.Core.RaisingEffect
 
         public string AttributeName => attributeNameToBeAdded;
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.AttributeManager.TryGetAttribute(attributeNameToAdd, out var attributeToAdd);
             if (character.AttributeManager.TryGetAttribute(attributeNameToBeAdded, out var attribute))
