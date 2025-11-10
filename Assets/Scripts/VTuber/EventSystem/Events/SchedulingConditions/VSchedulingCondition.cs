@@ -68,7 +68,7 @@ namespace VTuber.ScheduleSystem.Events
 
         public VSchedulingCondition(CellRange row)
         {
-            Id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
+            _id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
 
             var placingConditionStr = row.Columns[VSchedulingConditionHeaderIndex.PlacingCondition].Value;
             if (!placingConditionStr.IsNullOrWhitespace())
@@ -119,7 +119,7 @@ namespace VTuber.ScheduleSystem.Events
                 }
             }
 
-            Effects = new List<VRaisingEffect>();
+            _effects = new List<VRaisingEffect>();
             for (var i = VSchedulingConditionHeaderIndex.Effect1; i <= VSchedulingConditionHeaderIndex.E3Param; i += 2)
             {
                 var effectIDStr = row.Columns[i].Value;
@@ -129,10 +129,6 @@ namespace VTuber.ScheduleSystem.Events
                     row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
             }
         }
-
-        public uint Id { get; }
-
-        public List<VRaisingEffect> Effects { get; }
 
         public bool IsTrue(VCharacter character, VScheduleSlot slot)
         {

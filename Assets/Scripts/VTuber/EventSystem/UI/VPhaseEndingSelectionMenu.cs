@@ -25,8 +25,6 @@ namespace VTuber.EventSystem.UI
             _options = new List<VPhaseEndingOption>();
             foreach (var ending in endings)
             {
-                GameObject endingGo = Instantiate(endingPrefab, grid);
-                VPhaseEndingOption option = endingGo.GetComponent<VPhaseEndingOption>();
                 // This call now handles the relic display internally
                 var endingGo = Instantiate(endingPrefab, grid);
                 var option = endingGo.GetComponent<VPhaseEndingOption>();

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
 using VTuber.EventSystem.UI;
 using VTuber.ScheduleSystem.Events;
@@ -17,7 +18,6 @@ namespace VTuber.Dialogue.UI
     {
         public VStreamEvent E => e;
         private VStreamEvent e;
-        VPhaseEndingSelectionMenu _menu;
         // --- NEW FIELDS: Add these for relic display ---
         [Header("Relic Display")]
         [SerializeField] private GameObject relicUiPrefab; // The prefab for a single relic icon
@@ -100,7 +100,6 @@ namespace VTuber.Dialogue.UI
         {
             backgroundImage.color = Color.white;
         }
-        public VStreamEvent E { get; private set; }
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -114,27 +113,6 @@ namespace VTuber.Dialogue.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-        }
-
-        public void Initialize(VStreamEvent streamEvent, VPhaseEndingSelectionMenu menu)
-        {
-            ;
-            E = streamEvent;
-            _menu = menu;
-            conditionDescriptions = new List<TMP_Text>();
-            titleText.text = streamEvent.EventName;
-            var kpis = streamEvent.Kpis;
-            foreach (var kpi in kpis)
-            {
-                var conditionGo = Instantiate(conditionPrefab, grids);
-                var text = conditionGo.GetComponent<TMP_Text>();
-                text.text = $"每周至少需完成 {kpi.RequiredAmount} 次 <color=red>{kpi.AbilityName}{kpi.EventName}</color>";
-            }
-        }
-
-        public void Unselect()
-        {
-            backgroundImage.color = Color.white;
         }
     }
 }
