@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SlayTheSpire.System.SavingSystem;
 using TMPro;
@@ -24,26 +23,30 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private VGameManager gameManager;
         [SerializeField] private VLoadSaveMenu loadSaveMenu;
         [SerializeField] private VConfirmationMenu confirmationMenu;
-        
-        [Space(5)]
-        [Header("消息")]
-        [TextArea][LabelText("删除存档确认")][SerializeField] private string deleteSaveConfirmationText;
-        [TextArea][LabelText("新游戏确认")][SerializeField] private string newGameConfirmationText;
-        [TextArea][LabelText("新游戏二次确认")][SerializeField] private string newGameConfirmationTwiceText;
-        
-        private List<VScriptConfiguration> _scripts;
-        private List<VCharacterConfiguration> _characters;
+
+        [Space(5)] [Header("消息")] [TextArea] [LabelText("删除存档确认")] [SerializeField]
+        private string deleteSaveConfirmationText;
+
+        [TextArea] [LabelText("新游戏确认")] [SerializeField]
+        private string newGameConfirmationText;
+
+        [TextArea] [LabelText("新游戏二次确认")] [SerializeField]
+        private string newGameConfirmationTwiceText;
+
         private List<VAccount> _accounts;
+        private List<VCharacterConfiguration> _characters;
+
+        private List<VScriptConfiguration> _scripts;
 
         protected override void Awake()
         {
             base.Awake();
-            
+
             _startButton.onClick.AddListener(NewGame);
             _loadGameButton.onClick.AddListener(OpenLoadMenu);
             _optionButton.onClick.AddListener(OpenOptionMenu);
             _exitButton.onClick.AddListener(ExitGame);
-            
+
             loadSaveMenu.confirmButton.onClick.AddListener(ConfirmLoad);
             loadSaveMenu.returnButton.onClick.AddListener(CloseLoadMenu);
             loadSaveMenu.deleteSaveButton.onClick.AddListener(DeleteSave);
@@ -53,7 +56,7 @@ namespace VTuber.BattleSystem.Core.UI
         {
             confirmationMenu.Show("删除存档", new List<string> { deleteSaveConfirmationText }, () =>
             {
-                DataPersistenceManager.Instance.DeleteSave();
+                VDataPersistenceManager.Instance.DeleteSave();
                 CloseLoadMenu();
                 _loadGameButton.interactable = false;
             });
@@ -62,7 +65,7 @@ namespace VTuber.BattleSystem.Core.UI
         private void OpenLoadMenu()
         {
             loadSaveMenu.gameObject.SetActive(true);
-            loadSaveMenu.SetDetails(DataPersistenceManager.Instance.SaveData);
+            loadSaveMenu.SetDetails(VDataPersistenceManager.Instance.SaveData);
         }
 
         private void CloseLoadMenu()
@@ -80,38 +83,38 @@ namespace VTuber.BattleSystem.Core.UI
         private void NewGame()
         {
             //VSave save = VSaveSystem.Load();
-            if (DataPersistenceManager.Instance.SaveData is null)
+            if (VDataPersistenceManager.Instance.SaveData is null)
             {
-                DataPersistenceManager.Instance.NewGame();
+                VDataPersistenceManager.Instance.NewGame(gameManager.IsTutorial);
                 gameConfigSelection.Begin(_scripts, _characters, _accounts);
                 return;
             }
-            
+
             confirmationMenu.Show("新游戏", new List<string> { newGameConfirmationText }, () =>
             {
                 confirmationMenu.Show("新游戏", new List<string> { newGameConfirmationTwiceText }, () =>
                 {
-                    DataPersistenceManager.Instance.NewGame();
+                    VDataPersistenceManager.Instance.NewGame(gameManager.IsTutorial);
                     gameConfigSelection.Begin(_scripts, _characters, _accounts);
                 });
             });
         }
 
-        public void Initialize(bool isReturn, List<VScriptConfiguration> scriptConfig, List<VCharacterConfiguration> characterConfiguration,
+        public void Initialize(bool isReturn, List<VScriptConfiguration> scriptConfig,
+            List<VCharacterConfiguration> characterConfiguration,
             List<VAccount> accounts)
         {
             _scripts = scriptConfig;
             _characters = characterConfiguration;
-            
+
             _accounts = accounts;
 
-            _loadGameButton.interactable = DataPersistenceManager.Instance.SaveData is not null;
+            _loadGameButton.interactable = VDataPersistenceManager.Instance.SaveData is not null;
             VAudioPlayer.Instance.PlayBGM(VBGMType.MainMenu);
         }
-        
+
         private void OpenOptionMenu()
         {
-            
         }
 
         private void ExitGame()

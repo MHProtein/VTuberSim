@@ -8,9 +8,11 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddEventAfterCurrentEffect : VRaisingEffect
     {
-        private VEventType _eventType;
-        private uint eventId;
-        public VRaisingAddEventAfterCurrentEffect(VRaisingAddEventAfterCurrentEffectConfiguration configuration, string parameter) : base(configuration)
+        private readonly VEventType _eventType;
+        private readonly uint eventId;
+
+        public VRaisingAddEventAfterCurrentEffect(VRaisingAddEventAfterCurrentEffectConfiguration configuration,
+            string parameter) : base(configuration)
         {
             _eventType = configuration.eventType;
             eventId = uint.Parse(parameter.Trim());
@@ -21,26 +23,22 @@ namespace VTuber.Core.RaisingEffect
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddFollowUpEvent, new Dictionary<string, object>
             {
                 { "EventType", _eventType },
-                { "EventId", eventId },
+                { "EventId", eventId }
             });
         }
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()
         {
-            
         }
-        
+
         public override string GetParameter()
         {
             if (_eventType == VEventType.Stream)
-            {
                 return VDataManager.Instance.GetStreamEventConfigurationByID(eventId).eventName;
-            }
             return VDataManager.Instance.GetDialogueEventConfigurationByID(eventId).eventName;
         }
     }

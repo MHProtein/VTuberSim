@@ -10,12 +10,12 @@ namespace VTuber.Character
 {
     public class VCharacterAttributeManager
     {
-        public Dictionary<string, VCharacterAttribute> Attributes { get; set; }
-        
         public VCharacterAttributeManager()
         {
             Attributes = new Dictionary<string, VCharacterAttribute>();
         }
+
+        public Dictionary<string, VCharacterAttribute> Attributes { get; set; }
 
         public void AddAttribute(string name, VCharacterAttribute attribute)
         {
@@ -23,7 +23,7 @@ namespace VTuber.Character
             attribute.AttributeName = name;
             attribute.SetAttributeManager(this);
         }
-        
+
         public bool TryGetAttribute(string name, out VCharacterAttribute attribute)
         {
             return Attributes.TryGetValue(name.Trim(), out attribute);
@@ -31,7 +31,7 @@ namespace VTuber.Character
 
         public bool TryGetAttributeValue(string name, out int value, out bool isPercentage)
         {
-            if(Attributes.TryGetValue(name, out var attribute))
+            if (Attributes.TryGetValue(name, out var attribute))
             {
                 value = attribute.Value;
                 isPercentage = attribute.IsPercentage;
@@ -42,7 +42,7 @@ namespace VTuber.Character
             isPercentage = false;
             return false;
         }
-        
+
         public void ConvertToCharacterAttributes(Dictionary<string, VBattleAttribute> attributes)
         {
             foreach (var attribute in Attributes)
@@ -71,29 +71,21 @@ namespace VTuber.Character
             switch (e.CostType)
             {
                 case VEventCostType.Stamina:
-                    if (TryGetAttribute("CAStamina", out var stamina))
-                    {
-                        stamina.AddTo(-e.Cost, false);
-                    }
+                    if (TryGetAttribute("CAStamina", out var stamina)) stamina.AddTo(-e.Cost, false);
 
                     break;
                 case VEventCostType.Money:
-                    if (TryGetAttribute("CAMoney", out var money))
-                    {
-                        money.AddTo(-e.Cost, false);
-                    }
+                    if (TryGetAttribute("CAMoney", out var money)) money.AddTo(-e.Cost, false);
                     break;
             }
         }
 
         public List<VBuff> GetBuffs()
         {
-            List<VBuff> buffs = new List<VBuff>();
+            var buffs = new List<VBuff>();
 
             if (TryGetAttribute("CAMembershipCount", out var membership))
-            {
                 buffs.Add((membership as VMembershipCountAttribute).GetBuff());
-            }
 
             return buffs;
         }
@@ -101,9 +93,7 @@ namespace VTuber.Character
         public void ApplyPressureEffects(VCharacter character)
         {
             if (TryGetAttribute("CAPressure", out var pressure))
-            {
                 (pressure as VPressureAttribute).ApplyEffects(character);
-            }
         }
 
         public List<VCharacterAttribute> GetAttributes()

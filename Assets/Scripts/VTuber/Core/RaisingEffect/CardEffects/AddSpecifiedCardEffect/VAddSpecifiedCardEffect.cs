@@ -6,31 +6,30 @@ namespace VTuber.Core.RaisingEffect
 {
     public class VAddSpecifiedCardEffect : VRaisingEffect
     {
-        public uint CardId => cardId;
-        private uint cardId;
-        public VAddSpecifiedCardEffect(VRaisingEffectConfiguration configuration, string parameter) : base(configuration)
+        public VAddSpecifiedCardEffect(VRaisingEffectConfiguration configuration, string parameter) : base(
+            configuration)
         {
-            cardId = uint.Parse(parameter);
+            CardId = uint.Parse(parameter);
         }
+
+        public uint CardId { get; }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            character.CardLibrary.AddCard(VDataManager.Instance.CreateCardByID(cardId));
+            character.CardLibrary.AddCard(VDataManager.Instance.CreateCardByID(CardId));
         }
 
         public override void Upgrade()
         {
-            
         }
 
         public override void DownGrade()
         {
-            
         }
 
         public override string GetParameter()
         {
-            return VDataManager.Instance.GetCardConfigurationByID(cardId).cardName;
+            return VDataManager.Instance.GetCardConfigurationByID(CardId).cardName;
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Spire.Xls;
-using VTuber.Character;
+﻿using Spire.Xls;
 
 namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddAttributeMaxValueEffectConfiguration : VRaisingEffectConfiguration
     {
         public string attributeName;
+
         public VRaisingAddAttributeMaxValueEffectConfiguration(CellRange row) : base(row)
         {
             attributeName = row.Columns[VRaisingEffectHeaderIndex.Param].Value;

@@ -6,19 +6,19 @@ namespace VTuber.BattleSystem.Core
 {
     public class VBattleLookUpTables : VSingleton<VBattleLookUpTables>
     {
-        private Dictionary<int, VValueModifier<int>> _gainValueModifiers;
         private Dictionary<int, VValueModifier<float>> _gainRateModifiers;
-        
-        public int IDDistributor => _idDistributor;
-        private int _idDistributor = 0;
+        private Dictionary<int, VValueModifier<int>> _gainValueModifiers;
+
+        public int IDDistributor { get; private set; }
+
         public void Initialize(VBattleSaveData saveData)
         {
             if (saveData is not null)
-                _idDistributor = saveData.battleLookUpIDDistributor;
+                IDDistributor = saveData.battleLookUpIDDistributor;
             _gainValueModifiers = new Dictionary<int, VValueModifier<int>>();
             _gainRateModifiers = new Dictionary<int, VValueModifier<float>>();
         }
-        
+
         public VValueModifier<int> GetGainValueModifier(int id)
         {
             if (_gainValueModifiers.ContainsKey(id))
@@ -37,8 +37,8 @@ namespace VTuber.BattleSystem.Core
         {
             if (modifier.ID == -1)
             {
-                modifier.SetID(_idDistributor);
-                _gainValueModifiers.Add(_idDistributor++, modifier);
+                modifier.SetID(IDDistributor);
+                _gainValueModifiers.Add(IDDistributor++, modifier);
             }
             else
             {
@@ -50,8 +50,8 @@ namespace VTuber.BattleSystem.Core
         {
             if (modifier.ID == -1)
             {
-                modifier.SetID(_idDistributor);
-                _gainRateModifiers.Add(_idDistributor++, modifier);
+                modifier.SetID(IDDistributor);
+                _gainRateModifiers.Add(IDDistributor++, modifier);
             }
             else
             {

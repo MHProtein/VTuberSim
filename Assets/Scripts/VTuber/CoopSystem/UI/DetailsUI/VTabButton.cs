@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
@@ -10,20 +9,21 @@ namespace VTuber.CoopSystem.UI.DetailsUI
 {
     public class VTabButton : VUIBehaviour, IPointerClickHandler
     {
-        [SerializeField] Image image;
-        [SerializeField] VTabUI tab;
-        Action<VTabButton> _onClick;
+        [SerializeField] private Image image;
+        [SerializeField] private VTabUI tab;
         private Color _color;
+        private Action<VTabButton> _onClick;
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Select();
+        }
+
         public void Initialize(Action<VTabButton> onClick, Color clickedColor)
         {
             _onClick = onClick;
             _color = clickedColor;
             tab.gameObject.SetActive(false);
-        }
-        
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            Select();
         }
 
         public void Unselect()

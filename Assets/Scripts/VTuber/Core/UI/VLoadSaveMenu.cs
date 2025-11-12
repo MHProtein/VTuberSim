@@ -3,9 +3,7 @@ using SlayTheSpire.System.SavingSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using VTuber.Character;
 using VTuber.Core.Foundation;
-using VTuber.Core.ScriptSystem;
 using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Core.UI
@@ -22,21 +20,23 @@ namespace VTuber.BattleSystem.Core.UI
         [SerializeField] private TMP_Text currentWeek;
         [SerializeField] private TMP_Text lastPlayTime;
         [SerializeField] private VAbilityDetails abilityDetails;
-        
+
         public void SetDetails(SaveData saveData)
         {
-            VScriptConfiguration scriptConfig = VGameManager.Instance.GetScriptConfig(saveData.script.scriptConfigurationName);
+            var scriptConfig = VGameManager.Instance.GetScriptConfig(saveData.script.scriptConfigurationName);
             scriptName.text = scriptConfig.scriptName;
             scriptImage.sprite = scriptConfig.icon;
-            
-            VCharacterConfiguration characterConfig = VGameManager.Instance.GetCharacterConfig(saveData.characterSaveData.characterConfigurationName);
+
+            var characterConfig =
+                VGameManager.Instance.GetCharacterConfig(saveData.characterSaveData.characterConfigurationName);
             characterName.text = characterConfig.name;
 
             currentPhase.text = "当前阶段: " + scriptConfig.phases[saveData.script.currentPhaseIndex].phaseName;
-            currentWeek.text = saveData.stateMachine.weekIndex + "/" + (scriptConfig.phases.Last().endEventWeekIndex + 1) + "周";
-            
+            currentWeek.text = saveData.stateMachine.weekIndex + "/" +
+                               (scriptConfig.phases.Last().endEventWeekIndex + 1) + "周";
+
             lastPlayTime.text = VStringUtils.GetTime(saveData.lastPlayTime);
-            
+
             abilityDetails.SetDetails(saveData.characterSaveData);
         }
     }

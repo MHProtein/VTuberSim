@@ -4,7 +4,6 @@ using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.Foundation;
-using VTuber.Relic;
 
 namespace VTuber.BattleSystem.Core
 {
@@ -15,30 +14,34 @@ namespace VTuber.BattleSystem.Core
         [SerializeField] private VBattle _battle;
         [SerializeField] private VCharacterConfiguration _characterConfiguration;
         private VCharacter character;
-        
+
         protected override void Awake()
         {
             base.Awake();
-            
-            VDataLoader loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
+
+            var loader = new VDataLoader(Path.Combine(Application.streamingAssetsPath, "Configurations/Cards.xlsx"),
                 Path.Combine(Application.streamingAssetsPath, "Configurations/Raising.xlsx"),
                 Path.Combine(Application.streamingAssetsPath, "Configurations/Relics.xlsx"),
                 Path.Combine(Application.streamingAssetsPath, "Configurations/Coop.xlsx"));
             character = new VCharacter(_characterConfiguration);
             var cardConfigs = loader.Load();
-            List<VCard> cards = new List<VCard>();
+            var cards = new List<VCard>();
 
             foreach (var cardConfig in cardConfigs)
-            {
-                for (int i = 0; i < 2; i++)
+                for (var i = 0; i < 2; i++)
                 {
                     var card = cardConfig.CreateCard();
-                    if(card is not null)
+                    if (card is not null)
                         cards.Add(card);
                 }
-            }
+
             character.CardLibrary.AddCards(cards);
             InitializeBattle();
+        }
+
+        protected override void Start()
+        {
+            base.Start();
         }
 
         protected override void OnEnable()
@@ -50,12 +53,7 @@ namespace VTuber.BattleSystem.Core
         {
             //battleRoot.SetActive(true);
             //_battle.InitializeBattle(false, character.AttributeManager,
-                //character.CardLibrary, 10, 0, new List<int> {2, 6, 2}, 0, 0, new List<VBattleRelic>());
-        }
-
-        protected override void Start()
-        {
-            base.Start();
+            //character.CardLibrary, 10, 0, new List<int> {2, 6, 2}, 0, 0, new List<VBattleRelic>());
         }
     }
 }

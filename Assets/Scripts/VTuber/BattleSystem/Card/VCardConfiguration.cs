@@ -1,35 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VTuber.BattleSystem.Effect;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
-using VTuber.Core.StringToEnum;
-using VTuber.Core.UI;
 
 namespace VTuber.BattleSystem.Card
-{   
+{
     public enum CostType
     {
         Stamina,
         TrueStamina,
-        Buff,
+        Buff
     }
-    
+
     public enum VCardRarity
     {
         Basic, //white
         Common, //blue
-        Rare,  //purple
-        Epic,  //gold
-        Special, //black
+        Rare, //purple
+        Epic, //gold
+        Special //black
     }
-    
+
     public class VCardHeaderIndex
     {
         public const int Id = 0;
@@ -74,85 +70,68 @@ namespace VTuber.BattleSystem.Card
         public uint id;
         public string parameter;
         public string upgradedParameter;
-        [HideInInspector]public int level;
-        
+        [HideInInspector] public int level;
+
         public VEffect CreateEffect()
         {
             if (VDataManager.Instance.EffectConfigurations.TryGetValue(id, out var config))
-            {
                 return config.CreateEffect(parameter, upgradedParameter);
-            }
-            else
-            {
-                VDebug.LogError($"Effect with ID {id} not found in configurations.");
-                return null;
-            }
+
+            VDebug.LogError($"Effect with ID {id} not found in configurations.");
+            return null;
         }
 
         public VRaisingEffect CreateRaisingEffect()
         {
             if (VDataManager.Instance.RaisingEffects.TryGetValue(id, out var config))
-            {
                 return config.CreateEffect(parameter, upgradedParameter);
-            }
-            else
-            {
-                VDebug.LogError($"Effect with ID {id} not found in configurations.");
-                return null;
-            }
+
+            VDebug.LogError($"Effect with ID {id} not found in configurations.");
+            return null;
         }
     }
-    
+
     public class VCardConfiguration
     {
-        public uint id;
-        public string cardName;
-        public Sprite icon;
-
-        public string description;
-        public string upgradeDescription;
-        public string liveType;
-        public List<string> tags;
-        
-        public string cardType;
-        
-        public VCardRarity rarity;
-            
         public Sprite background;
-        public Sprite facade;
-        
-        public CostType costType = CostType.Stamina;
-        public uint costBuffId;
-        public int cost;
-        public int upgradedCost;
-        public bool isExhaust = false;
-        public bool notRepeatable = false;
-        public bool prioritized = false;
-        
-        public List<VEffectItem> effects;
-        public List<VEffectItem> newEffects;
+        public string cardName;
+
+        public string cardType;
 
         public int conditionId;
+        public int cost;
+        public uint costBuffId;
 
+        public CostType costType = CostType.Stamina;
 
-        public static uint IDDistributor => _idDistributor;
-        private static uint _idDistributor = 0;
+        public string description;
 
-        public static void LoadIDDistributor(uint id)
-        {
-            _idDistributor = id;
-        }
+        public List<VEffectItem> effects;
+        public Sprite facade;
+        public Sprite icon;
+        public uint id;
+        public bool isExhaust;
+        public string liveType;
+        public List<VEffectItem> newEffects;
+        public bool notRepeatable;
+        public bool prioritized;
+
+        public VCardRarity rarity;
+        public List<string> tags;
+        public int upgradedCost;
+        public string upgradeDescription;
+
         public VCardConfiguration(CellRange row)
         {
             effects = new List<VEffectItem>();
             effects = new List<VEffectItem>();
             newEffects = new List<VEffectItem>();
-            
+
             id = Convert.ToUInt32(row.Columns[VCardHeaderIndex.Id].Value.Trim());
             cardName = row.Columns[VCardHeaderIndex.Name].Value.Trim();
             var descriptions = row.Columns[VCardHeaderIndex.DescriptionInGame].Value.Trim().Split('$');
             description = descriptions[0];
-            if(descriptions.Length > 1)
+            if (descriptions.Length > 1)
                 upgradeDescription = descriptions[1];
             rarity = Enum.Parse<VCardRarity>(row.Columns[VCardHeaderIndex.Rarity].Value.Trim());
             cardType = row.Columns[VCardHeaderIndex.Type].Value.Trim();
@@ -161,12 +140,12 @@ namespace VTuber.BattleSystem.Card
             tags = new List<string>
             {
                 row.Columns[VCardHeaderIndex.Tag1].Value.Trim(),
-                row.Columns[VCardHeaderIndex.Tag2].Value.Trim(),
+                row.Columns[VCardHeaderIndex.Tag2].Value.Trim()
             };
-            
+
             costType = Enum.Parse<CostType>(row.Columns[VCardHeaderIndex.CostType].Value.Trim());
-            
-            if(costType == CostType.Buff)
+
+            if (costType == CostType.Buff)
                 costBuffId = Convert.ToUInt32(row.Columns[VCardHeaderIndex.CostBuffID].Value.Trim());
 
             cost = Convert.ToInt32(row.Columns[VCardHeaderIndex.Cost].Value.Trim());
@@ -174,50 +153,48 @@ namespace VTuber.BattleSystem.Card
             notRepeatable = Convert.ToInt32(row.Columns[VCardHeaderIndex.NotRepeatable].Value.Trim()) == 1;
             isExhaust = Convert.ToInt32(row.Columns[VCardHeaderIndex.IsExhaust].Value.Trim()) == 1;
             prioritized = !row.Columns[VCardHeaderIndex.Priority].Value.Trim().IsNullOrWhitespace();
-            
+
             var conditionStr = row.Columns[VCardHeaderIndex.Condition].Value.Trim();
-            if(!conditionStr.IsNullOrWhitespace())
-            {
+            if (!conditionStr.IsNullOrWhitespace())
                 conditionId = Convert.ToInt32(conditionStr);
-            }
             else
-            {
                 conditionId = -1;
-            }
-            
+
             //background = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Background"));
             //facade = VBattleDataManager.Instance.LoadSprite(csv.GetField<string>("Facade"));
-            
-            for (int i = VCardHeaderIndex.Effect1; i < VCardHeaderIndex.E4UpgradedParam; i += 3)
+
+            for (var i = VCardHeaderIndex.Effect1; i < VCardHeaderIndex.E4UpgradedParam; i += 3)
             {
                 var effectIDStr = row.Columns[i].Value.Trim();
-                if(effectIDStr.IsNullOrWhitespace())
+                if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                uint effectID = Convert.ToUInt32(effectIDStr);
+                var effectID = Convert.ToUInt32(effectIDStr);
 
                 if (VDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
                 {
-                    string parameter = row.Columns[i + 1].Value;
-                    string upgradedParameter = row.Columns[i + 2].Value;
-                    effects.Add(new VEffectItem(){
+                    var parameter = row.Columns[i + 1].Value;
+                    var upgradedParameter = row.Columns[i + 2].Value;
+                    effects.Add(new VEffectItem
+                    {
                         id = effectID,
                         parameter = parameter,
                         upgradedParameter = upgradedParameter
                     });
                 }
             }
-            
-            for (int i = VCardHeaderIndex.NewEffect1; i < VCardHeaderIndex.NE2Param; i += 2)
+
+            for (var i = VCardHeaderIndex.NewEffect1; i < VCardHeaderIndex.NE2Param; i += 2)
             {
                 var effectIDStr = row.Columns[i].Value.Trim();
-                if(effectIDStr.IsNullOrWhitespace())
+                if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                uint effectID = Convert.ToUInt32(effectIDStr);
+                var effectID = Convert.ToUInt32(effectIDStr);
 
                 if (VDataManager.Instance.EffectConfigurations.TryGetValue(effectID, out var config))
                 {
-                    string parameter = row.Columns[i + 1].Value;
-                    newEffects.Add(new VEffectItem(){
+                    var parameter = row.Columns[i + 1].Value;
+                    newEffects.Add(new VEffectItem
+                    {
                         id = effectID,
                         parameter = parameter,
                         upgradedParameter = parameter
@@ -225,13 +202,21 @@ namespace VTuber.BattleSystem.Card
                 }
             }
         }
-        
+
+
+        public static uint IDDistributor { get; private set; }
+
+        public static void LoadIDDistributor(uint id)
+        {
+            IDDistributor = id;
+        }
+
         public VCard CreateCard()
         {
-        //     if (_spawned)
-        //         return null;
-        //     _spawned = true;
-            return new VCard(this, _idDistributor++, effects, newEffects, conditionId);
+            //     if (_spawned)
+            //         return null;
+            //     _spawned = true;
+            return new VCard(this, IDDistributor++, effects, newEffects, conditionId);
         }
     }
 }

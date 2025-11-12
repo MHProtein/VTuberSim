@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using Spire.Xls;
-using VTuber.BattleSystem.Effect;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -14,12 +12,12 @@ namespace VTuber.Core.RaisingEffect
         public const int Condition = 4;
         public const int Param = 5;
     }
-    
+
     public abstract class VRaisingEffectConfiguration
     {
-        public uint id;
-        public string effectName;
         public string description;
+        public string effectName;
+        public uint id;
 
         public VRaisingEffectConfiguration(CellRange row)
         {

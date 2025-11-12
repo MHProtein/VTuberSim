@@ -4,13 +4,20 @@ using VTuber.Core.Foundation;
 
 namespace VTuber.Consumable
 {
-    public class VClickDetectionPanel : VUIBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+    public class VClickDetectionPanel : VUIBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler,
+        IPointerDownHandler, IPointerUpHandler
     {
         public Action onClick;
+
         public void OnPointerClick(PointerEventData eventData)
         {
             eventData.Use();
             onClick?.Invoke();
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            eventData.Use();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -19,11 +26,6 @@ namespace VTuber.Consumable
         }
 
         public void OnPointerExit(PointerEventData eventData)
-        {
-            eventData.Use();
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
         {
             eventData.Use();
         }

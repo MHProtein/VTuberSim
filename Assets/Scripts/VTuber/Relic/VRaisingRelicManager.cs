@@ -5,50 +5,47 @@ namespace VTuber.Relic
 {
     public class VRaisingRelicManager
     {
-        public List<VRaisingRelic> Relics => _relics;
-        private readonly List<VRaisingRelic> _relics = new List<VRaisingRelic>();
-        public uint idDistributor = 0;
-
-        public VCharacter Character { get; }
+        public uint idDistributor;
 
         public VRaisingRelicManager(VCharacter character)
         {
             Character = character;
         }
 
+        public List<VRaisingRelic> Relics { get; } = new();
+
+        public VCharacter Character { get; }
+
         public void AddRelic(VRaisingRelic relic)
         {
             if (relic == null)
                 return;
 
-            if (_relics.Contains(relic))
+            if (Relics.Contains(relic))
                 return;
-            _relics.Add(relic);
+            Relics.Add(relic);
             relic.Initialize(idDistributor++, this);
             relic.OnRelicAddedInRaising();
         }
 
         public void Remove(VRaisingRelic relic)
         {
-            if (_relics.Contains(relic))
+            if (Relics.Contains(relic))
             {
                 relic.OnRelicRemovedInRaising();
-                _relics.Remove(relic);
+                Relics.Remove(relic);
             }
         }
 
         public void Clear()
         {
-            foreach (var relic in _relics)
-            {
-                relic.OnRelicRemovedInRaising();
-            }
-            _relics.Clear();
+            foreach (var relic in Relics) relic.OnRelicRemovedInRaising();
+            Relics.Clear();
         }
 
         public List<VRaisingRelic> GetRelics()
         {
-            return _relics;
+            return Relics;
         }
     }
 }

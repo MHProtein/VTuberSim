@@ -8,12 +8,12 @@ namespace VTuber.Core.RaisingEffect
     {
         public VRaisingEnterStoreEffect(VRaisingEnterStoreEffectConfiguration configuration) : base(configuration)
         {
-            
         }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRequestEnterStore, new Dictionary<string, object>());
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnRequestEnterStore,
+                new Dictionary<string, object>());
         }
 
         public override void Upgrade()

@@ -8,9 +8,12 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingStoreGlobalDiscountEffect : VRaisingEffect
     {
         private readonly VUpgradableValue<float> _discount;
-        public VRaisingStoreGlobalDiscountEffect(VRaisingEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+
+        public VRaisingStoreGlobalDiscountEffect(VRaisingEffectConfiguration configuration, string parameter,
+            string upgradedParameter) : base(configuration)
         {
-            _discount = new VUpgradableValue<float>(float.Parse(parameter.Trim()), float.Parse(upgradedParameter.Trim()));
+            _discount = new VUpgradableValue<float>(float.Parse(parameter.Trim()),
+                float.Parse(upgradedParameter.Trim()));
         }
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
@@ -28,6 +31,7 @@ namespace VTuber.Core.RaisingEffect
         {
             _discount.Downgrade();
         }
+
         public override string GetParameter()
         {
             return (_discount.Value * 100f).ToString("0.0");

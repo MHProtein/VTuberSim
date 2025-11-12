@@ -15,61 +15,63 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
     [Serializable]
     public class VSpecialEventData
     {
-        public int WeekIndex => weekIndexForInspector - 1;
         public int weekIndexForInspector;
-        
-        public int DayIndex => dayIndexForInspector - 1;
         [FormerlySerializedAs("dayIndex")] public int dayIndexForInspector;
-        
+
         public TimeOfDay timeOfDay;
         public VEventType eventType;
-        [HideIf("eventType", VEventType.TutorialStream)] public uint eventID;
-        [ShowIf("eventType", VEventType.TutorialStream)] public VTutorialStreamEventConfiguration configuration;
+
+        [HideIf("eventType", VEventType.TutorialStream)]
+        public uint eventID;
+
+        [FormerlySerializedAs("configuration")] [ShowIf("eventType", VEventType.TutorialStream)]
+        public VTutorialStreamEventConfiguration tutorialStreamConfig;
+
         [HideInInspector] public VPhase phase;
         public bool isPhaseStart;
-        
+        public int WeekIndex => weekIndexForInspector - 1;
+
+        public int DayIndex => dayIndexForInspector - 1;
+
         public void SetWeekDay(int weekIndex, int dayIndex)
         {
-            this.weekIndexForInspector = weekIndex;
-            this.dayIndexForInspector = dayIndex;
+            weekIndexForInspector = weekIndex;
+            dayIndexForInspector = dayIndex;
         }
     }
-    
+
     [Serializable]
     public class VPhase
     {
         [SerializeField] public string phaseName;
         [SerializeField] public string description;
-        
-        [Header("开始事件")]
-        [LabelText("周")]
-        public int startEventWeekIndex;
-        
-        [Header("")]
-        [LabelText("开始事件类型")]
-        [SerializeField] public VEventType startEventType;
-        [LabelText("开始事件ID")]
-        [SerializeField] public uint startEventID;
-        
-        [HorizontalGroup("结束事件", Gap = 10)]
-        [Header("结束事件")]
-        [LabelText("周")]
+
+        [Header("开始事件")] [LabelText("周")] public int startEventWeekIndex;
+
+        [Header("")] [LabelText("开始事件类型")] [SerializeField]
+        public VEventType startEventType;
+
+        [LabelText("开始事件ID")] [SerializeField] public uint startEventID;
+
+        [HorizontalGroup("结束事件", Gap = 10)] [Header("结束事件")] [LabelText("周")]
         public int endEventWeekIndex;
-        
-        [LabelText("结束事件ID")][SerializeField] List<uint> endEventIDs = new List<uint>();
-        
-        [LabelText("特殊事件")]
-        [SerializeField] private List<VSpecialEventData> specialEventData;
-        
-        [HorizontalGroup("curves")]
-        [Header("衰退线1")]
-        [SerializeField] AnimationCurve decayCurve1;
-        [HorizontalGroup("curves")]
-        [Header("衰退线2")]
-        [SerializeField] AnimationCurve decayCurve2;
-        [HorizontalGroup("curves")]
-        [Header("衰退线3")]
-        [SerializeField] AnimationCurve decayCurve3;
+
+        [LabelText("结束事件ID")] [SerializeField] private List<uint> endEventIDs = new();
+
+        [LabelText("特殊事件")] [SerializeField] private List<VSpecialEventData> specialEventData;
+
+        [HorizontalGroup("curves")] [Header("衰退线1")] [SerializeField]
+        private AnimationCurve decayCurve1;
+
+        [HorizontalGroup("curves")] [Header("衰退线2")] [SerializeField]
+        private AnimationCurve decayCurve2;
+
+        [HorizontalGroup("curves")] [Header("衰退线3")] [SerializeField]
+        private AnimationCurve decayCurve3;
+
+        public VPhase nextPhase;
+
+        private uint _endEventID;
 
         public List<VKPI> KPIs { get; private set; }
 
@@ -85,43 +87,32 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
             }
         }
 
-        private uint _endEventID;
-
-        public VPhase nextPhase;
-        
         public List<VSpecialEventData> GetSpecialEventData(int weekIndex)
         {
             var list = new List<VSpecialEventData>();
 
             foreach (var e in specialEventData)
-            {
                 if (e.WeekIndex == weekIndex)
-                {
                     list.Add(e);
-                }
-            }
 
-            if(weekIndex != endEventWeekIndex - 1) return list;
-            
+            if (weekIndex != endEventWeekIndex - 1) return list;
+
             var endingEvent = new VSpecialEventData
             {
                 timeOfDay = TimeOfDay.Morning,
                 eventType = VEventType.Stream,
                 eventID = _endEventID,
-                phase = this,
+                phase = this
             };
             endingEvent.SetWeekDay(endEventWeekIndex - 1, 7);
             list.Add(endingEvent);
-            
+
             return list;
         }
 
         public bool IsInPhase(int weekIndex)
         {
-            if (weekIndex >= startEventWeekIndex - 1 && weekIndex <= endEventWeekIndex - 1)
-            {
-                return true;
-            }
+            if (weekIndex >= startEventWeekIndex - 1 && weekIndex <= endEventWeekIndex - 1) return true;
 
             return false;
         }
@@ -132,15 +123,15 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
             e.Phase = this;
             return e;
         }
-        
+
         public void SetEndingEventID(uint id)
         {
             _endEventID = id;
         }
-        
+
         public List<VStreamEvent> GetPhaseEndingEvents(VCharacter character)
         {
-            List<VStreamEvent> events = new List<VStreamEvent>();
+            var events = new List<VStreamEvent>();
             foreach (var id in endEventIDs)
             {
                 var e = VDataManager.Instance.CreateStreamEventByID(id);

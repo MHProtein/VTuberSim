@@ -9,21 +9,22 @@ namespace VTuber.BattleSystem.Effect
     public class VAttributeGainRateModifierEffect : VModifierEffect
     {
         private readonly string _attributeName;
+        private bool _applied;
         private VUpgradableValue<float> _deltaRate;
+        private uint _modifierID;
+        private Action<uint, float> _onBuffLayerChangeRate;
+        private Action<uint> _onBuffRemove;
 
         private int _valueModifierID = -1;
-        private Action<uint> _onBuffRemove;
-        private Action<uint, float> _onBuffLayerChangeRate;
-        private uint _modifierID;
-        private bool _applied = false;
-        
-        public VAttributeGainRateModifierEffect(VAttributeGainRateModifierEffectConfiguration configuration, string parameter, string upgradedParameter) : base(configuration)
+
+        public VAttributeGainRateModifierEffect(VAttributeGainRateModifierEffectConfiguration configuration,
+            string parameter, string upgradedParameter) : base(configuration)
         {
             _attributeName = configuration.attributeName;
-            
+
             _deltaRate = new VUpgradableValue<float>(Convert.ToSingle(parameter), Convert.ToSingle(upgradedParameter));
         }
-        
+
         public override VModifierEffectSaveData Save()
         {
             return new VModifierEffectSaveData
@@ -33,7 +34,7 @@ namespace VTuber.BattleSystem.Effect
                 modifierID = _modifierID,
                 applied = _applied,
                 parameterFloat = _deltaRate.Value,
-                upgradedParameterFloat = _deltaRate.UpgradedValue,
+                upgradedParameterFloat = _deltaRate.UpgradedValue
             };
         }
 
@@ -64,7 +65,7 @@ namespace VTuber.BattleSystem.Effect
             base.Upgrade();
             _deltaRate.Upgrade();
         }
-        
+
         public override void Downgrade()
         {
             base.Downgrade();
@@ -85,13 +86,15 @@ namespace VTuber.BattleSystem.Effect
                 Apply(_battle, layer);
                 return;
             }
+
             if (MultiplyByLayer < 0.0f)
                 return;
-    
-            float rateValue = _deltaRate.Value;
+
+            var rateValue = _deltaRate.Value;
             rateValue *= layer * MultiplyByLayer;
             _onBuffLayerChangeRate(_modifierID, rateValue);
-            VDebug.Log("Effect " + _configuration.effectName + " changed gain rate to " + rateValue + " for layer " + layer);
+            VDebug.Log("Effect " + _configuration.effectName + " changed gain rate to " + rateValue + " for layer " +
+                       layer);
         }
 
         public override void OnBuffRemove()
@@ -100,12 +103,14 @@ namespace VTuber.BattleSystem.Effect
                 return;
             if (_onBuffRemove is null)
             {
-                VDebug.LogError("OnBuffRemove is null for _modifierID: " + _modifierID + ", attribute: " + _attributeName + "检查属性名");
+                VDebug.LogError("OnBuffRemove is null for _modifierID: " + _modifierID + ", attribute: " +
+                                _attributeName + "检查属性名");
                 return;
             }
+
             _onBuffRemove(_modifierID);
         }
-        
+
         public override string GetValue()
         {
             return VMathUtils.FloatToInt(_deltaRate.Value * 100) + "%";
@@ -121,7 +126,7 @@ namespace VTuber.BattleSystem.Effect
             {
                 Triggered = true;
                 _applied = true;
-                float rateValue = _deltaRate.Value;
+                var rateValue = _deltaRate.Value;
                 if (MultiplyByLayer > 0.0f)
                     rateValue *= layer * MultiplyByLayer;
 

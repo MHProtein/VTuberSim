@@ -7,7 +7,8 @@ using VTuber.Consumable;
 using VTuber.Core.Foundation;
 using Tween = PrimeTween.Tween;
 
-namespace VTuber.BattleSystem.UI {
+namespace VTuber.BattleSystem.UI
+{
     public class VBuffGroupUI : VUIBehaviour
     {
         [SerializeField] private GameObject buffDetailsObject;
@@ -17,11 +18,11 @@ namespace VTuber.BattleSystem.UI {
         [SerializeField] private GameObject ellipsisPrefab;
         [SerializeField] private GameObject buffCellPrefab;
         [SerializeField] private int displayingBuffCount = 6;
+        private readonly VAnimationQueue _animationQueue = new();
 
         private List<VBuffUI> _buffUIs;
-        private VAnimationQueue _animationQueue = new VAnimationQueue();
         private GameObject _ellipsisObject;
-        private bool _isDetailsOpen = false;
+        private bool _isDetailsOpen;
 
         protected override void Awake()
         {
@@ -55,13 +56,14 @@ namespace VTuber.BattleSystem.UI {
             clickDetectionPanel.gameObject.SetActive(_isDetailsOpen);
         }
 
-        private void OnBattleEnd(Dictionary<string, object> msg) 
+        private void OnBattleEnd(Dictionary<string, object> msg)
         {
             foreach (var ui in _buffUIs)
             {
                 ui.Clear();
                 Destroy(ui.gameObject);
             }
+
             _buffUIs.Clear();
             if (_ellipsisObject)
             {
@@ -72,11 +74,11 @@ namespace VTuber.BattleSystem.UI {
 
         private void OnBuffAdded(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
-            bool isFromCard = msg["IsFromCard"] as bool? ?? false;
-            bool shouldTwice = msg["ShouldPlayTwice"] as bool? ?? false;
+            var id = (uint)msg["Id"];
+            var isFromCard = msg["IsFromCard"] as bool? ?? false;
+            var shouldTwice = msg["ShouldPlayTwice"] as bool? ?? false;
             var buff = (VBuffItem)msg["Buff"];
-            int value = (int)msg["Value"];
+            var value = (int)msg["Value"];
 
             var go = Instantiate(buffCellPrefab, transform);
             var details = Instantiate(buffDetailsPrefab, buffDetailsParent);
@@ -85,7 +87,7 @@ namespace VTuber.BattleSystem.UI {
             ui.onClick += () => OpenBuffDetails();
             ui.SetBuff(buff, details.GetComponent<VBuffDetailsUI>());
             ui.SetText(value);
-            
+
 
             _buffUIs.Add(ui);
             _animationQueue.Enqueue(Tween.Scale(ui.transform, Vector3.one, 0.3f).OnComplete(() =>
@@ -99,22 +101,21 @@ namespace VTuber.BattleSystem.UI {
 
         private void OnBuffValueUpdated(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
+            var id = (uint)msg["Id"];
 
             var buff = _buffUIs.Find(ui => ui.id == id);
-            if (buff is not null) {
+            if (buff is not null)
+            {
                 buff.SetText((int)msg["Value"]);
 
                 if (IsVisible(buff))
-                {
                     _animationQueue.Enqueue(Tween.PunchScale(buff.transform, Vector3.one * 1.3f, 0.3f).OnComplete(() =>
                     {
                         RaiseEvents(msg["IsFromCard"] as bool? ?? false,
                             msg["ShouldPlayTwice"] as bool? ?? false);
                     }));
-                }
-            } 
-            else 
+            }
+            else
             {
                 RaiseEvents(false, false);
             }
@@ -122,7 +123,7 @@ namespace VTuber.BattleSystem.UI {
 
         private void OnBuffRemoved(Dictionary<string, object> msg)
         {
-            uint id = (uint)msg["Id"];
+            var id = (uint)msg["Id"];
 
             var buff = _buffUIs.Find(ui => ui.id == id);
             if (buff is not null)
@@ -134,17 +135,14 @@ namespace VTuber.BattleSystem.UI {
             }
         }
 
-        private void RefreshBuffDisplay() 
+        private void RefreshBuffDisplay()
         {
             var ordered = _buffUIs.OrderBy(ui => ui.ConfigID).ToList();
 
-            int n = displayingBuffCount;
-            if (ordered.Count > n)
-            {
-                n--;
-            }
-            
-            for (int i = 0; i < ordered.Count; i++)
+            var n = displayingBuffCount;
+            if (ordered.Count > n) n--;
+
+            for (var i = 0; i < ordered.Count; i++)
             {
                 var ui = ordered[i];
                 if (i < n)
@@ -166,7 +164,7 @@ namespace VTuber.BattleSystem.UI {
                     _ellipsisObject.transform.SetAsLastSibling();
                     _ellipsisObject.GetComponent<VEllipsisUI>().onClick = OpenBuffDetails;
                 }
-            } 
+            }
             else
             {
                 if (_ellipsisObject != null)
@@ -177,26 +175,27 @@ namespace VTuber.BattleSystem.UI {
             }
         }
 
-        private bool IsVisible(VBuffUI ui) 
+        private bool IsVisible(VBuffUI ui)
         {
             return ui.gameObject.activeSelf;
         }
 
-        private void RaiseEvents(bool isFromCard, bool shouldPlayTwice) 
+        private void RaiseEvents(bool isFromCard, bool shouldPlayTwice)
         {
-            if (shouldPlayTwice) {
+            if (shouldPlayTwice)
+            {
                 VBattleRootEventCenter.Instance.Raise(
                     VBattleEventKey.OnPlayTheSecondTime,
                     new Dictionary<string, object>()
                 );
                 return;
             }
-            if (isFromCard) {
+
+            if (isFromCard)
                 VBattleRootEventCenter.Instance.Raise(
                     VBattleEventKey.OnNotifyBeginDisposeCard,
                     new Dictionary<string, object>()
                 );
-            }
         }
     }
 }

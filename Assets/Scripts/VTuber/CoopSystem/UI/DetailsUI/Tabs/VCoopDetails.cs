@@ -25,25 +25,15 @@ namespace VTuber.CoopSystem.UI.DetailsUI
 
         public void SetCooperator(VCooperator cooperator)
         {
-            foreach (var tab in tabs)
-            {
-                tab.Clear();
-            }
+            foreach (var tab in tabs) tab.Clear();
             coopName.text = cooperator.configuration.Name;
             var nextLevelIndex = cooperator.CurrentLevel + 1;
             if (nextLevelIndex >= cooperator.configuration.CoopLevels.Count)
-            {
                 coopValue.text = "好感度已满";
-            }
             else
-            {
                 coopValue.text = $"{cooperator.CoopValue}/{cooperator.configuration.CoopLevels[nextLevelIndex].from}";
-            }
 
-            foreach (var tab in tabs)
-            {
-                tab.SetTab(cooperator);
-            }
+            foreach (var tab in tabs) tab.SetTab(cooperator);
         }
 
         public void Show()
@@ -54,11 +44,8 @@ namespace VTuber.CoopSystem.UI.DetailsUI
         public void Hide()
         {
             ui.gameObject.SetActive(false);
-            foreach (var tab in tabs)
-            {
-                tab.Clear();
-            }
-            onHide?.Invoke();          
+            foreach (var tab in tabs) tab.Clear();
+            onHide?.Invoke();
         }
     }
 }

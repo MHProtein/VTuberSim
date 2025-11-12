@@ -5,6 +5,7 @@ namespace VTuber.BattleSystem.Effect
     public class VAddParamAttributePercentageEffectConfiguration : VEffectConfiguration
     {
         public string attributeName;
+
         public VAddParamAttributePercentageEffectConfiguration(CellRange row) : base(row)
         {
             attributeName = row.Columns[VEffectHeaderIndex.Parameter].Value;

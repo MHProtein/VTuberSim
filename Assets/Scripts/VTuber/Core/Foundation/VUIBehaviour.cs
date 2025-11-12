@@ -1,4 +1,5 @@
-﻿using UnityEngine.EventSystems;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace VTuber.Core.Foundation
 {
@@ -6,12 +7,10 @@ namespace VTuber.Core.Foundation
     {
         protected virtual void Awake()
         {
-        
         }
 
         protected virtual void Start()
         {
-    
         }
 
         private void Update()
@@ -19,31 +18,29 @@ namespace VTuber.Core.Foundation
             OnUpdateBegin();
             UpdateImpl();
             OnUpdateEnd();
+            GameObject x;
         }
 
         protected virtual void OnEnable()
         {
-        
         }
-    
+
         protected virtual void OnDisable()
         {
-        
         }
-    
+
         protected virtual void OnUpdateBegin()
         {
-        
         }
-    
+
         protected virtual void OnUpdateEnd()
         {
-        
         }
 
         protected virtual void UpdateImpl()
         {
-        
         }
+        
+        
     }
 }

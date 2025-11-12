@@ -4,20 +4,22 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 {
     public class VAccountSlot : VUIBehaviour
     {
-        public VAccountUI Account => _accountUI;
-        private VAccountUI _accountUI;
-        
+        public VAccountUI Account { get; private set; }
+
 
         public void SetAccountUI(VAccountUI accountUI)
         {
-            _accountUI = accountUI;
+            Account = accountUI;
         }
 
         public void RemoveAccountUI()
         {
-            _accountUI = null;
+            Account = null;
         }
 
-        public bool HasAccountUI() => _accountUI is not null;
+        public bool HasAccountUI()
+        {
+            return Account is not null;
+        }
     }
 }

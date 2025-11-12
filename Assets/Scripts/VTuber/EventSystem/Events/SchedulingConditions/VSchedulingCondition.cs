@@ -17,7 +17,7 @@ namespace VTuber.ScheduleSystem.Events
         Type,
         SameType,
         ExcludeType,
-        ExcludeID,
+        ExcludeID
     }
 
     public enum VSchedulingConditionPositionPatterns
@@ -26,9 +26,9 @@ namespace VTuber.ScheduleSystem.Events
         UD,
         LR,
         UDLR,
-        All,
+        All
     }
-    
+
     public class VSchedulingConditionHeaderIndex
     {
         public const int Id = 0;
@@ -45,77 +45,108 @@ namespace VTuber.ScheduleSystem.Events
         public const int Effect3 = 11;
         public const int E3Param = 12;
     }
-    
+
     public class VSchedulingCondition
     {
         public uint Id => _id;
         private uint _id;
         
-        private VPlacingCondition _placingCondition;
-        private VSchedulingConditionPositionPatterns _positionPattern;
-        private VSchedulingConditionType _type;
+        
+        // --- 新增：公开属性供 UI 读取 ---
+        public VSchedulingConditionType Type => _type;
+        public uint TargetID => _targetID;
+        public VEventType TargetType => _targetType;
+    
+        // 辅助属性：判断目标是否为直播流事件 (用于 VEventUI 查询)
+        // 注意：这里假设如果 TargetType 是 Stream 类，或者是 ID 且该 ID 对应的是 Stream
+        // 具体判断逻辑取决于你的策划配置表是否在 ID 模式下也指定了类型。
+        // 如果配置表中 ID 模式下没有指定类型，你可能需要尝试获取或在 VSchedulingCondition 解析时存储 IsStream。
+        public bool IsTargetStream => _targetType == VEventType.Stream;
+        
+        
         
         public List<VRaisingEffect> Effects => _effects;
         private List<VRaisingEffect> _effects;
         
-        private uint _targetID;
-        private VEventType _targetType;
-        
         // Add this line to expose the Position Pattern for UI purposes
         public VSchedulingConditionPositionPatterns PositionPattern => _positionPattern;
         
+        private readonly VPlacingCondition _placingCondition;
+        private readonly VSchedulingConditionPositionPatterns _positionPattern;
+
+        private readonly bool _isStream;
+        private readonly uint _targetID;
+        private readonly VEventType _targetType;
+        private readonly VSchedulingConditionType _type;
 
         public VSchedulingCondition(CellRange row)
         {
             _id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
-            
-            string placingConditionStr = row.Columns[VSchedulingConditionHeaderIndex.PlacingCondition].Value;
+
+            var placingConditionStr = row.Columns[VSchedulingConditionHeaderIndex.PlacingCondition].Value;
             if (!placingConditionStr.IsNullOrWhitespace())
                 _placingCondition = VDataManager.Instance.GetPlacingCondtionByID(uint.Parse(placingConditionStr));
 
-            string typeStr = row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value;
+            var typeStr = row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value;
             if (!typeStr.IsNullOrWhitespace())
             {
-                _positionPattern = Enum.Parse<VSchedulingConditionPositionPatterns>(row.Columns[VSchedulingConditionHeaderIndex.Pattern].Value);
+                _positionPattern =
+                    Enum.Parse<VSchedulingConditionPositionPatterns>(row
+                        .Columns[VSchedulingConditionHeaderIndex.Pattern].Value);
                 _type = Enum.Parse<VSchedulingConditionType>(typeStr);
 
                 switch (_type)
                 {
                     case VSchedulingConditionType.ID:
-                        _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                    {
+                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value;
+                        if (targetStr.Contains("S"))
+                        {
+                            _isStream = true;
+                            targetStr = targetStr.Substring(1);
+                        }
+                        _targetID = uint.Parse(targetStr);
                         break;
+                    }
                     case VSchedulingConditionType.Type:
-                        _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        _targetType =
+                            Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
                         break;
                     case VSchedulingConditionType.SameType:
                         break;
                     case VSchedulingConditionType.ExcludeType:
-                        _targetType = Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        _targetType =
+                            Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
                         break;
                     case VSchedulingConditionType.ExcludeID:
-                        _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                    {
+                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value;
+                        if (targetStr.Contains("S"))
+                        {
+                            _isStream = true;
+                            targetStr = targetStr.Substring(1);
+                        }
+                        _targetID = uint.Parse(targetStr);
                         break;
+                    }
                 }
             }
-            
+
             _effects = new List<VRaisingEffect>();
-            for (int i = VSchedulingConditionHeaderIndex.Effect1; i <= VSchedulingConditionHeaderIndex.E3Param; i += 2)
+            for (var i = VSchedulingConditionHeaderIndex.Effect1; i <= VSchedulingConditionHeaderIndex.E3Param; i += 2)
             {
                 var effectIDStr = row.Columns[i].Value;
                 if (effectIDStr.IsNullOrWhitespace())
                     continue;
-                _effects.Add(VDataManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr.Trim()),
+                Effects.Add(VDataManager.Instance.CreateRaisingEffectByID(Convert.ToUInt32(effectIDStr.Trim()),
                     row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
             }
         }
 
         public bool IsTrue(VCharacter character, VScheduleSlot slot)
         {
-            if (_placingCondition is not null)
-            {
-                return _placingCondition.IsTrue(character, slot);
-            }
-            
+            if (_placingCondition is not null) return _placingCondition.IsTrue(character, slot);
+
             List<VScheduleSlot> slots = null;
 
             switch (_positionPattern)
@@ -142,45 +173,41 @@ namespace VTuber.ScheduleSystem.Events
             if (_type == VSchedulingConditionType.ExcludeType)
             {
                 foreach (var s in slots)
-                {
                     if (s.Item is not null)
-                    {
                         if (s.Item.Event.Type == _targetType)
                             return false;
-                    }
-                }
+
                 return true;
             }
-            
+
             if (_type == VSchedulingConditionType.ExcludeID)
             {
                 foreach (var s in slots)
-                {
                     if (s.Item is not null)
                     {
-                        if (s.Item.Event.EventID == _targetID)
+                        if (_isStream && s.Item.Event is VStreamEvent && s.Item.Event.EventID == _targetID)
                             return false;
                     }
-                }
+
                 return true;
             }
-            
+
             foreach (var s in slots)
-            {
                 if (s.Item is not null)
-                {
                     switch (_type)
                     {
                         case VSchedulingConditionType.ID:
+                        {
+                            if (_isStream && s.Item.Event is not VStreamEvent)
+                                return false;
                             return s.Item.Event.EventID == _targetID;
+                        }
                         case VSchedulingConditionType.Type:
                             return s.Item.Event.Type == _targetType;
                         case VSchedulingConditionType.SameType:
                             return s.Item.Event.Type == slot.Item.Event.Type;
                     }
-                }
-            }
-            
+
             return false;
         }
     }

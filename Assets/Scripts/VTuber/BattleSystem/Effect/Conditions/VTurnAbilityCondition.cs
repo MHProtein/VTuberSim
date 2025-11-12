@@ -6,7 +6,8 @@ namespace VTuber.BattleSystem.Effect.Conditions
 {
     public class VTurnAbilityCondition : VEffectCondition
     {
-        private string _attributeName;
+        private readonly string _attributeName;
+
         public VTurnAbilityCondition(CellRange row) : base(row)
         {
             _attributeName = row.Columns[VConditionHeaderIndex.TargetValue].Value.Trim();

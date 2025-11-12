@@ -1,6 +1,5 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 
@@ -14,12 +13,12 @@ namespace VTuber.Consumable
         [SerializeField] public TMP_Text description;
         [SerializeField] public TMP_Text consumableName;
         public VConsumable consumable;
-        
+
         public void SetConsumable(VConsumable consumable)
         {
             this.consumable = consumable;
             icon.sprite = consumable.Icon;
-            
+
             consumableName.text = consumable.Name;
             description.text = consumable.Description;
         }
@@ -38,7 +37,7 @@ namespace VTuber.Consumable
         {
             return consumable is not null;
         }
-        
+
         public void UseConsumable()
         {
             consumable.ApplyEffect();

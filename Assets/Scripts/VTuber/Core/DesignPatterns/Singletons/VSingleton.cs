@@ -1,18 +1,18 @@
 ﻿namespace VTuber.Core.Foundation
 {
-    public class VSingleton<T> where T: new()
+    public class VSingleton<T> where T : new()
     {
+        protected static T instance;
+
         public static T Instance
         {
             get
             {
-                if(instance is null)
+                if (instance is null)
                     instance = new T();
-                
+
                 return instance;
             }
         }
-
-        protected static T instance;
     }
 }

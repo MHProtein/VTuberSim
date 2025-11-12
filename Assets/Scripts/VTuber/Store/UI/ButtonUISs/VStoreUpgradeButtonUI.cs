@@ -14,12 +14,13 @@ namespace VTuber.Store.UI
         {
             base.OnClick();
             upgradeCardLibraryUI.gameObject.SetActive(true);
-            upgradeCardLibraryUI.Initialize(character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(), true, true, false,
-                confirmAction: (card) =>
+            upgradeCardLibraryUI.Initialize(character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(),
+                true, true, false,
+                card =>
                 {
                     card.Upgrade(false);
                     VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreEndUpgradeCard,
-                        new Dictionary<string, object>()
+                        new Dictionary<string, object>
                         {
                             { "Upgraded", true },
                             { "UpgradedCard", card }
@@ -28,17 +29,17 @@ namespace VTuber.Store.UI
                     upgradeCardLibraryUI.gameObject.SetActive(false);
                     Buy();
                 },
-                returnAction: () =>
+                () =>
                 {
                     VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnStoreEndUpgradeCard,
-                        new Dictionary<string, object>()
+                        new Dictionary<string, object>
                         {
-                            { "Upgraded", false },
+                            { "Upgraded", false }
                         });
                     upgradeCardLibraryUI.Close();
                     upgradeCardLibraryUI.gameObject.SetActive(false);
                 },
-                previewAction: (card) => card.Upgrade(false));
+                card => card.Upgrade(false));
         }
     }
 }

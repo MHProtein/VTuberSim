@@ -3,16 +3,14 @@ using PrimeTween;
 using TMPro;
 using UnityEngine;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
-using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.UI
 {
     public class VBattlePlayLeftUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text PlayLeftText;
-        
-        
+
+
         protected override void Awake()
         {
             base.Awake();
@@ -23,27 +21,25 @@ namespace VTuber.BattleSystem.UI
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
-            bool isFromCard = messagedict["IsFromCard"] as bool? ?? false;
-            bool shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
-            int delta = messagedict["Delta"] as int ? ?? 0;
+            var isFromCard = messagedict["IsFromCard"] as bool? ?? false;
+            var shouldPlayTwice = messagedict["ShouldPlayTwice"] as bool? ?? false;
+            var delta = messagedict["Delta"] as int? ?? 0;
             var value = messagedict["NewValue"] as int? ?? 0;
 
             PlayLeftText.gameObject.SetActive(value > 1);
-            
+
             PlayLeftText.text = $"{value}";
-            
-            if(delta == 0)
+
+            if (delta == 0)
                 return;
-            
-            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete((
-                () =>
-                {
-                    RaiseEvents(isFromCard, shouldPlayTwice);
-                    PlayLeftText.faceColor = Color.white;
-                })));
+
+            _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
+            {
+                RaiseEvents(isFromCard, shouldPlayTwice);
+                PlayLeftText.faceColor = Color.white;
+            }));
 
             PlayLeftText.faceColor = delta > 0 ? Color.green : Color.red;
         }
-        
     }
 }

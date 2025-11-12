@@ -12,15 +12,15 @@ namespace VTuber.EventSystem.Events
         public const int Type = 3;
         public const int TargetValue = 4;
     }
+
     public abstract class VPlacingCondition
     {
-        public uint Id { get; private set; }
-        public abstract bool IsTrue(VCharacter character, VScheduleSlot slot);
-        
         public VPlacingCondition(CellRange row)
         {
             Id = uint.Parse(row.Columns[VPlacingConditionHeaderIndex.Id].Value);
         }
-        
+
+        public uint Id { get; private set; }
+        public abstract bool IsTrue(VCharacter character, VScheduleSlot slot);
     }
 }

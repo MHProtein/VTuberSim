@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6facdafa42f4786a94ddb931c83b5ca, type: 3}
-  m_Name: Script_frist
+  m_Script: {fileID: 11500000, guid: 9fbfa2b940734523b130fc5cd61fa2bb, type: 3}
+  m_Name: TutorialScript
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -92,6 +92,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  index: 0
   scriptName: "\u51FA\u9053"
   description: "\u5728\u505A\u4E86\u5341\u8DB3\u7684\u51C6\u5907\u540E\uFF0C\u4F60\u51C6\u5907\u8E0F\u4E0A\u4E86\u865A\u62DF\u4E3B\u64AD\u4E4B\u8DEF\uFF0C"
   icon: {fileID: 21300000, guid: c344fe1d7bb00f6428dc6422ed14cf24, type: 3}
@@ -157,9 +158,12 @@ MonoBehaviour:
     endEventWeekIndex: 2
     endEventIDs: 040000000500000006000000
     specialEventData:
-    - timeOfDay: 0
-      eventType: 0
+    - weekIndexForInspector: 1
+      dayIndexForInspector: 1
+      timeOfDay: 0
+      eventType: 7
       eventID: 0
+      tutorialStreamConfig: {fileID: 11400000, guid: 24fee718a9eee4f4fbb8f777b4ec0e7d, type: 2}
       phase:
         phaseName: 
         description: 
@@ -295,9 +299,12 @@ MonoBehaviour:
     endEventWeekIndex: 5
     endEventIDs: 0700000008000000090000000a000000
     specialEventData:
-    - timeOfDay: 0
+    - weekIndexForInspector: 0
+      dayIndexForInspector: 0
+      timeOfDay: 0
       eventType: 0
       eventID: 0
+      tutorialStreamConfig: {fileID: 0}
       phase:
         phaseName: 
         description: 
@@ -639,3 +646,24 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+  weeks:
+  - weekID: 0
+    eventIDs: 0000000001000000020000000300000004000000050000000b0000000c0000001f0000001e0000000d00000034000000
+    streamEventIDs: 000000000100000002000000
+    conditions:
+    - conditionType: 0
+      idOrName: CAMoney
+      operatorType: 3
+      targetValue: 100000
+    tip:
+      title: "\u63D0\u793A"
+      description: safasdfasdfasfasfsadfasfdasfasdfasdfasdfasf
+      image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
+  - weekID: 1
+    eventIDs: 000000000100000002000000030000000400000005000000
+    streamEventIDs: 000000000100000002000000
+    conditions: []
+    tip:
+      title: dsaf
+      description: safasdfasdfasfasfsadfasfdasfasdfasdfasdfasf
+      image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}

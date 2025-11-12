@@ -1,51 +1,46 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Core;
-using VTuber.Core.EventCenter;
-using VTuber.Core.Foundation;
 
 namespace VTuber.BattleSystem.BattleAttribute
 {
     public class VBattlePopularityAttribute : VBattleAttribute
     {
-        public Dictionary<string, int> ScoreForAbilities => _scoreForAbilities;
-        private Dictionary<string, int> _scoreForAbilities;
-        
         public VBattlePopularityAttribute(int value) : base(value, false, VBattleEventKey.OnPopularityChange)
         {
-            _scoreForAbilities = new Dictionary<string, int>()
+            ScoreForAbilities = new Dictionary<string, int>
             {
                 { "BASingingMultiplier", 0 },
                 { "BAGamingMultiplier", 0 },
-                { "BAChattingMultiplier", 0 },
+                { "BAChattingMultiplier", 0 }
             };
             gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
             gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
         }
-        
+
         public VBattlePopularityAttribute(VBattleAttributeSaveData saveData) : base(saveData)
         {
-            _scoreForAbilities = saveData.scoreForAbilities;
+            ScoreForAbilities = saveData.scoreForAbilities;
             gainPointsModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
             gainRateModifier.SetEventKey(VBattleEventKey.OnParameterPopularityModifierChanged);
         }
 
+        public Dictionary<string, int> ScoreForAbilities { get; }
+
         public override VBattleAttributeSaveData Save()
         {
             var data = base.Save();
-            data.scoreForAbilities = _scoreForAbilities;
+            data.scoreForAbilities = ScoreForAbilities;
             return data;
         }
-        
-        public void AddPopularity(int delta, string abilityName = "", bool isFromCard = false, bool shouldPlayTwice = false)
+
+        public void AddPopularity(int delta, string abilityName = "", bool isFromCard = false,
+            bool shouldPlayTwice = false)
         {
             if (delta == 0)
                 return;
 
-            if (_scoreForAbilities.ContainsKey(abilityName))
-            {
-                _scoreForAbilities[abilityName] += delta;
-            }
-            
+            if (ScoreForAbilities.ContainsKey(abilityName)) ScoreForAbilities[abilityName] += delta;
+
             AddTo(delta, isFromCard, shouldPlayTwice);
         }
     }

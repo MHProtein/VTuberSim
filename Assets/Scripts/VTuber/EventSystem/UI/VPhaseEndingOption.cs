@@ -18,7 +18,6 @@ namespace VTuber.Dialogue.UI
     {
         public VStreamEvent E => e;
         private VStreamEvent e;
-        VPhaseEndingSelectionMenu _menu;
         // --- NEW FIELDS: Add these for relic display ---
         [Header("Relic Display")]
         [SerializeField] private GameObject relicUiPrefab; // The prefab for a single relic icon
@@ -29,6 +28,7 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private TMP_Text titleText;
         [SerializeField] private GameObject conditionPrefab;
         [SerializeField] private Transform grids;
+        private VPhaseEndingSelectionMenu _menu;
         private List<TMP_Text> conditionDescriptions;
         
         public void Initialize(VStreamEvent streamEvent, VPhaseEndingSelectionMenu menu)
@@ -109,7 +109,6 @@ namespace VTuber.Dialogue.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            
         }
 
         public void OnPointerExit(PointerEventData eventData)

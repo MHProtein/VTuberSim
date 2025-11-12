@@ -8,6 +8,8 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
 using VTuber.ScheduleSystem.Events;
+using VTuber.Core.Managers; // 引入 VDataManager
+using VTuber.ScheduleSystem.Core; // 引入 VScheduleEventConfiguration
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -34,22 +36,31 @@ namespace VTuber.ScheduleSystem.UI
         [Tooltip("右方向指示器")]
         [SerializeField] private GameObject rightIndicator;
         
+        [Header("指示器文本")]
+        [Tooltip("请确保这些数组/字段对应 Up, Down, Left, Right 的 Text 组件")]
+        [SerializeField] private TMP_Text upText;
+        [SerializeField] private TMP_Text downText;
+        [SerializeField] private TMP_Text leftText;
+        [SerializeField] private TMP_Text rightText;
+        
         
         [HideInInspector] public Vector2 initOffset;
-        private bool _isSelected;
+
+        private Color _bgColor;
+
+        private Vector2 _initPosition;
         private bool _interactable;
-        
-        public VScheduleEvent Event => _event;
-        private VScheduleEvent _event;
-        
-        private List<VScheduleSlot> parentBeforeDrag;
+        private bool _isSelected;
         private Vector2 _lastPosition;
+
+
+        private List<VScheduleSlot> parentBeforeDrag;
 
         private List<VScheduleSlot> parentSlots;
 
-        private Vector2 _initPosition;
-        
-        private Color _bgColor;
+        public VScheduleEvent Event => _event;
+        private VScheduleEvent _event;
+
 
         public bool IsFixed => _isFixed;
         private bool _isFixed = false;
@@ -98,19 +109,19 @@ namespace VTuber.ScheduleSystem.UI
         {
             background.color = Color.grey;
         }
-        
+
         public void SetColorOriginal()
         {
             background.color = _bgColor;
             icon.color = Color.white;
         }
-        
+
         public void SetFixed(bool isFixed)
         {
             _isFixed = isFixed;
             _interactable = isFixed;
         }
-        
+
         public void SetInteractive(bool interactable)
         {
             _interactable = interactable;
@@ -126,7 +137,7 @@ namespace VTuber.ScheduleSystem.UI
             background.transform.localScale = Vector3.zero;
             nameText.text = e.EventName;
             nameIcon.color = e.BackgroundColor;
-            
+
             switch (e.CostType)
             {
                 case VEventCostType.Stamina:
@@ -136,15 +147,17 @@ namespace VTuber.ScheduleSystem.UI
                     costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Money");
                     break;
             }
-            
+
             costText.text = e.Cost.ToString();
-            
+
             Tween.Scale(icon.transform, Vector3.one, 0.3f);
             Tween.Scale(background.transform, Vector3.one, 0.3f);
-            var rectTransform = (background.transform as RectTransform);
-            Tween.UISizeDelta(rectTransform, new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
+            var rectTransform = background.transform as RectTransform;
+            Tween.UISizeDelta(rectTransform,
+                new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
 
-            if (slot.FindPosition((int)e.EventID, _event.Duration, initOffset.y, out var parents, out var transformParent,
+            if (slot.FindPosition((int)e.EventID, Event.Duration, initOffset.y, out var parents,
+                    out var transformParent,
                     out var position))
             {
                 SetNewParents(parents, transformParent, position,
@@ -155,10 +168,12 @@ namespace VTuber.ScheduleSystem.UI
                     transform.SetParent(parent);
                     transform.SetAsLastSibling();
                 }
+
                 parentBeforeDrag.Clear();
                 _disposeSlots = parentSlots;
                 _disposePosition = parent;
             }
+
             _disposable = disposable;
             _hasInSchedule = false;
         }
@@ -177,7 +192,7 @@ namespace VTuber.ScheduleSystem.UI
             background.transform.localScale = Vector3.zero;
             nameText.text = e.EventName;
             nameIcon.color = e.BackgroundColor;
-            
+
             switch (e.CostType)
             {
                 case VEventCostType.Stamina:
@@ -187,19 +202,20 @@ namespace VTuber.ScheduleSystem.UI
                     costIcon.sprite = VResourcesManager.Instance.TryGetSprite("Icon_Money");
                     break;
             }
-            
+
             costText.text = e.Cost.ToString();
 
             Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
             Tween.Scale(background.transform, Vector3.one, 0.3f);
-            var rectTransform = (background.transform as RectTransform);
-            Tween.UISizeDelta(rectTransform, new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
+            var rectTransform = background.transform as RectTransform;
+            Tween.UISizeDelta(rectTransform,
+                new Vector2(rectTransform.rect.width, rectTransform.rect.height * e.Duration), 0.3f);
 
             transform.SetAsLastSibling();
 
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>()
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>
             {
-                { "Event", _event }
+                { "Event", Event }
             });
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
             
@@ -207,78 +223,66 @@ namespace VTuber.ScheduleSystem.UI
             // 调用显示指示器
             ShowConditionIndicators();
         }
-        
+
         public void SetParentBeforeDrag()
         {
             parentSlots = parentBeforeDrag;
 
             Tween.Position(transform, _lastPosition, 0.2f);
             //transform.position = _lastPosition;
-            foreach (var parent in parentSlots)
+            foreach (var parent in parentSlots) parent.SetItem(this);
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
             {
-                parent.SetItem(this);
-            }
-            
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
-            {
-                { "Event", _event }
+                { "Event", Event }
             });
         }
-        
+
         public void SetParentDisposeSlot()
         {
             parentSlots = _disposeSlots;
 
             Tween.Position(transform, _disposePosition.position, 0.2f);
             //transform.position = _lastPosition;
-            foreach (var parent in parentSlots)
-            {
-                parent.SetItem(this);
-            }
+            foreach (var parent in parentSlots) parent.SetItem(this);
             transform.SetParent(_disposePosition);
-            
         }
 
-        public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position, bool shouldTween)
+        public void SetNewParents(List<VScheduleSlot> parents, Transform transformParent, Vector2 position,
+            bool shouldTween)
         {
             _hasInSchedule = true;
             parentBeforeDrag = parentSlots;
             parentSlots = parents;
             _lastPosition = position;
-            
-            foreach (var parent in parentSlots)
-            {
-                parent.SetItem(this);
-            }
-            if(shouldTween)
+
+            foreach (var parent in parentSlots) parent.SetItem(this);
+            if (shouldTween)
                 Tween.Position(transform, position, 0.2f);
             else
-            {
                 transform.position = position;
-            }
             transform.SetParent(transformParent);
             //transform.position = position;
-            if(!_event.IsSpecialEvent)
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+            if (!Event.IsSpecialEvent)
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
                 {
-                    { "Event", _event }
+                    { "Event", Event }
                 });
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_PlaceEvent);
         }
-        
+
         public bool TryPlaceEvent(List<RaycastResult> results)
         {
             foreach (var result in results)
             {
                 var slot = result.gameObject.GetComponent<VScheduleSlot>();
                 if (slot is not null)
-                {
-                    if(slot.FindPosition((int)_event.EventID, _event.Duration, initOffset.y, out var parents, out var transformParent, out var position))
+                    if (slot.FindPosition((int)Event.EventID, Event.Duration, initOffset.y, out var parents,
+                            out var transformParent, out var position))
                     {
                         SetNewParents(parents, transformParent, position, true);
                         return true;
                     }
-                }
             }
 
             return false;
@@ -358,23 +362,20 @@ namespace VTuber.ScheduleSystem.UI
                 _isSelected = false;
                 return;
             }
-      
-            if(parentSlots is null || parentSlots.Count == 0)
+
+            if (parentSlots is null || parentSlots.Count == 0)
             {
                 if (_disposable)
                 {
                     Despawn();
                     return;
                 }
-                else
-                {
-                    SetParentBeforeDrag();
-                    return;
-                }
+
+                SetParentBeforeDrag();
+                return;
             }
 
             if ((!_disposable && _hasInSchedule) || _disposable)
-            {
                 foreach (var result in results)
                 {
                     var slot = result.gameObject.GetComponent<VScheduleSlot>();
@@ -384,34 +385,23 @@ namespace VTuber.ScheduleSystem.UI
                         return;
                     }
                 }
-            }
 
             if (!_disposable && _disposeSlots is not null)
-            {
                 SetParentDisposeSlot();
-            }
             else
-            {
                 Despawn();
-            }
         }
 
         public void Despawn()
         {
-            foreach (var slot in parentSlots)
-            {
-                slot.RemoveItem();
-            }
+            foreach (var slot in parentSlots) slot.RemoveItem();
             Tween.Scale(transform, Vector3.one * 0.2f, 0.28f);
             Tween.Position(transform, _initPosition, 0.3f)
-                .OnComplete(() =>
-                {
-                    Destroy(gameObject);
-                });
-            
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+                .OnComplete(() => { Destroy(gameObject); });
+
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
             {
-                { "Event", _event }
+                { "Event", Event }
             });
         }
         
@@ -495,37 +485,114 @@ public void OnPointerEnter(PointerEventData eventData)
         {
             if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
 
-            var pattern = _event.SchedulingCondition.PositionPattern;
+            var condition = _event.SchedulingCondition; // 获取条件对象
+            var pattern = condition.PositionPattern;
+            
             if (pattern == VSchedulingConditionPositionPatterns.None) return;
 
-            // 激活主容器
-            conditionIndicatorsContainer.SetActive(true);
+            // 1. 获取提示文字
+            string hintText = GetConditionHintText(condition);
 
-            // 先全部隐藏，重置状态
+            // 2. 激活容器
+            conditionIndicatorsContainer.SetActive(true);
+            
+            // 重置状态
             upIndicator?.SetActive(false);
             downIndicator?.SetActive(false);
             leftIndicator?.SetActive(false);
             rightIndicator?.SetActive(false);
-
-            // 根据模式激活对应的指示器
+            
+            // 3. 根据模式显示指示器并设置文字
             switch (pattern)
             {
                 case VSchedulingConditionPositionPatterns.UD:
-                    upIndicator?.SetActive(true);
-                    downIndicator?.SetActive(true);
+                    ActivateIndicator(upIndicator, upText, hintText);
+                    ActivateIndicator(downIndicator, downText, hintText);
                     break;
                 case VSchedulingConditionPositionPatterns.LR:
-                    leftIndicator?.SetActive(true);
-                    rightIndicator?.SetActive(true);
+                    ActivateIndicator(leftIndicator, leftText, hintText);
+                    ActivateIndicator(rightIndicator, rightText, hintText);
                     break;
                 case VSchedulingConditionPositionPatterns.UDLR:
                 case VSchedulingConditionPositionPatterns.All:
-                    upIndicator?.SetActive(true);
-                    downIndicator?.SetActive(true);
-                    leftIndicator?.SetActive(true);
-                    rightIndicator?.SetActive(true);
+                    ActivateIndicator(upIndicator, upText, hintText);
+                    ActivateIndicator(downIndicator, downText, hintText);
+                    ActivateIndicator(leftIndicator, leftText, hintText);
+                    ActivateIndicator(rightIndicator, rightText, hintText);
                     break;
             }
         }
+        
+        // 新增：激活指示器并设置文字的辅助方法
+        private void ActivateIndicator(GameObject indicator, TMP_Text textComponent, string text)
+        {
+            if (indicator != null)
+            {
+                indicator.SetActive(true);
+                if (textComponent != null)
+                {
+                    textComponent.text = text;
+                }
+            }
+        }
+        
+        // 新增：核心逻辑 - 获取条件描述文字
+        private string GetConditionHintText(VSchedulingCondition condition)
+        {
+            string result = "";
+
+            switch (condition.Type)
+            {
+                case VSchedulingConditionType.ID:
+                    // --- 使用你提供的 API 逻辑 ---
+                    VScheduleEventConfiguration config = null;
+                    
+                    // 这里使用我们在 VSchedulingCondition 中公开的 IsTargetStream 属性
+                    // 或者根据 _targetID 尝试获取（如果 ID 区分段位）
+                    if (condition.IsTargetStream) 
+                    {
+                        config = VDataManager.Instance.GetStreamEventConfigurationByID(condition.TargetID);
+                    }
+                    else
+                    {
+                        config = VDataManager.Instance.GetDialogueEventConfigurationByID(condition.TargetID);
+                    }
+
+                    if (config != null)
+                    {
+                        result = config.eventName; // 或者 config.icon 等
+                    }
+                    else
+                    {
+                        result = "Unknown Event";
+                    }
+                    break;
+
+                case VSchedulingConditionType.Type:
+                case VSchedulingConditionType.ExcludeType:
+                    // 如果是类型检查，直接显示类型名称
+                    result = condition.TargetType.ToString();
+                    break;
+                    
+                case VSchedulingConditionType.SameType:
+                    result = "Same Type";
+                    break;
+                    
+                default:
+                    result = "Condition";
+                    break;
+            }
+
+            // 可选：如果是“排除”条件，加个前缀
+            if (condition.Type == VSchedulingConditionType.ExcludeType || condition.Type == VSchedulingConditionType.ExcludeID)
+            {
+                result = "NOT " + result;
+            }
+
+            return result;
+        }
+        
+        
+        
     }
 }

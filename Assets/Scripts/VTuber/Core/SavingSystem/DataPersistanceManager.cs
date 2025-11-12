@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using VTuber.Core.EventCenter;
@@ -7,44 +6,54 @@ using VTuber.Core.Foundation;
 
 namespace SlayTheSpire.System.SavingSystem
 {
-    public class DataPersistenceManager : VSingleton<DataPersistenceManager>
+    public class VDataPersistenceManager : VSingleton<VDataPersistenceManager>
     {
-        public SaveData SaveData => _saveData;
-        private SaveData _saveData;
-        
-        public List<IDataPersistence> DataPersistences =>_dataPersistences;
-        private List<IDataPersistence> _dataPersistences;
-
         private FileDataHandler _dataHandler;
-        
+        private FileDataHandler _tutorialBattleDataHandler;
+        private FileDataHandler _tutorialWeekDataHandler;
+        private SaveData _tutorialBattleSaveData;
+        private SaveData _tutorialWeekSaveData;
+        public SaveData SaveData { get; private set; }
+
+        public SaveData TutorialBattleSaveData => _tutorialBattleSaveData;
+        public SaveData TutorialWeekSaveData => _tutorialWeekSaveData;
+
+        public List<IDataPersistence> DataPersistences { get; private set; }
+
         public void Register(IDataPersistence data)
         {
-            _dataPersistences.Add(data);
+            DataPersistences.Add(data);
         }
 
         public void Initialize()
         {
-            _dataPersistences = new List<IDataPersistence>();
+            DataPersistences = new List<IDataPersistence>();
             _dataHandler = new FileDataHandler(Application.persistentDataPath, "player.vtb");
-            
+            _tutorialBattleDataHandler = new FileDataHandler(Application.persistentDataPath, "player_tutorial.vtb");
+            _tutorialWeekDataHandler = new FileDataHandler(Application.persistentDataPath, "player_week.vtb");
+
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEndSave, EventSaveGame);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEndRun, EventSaveGame);
         }
-        
+
         private void Start()
         {
-            LoadGame();
+            LoadGame(false);
         }
 
-        public void NewGame()
+        public void NewGame(bool isTutorial)
         {
-            _saveData = new SaveData();
+            SaveData = new SaveData();
+            if (!isTutorial)
+                return;
+            _tutorialBattleSaveData = new SaveData();
+            _tutorialWeekSaveData = new SaveData();
             //GameManager.Instance.newGame = true;
         }
 
         public void DeleteSave()
         {
-            _saveData = null;
+            SaveData = null;
             _dataHandler.Delete();
         }
 
@@ -53,46 +62,88 @@ namespace SlayTheSpire.System.SavingSystem
             return _dataHandler.SaveExists();
         }
 
-        public void LoadGame()
+        public void LoadGame(bool isTutorial)
         {
-            if(_saveData is null) 
-                _saveData = _dataHandler.Load();
-            if (_saveData is null)
+            if (SaveData is null)
+                SaveData = _dataHandler.Load();
+            if (SaveData is null)
             {
                 Debug.Log("No data was found. Initializing data to defaults");
-                NewGame();
+                NewGame(isTutorial);
             }
 
-            foreach (var dataPersistence in _dataPersistences)
-            {
-                dataPersistence.Load(_saveData);
-            }
+            foreach (var dataPersistence in DataPersistences) dataPersistence.Load(SaveData);
         }
 
         public SaveData LoadSave()
         {
-            _saveData = _dataHandler.Load();
-            return _saveData;
+            SaveData = _dataHandler.Load();
+            return SaveData;
         }
 
         public void EventSaveGame(Dictionary<string, object> message)
         {
             SaveGame();
         }
-        
+
         public void SaveGame()
         {
-            SavePersistences().Wait();
-            _dataHandler.Save(_saveData);
+            SavePersistences(SaveData);
+            _dataHandler.Save(SaveData);
         }
 
-        public async Task SavePersistences()
+        public void SavePersistences(SaveData saveData)
         {
-            foreach (var dataPersistence in _dataPersistences)
+            foreach (var dataPersistence in DataPersistences)
             {
-                dataPersistence.Save(_saveData);
-                await Task.CompletedTask;
+                dataPersistence.Save(saveData);
             }
+        }
+
+        public void SaveGameTutorialBattle()
+        {            
+            if (_tutorialBattleSaveData is null)
+                return;
+            SavePersistences(_tutorialBattleSaveData);
+            _tutorialBattleDataHandler.Save(_tutorialBattleSaveData);
+        }
+
+        public SaveData LoadTutorialBattleSave()
+        {
+            _tutorialBattleSaveData = _tutorialBattleDataHandler.Load();
+            return _tutorialBattleSaveData;
+        }
+
+        public void LoadTutorialBattleGame()
+        {
+            if (_tutorialBattleSaveData is null)
+                _tutorialBattleSaveData = _tutorialBattleDataHandler.Load();
+            if (_tutorialBattleSaveData is null) VDebug.LogError("No tutorial save data was found.");
+
+            foreach (var dataPersistence in DataPersistences) dataPersistence.Load(_tutorialBattleSaveData);
+        }
+        
+        public void SaveGameTutorialWeek()
+        {
+            if (_tutorialWeekSaveData is null)
+                return;
+            SavePersistences(_tutorialWeekSaveData);
+            _tutorialWeekDataHandler.Save(_tutorialWeekSaveData);
+        }
+
+        public SaveData LoadTutorialWeekSave()
+        {
+            _tutorialWeekSaveData = _tutorialWeekDataHandler.Load();
+            return _tutorialWeekSaveData;
+        }
+
+        public void LoadTutorialWeekGame()
+        {
+            if (_tutorialWeekSaveData is null)
+                _tutorialWeekSaveData = _tutorialWeekDataHandler.Load();
+            if (_tutorialWeekSaveData is null) VDebug.LogError("No tutorial save data was found.");
+
+            foreach (var dataPersistence in DataPersistences) dataPersistence.Load(_tutorialWeekSaveData);
         }
     }
 }

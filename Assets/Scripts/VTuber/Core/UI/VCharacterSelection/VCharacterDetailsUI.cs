@@ -20,8 +20,8 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
         [SerializeField] private TMP_Text followerText;
         [SerializeField] private VAbilityDetails abilityDetails;
 
-        private Dictionary<uint, VCard> cardsCreated = new Dictionary<uint, VCard>();
-        
+        private readonly Dictionary<uint, VCard> cardsCreated = new();
+
         public string GetLiveTypeText(string liveType)
         {
             switch (liveType)
@@ -40,14 +40,16 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
 
             return null;
         }
-        
+
         public void SetDetails(VCharacterConfiguration characterConfig)
         {
             nameText.text = characterConfig.characterName;
             descriptionText.text = characterConfig.description;
             liveTypeText.text = GetLiveTypeText(characterConfig.liveType);
-            if(cardsCreated.TryGetValue(characterConfig.initialCardId, out var value))
+            if (cardsCreated.TryGetValue(characterConfig.initialCardId, out var value))
+            {
                 card.SetCard(value);
+            }
             else
             {
                 var c = VDataManager.Instance.CreateCardByID(characterConfig.initialCardId);
@@ -58,7 +60,7 @@ namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
             staminaText.text = $"{characterConfig.staminaInitialValue}/{characterConfig.staminaMaxValue}";
             moneyText.text = characterConfig.moneyInitialValue.ToString();
             followerText.text = characterConfig.followerCountInitialValue.ToString();
-            
+
             abilityDetails.SetDetails(characterConfig);
         }
     }

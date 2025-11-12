@@ -1,10 +1,10 @@
 {
-	"Version": 3,
-	"FileReferences": {
-		"Moc": "常态动感DJplus.moc3",
-		"Textures": [
-			"常态动感DJplus.1024/texture_00.png"
-		],
-		"DisplayInfo": "常态动感DJplus.cdi3.json"
-	}
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "常态动感DJplus.moc3",
+    "Textures": [
+      "常态动感DJplus.1024/texture_00.png"
+    ],
+    "DisplayInfo": "常态动感DJplus.cdi3.json"
+  }
 }

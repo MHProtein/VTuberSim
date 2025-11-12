@@ -404,6 +404,10 @@ MonoBehaviour:
   downIndicator: {fileID: 4835570433687153550}
   leftIndicator: {fileID: 3665110528720980505}
   rightIndicator: {fileID: 1544316666014550363}
+  upText: {fileID: 8327045982360815979}
+  downText: {fileID: 5063866286551585610}
+  leftText: {fileID: 2257176856378210378}
+  rightText: {fileID: 3554727981171682367}
   initOffset: {x: 0, y: 0}
 --- !u!1 &1544316666014550363
 GameObject:
@@ -961,7 +965,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6016041587424240677}
   m_Father: {fileID: 2653356724821197783}
@@ -1489,7 +1493,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7382030238700473965
 Transform:
   m_ObjectHideFlags: 0

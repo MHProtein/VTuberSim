@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
+using Tutorial.Script;
 using UnityEngine;
-using VTuber.BattleSystem.Core;
-using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
-using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem;
 using VTuber.Reincarnation;
-using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
 
@@ -20,87 +16,82 @@ namespace VTuber.Core.StateMachine
 {
     public class VStateMachineSaveData
     {
-        public int weekIndex;
         public VStateType currentStateType;
         public VStateType lastStateType;
         public List<VStateSaveData> stateSaveDataList;
+        public int weekIndex;
     }
-    
+
     public class VStateMachine
     {
-        public bool IsInitialized { get; private set; }
-        
-        private List<VState> RegisteredStateList => _registeredStateList;
-        private List<VState> _registeredStateList = new List<VState>();
+        public readonly bool isTutorial;
+        protected bool shouldPauseSchedule;
 
-        public VState CurrentState => currentState;
-        private VState currentState;
-        
-        public VState LastState => lastState;
-        private VState lastState;
-
-        public VScheduleUI ScheduleUI => _scheduleUI;
-        private VScheduleUI _scheduleUI;
-        
-        public VWeeklySchedule WeeklySchedule => _weeklySchedule;
-        private VWeeklySchedule _weeklySchedule; 
-        
-        public GameObject BattleRoot => _battleRoot;
-        private GameObject _battleRoot;
-        
-        public GameObject EventSystemRoot => _eventSystemRoot;
-        private GameObject _eventSystemRoot;
-        
-        public VEventSystem EventSystemSystem => _eventSystemSystem;
-        private VEventSystem _eventSystemSystem;
-        
-        public VCharacter Character => _character;
-        private VCharacter _character;
-        
-        public bool ShouldPauseSchedule => shouldPauseSchedule;
-        protected bool shouldPauseSchedule = false;
-
-        public VScript Script => _script;
-        private VScript _script;
-        
-        public VReincarnationConfiguration ReincarnationConfiguration => _reincarnationConfiguration;
-        private VReincarnationConfiguration _reincarnationConfiguration;
-        
-        public VStateMachine(VScheduleUI scheduleUI,
+        public VStateMachine(bool isTutorial, VScheduleUI scheduleUI,
             VWeeklySchedule weeklySchedule,
             GameObject battleRoot,
             GameObject eventSystemRoot, VEventSystem eventSystemSystem,
             VCharacter character, VScript script, VReincarnationConfiguration reincarnationConfiguration)
         {
-            _scheduleUI = scheduleUI;
-            _weeklySchedule = weeklySchedule;
-            _battleRoot = battleRoot;
-            _eventSystemRoot = eventSystemRoot;
-            _eventSystemSystem = eventSystemSystem;
-            _character = character;
-            _script = script;
+            this.isTutorial = isTutorial;
+
+            if (isTutorial) TutorialScript = script as VTutorialScript;
+
+            ScheduleUI = scheduleUI;
+            WeeklySchedule = weeklySchedule;
+            BattleRoot = battleRoot;
+            EventSystemRoot = eventSystemRoot;
+            EventSystemSystem = eventSystemSystem;
+            Character = character;
+            Script = script;
             IsInitialized = true;
-            _reincarnationConfiguration = reincarnationConfiguration;
+            ReincarnationConfiguration = reincarnationConfiguration;
         }
+
+        public bool IsInitialized { get; }
+
+        private List<VState> RegisteredStateList { get; } = new();
+
+        public VState CurrentState { get; private set; }
+
+        public VState LastState { get; private set; }
+
+        public VScheduleUI ScheduleUI { get; }
+
+        public VWeeklySchedule WeeklySchedule { get; }
+
+        public GameObject BattleRoot { get; }
+
+        public GameObject EventSystemRoot { get; }
+
+        public VEventSystem EventSystemSystem { get; }
+
+        public VCharacter Character { get; }
+
+        public bool ShouldPauseSchedule => shouldPauseSchedule;
+
+        public VScript Script { get; }
+
+        public VTutorialScript TutorialScript { get; }
+
+        public VReincarnationConfiguration ReincarnationConfiguration { get; }
 
         public VStateMachineSaveData Save()
         {
             return new VStateMachineSaveData
             {
-                currentStateType = currentState.StateType,
-                lastStateType = lastState?.StateType ?? VStateType.None,
+                currentStateType = CurrentState.StateType,
+                lastStateType = LastState?.StateType ?? VStateType.None,
                 stateSaveDataList = RegisteredStateList.Select(state => state.Save()).ToList()
             };
         }
 
         public void Load(VStateMachineSaveData saveData)
         {
-            lastState = RegisteredStateList.Find(state => state.StateType == saveData.lastStateType);
-            
+            LastState = RegisteredStateList.Find(state => state.StateType == saveData.lastStateType);
+
             foreach (var state in RegisteredStateList)
-            {
                 state.Load(saveData.stateSaveDataList.Find(saveData => saveData.stateType == state.StateType));
-            }
             SwitchState(saveData.currentStateType);
         }
 
@@ -112,7 +103,7 @@ namespace VTuber.Core.StateMachine
         {
             UnregisterAll();
         }
-        
+
         public void PauseSchedule()
         {
             if (shouldPauseSchedule)
@@ -131,12 +122,12 @@ namespace VTuber.Core.StateMachine
         {
             shouldPauseSchedule = value;
         }
-        
+
         public void ContinueSchedule()
         {
             SwitchState(VStateType.Execution);
         }
-        
+
         public bool RegisterState(VState state)
         {
             if (state == null)
@@ -145,24 +136,21 @@ namespace VTuber.Core.StateMachine
                 return false;
             if (RegisteredStateList.Exists(s => s.StateType == state.StateType))
                 return false;
-            
+
             RegisteredStateList.Add(state);
             state.Register(this);
             return false;
         }
-        
+
         public void UnregisterAll()
         {
             if (!IsInitialized)
                 return;
-            
-            foreach (var state in RegisteredStateList)
-            {
-                state.Unregister();
-            }
+
+            foreach (var state in RegisteredStateList) state.Unregister();
             RegisteredStateList.Clear();
-            currentState = null;
-            lastState = null;
+            CurrentState = null;
+            LastState = null;
         }
 
         public bool UnRegisterState(VStateType vStateType)
@@ -183,44 +171,43 @@ namespace VTuber.Core.StateMachine
             var state = RegisteredStateList.Find(s => s.StateType == vStateType);
             if (state is null)
                 return false;
-            
-            if (currentState is not null)
-                currentState.Exit(state);
-            lastState = currentState;
-            currentState = state;
-            currentState.Enter(lastState, args);
-            
+
+            if (CurrentState is not null)
+                CurrentState.Exit(state);
+            LastState = CurrentState;
+            CurrentState = state;
+            CurrentState.Enter(LastState, args);
+
             return false;
         }
 
         public void Update()
         {
-            currentState.Update();
+            CurrentState.Update();
         }
 
         public void NextSchedule()
         {
+            if (isTutorial && !TutorialScript.CheckCurrentWeekConditions(Character))
+            {
+                VRaisingUI.Instance.ShowRestartWeekUI();
+                return;
+            }
+
             VDebug.Log("<color=green>Next Schedule</color>");
-            _weeklySchedule.Reset(true);
+            WeeklySchedule.Reset(true);
             ScheduleUI.ResetSchedule();
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleEnd, new Dictionary<string, object>()
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnScheduleEnd, new Dictionary<string, object>
             {
-                { "WeekIndex", _script.WeekIndex },
+                { "WeekIndex", Script.WeekIndex }
             });
-            _script.NextWeek();
-            VRaisingUI.Instance.UpdateWeekCount(_script.WeekIndex + 1);
-            var e = _script.NextWeek();
+            Script.NextWeek();
+            VRaisingUI.Instance.UpdateWeekCount(Script.WeekIndex + 1);
+            var e = Script.NextWeek();
             if (e is not null)
-            {
-                Tween.Delay(0.1f, () =>
-                {
-                    SwitchState(VStateType.PhaseStart, e);
-                });
-            }
+                Tween.Delay(0.1f, () => { SwitchState(VStateType.PhaseStart, e); });
             else
-            {
                 SwitchState(VStateType.ScheduleCreation);
-            }
         }
     }
 }

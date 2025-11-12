@@ -7,8 +7,8 @@ namespace VTuber.Relic
 {
     public class VBattleRelicManagerSaveData
     {
-        public List<VBattleRelicSaveData> relics;
         public uint idDistributor;
+        public List<VBattleRelicSaveData> relics;
     }
 
     public class VBattleRelicSaveData
@@ -19,28 +19,13 @@ namespace VTuber.Relic
 
     public class VBattleRelicManager
     {
-        public VBattle Battle => _battle;
-        private VBattle _battle;
-
-        public uint idDistributor = 0;
-        private List<VBattleRelic> relics;
-
-        public VBattleRelicManagerSaveData Save()
-        {
-            return new VBattleRelicManagerSaveData()
-            {
-                idDistributor = idDistributor,
-                relics = relics.Select(relic => new VBattleRelicSaveData()
-                {
-                    configID = relic.ConfigId,
-                    layer = relic.Layer
-                }).ToList()
-            };
-        }
+        private readonly List<VBattleRelic> relics;
+        public uint idDistributor;
+        
 
         public VBattleRelicManager(VBattle battle, VBattleRelicManagerSaveData saveData)
         {
-            _battle = battle;
+            Battle = battle;
             relics = new List<VBattleRelic>();
             idDistributor = saveData.idDistributor;
             foreach (var relicSaveData in saveData.relics)
@@ -53,12 +38,24 @@ namespace VTuber.Relic
 
         public VBattleRelicManager(VBattle battle, List<VBattleRelic> initRelics)
         {
-            _battle = battle;
+            Battle = battle;
             relics = new List<VBattleRelic>();
-            foreach (var relic in initRelics)
+            foreach (var relic in initRelics) AddRelic(relic);
+        }
+
+        public VBattle Battle { get; }
+
+        public VBattleRelicManagerSaveData Save()
+        {
+            return new VBattleRelicManagerSaveData
             {
-                AddRelic(relic);
-            }
+                idDistributor = idDistributor,
+                relics = relics.Select(relic => new VBattleRelicSaveData
+                {
+                    configID = relic.ConfigId,
+                    layer = relic.Layer
+                }).ToList()
+            };
         }
 
         public void AddRelic(VBattleRelic relic)

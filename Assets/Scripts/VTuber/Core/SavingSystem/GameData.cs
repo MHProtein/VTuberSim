@@ -15,18 +15,18 @@ namespace SlayTheSpire.System.SavingSystem
     public class SaveData
     {
         public List<VAccountSaveData> accounts;
-        public VCharacterSaveData characterSaveData;
-        public VStateMachineSaveData stateMachine;
-        public VWeeklyScheduleSaveData weeklySchedule;
-        public VScriptSaveData script;
         public VBattleSaveData battleSaveData;
-        
-        public VScheduleUISaveData scheduleUISaveData;
-        public VStoreSaveData storeSaveData;
+
+        public uint cardIDDistributor;
+        public VCharacterSaveData characterSaveData;
+        public uint consumableIDDistributor;
         public VEventSystemSaveData eventSystemSaveData;
         public TimeSpan lastPlayTime;
 
-        public uint cardIDDistributor;
-        public uint consumableIDDistributor;
+        public VScheduleUISaveData scheduleUISaveData;
+        public VScriptSaveData script;
+        public VStateMachineSaveData stateMachine;
+        public VStoreSaveData storeSaveData;
+        public VWeeklyScheduleSaveData weeklySchedule;
     }
 }

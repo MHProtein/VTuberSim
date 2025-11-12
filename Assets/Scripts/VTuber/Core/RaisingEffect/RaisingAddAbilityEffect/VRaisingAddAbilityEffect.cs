@@ -2,8 +2,6 @@
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Character.Attributes;
-using VTuber.Core.Foundation;
-using VTuber.Core.RaisingEffect;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -11,28 +9,28 @@ namespace VTuber.Core.RaisingEffect
     {
         string AttributeName { get; }
     }
+
     public class VRaisingAddAbilityEffect : VRaisingEffect, IAttributeEffect
     {
-        public string AttributeName => _attributeName;
-        private readonly string _attributeName;
-        private readonly VUpgradableValue<int> _value;
         private readonly bool _shouldUseEfficiency;
-        public VRaisingAddAbilityEffect(VRaisingAddAbilityEffectConfiguration configuration, int value, int upgradedValue) : base(configuration)
+        private readonly VUpgradableValue<int> _value;
+
+        public VRaisingAddAbilityEffect(VRaisingAddAbilityEffectConfiguration configuration, int value,
+            int upgradedValue) : base(configuration)
         {
-            _attributeName = configuration.AbilityName;
+            AttributeName = configuration.AbilityName;
             _shouldUseEfficiency = configuration.ShouldUseEfficiency;
             _value = new VUpgradableValue<int>(value, upgradedValue);
         }
 
+        public string AttributeName { get; }
+
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
         {
-            if(character.AttributeManager.TryGetAttribute(_attributeName, out var attribute))
+            if (character.AttributeManager.TryGetAttribute(AttributeName, out var attribute))
             {
                 var abilityAttribute = attribute as VAbilityAttribute;
-                if (abilityAttribute is not null)
-                {
-                    abilityAttribute.AddAbility(_value.Value, _shouldUseEfficiency);
-                }
+                if (abilityAttribute is not null) abilityAttribute.AddAbility(_value.Value, _shouldUseEfficiency);
             }
         }
 
@@ -50,6 +48,5 @@ namespace VTuber.Core.RaisingEffect
         {
             return _value.Value.ToString();
         }
-        
     }
 }

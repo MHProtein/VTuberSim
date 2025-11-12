@@ -1,9 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 
@@ -18,15 +16,25 @@ namespace VTuber.Store.UI
         [SerializeField] protected GameObject discountObject;
         [SerializeField] protected TMP_Text discountText;
         [SerializeField] protected GameObject poorObject;
-        protected VStoreSlot slot;
-        protected VCharacter character;
         protected bool canBuy = true;
-        protected bool hasBought = false;
+        protected VCharacter character;
+        protected bool hasBought;
+        protected VStoreSlot slot;
 
         protected override void Awake()
         {
             base.Awake();
             buyButton.onClick.AddListener(Buy);
+        }
+
+        public virtual void OnPointerEnter(PointerEventData eventData)
+        {
+            if (!hasBought && canBuy) buyPanel.SetActive(true);
+        }
+
+        public virtual void OnPointerExit(PointerEventData eventData)
+        {
+            if (!hasBought) buyPanel.SetActive(false);
         }
 
         public virtual void SetSlot(VStoreSlot slot, VCharacter character)
@@ -63,32 +71,13 @@ namespace VTuber.Store.UI
             }
         }
 
-        public virtual void OnPointerEnter(PointerEventData eventData)
-        {
-            if (!hasBought && canBuy)
-            {
-                buyPanel.SetActive(true);
-            }
-        }
-
-        public virtual void OnPointerExit(PointerEventData eventData)
-        {
-            if (!hasBought)
-            {
-                buyPanel.SetActive(false);
-            }
-        }
-
         public void SetCanAfford()
         {
-            if(hasBought)
+            if (hasBought)
                 return;
             canBuy = slot.Affordable(character);
             poorObject.SetActive(!canBuy);
-            if (!canBuy)
-            {
-                priceText.color = Color.red;
-            }
+            if (!canBuy) priceText.color = Color.red;
         }
     }
 }

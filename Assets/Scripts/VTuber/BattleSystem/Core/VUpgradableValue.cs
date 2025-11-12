@@ -2,30 +2,28 @@
 {
     public class VUpgradableValue<T>
     {
-        T _baseValue;
-        T _upgradedValue;
-        public bool IsUpgraded => _isUpgraded;
-        bool _isUpgraded;
-        
-        public T Value => _isUpgraded ? _upgradedValue : _baseValue;
-        public T UpgradedValue => _upgradedValue;
+        private readonly T _baseValue;
 
         public VUpgradableValue(T baseValue, T upgradedValue)
         {
             _baseValue = baseValue;
-            _upgradedValue = upgradedValue;
-            _isUpgraded = false;
+            UpgradedValue = upgradedValue;
+            IsUpgraded = false;
         }
-        
+
+        public bool IsUpgraded { get; private set; }
+
+        public T Value => IsUpgraded ? UpgradedValue : _baseValue;
+        public T UpgradedValue { get; }
+
         public void Upgrade()
         {
-            _isUpgraded = true;
+            IsUpgraded = true;
         }
-        
+
         public void Downgrade()
         {
-            _isUpgraded = false;
+            IsUpgraded = false;
         }
-        
     }
 }

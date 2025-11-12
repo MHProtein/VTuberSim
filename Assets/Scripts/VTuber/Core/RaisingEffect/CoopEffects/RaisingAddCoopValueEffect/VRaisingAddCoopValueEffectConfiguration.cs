@@ -5,6 +5,7 @@ namespace VTuber.Core.RaisingEffect
     public class VRaisingAddCoopValueEffectConfiguration : VRaisingEffectConfiguration
     {
         public uint cooperatorID;
+
         public VRaisingAddCoopValueEffectConfiguration(CellRange row) : base(row)
         {
             cooperatorID = uint.Parse(row.Columns[VRaisingEffectHeaderIndex.Param].Value);

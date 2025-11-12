@@ -2,15 +2,14 @@
 
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using UnityEngine;
 using VTuber.Core.Foundation;
 
 namespace VTuber.Core.AutoSave
 {
     [InitializeOnLoad]
-    static class VAutoSave
+    internal static class VEditorAutoSave
     {
-        static VAutoSave()
+        static VEditorAutoSave()
         {
             EditorApplication.playModeStateChanged -= Save;
             EditorApplication.playModeStateChanged += Save;
@@ -18,7 +17,7 @@ namespace VTuber.Core.AutoSave
 
         private static void Save(PlayModeStateChange playModeStateChange)
         {
-            if(playModeStateChange == PlayModeStateChange.ExitingEditMode)
+            if (playModeStateChange == PlayModeStateChange.ExitingEditMode)
             {
                 VDebug.Log("AutoSave - Saving Scenes and Assets");
 
@@ -26,7 +25,6 @@ namespace VTuber.Core.AutoSave
                 AssetDatabase.SaveAssets();
             }
         }
-    
     }
 }
 #endif
