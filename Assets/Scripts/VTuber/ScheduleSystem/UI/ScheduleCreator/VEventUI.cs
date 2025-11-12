@@ -8,6 +8,8 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
 using VTuber.ScheduleSystem.Events;
+using VTuber.Core.Managers; // 引入 VDataManager
+using VTuber.ScheduleSystem.Core; // 引入 VScheduleEventConfiguration
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -33,6 +35,13 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private GameObject leftIndicator;
         [Tooltip("右方向指示器")]
         [SerializeField] private GameObject rightIndicator;
+        
+        [Header("指示器文本")]
+        [Tooltip("请确保这些数组/字段对应 Up, Down, Left, Right 的 Text 组件")]
+        [SerializeField] private TMP_Text upText;
+        [SerializeField] private TMP_Text downText;
+        [SerializeField] private TMP_Text leftText;
+        [SerializeField] private TMP_Text rightText;
         
         
         [HideInInspector] public Vector2 initOffset;
@@ -476,37 +485,114 @@ public void OnPointerEnter(PointerEventData eventData)
         {
             if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
 
-            var pattern = _event.SchedulingCondition.PositionPattern;
+            var condition = _event.SchedulingCondition; // 获取条件对象
+            var pattern = condition.PositionPattern;
+            
             if (pattern == VSchedulingConditionPositionPatterns.None) return;
 
-            // 激活主容器
-            conditionIndicatorsContainer.SetActive(true);
+            // 1. 获取提示文字
+            string hintText = GetConditionHintText(condition);
 
-            // 先全部隐藏，重置状态
+            // 2. 激活容器
+            conditionIndicatorsContainer.SetActive(true);
+            
+            // 重置状态
             upIndicator?.SetActive(false);
             downIndicator?.SetActive(false);
             leftIndicator?.SetActive(false);
             rightIndicator?.SetActive(false);
-
-            // 根据模式激活对应的指示器
+            
+            // 3. 根据模式显示指示器并设置文字
             switch (pattern)
             {
                 case VSchedulingConditionPositionPatterns.UD:
-                    upIndicator?.SetActive(true);
-                    downIndicator?.SetActive(true);
+                    ActivateIndicator(upIndicator, upText, hintText);
+                    ActivateIndicator(downIndicator, downText, hintText);
                     break;
                 case VSchedulingConditionPositionPatterns.LR:
-                    leftIndicator?.SetActive(true);
-                    rightIndicator?.SetActive(true);
+                    ActivateIndicator(leftIndicator, leftText, hintText);
+                    ActivateIndicator(rightIndicator, rightText, hintText);
                     break;
                 case VSchedulingConditionPositionPatterns.UDLR:
                 case VSchedulingConditionPositionPatterns.All:
-                    upIndicator?.SetActive(true);
-                    downIndicator?.SetActive(true);
-                    leftIndicator?.SetActive(true);
-                    rightIndicator?.SetActive(true);
+                    ActivateIndicator(upIndicator, upText, hintText);
+                    ActivateIndicator(downIndicator, downText, hintText);
+                    ActivateIndicator(leftIndicator, leftText, hintText);
+                    ActivateIndicator(rightIndicator, rightText, hintText);
                     break;
             }
         }
+        
+        // 新增：激活指示器并设置文字的辅助方法
+        private void ActivateIndicator(GameObject indicator, TMP_Text textComponent, string text)
+        {
+            if (indicator != null)
+            {
+                indicator.SetActive(true);
+                if (textComponent != null)
+                {
+                    textComponent.text = text;
+                }
+            }
+        }
+        
+        // 新增：核心逻辑 - 获取条件描述文字
+        private string GetConditionHintText(VSchedulingCondition condition)
+        {
+            string result = "";
+
+            switch (condition.Type)
+            {
+                case VSchedulingConditionType.ID:
+                    // --- 使用你提供的 API 逻辑 ---
+                    VScheduleEventConfiguration config = null;
+                    
+                    // 这里使用我们在 VSchedulingCondition 中公开的 IsTargetStream 属性
+                    // 或者根据 _targetID 尝试获取（如果 ID 区分段位）
+                    if (condition.IsTargetStream) 
+                    {
+                        config = VDataManager.Instance.GetStreamEventConfigurationByID(condition.TargetID);
+                    }
+                    else
+                    {
+                        config = VDataManager.Instance.GetDialogueEventConfigurationByID(condition.TargetID);
+                    }
+
+                    if (config != null)
+                    {
+                        result = config.eventName; // 或者 config.icon 等
+                    }
+                    else
+                    {
+                        result = "Unknown Event";
+                    }
+                    break;
+
+                case VSchedulingConditionType.Type:
+                case VSchedulingConditionType.ExcludeType:
+                    // 如果是类型检查，直接显示类型名称
+                    result = condition.TargetType.ToString();
+                    break;
+                    
+                case VSchedulingConditionType.SameType:
+                    result = "Same Type";
+                    break;
+                    
+                default:
+                    result = "Condition";
+                    break;
+            }
+
+            // 可选：如果是“排除”条件，加个前缀
+            if (condition.Type == VSchedulingConditionType.ExcludeType || condition.Type == VSchedulingConditionType.ExcludeID)
+            {
+                result = "NOT " + result;
+            }
+
+            return result;
+        }
+        
+        
+        
     }
 }
