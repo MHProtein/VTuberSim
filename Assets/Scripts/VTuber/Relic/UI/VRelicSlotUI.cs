@@ -11,11 +11,14 @@ namespace VTuber.Relic.UI
         [SerializeField] private GameObject descriptionObject;
         [SerializeField] private TMP_Text description;
         [SerializeField] private Image icon;
+        [SerializeField] private Image background;
         [SerializeField] private TMP_Text layer;
         public VRelic Relic { get; private set; }
 
         public uint BattleID { get; private set; }
         public bool IsAdditional { get; private set; }
+        
+        private bool _isPermanentDescriptionShown = false;
 
         protected override void Awake()
         {
@@ -25,11 +28,15 @@ namespace VTuber.Relic.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            if (_isPermanentDescriptionShown)
+                return;
             descriptionObject.SetActive(true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            if (_isPermanentDescriptionShown)
+                return;
             descriptionObject.SetActive(false);
         }
 
@@ -50,7 +57,9 @@ namespace VTuber.Relic.UI
             icon.sprite = relic.Icon;
             icon.gameObject.SetActive(true);
             description.text = Relic.Description;
-            BattleID = (relic as VBattleRelic)?.BattleID ?? 10000;
+
+            if (relic is VBattleRelic battleRelic)
+                BattleID = battleRelic.BattleID;
         }
 
         public bool HasRelic()
@@ -68,6 +77,18 @@ namespace VTuber.Relic.UI
         public void UpdateValue()
         {
             layer.text = Relic.Layer.ToString();
+        }
+
+        public void SetBackgroundColor(Color color)
+        {
+            if(background)
+                background.color = color;
+        }
+
+        public void ShowDescriptionPermenant()
+        {
+            _isPermanentDescriptionShown = true;
+            descriptionObject.SetActive(true);
         }
     }
 }

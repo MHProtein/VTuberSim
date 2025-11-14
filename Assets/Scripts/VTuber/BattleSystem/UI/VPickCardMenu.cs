@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,9 +23,18 @@ namespace VTuber.BattleSystem.UI
         private List<VCard> _pickedCards;
         private bool _shouldPlayTwice;
 
-        public void BeginPickCard(List<VCardUI> cardsToSpawn, int maxPickCount, VCardPileType cardPileType,
-            bool isFromCard, bool shouldPlayTwice)
+        private Action<List<VCard>> _onCardPicked;
+
+        protected override void Awake()
         {
+            base.Awake();
+            ConfirmButton.onClick.AddListener(ConfirmSelection);
+        }
+
+        public void BeginPickCard(List<VCardUI> cardsToSpawn, int maxPickCount, VCardPileType cardPileType,
+            bool isFromCard, bool shouldPlayTwice, Action<List<VCard>> onCardPicked)
+        {
+            _onCardPicked = onCardPicked;
             ConfirmButton.interactable = true;
             _maxPickCount = maxPickCount;
             _cardPileType = cardPileType;
@@ -68,7 +78,13 @@ namespace VTuber.BattleSystem.UI
             SelectCardText.text = $"Selected {_pickedCards.Count} cards.";
             ConfirmButton.interactable = false;
 
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardsPickedFromPile,
+            if (_onCardPicked is not null)
+            {
+                _onCardPicked?.Invoke(_pickedCards);
+            }
+            else
+            {           
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardsPickedFromPile,
                 new Dictionary<string, object>
                 {
                     { "CardPileType", _cardPileType },
@@ -76,6 +92,7 @@ namespace VTuber.BattleSystem.UI
                     { "IsFromCard", _isFromCard },
                     { "ShouldPlayTwice", _shouldPlayTwice }
                 });
+            }
 
             foreach (var cardUI in _cardUIs) Destroy(cardUI.gameObject);
             _cardUIs.Clear();

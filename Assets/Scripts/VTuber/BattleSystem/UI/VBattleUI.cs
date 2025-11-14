@@ -208,7 +208,7 @@ namespace VTuber.BattleSystem.UI
             var cardUIs = ShowCardScroll(cards, pickCardContent);
             _displayingCards = cardUIs;
             pickCardMenuScroll.SetActive(true);
-            _pickCardMenu.BeginPickCard(cardUIs, count, cardPileType, isFromCard, shouldPlayTwice);
+            _pickCardMenu.BeginPickCard(cardUIs, count, cardPileType, isFromCard, shouldPlayTwice, null);
         }
 
         private List<VCardUI> ShowCardScroll(IEnumerable<VCard> cards, Transform content)
