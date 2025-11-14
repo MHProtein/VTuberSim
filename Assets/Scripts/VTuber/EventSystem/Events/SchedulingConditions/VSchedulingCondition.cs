@@ -52,6 +52,7 @@ namespace VTuber.ScheduleSystem.Events
         private readonly VPlacingCondition _placingCondition;
         private readonly VSchedulingConditionPositionPatterns _positionPattern;
 
+        private readonly bool _isStream;
         private readonly uint _targetID;
         private readonly VEventType _targetType;
         private readonly VSchedulingConditionType _type;
@@ -85,8 +86,16 @@ namespace VTuber.ScheduleSystem.Events
                 switch (_type)
                 {
                     case VSchedulingConditionType.ID:
-                        _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                    {
+                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value;
+                        if (targetStr.Contains("S"))
+                        {
+                            _isStream = true;
+                            targetStr = targetStr.Substring(1);
+                        }
+                        _targetID = uint.Parse(targetStr);
                         break;
+                    }
                     case VSchedulingConditionType.Type:
                         _targetType =
                             Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
@@ -98,8 +107,16 @@ namespace VTuber.ScheduleSystem.Events
                             Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
                         break;
                     case VSchedulingConditionType.ExcludeID:
-                        _targetID = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                    {
+                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value;
+                        if (targetStr.Contains("S"))
+                        {
+                            _isStream = true;
+                            targetStr = targetStr.Substring(1);
+                        }
+                        _targetID = uint.Parse(targetStr);
                         break;
+                    }
                 }
             }
 
@@ -155,8 +172,10 @@ namespace VTuber.ScheduleSystem.Events
             {
                 foreach (var s in slots)
                     if (s.Item is not null)
-                        if (s.Item.Event.EventID == _targetID)
+                    {
+                        if (_isStream && s.Item.Event is VStreamEvent && s.Item.Event.EventID == _targetID)
                             return false;
+                    }
 
                 return true;
             }
@@ -166,7 +185,11 @@ namespace VTuber.ScheduleSystem.Events
                     switch (_type)
                     {
                         case VSchedulingConditionType.ID:
+                        {
+                            if (_isStream && s.Item.Event is not VStreamEvent)
+                                return false;
                             return s.Item.Event.EventID == _targetID;
+                        }
                         case VSchedulingConditionType.Type:
                             return s.Item.Event.Type == _targetType;
                         case VSchedulingConditionType.SameType:
