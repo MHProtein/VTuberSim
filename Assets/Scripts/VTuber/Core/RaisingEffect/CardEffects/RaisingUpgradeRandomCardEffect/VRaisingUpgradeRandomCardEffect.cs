@@ -11,6 +11,7 @@ namespace VTuber.Core.RaisingEffect
         public VRaisingUpgradeRandomCardEffect(VRaisingUpgradeRandomCardEffectConfiguration configuration) : base(
             configuration)
         {
+            shouldPlayAnimation = false;
         }
 
         protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)

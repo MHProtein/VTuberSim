@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sirenix.Utilities;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
@@ -15,6 +16,11 @@ namespace VTuber.Core.UI
         [SerializeField] private List<string> pressureNames;
         [SerializeField] private Sprite coopIcon;
 
+        public Sprite GetRandomAttributeIcon()
+        {
+            return attributeIcons.Values.ToList()[Random.Range(0, attributeIcons.Count)];
+        }
+        
         public Sprite GetAttributeIcon(string attributeName)
         {
             return attributeIcons[attributeName];
@@ -102,6 +108,11 @@ namespace VTuber.Core.UI
             cardUI.SetCard(card);
 
             return cardUI;
+        }
+
+        public static GameObject SpawnPrefab(GameObject prefab, Transform parent)
+        {
+            return Instantiate(prefab, parent);
         }
     }
 }

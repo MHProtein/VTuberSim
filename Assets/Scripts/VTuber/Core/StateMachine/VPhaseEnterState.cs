@@ -2,6 +2,7 @@
 using VTuber.Core.EventCenter;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.StateMachine
 {
@@ -27,6 +28,10 @@ namespace VTuber.Core.StateMachine
             _currentEvent = (VDialogueEvent)stateMachine.Script.CurrentPhase.GetStartEvent();
             VRaisingUI.Instance.SetScheduleUIPositionToInitial();
             InitializeEvent(_currentEvent);
+            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseBegin, new Dictionary<string, object>());
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(()=>{});
+            
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEnd, OnEventEnd);
             stateMachine.Character.ConsumableManager.SetCanUseConsumable(false);
         }

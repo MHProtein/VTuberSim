@@ -19,12 +19,9 @@ public class OptionBtn:MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         
         btn.onClick.AddListener(() =>
         {
-            dc.AppleEffects(character);
-        });
-        
-        btn.onClick.AddListener(() =>
-        {
+            //dc.AppleEffects(character);
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            
             DialogSystem.Instance.CreateDialog(dc);
             DialogSystem.Instance.HideOptionDescription();
         });

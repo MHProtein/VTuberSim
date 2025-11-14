@@ -12,6 +12,7 @@ namespace VTuber.Core.RaisingEffect
 
         public VRaisingDeleteCardEffect(VRaisingDeleteCardEffectConfiguration configuration) : base(configuration)
         {
+            shouldPlayAnimation = false;
             _condition = configuration.Condition;
         }
 

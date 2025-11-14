@@ -49,10 +49,11 @@ public class DialogObj : MonoBehaviour
             if(contentGroupTransform != null)
                 contentTransform.anchoredPosition = contentGroupTransform.anchoredPosition;
         }
-        speakerIcon.sprite = Resources.Load<Sprite>($"Sprites/SpeakerIcons/{dc.iconId}");
+
+        speakerIcon.sprite = VResourcesManager.Instance.TryGetSprite(dc.iconId);
         if (dc.ifImage)
         {
-            wordsImage.sprite = Resources.Load<Sprite>($"Sprites/SpeakerImages/{dc.imageId}");
+            wordsImage.sprite = VResourcesManager.Instance.TryGetSprite(dc.imageId);
             WordBoxTransform.localScale *= 1.2f;
         }
         else

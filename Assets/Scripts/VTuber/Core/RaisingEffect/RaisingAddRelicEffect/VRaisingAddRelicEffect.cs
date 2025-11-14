@@ -9,6 +9,7 @@ namespace VTuber.Core.RaisingEffect
         public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration, string parameter,
             string upgradedParameter) : base(configuration)
         {
+            shouldPlayAnimation = false;
             RelicId = uint.Parse(parameter);
         }
 

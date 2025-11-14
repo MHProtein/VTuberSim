@@ -49,5 +49,10 @@ namespace VTuber.Core.RaisingEffect
         {
             return _value.Value.ToString();
         }
+
+        protected override int GetPreviewValue(VCharacter character)
+        {
+            return _value.Value;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
@@ -31,18 +32,21 @@ namespace VTuber.ScheduleSystem.Events
     { 
         public Sprite pfp;
         public List<VRaisingEffect> effects;
+        public string description;
 
-        public VScheduleEventSlotCoopEffectData(Sprite icon, List<VRaisingEffect> coopEffects)
+        public VScheduleEventSlotCoopEffectData(Sprite icon, List<VRaisingEffect> coopEffects, string description)
         {
             pfp = icon;
             effects = coopEffects;
+            this.description = description;
         }
 
         public void ApplyEffect(VCharacter character)
         {
-            foreach (var effect in effects)
+            List<string> descriptions = description.Split("|").ToList();
+            for (int i = 0; i < effects.Count; i++)
             {
-                effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, pfp, "coop description place_holder"));
+                effects[i].ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, pfp, descriptions[i]));
             }
         }
     }
@@ -107,9 +111,9 @@ namespace VTuber.ScheduleSystem.Events
             _isSchedulingConditionMet = value;
         }
 
-        public void SetCoopEffects(VScheduleSlot slot, List<VRaisingEffect> coopEffects, Sprite icon)
+        public void SetCoopEffects(VScheduleSlot slot, List<VRaisingEffect> coopEffects, Sprite icon, string description)
         {
-            CoopEffects[slot] = new VScheduleEventSlotCoopEffectData(icon, coopEffects);
+            CoopEffects[slot] = new VScheduleEventSlotCoopEffectData(icon, coopEffects, description);
         }
 
         public void RemoveCoopEffects(VScheduleSlot slot)

@@ -13,7 +13,8 @@ namespace VTuber.Core.RaisingEffect
         Relic,
         Pressure,
         Consumable,
-        Dialog
+        Dialog,
+        Ignore
     }
     
     public abstract class VRaisingEffect

@@ -12,6 +12,7 @@ namespace VTuber.Core.RaisingEffect
 
         public VRaisingConsumableEffect(VRaisingConsumableEffectConfiguration configuration) : base(configuration)
         {
+            shouldPlayAnimation = false;
             rarityProbabilities = configuration.rarityProbabilities;
         }
 

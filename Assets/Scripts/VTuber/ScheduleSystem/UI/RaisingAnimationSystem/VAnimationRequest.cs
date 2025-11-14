@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using VTuber.CoopSystem;
 using VTuber.Core.RaisingEffect;
 
 namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem
@@ -14,6 +15,7 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem
         public VRaisingEffect effect;
         public VAnimationType animationType;
         public Action effectApply;
+        public VCooperator coop;
     }
 
     public class VAnimationRequestFactory

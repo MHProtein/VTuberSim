@@ -423,5 +423,10 @@ namespace VTuber.BattleSystem.Core
         {
             Character.CharacterRelicManager.AddRelics(relics);
         }
+
+        public T GetState<T>() where T: VState
+        {
+            return _stateMachine.CurrentState as T;
+        }
     }
 }

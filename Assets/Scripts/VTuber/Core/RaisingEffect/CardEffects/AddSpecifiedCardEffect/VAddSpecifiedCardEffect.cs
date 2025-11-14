@@ -9,6 +9,7 @@ namespace VTuber.Core.RaisingEffect
         public VAddSpecifiedCardEffect(VRaisingEffectConfiguration configuration, string parameter) : base(
             configuration)
         {
+            shouldPlayAnimation = false;
             CardId = uint.Parse(parameter);
         }
 
