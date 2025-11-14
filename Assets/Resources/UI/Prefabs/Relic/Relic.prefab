@@ -512,6 +512,7 @@ MonoBehaviour:
   descriptionObject: {fileID: 8596794462785695221}
   description: {fileID: 8639555970414186303}
   icon: {fileID: 1536004373582375320}
+  background: {fileID: 4294131178260254258}
   layer: {fileID: 2372992816450295634}
 --- !u!1 &8596794462785695221
 GameObject:
