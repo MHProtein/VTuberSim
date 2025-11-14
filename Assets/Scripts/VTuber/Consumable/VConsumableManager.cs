@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.RaisingEffect;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Consumable
 {
@@ -75,9 +77,9 @@ namespace VTuber.Consumable
             effects.ForEach(effect => effect.ApplyEffect(_battle));
         }
 
-        public void ApplyRaisingEffects(List<VRaisingEffect> effects)
+        public void ApplyRaisingEffects(List<VRaisingEffect> effects, Sprite icon, string description)
         {
-            effects.ForEach(effect => effect.ApplyEffect(_character, null));
+            effects.ForEach(effect => effect.ApplyEffect(_character, null, VAnimationRequestFactory.Create(VInstigatorType.Consumable, icon, description)));
         }
 
         public void Remove(VConsumable consumable)

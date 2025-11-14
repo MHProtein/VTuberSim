@@ -16,7 +16,7 @@ namespace VTuber.Core.RaisingEffect
         {
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             _character = character;
             var consumable = GetRandomConsumables(1, character.LiveType).FirstOrDefault();

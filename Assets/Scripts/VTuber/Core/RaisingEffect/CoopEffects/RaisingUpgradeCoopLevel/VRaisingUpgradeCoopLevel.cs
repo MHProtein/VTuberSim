@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VTuber.Character;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -13,7 +14,15 @@ namespace VTuber.Core.RaisingEffect
             cooperatorID = uint.Parse(parameter);
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
+        {
+            animationRequest.coop = character.CooperatorManager.GetCooperator(cooperatorID);
+            animationRequest.instigatorType = VInstigatorType.Ignore;
+            animationRequest.animationType = VAnimationType.CoopUpgrade;
+            base.ApplyEffect(character, messagedict, animationRequest);
+        }
+
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CooperatorManager.GetCooperator(cooperatorID).UpgradeLevel();
         }

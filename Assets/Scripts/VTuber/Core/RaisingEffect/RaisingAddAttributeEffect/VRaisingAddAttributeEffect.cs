@@ -2,6 +2,8 @@
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -18,13 +20,19 @@ namespace VTuber.Core.RaisingEffect
 
         public string AttributeName { get; }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             if (character.AttributeManager.TryGetAttribute(AttributeName, out var attribute))
             {
                 attribute.AddTo(_value.Value, true);
                 VDebug.Log("Added " + _value + " To " + AttributeName);
             }
+        }
+        
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
+        {
+            animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
+            base.ApplyEffect(character, messagedict, animationRequest);
         }
 
         public override void Upgrade()
@@ -40,6 +48,11 @@ namespace VTuber.Core.RaisingEffect
         public override string GetParameter()
         {
             return _value.Value.ToString();
+        }
+
+        protected override int GetPreviewValue(VCharacter character)
+        {
+            return _value.Value;
         }
     }
 }

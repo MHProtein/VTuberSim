@@ -22,7 +22,7 @@ namespace VTuber.Consumable
 
         public override void ApplyEffect()
         {
-            _consumableManager.ApplyRaisingEffects(raisingEffects);
+            _consumableManager.ApplyRaisingEffects(raisingEffects, Icon, Description);
             _consumableManager.Remove(this);
         }
     }

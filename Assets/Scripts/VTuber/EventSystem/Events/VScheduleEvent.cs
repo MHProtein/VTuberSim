@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
@@ -9,6 +10,7 @@ using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.ScheduleSystem.Events
 {
@@ -26,6 +28,29 @@ namespace VTuber.ScheduleSystem.Events
         public int phase;
     }
 
+    public struct VScheduleEventSlotCoopEffectData
+    { 
+        public Sprite pfp;
+        public List<VRaisingEffect> effects;
+        public string description;
+
+        public VScheduleEventSlotCoopEffectData(Sprite icon, List<VRaisingEffect> coopEffects, string description)
+        {
+            pfp = icon;
+            effects = coopEffects;
+            this.description = description;
+        }
+
+        public void ApplyEffect(VCharacter character)
+        {
+            List<string> descriptions = description.Split("|").ToList();
+            for (int i = 0; i < effects.Count; i++)
+            {
+                effects[i].ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, pfp, descriptions[i]));
+            }
+        }
+    }
+
     public class VScheduleEvent
     {
         protected readonly VScheduleEventConfiguration _config;
@@ -37,23 +62,11 @@ namespace VTuber.ScheduleSystem.Events
 
         public bool isFollowUp;
 
-
-        public VScheduleEvent(VScheduleEventConfiguration config)
-        {
-            _config = config;
-            CoopEffects = new Dictionary<VScheduleSlot, List<VRaisingEffect>>();
-
-            PlacingConditions = new List<VPlacingCondition>();
-            foreach (var conditionId in config.placingConditions)
-                PlacingConditions.Add(VDataManager.Instance.GetPlacingCondtionByID(conditionId));
-            SchedulingCondition = config.schedulingCondition;
-        }
-
         public uint EventID => _config.id;
         public string EventName => _config.eventName;
         public string Description => _config.description;
         public VEventType Type => _config.type;
-        public string Icon => _config.icon;
+        public Sprite Icon { get; protected set; }
         public Color BackgroundColor => _config.backgroundColor;
         public VEventCostType CostType => _config.costType;
 
@@ -73,27 +86,39 @@ namespace VTuber.ScheduleSystem.Events
         public bool IsPhaseEndingEvent { get; set; }
 
         public VScheduleEvent FollowUpEvent => _followUpEvent;
-
-        public Dictionary<VScheduleSlot, List<VRaisingEffect>> CoopEffects { get; }
+        
+        public Dictionary<VScheduleSlot, VScheduleEventSlotCoopEffectData> CoopEffects { get; }
 
         public List<VPlacingCondition> PlacingConditions { get; }
 
         public VSchedulingCondition SchedulingCondition { get; }
 
+        
+        public VScheduleEvent(VScheduleEventConfiguration config)
+        {
+            _config = config;
+            CoopEffects = new ();
+
+            PlacingConditions = new List<VPlacingCondition>();
+            foreach (var conditionId in config.placingConditions)
+                PlacingConditions.Add(VDataManager.Instance.GetPlacingCondtionByID(conditionId));
+            SchedulingCondition = config.schedulingCondition;
+            Icon = VResourcesManager.Instance.TryGetSprite(_config.icon);
+        }
 
         public void SetSchedulingConditionMet(bool value)
         {
             _isSchedulingConditionMet = value;
         }
 
-        public void SetCoopEffects(VScheduleSlot slot, List<VRaisingEffect> coopEffects)
+        public void SetCoopEffects(VScheduleSlot slot, List<VRaisingEffect> coopEffects, Sprite icon, string description)
         {
-            CoopEffects[slot] = coopEffects;
+            CoopEffects[slot] = new VScheduleEventSlotCoopEffectData(icon, coopEffects, description);
         }
 
         public void RemoveCoopEffects(VScheduleSlot slot)
         {
-            CoopEffects[slot] = null;
+            CoopEffects.Remove(slot);
         }
 
         public void SetDaySchedule(VDaySchedule daySchedule, Vector2Int position)
@@ -155,15 +180,24 @@ namespace VTuber.ScheduleSystem.Events
             }
         }
 
+        public void ExecuteEffectsBeforeEvent(VCharacter character)
+        {
+            if (_isSchedulingConditionMet && SchedulingCondition.ShouldExecuteBeforeEvent)
+                foreach (var effect in SchedulingCondition.Effects)
+                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, Description));
+        }
+        
         public void ExecuteAppendedEffects(VCharacter character)
         {
             if (CoopEffects is not null && character is not null)
-                foreach (var effect in CoopEffects.Values)
-                    effect?.ForEach(x => x.ApplyEffect(character, null));
+                foreach (var data in CoopEffects.Values)
+                {
+                    data.ApplyEffect(character);
+                }
 
-            if (_isSchedulingConditionMet)
+            if (_isSchedulingConditionMet && !SchedulingCondition.ShouldExecuteBeforeEvent)
                 foreach (var effect in SchedulingCondition.Effects)
-                    effect?.ApplyEffect(character, null);
+                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, Description));
         }
 
         public void SetExecuted()

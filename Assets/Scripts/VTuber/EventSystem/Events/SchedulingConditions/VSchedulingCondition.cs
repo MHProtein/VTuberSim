@@ -35,15 +35,16 @@ namespace VTuber.ScheduleSystem.Events
         public const int Name = 1;
         public const int Description = 2;
         public const int PlacingCondition = 3;
-        public const int Pattern = 4;
-        public const int TargetType = 5;
-        public const int TargetValue = 6;
-        public const int Effect1 = 7;
-        public const int E1Param = 8;
-        public const int Effect2 = 9;
-        public const int E2Param = 10;
-        public const int Effect3 = 11;
-        public const int E3Param = 12;
+        public const int ExecuteBeforeEvent = 4; // 在事件前执行
+        public const int Pattern = 5;
+        public const int TargetType = 6;
+        public const int TargetValue = 7;
+        public const int Effect1 = 8;
+        public const int E1Param = 9;
+        public const int Effect2 = 10;
+        public const int E2Param = 11;
+        public const int Effect3 = 12;
+        public const int E3Param = 13;
     }
 
     public class VSchedulingCondition
@@ -54,7 +55,14 @@ namespace VTuber.ScheduleSystem.Events
         private readonly uint _targetID;
         private readonly VEventType _targetType;
         private readonly VSchedulingConditionType _type;
+        private readonly bool _shouldExecuteBeforeEvent;
 
+        public uint Id { get; }
+
+        public List<VRaisingEffect> Effects { get; }
+        
+        public bool ShouldExecuteBeforeEvent => _shouldExecuteBeforeEvent;
+        
         public VSchedulingCondition(CellRange row)
         {
             Id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
@@ -64,6 +72,9 @@ namespace VTuber.ScheduleSystem.Events
                 _placingCondition = VDataManager.Instance.GetPlacingCondtionByID(uint.Parse(placingConditionStr));
 
             var typeStr = row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value;
+            
+            _shouldExecuteBeforeEvent = int.Parse(row.Columns[VSchedulingConditionHeaderIndex.ExecuteBeforeEvent].Value) == 1;
+            
             if (!typeStr.IsNullOrWhitespace())
             {
                 _positionPattern =
@@ -102,10 +113,6 @@ namespace VTuber.ScheduleSystem.Events
                     row.Columns[i + 1].Value.Trim(), row.Columns[i + 1].Value.Trim()));
             }
         }
-
-        public uint Id { get; }
-
-        public List<VRaisingEffect> Effects { get; }
 
         public bool IsTrue(VCharacter character, VScheduleSlot slot)
         {

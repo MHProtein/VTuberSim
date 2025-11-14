@@ -271,18 +271,18 @@
         </member>
         <member name="P:NugetForUnity.PluginAPI.Models.INuspecFile.IconUrl">
             <summary>
-                Gets or sets the URL for the location of the icon of the NuGet package.
+                Gets or sets the URL for the location of the instigatorIcon of the NuGet package.
             </summary>
         </member>
         <member name="P:NugetForUnity.PluginAPI.Models.INuspecFile.Icon">
             <summary>
-                Gets the path to a icon file. The path is relative to the root folder of the package. This is a alternative to using a URL <see cref="P:NugetForUnity.PluginAPI.Models.INuspecFile.IconUrl" />
+                Gets the path to a instigatorIcon file. The path is relative to the root folder of the package. This is a alternative to using a URL <see cref="P:NugetForUnity.PluginAPI.Models.INuspecFile.IconUrl" />
                 .
             </summary>
         </member>
         <member name="P:NugetForUnity.PluginAPI.Models.INuspecFile.IconFilePath">
             <summary>
-                Gets the full path to a icon file. This is only set if the .nuspec file contains a <see cref="P:NugetForUnity.PluginAPI.Models.INuspecFile.Icon" />. This is a alternative to using a URL
+                Gets the full path to a instigatorIcon file. This is only set if the .nuspec file contains a <see cref="P:NugetForUnity.PluginAPI.Models.INuspecFile.Icon" />. This is a alternative to using a URL
                 <see cref="P:NugetForUnity.PluginAPI.Models.INuspecFile.IconUrl" />.
             </summary>
         </member>

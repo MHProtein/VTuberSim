@@ -8,9 +8,10 @@ namespace VTuber.Core.RaisingEffect
     {
         public VRaisingPickPhaseEndingEffect(VRaisingEffectConfiguration configuration) : base(configuration)
         {
+            shouldPlayAnimation = false;
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSelectPhaseEndingBegin,
                 new Dictionary<string, object>());

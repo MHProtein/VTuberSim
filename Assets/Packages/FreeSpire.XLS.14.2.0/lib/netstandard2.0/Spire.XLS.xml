@@ -21198,31 +21198,31 @@
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsIconSet.IconCriteria">
             <summary>
                 Returns an IconCriteria collection which represents the set of criteria for
-                an icon set conditional formatting rule.
+                an instigatorIcon set conditional formatting rule.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsIconSet.IconSet">
             <summary>
-                Returns or sets an IconSets collection which specifies the icon set used
+                Returns or sets an IconSets collection which specifies the instigatorIcon set used
                 in the conditional format.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsIconSet.PercentileValues">
             <summary>
-                Returns or sets a Boolean value indicating if the thresholds for an icon
+                Returns or sets a Boolean value indicating if the thresholds for an instigatorIcon
                 set conditional format are determined using percentiles.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsIconSet.IsReverseOrder">
             <summary>
                 Returns or sets a Boolean value indicating if the order of icons is
-                reversed for an icon set.
+                reversed for an instigatorIcon set.
             </summary>
         </member>
         <member name="P:Spire.Xls.Core.Spreadsheet.XlsIconSet.ShowIconOnly">
             <summary>
-                Returns or sets a Boolean value indicating if only the icon is displayed
-                for an icon set conditional format.
+                Returns or sets a Boolean value indicating if only the instigatorIcon is displayed
+                for an instigatorIcon set conditional format.
             </summary>
         </member>
         <member name="M:Spire.Xls.Core.Spreadsheet.XmlReaders.MSXmlReader.ReadWorksheetPageBreaks(System.Xml.XmlReader,Spire.Xls.Core.Converter.Spreadsheet.Worksheet)">
@@ -27842,11 +27842,11 @@
         </member>
         <member name="P:Spire.Xls.Core.IOleObject.DisplayAsIcon">
             <summary>
-                Gets or sets a value indicating whether [display as icon].
+                Gets or sets a value indicating whether [display as instigatorIcon].
             </summary>
             <value>
                 <c>true</c>
-                if [display as icon]; otherwise, <c>false</c>.
+                if [display as instigatorIcon]; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="P:Spire.Xls.Core.IOleObject.ObjectType">
@@ -35577,7 +35577,7 @@
         </member>
         <member name="T:Spire.Xls.IconSet">
             <summary>
-                Conditional formatting icon set condition.
+                Conditional formatting instigatorIcon set condition.
             </summary>
         </member>
         <member name="P:Spire.Xls.IconSet.IconCriteria">
@@ -35587,25 +35587,25 @@
         </member>
         <member name="P:Spire.Xls.IconSet.IconSetType">
             <summary>
-                Get or sets icon set type
+                Get or sets instigatorIcon set type
             </summary>
         </member>
         <member name="P:Spire.Xls.IconSet.PercentileValues">
             <summary>
-                Gets or sets a Boolean value indicates whether thresholds for an icon
+                Gets or sets a Boolean value indicates whether thresholds for an instigatorIcon
                 set conditional format are determined using percentiles.
             </summary>
         </member>
         <member name="P:Spire.Xls.IconSet.IsReverseOrder">
             <summary>
                 Gets or sets a Boolean value indicates whether the order of icons is
-                reversed for an icon set.
+                reversed for an instigatorIcon set.
             </summary>
         </member>
         <member name="P:Spire.Xls.IconSet.ShowIconOnly">
             <summary>
-                Gets or sets a Boolean value indcates whether only the icon is displayed
-                for an icon set conditional format.
+                Gets or sets a Boolean value indcates whether only the instigatorIcon is displayed
+                for an instigatorIcon set conditional format.
             </summary>
         </member>
         <member name="P:Spire.Xls.CellBorder.KnownColor">
@@ -45022,7 +45022,7 @@
         <member name="P:Spire.Xls.ConditionValue.Type">
             <summary>
                 specifies how the threshold values for a data bar, color scale,
-                or icon set conditional format are determined
+                or instigatorIcon set conditional format are determined
             </summary>
         </member>
         <member name="P:Spire.Xls.ConditionValue.Value">
@@ -47917,7 +47917,7 @@
         </member>
         <member name="F:Spire.Xls.Converters.DrawingML.ShapeAttr.OleIcon">
             <summary>
-                bool. For OLE objects, whether the object is in icon form.
+                bool. For OLE objects, whether the object is in instigatorIcon form.
                 What is stored in DOC escher does not seem very reliable, so I confirm it by extracting
                 a bit from the OLE object data. For DOCX and WordML this is DrawAspect.
             </summary>

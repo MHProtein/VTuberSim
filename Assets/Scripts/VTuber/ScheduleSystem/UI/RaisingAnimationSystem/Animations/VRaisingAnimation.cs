@@ -1,0 +1,40 @@
+﻿using System;
+using UnityEngine;
+using VTuber.Core.Foundation;
+
+namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem
+{
+    public class VRaisingAnimation : VUIBehaviour
+    {
+        [SerializeField] protected GameObject ui;
+        protected bool debug;
+
+        public virtual void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        {
+            if (!debug)
+            {
+                request.effectApply?.Invoke();
+            }
+        }
+
+        public virtual void ResetAnimation()
+        {
+            
+        }
+
+        public void Hide()
+        {
+            ui.SetActive(false);
+        }
+
+        public void Show()
+        {
+            ui.SetActive(true);
+        }
+
+        public void SetDebug(bool debug)
+        {
+            this.debug = debug;
+        }
+    }
+}

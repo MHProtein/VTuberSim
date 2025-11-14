@@ -11,6 +11,7 @@ using VTuber.EventSystem;
 using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.StateMachine
 {
@@ -201,11 +202,21 @@ namespace VTuber.Core.StateMachine
             {
                 { "WeekIndex", Script.WeekIndex }
             });
+            
             Script.NextWeek();
             VRaisingUI.Instance.UpdateWeekCount(Script.WeekIndex + 1);
             var e = Script.NextWeek();
             if (e is not null)
-                Tween.Delay(0.1f, () => { SwitchState(VStateType.PhaseStart, e); });
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseEnd, new Dictionary<string, object>
+                {
+                    { "Phase", Script.CurrentPhase }
+                });
+                VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+                {
+                    Tween.Delay(0.1f, () => { SwitchState(VStateType.PhaseStart, e); });
+                });
+            }
             else
                 SwitchState(VStateType.ScheduleCreation);
         }

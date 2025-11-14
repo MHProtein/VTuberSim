@@ -9,12 +9,13 @@ namespace VTuber.Core.RaisingEffect
         public VAddSpecifiedCardEffect(VRaisingEffectConfiguration configuration, string parameter) : base(
             configuration)
         {
+            shouldPlayAnimation = false;
             CardId = uint.Parse(parameter);
         }
 
         public uint CardId { get; }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CardLibrary.AddCard(VDataManager.Instance.CreateCardByID(CardId));
         }

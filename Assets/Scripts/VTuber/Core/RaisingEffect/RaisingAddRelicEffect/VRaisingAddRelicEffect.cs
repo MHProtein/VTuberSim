@@ -9,12 +9,13 @@ namespace VTuber.Core.RaisingEffect
         public VRaisingAddRelicEffect(VRaisingAddRelicEffectConfiguration configuration, string parameter,
             string upgradedParameter) : base(configuration)
         {
+            shouldPlayAnimation = false;
             RelicId = uint.Parse(parameter);
         }
 
         public uint RelicId { get; }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CharacterRelicManager.AddRelic
                 (VDataManager.Instance.CreateRelicByID(RelicId));

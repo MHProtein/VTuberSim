@@ -14,12 +14,14 @@ using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.SE;
+using VTuber.Core.StateMachine;
 using VTuber.Core.UI;
 using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 using VTuber.Store;
 
 namespace VTuber.EventSystem
@@ -166,13 +168,21 @@ namespace VTuber.EventSystem
                 _hasDialogue = false;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
-                foreach (var effect in e.effects) effect.ApplyEffect(character, null);
-                OnDialogueComplete(null);
-
+                
                 if (_loaded)
                 {
                     LoadedOpenSelectionMenu();
                     _loaded = false;
+                }
+                else
+                {
+                    foreach (var effect in e.effects)
+                        effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
+                
+                    VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+                    {
+                        OnDialogueComplete(null);
+                    });
                 }
 
                 return;
@@ -197,10 +207,14 @@ namespace VTuber.EventSystem
                 VEventSystemUI.Instance.OpenEventUI();
                 dialogueSystem.ShowMe(character);
                 if (!loaded)
+                {
                     dialogueSystem.ContinueDialog();
-                if (loaded)
-                    if (_loaded)
-                        LoadedOpenSelectionMenu();
+                    e.ExecuteEffectsBeforeEvent(character);
+                    VRaisingAnimationSystem.Instance.ExecuteAnimations(() => { });
+                }
+                else
+                    LoadedOpenSelectionMenu();
+                
                 _loaded = false;
             });
         }
@@ -248,7 +262,7 @@ namespace VTuber.EventSystem
 
         private void OnShowAddConsumable(Dictionary<string, object> messagedict)
         {
-            _consumablesToSelect = messagedict["Consumables"] as List<VConsumable>;
+            _consumablesToSelect = messagedict["Consumable"] as List<VConsumable>;
 
             ShowAddConsumable();
         }
@@ -394,8 +408,15 @@ namespace VTuber.EventSystem
                 {
                     { "Event", _currentEvent }
                 });
-            _currentEvent = null;
-            VAudioPlayer.Instance.StopBGM();
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+            {
+                _currentEvent = null;
+                VAudioPlayer.Instance.StopBGM();
+                
+                var state = VGameManager.Instance.GetState<VExecutionState>();
+                if (state is not null)
+                    state.OnEventEndAnimationEnd();
+            });
         }
 
         public void InitializeBattle(bool isPhaseEnding, int initialTurnCount, int targetPopularity,
@@ -454,10 +475,16 @@ namespace VTuber.EventSystem
                     {
                         { "Event", _currentEvent }
                     });
-                _currentEvent = null;
+                
+                VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+                {
+                    _currentEvent = null;
+                    dialogueSystem.HideMe();
+                    var state = VGameManager.Instance.GetState<VExecutionState>();
+                    if (state is not null)
+                        state.OnEventEndAnimationEnd();
+                });
             }
-
-            dialogueSystem.HideMe();
         }
 
         public void Load(SaveData data)

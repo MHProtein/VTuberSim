@@ -89,7 +89,6 @@ namespace VTuber.Core.ScriptSystem
             if (currentPhase.nextPhase.IsInPhase(_weekIndex))
             {
                 currentPhase = currentPhase.nextPhase;
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnPhaseBegin, new Dictionary<string, object>());
                 return currentPhase.GetStartEvent();
             }
 

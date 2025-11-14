@@ -113,16 +113,16 @@ namespace VTuber.ScheduleSystem.UI
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
         // {
         //     _eventData = eventData;
-        //     icon.sprite = eventData.icon;
+        //     instigatorIcon.sprite = eventData.instigatorIcon;
         //     background.color = eventData.backgroundColor;
         //     _initPosition = initPosition;
-        //     icon.raycastTarget = false;
+        //     instigatorIcon.raycastTarget = false;
         //     transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
         //     isSelected = true;
         //     canSetParent = true;
-        //     icon.transform.localScale = Vector3.zero;
+        //     instigatorIcon.transform.localScale = Vector3.zero;
         //     background.transform.localScale = Vector3.zero;
-        //     Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
+        //     Tween.Scale(instigatorIcon.transform, new Vector3(1, 1, 1), 0.3f);
         //     Tween.Scale(background.transform, new Vector3(1, eventData.height, 1), 0.3f);
         // }
 
@@ -151,7 +151,7 @@ namespace VTuber.ScheduleSystem.UI
         public void Initialize(VScheduleEvent e, VScheduleSlot slot, bool disposable, Transform parent = null)
         {
             Event = e;
-            icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
+            icon.sprite = e.Icon;
             background.color = e.BackgroundColor;
             _bgColor = background.color;
             icon.transform.localScale = Vector3.zero;
@@ -202,7 +202,7 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
             Event = e;
-            icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
+            icon.sprite = e.Icon;
             background.color = e.BackgroundColor;
             _bgColor = background.color;
             _initPosition = initPosition;
