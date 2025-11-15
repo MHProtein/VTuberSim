@@ -5,6 +5,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
 using VTuber.Core.RaisingEffect;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Consumable

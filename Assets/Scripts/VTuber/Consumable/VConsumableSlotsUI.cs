@@ -70,5 +70,15 @@ namespace VTuber.Consumable
             clickDetectionPanel.gameObject.SetActive(true);
             IsSubMenuActive = true;
         }
+        
+        public VConsumableSlotUI GetEmptySlot()
+        {
+            return _slots.Find(slot => slot.HasConsumable() == false);
+        }
+
+        public bool AreThereAvailableSlots()
+        {
+            return _slots.Exists(slot => slot.HasConsumable() == false);
+        }
     }
 }

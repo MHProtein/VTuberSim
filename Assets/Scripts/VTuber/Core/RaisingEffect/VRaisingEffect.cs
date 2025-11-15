@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using VTuber.Character;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
@@ -48,7 +49,6 @@ namespace VTuber.Core.RaisingEffect
         {
             if (shouldPlayAnimation && animationRequest is not null)
             {
-                animationRequest.effect = this;
                 animationRequest.value = GetPreviewValue(character);
                 animationRequest.effectApply = () => ApplyEffectImplement(character, messagedict);
             

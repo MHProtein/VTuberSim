@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Core.Managers;
+using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -14,10 +17,20 @@ namespace VTuber.Core.RaisingEffect
         }
 
         public uint CardId { get; }
+        private VCard _card;
+
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
+        {
+            _card = VDataManager.Instance.CreateCardByID(CardId);
+            animationRequest.animationType = VAnimationType.AddCard;
+            animationRequest.cards = new (){ _card };
+            animationRequest.instigatorType = VInstigatorType.Ignore;
+            base.ApplyEffect(character, messagedict, animationRequest);
+        }
 
         protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
-            character.CardLibrary.AddCard(VDataManager.Instance.CreateCardByID(CardId));
+            character.CardLibrary.AddCard(_card);
         }
 
         public override void Upgrade()

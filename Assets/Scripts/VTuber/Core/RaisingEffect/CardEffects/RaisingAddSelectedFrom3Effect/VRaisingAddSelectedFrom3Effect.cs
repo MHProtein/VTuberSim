@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VTuber.Character;
 using VTuber.Core.EventCenter;
+using VTuber.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -14,20 +16,14 @@ namespace VTuber.Core.RaisingEffect
         {
             _condition = configuration.Condition;
         }
-
-        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
+        
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            _character = character;
-            var cardsToAdd = GetRandomCards(3, _condition, character.LiveType, character);
-
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectCardFrom3,
-                new Dictionary<string, object>
-                {
-                    { "Cards", cardsToAdd },
-                    { "ActionType", VCardActionType.Add }
-                });
+            animationRequest.animationType = VAnimationType.SelectCardFrom3;
+            animationRequest.cards = GetRandomCards(3, _condition, character.LiveType, character);
+            animationRequest.instigatorType = VInstigatorType.Ignore;
+            base.ApplyEffect(character, messagedict, animationRequest);
         }
-
 
         public override void Upgrade()
         {

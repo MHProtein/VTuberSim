@@ -8,6 +8,7 @@ using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 

@@ -7,6 +7,7 @@ using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem.Events;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VTuber.Core.EventCenter;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;

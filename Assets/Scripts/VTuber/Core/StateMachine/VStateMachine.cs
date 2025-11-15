@@ -8,6 +8,7 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.ScriptSystem;
 using VTuber.EventSystem;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
