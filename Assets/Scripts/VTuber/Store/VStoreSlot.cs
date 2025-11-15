@@ -1,6 +1,8 @@
 ﻿using VTuber.BattleSystem.Card;
 using VTuber.Character;
 using VTuber.Consumable;
+using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Store
 {
@@ -18,7 +20,9 @@ namespace VTuber.Store
         public override void Buy(VCharacter character)
         {
             base.Buy(character);
-            character.ConsumableManager.AddConsumable(consumable);
+            
+            VRaisingAnimationSystem.Instance.EnqueueAnimationRequest(VAnimationRequestFactory.CreateAddConsumableRequest(consumable, false));
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(null);
         }
     }
 
@@ -35,7 +39,9 @@ namespace VTuber.Store
         public override void Buy(VCharacter character)
         {
             base.Buy(character);
-            character.CardLibrary.AddCard(card);
+            
+            VRaisingAnimationSystem.Instance.EnqueueAnimationRequest(VAnimationRequestFactory.CreateAddCardRequest(card));
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(null);
         }
     }
 

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.SE;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 using Random = UnityEngine.Random;
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VTuber.Character;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect

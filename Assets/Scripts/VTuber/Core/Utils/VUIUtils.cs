@@ -15,6 +15,7 @@ namespace VTuber.Core.UI
         [SerializeField] private List<Sprite> pressureIcons;
         [SerializeField] private List<string> pressureNames;
         [SerializeField] private Sprite coopIcon;
+        [SerializeField] private List<Sprite> haloSprites;
 
         public Sprite GetRandomAttributeIcon()
         {
@@ -29,6 +30,11 @@ namespace VTuber.Core.UI
         public Sprite GetCoopIcon()
         {
             return coopIcon;
+        }
+        
+        public Sprite GetHaloSprite(int level)
+        {
+            return haloSprites[level];
         }
 
         public KeyValuePair<string, Sprite> GetPressureIcon(int i)

@@ -3,6 +3,7 @@ using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Character.Attributes;
 using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect

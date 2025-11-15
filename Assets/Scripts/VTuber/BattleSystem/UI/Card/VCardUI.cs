@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using PrimeTween;
 
 namespace VTuber.BattleSystem.UI
 {
@@ -116,6 +117,53 @@ namespace VTuber.BattleSystem.UI
                 popularityImage.sprite = chattingSprite;
                 popularityText.color = chattingColor;
             }
+        }
+
+        public void SetImageAlpha(Image image, float alpha)
+        {
+            var color = image.color;
+            color.a = alpha;
+            image.color = color;
+        }
+        
+        public void SetAlpha(float alpha)
+        {
+            SetImageAlpha(background, alpha);
+            SetImageAlpha(icon, alpha);
+            SetImageAlpha(descriptionImage, alpha);
+            SetImageAlpha(nameImage, alpha);
+            SetImageAlpha(typeImage, alpha);
+            SetImageAlpha(popularityImage, alpha);
+            SetImageAlpha(shieldImage, alpha);
+            SetImageAlpha(costImage, alpha);
+            
+            name.alpha = alpha;
+            description.alpha = alpha;
+            cost.alpha = alpha;
+            typeText.alpha = alpha;
+            popularityText.alpha = alpha;
+            shieldText.alpha = alpha;
+        }
+
+        public Sequence TweenAlpha(float targetValue, float duration)
+        {
+            var alphaSequence = Sequence.Create();
+            alphaSequence
+                .Group(Tween.Alpha(background, targetValue, duration))
+                .Group(Tween.Alpha(icon, targetValue, duration))
+                .Group(Tween.Alpha(descriptionImage, targetValue, duration))
+                .Group(Tween.Alpha(nameImage, targetValue, duration))
+                .Group(Tween.Alpha(typeImage, targetValue, duration))
+                .Group(Tween.Alpha(popularityImage, targetValue, duration))
+                .Group(Tween.Alpha(shieldImage, targetValue, duration))
+                .Group(Tween.Alpha(costImage, targetValue, duration))
+                .Group(Tween.Alpha(name, targetValue, duration))
+                .Group(Tween.Alpha(description, targetValue, duration))
+                .Group(Tween.Alpha(cost, targetValue, duration))
+                .Group(Tween.Alpha(typeText, targetValue, duration))
+                .Group(Tween.Alpha(popularityText, targetValue, duration))
+                .Group(Tween.Alpha(shieldText, targetValue, duration));
+            return alphaSequence;
         }
     }
 }

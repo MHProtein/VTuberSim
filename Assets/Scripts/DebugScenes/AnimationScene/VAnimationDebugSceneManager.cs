@@ -4,6 +4,7 @@ using UnityEngine;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace DebugScenes.AnimationScene
@@ -15,6 +16,33 @@ namespace DebugScenes.AnimationScene
         [SerializeField] private GameObject animationRequestPrefab;
         
         List<TMP_Text> animationRequestTexts = new List<TMP_Text>();
+
+        public void AddRemoveCardAnim()
+        {
+            raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest
+            {
+                instigatorType = VInstigatorType.Ignore,
+                instigatorIcon = null,
+                animationType = VAnimationType.RemoveCard,
+            });
+            var x = Instantiate(animationRequestPrefab, queue).GetComponent<TMP_Text>();
+            x.text = "删除卡牌";
+            animationRequestTexts.Add(x);
+        }
+        
+        public void AddRelicAnim()
+        {
+            raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest
+            {
+                instigatorType = VInstigatorType.Ignore,
+                instigatorIcon = null,
+                animationType = VAnimationType.AddRelic,
+                relicId = 1,
+            });
+            var x = Instantiate(animationRequestPrefab, queue).GetComponent<TMP_Text>();
+            x.text = "添加遗物";
+            animationRequestTexts.Add(x);
+        }
         
         public void AddCoopAnim()
         {

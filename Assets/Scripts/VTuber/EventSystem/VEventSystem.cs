@@ -17,6 +17,7 @@ using VTuber.Core.SE;
 using VTuber.Core.StateMachine;
 using VTuber.Core.UI;
 using VTuber.Dialogue.UI;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
@@ -88,18 +89,12 @@ namespace VTuber.EventSystem
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSelectPhaseEndingBegin,
                 OnPickPhaseEndingBegin);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCardFrom3,
-                OnBeginSelectCardFrom3);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventSelectUpgradeCard,
                 OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRequestEnterStore,
                 OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectConsumableFrom3,
-                OnBeginSelectConsumableFrom3);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnShowAddConsumable,
-                OnShowAddConsumable);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
 
@@ -108,16 +103,11 @@ namespace VTuber.EventSystem
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSelectPhaseEndingBegin,
                 OnPickPhaseEndingBegin);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCardFrom3,
-                OnBeginSelectCardFrom3);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventSelectUpgradeCard,
                 OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnShowAddConsumable, OnShowAddConsumable);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectConsumableFrom3,
-                OnBeginSelectConsumableFrom3);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
 
@@ -171,7 +161,6 @@ namespace VTuber.EventSystem
                 
                 if (_loaded)
                 {
-                    LoadedOpenSelectionMenu();
                     _loaded = false;
                 }
                 else
@@ -212,38 +201,12 @@ namespace VTuber.EventSystem
                     e.ExecuteEffectsBeforeEvent(character);
                     VRaisingAnimationSystem.Instance.ExecuteAnimations(() => { });
                 }
-                else
-                    LoadedOpenSelectionMenu();
                 
                 _loaded = false;
             });
         }
 
-        public void LoadedOpenSelectionMenu()
-        {
-            switch (_selectionMenuType)
-            {
-                case VSelectionMenuType.AddCard:
-                    break;
-                case VSelectionMenuType.AddConsumable:
-                    ShowAddConsumable();
-                    break;
-                case VSelectionMenuType.SelectCard:
-                    ShowSelectCard();
-                    break;
-                case VSelectionMenuType.SelectCardFrom3:
-                    ShowSelectCardFrom3();
-                    break;
-                case VSelectionMenuType.SelectConsumableFrom3:
-                    ShowSelectConsumableFrom3();
-                    break;
-                case VSelectionMenuType.SelectUpgradeCard:
-                    ShowUpgradeCard();
-                    break;
-                case VSelectionMenuType.SelectPhaseEnding:
-                    break;
-            }
-        }
+
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
@@ -260,20 +223,6 @@ namespace VTuber.EventSystem
             _store.Reset();
         }
 
-        private void OnShowAddConsumable(Dictionary<string, object> messagedict)
-        {
-            _consumablesToSelect = messagedict["Consumable"] as List<VConsumable>;
-
-            ShowAddConsumable();
-        }
-
-        private void OnBeginSelectConsumableFrom3(Dictionary<string, object> messagedict)
-        {
-            _consumablesToSelect = messagedict["Consumables"] as List<VConsumable>;
-
-            ShowSelectConsumableFrom3();
-        }
-
         private void OnEventSelectUpgradeCard(Dictionary<string, object> messagedict)
         {
             ShowUpgradeCard();
@@ -287,75 +236,13 @@ namespace VTuber.EventSystem
 
             ShowSelectCard();
         }
-
-        private void OnBeginSelectCardFrom3(Dictionary<string, object> messagedict)
-        {
-            _cardActionType = (VCardActionType)messagedict["ActionType"];
-            _cardsToSelect = messagedict["Cards"] as List<VCard>;
-            messagedict.TryGetValue("ReplaceSelectedCard", out var selectedCard);
-            _replaceSelectedCard = selectedCard as VCard;
-
-            ShowSelectCardFrom3();
-        }
-
-        public void ShowAddConsumable()
-        {
-            _selectionMenuType = VSelectionMenuType.AddConsumable;
-            VEventSystemUI.Instance.OpenAddConsumableUI(_character,
-                _consumablesToSelect.FirstOrDefault(),
-                consumable => { _character.ConsumableManager.AddConsumable(consumable); },
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
-
-        public void ShowSelectConsumableFrom3()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectConsumableFrom3;
-            VEventSystemUI.Instance.OpenSelectFrom3ConsumablesMenu(_character,
-                _consumablesToSelect,
-                consumable => { _character.ConsumableManager.AddConsumable(consumable); },
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
+        
 
         public void ShowUpgradeCard()
         {
             _selectionMenuType = VSelectionMenuType.SelectUpgradeCard;
             VEventSystemUI.Instance.OpenUpgradeCard(
                 _character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(),
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
-
-        public void ShowSelectCardFrom3()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectCardFrom3;
-            VEventSystemUI.Instance.OpenSelectFrom3Menu(_cardsToSelect,
-                VCardActionUtils.GetAction(_cardActionType, _character, _replaceSelectedCard),
                 () =>
                 {
                     _selectionMenuType = VSelectionMenuType.None;

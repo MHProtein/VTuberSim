@@ -21,7 +21,7 @@ public class VResourcesManager : VSingleton<VResourcesManager>
 
     public void LoadSprites()
     {
-        var assets = Resources.LoadAll<Sprite>("UI/Sprites");
+        var assets = Resources.LoadAll<Sprite>("Sprites");
         foreach (var asset in assets) spriteDic.Add(asset.name, asset);
     }
 

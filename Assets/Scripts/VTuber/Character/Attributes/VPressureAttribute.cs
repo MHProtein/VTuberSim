@@ -4,6 +4,7 @@ using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Character.Attributes

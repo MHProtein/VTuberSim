@@ -22,7 +22,6 @@ namespace VTuber.Core.RaisingEffect
 
         public VRaisingCardEffect(VRaisingCardEffectConfiguration configuration) : base(configuration)
         {
-            shouldPlayAnimation = false;
             _rarityProbabilities = configuration.rarityProbabilities;
             _upgradeProbabilities = configuration.upgradeProbabilities;
         }
