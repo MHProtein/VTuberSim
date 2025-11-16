@@ -87,14 +87,16 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectFrom3ConsumableAnimatio
 
         private void OnRemoveConsumable(Dictionary<string, object> messagedict)
         {
-            foreach (var consumableUI in _consumableUIs) consumableUI.SetSelectable(true);
+            if(_consumableUIs != null)
+                foreach (var consumableUI in _consumableUIs) consumableUI.SetSelectable(true);
         }
 
         private void OnAddConsumable(Dictionary<string, object> messagedict)
         {
             var areSlotsFull = (bool)messagedict["AreSlotsFull"];
 
-            foreach (var consumableUI in _consumableUIs) consumableUI.SetSelectable(!areSlotsFull);
+            if(_consumableUIs != null)
+                foreach (var consumableUI in _consumableUIs) consumableUI.SetSelectable(!areSlotsFull);
         }
 
         public void Confirm()

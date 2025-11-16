@@ -98,6 +98,7 @@ namespace SlayTheSpire.System.SavingSystem
             {
                 dataPersistence.Save(saveData);
             }
+            saveData.saved = true;
         }
 
         public void SaveGameTutorialBattle()

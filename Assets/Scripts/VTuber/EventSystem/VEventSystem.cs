@@ -89,9 +89,6 @@ namespace VTuber.EventSystem
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSelectPhaseEndingBegin,
                 OnPickPhaseEndingBegin);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventSelectUpgradeCard,
-                OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRequestEnterStore,
                 OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
@@ -103,9 +100,6 @@ namespace VTuber.EventSystem
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSelectPhaseEndingBegin,
                 OnPickPhaseEndingBegin);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventSelectUpgradeCard,
-                OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
@@ -128,7 +122,7 @@ namespace VTuber.EventSystem
         {
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_EnterEvent);
             _isPhaseStartEvent = isPhaseStartEvent;
-            if (_loaded)
+            if (_loaded && !e.dialogueNode.IsNullOrWhitespace())
             {
                 _character = character;
                 if (_isInBattle)
@@ -159,20 +153,21 @@ namespace VTuber.EventSystem
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
                 
+                VDataPersistenceManager.Instance.SaveGame();
+                
                 if (_loaded)
                 {
                     _loaded = false;
                 }
-                else
+         
+                foreach (var effect in e.effects)
+                    effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
+            
+                VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
                 {
-                    foreach (var effect in e.effects)
-                        effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
+                    OnDialogueComplete(null);
+                });
                 
-                    VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
-                    {
-                        OnDialogueComplete(null);
-                    });
-                }
 
                 return;
             }
@@ -221,55 +216,6 @@ namespace VTuber.EventSystem
         private void OnPhaseBegin(Dictionary<string, object> messagedict)
         {
             _store.Reset();
-        }
-
-        private void OnEventSelectUpgradeCard(Dictionary<string, object> messagedict)
-        {
-            ShowUpgradeCard();
-        }
-
-        private void OnBeginSelectCard(Dictionary<string, object> messagedict)
-        {
-            _cardActionType = (VCardActionType)messagedict["ActionType"];
-            messagedict.TryGetValue("ReplaceSelectedCard", out var selectedCard);
-            _replaceSelectedCard = selectedCard as VCard;
-
-            ShowSelectCard();
-        }
-        
-
-        public void ShowUpgradeCard()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectUpgradeCard;
-            VEventSystemUI.Instance.OpenUpgradeCard(
-                _character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(),
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
-
-        public void ShowSelectCard()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectCard;
-            VEventSystemUI.Instance.OpenSelectCard(_character.CardLibrary.GetCards(), true,
-                VCardActionUtils.GetAction(_cardActionType, _character, _replaceSelectedCard),
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
         }
 
         private void OnPickPhaseEndingBegin(Dictionary<string, object> messagedict)

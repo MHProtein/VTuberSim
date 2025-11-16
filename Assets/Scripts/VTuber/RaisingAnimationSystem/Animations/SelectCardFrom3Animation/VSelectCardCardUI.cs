@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using PrimeTween;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
@@ -12,6 +13,7 @@ namespace VTuber.ScheduleSystem.UI
         private VCardUI _cardUI;
         private bool _selectable = true;
         public VCard Card => _cardUI.Card;
+        private Vector3 _cardPosition;
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -46,6 +48,25 @@ namespace VTuber.ScheduleSystem.UI
         public void UnSelect()
         {
             _cardUI.background.color = Color.white;
+        }
+
+        public void SetCard(VCard card, bool selectable)
+        {
+            _cardUI.SetCard(card);
+            _selectable = selectable;
+        }
+        
+        public void Popup()
+        {
+            SetSelectable(false);
+            _cardUI.transform.localScale = Vector3.zero;
+            Tween.Scale(_cardUI.transform, Vector3.one * 1.1f, 0.5f, Ease.OutCubic).OnComplete(() =>
+            {
+                Tween.Scale(_cardUI.transform, Vector3.one, 0.5f, Ease.OutBack).OnComplete(() =>
+                {
+                    SetSelectable(_selectable);
+                });
+            });
         }
     }
 }

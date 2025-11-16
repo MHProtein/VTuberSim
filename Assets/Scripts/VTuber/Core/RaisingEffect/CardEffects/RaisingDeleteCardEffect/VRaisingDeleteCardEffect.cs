@@ -22,6 +22,8 @@ namespace VTuber.Core.RaisingEffect
             var cards = character.CardLibrary.GetCards();
             if (_condition is not null)
                 cards = cards.Where(card => _condition.IsTrue(card)).ToList();
+            if (cards.Count == 0)
+                return;
             _card = cards[Random.Range(0, cards.Count)];
             
             animationRequest.animationType = VAnimationType.RemoveCard;

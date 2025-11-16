@@ -17,6 +17,46 @@ namespace DebugScenes.AnimationScene
         
         List<TMP_Text> animationRequestTexts = new List<TMP_Text>();
 
+        public void AddAddConsumableAnim()
+        {
+            raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest
+            {
+                instigatorType = VInstigatorType.Ignore,
+                instigatorIcon = null,
+                animationType = VAnimationType.AddConsumable,
+                
+            });
+            var x = Instantiate(animationRequestPrefab, queue).GetComponent<TMP_Text>();
+            x.text = "添加消耗品";
+            animationRequestTexts.Add(x);
+        }
+        
+        public void AddAddCardAnim()
+        {
+            raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest
+            {
+                instigatorType = VInstigatorType.Ignore,
+                instigatorIcon = null,
+                animationType = VAnimationType.AddCard,
+            });
+            var x = Instantiate(animationRequestPrefab, queue).GetComponent<TMP_Text>();
+            x.text = "添加卡牌";
+            animationRequestTexts.Add(x);
+        }
+        
+        public void AddUpgradeCardAnim()
+        {
+            raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest
+            {
+                instigatorType = VInstigatorType.Ignore,
+                instigatorIcon = null,
+                animationType = VAnimationType.UpgradeCard,
+            });
+            var x = Instantiate(animationRequestPrefab, queue).GetComponent<TMP_Text>();
+            x.text = "升级卡牌";
+            animationRequestTexts.Add(x);
+        }
+        
         public void AddRemoveCardAnim()
         {
             raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest

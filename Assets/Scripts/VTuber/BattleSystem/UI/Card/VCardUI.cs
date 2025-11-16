@@ -165,5 +165,10 @@ namespace VTuber.BattleSystem.UI
                 .Group(Tween.Alpha(shieldText, targetValue, duration));
             return alphaSequence;
         }
+
+        public void UpdateView()
+        {
+            SetCard(Card);
+        }
     }
 }

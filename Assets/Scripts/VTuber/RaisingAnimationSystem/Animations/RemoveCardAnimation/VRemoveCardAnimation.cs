@@ -1,5 +1,6 @@
 ﻿using System;
 using PrimeTween;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.UI;
@@ -10,10 +11,52 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem.RemoveCardAnimation
 {
     public class VRemoveCardAnimation : VRaisingAnimation
     {
+        [FoldoutGroup("基础引用")]
+        [LabelText("卡牌 UI")]
         [SerializeField] private VCardUI cardUI;
+
+        [FoldoutGroup("基础引用")]
+        [LabelText("烟雾特效")]
         [SerializeField] private Transform smoke;
+        
+        
+        [FoldoutGroup("初始设置")]
+        [LabelText("卡牌初始放大倍数")]
+        [SerializeField] private float cardStartScale = 3.0f;
+
+
+        [FoldoutGroup("出现动画")]
+        [LabelText("卡牌缩放到正常大小时长")]
+        [SerializeField] private float cardScaleInDuration = 0.5f;
+
+        [FoldoutGroup("出现动画")]
+        [LabelText("卡牌淡入时长")]
+        [SerializeField] private float cardFadeInDuration = 0.5f;
+
+        [FoldoutGroup("出现动画")]
+        [LabelText("出现后等待时间")]
+        [SerializeField] private float cardPauseBeforeRemoval = 0.5f;
+
+
+        [FoldoutGroup("移除动画")]
+        [LabelText("卡牌缩小到 0 的时长")]
+        [SerializeField] private float cardShrinkDuration = 0.5f;
+
+        [FoldoutGroup("移除动画")]
+        [LabelText("烟雾放大时长")]
+        [SerializeField] private float smokeExpandDuration = 1.0f;
+
+        [FoldoutGroup("移除动画")]
+        [LabelText("烟雾消失时长")]
+        [SerializeField] private float smokeFadeOutDuration = 0.15f;
+
+        [FoldoutGroup("移除动画")]
+        [LabelText("烟雾消失后等待")]
+        [SerializeField] private float smokeFinishDelay = 0.25f;
+
 
         private Vector3 _initScale;
+
         protected override void Awake()
         {
             base.Awake();
@@ -24,7 +67,8 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem.RemoveCardAnimation
         {
             base.BeginAnimation(request, onComplete, isLastSameType);
 
-            cardUI.transform.localScale = Vector3.one * 3.0f;
+            cardUI.transform.localScale = Vector3.one * cardStartScale;
+
             if (!debug)
             {
                 cardUI.SetCard(request.cards[0]);
@@ -32,20 +76,18 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem.RemoveCardAnimation
 
             var sequence = Sequence.Create();
             sequence
-                .Chain(Tween.Scale(cardUI.transform, _initScale, 0.5f, Ease.OutBack))
-                .Group(cardUI.TweenAlpha(1.0f, 0.5f))
-                .ChainDelay(0.5f)
-                .Chain(Tween.Scale(cardUI.transform, Vector3.zero, 0.5f, Ease.InQuart))
-                .Group(Tween.Scale(smoke, Vector3.one, 1.0f, Ease.OutCubic))
-                .Chain(Tween.Scale(smoke, Vector3.zero, 0.15f))
-                .ChainDelay(0.25f)
+                .Chain(Tween.Scale(cardUI.transform, _initScale, cardScaleInDuration, Ease.OutBack))
+                .Group(cardUI.TweenAlpha(1.0f, cardFadeInDuration))
+                .ChainDelay(cardPauseBeforeRemoval)
+                .Chain(Tween.Scale(cardUI.transform, Vector3.zero, cardShrinkDuration, Ease.InQuart))
+                .Group(Tween.Scale(smoke, Vector3.one, smokeExpandDuration, Ease.OutCubic))
+                .Chain(Tween.Scale(smoke, Vector3.zero, smokeFadeOutDuration))
+                .ChainDelay(smokeFinishDelay)
                 .ChainCallback(() =>
                 {
                     request.effectApply?.Invoke();
-
                     onComplete?.Invoke();
                 });
-
         }
 
         public override void ResetAnimation()

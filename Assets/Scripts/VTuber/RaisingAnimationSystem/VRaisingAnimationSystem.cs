@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PrimeTween;
 using UnityEngine;
+using UnityEngine.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
@@ -19,13 +21,17 @@ namespace VTuber.RaisingAnimationSystem
         SelectConsumableFrom3,
         AddCard,
         SelectCardFrom3,
-        RemoveCard
+        RemoveCard,
+        SelectCard,
+        UpgradeCard,
+        SelectCardPreview,
     }
     
     public class VRaisingAnimationSystem : VSingletonMonobehaviour<VRaisingAnimationSystem>
     {
         [SerializeField] private bool debug;
         [SerializeField] private GameObject ui;
+        [SerializeField] private Image background;
         [SerializeField] private Dictionary<VAnimationType, VRaisingAnimation> animations;
         private LinkedList<VAnimationRequest> _animationRequestQueue;
         private Action _onAnimationsExecuted;
@@ -96,7 +102,8 @@ namespace VTuber.RaisingAnimationSystem
             {
                 animation.Value.ResetAnimation();
             }
-            ExecuteAnimationsImplement();
+
+            Tween.Alpha(background, 0.7f, 0.3f).OnComplete(ExecuteAnimationsImplement);
         }
 
         private void ExecuteAnimationsImplement()
@@ -109,6 +116,7 @@ namespace VTuber.RaisingAnimationSystem
                 
                 ui.SetActive(false);
                 _onAnimationsExecuted?.Invoke();
+                Tween.Alpha(background, 0.0f, 0.3f);
                 
                 return;
             }

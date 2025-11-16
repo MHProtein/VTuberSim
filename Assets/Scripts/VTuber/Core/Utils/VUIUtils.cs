@@ -2,6 +2,7 @@
 using System.Linq;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
@@ -119,6 +120,11 @@ namespace VTuber.Core.UI
         public static GameObject SpawnPrefab(GameObject prefab, Transform parent)
         {
             return Instantiate(prefab, parent);
+        }
+
+        public static void SetImageAlpha(Image image, float alpha)
+        {
+            image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
         }
     }
 }
