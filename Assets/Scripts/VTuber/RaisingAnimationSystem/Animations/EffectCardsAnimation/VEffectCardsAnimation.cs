@@ -133,7 +133,12 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
                 }
             }
 
-            sequence.ChainCallback(onCompleted);
+            sequence.ChainCallback(()=>
+            {
+                onCompleted?.Invoke();
+                if(isLastSameType)
+                    ResetAnimation();
+            });
         }
 
 
