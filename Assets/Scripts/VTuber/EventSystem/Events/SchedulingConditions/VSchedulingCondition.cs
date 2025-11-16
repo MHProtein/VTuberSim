@@ -80,10 +80,6 @@ namespace VTuber.ScheduleSystem.Events
         private readonly VEventType _targetType;
         private readonly VSchedulingConditionType _type;
         private readonly bool _shouldExecuteBeforeEvent;
-
-        public uint Id { get; }
-
-        public List<VRaisingEffect> Effects { get; }
         
         public bool ShouldExecuteBeforeEvent => _shouldExecuteBeforeEvent;
         

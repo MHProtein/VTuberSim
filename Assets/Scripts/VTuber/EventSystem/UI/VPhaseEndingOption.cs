@@ -5,7 +5,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.EventSystem.UI;
+using VTuber.Relic;
+using VTuber.Relic.UI;
 using VTuber.ScheduleSystem.Events;
 
 namespace VTuber.Dialogue.UI
@@ -26,7 +29,6 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private Transform grids;
         private VPhaseEndingSelectionMenu _menu;
         private List<TMP_Text> conditionDescriptions;
-        public VStreamEvent E { get; private set; }
         
         public void Initialize(VStreamEvent streamEvent, VPhaseEndingSelectionMenu menu)
         {;

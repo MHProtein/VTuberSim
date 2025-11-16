@@ -124,7 +124,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void Initialize(VScheduleEvent e, VScheduleSlot slot, bool disposable, Transform parent = null)
         {
-            Event = e;
+            = e;
             icon.sprite = e.Icon;
             background.color = e.BackgroundColor;
             _bgColor = background.color;
