@@ -28,6 +28,14 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private List<Image> eventIcons;
         [SerializeField] private TMP_Text effectText;
         [SerializeField] private Image effectImage;
+        
+        // Add this new field at the top with your other [SerializeField] variables
+        [Header("Scheduling Condition UI")]
+        [Tooltip("The UI element to show when a scheduling condition is met during drag")]
+        [SerializeField] private GameObject conditionHighlight;
+        
+        
+        
         private int _allowedEventID;
         private List<VRaisingEffect> _coopEventEffects;
         private Sprite _coopEventIcon;

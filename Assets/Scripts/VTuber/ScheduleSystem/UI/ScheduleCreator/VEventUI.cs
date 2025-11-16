@@ -8,6 +8,8 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
 using VTuber.ScheduleSystem.Events;
+using VTuber.Core.Managers; // 引入 VDataManager
+using VTuber.ScheduleSystem.Core; // 引入 VScheduleEventConfiguration
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -20,30 +22,59 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private TMP_Text costText;
         [SerializeField] private Image costIcon;
+        
+        //  Position Pattern for UI purposes
+        [Header("日程规划条件UI")]
+        [Tooltip("用于容纳所有位置指示器的父对象")]
+        [SerializeField] private GameObject conditionIndicatorsContainer; 
+        [Tooltip("上方向指示器")]
+        [SerializeField] private GameObject upIndicator;
+        [Tooltip("下方向指示器")]
+        [SerializeField] private GameObject downIndicator;
+        [Tooltip("左方向指示器")]
+        [SerializeField] private GameObject leftIndicator;
+        [Tooltip("右方向指示器")]
+        [SerializeField] private GameObject rightIndicator;
+        
+        [Header("指示器文本")]
+        [Tooltip("请确保这些数组/字段对应 Up, Down, Left, Right 的 Text 组件")]
+        [SerializeField] private TMP_Text upText;
+        [SerializeField] private TMP_Text downText;
+        [SerializeField] private TMP_Text leftText;
+        [SerializeField] private TMP_Text rightText;
+        
+        
         [HideInInspector] public Vector2 initOffset;
 
         private Color _bgColor;
-        private Camera _camera;
-        private bool _disposable = true;
-        private Transform _disposePosition;
-        private List<VScheduleSlot> _disposeSlots;
-        private bool _hasInSchedule;
 
         private Vector2 _initPosition;
         private bool _interactable;
         private bool _isSelected;
         private Vector2 _lastPosition;
 
-        private RectTransform _rectTransform;
 
         private List<VScheduleSlot> parentBeforeDrag;
 
         private List<VScheduleSlot> parentSlots;
 
-        public VScheduleEvent Event { get; private set; }
+        public VScheduleEvent Event => _event;
+        private VScheduleEvent _event;
 
-        public bool IsFixed { get; private set; }
 
+        public bool IsFixed => _isFixed;
+        private bool _isFixed = false;
+        private Camera _camera;
+        private List<VScheduleSlot> _disposeSlots;
+        private bool _disposable = true;
+        private Transform _disposePosition;
+        
+        private RectTransform _rectTransform;
+        private bool _hasInSchedule = false;
+        
+        // Add this field to your VEventUI class to keep track of the last slot hovered over.
+        private VScheduleSlot _lastHoveredSlot = null;
+        
         protected override void Awake()
         {
             parentSlots = new List<VScheduleSlot>();
@@ -51,63 +82,6 @@ namespace VTuber.ScheduleSystem.UI
             _interactable = true;
             _camera = Camera.main;
             _rectTransform = GetComponent<RectTransform>();
-        }
-
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            Debug.Log("OnBeginDrag");
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            Debug.Log("EndDrag");
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            if (!_interactable || IsFixed)
-                return;
-            if (!_isSelected && eventData.button
-                == PointerEventData.InputButton.Left)
-            {
-                icon.raycastTarget = false;
-                parentBeforeDrag = parentSlots;
-                transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
-                initOffset = transform.position - _camera.ScreenToWorldPoint(Input.mousePosition);
-                _isSelected = true;
-
-                foreach (var parent in parentSlots) parent.RemoveItem();
-                transform.SetAsLastSibling();
-
-                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected,
-                    new Dictionary<string, object>
-                    {
-                        { "Event", Event }
-                    });
-                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
-            }
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
-                new Dictionary<string, object>
-                {
-                    { "Name", Event.EventName },
-                    { "Description", Event.Description }
-                });
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
         }
 
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
@@ -139,7 +113,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SetFixed(bool isFixed)
         {
-            IsFixed = isFixed;
+            _isFixed = isFixed;
             _interactable = isFixed;
         }
 
@@ -312,24 +286,37 @@ namespace VTuber.ScheduleSystem.UI
             base.UpdateImpl();
             if (_isSelected)
             {
-                var mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition) + (Vector3)initOffset;
+                // This part remains the same: move the UI with the mouse
+                Vector3 mousePosition = _camera.ScreenToWorldPoint(Input.mousePosition) + (Vector3)initOffset;
                 mousePosition.z = 0;
                 transform.position = mousePosition;
 
+                // --- NEW AND IMPROVED LOGIC FOR REAL-TIME HIGHLIGHTING ---
                 var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
+                VScheduleSlot currentHoveredSlot = null;
 
+                // Find the slot currently under the mouse
                 foreach (var result in results)
                 {
                     var slot = result.gameObject.GetComponent<VScheduleSlot>();
                     if (slot is not null)
                     {
-                        slot.SetIndicator(Event.Duration, initOffset.y);
+                        currentHoveredSlot = slot;
+                        // We also call the existing SetIndicator logic here
+                        slot.SetIndicator(_event.Duration, initOffset.y);
                         break;
                     }
                 }
             }
 
-            if (_isSelected && Input.GetMouseButtonUp(0)) OnEndDragging();
+            if (_isSelected && Input.GetMouseButtonUp(0))
+            {
+                // When we stop dragging, make sure to clear any active highlight
+                _lastHoveredSlot?.HideHighlight();
+                _lastHoveredSlot = null;
+        
+                OnEndDragging();
+            }
         }
 
         public void OnEndDragging()
@@ -385,5 +372,195 @@ namespace VTuber.ScheduleSystem.UI
                 { "Event", Event }
             });
         }
+        
+        public void OnPointerEnter(PointerEventData eventData)
+        {            
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
+                new Dictionary<string, object>()
+                {
+                    {"Name", _event.EventName},
+                    {"Description", _event.Description}
+                });
+
+
+        }
+
+
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!_interactable || _isFixed)
+                return;
+            if (!_isSelected && eventData.button
+                == PointerEventData.InputButton.Left)
+            {
+                icon.raycastTarget = false;
+                parentBeforeDrag = parentSlots;
+                transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
+                initOffset = transform.position - _camera.ScreenToWorldPoint(Input.mousePosition);
+                _isSelected = true;
+
+                // --- 在这里添加新逻辑 ---
+                // 调用显示指示器的方法
+                ShowConditionIndicators(); 
+                // --- 新逻辑结束 ---
+
+                foreach (var parent in parentSlots)
+                {
+                    parent.RemoveItem();
+                }
+                transform.SetAsLastSibling();
+
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUISelected, new Dictionary<string, object>()
+                {
+                    { "Event", _event }
+                });
+                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            }
+        }
+        
+        public void OnPointerUp(PointerEventData eventData)
+        {   
+            
+        }
+        
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            // // 如果指示器容器存在，就将其设为非激活状态
+            // if (conditionIndicatorsContainer != null)
+            // {
+            //     conditionIndicatorsContainer.SetActive(false);
+            // }
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            Debug.Log("OnBeginDrag");
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            Debug.Log("EndDrag");
+        }
+        // VEventUI.cs (在类的任何地方添加这个新方法)
+
+        private void ShowConditionIndicators()
+        {
+            if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
+
+            var condition = _event.SchedulingCondition; // 获取条件对象
+            var pattern = condition.PositionPattern;
+            
+            if (pattern == VSchedulingConditionPositionPatterns.None) return;
+
+            // 1. 获取提示文字
+            string hintText = GetConditionHintText(condition);
+
+            // 2. 激活容器
+            conditionIndicatorsContainer.SetActive(true);
+            
+            // 重置状态
+            upIndicator?.SetActive(false);
+            downIndicator?.SetActive(false);
+            leftIndicator?.SetActive(false);
+            rightIndicator?.SetActive(false);
+            
+            // 3. 根据模式显示指示器并设置文字
+            switch (pattern)
+            {
+                case VSchedulingConditionPositionPatterns.UD:
+                    ActivateIndicator(upIndicator, upText, hintText);
+                    ActivateIndicator(downIndicator, downText, hintText);
+                    break;
+                case VSchedulingConditionPositionPatterns.LR:
+                    ActivateIndicator(leftIndicator, leftText, hintText);
+                    ActivateIndicator(rightIndicator, rightText, hintText);
+                    break;
+                case VSchedulingConditionPositionPatterns.UDLR:
+                case VSchedulingConditionPositionPatterns.All:
+                    ActivateIndicator(upIndicator, upText, hintText);
+                    ActivateIndicator(downIndicator, downText, hintText);
+                    ActivateIndicator(leftIndicator, leftText, hintText);
+                    ActivateIndicator(rightIndicator, rightText, hintText);
+                    break;
+            }
+        }
+        
+        // 新增：激活指示器并设置文字的辅助方法
+        private void ActivateIndicator(GameObject indicator, TMP_Text textComponent, string text)
+        {
+            if (indicator != null)
+            {
+                indicator.SetActive(true);
+                if (textComponent != null)
+                {
+                    textComponent.text = text;
+                }
+            }
+        }
+        
+        // 新增：核心逻辑 - 获取条件描述文字
+        private string GetConditionHintText(VSchedulingCondition condition)
+        {
+            string result = "";
+
+            switch (condition.Type)
+            {
+                case VSchedulingConditionType.ID:
+                    // --- 使用你提供的 API 逻辑 ---
+                    VScheduleEventConfiguration config = null;
+                    
+                    // 这里使用我们在 VSchedulingCondition 中公开的 IsTargetStream 属性
+                    // 或者根据 _targetID 尝试获取（如果 ID 区分段位）
+                    if (condition.IsTargetStream) 
+                    {
+                        config = VDataManager.Instance.GetStreamEventConfigurationByID(condition.TargetID);
+                    }
+                    else
+                    {
+                        config = VDataManager.Instance.GetDialogueEventConfigurationByID(condition.TargetID);
+                    }
+
+                    if (config != null)
+                    {
+                        result = config.eventName; // 或者 config.icon 等
+                    }
+                    else
+                    {
+                        result = "Unknown Event";
+                    }
+                    break;
+
+                case VSchedulingConditionType.Type:
+                case VSchedulingConditionType.ExcludeType:
+                    // 如果是类型检查，直接显示类型名称
+                    result = condition.TargetType.ToString();
+                    break;
+                    
+                case VSchedulingConditionType.SameType:
+                    result = "Same Type";
+                    break;
+                    
+                default:
+                    result = "Condition";
+                    break;
+            }
+
+            // 可选：如果是“排除”条件，加个前缀
+            if (condition.Type == VSchedulingConditionType.ExcludeType || condition.Type == VSchedulingConditionType.ExcludeID)
+            {
+                result = "NOT " + result;
+            }
+
+            return result;
+        }
+        
+        
+        
     }
 }

@@ -49,6 +49,29 @@ namespace VTuber.ScheduleSystem.Events
 
     public class VSchedulingCondition
     {
+        public uint Id => _id;
+        private uint _id;
+        
+        
+        // --- 新增：公开属性供 UI 读取 ---
+        public VSchedulingConditionType Type => _type;
+        public uint TargetID => _targetID;
+        public VEventType TargetType => _targetType;
+    
+        // 辅助属性：判断目标是否为直播流事件 (用于 VEventUI 查询)
+        // 注意：这里假设如果 TargetType 是 Stream 类，或者是 ID 且该 ID 对应的是 Stream
+        // 具体判断逻辑取决于你的策划配置表是否在 ID 模式下也指定了类型。
+        // 如果配置表中 ID 模式下没有指定类型，你可能需要尝试获取或在 VSchedulingCondition 解析时存储 IsStream。
+        public bool IsTargetStream => _targetType == VEventType.Stream;
+        
+        
+        
+        public List<VRaisingEffect> Effects => _effects;
+        private List<VRaisingEffect> _effects;
+        
+        // Add this line to expose the Position Pattern for UI purposes
+        public VSchedulingConditionPositionPatterns PositionPattern => _positionPattern;
+        
         private readonly VPlacingCondition _placingCondition;
         private readonly VSchedulingConditionPositionPatterns _positionPattern;
 
@@ -66,7 +89,7 @@ namespace VTuber.ScheduleSystem.Events
         
         public VSchedulingCondition(CellRange row)
         {
-            Id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
+            _id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
 
             var placingConditionStr = row.Columns[VSchedulingConditionHeaderIndex.PlacingCondition].Value;
             if (!placingConditionStr.IsNullOrWhitespace())
@@ -120,7 +143,7 @@ namespace VTuber.ScheduleSystem.Events
                 }
             }
 
-            Effects = new List<VRaisingEffect>();
+            _effects = new List<VRaisingEffect>();
             for (var i = VSchedulingConditionHeaderIndex.Effect1; i <= VSchedulingConditionHeaderIndex.E3Param; i += 2)
             {
                 var effectIDStr = row.Columns[i].Value;
