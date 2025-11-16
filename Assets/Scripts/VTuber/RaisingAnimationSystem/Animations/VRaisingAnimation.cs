@@ -10,7 +10,7 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem
         [SerializeField] protected GameObject ui;
         protected bool debug;
 
-        public virtual void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        public virtual void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             if (!debug)
             {

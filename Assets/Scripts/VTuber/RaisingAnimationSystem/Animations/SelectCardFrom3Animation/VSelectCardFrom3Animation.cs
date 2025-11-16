@@ -47,9 +47,9 @@ namespace VTuber.ScheduleSystem.UI
             _selectedCardUI = cardUI;
         }
 
-        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
-            base.BeginAnimation(request, onComplete, isLast);
+            base.BeginAnimation(request, onComplete, isLastSameType);
 
             _onComplete = onComplete;
             Initialize(request.cards);

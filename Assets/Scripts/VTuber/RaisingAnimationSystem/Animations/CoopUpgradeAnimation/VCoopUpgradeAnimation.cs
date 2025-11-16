@@ -46,7 +46,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
         private Action _onComplete;
         private bool _isAnimating;
 
-        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             _onComplete = onComplete;
             if (!debug)
@@ -89,7 +89,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
                 .Chain(Tween.Alpha(upgradeLevelText, 1, upgradeLevelFadeDuration))
 
                 // Run base animation
-                .ChainCallback(() => base.BeginAnimation(request, onComplete, isLast))
+                .ChainCallback(() => base.BeginAnimation(request, onComplete, isLastSameType))
 
                 // Character spacing animation
                 .Chain(Tween.Custom(-100, 0, spacingAnimDuration, v => upgradeLevelText.characterSpacing = v))

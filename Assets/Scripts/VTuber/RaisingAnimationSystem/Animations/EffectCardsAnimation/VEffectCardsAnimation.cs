@@ -76,9 +76,9 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
         }
 
 
-        public override void BeginAnimation(VAnimationRequest request, Action onCompleted, bool isLast)
+        public override void BeginAnimation(VAnimationRequest request, Action onCompleted, bool isLastSameType)
         {
-            base.BeginAnimation(request, onCompleted, isLast);
+            base.BeginAnimation(request, onCompleted, isLastSameType);
             
             var availableCard = GetAvailableCard();
             if (availableCard == null)
@@ -102,18 +102,18 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
                 {
                     topCard.transform.position = startPosition.position;
                     topCard.SetEffect(request, debug);
-                    AddNewCard(topCard, onCompleted, isLast);
+                    AddNewCard(topCard, onCompleted, isLastSameType);
                 });
             }
             else
             {
                 availableCard.SetEffect(request, debug);
-                AddNewCard(availableCard, onCompleted, isLast);
+                AddNewCard(availableCard, onCompleted, isLastSameType);
             }
         }
 
 
-        private void AddNewCard(VEffectCard card, Action onCompleted, bool isLast)
+        private void AddNewCard(VEffectCard card, Action onCompleted, bool isLastSameType)
         {
             card.isAvailable = false;
             card.index = _currentCards;
@@ -125,7 +125,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
                 .Chain(Tween.LocalPosition(card.transform, _cardPositions[_currentCards - 1], moveDuration, moveEase))
                 .ChainDelay(cardHoldDelay);
 
-            if (isLast)
+            if (isLastSameType)
             {
                 foreach (var c in _cards)
                 {
@@ -133,7 +133,12 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
                 }
             }
 
-            sequence.ChainCallback(onCompleted);
+            sequence.ChainCallback(()=>
+            {
+                onCompleted?.Invoke();
+                if(isLastSameType)
+                    ResetAnimation();
+            });
         }
 
 
