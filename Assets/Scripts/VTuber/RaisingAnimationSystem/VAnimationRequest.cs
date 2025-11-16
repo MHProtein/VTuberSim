@@ -22,8 +22,13 @@ namespace VTuber.RaisingAnimationSystem
         public VCooperator coop;
         public uint relicId;
         public List<uint> consumableIDs;
-        public bool returnable; //for consumable menu, determines if return button shows
+        public bool returnable; //for consumable/card menu, determines if return button shows
         public List<VCard> cards;
+        public bool cardSelectable;
+        public VAnimationType cardSelectAnimationType;
+        public Action<VCard> cardSelectConfirmAction;
+        public Action<VCard> cardSelectPreviewAction;
+        public Action cardSelectReturnAction;
     }
 
     public class VAnimationRequestFactory
@@ -58,6 +63,45 @@ namespace VTuber.RaisingAnimationSystem
                 animationType = VAnimationType.AddCard,
                 cards = new (){ card },
                 effectApply = () => VGameManager.Instance.Character.CardLibrary.AddCard(card),
+            };
+        }
+
+        public static VAnimationRequest CreateRemoveCardRequest(VCard card)
+        {
+            return new VAnimationRequest()
+            {
+                instigatorType = VInstigatorType.Ignore,
+                animationType = VAnimationType.RemoveCard,
+                cards = new (){ card },
+                effectApply = () => VGameManager.Instance.Character.CardLibrary.RemoveCard(card),
+            };
+        }
+        
+        public static VAnimationRequest CreateUpgradeCardRequest(VCard card)
+        {
+            return new VAnimationRequest()
+            {
+                instigatorType = VInstigatorType.Ignore,
+                animationType = VAnimationType.UpgradeCard,
+                cards = new (){ card },
+            };
+        }
+        
+        public static VAnimationRequest CreateSelectCardRequest(List<VCard> cards, 
+            bool returnable, bool cardSelectable, VAnimationType cardSelectAnimationType,
+            Action<VCard> cardSelectConfirmAction, Action returnAction = null, Action<VCard> previewAction = null)
+        {
+            return new VAnimationRequest()
+            {
+                instigatorType = VInstigatorType.Ignore,
+                animationType = previewAction == null ? VAnimationType.SelectCard : VAnimationType.SelectCardPreview,
+                cardSelectPreviewAction = previewAction,
+                cardSelectReturnAction = returnAction,
+                returnable = returnable,
+                cardSelectable = cardSelectable,
+                cards = cards,
+                cardSelectAnimationType = cardSelectAnimationType,
+                cardSelectConfirmAction = cardSelectConfirmAction,
             };
         }
     }

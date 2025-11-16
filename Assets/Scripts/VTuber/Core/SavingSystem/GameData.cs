@@ -28,5 +28,6 @@ namespace SlayTheSpire.System.SavingSystem
         public VStateMachineSaveData stateMachine;
         public VStoreSaveData storeSaveData;
         public VWeeklyScheduleSaveData weeklySchedule;
+        public bool saved;
     }
 }

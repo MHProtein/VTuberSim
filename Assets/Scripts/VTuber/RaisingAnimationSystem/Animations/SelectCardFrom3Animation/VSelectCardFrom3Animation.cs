@@ -107,7 +107,6 @@ namespace VTuber.ScheduleSystem.UI
                     foreach (var cardUI in _cardUIs) Destroy(cardUI.gameObject);
                     _cardUIs.Clear();
                     _selectedCardUI = null;
-                    VEventSystemUI.Instance.CloseSelectFrom3Menu();
                 });
         }
     }

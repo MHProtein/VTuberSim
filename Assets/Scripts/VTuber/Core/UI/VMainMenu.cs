@@ -109,7 +109,7 @@ namespace VTuber.BattleSystem.Core.UI
 
             _accounts = accounts;
 
-            _loadGameButton.interactable = VDataPersistenceManager.Instance.SaveData is not null;
+            _loadGameButton.interactable = VDataPersistenceManager.Instance.SaveData is not null && VDataPersistenceManager.Instance.SaveData.saved;
             VAudioPlayer.Instance.PlayBGM(VBGMType.MainMenu);
         }
 

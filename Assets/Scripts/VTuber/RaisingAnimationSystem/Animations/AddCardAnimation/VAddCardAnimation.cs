@@ -38,22 +38,10 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
         [FoldoutGroup("呼吸动画")]
         [LabelText("呼吸放大倍数")]
         [SerializeField] private float cardPulseScale = 1.8f;
-
-        [FoldoutGroup("呼吸动画")]
-        [LabelText("呼吸循环次数（-1 无限）")]
-        [SerializeField] private int cardPulseLoops = 1000;
-
-        [FoldoutGroup("呼吸动画")]
-        [LabelText("呼吸循环模式")]
-        [SerializeField] private CycleMode cardPulseCycle = CycleMode.Rewind;
-
+        
         [FoldoutGroup("光环旋转")]
         [LabelText("光环旋转时长")]
         [SerializeField] private float haloSpinDuration = 8f;
-
-        [FoldoutGroup("光环旋转")]
-        [LabelText("旋转循环模式")]
-        [SerializeField] private CycleMode haloSpinCycle = CycleMode.Incremental;
         
         [FoldoutGroup("移入卡库动画")]
         [LabelText("缩小时长")]
@@ -114,8 +102,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
                         cardPulseScale,
                         cardPulseDuration,
                         Ease.InOutCubic,
-                        cardPulseLoops,
-                        cardPulseCycle
+                        1000,
+                        CycleMode.Rewind
                     )
                 );
             

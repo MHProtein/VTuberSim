@@ -6,6 +6,7 @@ using TMPro;
 using Tutorial.Script;
 using Tutorial.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
@@ -15,6 +16,7 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.Relic.UI;
@@ -59,7 +61,7 @@ namespace VTuber.ScheduleSystem.UI
         [Space(3)] [Header("CardViewUI")] [SerializeField]
         private GameObject cardLibraryUIObject;
 
-        [SerializeField] private VCardViewSelectionUI cardLibraryUI;
+        [FormerlySerializedAs("selectCardLibraryUI")] [FormerlySerializedAs("cardLibraryUI")] [SerializeField] private VSelectCardMenuAnimation selectCardMenuLibraryUI;
 
         [Space(3)] [Header("ConsumableUI")] [SerializeField]
         private GameObject consumableUIParent;
@@ -192,12 +194,12 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeCardLibraryUI(List<VCard> cards)
         {
             cardLibraryUIObject.SetActive(true);
-            cardLibraryUI.Initialize(cards, false, false, false, null);
+            selectCardMenuLibraryUI.Initialize(cards, true, false, VAnimationType.None, null);
         }
 
         public void CloseCardLibraryUI()
         {
-            cardLibraryUI.Close();
+            selectCardMenuLibraryUI.Close();
             cardLibraryUIObject.SetActive(false);
         }
 

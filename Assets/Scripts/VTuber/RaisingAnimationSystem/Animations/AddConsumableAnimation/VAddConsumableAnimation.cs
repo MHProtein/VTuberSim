@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
+using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations
@@ -27,6 +28,8 @@ namespace VTuber.RaisingAnimationSystem.Animations
         [SerializeField] private Button addConsumableButton;
         [SerializeField] private Button returnButton;
         [SerializeField] private Transform light;
+        [SerializeField] private Image haloImage;
+        [SerializeField] private Transform debugSlot;
         [SerializeField] private VConsumableSlotsUI consumableSlotsUI;
         
         [SerializeField] private Transform addConsumableButtonRightPosition;
@@ -101,8 +104,19 @@ namespace VTuber.RaisingAnimationSystem.Animations
         protected override void OnEnable()
         {
             base.OnEnable();
+            if (debug)
+                return;
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnAddConsumable, OnAddConsumable);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRemoveConsumable, OnRemoveConsumable);
+        }
+        
+        protected override void OnDisable()
+        {
+            base.OnEnable();
+            if (debug)
+                return;
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnAddConsumable, OnAddConsumable);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRemoveConsumable, OnRemoveConsumable);
         }
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
@@ -116,6 +130,7 @@ namespace VTuber.RaisingAnimationSystem.Animations
                 nameText.text = consumable.consumableName;
                 relicDescriptionText.text = consumable.description;
                 _applyEffect = request.effectApply;
+                haloImage.sprite = VUIUtils.Instance.GetHaloSprite((int)consumable.rarity + 1);
             }
 
             if (request.returnable)
@@ -144,7 +159,12 @@ namespace VTuber.RaisingAnimationSystem.Animations
                 .Chain(Tween.LocalPosition(descriptionObject, descriptionPosition.localPosition, descriptionMoveDuration, descriptionMoveEase))
                 .ChainCallback(() =>
                 {
-                    addConsumableButton.interactable = consumableSlotsUI.GetEmptySlot() is not null;
+                    if(debug)
+                        addConsumableButton.interactable = true;
+                    else
+                        addConsumableButton.interactable = consumableSlotsUI.GetEmptySlot() is not null;
+                    returnButton.interactable = true;
+                    
                     returnButton.interactable = true;
                 });
 
@@ -195,8 +215,16 @@ namespace VTuber.RaisingAnimationSystem.Animations
 
             var sequence = Sequence.Create();
 
-            var slot = consumableSlotsUI.GetEmptySlot();
-            consumableImage.transform.SetParent(slot.transform);
+            if (debug)
+            {
+                consumableImage.transform.SetParent(debugSlot);
+            }
+            else
+            {
+                
+                var slot = consumableSlotsUI.GetEmptySlot();
+                consumableImage.transform.SetParent(slot.transform);
+            }
 
             sequence
                 .Chain(Tween.LocalPosition(descriptionObject, descriptionInitPosition.localPosition, descriptionExitDuration, Ease.OutCubic))
