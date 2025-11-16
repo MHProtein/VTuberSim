@@ -90,7 +90,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
         }
 
 
-        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             if (!debug)
             {

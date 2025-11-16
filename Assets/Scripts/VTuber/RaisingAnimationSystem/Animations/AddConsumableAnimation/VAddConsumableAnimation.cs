@@ -105,7 +105,7 @@ namespace VTuber.RaisingAnimationSystem.Animations
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRemoveConsumable, OnRemoveConsumable);
         }
 
-        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             _onComplete = onComplete;
 

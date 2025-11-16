@@ -124,10 +124,19 @@ namespace VTuber.RaisingAnimationSystem
                     anim.Value.Hide();
                 }
             }
+
+            if (request.animationType != VAnimationType.EffectCards)
+            {
+                animation.ResetAnimation();
+            }
             
             animation.Show();
             _currentAnimationType = request.animationType;
-            animation.BeginAnimation(request, ExecuteAnimationsImplement, _animationRequestQueue.Count == 0);
+            
+            animation.BeginAnimation(request,
+                ExecuteAnimationsImplement, 
+                _animationRequestQueue.Count == 0 || 
+                (_animationRequestQueue.First is not null && _animationRequestQueue.First.Value.animationType != request.animationType));
         }
 
         public bool HasAnimationRequests()

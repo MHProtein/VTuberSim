@@ -44,10 +44,10 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
         [SerializeField] private float initScale = 1.5f;
 
 
-        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             ResetAnimation();
-            base.BeginAnimation(request, onComplete, isLast);
+            base.BeginAnimation(request, onComplete, isLastSameType);
 
             // Display values
             icon.sprite = request.attributeIcon;

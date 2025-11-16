@@ -20,9 +20,9 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem.RemoveCardAnimation
             _initScale = cardUI.transform.localScale;
         }
 
-        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLast)
+        public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
-            base.BeginAnimation(request, onComplete, isLast);
+            base.BeginAnimation(request, onComplete, isLastSameType);
 
             cardUI.transform.localScale = Vector3.one * 3.0f;
             if (!debug)
