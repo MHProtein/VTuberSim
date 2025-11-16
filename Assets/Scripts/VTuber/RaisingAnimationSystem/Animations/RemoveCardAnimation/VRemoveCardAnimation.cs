@@ -2,12 +2,10 @@
 using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.UI;
 using VTuber.BattleSystem.UI;
-using VTuber.Core.Managers;
-using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
-namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem.RemoveCardAnimation
+namespace VTuber.RaisingAnimationSystem.Animations.RemoveCardAnimation
 {
     public class VRemoveCardAnimation : VRaisingAnimation
     {

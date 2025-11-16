@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PrimeTween;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
-using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.SE;
-using VTuber.RaisingAnimationSystem;
+using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem.Animations.SelectCardFrom3Animation;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
-namespace VTuber.ScheduleSystem.UI
+namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
 {
     public class VSelectCardMenuAnimation : VRaisingAnimation, ISelectableCardMenu
     {
@@ -26,6 +25,9 @@ namespace VTuber.ScheduleSystem.UI
 
         [SerializeField] public Button confirmButton;
         [SerializeField] public Button returnButton;
+        
+        [SerializeField] public TMP_Text title;
+        [SerializeField] public TMP_Text previewTitle;
 
         private List<VSelectCardCardUI> _cardUIs;
 
@@ -40,6 +42,7 @@ namespace VTuber.ScheduleSystem.UI
         private VSelectCardCardUI _selectedCardUI;
 
         private Action _onComplete;
+        private VCard _previewCard;
 
         protected override void Awake()
         {
@@ -78,7 +81,7 @@ namespace VTuber.ScheduleSystem.UI
                 _selectedCardUI.UnSelect();
             _selectedCardUI = cardUI;
 
-            if (previewCardUI)
+            if (_previewCard is null && previewCardUI is not null && _previewAction is not null)
             {
                 previewCardUI.gameObject.SetActive(true);
                 var previewCard = VDataManager.Instance.CreateCardByID(_selectedCardUI.Card.configID);
@@ -107,6 +110,10 @@ namespace VTuber.ScheduleSystem.UI
                     VRaisingAnimationSystem.Instance.EnqueueAnimationRequest(
                         VAnimationRequestFactory.CreateUpgradeCardRequest(_selectedCardUI.Card), true);
                     break;
+                case VAnimationType.ReplaceCard:
+                    VRaisingAnimationSystem.Instance.EnqueueAnimationRequest(
+                        VAnimationRequestFactory.CreateReplaceCardRequest(_previewCard, _selectedCardUI.Card), true);
+                    break;
             }
         
             _onComplete?.Invoke();
@@ -124,12 +131,18 @@ namespace VTuber.ScheduleSystem.UI
             
             _onComplete = onComplete;
             Initialize(request.cards, request.returnable, request.cardSelectable, request.cardSelectAnimationType, request.cardSelectConfirmAction,
-                request.cardSelectReturnAction, request.cardSelectPreviewAction);
+                request.cardSelectReturnAction, request.cardSelectPreviewAction, request.previewCard);
         }
 
         public void Initialize(List<VCard> cards, bool returnable, bool selectable, VAnimationType cardSelectAnimationType, Action<VCard> cardSelectConfirmAction,
-            Action returnAction = null, Action<VCard> previewAction = null)
+            Action returnAction = null, Action<VCard> previewAction = null, VCard previewCard = null)
         {
+            title.text = VUIUtils.Instance.GetSelectCardMenuTitle(cardSelectAnimationType);
+            if (previewCardUI is not null)
+            {
+                previewTitle.text = VUIUtils.Instance.GetSelectCardMenuPreviewCardTitle(cardSelectAnimationType);
+            }
+            
             confirmButton.gameObject.SetActive(selectable);
             returnButton.gameObject.SetActive(!selectable);
             if (returnable)
@@ -138,6 +151,14 @@ namespace VTuber.ScheduleSystem.UI
             _previewAction = previewAction;
             _confirmAction = cardSelectConfirmAction;
             _cardSelectAnimationType = cardSelectAnimationType;
+
+            if (previewCard is not null)
+            {
+                previewCardUI.gameObject.SetActive(true);
+                previewCardUI.SetCard(previewCard);
+                _previewCard = previewCard;
+            }
+            
             foreach (var card in cards)
             {
                 var cardItem = GetPooledCard();

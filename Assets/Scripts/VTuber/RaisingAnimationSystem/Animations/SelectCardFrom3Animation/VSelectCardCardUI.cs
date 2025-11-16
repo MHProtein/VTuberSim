@@ -4,8 +4,10 @@ using UnityEngine.EventSystems;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
+using VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation;
+using VTuber.ScheduleSystem.UI;
 
-namespace VTuber.ScheduleSystem.UI
+namespace VTuber.RaisingAnimationSystem.Animations.SelectCardFrom3Animation
 {
     public class VSelectCardCardUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
@@ -58,13 +60,14 @@ namespace VTuber.ScheduleSystem.UI
         
         public void Popup()
         {
+            var selectable = _selectable;
             SetSelectable(false);
             _cardUI.transform.localScale = Vector3.zero;
             Tween.Scale(_cardUI.transform, Vector3.one * 1.1f, 0.5f, Ease.OutCubic).OnComplete(() =>
             {
                 Tween.Scale(_cardUI.transform, Vector3.one, 0.5f, Ease.OutBack).OnComplete(() =>
                 {
-                    SetSelectable(_selectable);
+                    SetSelectable(selectable);
                 });
             });
         }

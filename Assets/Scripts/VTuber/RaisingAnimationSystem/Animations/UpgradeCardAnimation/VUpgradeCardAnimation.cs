@@ -6,9 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.UI;
-using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
-namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem.UpgradeCardAnimation
+namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
 {
     public class VUpgradeCardAnimation : VRaisingAnimation
     {

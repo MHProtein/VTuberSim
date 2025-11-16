@@ -1,4 +1,6 @@
-﻿namespace VTuber.ScheduleSystem.UI
+﻿using VTuber.RaisingAnimationSystem.Animations.SelectCardFrom3Animation;
+
+namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
 {
     public interface ISelectableCardMenu
     {

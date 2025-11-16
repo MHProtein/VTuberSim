@@ -149,6 +149,7 @@ namespace VTuber.EventSystem
 
             if (e.dialogueNode.IsNullOrWhitespace())
             {
+                dialogueSystem.HideMe();
                 _hasDialogue = false;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
@@ -159,7 +160,7 @@ namespace VTuber.EventSystem
                 {
                     _loaded = false;
                 }
-         
+                
                 foreach (var effect in e.effects)
                     effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
             
@@ -168,7 +169,6 @@ namespace VTuber.EventSystem
                     OnDialogueComplete(null);
                 });
                 
-
                 return;
             }
 
@@ -312,10 +312,9 @@ namespace VTuber.EventSystem
                 VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
                 {
                     _currentEvent = null;
-                    dialogueSystem.HideMe();
                     var state = VGameManager.Instance.GetState<VExecutionState>();
                     if (state is not null)
-                        state.OnEventEndAnimationEnd();
+                        state.OnEventEndAnimationEnd(()=> { dialogueSystem.HideMe(); });
                 });
             }
         }

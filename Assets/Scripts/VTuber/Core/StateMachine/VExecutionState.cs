@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
 using UnityEngine;
@@ -96,8 +97,8 @@ namespace VTuber.Core.StateMachine
             //stateMachine.EventSystemRoot.SetActive(false);
             _currentEvent.ExecuteAppendedEffects(stateMachine.Character);
         }
-        
-        public void OnEventEndAnimationEnd()
+
+        public void OnEventEndAnimationEnd(Action onAnimationExecuted = null)
         {
             if (_shouldEndGame)
             {
@@ -124,7 +125,7 @@ namespace VTuber.Core.StateMachine
             temp.AdvanceTime();
             VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
             {
-                
+                onAnimationExecuted?.Invoke();
                 if (_dayEndEvents.Count != 0)
                 {
                     var e = _dayEndEvents.Dequeue();

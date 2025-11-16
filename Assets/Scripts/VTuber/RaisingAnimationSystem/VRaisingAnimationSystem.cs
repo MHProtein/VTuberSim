@@ -25,6 +25,7 @@ namespace VTuber.RaisingAnimationSystem
         SelectCard,
         UpgradeCard,
         SelectCardPreview,
+        ReplaceCard
     }
     
     public class VRaisingAnimationSystem : VSingletonMonobehaviour<VRaisingAnimationSystem>
@@ -102,8 +103,8 @@ namespace VTuber.RaisingAnimationSystem
             {
                 animation.Value.ResetAnimation();
             }
-
-            Tween.Alpha(background, 0.7f, 0.3f).OnComplete(ExecuteAnimationsImplement);
+            
+            Tween.Alpha(background, 0.8f, 0.3f).OnComplete(ExecuteAnimationsImplement);
         }
 
         private void ExecuteAnimationsImplement()

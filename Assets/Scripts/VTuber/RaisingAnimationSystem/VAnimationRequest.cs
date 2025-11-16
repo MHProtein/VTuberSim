@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.UI;
 using VTuber.Consumable;
 using VTuber.CoopSystem;
 using VTuber.Core.RaisingEffect;
@@ -29,6 +30,7 @@ namespace VTuber.RaisingAnimationSystem
         public Action<VCard> cardSelectConfirmAction;
         public Action<VCard> cardSelectPreviewAction;
         public Action cardSelectReturnAction;
+        public VCard previewCard;
     }
 
     public class VAnimationRequestFactory
@@ -87,6 +89,16 @@ namespace VTuber.RaisingAnimationSystem
             };
         }
         
+        public static VAnimationRequest CreateReplaceCardRequest(VCard cardToReplace, VCard cardToBeReplaced)
+        {
+            return new VAnimationRequest()
+            {
+                instigatorType = VInstigatorType.Ignore,
+                animationType = VAnimationType.ReplaceCard,
+                cards = new (){ cardToReplace, cardToBeReplaced },
+            };
+        }
+        
         public static VAnimationRequest CreateSelectCardRequest(List<VCard> cards, 
             bool returnable, bool cardSelectable, VAnimationType cardSelectAnimationType,
             Action<VCard> cardSelectConfirmAction, Action returnAction = null, Action<VCard> previewAction = null)
@@ -104,5 +116,7 @@ namespace VTuber.RaisingAnimationSystem
                 cardSelectConfirmAction = cardSelectConfirmAction,
             };
         }
+
+
     }
 }

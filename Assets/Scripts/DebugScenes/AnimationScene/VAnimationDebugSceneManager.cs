@@ -17,6 +17,19 @@ namespace DebugScenes.AnimationScene
         
         List<TMP_Text> animationRequestTexts = new List<TMP_Text>();
 
+        public void AddReplaceCardAnim()
+        {
+            raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest
+            {
+                instigatorType = VInstigatorType.Ignore,
+                instigatorIcon = null,
+                animationType = VAnimationType.ReplaceCard,
+            });
+            var x = Instantiate(animationRequestPrefab, queue).GetComponent<TMP_Text>();
+            x.text = "替换卡牌";
+            animationRequestTexts.Add(x);
+        }
+        
         public void AddAddConsumableAnim()
         {
             raisingAnimationSystem.DebugEnqueueAnimationRequest(new VAnimationRequest

@@ -11,6 +11,8 @@ using VTuber.Core.Managers;
 using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
 using VTuber.RaisingAnimationSystem;
+using VTuber.RaisingAnimationSystem.Animations.SelectCardFrom3Animation;
+using VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.ScheduleSystem.UI

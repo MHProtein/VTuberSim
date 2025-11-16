@@ -12,7 +12,7 @@ using VTuber.Core.Managers;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
-namespace VTuber.RaisingAnimationSystem.Animations
+namespace VTuber.RaisingAnimationSystem.Animations.AddConsumableAnimation
 {
     public class VAddConsumableAnimation : VRaisingAnimation
     {     

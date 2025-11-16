@@ -17,6 +17,7 @@ using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.UI;
 using VTuber.RaisingAnimationSystem;
+using VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.Relic.UI;

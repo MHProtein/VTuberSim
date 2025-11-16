@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.Core.UI
@@ -17,6 +18,8 @@ namespace VTuber.Core.UI
         [SerializeField] private List<string> pressureNames;
         [SerializeField] private Sprite coopIcon;
         [SerializeField] private List<Sprite> haloSprites;
+        [SerializeField] private Dictionary<VAnimationType, string> selectCardMenuTitles;
+        [SerializeField] private Dictionary<VAnimationType, string> selectCardMenuPreviewCardTitles;
 
         public Sprite GetRandomAttributeIcon()
         {
@@ -125,6 +128,16 @@ namespace VTuber.Core.UI
         public static void SetImageAlpha(Image image, float alpha)
         {
             image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
+        }
+
+        public string GetSelectCardMenuTitle(VAnimationType cardSelectAnimationType)
+        {
+            return selectCardMenuTitles[cardSelectAnimationType];
+        }
+
+        public string GetSelectCardMenuPreviewCardTitle(VAnimationType cardSelectAnimationType)
+        {
+            return selectCardMenuPreviewCardTitles[cardSelectAnimationType];
         }
     }
 }
