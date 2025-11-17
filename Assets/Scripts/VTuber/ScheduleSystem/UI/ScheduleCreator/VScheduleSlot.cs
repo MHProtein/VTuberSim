@@ -520,5 +520,47 @@ namespace VTuber.ScheduleSystem.UI
 
             return false;
         }
+        
+        // Add these new public methods to the class
+        #region Scheduling Condition Highlighting
+
+        protected override void Awake()
+        {
+            // Make sure the highlight is off at the start
+            if (conditionHighlight != null)
+            {
+                conditionHighlight.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// Checks if the dragged event meets this slot's scheduling condition and shows/hides the highlight accordingly.
+        /// </summary>
+        /// <param name="eventBeingDragged">The event currently being dragged over this slot.</param>
+        public void CheckAndHighlight(VScheduleEvent eventBeingDragged)
+        {
+            if (conditionHighlight == null || eventBeingDragged?.SchedulingCondition == null)
+            {
+                return;
+            }
+
+            // Use the character reference from the VScheduleUI, as seen in your TestSchedulingCondition method
+            bool isConditionMet = eventBeingDragged.SchedulingCondition.IsTrue(_scheduleUI.Character, this);
+
+            conditionHighlight.SetActive(isConditionMet);
+        }
+
+        /// <summary>
+        /// Forces the condition highlight to be hidden.
+        /// </summary>
+        public void HideHighlight()
+        {
+            if (conditionHighlight != null)
+            {
+                conditionHighlight.SetActive(false);
+            }
+        }
+
+        #endregion
     }
 }

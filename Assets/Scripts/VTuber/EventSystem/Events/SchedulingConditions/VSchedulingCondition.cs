@@ -62,7 +62,7 @@ namespace VTuber.ScheduleSystem.Events
         // 注意：这里假设如果 TargetType 是 Stream 类，或者是 ID 且该 ID 对应的是 Stream
         // 具体判断逻辑取决于你的策划配置表是否在 ID 模式下也指定了类型。
         // 如果配置表中 ID 模式下没有指定类型，你可能需要尝试获取或在 VSchedulingCondition 解析时存储 IsStream。
-        public bool IsTargetStream => _targetType == VEventType.Stream;
+        public bool IsTargetStream => _isStream;
         
         
         
@@ -74,7 +74,7 @@ namespace VTuber.ScheduleSystem.Events
         
         private readonly VPlacingCondition _placingCondition;
         private readonly VSchedulingConditionPositionPatterns _positionPattern;
-
+        
         private readonly bool _isStream;
         private readonly uint _targetID;
         private readonly VEventType _targetType;

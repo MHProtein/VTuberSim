@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -82,21 +82,26 @@ namespace VTuber.ScheduleSystem.UI
             _interactable = true;
             _camera = Camera.main;
             _rectTransform = GetComponent<RectTransform>();
+
+            if (conditionIndicatorsContainer != null)
+            {
+                conditionIndicatorsContainer.SetActive(false);
+            }
         }
 
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
         // {
         //     _eventData = eventData;
-        //     instigatorIcon.sprite = eventData.instigatorIcon;
+        //     icon.sprite = eventData.icon;
         //     background.color = eventData.backgroundColor;
         //     _initPosition = initPosition;
-        //     instigatorIcon.raycastTarget = false;
+        //     icon.raycastTarget = false;
         //     transform.SetParent(VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect);
         //     isSelected = true;
         //     canSetParent = true;
-        //     instigatorIcon.transform.localScale = Vector3.zero;
+        //     icon.transform.localScale = Vector3.zero;
         //     background.transform.localScale = Vector3.zero;
-        //     Tween.Scale(instigatorIcon.transform, new Vector3(1, 1, 1), 0.3f);
+        //     Tween.Scale(icon.transform, new Vector3(1, 1, 1), 0.3f);
         //     Tween.Scale(background.transform, new Vector3(1, eventData.height, 1), 0.3f);
         // }
 
@@ -124,7 +129,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void Initialize(VScheduleEvent e, VScheduleSlot slot, bool disposable, Transform parent = null)
         {
-            = e;
+            _event = e;
             icon.sprite = e.Icon;
             background.color = e.BackgroundColor;
             _bgColor = background.color;
@@ -175,7 +180,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
-            Event = e;
+            _event = e;
             icon.sprite = e.Icon;
             background.color = e.BackgroundColor;
             _bgColor = background.color;
@@ -213,6 +218,10 @@ namespace VTuber.ScheduleSystem.UI
                 { "Event", Event }
             });
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Selection);
+            
+            
+            // 调用显示指示器
+            ShowConditionIndicators();
         }
 
         public void SetParentBeforeDrag()
@@ -299,7 +308,7 @@ namespace VTuber.ScheduleSystem.UI
                 foreach (var result in results)
                 {
                     var slot = result.gameObject.GetComponent<VScheduleSlot>();
-                    if (slot is not null)
+                    if (slot != null)
                     {
                         currentHoveredSlot = slot;
                         // We also call the existing SetIndicator logic here
@@ -307,6 +316,20 @@ namespace VTuber.ScheduleSystem.UI
                         break;
                     }
                 }
+
+                // Check if we have moved to a new slot
+                if (currentHoveredSlot != _lastHoveredSlot)
+                {
+                    // Turn off the highlight on the slot we just left
+                    _lastHoveredSlot?.HideHighlight();
+
+                    // Ask the new slot to check the condition and highlight itself if needed
+                    currentHoveredSlot?.CheckAndHighlight(_event);
+
+                    // Update the last hovered slot
+                    _lastHoveredSlot = currentHoveredSlot;
+                }
+                // --- END OF NEW LOGIC ---
             }
 
             if (_isSelected && Input.GetMouseButtonUp(0))
@@ -318,11 +341,20 @@ namespace VTuber.ScheduleSystem.UI
                 OnEndDragging();
             }
         }
+        
+        
 
         public void OnEndDragging()
         {
+            // 新增：在拖拽结束时，也隐藏指示器
+            if (conditionIndicatorsContainer != null)
+            {
+                conditionIndicatorsContainer.SetActive(false);
+            }
             _isSelected = false;
             icon.raycastTarget = true;
+            _lastHoveredSlot?.HideHighlight();
+            _lastHoveredSlot = null;
             var results = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.RaycastFromMouse();
             if (TryPlaceEvent(results))
             {
@@ -373,7 +405,7 @@ namespace VTuber.ScheduleSystem.UI
             });
         }
         
-        public void OnPointerEnter(PointerEventData eventData)
+public void OnPointerEnter(PointerEventData eventData)
         {            
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
                 new Dictionary<string, object>()

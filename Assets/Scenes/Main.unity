@@ -8445,10 +8445,12 @@ MonoBehaviour:
   halo: {fileID: 115954999}
   haloImage: {fileID: 115955000}
   cardLibrary: {fileID: 1900267185}
-  angle: 2880
-  duration: 4
-  ease: 4
+  flipDuration: 3
+  flipAngle: 36000
+  flipEase: 22
   haloSpinDuration: 8
+  collectMoveDuration: 0.5
+  collectScaleDuration: 0.5
 --- !u!1 &162412284
 GameObject:
   m_ObjectHideFlags: 0
@@ -60066,7 +60068,7 @@ MonoBehaviour:
   weekCountText: {fileID: 1787199646}
   _scheduleUI: {fileID: 1370900052}
   initialScheduleUIPosition: {fileID: 1765292046}
-  eventUIPrefab: {fileID: 1328888101914423096, guid: 2e229b23f5c424c42ab5ffd3bc7d727c, type: 3}
+  eventUIPrefab: {fileID: 1328888101914423096, guid: 7e973428dd8fc3c4da482097411cce3b, type: 3}
   scheduleCreationUI: {fileID: 1706758801}
   eventNameUI: {fileID: 1396912219}
   eventDescriptionUI: {fileID: 1109780480}
@@ -93643,7 +93645,7 @@ MonoBehaviour:
   - "\u7EDD\u4E0D\u8C03"
   coopIcon: {fileID: -2090269636, guid: 9a3f0341aeb07054384bd1c52d1fc5af, type: 3}
   haloSprites:
-  - {fileID: 21300000, guid: e632caf4124f7a44588c0a61cfd54276, type: 3}
+  - {fileID: 21300000, guid: f14380ba47ce93c46b4a03e505b177da, type: 3}
   - {fileID: 21300000, guid: e632caf4124f7a44588c0a61cfd54276, type: 3}
   - {fileID: 21300000, guid: 18e273f506eeb33449db4ac0546763e8, type: 3}
   - {fileID: 21300000, guid: 78adfa1b978e3c84998d3b0f99163b47, type: 3}
