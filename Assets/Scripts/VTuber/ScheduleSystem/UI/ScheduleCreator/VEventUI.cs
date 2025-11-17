@@ -45,6 +45,11 @@ namespace VTuber.ScheduleSystem.UI
         
         
         [HideInInspector] public Vector2 initOffset;
+        
+        
+        [Header("高亮显示")]
+        [Tooltip("用于“作为邻居”满足条件时的高亮")]
+        [SerializeField] private GameObject neighborHighlightVisual; // 拖入你新创建的UI
 
         private Color _bgColor;
 
@@ -75,6 +80,9 @@ namespace VTuber.ScheduleSystem.UI
         // Add this field to your VEventUI class to keep track of the last slot hovered over.
         private VScheduleSlot _lastHoveredSlot = null;
         
+        // 用于缓存当前高亮的所有邻居，以便拖拽结束时清除
+        private static List<VEventUI> _highlightedNeighbors = new List<VEventUI>();
+        
         protected override void Awake()
         {
             parentSlots = new List<VScheduleSlot>();
@@ -87,8 +95,13 @@ namespace VTuber.ScheduleSystem.UI
             {
                 conditionIndicatorsContainer.SetActive(false);
             }
+            neighborHighlightVisual?.SetActive(false); // 确保默认隐藏
         }
-
+        //用于打开/关闭条件高亮
+        public void SetNeighborHighlight(bool value)
+        {
+            neighborHighlightVisual?.SetActive(value);
+        }
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
         // {
         //     _eventData = eventData;
@@ -222,6 +235,9 @@ namespace VTuber.ScheduleSystem.UI
             
             // 调用显示指示器
             ShowConditionIndicators();
+            // --- 新增逻辑：高亮所有满足条件的事件 ---
+            HighlightAllSatisfyingEvents(_event);
+            // --- 逻辑结束 ---
         }
 
         public void SetParentBeforeDrag()
@@ -346,6 +362,9 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnEndDragging()
         {
+            // --- 新增逻辑：在拖拽最开始时，清除所有高亮 ---
+            ClearAllSatisfyingEventHighlights();
+            // --- 逻辑结束 ---
             // 新增：在拖拽结束时，也隐藏指示器
             if (conditionIndicatorsContainer != null)
             {
@@ -437,6 +456,10 @@ public void OnPointerEnter(PointerEventData eventData)
                 ShowConditionIndicators(); 
                 // --- 新逻辑结束 ---
 
+                // --- 新增逻辑：高亮所有满足条件的事件 ---
+                HighlightAllSatisfyingEvents(_event);
+                // --- 逻辑结束 ---
+                
                 foreach (var parent in parentSlots)
                 {
                     parent.RemoveItem();
@@ -593,6 +616,72 @@ public void OnPointerEnter(PointerEventData eventData)
         }
         
         
+        // 高亮所有满足条件的事件
+        private void HighlightAllSatisfyingEvents(VScheduleEvent eventBeingDragged)
+        {
+            // 清除任何可能残留的高亮
+            ClearAllSatisfyingEventHighlights();
+
+            var condition = eventBeingDragged?.SchedulingCondition;
+            if (condition == null) return;
+
+            // 我们只关心需要“特定事件”的条件
+            if (condition.Type != VSchedulingConditionType.ID && 
+                condition.Type != VSchedulingConditionType.Type && 
+                condition.Type != VSchedulingConditionType.SameType)
+            {
+                return;
+            }
+
+            // 获取所有事件所在的父节点 (CanvasRect 似乎是最安全的根)
+            var eventParent = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect;
+            if (eventParent == null) return;
+
+            // 查找所有当前在日程表中的 VEventUI 实例
+            VEventUI[] allPlacedEvents = eventParent.GetComponentsInChildren<VEventUI>();
+
+            foreach (var placedEventUI in allPlacedEvents)
+            {
+                // 排除自己
+                if (placedEventUI == this) continue;
+                // 排除其他正在被拖拽的（理论上不应该）
+                if (placedEventUI._isSelected) continue; 
+
+                var placedEvent = placedEventUI.Event;
+                if (placedEvent == null) continue;
+
+                bool conditionMet = false;
+                switch (condition.Type)
+                {
+                    case VSchedulingConditionType.ID:
+                        conditionMet = (placedEvent.EventID == condition.TargetID);
+                        break;
+                    case VSchedulingConditionType.Type:
+                        conditionMet = (placedEvent.Type == condition.TargetType);
+                        break;
+                    case VSchedulingConditionType.SameType:
+                        conditionMet = (placedEvent.Type == eventBeingDragged.Type);
+                        break;
+                }
+
+                if (conditionMet)
+                {
+                    placedEventUI.SetNeighborHighlight(true);
+                    _highlightedNeighbors.Add(placedEventUI); // 存入缓存，以便清除
+                }
+            }
+        }
+
+        // 清除所有高亮
+        private void ClearAllSatisfyingEventHighlights()
+        {
+            foreach (var eventUI in _highlightedNeighbors)
+            {
+                if(eventUI != null) // 增加安全检查
+                    eventUI.SetNeighborHighlight(false);
+            }
+            _highlightedNeighbors.Clear();
+        }
         
     }
 }
