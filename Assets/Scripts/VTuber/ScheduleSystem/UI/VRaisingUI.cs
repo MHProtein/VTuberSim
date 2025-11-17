@@ -1,16 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PrimeTween;
 using TMPro;
 using Tutorial.Script;
 using Tutorial.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
+using VTuber.BattleSystem.Effect;
+using VTuber.BattleSystem.UI;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
+using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
+using VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation;
 using VTuber.Reincarnation;
+using VTuber.Relic;
+using VTuber.Relic.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -52,7 +62,7 @@ namespace VTuber.ScheduleSystem.UI
         [Space(3)] [Header("CardViewUI")] [SerializeField]
         private GameObject cardLibraryUIObject;
 
-        [SerializeField] private VCardViewSelectionUI cardLibraryUI;
+        [FormerlySerializedAs("selectCardLibraryUI")] [FormerlySerializedAs("cardLibraryUI")] [SerializeField] private VSelectCardMenuAnimation selectCardMenuLibraryUI;
 
         [Space(3)] [Header("ConsumableUI")] [SerializeField]
         private GameObject consumableUIParent;
@@ -76,10 +86,23 @@ namespace VTuber.ScheduleSystem.UI
 
         public List<Color> abilityColors = new();
 
+        [Space(3)] [Header("AddCard")]
+        [SerializeField] private GameObject pickCardMenuScroll;
+        [SerializeField] private Transform pickCardMenuScrollContent;
+        [SerializeField] private VPickCardMenu pickCardMenu;
+        [SerializeField] private Button addCardButton;
+        [SerializeField] private GameObject cardUIPrefab;
+        
+        [Space(3)] [Header("AddRelic")]
+        [SerializeField] private GameObject pickRelicMenuScroll;
+        [SerializeField] private VPickRelicMenu pickRelicMenu;
+        [SerializeField] private Button addRelicButton;
         protected override void Awake()
         {
             base.Awake();
             tutorialRestartWeekButton.onClick.AddListener(RestartWeek);
+            addCardButton.onClick.AddListener(OnAddCardButtonClicked);
+            addRelicButton.onClick.AddListener(OnAddRelicButtonClicked);
         }
 
         protected override void OnEnable()
@@ -93,6 +116,34 @@ namespace VTuber.ScheduleSystem.UI
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnNotifyEventDescriptionChange,
                 OnNotifyEventDescriptionChange);
+        }
+        
+        public void OnAddCardButtonClicked()
+        {
+            var cardUIs = new List<VCardUI>();
+            var cards = VDataManager.Instance.GetAllCardConfigurations().Select(card => card.CreateCard());
+            foreach (var card in cards) cardUIs.Add(VUIUtils.SpawnCardUI(cardUIPrefab, card, pickCardMenuScrollContent));
+            pickCardMenu.BeginPickCard(cardUIs, 1000, VCardPileType.ALL, false, false, OnCardPicked);
+            pickCardMenuScroll.SetActive(true);
+        }
+
+        private void OnCardPicked(List<VCard> cards)
+        {
+            VGameManager.Instance.AddCardsToCharacter(cards);
+            pickCardMenuScroll.SetActive(false);
+        }
+        
+        private void OnAddRelicButtonClicked()
+        {
+            var relics = VDataManager.Instance.Relics.Select(relic => relic.Value.CreateRelic()).ToList();
+            pickRelicMenu.BeginPickRelic(relics, 1000, OnRelicPicked);
+            pickRelicMenuScroll.SetActive(true);
+        }
+
+        private void OnRelicPicked(List<VRelic> relics)
+        {
+            VGameManager.Instance.AddRelicsToCharacter(relics);
+            pickRelicMenuScroll.SetActive(false);
         }
 
         public void Initialize(bool isTutorial)
@@ -144,12 +195,12 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeCardLibraryUI(List<VCard> cards)
         {
             cardLibraryUIObject.SetActive(true);
-            cardLibraryUI.Initialize(cards, false, false, false, null);
+            selectCardMenuLibraryUI.Initialize(cards, true, false, VAnimationType.None, null);
         }
 
         public void CloseCardLibraryUI()
         {
-            cardLibraryUI.Close();
+            selectCardMenuLibraryUI.Close();
             cardLibraryUIObject.SetActive(false);
         }
 

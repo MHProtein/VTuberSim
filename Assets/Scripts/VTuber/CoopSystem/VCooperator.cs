@@ -39,6 +39,7 @@ namespace VTuber.CoopSystem
         public uint id;
         public float probability;
         public int unlockLevel;
+        public string description;
 
         public VCoopEvent(CellRange row)
         {
@@ -46,6 +47,7 @@ namespace VTuber.CoopSystem
             eventName = row.Columns[VCoopEventHeaderIndex.Name].Value;
             unlockLevel = int.Parse(row.Columns[VCoopEventHeaderIndex.UnlockLevel].Value);
             probability = float.Parse(row.Columns[VCoopEventHeaderIndex.Probability].Value);
+            description = row.Columns[VCoopEventHeaderIndex.Description].Value;
 
             effects = new List<VRaisingEffect>();
             for (var i = VCoopEventHeaderIndex.Effect1; i <= VCoopEventHeaderIndex.E3Param; i += 2)
@@ -89,6 +91,7 @@ namespace VTuber.CoopSystem
         public VCoopEvent e;
         public Sprite pfp;
         public Vector2Int position;
+        public string description;
     }
 
     public class VCoopSaveData
@@ -125,6 +128,7 @@ namespace VTuber.CoopSystem
         public List<VCoopEvent> CoopEvents { get; }
 
         public VScheduleEvent UpgradeEvent { get; private set; }
+        public Sprite Pfp => configuration.Icon;
 
         public static VCooperator Load(VCoopSaveData saveData)
         {
@@ -272,7 +276,8 @@ namespace VTuber.CoopSystem
                 {
                     e = e,
                     position = position,
-                    pfp = configuration.Icon
+                    pfp = configuration.Icon,
+                    description = e.description
                 });
             }
 
@@ -329,5 +334,10 @@ namespace VTuber.CoopSystem
         }
 
         #endregion
+
+        public VCoopLevel GetNextLevel()
+        {
+            return configuration.CoopLevels[CurrentLevel + 1];
+        }
     }
 }

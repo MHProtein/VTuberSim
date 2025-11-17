@@ -14,11 +14,12 @@ namespace VTuber.Core.RaisingEffect
         public VRaisingAddEventAfterCurrentEffect(VRaisingAddEventAfterCurrentEffectConfiguration configuration,
             string parameter) : base(configuration)
         {
+            shouldPlayAnimation = false;
             _eventType = configuration.eventType;
             eventId = uint.Parse(parameter.Trim());
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnAddFollowUpEvent, new Dictionary<string, object>
             {

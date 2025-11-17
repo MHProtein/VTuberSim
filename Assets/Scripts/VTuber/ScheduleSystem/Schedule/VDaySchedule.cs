@@ -11,7 +11,7 @@ namespace VTuber.ScheduleSystem.Schedule
     public class VDayScheduleSaveData
     {
         public uint currentEventIndex;
-        public TimeOfDay currentTimeOfDay;
+        public int currentTimeOfDay;
         public int dayIndex;
         public int eventIndex;
         public List<VScheduleEventSaveData> events;
@@ -104,7 +104,8 @@ namespace VTuber.ScheduleSystem.Schedule
                 events = _events.Select(e => e.Save(script)).ToList(),
                 dayIndex = _dayIndex,
                 eventIndex = eventIndex,
-                currentTimeOfDay = currentTimeOfDay
+                currentTimeOfDay = (int)currentTimeOfDay,
+                currentEventIndex = _currentEventIndex
             };
         }
 
@@ -112,7 +113,8 @@ namespace VTuber.ScheduleSystem.Schedule
         {
             VDaySchedule daySchedule = new(weeklySchedule, saveData.dayIndex);
             daySchedule.eventIndex = saveData.eventIndex;
-            daySchedule.currentTimeOfDay = saveData.currentTimeOfDay;
+            daySchedule.currentTimeOfDay = (TimeOfDay)saveData.currentTimeOfDay;
+            daySchedule._currentEventIndex = saveData.currentEventIndex;
             daySchedule._events = saveData.events.Select(eventSaveData => VScheduleEvent.Load(eventSaveData, script))
                 .ToList();
             foreach (var scheduleEvent in daySchedule._events)

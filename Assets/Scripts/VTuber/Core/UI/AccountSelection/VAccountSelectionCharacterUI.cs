@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.RaisingEffect;
 using VTuber.Core.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 {
@@ -50,7 +52,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
 
             foreach (var account in _accounts)
             foreach (var effect in account.Account.Effects)
-                effect.ApplyEffect(_character, null);
+                effect.ApplyEffect(_character, null, null);
 
             UpdateUI();
         }

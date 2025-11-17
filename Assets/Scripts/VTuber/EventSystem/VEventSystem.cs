@@ -14,12 +14,15 @@ using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.SE;
+using VTuber.Core.StateMachine;
 using VTuber.Core.UI;
 using VTuber.Dialogue.UI;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 using VTuber.Store;
 
 namespace VTuber.EventSystem
@@ -86,18 +89,9 @@ namespace VTuber.EventSystem
             base.OnEnable();
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnSelectPhaseEndingBegin,
                 OnPickPhaseEndingBegin);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCardFrom3,
-                OnBeginSelectCardFrom3);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventSelectUpgradeCard,
-                OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRequestEnterStore,
                 OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnBeginSelectConsumableFrom3,
-                OnBeginSelectConsumableFrom3);
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnShowAddConsumable,
-                OnShowAddConsumable);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
 
@@ -106,16 +100,8 @@ namespace VTuber.EventSystem
             base.OnDisable();
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnSelectPhaseEndingBegin,
                 OnPickPhaseEndingBegin);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCardFrom3,
-                OnBeginSelectCardFrom3);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectCard, OnBeginSelectCard);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnEventSelectUpgradeCard,
-                OnEventSelectUpgradeCard);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRequestEnterStore, OnRequestEnterStore);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnPhaseBegin, OnPhaseBegin);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnShowAddConsumable, OnShowAddConsumable);
-            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnBeginSelectConsumableFrom3,
-                OnBeginSelectConsumableFrom3);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEndNotify, OnBattleEnd);
         }
 
@@ -136,7 +122,7 @@ namespace VTuber.EventSystem
         {
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_EnterEvent);
             _isPhaseStartEvent = isPhaseStartEvent;
-            if (_loaded)
+            if (_loaded && !e.dialogueNode.IsNullOrWhitespace())
             {
                 _character = character;
                 if (_isInBattle)
@@ -163,18 +149,26 @@ namespace VTuber.EventSystem
 
             if (e.dialogueNode.IsNullOrWhitespace())
             {
+                dialogueSystem.HideMe();
                 _hasDialogue = false;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
-                foreach (var effect in e.effects) effect.ApplyEffect(character, null);
-                OnDialogueComplete(null);
-
+                
+                VDataPersistenceManager.Instance.SaveGame();
+                
                 if (_loaded)
                 {
-                    LoadedOpenSelectionMenu();
                     _loaded = false;
                 }
-
+                
+                foreach (var effect in e.effects)
+                    effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
+            
+                VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+                {
+                    OnDialogueComplete(null);
+                });
+                
                 return;
             }
 
@@ -197,39 +191,17 @@ namespace VTuber.EventSystem
                 VEventSystemUI.Instance.OpenEventUI();
                 dialogueSystem.ShowMe(character);
                 if (!loaded)
+                {
                     dialogueSystem.ContinueDialog();
-                if (loaded)
-                    if (_loaded)
-                        LoadedOpenSelectionMenu();
+                    e.ExecuteEffectsBeforeEvent(character);
+                    VRaisingAnimationSystem.Instance.ExecuteAnimations(() => { });
+                }
+                
                 _loaded = false;
             });
         }
 
-        public void LoadedOpenSelectionMenu()
-        {
-            switch (_selectionMenuType)
-            {
-                case VSelectionMenuType.AddCard:
-                    break;
-                case VSelectionMenuType.AddConsumable:
-                    ShowAddConsumable();
-                    break;
-                case VSelectionMenuType.SelectCard:
-                    ShowSelectCard();
-                    break;
-                case VSelectionMenuType.SelectCardFrom3:
-                    ShowSelectCardFrom3();
-                    break;
-                case VSelectionMenuType.SelectConsumableFrom3:
-                    ShowSelectConsumableFrom3();
-                    break;
-                case VSelectionMenuType.SelectUpgradeCard:
-                    ShowUpgradeCard();
-                    break;
-                case VSelectionMenuType.SelectPhaseEnding:
-                    break;
-            }
-        }
+
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
@@ -244,131 +216,6 @@ namespace VTuber.EventSystem
         private void OnPhaseBegin(Dictionary<string, object> messagedict)
         {
             _store.Reset();
-        }
-
-        private void OnShowAddConsumable(Dictionary<string, object> messagedict)
-        {
-            _consumablesToSelect = messagedict["Consumables"] as List<VConsumable>;
-
-            ShowAddConsumable();
-        }
-
-        private void OnBeginSelectConsumableFrom3(Dictionary<string, object> messagedict)
-        {
-            _consumablesToSelect = messagedict["Consumables"] as List<VConsumable>;
-
-            ShowSelectConsumableFrom3();
-        }
-
-        private void OnEventSelectUpgradeCard(Dictionary<string, object> messagedict)
-        {
-            ShowUpgradeCard();
-        }
-
-        private void OnBeginSelectCard(Dictionary<string, object> messagedict)
-        {
-            _cardActionType = (VCardActionType)messagedict["ActionType"];
-            messagedict.TryGetValue("ReplaceSelectedCard", out var selectedCard);
-            _replaceSelectedCard = selectedCard as VCard;
-
-            ShowSelectCard();
-        }
-
-        private void OnBeginSelectCardFrom3(Dictionary<string, object> messagedict)
-        {
-            _cardActionType = (VCardActionType)messagedict["ActionType"];
-            _cardsToSelect = messagedict["Cards"] as List<VCard>;
-            messagedict.TryGetValue("ReplaceSelectedCard", out var selectedCard);
-            _replaceSelectedCard = selectedCard as VCard;
-
-            ShowSelectCardFrom3();
-        }
-
-        public void ShowAddConsumable()
-        {
-            _selectionMenuType = VSelectionMenuType.AddConsumable;
-            VEventSystemUI.Instance.OpenAddConsumableUI(_character,
-                _consumablesToSelect.FirstOrDefault(),
-                consumable => { _character.ConsumableManager.AddConsumable(consumable); },
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
-
-        public void ShowSelectConsumableFrom3()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectConsumableFrom3;
-            VEventSystemUI.Instance.OpenSelectFrom3ConsumablesMenu(_character,
-                _consumablesToSelect,
-                consumable => { _character.ConsumableManager.AddConsumable(consumable); },
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
-
-        public void ShowUpgradeCard()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectUpgradeCard;
-            VEventSystemUI.Instance.OpenUpgradeCard(
-                _character.CardLibrary.GetCards().Where(card => !card.IsUpgraded).ToList(),
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
-
-        public void ShowSelectCardFrom3()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectCardFrom3;
-            VEventSystemUI.Instance.OpenSelectFrom3Menu(_cardsToSelect,
-                VCardActionUtils.GetAction(_cardActionType, _character, _replaceSelectedCard),
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
-        }
-
-        public void ShowSelectCard()
-        {
-            _selectionMenuType = VSelectionMenuType.SelectCard;
-            VEventSystemUI.Instance.OpenSelectCard(_character.CardLibrary.GetCards(), true,
-                VCardActionUtils.GetAction(_cardActionType, _character, _replaceSelectedCard),
-                () =>
-                {
-                    _selectionMenuType = VSelectionMenuType.None;
-                    if (_hasDialogue)
-                        dialogueSystem.SetPaused(false);
-                    else
-                        OnDialogueComplete(null);
-                });
-            if (_hasDialogue)
-                dialogueSystem.SetPaused(true);
         }
 
         private void OnPickPhaseEndingBegin(Dictionary<string, object> messagedict)
@@ -394,8 +241,15 @@ namespace VTuber.EventSystem
                 {
                     { "Event", _currentEvent }
                 });
-            _currentEvent = null;
-            VAudioPlayer.Instance.StopBGM();
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+            {
+                _currentEvent = null;
+                VAudioPlayer.Instance.StopBGM();
+                
+                var state = VGameManager.Instance.GetState<VExecutionState>();
+                if (state is not null)
+                    state.OnEventEndAnimationEnd();
+            });
         }
 
         public void InitializeBattle(bool isPhaseEnding, int initialTurnCount, int targetPopularity,
@@ -454,10 +308,15 @@ namespace VTuber.EventSystem
                     {
                         { "Event", _currentEvent }
                     });
-                _currentEvent = null;
+                
+                VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+                {
+                    _currentEvent = null;
+                    var state = VGameManager.Instance.GetState<VExecutionState>();
+                    if (state is not null)
+                        state.OnEventEndAnimationEnd(()=> { dialogueSystem.HideMe(); });
+                });
             }
-
-            dialogueSystem.HideMe();
         }
 
         public void Load(SaveData data)

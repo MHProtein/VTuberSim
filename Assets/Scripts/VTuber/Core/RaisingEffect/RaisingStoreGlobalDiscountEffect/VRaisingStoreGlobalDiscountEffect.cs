@@ -16,7 +16,7 @@ namespace VTuber.Core.RaisingEffect
                 float.Parse(upgradedParameter.Trim()));
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             var store = messagedict["Store"] as VStore;
             store.SetGlobalDiscount(_discount.Value);

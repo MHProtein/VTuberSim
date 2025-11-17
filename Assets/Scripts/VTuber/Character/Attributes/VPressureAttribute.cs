@@ -3,6 +3,9 @@ using VTuber.BattleSystem.Card;
 using VTuber.Character.Attribute;
 using VTuber.Core.EventCenter;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Character.Attributes
 {
@@ -22,7 +25,8 @@ namespace VTuber.Character.Attributes
 
         public void ApplyEffects(VCharacter character)
         {
-            _effects[Value - 1].ApplyEffect(character, null);
+            _effects[Value - 1].ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Pressure,
+                VUIUtils.Instance.GetPressureIcon(Value).Value, "pressure description place_holder"));
         }
     }
 }

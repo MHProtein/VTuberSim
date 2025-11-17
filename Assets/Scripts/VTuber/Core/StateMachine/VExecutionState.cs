@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
 using UnityEngine;
@@ -6,11 +7,13 @@ using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Reincarnation;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.StateMachine
 {
@@ -74,20 +77,29 @@ namespace VTuber.Core.StateMachine
                 {
                     { "Event", _currentEvent }
                 });
-            stateMachine.Character.ConsumableManager.SetBattle(null);
-            VRaisingUI.Instance.SetConsumableToRaising();
-            _lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
-            if (_isLastStreamSuccess)
-                stateMachine.Character.succeededStreams.Add(_currentEvent.EventID);
 
-            VRaisingUI.Instance.SwitchAttributesUIBattle(true);
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+            {
+                stateMachine.Character.ConsumableManager.SetBattle(null);
+                VRaisingUI.Instance.SetConsumableToRaising();
+                _lastStreamPopularity = messagedict["Popularity"] as int? ?? 0;
+                if (_isLastStreamSuccess)
+                    stateMachine.Character.succeededStreams.Add(_currentEvent.EventID);
+
+                VRaisingUI.Instance.SwitchAttributesUIBattle(true);
+                
+                OnEventEndAnimationEnd();
+            });
         }
 
         private void OnEventEnd(Dictionary<string, object> messagedict)
         {
-            stateMachine.EventSystemRoot.SetActive(false);
+            //stateMachine.EventSystemRoot.SetActive(false);
             _currentEvent.ExecuteAppendedEffects(stateMachine.Character);
+        }
 
+        public void OnEventEndAnimationEnd(Action onAnimationExecuted = null)
+        {
             if (_shouldEndGame)
             {
                 _shouldEndGame = false;
@@ -111,19 +123,23 @@ namespace VTuber.Core.StateMachine
             var temp = _currentEvent;
             _currentEvent = null;
             temp.AdvanceTime();
-            if (_dayEndEvents.Count != 0)
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
             {
-                var e = _dayEndEvents.Dequeue();
-                ExecuteEvent(e);
-                return;
-            }
+                onAnimationExecuted?.Invoke();
+                if (_dayEndEvents.Count != 0)
+                {
+                    var e = _dayEndEvents.Dequeue();
+                    ExecuteEvent(e);
+                    return;
+                }
 
-            //VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEndSave, new Dictionary<string, object>());
+                //VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEndSave, new Dictionary<string, object>());
 
-            if (stateMachine.ShouldPauseSchedule)
-                stateMachine.SwitchState(VStateType.Pause);
-            else
-                NextEvent();
+                if (stateMachine.ShouldPauseSchedule)
+                    stateMachine.SwitchState(VStateType.Pause);
+                else
+                    NextEvent();
+            });
         }
 
         public void EndRun()

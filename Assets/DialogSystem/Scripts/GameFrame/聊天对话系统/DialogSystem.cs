@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.SE;
+using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 using Random = UnityEngine.Random;
 
 public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
@@ -238,7 +240,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
 
     public void CreateDialog(DialogContent dc, bool isLoadedSkip = false)
     {
-        if (!isLoadedSkip && (!dc.ifOption && currentDialogObj != null))
+        if (!isLoadedSkip && currentDialogObj != null)
         {
             dc.AppleEffects(_character);
         }
@@ -288,6 +290,21 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             shouldEnd = true;
         }
         currentDialog.index = dc.nextId;
+
+        if(VRaisingAnimationSystem.Instance.HasAnimationRequests())
+        {
+            PauseAuto();
+            PauseSkip();
+            SetPaused(true);
+            var tempAuto = auto;
+            var tempSkip = skip;
+            VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+            {
+                auto = tempAuto;
+                skip = tempSkip;
+                SetPaused(false);
+            });
+        }
     }
 
     public GameObject GetBtn()

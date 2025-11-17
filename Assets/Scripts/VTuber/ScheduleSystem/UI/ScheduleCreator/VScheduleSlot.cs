@@ -10,12 +10,8 @@ using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
-
-
-
 namespace VTuber.ScheduleSystem.UI
 {
-    
     public class VScheduleSlotSaveData
     {
         public string coopEventIconName;
@@ -45,6 +41,7 @@ namespace VTuber.ScheduleSystem.UI
         private Sprite _coopEventIcon;
         private int _coopEventID;
         private List<VCoopEvent.VCoopEventType> _coopEventTypes;
+        private string _coopEventDescription;
         private Vector2Int _coordination;
         private int _eventID;
 
@@ -139,6 +136,7 @@ namespace VTuber.ScheduleSystem.UI
             pfp.sprite = eventItem.pfp;
             _coopEventEffects = eventItem.e.effects;
             _coopEventTypes = eventItem.e.eventTypes;
+            _coopEventDescription = eventItem.description;
             for (var i = 0; i < eventItem.e.eventTypes.Count; i++)
             {
                 eventIcons[i].gameObject.SetActive(true);
@@ -195,7 +193,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 checkmark.gameObject.SetActive(true);
                 checkmark.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
-                item.Event.SetCoopEffects(this, _coopEventEffects);
+                item.Event.SetCoopEffects(this, _coopEventEffects, _coopEventIcon, _coopEventDescription);
             }
             else if (IsCoopEventSlot)
             {
