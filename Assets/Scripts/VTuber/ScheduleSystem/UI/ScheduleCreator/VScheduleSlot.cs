@@ -34,8 +34,6 @@ namespace VTuber.ScheduleSystem.UI
         [Tooltip("The UI element to show when a scheduling condition is met during drag")]
         [SerializeField] private GameObject conditionHighlight;
         
-        
-        
         private int _allowedEventID;
         private List<VRaisingEffect> _coopEventEffects;
         private Sprite _coopEventIcon;
@@ -85,10 +83,12 @@ namespace VTuber.ScheduleSystem.UI
             if (saveData.coopEventID == -1)
                 return;
             _coopEventIcon = VResourcesManager.Instance.TryGetSprite(saveData.coopEventIconName);
+            var coopEvent = VDataManager.Instance.GetCoopEventByID((uint)saveData.coopEventID);
             SetCoopEvent(new VCoopEventItem
             {
-                e = VDataManager.Instance.GetCoopEventByID((uint)saveData.coopEventID),
-                pfp = _coopEventIcon
+                e = coopEvent,
+                pfp = _coopEventIcon,
+                description = coopEvent.description,
             });
         }
 

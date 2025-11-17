@@ -652,7 +652,7 @@ namespace VTuber.BattleSystem.Core
             }
             
             if (!_isDebugScene)
-                VDataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGame(VSavePointType.Battle);
         }
 
         private void EndTurn()
