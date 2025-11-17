@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
+using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem
@@ -151,6 +152,18 @@ namespace VTuber.RaisingAnimationSystem
         public bool HasAnimationRequests()
         {
             return _animationRequestQueue.Count > 0;
+        }
+
+        public void StopAllAnimations()
+        {
+            Tween.StopAll();
+            _animationRequestQueue.Clear();
+            foreach (var raisingAnimation in animations)
+            {
+                raisingAnimation.Value.StopAnimation();
+            }
+            VUIUtils.SetImageAlpha(background, 0.0f);
+            ui.SetActive(false);
         }
     }
 }

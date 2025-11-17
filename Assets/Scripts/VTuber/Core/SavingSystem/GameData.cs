@@ -14,6 +14,7 @@ namespace SlayTheSpire.System.SavingSystem
 {
     public class SaveData
     {
+        public VSavePointType savePointType;
         public List<VAccountSaveData> accounts;
         public VBattleSaveData battleSaveData;
 

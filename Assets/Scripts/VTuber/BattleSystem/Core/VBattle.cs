@@ -431,13 +431,27 @@ namespace VTuber.BattleSystem.Core
             });
 
             _initialized = false;
-            _buffManager.Clear();
-            _battleAttributeManager.Clear();
-            _cardPilesManager.Clear();
+            
+            if(_buffManager is not null)
+                _buffManager.Clear();
+            
+            if(_battleAttributeManager is not null)
+                _battleAttributeManager.Clear();
+            
+            
+            if(_cardPilesManager is not null)
+                _cardPilesManager.Clear();
 
-            _battleAttributeManager.OnDisable();
-            _cardPilesManager.OnDisable();
-            _buffManager.OnDisable();
+            if(_battleAttributeManager is not null)
+                _battleAttributeManager.OnDisable();
+            
+            
+            if(_cardPilesManager is not null)
+                _cardPilesManager.OnDisable();
+            
+            
+            if(_buffManager is not null)
+                _buffManager.OnDisable();
 
             _cardPilesManager = null;
             _buffManager = null;
@@ -638,7 +652,7 @@ namespace VTuber.BattleSystem.Core
             }
             
             if (!_isDebugScene)
-                VDataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGame(VSavePointType.Battle);
         }
 
         private void EndTurn()

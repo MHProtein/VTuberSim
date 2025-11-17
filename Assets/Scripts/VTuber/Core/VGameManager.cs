@@ -19,6 +19,7 @@ using VTuber.Core.RaisingEffect;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
@@ -403,6 +404,7 @@ namespace VTuber.BattleSystem.Core
 
             eventSystem.CloseUI();
             scheduleCreator.gameObject.SetActive(false);
+            VRaisingAnimationSystem.Instance.StopAllAnimations();
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnReset, new Dictionary<string, object>());
         }
 

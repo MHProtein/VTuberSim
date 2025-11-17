@@ -175,10 +175,14 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
             base.ResetAnimation();
             if(_selectedCardUI)
                 _selectedCardUI.transform.SetParent(grid);
-            foreach (var cardUI in _cardUIs) ReturnCardToPool(cardUI);
-            _cardUIs.Clear();
+            if (_cardUIs is not null)
+            {
+                foreach (var cardUI in _cardUIs) ReturnCardToPool(cardUI);
+                _cardUIs.Clear();
+                _displayingCardUIs.Clear();
+                
+            }
             _selectedCardUI = null;
-            _displayingCardUIs.Clear();
             _typeDropdown.value = 0; 
             _rarityDropdown.value = 0; 
             _isUpgraded.isOn = false;

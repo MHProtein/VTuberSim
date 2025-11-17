@@ -80,8 +80,6 @@ namespace VTuber.EventSystem
         protected override void Awake()
         {
             base.Awake();
-            dialogueSystem.OnDialogFinished += OnDialogueComplete;
-            dialogueSystem.OnLineFinished += OnLineFinished;
         }
 
         protected override void OnEnable()
@@ -115,11 +113,13 @@ namespace VTuber.EventSystem
             if (_isPhaseStartEvent)
                 return;
             _executedLines.Add(line);
-            VDataPersistenceManager.Instance.SaveGame();
+            VDataPersistenceManager.Instance.SaveGame(VSavePointType.Dialog);
         }
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e, bool isPhaseStartEvent = false)
         {
+            dialogueSystem.OnDialogFinished += OnDialogueComplete;
+            dialogueSystem.OnLineFinished += OnLineFinished;
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_EnterEvent);
             _isPhaseStartEvent = isPhaseStartEvent;
             if (_loaded && !e.dialogueNode.IsNullOrWhitespace())
@@ -154,7 +154,7 @@ namespace VTuber.EventSystem
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
                 
-                VDataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGame(VSavePointType.Dialog);
                 
                 if (_loaded)
                 {
@@ -203,8 +203,6 @@ namespace VTuber.EventSystem
                 _loaded = false;
             });
         }
-
-
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
@@ -278,6 +276,9 @@ namespace VTuber.EventSystem
         {
             if (!_hasDialogue && _selectionMenuType != VSelectionMenuType.None)
                 return;
+            
+            dialogueSystem.OnDialogFinished -= OnDialogueComplete;
+            dialogueSystem.OnLineFinished -= OnLineFinished;
             if (_currentEvent.Type == VEventType.Stream)
             {
                 var streamEvent = _currentEvent as VStreamEvent;
@@ -331,9 +332,10 @@ namespace VTuber.EventSystem
             _isInBattle = data.eventSystemSaveData.isInBattle;
             _store.Load(data.storeSaveData);
             _executedLines = data.eventSystemSaveData.executedLines;
-            _loaded = true;
+            
+            if(data.savePointType == VSavePointType.Dialog)
+                _loaded = true;
 
-            _selectionMenuType = data.eventSystemSaveData.selectionMenuType;
 
             _cardsToSelect = new List<VCard>();
 
@@ -378,6 +380,8 @@ namespace VTuber.EventSystem
             _executedLines = null;
             if(VEventSystemUI.Instance)
                 VEventSystemUI.Instance.CloseUI();
+            dialogueSystem.OnDialogFinished -= OnDialogueComplete;
+            dialogueSystem.OnLineFinished -= OnLineFinished;
         }
     }
 }

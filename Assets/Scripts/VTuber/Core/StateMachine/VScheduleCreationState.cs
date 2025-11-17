@@ -27,7 +27,7 @@ namespace VTuber.Core.StateMachine
                     stateMachine.Script.WeekIndex);
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToScheduleCreation,
                     new Dictionary<string, object>());
-                VDataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGame(VSavePointType.ScheduleCreation);
                 VDataPersistenceManager.Instance.SaveGameTutorialWeek();
                 VAudioPlayer.Instance.PlayBGM(VBGMType.ScheduleCreation);
             });
