@@ -14,12 +14,10 @@ namespace VTuber.Core.RaisingEffect
         public VRaisingUpgradeRandomCardEffect(VRaisingUpgradeRandomCardEffectConfiguration configuration) : base(
             configuration)
         {
-            shouldPlayAnimation = false;
         }
         
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            
             var cards = character.CardLibrary.GetCards().Where(vCard => !vCard.IsUpgraded).ToList();
             if (cards.Count == 0)
                 return;

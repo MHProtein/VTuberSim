@@ -4,6 +4,7 @@ using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Core.ScriptSystem;
 using VTuber.Character;
 using VTuber.Character.Attributes;
+using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.ScheduleSystem.Events;
@@ -46,6 +47,7 @@ namespace VTuber.Core.ScriptSystem
 
         public List<uint> EventList => configuration.eventIDs;
         public List<uint> StreamEventList => configuration.streamEventIDs;
+        public List<VCooperatorConfiguration> Coops => configuration.coops;
 
         public VScriptSaveData Save()
         {

@@ -11,6 +11,7 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
 using VTuber.Consumable;
+using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -152,14 +153,15 @@ namespace VTuber.BattleSystem.Core
             VConsumableConfiguration.LoadIDDistributor(data.consumableIDDistributor);
             _accounts = new List<VAccount>();
             foreach (var saveData in data.accounts) _accounts.Add(new VAccount(saveData));
+            
+            var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
 
+            _script = VScript.Load(data.script, scriptConfig);
+            
             Character = new VCharacter(null);
             Character.Load(data, _characterConfigs.Find(config
                 => config.name == data.characterSaveData.characterConfigurationName));
 
-            var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
-
-            _script = VScript.Load(data.script, scriptConfig);
 
             // if (scriptConfig is VTutorialScriptConfiguration)
             // {
@@ -427,6 +429,11 @@ namespace VTuber.BattleSystem.Core
         public T GetState<T>() where T: VState
         {
             return _stateMachine.CurrentState as T;
+        }
+
+        public VCooperatorConfiguration GetCooperatorConfigurationByID(uint saveDataConfigId)
+        {
+            return _script.Coops.Find(config => config.Id == saveDataConfigId);
         }
     }
 }

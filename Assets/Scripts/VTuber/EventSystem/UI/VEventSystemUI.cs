@@ -12,6 +12,7 @@ using VTuber.Core.SE;
 using VTuber.EventSystem.UI;
 using VTuber.RaisingAnimationSystem.Animations.SelectFrom3ConsumableAnimation;
 using VTuber.ScheduleSystem.Events;
+using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Dialogue.UI
@@ -19,7 +20,7 @@ namespace VTuber.Dialogue.UI
     public class VEventSystemUI : VSingletonMonobehaviour<VEventSystemUI>
     {
         [SerializeField] private Canvas canvas;
-        [SerializeField] private VideoPlayer loadingVideoPlayer;
+        [SerializeField] private VLoadingAnimation loadingAnimation;
         [SerializeField] private Transform normalScreenPosition;
         [SerializeField] private RectTransform uiWrappers;
         [SerializeField] private RectTransform battleUIWrapper;
@@ -40,7 +41,6 @@ namespace VTuber.Dialogue.UI
         {
             base.Awake();
 
-            loadingVideoPlayer.loopPointReached += OnLoadingEnded;
         }
 
         public void SetFullScreenButton()
@@ -66,18 +66,21 @@ namespace VTuber.Dialogue.UI
             return Tween.Scale(uiWrappers, Vector3.one * 0.6f, 0.3f);
         }
 
-        private void OnLoadingEnded(VideoPlayer source)
+        private void OnLoadingEnded()
         {
-            loadingVideoPlayer.gameObject.SetActive(false);
-            loadingVideoPlayer.Stop();
             onVideoFinish?.Invoke();
             onVideoFinish = null;
         }
 
-        public void PlayVideo(Action onFinish)
+        public void PlayLoadingAnimation(VDialogueEvent e, Action onFinish)
         {
-            loadingVideoPlayer.gameObject.SetActive(true);
-            loadingVideoPlayer.Play();
+            loadingAnimation.PlayAnimation(e).OnComplete(OnLoadingEnded);
+            onVideoFinish = onFinish;
+        }
+        
+        public void PlayLoadingAnimation(VStreamEventConfiguration e, Action onFinish)
+        {
+            loadingAnimation.PlayAnimation(e).OnComplete(OnLoadingEnded);
             onVideoFinish = onFinish;
         }
 
@@ -111,11 +114,23 @@ namespace VTuber.Dialogue.UI
             eventUIWrapper.gameObject.SetActive(false);
             battleUIWrapper.gameObject.SetActive(true);
         }
-
+        
+        public void CloseBattleUI()
+        {
+            battleUIWrapper.gameObject.SetActive(false);
+        }
+        
         public void CloseUI()
         {
             eventUIWrapper.gameObject.SetActive(false);
             battleUIWrapper.gameObject.SetActive(false);
         }
+
+        public void CloseLoadingAnimation()
+        {
+            loadingAnimation.Close();
+        }
+
+
     }
 }

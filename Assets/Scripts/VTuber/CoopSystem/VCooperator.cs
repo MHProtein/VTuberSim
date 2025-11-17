@@ -5,6 +5,7 @@ using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEditor;
 using UnityEngine;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -96,7 +97,7 @@ namespace VTuber.CoopSystem
 
     public class VCoopSaveData
     {
-        public string configurationPath;
+        public uint configId;
         public int coopValue;
         public int currentLevelIndex;
         public bool hasExecutedUpgradeEventThisWeek;
@@ -132,7 +133,7 @@ namespace VTuber.CoopSystem
 
         public static VCooperator Load(VCoopSaveData saveData)
         {
-            var configuration = AssetDatabase.LoadAssetAtPath<VCooperatorConfiguration>(saveData.configurationPath);
+            var configuration = VGameManager.Instance.GetCooperatorConfigurationByID(saveData.configId);
             var cooperator = new VCooperator(configuration);
             cooperator.CurrentLevel = saveData.currentLevelIndex;
             cooperator.CoopValue = saveData.coopValue;
@@ -153,7 +154,7 @@ namespace VTuber.CoopSystem
         {
             return new VCoopSaveData
             {
-                configurationPath = AssetDatabase.GetAssetPath(configuration),
+                configId = configuration.Id,
                 currentLevelIndex = CurrentLevel,
                 coopValue = CoopValue,
                 hasExecutedUpgradeEventThisWeek = _hasExecutedUpgradeEventThisWeek,

@@ -161,12 +161,15 @@ namespace VTuber.EventSystem
                     _loaded = false;
                 }
                 
-                foreach (var effect in e.effects)
-                    effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
-            
-                VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+                VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
                 {
-                    OnDialogueComplete(null);
+                    foreach (var effect in e.effects)
+                        effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
+            
+                    VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
+                    {
+                        OnDialogueComplete(null);
+                    });
                 });
                 
                 return;
@@ -184,7 +187,7 @@ namespace VTuber.EventSystem
             if (!loaded)
                 _executedLines = new List<int>();
 
-            VEventSystemUI.Instance.PlayVideo(() =>
+            VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
                 _character = character;
                 _currentEvent = e;
@@ -206,6 +209,7 @@ namespace VTuber.EventSystem
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
             _isInBattle = false;
+            VEventSystemUI.Instance.CloseBattleUI();
         }
 
         private void OnRequestEnterStore(Dictionary<string, object> messagedict)
@@ -260,7 +264,7 @@ namespace VTuber.EventSystem
         {
             _isInBattle = true;
             battleObject.SetActive(true);
-            battle.InitializeBattle(false, isPhaseEnding, _character.AttributeManager,
+            battle.InitializeBattle(false, _currentEvent, isPhaseEnding, _character.AttributeManager,
                 _character.CardLibrary,
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
@@ -294,7 +298,7 @@ namespace VTuber.EventSystem
             }
             else if (_shouldEnterStore)
             {
-                VEventSystemUI.Instance.PlayVideo(() =>
+                VEventSystemUI.Instance.PlayLoadingAnimation(_currentEvent, () =>
                 {
                     storeObject.SetActive(true);
                     _store.EnterStore(_character);
@@ -314,7 +318,10 @@ namespace VTuber.EventSystem
                     _currentEvent = null;
                     var state = VGameManager.Instance.GetState<VExecutionState>();
                     if (state is not null)
-                        state.OnEventEndAnimationEnd(()=> { dialogueSystem.HideMe(); });
+                        state.OnEventEndAnimationEnd(()=> {
+                            dialogueSystem.HideMe();
+                            VEventSystemUI.Instance.CloseLoadingAnimation(); 
+                        });
                 });
             }
         }
