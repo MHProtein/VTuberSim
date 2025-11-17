@@ -38461,7 +38461,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 7
     - Name: 
       Entry: 7
       Data: 
@@ -38492,7 +38492,7 @@ MonoBehaviour:
       Data: 1
     - Name: loop
       Entry: 5
-      Data: false
+      Data: true
     - Name: delay
       Entry: 4
       Data: 0
@@ -38527,6 +38527,236 @@ MonoBehaviour:
     - Name: soundName
       Entry: 1
       Data: LiveFail
+    - Name: channel
+      Entry: 3
+      Data: 5
+    - Name: volume
+      Entry: 4
+      Data: 1
+    - Name: pitch
+      Entry: 4
+      Data: 1
+    - Name: loop
+      Entry: 5
+      Data: true
+    - Name: delay
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 6
+    - Name: $v
+      Entry: 7
+      Data: 24|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 25|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+    - Name: soundName
+      Entry: 1
+      Data: shop
+    - Name: channel
+      Entry: 3
+      Data: 5
+    - Name: volume
+      Entry: 4
+      Data: 1
+    - Name: pitch
+      Entry: 4
+      Data: 1
+    - Name: loop
+      Entry: 5
+      Data: true
+    - Name: delay
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 7
+      Data: 26|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 27|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+    - Name: soundName
+      Entry: 1
+      Data: 
+    - Name: channel
+      Entry: 3
+      Data: 5
+    - Name: volume
+      Entry: 4
+      Data: 1
+    - Name: pitch
+      Entry: 4
+      Data: 1
+    - Name: loop
+      Entry: 5
+      Data: true
+    - Name: delay
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 28|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 29|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+    - Name: soundName
+      Entry: 1
+      Data: LiveScoress
+    - Name: channel
+      Entry: 3
+      Data: 5
+    - Name: volume
+      Entry: 4
+      Data: 1
+    - Name: pitch
+      Entry: 4
+      Data: 1
+    - Name: loop
+      Entry: 5
+      Data: false
+    - Name: delay
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 5
+    - Name: $v
+      Entry: 7
+      Data: 30|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 31|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+    - Name: soundName
+      Entry: 1
+      Data: commom
+    - Name: channel
+      Entry: 3
+      Data: 5
+    - Name: volume
+      Entry: 4
+      Data: 1
+    - Name: pitch
+      Entry: 4
+      Data: 1
+    - Name: loop
+      Entry: 5
+      Data: true
+    - Name: delay
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 7
+      Data: 32|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 33|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+    - Name: soundName
+      Entry: 1
+      Data: LiveSuccessMega
     - Name: channel
       Entry: 3
       Data: 5
@@ -44479,13 +44709,13 @@ MonoBehaviour:
   initialPosition: {fileID: 318789939}
   middlePosition: {fileID: 863244286}
   finalPosition: {fileID: 1122453058}
-  bgFillDuration: 0.5
-  bgFadeOutDuration: 0.5
-  moveToMiddleDuration: 0.25
-  moveToFinalDuration: 0.5
-  moveBackDuration: 0.5
-  iconScaleDuration: 0.5
-  holdDuration: 1
+  bgFillDuration: 0.25
+  bgFadeOutDuration: 0.25
+  moveToMiddleDuration: 0.3
+  moveToFinalDuration: 0.4
+  moveBackDuration: 0.3
+  iconScaleDuration: 0.25
+  holdDuration: 0.25
 --- !u!224 &834717766
 RectTransform:
   m_ObjectHideFlags: 0
