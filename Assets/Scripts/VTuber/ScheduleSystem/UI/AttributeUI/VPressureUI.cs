@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.Core.RaisingEffect;
 using VTuber.Core.SE;
 using VTuber.Core.UI;
+using VTuber.Core.UI.VCharacterSelection;
 
 namespace VTuber.ScheduleSystem.UI
 {
-    public class VPressureUI : VAttributeUI
+    public class VPressureUI : VAttributeUI, IPointerEnterHandler, IPointerExitHandler
     {
         [SerializeField] private Image icon;
+        [SerializeField] private VPressureEffectTableEntry pressureEffectTableEntry;
 
         protected override void OnValueChanged(Dictionary<string, object> messagedict)
         {
@@ -19,6 +23,10 @@ namespace VTuber.ScheduleSystem.UI
             var delta = messagedict["Delta"] as int? ?? 0;
             var info = VUIUtils.Instance.GetPressureIcon((int)messagedict["NewValue"]);
             icon.sprite = info.Value;
+            pressureEffectTableEntry.SetEffect(info.Value,
+                info.Key,
+                "每天结束时, " + (messagedict["Effect"] as VRaisingEffect).Description);
+            
             text.text = info.Key;
             if (delta == 0)
                 return;
@@ -28,6 +36,16 @@ namespace VTuber.ScheduleSystem.UI
             {
                 text.color = Color.white;
             }));
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            pressureEffectTableEntry.gameObject.SetActive(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            pressureEffectTableEntry.gameObject.SetActive(false);
         }
     }
 }

@@ -37,7 +37,16 @@ namespace VTuber.Core.RaisingEffect
             {
                 var description = _configuration.description;
 
-                return description.Replace("X", GetParameter());
+                var parameter = GetParameter();
+                if (parameter.Contains('-'))
+                {
+                    return description.Replace("+X", GetParameter());
+                }
+                else
+                {
+                    return description.Replace("X", GetParameter());
+                }
+                
             }
         }
         
