@@ -164,23 +164,17 @@ MonoBehaviour:
     high: 10000
     name: B
   - low: 10000
-    high: 12000
+    high: -1
     name: A
-  - low: 12000
-    high: 14000
-    name: S
-  kpis:
-  - EventType: 0
-    RequiredAmount: 2
-    AbilityIndex: -1
+  kpis: []
   phases:
   - phaseName: "\u7B2C\u4E00\u9636\u6BB5"
     description: "\u7B2C\u4E00\u9636\u6BB5"
     startEventWeekIndex: 1
     startEventType: 1
     startEventID: 9
-    endEventWeekIndex: 2
-    endEventIDs: 040000000500000006000000
+    endEventWeekIndex: 3
+    endEventIDs: 04000000
     specialEventData:
     - weekIndexForInspector: 1
       dayIndexForInspector: 1
@@ -673,15 +667,23 @@ MonoBehaviour:
   weeks:
   - weekID: 0
     eventIDs: 00000000010000000200000003000000
-    streamEventIDs: 000000000100000002000000
+    streamEventIDs: 
     conditions:
     - conditionType: 0
-      idOrName: CAMoney
-      operatorType: 3
-      targetValue: 100000
+      idOrName: BASingingMultiplier
+      operatorType: 4
+      targetValue: 200
+    - conditionType: 0
+      idOrName: BAGamingMultiplier
+      operatorType: 4
+      targetValue: 200
+    - conditionType: 0
+      idOrName: BAChattingMultiplier
+      operatorType: 4
+      targetValue: 200
     tip:
       title: "\u5B89\u6392\u5468\u8868"
-      description: "\u901A\u8FC7\u5728\u5468\u8868\u4E2D\u5B89\u6392\u4E8B\u4EF6\u8FDB\u884C"
+      description: "\u901A\u8FC7\u5728\u5468\u8868\u4E2D\u5B89\u6392\u4E8B\u4EF6\u8FDB\u884C\uFF0C\u5C06\u4E09\u79CD\u5C5E\u6027\u63D0\u5347\u5230200\u5427"
       image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
   - weekID: 1
     eventIDs: 000000000100000002000000030000000400000005000000
