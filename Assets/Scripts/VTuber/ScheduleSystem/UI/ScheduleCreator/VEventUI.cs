@@ -27,14 +27,14 @@ namespace VTuber.ScheduleSystem.UI
         [Header("日程规划条件UI")]
         [Tooltip("用于容纳所有位置指示器的父对象")]
         [SerializeField] private GameObject conditionIndicatorsContainer; 
-        [Tooltip("上方向指示器")]
-        [SerializeField] private GameObject upIndicator;
-        [Tooltip("下方向指示器")]
-        [SerializeField] private GameObject downIndicator;
-        [Tooltip("左方向指示器")]
-        [SerializeField] private GameObject leftIndicator;
-        [Tooltip("右方向指示器")]
-        [SerializeField] private GameObject rightIndicator;
+        [Tooltip("上方向指示器的 Image 组件")]
+        [SerializeField] private Image upIndicatorImage;
+        [Tooltip("下方向指示器的 Image 组件")]
+        [SerializeField] private Image downIndicatorImage;
+        [Tooltip("左方向指示器的 Image 组件")]
+        [SerializeField] private Image leftIndicatorImage;
+        [Tooltip("右方向指示器的 Image 组件")]
+        [SerializeField] private Image rightIndicatorImage;
         
         [Header("指示器文本")]
         [Tooltip("请确保这些数组/字段对应 Up, Down, Left, Right 的 Text 组件")]
@@ -503,55 +503,64 @@ public void OnPointerEnter(PointerEventData eventData)
             Debug.Log("EndDrag");
         }
         // VEventUI.cs (在类的任何地方添加这个新方法)
-
-        private void ShowConditionIndicators()
+        // 新增：一个私有结构体，用于在方法间传递条件信息
+        private struct ConditionTargetInfo
+        {
+            public string HintText;
+            public Color BackgroundColor;
+            public bool IsValid;
+        }
+private void ShowConditionIndicators()
         {
             if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
 
-            var condition = _event.SchedulingCondition; // 获取条件对象
+            var condition = _event.SchedulingCondition;
             var pattern = condition.PositionPattern;
             
             if (pattern == VSchedulingConditionPositionPatterns.None) return;
 
-            // 1. 获取提示文字
-            string hintText = GetConditionHintText(condition);
+            // 1. 获取包含文本和颜色的信息
+            ConditionTargetInfo info = GetConditionTargetInfo(condition);
+            if (!info.IsValid) return; // 如果条件无效（如 SameType 但无事件），则不显示
 
             // 2. 激活容器
             conditionIndicatorsContainer.SetActive(true);
             
             // 重置状态
-            upIndicator?.SetActive(false);
-            downIndicator?.SetActive(false);
-            leftIndicator?.SetActive(false);
-            rightIndicator?.SetActive(false);
+            upIndicatorImage?.gameObject.SetActive(false);
+            downIndicatorImage?.gameObject.SetActive(false);
+            leftIndicatorImage?.gameObject.SetActive(false);
+            rightIndicatorImage?.gameObject.SetActive(false);
             
-            // 3. 根据模式显示指示器并设置文字
+            // 3. 根据模式显示指示器，并传入文本和颜色
             switch (pattern)
             {
                 case VSchedulingConditionPositionPatterns.UD:
-                    ActivateIndicator(upIndicator, upText, hintText);
-                    ActivateIndicator(downIndicator, downText, hintText);
+                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(downIndicatorImage, downText, info.HintText, info.BackgroundColor);
                     break;
                 case VSchedulingConditionPositionPatterns.LR:
-                    ActivateIndicator(leftIndicator, leftText, hintText);
-                    ActivateIndicator(rightIndicator, rightText, hintText);
+                    ActivateIndicator(leftIndicatorImage, leftText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(rightIndicatorImage, rightText, info.HintText, info.BackgroundColor);
                     break;
                 case VSchedulingConditionPositionPatterns.UDLR:
                 case VSchedulingConditionPositionPatterns.All:
-                    ActivateIndicator(upIndicator, upText, hintText);
-                    ActivateIndicator(downIndicator, downText, hintText);
-                    ActivateIndicator(leftIndicator, leftText, hintText);
-                    ActivateIndicator(rightIndicator, rightText, hintText);
+                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(downIndicatorImage, downText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(leftIndicatorImage, leftText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(rightIndicatorImage, rightText, info.HintText, info.BackgroundColor);
                     break;
             }
         }
         
         // 新增：激活指示器并设置文字的辅助方法
-        private void ActivateIndicator(GameObject indicator, TMP_Text textComponent, string text)
+        private void ActivateIndicator(Image indicatorImage, TMP_Text textComponent, string text, Color color)
         {
-            if (indicator != null)
+            if (indicatorImage != null)
             {
-                indicator.SetActive(true);
+                indicatorImage.gameObject.SetActive(true);
+                indicatorImage.color = color; 
+                
                 if (textComponent != null)
                 {
                     textComponent.text = text;
@@ -560,19 +569,21 @@ public void OnPointerEnter(PointerEventData eventData)
         }
         
         // 新增：核心逻辑 - 获取条件描述文字
-        private string GetConditionHintText(VSchedulingCondition condition)
+// 重构 GetConditionHintText 为 GetConditionTargetInfo
+        private ConditionTargetInfo GetConditionTargetInfo(VSchedulingCondition condition)
         {
-            string result = "";
+            // 默认值
+            string text = "";
+            Color color = Color.grey; // 默认灰色
+            bool isValid = true;
+            
+            VScheduleEventConfiguration config = null;
 
             switch (condition.Type)
             {
                 case VSchedulingConditionType.ID:
-                    // --- 使用你提供的 API 逻辑 ---
-                    VScheduleEventConfiguration config = null;
-                    
-                    // 这里使用我们在 VSchedulingCondition 中公开的 IsTargetStream 属性
-                    // 或者根据 _targetID 尝试获取（如果 ID 区分段位）
-                    if (condition.IsTargetStream) 
+                    // 使用你提供的 API 逻辑
+                    if (condition.IsTargetStream) // (假设 IsTargetStream 存在于 VSchedulingCondition)
                     {
                         config = VDataManager.Instance.GetStreamEventConfigurationByID(condition.TargetID);
                     }
@@ -580,40 +591,48 @@ public void OnPointerEnter(PointerEventData eventData)
                     {
                         config = VDataManager.Instance.GetDialogueEventConfigurationByID(condition.TargetID);
                     }
-
+                    
                     if (config != null)
                     {
-                        result = config.eventName; // 或者 config.icon 等
+                        text = config.eventName;
+                        color = config.backgroundColor; // 获取配置的颜色
                     }
                     else
                     {
-                        result = "Unknown Event";
+                        text = "Unknown Event";
                     }
                     break;
 
-                case VSchedulingConditionType.Type:
-                case VSchedulingConditionType.ExcludeType:
-                    // 如果是类型检查，直接显示类型名称
-                    result = condition.TargetType.ToString();
+                case VSchedulingConditionType.SameType:
+                    text = "Same Type";
+                    color = _event.BackgroundColor; // 直接使用当前拖拽事件的颜色
                     break;
                     
-                case VSchedulingConditionType.SameType:
-                    result = "Same Type";
+                case VSchedulingConditionType.Type:
+                case VSchedulingConditionType.ExcludeType:
+                    text = condition.TargetType.ToString();
+                    color = Color.grey; // 类型条件太泛，使用中性色
+                    break;
+                    
+                case VSchedulingConditionType.ExcludeID:
+                    text = "NOT ID: " + condition.TargetID;
+                    color = Color.grey; // 排除条件也用中性色
                     break;
                     
                 default:
-                    result = "Condition";
+                    isValid = false;
                     break;
             }
 
-            // 可选：如果是“排除”条件，加个前缀
+            // 为“排除”条件添加前缀
             if (condition.Type == VSchedulingConditionType.ExcludeType || condition.Type == VSchedulingConditionType.ExcludeID)
             {
-                result = "NOT " + result;
+                text = "NOT " + text;
             }
 
-            return result;
+            return new ConditionTargetInfo { HintText = text, BackgroundColor = color, IsValid = isValid };
         }
+        
         
         
         // 高亮所有满足条件的事件
