@@ -477,6 +477,7 @@ MonoBehaviour:
   costText: {fileID: 1446073082955339995}
   costIcon: {fileID: 4223290737350361684}
   conditionIndicatorsContainer: {fileID: 5920070138063705945}
+  upIndicatorImage: {fileID: 8326533211370729034}
   downIndicatorImage: {fileID: 3057188801960778671}
   leftIndicatorImage: {fileID: 6361302754907059188}
   rightIndicatorImage: {fileID: 7867561065611497732}
