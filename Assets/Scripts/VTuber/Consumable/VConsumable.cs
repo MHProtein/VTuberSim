@@ -22,7 +22,7 @@ namespace VTuber.Consumable
 
         public override void ApplyEffect()
         {
-            _consumableManager.ApplyRaisingEffects(raisingEffects);
+            _consumableManager.ApplyRaisingEffects(raisingEffects, Icon, Description);
             _consumableManager.Remove(this);
         }
     }
@@ -65,7 +65,7 @@ namespace VTuber.Consumable
 
         public uint Id { get; private set; }
         public uint ConfigId => _configuration.id;
-        public string Name => _configuration.name;
+        public string ConsumableName => _configuration.consumableName;
         public string Description => _configuration.description;
         public Sprite Icon => _configuration.icon;
         public VConsumableRarity Rarity => _configuration.rarity;

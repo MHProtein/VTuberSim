@@ -35,15 +35,16 @@ namespace VTuber.ScheduleSystem.Events
         public const int Name = 1;
         public const int Description = 2;
         public const int PlacingCondition = 3;
-        public const int Pattern = 4;
-        public const int TargetType = 5;
-        public const int TargetValue = 6;
-        public const int Effect1 = 7;
-        public const int E1Param = 8;
-        public const int Effect2 = 9;
-        public const int E2Param = 10;
-        public const int Effect3 = 11;
-        public const int E3Param = 12;
+        public const int ExecuteBeforeEvent = 4; // 在事件前执行
+        public const int Pattern = 5;
+        public const int TargetType = 6;
+        public const int TargetValue = 7;
+        public const int Effect1 = 8;
+        public const int E1Param = 9;
+        public const int Effect2 = 10;
+        public const int E2Param = 11;
+        public const int Effect3 = 12;
+        public const int E3Param = 13;
     }
 
     public class VSchedulingCondition
@@ -61,7 +62,7 @@ namespace VTuber.ScheduleSystem.Events
         // 注意：这里假设如果 TargetType 是 Stream 类，或者是 ID 且该 ID 对应的是 Stream
         // 具体判断逻辑取决于你的策划配置表是否在 ID 模式下也指定了类型。
         // 如果配置表中 ID 模式下没有指定类型，你可能需要尝试获取或在 VSchedulingCondition 解析时存储 IsStream。
-        public bool IsTargetStream => _targetType == VEventType.Stream;
+        public bool IsTargetStream => _isStream;
         
         
         
@@ -73,12 +74,15 @@ namespace VTuber.ScheduleSystem.Events
         
         private readonly VPlacingCondition _placingCondition;
         private readonly VSchedulingConditionPositionPatterns _positionPattern;
-
+        
         private readonly bool _isStream;
         private readonly uint _targetID;
         private readonly VEventType _targetType;
         private readonly VSchedulingConditionType _type;
-
+        private readonly bool _shouldExecuteBeforeEvent;
+        
+        public bool ShouldExecuteBeforeEvent => _shouldExecuteBeforeEvent;
+        
         public VSchedulingCondition(CellRange row)
         {
             _id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
@@ -88,6 +92,9 @@ namespace VTuber.ScheduleSystem.Events
                 _placingCondition = VDataManager.Instance.GetPlacingCondtionByID(uint.Parse(placingConditionStr));
 
             var typeStr = row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value;
+            
+            _shouldExecuteBeforeEvent = int.Parse(row.Columns[VSchedulingConditionHeaderIndex.ExecuteBeforeEvent].Value) == 1;
+            
             if (!typeStr.IsNullOrWhitespace())
             {
                 _positionPattern =

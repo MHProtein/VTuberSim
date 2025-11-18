@@ -11,17 +11,22 @@ using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core.UI;
 using VTuber.Character;
 using VTuber.Consumable;
+using VTuber.CoopSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.RaisingEffect;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Reincarnation;
+using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Schedule;
 using VTuber.ScheduleSystem.UI;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 using VTuber.Store;
 using VTuber.Store.UI;
 
@@ -149,14 +154,15 @@ namespace VTuber.BattleSystem.Core
             VConsumableConfiguration.LoadIDDistributor(data.consumableIDDistributor);
             _accounts = new List<VAccount>();
             foreach (var saveData in data.accounts) _accounts.Add(new VAccount(saveData));
+            
+            var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
 
+            _script = VScript.Load(data.script, scriptConfig);
+            
             Character = new VCharacter(null);
             Character.Load(data, _characterConfigs.Find(config
                 => config.name == data.characterSaveData.characterConfigurationName));
 
-            var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
-
-            _script = VScript.Load(data.script, scriptConfig);
 
             // if (scriptConfig is VTutorialScriptConfiguration)
             // {
@@ -241,6 +247,7 @@ namespace VTuber.BattleSystem.Core
             }
             else
             {
+                IsTutorial = false;
                 _script = new VScript(scriptConfig);
                 scheduleCreator.InitializeCreator(_script);
             }
@@ -251,8 +258,8 @@ namespace VTuber.BattleSystem.Core
             Character.Initialize(false);
 
             foreach (var account in accounts)
-            foreach (var effect in account.Effects)
-                effect.ApplyEffect(Character, null);
+                foreach (var effect in account.Effects)
+                    effect.ApplyEffect(Character, null, null);
 
             _weeklySchedule = new VWeeklySchedule();
 
@@ -397,6 +404,7 @@ namespace VTuber.BattleSystem.Core
 
             eventSystem.CloseUI();
             scheduleCreator.gameObject.SetActive(false);
+            VRaisingAnimationSystem.Instance.StopAllAnimations();
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnReset, new Dictionary<string, object>());
         }
 
@@ -408,6 +416,26 @@ namespace VTuber.BattleSystem.Core
         public VCharacterConfiguration GetCharacterConfig(string characterConfigurationName)
         {
             return _characterConfigs.Find(config => config.name == characterConfigurationName);
+        }
+
+        public void AddCardsToCharacter(List<VCard> cards)
+        {
+            Character.CardLibrary.AddCards(cards);
+        }
+
+        public void AddRelicsToCharacter(List<VRelic> relics)
+        {
+            Character.CharacterRelicManager.AddRelics(relics);
+        }
+
+        public T GetState<T>() where T: VState
+        {
+            return _stateMachine.CurrentState as T;
+        }
+
+        public VCooperatorConfiguration GetCooperatorConfigurationByID(uint saveDataConfigId)
+        {
+            return _script.Coops.Find(config => config.Id == saveDataConfigId);
         }
     }
 }

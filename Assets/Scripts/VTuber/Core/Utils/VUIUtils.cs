@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
+using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
+using VTuber.RaisingAnimationSystem;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.Core.UI
@@ -12,7 +17,15 @@ namespace VTuber.Core.UI
         [SerializeField] private List<Sprite> pressureIcons;
         [SerializeField] private List<string> pressureNames;
         [SerializeField] private Sprite coopIcon;
+        [SerializeField] private List<Sprite> haloSprites;
+        [SerializeField] private Dictionary<VAnimationType, string> selectCardMenuTitles;
+        [SerializeField] private Dictionary<VAnimationType, string> selectCardMenuPreviewCardTitles;
 
+        public Sprite GetRandomAttributeIcon()
+        {
+            return attributeIcons.Values.ToList()[Random.Range(0, attributeIcons.Count)];
+        }
+        
         public Sprite GetAttributeIcon(string attributeName)
         {
             return attributeIcons[attributeName];
@@ -21,6 +34,11 @@ namespace VTuber.Core.UI
         public Sprite GetCoopIcon()
         {
             return coopIcon;
+        }
+        
+        public Sprite GetHaloSprite(int level)
+        {
+            return haloSprites[level];
         }
 
         public KeyValuePair<string, Sprite> GetPressureIcon(int i)
@@ -86,6 +104,40 @@ namespace VTuber.Core.UI
         {
             if (level.IsNullOrWhitespace()) return VResourcesManager.Instance.TryGetSprite("ScoreLevel_SSS");
             return VResourcesManager.Instance.TryGetSprite("ScoreLevel_" + level);
+        }
+        
+        public static VCardUI SpawnCardUI(GameObject cardUIPrefab, VCard card, Transform parent)
+        {
+            if (card == null)
+            {
+                VDebug.LogError("SpawnCardUI: Card is null");
+                return null;
+            }
+
+            var cardUI = Instantiate(cardUIPrefab, parent).GetComponent<VCardUI>();
+            cardUI.SetCard(card);
+
+            return cardUI;
+        }
+
+        public static GameObject SpawnPrefab(GameObject prefab, Transform parent)
+        {
+            return Instantiate(prefab, parent);
+        }
+
+        public static void SetImageAlpha(Image image, float alpha)
+        {
+            image.color = new Color(image.color.r, image.color.g, image.color.b, alpha);
+        }
+
+        public string GetSelectCardMenuTitle(VAnimationType cardSelectAnimationType)
+        {
+            return selectCardMenuTitles[cardSelectAnimationType];
+        }
+
+        public string GetSelectCardMenuPreviewCardTitle(VAnimationType cardSelectAnimationType)
+        {
+            return selectCardMenuPreviewCardTitles[cardSelectAnimationType];
         }
     }
 }

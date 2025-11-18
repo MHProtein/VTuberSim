@@ -92,13 +92,13 @@ namespace VTuber.Consumable
         public Sprite icon;
         public uint id;
         public string liveType;
-        public string name;
+        public string consumableName;
         public VConsumableRarity rarity;
 
         public VConsumableConfiguration(CellRange row)
         {
             id = Convert.ToUInt32(row.Columns[VConsumableHeaderIndex.Id].Value.Trim());
-            name = row.Columns[VConsumableHeaderIndex.Name].Value.Trim();
+            consumableName = row.Columns[VConsumableHeaderIndex.Name].Value.Trim();
             description = row.Columns[VConsumableHeaderIndex.Description].Value.Trim();
             rarity = Enum.Parse<VConsumableRarity>(row.Columns[VConsumableHeaderIndex.Rarity].Value.Trim());
             liveType = row.Columns[VConsumableHeaderIndex.LiveType].Value.Trim();

@@ -13,8 +13,6 @@ namespace VTuber.EventSystem.UI
     {
         [SerializeField] private Button confirmButton;
         [SerializeField] private Transform grid;
-        
-        // --- REMOVED: The fields for relicUiPrefab and the containers have been deleted ---
         private List<VPhaseEndingOption> _options;
         private VPhaseEndingOption _selectedOption;
 
@@ -25,7 +23,6 @@ namespace VTuber.EventSystem.UI
             _options = new List<VPhaseEndingOption>();
             foreach (var ending in endings)
             {
-                // This call now handles the relic display internally
                 var endingGo = Instantiate(endingPrefab, grid);
                 var option = endingGo.GetComponent<VPhaseEndingOption>();
                 option.Initialize(ending, this);
@@ -40,8 +37,6 @@ namespace VTuber.EventSystem.UI
             if (_selectedOption is not null)
                 _selectedOption.Unselect();
             _selectedOption = option;
-            
-            // --- REMOVED: The call to DisplayRelicsForOption() has been deleted ---
         }
 
         public void Confirm()
@@ -58,7 +53,5 @@ namespace VTuber.EventSystem.UI
             _selectedOption = null;
             VEventSystemUI.Instance.ClosePhaseEndingSelectionMenu();
         }
-        
-        // --- REMOVED: The DisplayRelicsForOption() and ClearRelicDisplays() methods have been deleted ---
     }
 }

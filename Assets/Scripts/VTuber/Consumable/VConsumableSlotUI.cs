@@ -87,7 +87,7 @@ namespace VTuber.Consumable
             consumableUI.gameObject.SetActive(true);
             consumableUI.SetConsumable(consumable);
             _slots.CloseSubMenu();
-            nameText.text = consumable.Name;
+            nameText.text = consumable.ConsumableName;
             descriptionText.text = consumable.Description;
         }
 

@@ -5,6 +5,7 @@ using Sirenix.Utilities;
 using Spire.Xls;
 using UnityEditor;
 using UnityEngine;
+using VTuber.BattleSystem.Core;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
@@ -39,6 +40,7 @@ namespace VTuber.CoopSystem
         public uint id;
         public float probability;
         public int unlockLevel;
+        public string description;
 
         public VCoopEvent(CellRange row)
         {
@@ -46,6 +48,7 @@ namespace VTuber.CoopSystem
             eventName = row.Columns[VCoopEventHeaderIndex.Name].Value;
             unlockLevel = int.Parse(row.Columns[VCoopEventHeaderIndex.UnlockLevel].Value);
             probability = float.Parse(row.Columns[VCoopEventHeaderIndex.Probability].Value);
+            description = row.Columns[VCoopEventHeaderIndex.Description].Value;
 
             effects = new List<VRaisingEffect>();
             for (var i = VCoopEventHeaderIndex.Effect1; i <= VCoopEventHeaderIndex.E3Param; i += 2)
@@ -89,11 +92,12 @@ namespace VTuber.CoopSystem
         public VCoopEvent e;
         public Sprite pfp;
         public Vector2Int position;
+        public string description;
     }
 
     public class VCoopSaveData
     {
-        public string configurationPath;
+        public uint configId;
         public int coopValue;
         public int currentLevelIndex;
         public bool hasExecutedUpgradeEventThisWeek;
@@ -125,10 +129,11 @@ namespace VTuber.CoopSystem
         public List<VCoopEvent> CoopEvents { get; }
 
         public VScheduleEvent UpgradeEvent { get; private set; }
+        public Sprite Pfp => configuration.Icon;
 
         public static VCooperator Load(VCoopSaveData saveData)
         {
-            var configuration = AssetDatabase.LoadAssetAtPath<VCooperatorConfiguration>(saveData.configurationPath);
+            var configuration = VGameManager.Instance.GetCooperatorConfigurationByID(saveData.configId);
             var cooperator = new VCooperator(configuration);
             cooperator.CurrentLevel = saveData.currentLevelIndex;
             cooperator.CoopValue = saveData.coopValue;
@@ -149,7 +154,7 @@ namespace VTuber.CoopSystem
         {
             return new VCoopSaveData
             {
-                configurationPath = AssetDatabase.GetAssetPath(configuration),
+                configId = configuration.Id,
                 currentLevelIndex = CurrentLevel,
                 coopValue = CoopValue,
                 hasExecutedUpgradeEventThisWeek = _hasExecutedUpgradeEventThisWeek,
@@ -272,7 +277,8 @@ namespace VTuber.CoopSystem
                 {
                     e = e,
                     position = position,
-                    pfp = configuration.Icon
+                    pfp = configuration.Icon,
+                    description = e.description
                 });
             }
 
@@ -329,5 +335,10 @@ namespace VTuber.CoopSystem
         }
 
         #endregion
+
+        public VCoopLevel GetNextLevel()
+        {
+            return configuration.CoopLevels[CurrentLevel + 1];
+        }
     }
 }

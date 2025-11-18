@@ -8,7 +8,9 @@ using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Relic;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 
 public class DialogContent
@@ -30,7 +32,7 @@ public class DialogContent
     {
         foreach (var effect in effects)
         {
-            effect.ApplyEffect(character, null);
+            effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, null, context));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using PrimeTween;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
@@ -19,8 +20,12 @@ namespace VTuber.Consumable
             this.consumable = consumable;
             icon.sprite = consumable.Icon;
 
-            consumableName.text = consumable.Name;
+            consumableName.text = consumable.ConsumableName;
             description.text = consumable.Description;
+            
+            icon.transform.localScale = Vector3.zero;
+            
+            Tween.Scale(icon.transform, Vector3.one, 0.5f, Ease.OutBack);
         }
 
         public void Clear()
@@ -47,6 +52,8 @@ namespace VTuber.Consumable
         {
             consumable.Discard();
             consumable = null;
+            
+            Tween.Scale(icon.transform, Vector3.zero, 0.5f, Ease.InBack);
         }
 
         public bool CanUse()

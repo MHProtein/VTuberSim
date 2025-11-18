@@ -8,9 +8,10 @@ namespace VTuber.Core.RaisingEffect
     {
         public VRaisingSkipEventEffect(VRaisingEffectConfiguration configuration) : base(configuration)
         {
+            shouldPlayAnimation = false;
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSkipEvent, new Dictionary<string, object>());
         }

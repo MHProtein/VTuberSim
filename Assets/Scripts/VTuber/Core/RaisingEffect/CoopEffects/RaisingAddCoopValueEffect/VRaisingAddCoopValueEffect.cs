@@ -16,7 +16,7 @@ namespace VTuber.Core.RaisingEffect
             value = new VUpgradableValue<int>(int.Parse(parameter.Trim()), int.Parse(upgradedParameter.Trim()));
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             character.CooperatorManager.GetCooperator(cooperatorID).AddCoopValue(value.Value);
         }
@@ -32,6 +32,11 @@ namespace VTuber.Core.RaisingEffect
         public override string GetParameter()
         {
             return value.Value.ToString();
+        }
+
+        protected override int GetPreviewValue(VCharacter character)
+        {
+            return value.Value;
         }
     }
 }

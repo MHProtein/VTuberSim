@@ -24,7 +24,7 @@ MonoBehaviour:
   id: 1
   cooperatorName: "\u81F3\u5C0A\u8840\u738B"
   description: "\u59CB\u6E90\u7684\u5976P,\u4F4E\u77EE\u7684\u690D\u7269,\u6613\u7206\u7684\u70AE\u4ED7"
-  icon: {fileID: 21300000, guid: 8aaf071ea4d51a24ea562fdba64ef62f, type: 3}
+  icon: {fileID: 21300000, guid: af6b25b6ff84fe84996a1fc003549500, type: 3}
   baseCoopEvent: 24
   _coopLevels:
   - from: 0

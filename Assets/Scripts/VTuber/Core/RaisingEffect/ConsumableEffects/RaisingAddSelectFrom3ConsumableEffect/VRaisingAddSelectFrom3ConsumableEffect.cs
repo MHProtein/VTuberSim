@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using VTuber.Character;
 using VTuber.Consumable;
 using VTuber.Core.EventCenter;
+using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -15,17 +18,16 @@ namespace VTuber.Core.RaisingEffect
         {
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            _character = character;
-            var consumables = GetRandomConsumables(3, character.LiveType);
+            animationRequest.consumableIDs = GetRandomConsumables(3, character.LiveType).Select(c => c.ConfigId).ToList();
+            animationRequest.animationType = VAnimationType.SelectConsumableFrom3;
+            animationRequest.instigatorType = VInstigatorType.Ignore;
+            base.ApplyEffect(character, messagedict, animationRequest);
+        }
 
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnBeginSelectConsumableFrom3,
-                new Dictionary<string, object>
-                {
-                    { "Consumables", consumables },
-                    { "Action", new Action<VConsumable>(AddConsumable) }
-                });
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
+        {
         }
 
         public override void Upgrade()

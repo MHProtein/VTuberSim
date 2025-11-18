@@ -5,14 +5,13 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 using VTuber.Core.Foundation;
-using VTuber.EventSystem.UI;
-using VTuber.ScheduleSystem.Events;
-// --- Add these new using statements ---
 using VTuber.Core.Managers;
+using VTuber.EventSystem.UI;
 using VTuber.Relic;
 using VTuber.Relic.UI;
-namespace VTuber.Dialogue.UI
+using VTuber.ScheduleSystem.Events;
 
+namespace VTuber.Dialogue.UI
 {
     public class VPhaseEndingOption : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
     {
