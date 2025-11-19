@@ -676,6 +676,7 @@ MonoBehaviour:
     streamEventIDs: 000000000100000002000000
     conditions:
     - conditionType: 0
+      eventType: 0
       idOrName: CAMoney
       operatorType: 3
       targetValue: 100000
