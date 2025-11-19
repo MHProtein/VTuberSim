@@ -202,12 +202,12 @@ namespace VTuber.BattleSystem.UI
                 );
                 return;
             }
-
-            if (isFromCard)
-                VBattleRootEventCenter.Instance.Raise(
-                    VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>()
-                );
+            //
+            // if (isFromCard)
+            //     VBattleRootEventCenter.Instance.Raise(
+            //         VBattleEventKey.OnNotifyBeginDisposeCard,
+            //         new Dictionary<string, object>()
+            //     );
         }
     }
 }

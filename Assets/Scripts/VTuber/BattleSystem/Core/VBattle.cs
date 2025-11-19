@@ -7,6 +7,7 @@ using UnityEngine;
 using VTuber.BattleSystem.BattleAttribute;
 using VTuber.BattleSystem.Buff;
 using VTuber.BattleSystem.Card;
+using VTuber.BattleSystem.Effect;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Character;
 using VTuber.Character.Attributes;
@@ -43,22 +44,24 @@ namespace VTuber.BattleSystem.Core
         public int targetPopularity;
         public uint eventID;
     }
+    
+
 
     public class VBattle : VSingletonMonobehaviour<VBattle>
-    {
+    {    
         [SerializeField] protected VBattleConfiguration configuration;
 
-        protected bool _shouldNextCardPlayTwice;
-        protected bool _shouldRedraw;
+        protected bool shouldNextCardPlayTwice;
+        protected bool shouldRedraw;
 
-        protected VCard _playTwiceCard;
-        protected Dictionary<string, object> _playTwiceMessageDict;
-        protected VCharacterAttributeManager _characterAttributeManager;
+        protected VCard playTwiceCard;
+        protected Dictionary<string, object> playTwiceMessageDict;
+        protected VCharacterAttributeManager characterAttributeManager;
         protected bool paused;
-        protected int _targetPopularity;
-        protected int _extraTargetPopularity;
-        protected int _abilityBonus;
-        protected bool _isPhaseEnding;
+        protected int targetPopularity;
+        protected int extraTargetPopularity;
+        protected int abilityBonus;
+        protected bool isPhaseEnding;
         private int _mainAttributeIndex;
 
         private List<AnimationCurve> _decayCurves;
@@ -71,21 +74,21 @@ namespace VTuber.BattleSystem.Core
 
         private List<VAttributeCondition> _tutorialConditions;
 
-        public int TurnLeft => _turnAttribute.Value;
-        public int PlayLeft => _playLeftAttribute.Value;
+        public int TurnLeft => turnAttribute.Value;
+        public int PlayLeft => playLeftAttribute.Value;
 
         public Dictionary<string, int> CardTypeHistory => cardTypeHistory;
 
         #region Managers
 
-        public VBattleAttributeManager BattleAttributeManager => _battleAttributeManager;
-        protected VBattleAttributeManager _battleAttributeManager;
+        public VBattleAttributeManager BattleAttributeManager => battleAttributeManager;
+        protected VBattleAttributeManager battleAttributeManager;
 
-        public VCardPilesManager CardPilesManager => _cardPilesManager;
-        protected VCardPilesManager _cardPilesManager;
+        public VCardPilesManager CardPilesManager => cardPilesManager;
+        protected VCardPilesManager cardPilesManager;
 
-        public VBuffManager BuffManager => _buffManager;
-        protected VBuffManager _buffManager;
+        public VBuffManager BuffManager => buffManager;
+        protected VBuffManager buffManager;
 
         public VBattleRelicManager BattleRelicManager { get; private set; }
 
@@ -93,9 +96,9 @@ namespace VTuber.BattleSystem.Core
 
         #region Attributes
 
-        protected VBattleTurnAttribute _turnAttribute;
+        protected VBattleTurnAttribute turnAttribute;
 
-        protected VBattlePlayLeftAttribute _playLeftAttribute;
+        protected VBattlePlayLeftAttribute playLeftAttribute;
 
         // private VBattlePopularityAttribute _popularityAttribute;
         // private VBattleParameterAttribute _parameterAttribute;
@@ -105,7 +108,7 @@ namespace VTuber.BattleSystem.Core
         
         private bool _isTutorial;
         private VTipConfig _tipConfig;
-        private uint eventID;
+        private uint _eventID;
         
         protected override void OnEnable()
         {
@@ -177,27 +180,27 @@ namespace VTuber.BattleSystem.Core
                 return new VBattleSaveData();
             var saveData = new VBattleSaveData();
             saveData.battleLookUpIDDistributor = VBattleLookUpTables.Instance.IDDistributor;
-            saveData.attributeManagerSaveData = _battleAttributeManager.Save();
-            saveData.cardPilesManagerSaveData = _cardPilesManager.Save();
-            saveData.buffManagerSaveData = _buffManager.Save();
+            saveData.attributeManagerSaveData = battleAttributeManager.Save();
+            saveData.cardPilesManagerSaveData = cardPilesManager.Save();
+            saveData.buffManagerSaveData = buffManager.Save();
             saveData.battleRelicManagerSaveData = BattleRelicManager.Save();
 
-            saveData.shouldPlayNextCardTwice = _shouldNextCardPlayTwice;
-            saveData.targetPopularity = _targetPopularity;
-            saveData.extraTargetPopularity = _extraTargetPopularity;
-            saveData.abilityBonus = _abilityBonus;
-            saveData.isPhaseEnding = _isPhaseEnding;
+            saveData.shouldPlayNextCardTwice = shouldNextCardPlayTwice;
+            saveData.targetPopularity = targetPopularity;
+            saveData.extraTargetPopularity = extraTargetPopularity;
+            saveData.abilityBonus = abilityBonus;
+            saveData.isPhaseEnding = isPhaseEnding;
             saveData.mainAttributeIndex = _mainAttributeIndex;
             saveData.abilityTurnCounts = _abilityTurnCounts;
             saveData.shouldEndBattle = _shouldEndBattle;
             saveData.battleEnded = _battleEnded;
 
-            if (_playTwiceCard is not null)
-                saveData.playTwiceCard = _playTwiceCard.Id;
+            if (playTwiceCard is not null)
+                saveData.playTwiceCard = playTwiceCard.Id;
 
-            saveData.playTwiceMessageDict = _playTwiceMessageDict;
+            saveData.playTwiceMessageDict = playTwiceMessageDict;
             saveData.cardTypeHistory = cardTypeHistory;
-            saveData.eventID = eventID;
+            saveData.eventID = _eventID;
             return saveData;
         }
 
@@ -212,61 +215,61 @@ namespace VTuber.BattleSystem.Core
             VBattleLookUpTables.Instance.Initialize(saveData);
 
             _mainAttributeIndex = saveData.mainAttributeIndex;
-            _isPhaseEnding = saveData.isPhaseEnding;
+            isPhaseEnding = saveData.isPhaseEnding;
             cardTypeHistory = saveData.cardTypeHistory;
-            _targetPopularity = saveData.targetPopularity;
-            _extraTargetPopularity = saveData.extraTargetPopularity;
+            targetPopularity = saveData.targetPopularity;
+            extraTargetPopularity = saveData.extraTargetPopularity;
             _decayCurves = decayCurves;
-            _abilityBonus = saveData.abilityBonus;
+            abilityBonus = saveData.abilityBonus;
             _abilityTurnCounts = saveData.abilityTurnCounts;
-            _characterAttributeManager = characterAttributeManager;
+            this.characterAttributeManager = characterAttributeManager;
 
-            _shouldNextCardPlayTwice = saveData.shouldPlayNextCardTwice;
+            shouldNextCardPlayTwice = saveData.shouldPlayNextCardTwice;
             _shouldEndBattle = saveData.shouldEndBattle;
             _battleEnded = saveData.battleEnded;
 
             _isTutorial = _tutorialConditions is not null;
             _tipConfig = tipConfig;
-            eventID = saveData.eventID;
+            _eventID = saveData.eventID;
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
             {
-                { "TargetPopularity", _targetPopularity },
-                { "ExtraTargetPopularity", _extraTargetPopularity },
-                { "IsPhaseEnding", _isPhaseEnding },
+                { "TargetPopularity", targetPopularity },
+                { "ExtraTargetPopularity", extraTargetPopularity },
+                { "IsPhaseEnding", isPhaseEnding },
                 { "TipConfig", tipConfig }
             });
 
-            VEventSystemUI.Instance.PlayLoadingAnimation(VDataManager.Instance.GetStreamEventConfigurationByID(eventID), () =>
+            VEventSystemUI.Instance.PlayLoadingAnimation(VDataManager.Instance.GetStreamEventConfigurationByID(_eventID), () =>
             {
-                _battleAttributeManager =
-                    new VBattleAttributeManager(_isPhaseEnding, saveData.attributeManagerSaveData);
-                _buffManager = new VBuffManager(this, saveData.buffManagerSaveData);
-                _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize,
+                battleAttributeManager =
+                    new VBattleAttributeManager(isPhaseEnding, saveData.attributeManagerSaveData);
+                buffManager = new VBuffManager(this, saveData.buffManagerSaveData);
+                cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize,
                     cardLibrary,
                     null, null, saveData.cardPilesManagerSaveData);
 
-                _turnAttribute = _battleAttributeManager.BattleAttributes["BATurn"] as VBattleTurnAttribute;
-                _playLeftAttribute = _battleAttributeManager.BattleAttributes["BAPlayLeft"] as VBattlePlayLeftAttribute;
+                turnAttribute = battleAttributeManager.BattleAttributes["BATurn"] as VBattleTurnAttribute;
+                playLeftAttribute = battleAttributeManager.BattleAttributes["BAPlayLeft"] as VBattlePlayLeftAttribute;
                 _initialized = true;
 
                 if (saveData.playTwiceCard != 0)
-                    _playTwiceCard = _cardPilesManager.GetCardById(saveData.playTwiceCard);
-                _playTwiceMessageDict = saveData.playTwiceMessageDict;
+                    playTwiceCard = cardPilesManager.GetCardById(saveData.playTwiceCard);
+                playTwiceMessageDict = saveData.playTwiceMessageDict;
 
-                _battleAttributeManager.OnEnable();
-                _cardPilesManager.OnEnable();
-                _buffManager.OnEnable();
+                battleAttributeManager.OnEnable();
+                cardPilesManager.OnEnable();
+                buffManager.OnEnable();
 
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
                 {
                     { "IsLoadGame", true },
                     { "TurnLeft", TurnLeft },
-                    { "TargetPopularity", _targetPopularity },
-                    { "ExtraTargetPopularity", _extraTargetPopularity },
-                    { "IsPhaseEnding", _isPhaseEnding },
+                    { "TargetPopularity", targetPopularity },
+                    { "ExtraTargetPopularity", extraTargetPopularity },
+                    { "IsPhaseEnding", isPhaseEnding },
                     { "CharacterAttributeManager", characterAttributeManager },
-                    { "BattleAttributeManager", _battleAttributeManager }
+                    { "BattleAttributeManager", battleAttributeManager }
                 });
                 BattleRelicManager = new VBattleRelicManager(this, saveData.battleRelicManagerSaveData);
                 InitializeTurn(true);
@@ -295,23 +298,23 @@ namespace VTuber.BattleSystem.Core
             VBattleLookUpTables.Instance.Initialize(null);
 
             _mainAttributeIndex = mainAttributeIndex;
-            _isPhaseEnding = isPhaseEnding;
+            this.isPhaseEnding = isPhaseEnding;
             cardTypeHistory = new Dictionary<string, int>();
-            _targetPopularity = targetPopularity;
-            _extraTargetPopularity = extraTargetPopularity;
+            this.targetPopularity = targetPopularity;
+            this.extraTargetPopularity = extraTargetPopularity;
             _decayCurves = decayCurves;
-            _abilityBonus = abilityBonus;
+            this.abilityBonus = abilityBonus;
             _abilityTurnCounts = abilityTurnCounts;
-            _characterAttributeManager = characterAttributeManager;
-            _battleAttributeManager = new VBattleAttributeManager(isPhaseEnding, null);
-            _cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary,
+            this.characterAttributeManager = characterAttributeManager;
+            battleAttributeManager = new VBattleAttributeManager(isPhaseEnding, null);
+            cardPilesManager = new VCardPilesManager(configuration.handSize, configuration.maxHandSize, cardLibrary,
                 tutorialDeck, tutorialTurnHandCards, null);
-            _buffManager = new VBuffManager(this);
+            buffManager = new VBuffManager(this);
             _tutorialConditions = tutorialConditions;
 
-            _battleAttributeManager.OnEnable();
-            _cardPilesManager.OnEnable();
-            _buffManager.OnEnable();
+            battleAttributeManager.OnEnable();
+            cardPilesManager.OnEnable();
+            buffManager.OnEnable();
             _tipConfig = tipConfig;
 
             _isTutorial = _tutorialConditions is not null;
@@ -323,13 +326,13 @@ namespace VTuber.BattleSystem.Core
                     characterAttributeManager);
                 return;
             }
-            eventID = e.EventID;
+            _eventID = e.EventID;
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
             {
-                { "TargetPopularity", _targetPopularity },
-                { "ExtraTargetPopularity", _extraTargetPopularity },
-                { "IsPhaseEnding", _isPhaseEnding },
+                { "TargetPopularity", this.targetPopularity },
+                { "ExtraTargetPopularity", this.extraTargetPopularity },
+                { "IsPhaseEnding", this.isPhaseEnding },
                 { "TipConfig", tipConfig }
             });
             
@@ -347,35 +350,35 @@ namespace VTuber.BattleSystem.Core
             List<VBattleRelic> relics, int mainAttributeIndex, List<int> abilityTurnCounts,
             int targetPopularity, int extraTargetPopularity, VCharacterAttributeManager characterAttributeManager)
         {
-            _battleAttributeManager.AttributesConversion(_characterAttributeManager);
-            _turnAttribute = new VBattleTurnAttribute(initialTurnCount);
-            _playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
+            battleAttributeManager.AttributesConversion(this.characterAttributeManager);
+            turnAttribute = new VBattleTurnAttribute(initialTurnCount);
+            playLeftAttribute = new VBattlePlayLeftAttribute(configuration.defaultPlayPerTurn);
 
             if (!isPhaseEnding)
             {
-                _battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
+                battleAttributeManager.TryGetAttribute("BASingingMultiplier", out var attribute);
                 attribute.SetValue(100, false, false, false);
-                _battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
+                battleAttributeManager.TryGetAttribute("BAGamingMultiplier", out attribute);
                 attribute.SetValue(100, false, false, false);
-                _battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
+                battleAttributeManager.TryGetAttribute("BAChattingMultiplier", out attribute);
                 attribute.SetValue(100, false, false, false);
             }
 
-            _battleAttributeManager.AddAttribute("BATurn", _turnAttribute);
-            _battleAttributeManager.AddAttribute("BAPlayLeft", _playLeftAttribute);
+            battleAttributeManager.AddAttribute("BATurn", turnAttribute);
+            battleAttributeManager.AddAttribute("BAPlayLeft", playLeftAttribute);
 
-            _battleAttributeManager.AddAttribute("BAShield",
+            battleAttributeManager.AddAttribute("BAShield",
                 new VBattleStaminaAttribute(0, VBattleEventKey.OnShieldChange, true));
-            _battleAttributeManager.AddAttribute("BARevenue",
+            battleAttributeManager.AddAttribute("BARevenue",
                 new VBattleStaminaAttribute(0, VBattleEventKey.OnRevenueChange));
 
-            _battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
-            _battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
+            battleAttributeManager.AddAttribute("BAPopularity", new VBattlePopularityAttribute(0));
+            battleAttributeManager.AddAttribute("BAParameter", new VBattleParameterAttribute(0));
 
             BattleRelicManager = new VBattleRelicManager(this, relics);
-            if (_battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
+            if (battleAttributeManager.TryGetAttribute("BAViewerCount", out var viewerCountAttribute))
                 viewerCountAttribute.AddTo(initialViewers, false);
-            _battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
+            battleAttributeManager.InitializeInternalManagers(mainAttributeIndex, abilityTurnCounts);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleBegin, new Dictionary<string, object>
             {
                 { "TurnLeft", TurnLeft },
@@ -383,12 +386,12 @@ namespace VTuber.BattleSystem.Core
                 { "ExtraTargetPopularity", extraTargetPopularity },
                 { "IsPhaseEnding", isPhaseEnding },
                 { "CharacterAttributeManager", characterAttributeManager },
-                { "BattleAttributeManager", _battleAttributeManager }
+                { "BattleAttributeManager", battleAttributeManager }
             });
 
             foreach (var buff in characterAttributeManager.GetBuffs())
                 if (buff is not null)
-                    _buffManager.AddBuff(buff, 1, false, false);
+                    buffManager.AddBuff(buff, 1, false, false);
 
             InitializeTurn(false);
         }
@@ -397,20 +400,17 @@ namespace VTuber.BattleSystem.Core
         {
             if (value == false)
                 VDebug.Log("");
-            _shouldNextCardPlayTwice = value;
+            shouldNextCardPlayTwice = value;
         }
 
         public void NextCardPlayTwice()
         {
             SetShouldNextCardPlayTwice(true);
-
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                new Dictionary<string, object>());
         }
 
         public void RedrawRest()
         {
-            _shouldRedraw = true;
+            shouldRedraw = true;
         }
 
         public void Pause()
@@ -432,37 +432,37 @@ namespace VTuber.BattleSystem.Core
 
             _initialized = false;
             
-            if(_buffManager is not null)
-                _buffManager.Clear();
+            if(buffManager is not null)
+                buffManager.Clear();
             
-            if(_battleAttributeManager is not null)
-                _battleAttributeManager.Clear();
+            if(battleAttributeManager is not null)
+                battleAttributeManager.Clear();
             
             
-            if(_cardPilesManager is not null)
-                _cardPilesManager.Clear();
+            if(cardPilesManager is not null)
+                cardPilesManager.Clear();
 
-            if(_battleAttributeManager is not null)
-                _battleAttributeManager.OnDisable();
+            if(battleAttributeManager is not null)
+                battleAttributeManager.OnDisable();
             
             
-            if(_cardPilesManager is not null)
-                _cardPilesManager.OnDisable();
+            if(cardPilesManager is not null)
+                cardPilesManager.OnDisable();
             
             
-            if(_buffManager is not null)
-                _buffManager.OnDisable();
+            if(buffManager is not null)
+                buffManager.OnDisable();
 
-            _cardPilesManager = null;
-            _buffManager = null;
-            _battleAttributeManager = null;
+            cardPilesManager = null;
+            buffManager = null;
+            battleAttributeManager = null;
         }
 
         private void OnShieldModifierChanged(Dictionary<string, object> messagedict)
         {
-            if (_cardPilesManager is null)
+            if (cardPilesManager is null)
                 return;
-            foreach (var card in _cardPilesManager.HandPile)
+            foreach (var card in cardPilesManager.HandPile)
             {
                 if (card is null)
                     continue;
@@ -472,26 +472,26 @@ namespace VTuber.BattleSystem.Core
 
         private void OnPopularityChange(Dictionary<string, object> messagedict)
         {
-            if (_cardPilesManager is null)
+            if (cardPilesManager is null)
                 return;
             var value = (int)messagedict["NewValue"];
-            if (!_isPhaseEnding)
-                if (value >= _extraTargetPopularity)
+            if (!isPhaseEnding)
+                if (value >= extraTargetPopularity)
                     _shouldEndBattle = true;
         }
 
         private void OnParameterPopularityModifierChanged(Dictionary<string, object> messagedict)
         {
-            if (_cardPilesManager is null)
+            if (cardPilesManager is null)
                 return;
-            foreach (var card in _cardPilesManager.HandPile) card.PreviewPopularity(this, false);
+            foreach (var card in cardPilesManager.HandPile) card.PreviewPopularity(this, false);
         }
 
         private void OnAttributeValueChange(Dictionary<string, object> messagedict)
         {
-            if (_cardPilesManager is null)
+            if (cardPilesManager is null)
                 return;
-            foreach (var card in _cardPilesManager.HandPile)
+            foreach (var card in cardPilesManager.HandPile)
             {
                 if (card is null)
                     continue;
@@ -502,8 +502,8 @@ namespace VTuber.BattleSystem.Core
         private void OnRequestPickCardsFromPile(Dictionary<string, object> messagedict)
         {
             var cardCount = (int)messagedict["CardCount"];
-            if (_cardPilesManager.HandPile.Count + cardCount > configuration.maxHandSize)
-                cardCount = configuration.maxHandSize - _cardPilesManager.HandPile.Count;
+            if (cardPilesManager.HandPile.Count + cardCount > configuration.maxHandSize)
+                cardCount = configuration.maxHandSize - cardPilesManager.HandPile.Count;
 
             if (cardCount <= 0)
                 return;
@@ -516,7 +516,8 @@ namespace VTuber.BattleSystem.Core
         private void OnCardMovedToHandSlot(Dictionary<string, object> messagedict)
         {
             var card = messagedict["Card"] as VCard;
-
+            if (card is null)
+                return;
             card.TestCondition(this);
             card.PreviewPopularity(this, true);
             card.PreviewShield(this, true);
@@ -524,14 +525,14 @@ namespace VTuber.BattleSystem.Core
 
         private void OnBuffValueUpdated(Dictionary<string, object> messagedict)
         {
-            if (_cardPilesManager is null)
+            if (cardPilesManager is null)
                 return;
-            foreach (var card in _cardPilesManager.HandPile)
+            foreach (var card in cardPilesManager.HandPile)
             {
                 if (card is null)
                     continue;
                 if (card.CostType == CostType.Buff)
-                    card.setPlayable?.Invoke(_buffManager.TestCost(card.CostBuffId, card.Cost));
+                    card.setPlayable?.Invoke(buffManager.TestCost(card.CostBuffId, card.Cost));
                 card.TestCondition(this);
                 card.PreviewPopularity(this, false);
             }
@@ -539,9 +540,9 @@ namespace VTuber.BattleSystem.Core
 
         private void OnBuffAdded(Dictionary<string, object> messagedict)
         {
-            if (_cardPilesManager is null)
+            if (cardPilesManager is null)
                 return;
-            foreach (var card in _cardPilesManager.HandPile)
+            foreach (var card in cardPilesManager.HandPile)
             {
                 if (card is null)
                     continue;
@@ -552,9 +553,9 @@ namespace VTuber.BattleSystem.Core
 
         private void OnStaminaChange(Dictionary<string, object> messagedict)
         {
-            if (_cardPilesManager is null)
+            if (cardPilesManager is null)
                 return;
-            foreach (var card in _cardPilesManager.HandPile)
+            foreach (var card in cardPilesManager.HandPile)
             {
                 if (card is null)
                     continue;
@@ -568,8 +569,8 @@ namespace VTuber.BattleSystem.Core
         private void OnSkipTurnClicked(Dictionary<string, object> messagedict)
         {
             EndTurn();
-            if (_battleAttributeManager is not null)
-                _battleAttributeManager.SkipTurnRecoverStamina();
+            if (battleAttributeManager is not null)
+                battleAttributeManager.SkipTurnRecoverStamina();
         }
 
         private void OnPlayTheSecondTime(Dictionary<string, object> messagedict)
@@ -578,14 +579,14 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnCardUsed,
                 new Dictionary<string, object>
                 {
-                    { "Card", _playTwiceCard },
+                    { "Card", playTwiceCard },
                     { "IsPlayTwice", true }
                 });
-            if (_playTwiceCard is not null && _playTwiceMessageDict is not null)
-                ApplyCardEffects(_playTwiceCard, _playTwiceMessageDict);
+            if (playTwiceCard is not null && playTwiceMessageDict is not null)
+                ApplyCardEffects(playTwiceCard, playTwiceMessageDict);
 
-            _playTwiceCard = null;
-            _playTwiceMessageDict = null;
+            playTwiceCard = null;
+            playTwiceMessageDict = null;
         }
 
         private void OnCardMovedToPlayPosition(Dictionary<string, object> messagedict)
@@ -603,12 +604,12 @@ namespace VTuber.BattleSystem.Core
                 if ((bool)value)
                     return;
 
-            _playLeftAttribute.AddTo(-1, false);
+            playLeftAttribute.AddTo(-1, false);
             VDebug.Log("剩余可行动次数: " + PlayLeft);
             if (PlayLeft <= 0)
             {
                 EndTurn();
-                if (_shouldRedraw) _shouldRedraw = false;
+                if (shouldRedraw) shouldRedraw = false;
             }
 
             if (_shouldEndBattle)
@@ -641,7 +642,7 @@ namespace VTuber.BattleSystem.Core
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBegin, new Dictionary<string, object>
             {
                 { "TurnLeft", TurnLeft },
-                { "TurnIndex", _turnAttribute.TurnIndex },
+                { "TurnIndex", turnAttribute.TurnIndex },
                 { "HandSize", configuration.maxHandSize }
             });
 
@@ -658,7 +659,7 @@ namespace VTuber.BattleSystem.Core
         private void EndTurn()
         {
             VDebug.Log("回合结束: " + TurnLeft);
-            _turnAttribute.AddTo(-1, false);
+            turnAttribute.AddTo(-1, false);
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnEndBuffApply, new Dictionary<string, object>
             {
                 { "TurnLeft", TurnLeft }
@@ -678,15 +679,15 @@ namespace VTuber.BattleSystem.Core
         private int CalculateAbilityGain(int popularity)
         {
             var attributeGain = 0;
-            if (popularity >= _extraTargetPopularity)
+            if (popularity >= extraTargetPopularity)
             {
-                attributeGain = _abilityBonus;
+                attributeGain = abilityBonus;
                 return attributeGain;
             }
 
-            if (popularity >= _targetPopularity)
-                attributeGain = Mathf.CeilToInt(_abilityBonus * 0.5f + _abilityBonus * 0.5f *
-                    (popularity - _targetPopularity) / (_extraTargetPopularity - _targetPopularity));
+            if (popularity >= targetPopularity)
+                attributeGain = Mathf.CeilToInt(abilityBonus * 0.5f + abilityBonus * 0.5f *
+                    (popularity - targetPopularity) / (extraTargetPopularity - targetPopularity));
             return attributeGain;
         }
 
@@ -711,17 +712,17 @@ namespace VTuber.BattleSystem.Core
             if (_isDebugScene)
             {
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>());
-                _buffManager.Clear();
-                _battleAttributeManager.Clear();
-                _cardPilesManager.Clear();
+                buffManager.Clear();
+                battleAttributeManager.Clear();
+                cardPilesManager.Clear();
 
-                _battleAttributeManager.OnDisable();
-                _cardPilesManager.OnDisable();
-                _buffManager.OnDisable();
+                battleAttributeManager.OnDisable();
+                cardPilesManager.OnDisable();
+                buffManager.OnDisable();
 
-                _cardPilesManager = null;
-                _buffManager = null;
-                _battleAttributeManager = null;
+                cardPilesManager = null;
+                buffManager = null;
+                battleAttributeManager = null;
                 return;
             }
 
@@ -729,21 +730,21 @@ namespace VTuber.BattleSystem.Core
             var isTutorialConditionsSatisfied = TestTutorialConditions();
 
             _battleEnded = true;
-            _battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
+            battleAttributeManager.TryGetAttribute("BAPopularity", out var battleAttribute);
             var popularityAttribute = battleAttribute as VBattlePopularityAttribute;
-            if (!_isPhaseEnding)
+            if (!isPhaseEnding)
             {
                 var attributeGain = CalculateAbilityGain(popularityAttribute.Value);
 
                 var attributeKey = GetAbilityKey(_mainAttributeIndex);
 
-                _characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
+                characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
                 if (attribute is VAbilityAttribute abilityAttribute) abilityAttribute.AddAbility(attributeGain, true);
             }
             else
             {
                 var attributeKey = GetAbilityKey(_mainAttributeIndex);
-                _characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
+                characterAttributeManager.TryGetAttribute(attributeKey, out var attribute);
                 if (attribute is VAbilityAttribute abilityAttribute)
                     abilityAttribute.AddAbility(
                         (int)_decayCurves[0]
@@ -766,8 +767,8 @@ namespace VTuber.BattleSystem.Core
                     index2 = 1;
                 }
 
-                _characterAttributeManager.TryGetAttribute(GetAbilityKey(index1), out var ability1);
-                _characterAttributeManager.TryGetAttribute(GetAbilityKey(index2), out var ability2);
+                characterAttributeManager.TryGetAttribute(GetAbilityKey(index1), out var ability1);
+                characterAttributeManager.TryGetAttribute(GetAbilityKey(index2), out var ability2);
                 if (_abilityTurnCounts[index1] <= _abilityTurnCounts[index2])
                 {
                     if (ability1 is VAbilityAttribute abilityAttribute1)
@@ -793,39 +794,39 @@ namespace VTuber.BattleSystem.Core
             }
 
             if (isTutorialConditionsSatisfied)
-                _characterAttributeManager.ConvertToCharacterAttributes(_battleAttributeManager.BattleAttributes);
+                characterAttributeManager.ConvertToCharacterAttributes(battleAttributeManager.BattleAttributes);
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleEnd, new Dictionary<string, object>
             {
                 { "IsTutorial", _tutorialConditions != null },
                 { "IsTutorialConditionsSatisfied", isTutorialConditionsSatisfied },
                 { "TurnLeft", TurnLeft },
-                { "CharacterAttributeManager", _characterAttributeManager },
-                { "BattleAttributeManager", _battleAttributeManager },
-                { "ReachedTarget", popularityAttribute.Value >= _targetPopularity },
-                { "ReachedExtraTarget", popularityAttribute.Value >= _extraTargetPopularity }
+                { "CharacterAttributeManager", characterAttributeManager },
+                { "BattleAttributeManager", battleAttributeManager },
+                { "ReachedTarget", popularityAttribute.Value >= targetPopularity },
+                { "ReachedExtraTarget", popularityAttribute.Value >= extraTargetPopularity }
             });
 
             _tipConfig = null;
             _initialized = false;
-            _buffManager.Clear();
-            _battleAttributeManager.Clear();
-            _cardPilesManager.Clear();
+            buffManager.Clear();
+            battleAttributeManager.Clear();
+            cardPilesManager.Clear();
 
-            _battleAttributeManager.OnDisable();
-            _cardPilesManager.OnDisable();
-            _buffManager.OnDisable();
+            battleAttributeManager.OnDisable();
+            cardPilesManager.OnDisable();
+            buffManager.OnDisable();
 
-            _cardPilesManager = null;
-            _buffManager = null;
-            _battleAttributeManager = null;
+            cardPilesManager = null;
+            buffManager = null;
+            battleAttributeManager = null;
         }
 
         private void ReloadBattle(Dictionary<string, object> messagedict)
         {
             var save = VDataPersistenceManager.Instance.LoadTutorialBattleSave();
 
-            InitializeBattle(save.battleSaveData, _decayCurves, _characterAttributeManager, null, _tipConfig);
+            InitializeBattle(save.battleSaveData, _decayCurves, characterAttributeManager, null, _tipConfig);
         }
 
         private bool TestTutorialConditions()
@@ -850,13 +851,13 @@ namespace VTuber.BattleSystem.Core
             switch ((CostType)messagedict["CostType"])
             {
                 case CostType.Stamina:
-                    _battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"]);
+                    battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"]);
                     break;
                 case CostType.TrueStamina:
-                    _battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"], true);
+                    battleAttributeManager.StaminaManager.ApplyCost((int)messagedict["Cost"], true);
                     break;
                 case CostType.Buff:
-                    _buffManager.ApplyCost((uint)messagedict["CostBuffId"], (int)messagedict["Cost"]);
+                    buffManager.ApplyCost((uint)messagedict["CostBuffId"], (int)messagedict["Cost"]);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -867,10 +868,10 @@ namespace VTuber.BattleSystem.Core
         {
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRedrawCards, new Dictionary<string, object>
             {
-                { "ShouldPlayTwice", _shouldNextCardPlayTwice }
+                { "ShouldPlayTwice", shouldNextCardPlayTwice }
             });
 
-            if (_shouldNextCardPlayTwice)
+            if (shouldNextCardPlayTwice)
                 SetShouldNextCardPlayTwice(false);
         }
 
@@ -886,36 +887,53 @@ namespace VTuber.BattleSystem.Core
                 return;
             }
 
-            if (_shouldNextCardPlayTwice)
+            if (shouldNextCardPlayTwice)
             {
-                _playTwiceCard = card;
-                _playTwiceMessageDict = messagedict;
+                playTwiceCard = card;
+                playTwiceMessageDict = messagedict;
             }
 
+            StartCoroutine(ApplyCardEffectsImplement(effects, messagedict));
+        }
+        
+        private IEnumerator ApplyCardEffectsImplement(
+            List<VEffect> effects,
+            Dictionary<string, object> messagedict)
+        {
             var effectApplied = false;
-            var tempShouldPlayTwice = _shouldNextCardPlayTwice;
+            var tempShouldPlayTwice = shouldNextCardPlayTwice;
+
             foreach (var effect in effects)
             {
                 if (!effect.CanApply(this, messagedict))
                     continue;
+
                 effectApplied = true;
                 effect.ApplyEffect(this, 1, true, tempShouldPlayTwice);
+                yield return new WaitForSeconds(0.5f);
             }
-
+            VBattleRootEventCenter.Instance.Raise(
+                VBattleEventKey.OnNotifyBeginDisposeCard,
+                new Dictionary<string, object>()
+            );
             if (!effectApplied)
             {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>());
-                return;
+                yield return null;
             }
 
-            if (!_shouldRedraw) return;
-            _shouldRedraw = false;
+            if (!shouldRedraw)
+                yield break;
+
+            shouldRedraw = false;
+
             if (PlayLeft == 0)
-                return;
+            {
+                yield return null;
+                yield break;
+            }
+
             Redraw();
         }
-
 
     }
 }

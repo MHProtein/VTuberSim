@@ -45,12 +45,12 @@ namespace VTuber.BattleSystem.Effect
                 var value = _addValue.Value;
                 if (MultiplyByLayer > 0.0f)
                     value *= VMathUtils.FloatToInt(layer * MultiplyByLayer);
-                if (value == 0 && isFromCard)
-                {
-                    VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                        new Dictionary<string, object>());
-                    return;
-                }
+                // if (value == 0 && isFromCard)
+                // {
+                //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+                //         new Dictionary<string, object>());
+                //     return;
+                // }
 
                 attribute.AddTo(value, isFromCard, shouldApplyTwice);
             }
