@@ -19,7 +19,7 @@ namespace VTuber.Relic.UI
         public bool IsAdditional { get; private set; }
         
         private bool _isPermanentDescriptionShown = false;
-
+        private VRelicMenu _relicMenu;
         protected override void Awake()
         {
             base.Awake();
@@ -30,6 +30,11 @@ namespace VTuber.Relic.UI
         {
             if (_isPermanentDescriptionShown)
                 return;
+            if (_relicMenu)
+            {
+                _relicMenu.SetDescription(Relic);
+                return;
+            }
             descriptionObject.SetActive(true);
         }
 
@@ -37,6 +42,11 @@ namespace VTuber.Relic.UI
         {
             if (_isPermanentDescriptionShown)
                 return;
+            if (_relicMenu)
+            {
+                _relicMenu.SetDescription(null);
+                return;
+            }
             descriptionObject.SetActive(false);
         }
 
@@ -45,9 +55,10 @@ namespace VTuber.Relic.UI
             IsAdditional = isAdditional;
         }
 
-        public void Initialize(VRelic relic, bool displayValue)
+        public void Initialize(VRelic relic, bool displayValue, VRelicMenu relicMenu = null)
         {
             Relic = relic;
+            _relicMenu = relicMenu;
             if (displayValue && !relic.IsPermanent)
             {
                 layer.gameObject.SetActive(true);

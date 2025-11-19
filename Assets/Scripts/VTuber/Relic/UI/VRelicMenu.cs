@@ -14,6 +14,7 @@ namespace VTuber.Relic.UI
         [SerializeField] public Button showButton;
         [SerializeField] public VClickDetectionPanel detectionPanel;
         [SerializeField] private GameObject descriptionObject;
+        [SerializeField] private TMP_Text nameText;
         [SerializeField] private TMP_Text descriptionText;
         public bool isShowing;
 
@@ -34,8 +35,14 @@ namespace VTuber.Relic.UI
 
         public void SetDescription(VRelic relic)
         {
+            if(relic is null)
+            {
+                descriptionObject.SetActive(false);
+                return;
+            }
             descriptionObject.SetActive(true);
             descriptionText.text = relic.Description;
+            nameText.text = relic.GetRelicName();
         }
     }
 }
