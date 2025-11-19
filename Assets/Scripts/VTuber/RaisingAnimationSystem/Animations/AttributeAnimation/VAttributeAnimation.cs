@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
@@ -43,6 +44,9 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
         [LabelText("初始缩放值")]
         [SerializeField] private float initScale = 1.5f;
 
+        [FoldoutGroup("音效")] [LabelText("出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("消失音效")] [SerializeField] private VAudioPlayInfo disappearAudio;
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
@@ -59,6 +63,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
 
             sequence
                 // pop animation
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.Scale(infoTransform, popScale, fadeDuration, Ease.OutElastic))
 
                 // fade in + move at the same time
@@ -70,12 +75,15 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
                 .ChainDelay(holdDuration)
 
                 // fade out
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(disappearAudio))
                 .Chain(Tween.Alpha(icon, 0, fadeOutDuration))
                 .Group(Tween.Alpha(valueText, 0, fadeOutDuration))
 
                 // final callback
                 .ChainCallback(() => onComplete?.Invoke());
 
+            
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             // light rotation
             Tween.LocalEulerAngles(
                 light,

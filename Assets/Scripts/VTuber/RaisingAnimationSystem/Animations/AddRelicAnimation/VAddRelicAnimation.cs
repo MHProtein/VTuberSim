@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Managers;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
@@ -77,6 +78,10 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
         [LabelText("名称透明度隐藏时长")]
         [SerializeField] private float relicNameHideDuration = 0.5f;
 
+        [FoldoutGroup("音效")] [LabelText("遗物出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("描述框出现音效")] [SerializeField] private VAudioPlayInfo descriptionAppearAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("移动到库音效")] [SerializeField] private VAudioPlayInfo moveShrinkAudio;
 
         private Action _onComplete;
         private Action _applyEffect;
@@ -107,12 +112,14 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
             _sequence = Sequence.Create();
 
             _sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.LocalPosition(relicImage.transform, Vector3.zero, relicEnterDuration, Ease.OutBounce))
                 .Group(Tween.Alpha(relicImage, 1, relicEnterAlphaDuration))
                 .Group(Tween.Scale(relicImage.transform, Vector3.one, relicEnterScaleDuration, Ease.OutBounce))
                 .Group(Tween.Alpha(relicNameText, 1, relicNameFadeDuration))
                 .Group(Tween.Custom(relicNameText.characterSpacing, 0, nameSpacingDuration,
                     v => relicNameText.characterSpacing = v))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(descriptionAppearAudio))
                 .Chain(Tween.LocalPosition(descriptionObject, descriptionPosition.localPosition, descriptionMoveDuration, descriptionMoveEase))
                 .ChainCallback(() => { addRelicButton.interactable = true; });
 
@@ -128,6 +135,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
                 )
             );
 
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             // rotating light
             Tween.LocalEulerAngles(
                 light,
@@ -150,6 +158,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
             relicImage.transform.SetParent(relicLibraryPosition);
 
             sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
                 .Chain(Tween.LocalPosition(descriptionObject, descriptionInitPosition.localPosition, descriptionExitDuration, Ease.OutCubic))
                 .Group(Tween.Scale(relicImage.transform, Vector3.zero, relicShrinkDuration, Ease.InCubic))
                 .Group(Tween.LocalPosition(relicImage.transform, Vector3.zero, relicMoveToLibraryDuration, Ease.InCubic))
