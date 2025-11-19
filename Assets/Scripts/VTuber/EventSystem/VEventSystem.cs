@@ -80,6 +80,7 @@ namespace VTuber.EventSystem
         protected override void Awake()
         {
             base.Awake();
+            dialogueSystem.HideMe();
         }
 
         protected override void OnEnable()
@@ -192,7 +193,6 @@ namespace VTuber.EventSystem
                 _character = character;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
-                dialogueSystem.ShowMe(character);
                 if (!loaded)
                 {
                     dialogueSystem.ContinueDialog();
@@ -201,6 +201,10 @@ namespace VTuber.EventSystem
                 }
                 
                 _loaded = false;
+            },
+            () =>
+            {
+                dialogueSystem.ShowMe(character);
             });
         }
 
@@ -268,8 +272,6 @@ namespace VTuber.EventSystem
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck,
                 tutorialTurnHandCards, tipConfig);
-            _character.ConsumableManager.SetBattle(battle);
-            VRaisingUI.Instance.SetConsumableToBattle();
         }
 
         private void OnDialogueComplete(Dialog dialog)

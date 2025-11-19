@@ -101,6 +101,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
                 cardUI.SetCard(request.cards.First());
                 haloImage.sprite = VUIUtils.Instance.GetHaloSprite((int)cardUI.Card.Rarity);
             }
+
+            confirmButton.interactable = false;
             _sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.Scale(cardUI.transform, Vector3.one * appearScale, appearDuration, Ease.OutBack))

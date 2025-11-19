@@ -32,9 +32,7 @@ namespace VTuber.Dialogue.UI
 
         private Action _closePhaseEndingSelectionMenuAction;
         private Action _closeCardLibrary;
-        private Action _CloseSelectFrom3Menu;
-        private Action _CloseSelectFrom3ConsumablesMenu;
-        private Action onVideoFinish;
+        private Action _onVideoFinish;
         private bool _isFullScreen;
 
         protected override void Awake()
@@ -68,20 +66,20 @@ namespace VTuber.Dialogue.UI
 
         private void OnLoadingEnded()
         {
-            onVideoFinish?.Invoke();
-            onVideoFinish = null;
+            _onVideoFinish?.Invoke();
+            _onVideoFinish = null;
         }
 
-        public void PlayLoadingAnimation(VDialogueEvent e, Action onFinish)
+        public void PlayLoadingAnimation(VDialogueEvent e, Action onFinish, Action onBackgroundFilled = null)
         {
-            loadingAnimation.PlayAnimation(e).OnComplete(OnLoadingEnded);
-            onVideoFinish = onFinish;
+            _onVideoFinish = onFinish;
+            loadingAnimation.PlayAnimation(e, onBackgroundFilled).OnComplete(OnLoadingEnded);
         }
         
-        public void PlayLoadingAnimation(VStreamEventConfiguration e, Action onFinish)
+        public void PlayLoadingAnimation(VStreamEventConfiguration e, Action onFinish, Action onBackgroundFilled = null)
         {
-            loadingAnimation.PlayAnimation(e).OnComplete(OnLoadingEnded);
-            onVideoFinish = onFinish;
+            _onVideoFinish = onFinish;
+            loadingAnimation.PlayAnimation(e, onBackgroundFilled).OnComplete(OnLoadingEnded);
         }
 
         public void InitializePhaseEndingSelectionMenu(List<VStreamEvent> endings, Action confirmAction)
@@ -95,12 +93,6 @@ namespace VTuber.Dialogue.UI
         {
             phaseEndingSelectionMenu.gameObject.SetActive(false);
             _closePhaseEndingSelectionMenuAction?.Invoke();
-        }
-
-        public void CloseSelectFrom3ConsumablesMenu()
-        {
-            selectFrom3ConsumablesMenu.gameObject.SetActive(false);
-            _CloseSelectFrom3ConsumablesMenu?.Invoke();
         }
 
         public void OpenEventUI()

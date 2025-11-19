@@ -8571,6 +8571,34 @@ MonoBehaviour:
   haloSpinDuration: 8
   collectMoveDuration: 0.5
   collectScaleDuration: 0.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  flipAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  collectAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &162412284
 GameObject:
   m_ObjectHideFlags: 0
@@ -13507,7 +13535,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1715785173}
   m_Father: {fileID: 1701453081}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -13543,7 +13572,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1231823965, guid: 5bcb918d8041fcc438b89acdc9bf84c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f17dea9671b415243b7b7c2943241405, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -30415,6 +30444,34 @@ MonoBehaviour:
   cardPulseDuration: 3
   cardPulseScale: 1.8
   haloSpinDuration: 8
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  upgradeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  confirmAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &552402444
 GameObject:
   m_ObjectHideFlags: 0
@@ -44873,6 +44930,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ui: {fileID: 1701453080}
   backgroundImage: {fileID: 223485139}
+  tiles: {fileID: 1715785175}
   eventImage: {fileID: 766622904}
   leftCorner: {fileID: 1621864185}
   rightCorner: {fileID: 1704729375}
@@ -44880,6 +44938,7 @@ MonoBehaviour:
   middlePosition: {fileID: 863244286}
   finalPosition: {fileID: 1122453058}
   bgFillDuration: 0.5
+  noIconDelay: 1.5
   bgFadeOutDuration: 0.5
   moveToMiddleDuration: 0.25
   moveToFinalDuration: 0.5
@@ -49114,6 +49173,34 @@ MonoBehaviour:
   relicShrinkDuration: 0.5
   relicMoveToLibraryDuration: 0.5
   relicNameHideDuration: 0.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  descriptionAppearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveShrinkAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!43 &912112159
 Mesh:
   m_ObjectHideFlags: 0
@@ -59207,6 +59294,34 @@ MonoBehaviour:
   relicShrinkDuration: 0.5
   relicMoveToLibraryDuration: 0.5
   relicNameHideDuration: 0.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  descriptionAppearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveShrinkAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!114 &936156062 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7711524148099908043, guid: cd50b8af38f87f54f884443287f2634d, type: 3}
@@ -76839,6 +76954,62 @@ MonoBehaviour:
   arrowFillDuration: 0.25
   upgradeLevelFadeDuration: 0.25
   spacingAnimDuration: 0.5
+  moveInfoAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  upgradeTextAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveInfoPhase2Audio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  currentLevelMoveAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  arrowFillAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  upgradeLevelFadeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  spacingAnimAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &1264999962
 GameObject:
   m_ObjectHideFlags: 0
@@ -90297,6 +90468,34 @@ MonoBehaviour:
   moveEase: 3
   cardHoldDelay: 1
   finalRemoveDuration: 0.25
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  removeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  finalRemoveAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!114 &1497449583 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 994104212059979541, guid: cd50b8af38f87f54f884443287f2634d, type: 3}
@@ -96237,8 +96436,8 @@ RectTransform:
   m_GameObject: {fileID: 1621864184}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 833661764}
   - {fileID: 1959008087}
@@ -98130,6 +98329,34 @@ MonoBehaviour:
   smokeExpandDuration: 1
   smokeFadeOutDuration: 0.15
   smokeFinishDelay: 0.25
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  removeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  smokeAppearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  smokeFadeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &1673317506
 GameObject:
   m_ObjectHideFlags: 0
@@ -99779,8 +100006,8 @@ RectTransform:
   m_GameObject: {fileID: 1704729374}
   m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1988426197}
   - {fileID: 237593375}
@@ -100382,6 +100609,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 308e904e3f33207489a2c15b9b0b297b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1715785172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1715785173}
+  - component: {fileID: 1715785174}
+  - component: {fileID: 1715785175}
+  m_Layer: 5
+  m_Name: Tiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1715785173
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715785172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 223485137}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1715785174
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715785172}
+  m_CullTransparentMesh: 1
+--- !u!114 &1715785175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715785172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 10828b2c4d709aa49afa01bbde6e3b9a, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 1
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &1716572771 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5465086426813099525, guid: cd50b8af38f87f54f884443287f2634d, type: 3}
@@ -101021,20 +101323,6 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     delay: 0
-  haloAppearAudio:
-    soundName: 
-    channel: 1
-    volume: 1
-    pitch: 1
-    loop: 0
-    delay: 0
-  pulseAudio:
-    soundName: 
-    channel: 1
-    volume: 1
-    pitch: 1
-    loop: 0
-    delay: 0
   haloSpinAudio:
     soundName: 
     channel: 1
@@ -101043,20 +101331,6 @@ MonoBehaviour:
     loop: 0
     delay: 0
   moveShrinkAudio:
-    soundName: 
-    channel: 1
-    volume: 1
-    pitch: 1
-    loop: 0
-    delay: 0
-  movePosAudio:
-    soundName: 
-    channel: 1
-    volume: 1
-    pitch: 1
-    loop: 0
-    delay: 0
-  haloFadeAudio:
     soundName: 
     channel: 1
     volume: 1
@@ -130826,6 +131100,27 @@ MonoBehaviour:
   fadeOutDuration: 0.1
   lightSpinDuration: 8
   initScale: 1.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  disappearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!114 &4610553143291906436
 MonoBehaviour:
   m_ObjectHideFlags: 0
