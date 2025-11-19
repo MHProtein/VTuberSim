@@ -26,6 +26,9 @@ MonoBehaviour:
   liveType: C
   initialCardId: 67
   initialRelicId: 11
+  fillingEventIDDuration1: 75
+  fillingEventIDDuration2: 76
+  fillingEventIDDuration3: 77
   staminaInitialValue: 50
   staminaMinValue: 0
   staminaMaxValue: 50
@@ -33,27 +36,7 @@ MonoBehaviour:
   pressureInitialValue: 3
   pressureMinValue: 1
   pressureMaxValue: 5
-  pressureEffects:
-  - id: 3
-    parameter: 2
-    upgradedParameter: 
-    level: 0
-  - id: 3
-    parameter: 1
-    upgradedParameter: 
-    level: 0
-  - id: 3
-    parameter: 0
-    upgradedParameter: 
-    level: 0
-  - id: 3
-    parameter: -1
-    upgradedParameter: 
-    level: 0
-  - id: 3
-    parameter: -2
-    upgradedParameter: 
-    level: 0
+  pressureEffects: []
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100
   singingAbilityMinValue: 0
@@ -174,6 +157,3 @@ MonoBehaviour:
   skipTurnStaminaRecoveryMinValue: 0
   skipTurnStaminaRecoveryMaxValue: 100
   skipTurnStaminaRecoveryConfiguration: {fileID: 11400000, guid: e2f2234de9cc3ea4bba5ddab3a15de3e, type: 2}
-  fillingEventIDDuration1: 3
-  fillingEventIDDuration2: 4
-  fillingEventIDDuration3: 5
