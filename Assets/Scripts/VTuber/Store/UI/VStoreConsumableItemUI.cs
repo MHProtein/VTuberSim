@@ -18,7 +18,7 @@ namespace VTuber.Store.UI
         {
             var consumableSlot = slot as VStoreConsumableSlot;
             consumableUI.SetConsumable(consumableSlot.consumable);
-            nameText.text = consumableSlot.consumable.Name;
+            nameText.text = consumableSlot.consumable.ConsumableName;
             descriptionText.text = consumableSlot.consumable.Description;
             base.SetSlot(slot, character);
             AreSlotsFull(!this.character.ConsumableManager.CanAddConsumable());

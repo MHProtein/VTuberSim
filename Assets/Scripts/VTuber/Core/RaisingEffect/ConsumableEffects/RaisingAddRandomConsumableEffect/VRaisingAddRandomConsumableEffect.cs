@@ -4,33 +4,33 @@ using System.Linq;
 using VTuber.Character;
 using VTuber.Consumable;
 using VTuber.Core.EventCenter;
+using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
     public class VRaisingAddRandomConsumableEffect : VRaisingConsumableEffect
     {
         private VCharacter _character;
+        private VConsumable _consumable;
 
         public VRaisingAddRandomConsumableEffect(VRaisingConsumableEffectConfiguration configuration) : base(
             configuration)
         {
         }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            _character = character;
-            var consumable = GetRandomConsumables(1, character.LiveType).FirstOrDefault();
-            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnShowAddConsumable,
-                new Dictionary<string, object>
-                {
-                    { "Consumable", consumable },
-                    { "Action", new Action<VConsumable>(AddConsumable) }
-                });
+            _consumable = GetRandomConsumables(1, character.LiveType).FirstOrDefault();
+            animationRequest.animationType = VAnimationType.AddConsumable;
+            animationRequest.consumableIDs = new List<uint>(){ _consumable.ConfigId };
+            animationRequest.returnable = true;
+            base.ApplyEffect(character, messagedict, animationRequest);
         }
 
-        public void AddConsumable(VConsumable consumable)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
-            _character.ConsumableManager.AddConsumable(consumable);
+            _character.ConsumableManager.AddConsumable(_consumable);
         }
 
         public override void Upgrade()

@@ -1715,9 +1715,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5920070138063705945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2ee19ed2df9481392e03c4225ec42b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 089ec9fea0004be08932769eed9eac8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   minAlpha: 0.3
   maxAlpha: 1
   speed: 2

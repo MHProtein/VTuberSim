@@ -15,7 +15,7 @@ namespace VTuber.BattleSystem.Effect
         protected bool _isUpgraded;
 
         protected int _layer;
-        //public string Icon => configuration.icon;
+        //public string Icon => configuration.instigatorIcon;
         //public string UpgradeIcon => configuration.upgradeIcon;
 
         public List<VEffectCondition> conditions;

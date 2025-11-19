@@ -12,8 +12,10 @@ using VTuber.Character;
 using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Core.Managers;
 using VTuber.Dialogue.UI;
 using VTuber.Relic;
+using VTuber.ScheduleSystem.Events.DialogueEvent;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.BattleSystem.Core
@@ -39,6 +41,7 @@ namespace VTuber.BattleSystem.Core
 
         public bool shouldPlayNextCardTwice;
         public int targetPopularity;
+        public uint eventID;
     }
 
     public class VBattle : VSingletonMonobehaviour<VBattle>
@@ -102,6 +105,7 @@ namespace VTuber.BattleSystem.Core
         
         private bool _isTutorial;
         private VTipConfig _tipConfig;
+        private uint eventID;
         
         protected override void OnEnable()
         {
@@ -193,9 +197,11 @@ namespace VTuber.BattleSystem.Core
 
             saveData.playTwiceMessageDict = _playTwiceMessageDict;
             saveData.cardTypeHistory = cardTypeHistory;
+            saveData.eventID = eventID;
             return saveData;
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public void InitializeBattle(VBattleSaveData saveData, List<AnimationCurve> decayCurves,
             VCharacterAttributeManager characterAttributeManager,
             VCardLibrary cardLibrary, VTipConfig tipConfig)
@@ -221,6 +227,7 @@ namespace VTuber.BattleSystem.Core
 
             _isTutorial = _tutorialConditions is not null;
             _tipConfig = tipConfig;
+            eventID = saveData.eventID;
             
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
             {
@@ -230,7 +237,7 @@ namespace VTuber.BattleSystem.Core
                 { "TipConfig", tipConfig }
             });
 
-            VEventSystemUI.Instance.PlayVideo(() =>
+            VEventSystemUI.Instance.PlayLoadingAnimation(VDataManager.Instance.GetStreamEventConfigurationByID(eventID), () =>
             {
                 _battleAttributeManager =
                     new VBattleAttributeManager(_isPhaseEnding, saveData.attributeManagerSaveData);
@@ -266,7 +273,7 @@ namespace VTuber.BattleSystem.Core
             });
         }
 
-        public virtual void InitializeBattle(bool isDebugScene, bool isPhaseEnding,
+        public virtual void InitializeBattle(bool isDebugScene, VDialogueEvent e, bool isPhaseEnding,
             VCharacterAttributeManager characterAttributeManager,
             VCardLibrary cardLibrary, int initialTurnCount, int mainAttributeIndex, List<int> abilityTurnCounts,
             List<AnimationCurve> decayCurves,
@@ -316,6 +323,7 @@ namespace VTuber.BattleSystem.Core
                     characterAttributeManager);
                 return;
             }
+            eventID = e.EventID;
 
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
             {
@@ -324,8 +332,8 @@ namespace VTuber.BattleSystem.Core
                 { "IsPhaseEnding", _isPhaseEnding },
                 { "TipConfig", tipConfig }
             });
-
-            VEventSystemUI.Instance.PlayVideo(() =>
+            
+            VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
                 _initialized = true;
                 InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
@@ -423,13 +431,27 @@ namespace VTuber.BattleSystem.Core
             });
 
             _initialized = false;
-            _buffManager.Clear();
-            _battleAttributeManager.Clear();
-            _cardPilesManager.Clear();
+            
+            if(_buffManager is not null)
+                _buffManager.Clear();
+            
+            if(_battleAttributeManager is not null)
+                _battleAttributeManager.Clear();
+            
+            
+            if(_cardPilesManager is not null)
+                _cardPilesManager.Clear();
 
-            _battleAttributeManager.OnDisable();
-            _cardPilesManager.OnDisable();
-            _buffManager.OnDisable();
+            if(_battleAttributeManager is not null)
+                _battleAttributeManager.OnDisable();
+            
+            
+            if(_cardPilesManager is not null)
+                _cardPilesManager.OnDisable();
+            
+            
+            if(_buffManager is not null)
+                _buffManager.OnDisable();
 
             _cardPilesManager = null;
             _buffManager = null;
@@ -622,12 +644,15 @@ namespace VTuber.BattleSystem.Core
                 { "TurnIndex", _turnAttribute.TurnIndex },
                 { "HandSize", configuration.maxHandSize }
             });
-            
-            if(!isLoad && !_isTutorial)
+
+            if (!isLoad)
+            {
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnTurnBeginBuffApply,
                     new Dictionary<string, object>());
+            }
+            
             if (!_isDebugScene)
-                VDataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGame(VSavePointType.Battle);
         }
 
         private void EndTurn()

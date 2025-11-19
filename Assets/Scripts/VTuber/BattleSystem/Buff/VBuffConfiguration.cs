@@ -23,16 +23,17 @@ namespace VTuber.BattleSystem.Buff
         public const int Stackable = 4;
         public const int Latency = 5;
         public const int Icon = 6;
-        public const int Effect1 = 7;
-        public const int E1Param = 8;
-        public const int Effect2 = 9;
-        public const int E2Param = 10;
-        public const int Effect3 = 11;
-        public const int E3Param = 12;
-        public const int Effect4 = 13;
-        public const int E4Param = 14;
-        public const int Effect5 = 15;
-        public const int E5Param = 16;
+        public const int ReduceLayerInFirstTurn = 7; // 第一回合减少层数
+        public const int Effect1 = 8;
+        public const int E1Param = 9;
+        public const int Effect2 = 10;
+        public const int E2Param = 11;
+        public const int Effect3 = 12;
+        public const int E3Param = 13;
+        public const int Effect4 = 14;
+        public const int E4Param = 15;
+        public const int Effect5 = 16;
+        public const int E5Param = 17;
     }
 
     //Buff 的配置数据通过 VBuffConfiguration 存储，并延迟用于创建实例
@@ -41,6 +42,7 @@ namespace VTuber.BattleSystem.Buff
         public string buffName;
         public BuffType buffType;
         public string description;
+        public bool shouldFirstTurnDecrementLayer;
 
         public List<VEffectItem> effectItems;
         public Sprite icon;
@@ -59,7 +61,8 @@ namespace VTuber.BattleSystem.Buff
             effectItems = new List<VEffectItem>();
             latency = Convert.ToInt32(row.Columns[VBuffHeaderIndex.Latency].Value);
             icon = VResourcesManager.Instance.TryGetSprite(row.Columns[VBuffHeaderIndex.Icon].Value.Trim());
-
+            shouldFirstTurnDecrementLayer = Convert.ToInt32(row.Columns[VBuffHeaderIndex.ReduceLayerInFirstTurn].Value) == 1;
+            
             // 每两个字段为一组：EffectID + 参数
             for (var i = VBuffHeaderIndex.Effect1; i <= VBuffHeaderIndex.E5Param; i += 2)
             {

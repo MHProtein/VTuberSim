@@ -83,11 +83,11 @@ namespace VTuber.BattleSystem.Core
                 {
                     isTutorial = _isTutorial,
                     isFirstTurn = _isFirstTurn,
-                    Deck = new List<uint>(Deck.Select(card => card.Id).ToList()) ,
-                    DrawPile = new List<uint>(DrawPile.Select(card => card.Id).ToList()),
-                    DiscardPile = new List<uint>(DiscardPile.Select(card => card.Id).ToList()),
-                    HandPile = new List<uint>(HandPile.Select(card => card.Id).ToList()),
-                    ExhaustPile = new List<uint>(ExhaustPile.Select(card => card.Id).ToList()),
+                    Deck = new List<uint>(Deck.Select(card => card.configID).ToList()) ,
+                    DrawPile = new List<uint>(DrawPile.Select(card => card.configID).ToList()),
+                    DiscardPile = new List<uint>(DiscardPile.Select(card => card.configID).ToList()),
+                    HandPile = new List<uint>(HandPile.Select(card => card.configID).ToList()),
+                    ExhaustPile = new List<uint>(ExhaustPile.Select(card => card.configID).ToList()),
                     tutorialTurnHandCards = _tutorialTurnHandCards
                 };
             return new VCardPilesManagerSaveData
@@ -111,10 +111,10 @@ namespace VTuber.BattleSystem.Core
             if (_isTutorial)
             {
                 Deck.AddRange(saveData.Deck.Select(VDataManager.Instance.CreateCardByID));
-                DrawPile.AddRange(saveData.DrawPile.Select(GetCardByIDFromDeck));
-                DiscardPile.AddRange(saveData.DiscardPile.Select(GetCardByIDFromDeck));
-                HandPile.AddRange(saveData.HandPile.Select(GetCardByIDFromDeck));
-                ExhaustPile.AddRange(saveData.ExhaustPile.Select(GetCardByIDFromDeck));
+                DrawPile.AddRange(saveData.DrawPile.Select(VDataManager.Instance.CreateCardByID));
+                DiscardPile.AddRange(saveData.DiscardPile.Select(VDataManager.Instance.CreateCardByID));
+                HandPile.AddRange(saveData.HandPile.Select(VDataManager.Instance.CreateCardByID));
+                ExhaustPile.AddRange(saveData.ExhaustPile.Select(VDataManager.Instance.CreateCardByID));
                 _tutorialTurnHandCards = saveData.tutorialTurnHandCards;
                 return;
             }

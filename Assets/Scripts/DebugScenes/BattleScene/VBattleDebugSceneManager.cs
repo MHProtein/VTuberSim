@@ -117,7 +117,7 @@ namespace DebugScenes.BattleScene
             abilityTurnCounts.Add(avgTurn);
             abilityTurnCounts.Add(avgTurn);
             abilityTurnCounts.Add(initialTurnCount - 2 * avgTurn);
-            battle.InitializeBattle(true, isPhaseEnding, Character.AttributeManager, Character.CardLibrary,
+            battle.InitializeBattle(true, null, isPhaseEnding, Character.AttributeManager, Character.CardLibrary,
                 initialTurnCount,
                 0, abilityTurnCounts, null, 1000, 1000, 0, 0, relics);
         }

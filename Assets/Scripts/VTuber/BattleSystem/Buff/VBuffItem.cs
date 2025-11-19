@@ -23,6 +23,11 @@ namespace VTuber.BattleSystem.Buff
         private bool _isFirstTurn = true;
         public VBuff buff;
 
+        public int Value { get; private set; }
+
+        public uint Id { get; private set; }
+        public uint ConfigId => buff.ConfigId;
+
         public VBuffItem(VBuff buff, int value)
         {
             this.buff = buff;
@@ -44,12 +49,7 @@ namespace VTuber.BattleSystem.Buff
                 buff.AddEffect(effect);
             }
         }
-
-        public int Value { get; private set; }
-
-        public uint Id { get; private set; }
-        public uint ConfigId => buff.ConfigId;
-
+        
         public VBuffSaveData Save()
         {
             var modifierEffectSaveDatas = new List<VModifierEffectSaveData>();
@@ -105,12 +105,13 @@ namespace VTuber.BattleSystem.Buff
                 _isFirstTurn = false;
                 // 如果该Buff没有在第一回合生效的效果，则跳过首次递减
                 var shouldSkipDecrement = true;
-                foreach (var effect in buff.Effects)
-                    if (effect.Triggered)
-                    {
-                        shouldSkipDecrement = false;
-                        break;
-                    }
+                if(buff.shouldFirstTurnDecrementLayer)
+                    foreach (var effect in buff.Effects)
+                        if (effect.Triggered)
+                        {
+                            shouldSkipDecrement = false;
+                            break;
+                        }
 
                 if (shouldSkipDecrement)
                 {

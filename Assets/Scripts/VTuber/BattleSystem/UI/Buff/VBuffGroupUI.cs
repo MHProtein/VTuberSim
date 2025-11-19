@@ -38,6 +38,7 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
         }
 
         protected override void OnDisable()
@@ -47,16 +48,27 @@ namespace VTuber.BattleSystem.UI
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffRemoved, OnBuffRemoved);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBuffValueUpdated, OnBuffValueUpdated);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleUIInitialize, OnBattleUIInitialize);
         }
-
+        
         public void OpenBuffDetails()
         {
             _isDetailsOpen = !_isDetailsOpen;
             buffDetailsObject.SetActive(_isDetailsOpen);
             clickDetectionPanel.gameObject.SetActive(_isDetailsOpen);
         }
-
+        
+        private void OnBattleUIInitialize(Dictionary<string, object> messagedict)
+        {
+            Clear();
+        }
+        
         private void OnBattleEnd(Dictionary<string, object> msg)
+        {
+            Clear();
+        }
+
+        public void Clear()
         {
             foreach (var ui in _buffUIs)
             {

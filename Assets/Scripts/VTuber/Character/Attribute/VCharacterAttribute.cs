@@ -29,14 +29,14 @@ namespace VTuber.Character.Attribute
         public VCharacterAttribute(VCharacterAttributeConfiguration configuration,
             int initialValue, VRaisingEventKey eventKey = VRaisingEventKey.Default,
             int maxValue = int.MaxValue, int minValue = 0, bool isPercentage = false,
-            bool shouldBattleAttributeConvertTo = true)
+            bool shouldBattleAttributeConvertTo = true, bool shouldSetValue = true)
         {
             _configuration = configuration;
             _minValue = minValue;
             _maxValue = maxValue;
             _eventKey = eventKey;
             IsPercentage = isPercentage;
-            SetValue(initialValue, false);
+            if(shouldSetValue) SetValue(initialValue, false);
             ShouldBattleAttributeConvertTo = shouldBattleAttributeConvertTo;
             gainPointsModifier = new VValueModifier<int>(0);
             gainRateModifier = new VValueModifier<float>(1.0f);
@@ -176,7 +176,7 @@ namespace VTuber.Character.Attribute
             SendEvent(Value, delta, shouldPlaySFX);
         }
 
-        public void SendEvent(int newValue, int delta, bool shouldPlaySFX)
+        protected void SendEvent(int newValue, int delta, bool shouldPlaySFX)
         {
             var messageDict = new Dictionary<string, object>
             {
@@ -185,7 +185,12 @@ namespace VTuber.Character.Attribute
                 { "Delta", delta },
                 { "shouldPlaySFX", shouldPlaySFX }
             };
+            AddAdditionalEventParameters(messageDict);
             VRaisingRootEventCenter.Instance.Raise(_eventKey, messageDict);
+        }
+        
+        protected virtual void AddAdditionalEventParameters(Dictionary<string, object> messageDict)
+        {
         }
 
         public void AddMaxValue(int value)

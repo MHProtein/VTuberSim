@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI.VCharacterSelection;
 
 namespace VTuber.BattleSystem.Core.UI.VCharacterSelection
 {

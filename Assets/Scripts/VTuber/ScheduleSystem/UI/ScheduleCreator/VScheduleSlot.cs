@@ -10,12 +10,8 @@ using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
 
-
-
-
 namespace VTuber.ScheduleSystem.UI
 {
-    
     public class VScheduleSlotSaveData
     {
         public string coopEventIconName;
@@ -38,13 +34,12 @@ namespace VTuber.ScheduleSystem.UI
         [Tooltip("The UI element to show when a scheduling condition is met during drag")]
         [SerializeField] private GameObject conditionHighlight;
         
-        
-        
         private int _allowedEventID;
         private List<VRaisingEffect> _coopEventEffects;
         private Sprite _coopEventIcon;
         private int _coopEventID;
         private List<VCoopEvent.VCoopEventType> _coopEventTypes;
+        private string _coopEventDescription;
         private Vector2Int _coordination;
         private int _eventID;
 
@@ -90,10 +85,12 @@ namespace VTuber.ScheduleSystem.UI
             if (saveData.coopEventID == -1)
                 return;
             _coopEventIcon = VResourcesManager.Instance.TryGetSprite(saveData.coopEventIconName);
+            var coopEvent = VDataManager.Instance.GetCoopEventByID((uint)saveData.coopEventID);
             SetCoopEvent(new VCoopEventItem
             {
-                e = VDataManager.Instance.GetCoopEventByID((uint)saveData.coopEventID),
-                pfp = _coopEventIcon
+                e = coopEvent,
+                pfp = _coopEventIcon,
+                description = coopEvent.description,
             });
         }
 
@@ -141,6 +138,7 @@ namespace VTuber.ScheduleSystem.UI
             pfp.sprite = eventItem.pfp;
             _coopEventEffects = eventItem.e.effects;
             _coopEventTypes = eventItem.e.eventTypes;
+            _coopEventDescription = eventItem.description;
             for (var i = 0; i < eventItem.e.eventTypes.Count; i++)
             {
                 eventIcons[i].gameObject.SetActive(true);
@@ -197,7 +195,7 @@ namespace VTuber.ScheduleSystem.UI
             {
                 checkmark.gameObject.SetActive(true);
                 checkmark.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
-                item.Event.SetCoopEffects(this, _coopEventEffects);
+                item.Event.SetCoopEffects(this, _coopEventEffects, _coopEventIcon, _coopEventDescription);
             }
             else if (IsCoopEventSlot)
             {

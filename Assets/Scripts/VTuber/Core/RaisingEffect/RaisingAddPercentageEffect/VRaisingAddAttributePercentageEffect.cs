@@ -4,6 +4,8 @@ using VTuber.BattleSystem.Effect;
 using VTuber.Character;
 using VTuber.Character.Attributes;
 using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
+using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -21,7 +23,7 @@ namespace VTuber.Core.RaisingEffect
 
         public string AttributeName { get; }
 
-        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict)
+        protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)
         {
             if (character.AttributeManager.TryGetAttribute(AttributeName, out var attribute))
             {
@@ -38,6 +40,12 @@ namespace VTuber.Core.RaisingEffect
                 }
             }
         }
+        
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
+        {
+            animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
+            base.ApplyEffect(character, messagedict, animationRequest);
+        }
 
         public override void Upgrade()
         {
@@ -52,6 +60,25 @@ namespace VTuber.Core.RaisingEffect
         public override string GetParameter()
         {
             return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";
+        }
+
+        protected override int GetPreviewValue(VCharacter character)
+        {
+            var previewValue = 0;
+            if (character.AttributeManager.TryGetAttribute(AttributeName, out var attribute))
+            {
+                if (AttributeName.Contains("Ability"))
+                {
+                    var abilityAttribute = attribute as VAbilityAttribute;
+                    if (abilityAttribute is not null)
+                        previewValue = abilityAttribute.PreviewAddTo(VMathUtils.FloatToInt(_percentage.Value * abilityAttribute.Value)) - abilityAttribute.Value;
+                }
+                else
+                {
+                    previewValue = attribute.PreviewAddTo(VMathUtils.FloatToInt(_percentage.Value * attribute.Value)) - attribute.Value;
+                }
+            }
+            return previewValue;
         }
     }
 

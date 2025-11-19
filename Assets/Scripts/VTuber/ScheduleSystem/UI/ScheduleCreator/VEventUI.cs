@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
@@ -148,7 +148,7 @@ namespace VTuber.ScheduleSystem.UI
         public void Initialize(VScheduleEvent e, VScheduleSlot slot, bool disposable, Transform parent = null)
         {
             _event = e;
-            icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
+            icon.sprite = e.Icon;
             background.color = e.BackgroundColor;
             _bgColor = background.color;
             icon.transform.localScale = Vector3.zero;
@@ -215,7 +215,7 @@ namespace VTuber.ScheduleSystem.UI
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
             _event = e;
-            icon.sprite = VResourcesManager.Instance.TryGetSprite(e.Icon);
+            icon.sprite = e.Icon;
             background.color = e.BackgroundColor;
             _bgColor = background.color;
             _initPosition = initPosition;

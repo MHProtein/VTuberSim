@@ -109,11 +109,12 @@ namespace VTuber.ScheduleSystem.Schedule
 
         public VWeeklyScheduleSaveData Save(VScript script)
         {
-            return new VWeeklyScheduleSaveData
+            var data = new VWeeklyScheduleSaveData
             {
                 days = _days.Select(day => day.Save(script)).ToList(),
                 currentDayIndex = _currentDayIndex
             };
+            return data;
         }
 
         public static VWeeklySchedule Load(VWeeklyScheduleSaveData saveData, VScript script)

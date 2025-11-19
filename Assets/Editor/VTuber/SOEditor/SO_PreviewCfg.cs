@@ -33,7 +33,7 @@ public class KeyValueData<Ikey, T>
 
 public class SO_PreviewCfg: VScriptableObject
 {      
-    public static SO_PreviewCfg Instance => Resources.Load<SO_PreviewCfg>("so_preview cfg");
+    public static SO_PreviewCfg Instance => Resources.Load<SO_PreviewCfg>("Configurations/so_preview cfg");
 
     public List<KeyValueData<string, List<TreeDisplayData>>> displayDatas;
 

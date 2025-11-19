@@ -10,12 +10,14 @@ namespace VTuber.BattleSystem.Buff
         private readonly VBuffConfiguration _configuration;
 
         public int latency;
+        public bool shouldFirstTurnDecrementLayer;
 
         public VBuff(VBuffConfiguration configuration, List<VEffect> effects)
         {
             _configuration = configuration;
             Effects = effects;
             latency = _configuration.latency;
+            shouldFirstTurnDecrementLayer = _configuration.shouldFirstTurnDecrementLayer;
         }
 
         public List<VEffect> Effects { get; private set; }
