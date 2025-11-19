@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.UI;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
@@ -65,6 +66,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
         [FoldoutGroup("光环旋转")]
         [LabelText("光环旋转一圈时长")]
         [SerializeField] private float haloSpinDuration = 8f;
+
+        [FoldoutGroup("音效")] [LabelText("卡牌出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("卡牌升级音效")] [SerializeField] private VAudioPlayInfo upgradeAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("确认音效")] [SerializeField] private VAudioPlayInfo confirmAudio;
         
         private Action _onComplete;
         private Sequence _sequence;
@@ -79,8 +85,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
         {
             _sequence.Stop();
             _sequence = Sequence.Create();
-
             _sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(confirmAudio))
                 .Chain(cardUI.TweenAlpha(1.0f, 0.25f))
                 .Group(Tween.Alpha(haloImage, 0.0f, 0.25f))
                 .ChainCallback(() => { _onComplete?.Invoke(); });
@@ -90,32 +96,29 @@ namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
         {
             _onComplete = onComplete;
             _sequence = Sequence.Create();
-
             if (!debug)
             {
                 cardUI.SetCard(request.cards.First());
                 haloImage.sprite = VUIUtils.Instance.GetHaloSprite((int)cardUI.Card.Rarity);
             }
-
             _sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.Scale(cardUI.transform, Vector3.one * appearScale, appearDuration, Ease.OutBack))
                 .Group(cardUI.TweenAlpha(1.0f, appearDuration))
                 .ChainDelay(afterAppearDelay)
-
                 .Chain(Tween.Scale(cardUI.transform, Vector3.zero, shrinkDuration, Ease.InQuart))
                 .ChainCallback(() =>
                 {
+                    VAudioPlayer.Instance.PlaySFX(upgradeAudio);
                     if (!debug)
                     {
                         cardUI.Card.Upgrade(false);
                         cardUI.UpdateView();
                     }
                 })
-
                 .Chain(Tween.Scale(cardUI.transform, Vector3.one * upgradeScale, upgradeScaleDuration, Ease.OutBack))
                 .Chain(Tween.Scale(halo, Vector3.one, haloExpandDuration, Ease.OutBack))
                 .ChainDelay(afterUpgradeDelay)
-
                 .Chain(
                     Tween.Scale(
                         cardUI.transform,
@@ -127,6 +130,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
                     )
                 );
 
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             Tween.LocalEulerAngles(
                 halo,
                 Vector3.zero,

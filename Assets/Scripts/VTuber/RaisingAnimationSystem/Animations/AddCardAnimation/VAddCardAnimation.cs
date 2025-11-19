@@ -64,13 +64,9 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
         [LabelText("光环淡出时长")]
         [SerializeField] private float haloFadeDuration = 0.5f;
 
-        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo appearAudio;
-        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo haloAppearAudio;
-        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo pulseAudio;
-        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
-        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo moveShrinkAudio;
-        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo movePosAudio;
-        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo haloFadeAudio;
+        [FoldoutGroup("音效")] [LabelText("卡牌出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("移动到卡牌库音效")] [SerializeField] private VAudioPlayInfo moveShrinkAudio;
 
         private Action _onComplete;
         private Action _applyEffect;
@@ -98,15 +94,13 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             _applyEffect = request.effectApply;
 
             _sequence = Sequence.Create();
-
+            confirmButton.interactable = false;
+            
             _sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.Scale(cardUI.transform, _initScale, appearDuration, appearEase))
-
-                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(haloAppearAudio))
                 .Group(Tween.Scale(halo, Vector3.one, appearDuration, Ease.OutCubic))
-
-                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(pulseAudio))
+                .ChainCallback(() => confirmButton.interactable = true)
                 .Chain(
                     Tween.Scale(
                         cardUI.transform,
@@ -135,6 +129,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
         {
             _sequence.Stop();
 
+            confirmButton.interactable = false;
             var moveToLibrarySeq = Sequence.Create();
 
             cardUI.transform.SetParent(cardLibraryPosition);
@@ -142,11 +137,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             moveToLibrarySeq
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
                 .Chain(Tween.Scale(cardUI.transform, Vector3.zero, moveShrinkDuration, moveShrinkEase))
-
-                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(movePosAudio))
                 .Group(Tween.LocalPosition(cardUI.transform, Vector3.zero, movePositionDuration, movePositionEase))
-
-                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(haloFadeAudio))
                 .Group(Tween.Alpha(haloImage, 0f, haloFadeDuration))
 
                 .ChainCallback(() =>

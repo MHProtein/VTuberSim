@@ -3,6 +3,7 @@ using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using VTuber.BattleSystem.UI;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations.RemoveCardAnimation
@@ -53,6 +54,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.RemoveCardAnimation
         [SerializeField] private float smokeFinishDelay = 0.25f;
 
 
+        [FoldoutGroup("音效")] [LabelText("卡牌出现音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("卡牌移除音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo removeAudio;
+        [FoldoutGroup("音效")] [LabelText("烟雾出现音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo smokeAppearAudio;
+        [FoldoutGroup("音效")] [LabelText("烟雾消失音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo smokeFadeAudio;
+
         private Vector3 _initScale;
 
         protected override void Awake()
@@ -64,21 +70,22 @@ namespace VTuber.RaisingAnimationSystem.Animations.RemoveCardAnimation
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             base.BeginAnimation(request, onComplete, isLastSameType);
-
             cardUI.transform.localScale = Vector3.one * cardStartScale;
-
             if (!debug)
             {
                 cardUI.SetCard(request.cards[0]);
             }
-
             var sequence = Sequence.Create();
             sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.Scale(cardUI.transform, _initScale, cardScaleInDuration, Ease.OutBack))
                 .Group(cardUI.TweenAlpha(1.0f, cardFadeInDuration))
                 .ChainDelay(cardPauseBeforeRemoval)
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(removeAudio))
                 .Chain(Tween.Scale(cardUI.transform, Vector3.zero, cardShrinkDuration, Ease.InQuart))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(smokeAppearAudio))
                 .Group(Tween.Scale(smoke, Vector3.one, smokeExpandDuration, Ease.OutCubic))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(smokeFadeAudio))
                 .Chain(Tween.Scale(smoke, Vector3.zero, smokeFadeOutDuration))
                 .ChainDelay(smokeFinishDelay)
                 .ChainCallback(() =>
