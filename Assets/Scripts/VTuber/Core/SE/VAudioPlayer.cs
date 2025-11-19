@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PrimeTween;
 using UnityEngine;
 using VTuber.Core.Foundation;
 
@@ -40,6 +41,7 @@ namespace VTuber.Core.SE
         Dialog,
         ScheduleCreation,
         Store,
+        Loading,
     }
 
     public class VAudioPlayer : VSingletonMonobehaviour<VAudioPlayer>
@@ -68,7 +70,6 @@ namespace VTuber.Core.SE
             {
                 var sfx = sfxList.First();
                 AudioManager.Instance.PlaySound(sfx.soundName, sfx.channel, sfx.volume, sfx.pitch, sfx.loop, sfx.delay);
-                if (sfxType == VSFXType.Battle_BuffApply) VDebug.Log("Battle_BuffApply");
             }
         }
 
@@ -84,6 +85,11 @@ namespace VTuber.Core.SE
         public void StopBGM()
         {
             AudioManager.Instance.StopSoundsByChannel(SoundChannel.Music);
+        }
+
+        public void PlaySFX(VAudioPlayInfo sfx)
+        {
+            AudioManager.Instance.PlaySound(sfx.soundName, sfx.channel, sfx.volume, sfx.pitch, sfx.loop, sfx.delay);
         }
     }
 }

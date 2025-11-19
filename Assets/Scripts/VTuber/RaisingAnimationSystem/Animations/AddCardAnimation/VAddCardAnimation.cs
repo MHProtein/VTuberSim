@@ -5,12 +5,13 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.UI;
-using VTuber.Core.Managers;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
 {
+    
     public class VAddCardAnimation : VRaisingAnimation
     {
         [SerializeField] private VCardUI cardUI;
@@ -63,13 +64,19 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
         [LabelText("光环淡出时长")]
         [SerializeField] private float haloFadeDuration = 0.5f;
 
+        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo haloAppearAudio;
+        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo pulseAudio;
+        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo moveShrinkAudio;
+        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo movePosAudio;
+        [FoldoutGroup("音效")] [SerializeField] private VAudioPlayInfo haloFadeAudio;
 
         private Action _onComplete;
         private Action _applyEffect;
         private Sequence _sequence;
         private Vector3 _initScale;
-
-
+        
         protected override void Awake()
         {
             base.Awake();
@@ -77,7 +84,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             _initScale = cardUI.transform.localScale;
         }
 
-
+        
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             if (!debug)
@@ -89,13 +96,17 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
 
             _onComplete = onComplete;
             _applyEffect = request.effectApply;
+
             _sequence = Sequence.Create();
 
-
             _sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.Scale(cardUI.transform, _initScale, appearDuration, appearEase))
+
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(haloAppearAudio))
                 .Group(Tween.Scale(halo, Vector3.one, appearDuration, Ease.OutCubic))
 
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(pulseAudio))
                 .Chain(
                     Tween.Scale(
                         cardUI.transform,
@@ -107,6 +118,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
                     )
                 );
             
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
+
             Tween.LocalEulerAngles(
                 halo,
                 Vector3.zero,
@@ -118,7 +131,6 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             );
         }
 
-
         private void OnConfirmButtonClicked()
         {
             _sequence.Stop();
@@ -128,9 +140,15 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             cardUI.transform.SetParent(cardLibraryPosition);
 
             moveToLibrarySeq
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
                 .Chain(Tween.Scale(cardUI.transform, Vector3.zero, moveShrinkDuration, moveShrinkEase))
+
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(movePosAudio))
                 .Group(Tween.LocalPosition(cardUI.transform, Vector3.zero, movePositionDuration, movePositionEase))
+
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(haloFadeAudio))
                 .Group(Tween.Alpha(haloImage, 0f, haloFadeDuration))
+
                 .ChainCallback(() =>
                 {
                     cardUI.transform.SetParent(ui.transform);
@@ -143,7 +161,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
                 });
         }
 
-
+        
         public override void ResetAnimation()
         {
             base.ResetAnimation();

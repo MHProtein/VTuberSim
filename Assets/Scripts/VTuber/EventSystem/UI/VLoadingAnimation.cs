@@ -4,6 +4,7 @@ using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 
@@ -91,6 +92,7 @@ namespace VTuber.EventSystem.UI
         private Sequence PlayAnimationInternal()
         {
             ui.SetActive(true);
+            VAudioPlayer.Instance.PlayBGM(VBGMType.Loading);
 
             eventImage.transform.localScale = Vector3.zero;
             leftCorner.localScale = Vector3.one;
@@ -114,7 +116,8 @@ namespace VTuber.EventSystem.UI
             sequence.Group(Tween.Scale(eventImage.transform, Vector3.zero, iconScaleDuration));
             sequence.Group(Tween.Scale(leftCorner, 0f, 0.5f));
             sequence.Group(Tween.Scale(rightCorner, 0f, 0.5f));
-
+            sequence.ChainCallback(() => VAudioPlayer.Instance.StopBGM());
+            
             return sequence;
         }
 
