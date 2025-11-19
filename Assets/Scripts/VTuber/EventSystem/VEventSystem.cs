@@ -164,6 +164,7 @@ namespace VTuber.EventSystem
                 
                 VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
                 {
+                    VAudioPlayer.Instance.PlayBGM(VBGMType.NonDialogEvent);
                     foreach (var effect in e.effects)
                         effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
             
@@ -190,6 +191,7 @@ namespace VTuber.EventSystem
 
             VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
+                VAudioPlayer.Instance.PlayBGM(VBGMType.Dialog);
                 _character = character;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
@@ -325,6 +327,7 @@ namespace VTuber.EventSystem
                             dialogueSystem.HideMe();
                             VEventSystemUI.Instance.CloseLoadingAnimation(); 
                         });
+                    VAudioPlayer.Instance.StopBGM();
                 });
             }
         }

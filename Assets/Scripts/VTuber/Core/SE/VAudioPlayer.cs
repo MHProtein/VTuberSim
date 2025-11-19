@@ -42,6 +42,7 @@ namespace VTuber.Core.SE
         ScheduleCreation,
         Store,
         Loading,
+        NonDialogEvent
     }
 
     public class VAudioPlayer : VSingletonMonobehaviour<VAudioPlayer>
