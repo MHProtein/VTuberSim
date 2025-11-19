@@ -388,14 +388,17 @@ MonoBehaviour:
     streamEventIDs: 
     conditions:
     - conditionType: 0
+      eventType: 0
       idOrName: BASingingMultiplier
       operatorType: 4
       targetValue: 200
     - conditionType: 0
+      eventType: 0
       idOrName: BAGamingMultiplier
       operatorType: 4
       targetValue: 200
     - conditionType: 0
+      eventType: 0
       idOrName: BAChattingMultiplier
       operatorType: 4
       targetValue: 200
@@ -408,6 +411,7 @@ MonoBehaviour:
     streamEventIDs: 
     conditions:
     - conditionType: 1
+      eventType: 0
       idOrName: 
       operatorType: 4
       targetValue: 16
@@ -420,9 +424,10 @@ MonoBehaviour:
     streamEventIDs: 
     conditions:
     - conditionType: 2
+      eventType: 0
       idOrName: 0
       operatorType: 4
-      targetValue: 0
+      targetValue: 1
     tip:
       title: "\u63D0\u5347\u5173\u7CFB"
       description: "\u534F\u52A9\u8005\u4F1A\u5728\u968F\u673A\u65F6\u95F4\u6BB5\u51FA\u73B0\uFF0C\u5B89\u6392\u5BF9\u5E94\u7C7B\u578B\u7684\u4E8B\u4EF6\u5373\u53EF\u83B7\u5F97\u989D\u5916\u5956\u52B1\u5E76\u52A0\u6DF1\u534F\u52A9\u8005\u7684\u5173\u7CFB"

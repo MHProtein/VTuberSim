@@ -36,7 +36,27 @@ MonoBehaviour:
   pressureInitialValue: 3
   pressureMinValue: 1
   pressureMaxValue: 5
-  pressureEffects: []
+  pressureEffects:
+  - id: 3
+    parameter: 2
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: 1
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: 0
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: -1
+    upgradedParameter: 
+    level: 0
+  - id: 3
+    parameter: -2
+    upgradedParameter: 
+    level: 0
   pressureConfiguration: {fileID: 11400000, guid: d33d5177e6ead2b4c935fa76356bb039, type: 2}
   singingAbilityInitialValue: 100
   singingAbilityMinValue: 0
