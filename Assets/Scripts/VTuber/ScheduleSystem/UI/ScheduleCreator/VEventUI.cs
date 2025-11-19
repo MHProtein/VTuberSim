@@ -43,6 +43,10 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Text leftText;
         [SerializeField] private TMP_Text rightText;
         
+        [Header("状态反馈")]
+        [Tooltip("当规划条件满足时显示的绿色边框")]
+        [SerializeField] private GameObject conditionMetBorder; // 【步骤A】记得在Prefab里创建并拖入这个绿框
+        
         
         [HideInInspector] public Vector2 initOffset;
         
@@ -96,6 +100,7 @@ namespace VTuber.ScheduleSystem.UI
                 conditionIndicatorsContainer.SetActive(false);
             }
             neighborHighlightVisual?.SetActive(false); // 确保默认隐藏
+            if (conditionMetBorder != null) conditionMetBorder.SetActive(false);
         }
         //用于打开/关闭条件高亮
         public void SetNeighborHighlight(bool value)
@@ -190,7 +195,23 @@ namespace VTuber.ScheduleSystem.UI
             _disposable = disposable;
             _hasInSchedule = false;
         }
+        
+        private void UpdateConditionMetVisuals(VScheduleSlot anchorSlot)
+        {
+            if (anchorSlot == null || _event == null) return;
 
+            // 调用 Slot 现有的方法进行检测
+            // 传入 true，表示同时更新 Event 内部的 IsSchedulingConditionMet 数据
+            // 这样"特殊效果区"就能读到正确的数据了
+            bool isMet = anchorSlot.TestSchedulingCondition(true);
+
+            // 更新绿框显隐
+            if (conditionMetBorder != null)
+            {
+                conditionMetBorder.SetActive(isMet);
+            }
+        }
+        
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
             _event = e;
@@ -246,13 +267,43 @@ namespace VTuber.ScheduleSystem.UI
 
             Tween.Position(transform, _lastPosition, 0.2f);
             //transform.position = _lastPosition;
-            foreach (var parent in parentSlots) parent.SetItem(this);
-
+            foreach (var parent in parentSlots)
+            {
+                parent.SetItem(this);
+            }
+            
+            if (parentSlots.Count > 0)
+            {
+                UpdateConditionMetVisuals(parentSlots[0]);
+            }
+            
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
             {
                 { "Event", Event }
             });
         }
+        
+        // --- 新增：环境改变响应 ---
+        // 这个方法会被邻居 VScheduleSlot 调用
+        public void OnEnvironmentChanged()
+        {
+            // 只有已经在日程表上的事件才需要响应
+            if (!_hasInSchedule || parentSlots == null || parentSlots.Count == 0) return;
+
+            // 重新检测自身条件
+            UpdateConditionMetVisuals(parentSlots[0]);
+
+            // 广播事件，通知特殊效果区刷新
+            // 这里我们复用 OnEventUIPlaced 事件，因为它本质上是一次放置状态的更新
+            if(!_event.IsSpecialEvent)
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+                {
+                    { "Event", _event }
+                });
+            }
+        }
+        // ----------------------
 
         public void SetParentDisposeSlot()
         {
@@ -279,6 +330,11 @@ namespace VTuber.ScheduleSystem.UI
                 transform.position = position;
             transform.SetParent(transformParent);
             //transform.position = position;
+            if (parentSlots.Count > 0)
+            {
+                UpdateConditionMetVisuals(parentSlots[0]);
+            }
+            
             if (!Event.IsSpecialEvent)
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
                 {
@@ -502,7 +558,7 @@ public void OnPointerEnter(PointerEventData eventData)
         {
             Debug.Log("EndDrag");
         }
-        // VEventUI.cs (在类的任何地方添加这个新方法)
+        
         // 新增：一个私有结构体，用于在方法间传递条件信息
         private struct ConditionTargetInfo
         {
