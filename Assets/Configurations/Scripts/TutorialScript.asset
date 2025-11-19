@@ -384,7 +384,7 @@ MonoBehaviour:
       m_RotationOrder: 4
   weeks:
   - weekID: 0
-    eventIDs: 000000000100000002000000
+    eventIDs: 000000000100000002000000030000004e0000004f000000
     streamEventIDs: 
     conditions:
     - conditionType: 0
@@ -420,10 +420,23 @@ MonoBehaviour:
       description: "\u901A\u8FC7\u201C\u76F4\u64AD\u51C6\u5907\u201D\u4E8B\u4EF6,\u5C06\u5361\u7EC4\u4E2D\u5361\u724C\u7684\u6570\u91CF\u63D0\u5347\u81F316\u5F20\u4EE5\u4E0A\u5427"
       image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
   - weekID: 3
+    eventIDs: 000000000100000002000000030000004e0000004f000000
+    streamEventIDs: 000000000100000002000000
+    conditions:
+    - conditionType: 4
+      eventType: 0
+      idOrName: 
+      operatorType: 3
+      targetValue: 3
+    tip:
+      title: "\u5B89\u6392\u76F4\u64AD"
+      description: "\u7A33\u5B9A\u7684\u76F4\u64AD\u5BF9\u865A\u62DF\u4E3B\u64AD\u800C\u8A00\u5F88\u91CD\u8981\uFF0C\u8BD5\u7740\u5728\u4E00\u5468\u4E2D\u5B89\u63923\u573A\u76F4\u64AD\u5427\uFF0C\u6CE8\u610F\u7559\u8DB3\u591F\u7684\u4F53\u529B\u3002"
+      image: {fileID: 0}
+  - weekID: 3
     eventIDs: 000000000100000002000000
     streamEventIDs: 
     conditions:
-    - conditionType: 2
+    - conditionType: 3
       eventType: 0
       idOrName: 0
       operatorType: 4
