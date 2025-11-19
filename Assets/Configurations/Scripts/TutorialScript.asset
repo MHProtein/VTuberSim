@@ -174,7 +174,7 @@ MonoBehaviour:
     startEventType: 1
     startEventID: 73
     endEventWeekIndex: 3
-    endEventIDs: 04000000
+    endEventIDs: 16000000
     specialEventData: []
     decayCurve1:
       serializedVersion: 2
@@ -277,11 +277,11 @@ MonoBehaviour:
       m_RotationOrder: 4
   - phaseName: "\u7B2C\u4E8C\u9636\u6BB5"
     description: "\u7B2C\u4E8C\u9636\u6BB5"
-    startEventWeekIndex: 3
+    startEventWeekIndex: 4
     startEventType: 6
     startEventID: 10
     endEventWeekIndex: 5
-    endEventIDs: 0700000008000000090000000a000000
+    endEventIDs: 17000000
     specialEventData: []
     decayCurve1:
       serializedVersion: 2
