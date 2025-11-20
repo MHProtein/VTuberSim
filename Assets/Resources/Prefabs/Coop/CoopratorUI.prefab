@@ -308,7 +308,7 @@ MonoBehaviour:
   cooperatorName: {fileID: 4563477807515621647}
   coopLevel: {fileID: 7055062594309085290}
   upgradeEventScheduleSlot: {fileID: 6405588331881643632}
-  upgradeEventUIPrefab: {fileID: 1328888101914423096, guid: 2e229b23f5c424c42ab5ffd3bc7d727c, type: 3}
+  upgradeEventUIPrefab: {fileID: 1328888101914423096, guid: 7e973428dd8fc3c4da482097411cce3b, type: 3}
   itemDataPrefab: {fileID: 1328888101914423096, guid: 984e5b3ca7709a140b66d069b86fb39c, type: 3}
   creatorSlot: {fileID: 6176712117200295301}
   slotHidePos: {fileID: 3080466619712130925}

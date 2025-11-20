@@ -234,14 +234,20 @@ namespace VTuber.ScheduleSystem.UI
             return Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f);
         }
 
-        public Tween SetScheduleUIPositionToExecution()
+        public void SetScheduleUIPositionToExecution(Action onComplete)
         {
-            return Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f);
+            Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f).OnComplete(() =>
+            {
+                onComplete?.Invoke();
+            });
         }
 
-        public Tween SetScheduleUIPositionToPause()
+        public Tween SetScheduleUIPositionToPause(Action onComplete = null)
         {
-            return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f);
+            return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f).OnComplete(() =>
+            {
+                onComplete?.Invoke();
+            });
         }
 
         public void SetScheduleUIPositionToInitial()

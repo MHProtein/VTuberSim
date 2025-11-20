@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using VTuber.BattleSystem.Effect;
 using VTuber.Character;
+using VTuber.Core.UI;
+using VTuber.RaisingAnimationSystem;
 
 namespace VTuber.Core.RaisingEffect
 {
@@ -14,6 +16,13 @@ namespace VTuber.Core.RaisingEffect
         {
             cooperatorID = configuration.cooperatorID;
             value = new VUpgradableValue<int>(int.Parse(parameter.Trim()), int.Parse(upgradedParameter.Trim()));
+        }
+        
+        public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict,
+            VAnimationRequest animationRequest)
+        {
+            animationRequest.attributeIcon = VUIUtils.Instance.GetCoopIcon();
+            base.ApplyEffect(character, messagedict, animationRequest);
         }
 
         protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)

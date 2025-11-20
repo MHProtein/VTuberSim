@@ -25994,6 +25994,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -32496,6 +32500,10 @@ PrefabInstance:
       propertyPath: m_Padding.m_Left
       value: 41
       objectReference: {fileID: 0}
+    - target: {fileID: 5088592000355466785, guid: d086b669bb366614aa935623fc6e538a, type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5199392690790408872, guid: d086b669bb366614aa935623fc6e538a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -34611,6 +34619,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -35418,6 +35430,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -35805,6 +35821,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -38426,7 +38446,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 10
+      Data: 11
     - Name: 
       Entry: 7
       Data: 
@@ -38888,6 +38908,52 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 10
+    - Name: $v
+      Entry: 7
+      Data: 22|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 23|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+    - Name: soundName
+      Entry: 1
+      Data: change
+    - Name: channel
+      Entry: 3
+      Data: 2
+    - Name: volume
+      Entry: 4
+      Data: 1
+    - Name: pitch
+      Entry: 4
+      Data: 1
+    - Name: loop
+      Entry: 5
+      Data: false
+    - Name: delay
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 13
       Data: 
     - Name: 
@@ -38895,12 +38961,12 @@ MonoBehaviour:
       Data: 
     - Name: bgms
       Entry: 7
-      Data: 22|System.Collections.Generic.Dictionary`2[[VTuber.Core.SE.VBGMType,
+      Data: 24|System.Collections.Generic.Dictionary`2[[VTuber.Core.SE.VBGMType,
         Assembly-CSharp],[System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 23|System.Collections.Generic.EnumEqualityComparer`1[[VTuber.Core.SE.VBGMType,
+      Data: 25|System.Collections.Generic.EnumEqualityComparer`1[[VTuber.Core.SE.VBGMType,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
@@ -38922,14 +38988,14 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 7
-      Data: 24|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 26|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 25|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 27|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
       Data: Menu
@@ -38968,14 +39034,14 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 7
-      Data: 26|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 28|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 27|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 29|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
       Data: LiveFail
@@ -39014,14 +39080,14 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 7
-      Data: 28|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 30|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 29|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 31|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
       Data: LiveSuccess
@@ -39060,14 +39126,14 @@ MonoBehaviour:
       Data: 3
     - Name: $v
       Entry: 7
-      Data: 30|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 32|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 31|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 33|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
       Data: LiveSuccessMega
@@ -39106,17 +39172,17 @@ MonoBehaviour:
       Data: 6
     - Name: $v
       Entry: 7
-      Data: 32|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 34|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 33|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 35|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
-      Data: store
+      Data: shop
     - Name: channel
       Entry: 3
       Data: 5
@@ -39152,17 +39218,17 @@ MonoBehaviour:
       Data: 8
     - Name: $v
       Entry: 7
-      Data: 34|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 36|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 35|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 37|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
-      Data: work
+      Data: LiveBattle_v1_1
     - Name: channel
       Entry: 3
       Data: 5
@@ -39198,14 +39264,14 @@ MonoBehaviour:
       Data: 5
     - Name: $v
       Entry: 7
-      Data: 36|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 38|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 37|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 39|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
       Data: common
@@ -39244,14 +39310,14 @@ MonoBehaviour:
       Data: 4
     - Name: $v
       Entry: 7
-      Data: 38|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 40|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 39|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 41|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
       Data: chat
@@ -39290,17 +39356,17 @@ MonoBehaviour:
       Data: 7
     - Name: $v
       Entry: 7
-      Data: 40|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+      Data: 42|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
         Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 1
     - Name: 
       Entry: 7
-      Data: 41|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+      Data: 43|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
-      Data: change
+      Data: work
     - Name: channel
       Entry: 3
       Data: 5
@@ -39312,7 +39378,7 @@ MonoBehaviour:
       Data: 1
     - Name: loop
       Entry: 5
-      Data: false
+      Data: true
     - Name: delay
       Entry: 4
       Data: 0
@@ -39728,6 +39794,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -43854,7 +43924,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -544, y: 115}
+  m_AnchoredPosition: {x: -562.45, y: 116.3}
   m_SizeDelta: {x: 175.09998, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &799859843 stripped
@@ -61261,9 +61331,9 @@ RectTransform:
   - {fileID: 1765292046}
   - {fileID: 1070928067}
   - {fileID: 131576084}
+  - {fileID: 1370900052}
   - {fileID: 1725202475745509020}
   - {fileID: 617845857}
-  - {fileID: 1370900052}
   - {fileID: 198425575}
   - {fileID: 1101919677}
   - {fileID: 33083661}
@@ -65484,6 +65554,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -73630,6 +73704,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -74405,6 +74483,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -81338,6 +81420,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -81456,6 +81542,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -82460,6 +82550,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7265649754168869692, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 7265649754168869692, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
     - target: {fileID: 7692096295703266434, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
       propertyPath: m_SizeDelta.y
       value: 511.32
@@ -82518,7 +82612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9035661449475004400, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1397.66
+      value: 1471.21
       objectReference: {fileID: 0}
     - target: {fileID: 9035661449475004400, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
       propertyPath: m_SizeDelta.y
@@ -83833,6 +83927,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -85413,6 +85511,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -92071,6 +92173,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -98513,6 +98619,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -99493,6 +99603,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -101921,10 +102035,9 @@ MonoBehaviour:
   cardPulseScale: 1.8
   haloSpinDuration: 8
   moveShrinkDuration: 0.5
-  moveShrinkEase: 8
   movePositionDuration: 0.5
-  movePositionEase: 8
   haloFadeDuration: 0.5
+  speed: 1
   appearAudio:
     soundName: 
     channel: 1
@@ -102830,6 +102943,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -104504,6 +104621,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -113184,6 +113305,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -115330,6 +115455,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -117466,6 +117595,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -119086,6 +119219,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7745105966622914942, guid: 02246d929a3e384469efef361f932d55, type: 3}
+      propertyPath: upgradeEventUIPrefab
+      value: 
+      objectReference: {fileID: 1328888101914423096, guid: 7e973428dd8fc3c4da482097411cce3b, type: 3}
     - target: {fileID: 7988487836864989752, guid: 02246d929a3e384469efef361f932d55, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 7.800003
@@ -119504,6 +119641,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1648367449}
     m_Modifications:
+    - target: {fileID: 2623175411288905953, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7.800003
+      objectReference: {fileID: 0}
     - target: {fileID: 4559425938954352048, guid: d4b1cc9a3e76e9444a2fd9923539a8d1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 8.900002
@@ -131720,6 +131861,7 @@ MonoBehaviour:
   holdDuration: 2
   fadeOutDuration: 0.1
   lightSpinDuration: 8
+  speed: 1
   initScale: 1.5
   appearAudio:
     soundName: 

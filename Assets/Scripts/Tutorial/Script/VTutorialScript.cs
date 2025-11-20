@@ -19,6 +19,7 @@ namespace Tutorial.Script
         public List<uint> CurrentWeekStreamEventList => Configuration.weeks[_weekIndex].streamEventIDs;
         public List<VTutorialWeekCondition> CurrentWeekConditions => Configuration.weeks[_weekIndex].conditions;
         public VTipConfig CurrentWeekTip => Configuration.weeks[_weekIndex].tip;
+        public bool CurrentWeekUseCoopEvent => Configuration.weeks[_weekIndex].useCoopEvents;
         public VTutorialScriptConfiguration Configuration { get; }
 
         public void AddOnWeekAdvancedCallback(Action<int> callback)

@@ -83,6 +83,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
         [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
         [FoldoutGroup("音效")] [LabelText("移动到库音效")] [SerializeField] private VAudioPlayInfo moveShrinkAudio;
 
+        [Header("Animation Speed")]
+        [LabelText("动画速度倍数")]
+        [SerializeField] private float speed = 1f;
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
+
         private Action _onComplete;
         private Action _applyEffect;
         private Sequence _sequence;
@@ -110,17 +115,15 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
             addRelicButton.interactable = false;
 
             _sequence = Sequence.Create();
-
             _sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
-                .Chain(Tween.LocalPosition(relicImage.transform, Vector3.zero, relicEnterDuration, Ease.OutBounce))
-                .Group(Tween.Alpha(relicImage, 1, relicEnterAlphaDuration))
-                .Group(Tween.Scale(relicImage.transform, Vector3.one, relicEnterScaleDuration, Ease.OutBounce))
-                .Group(Tween.Alpha(relicNameText, 1, relicNameFadeDuration))
-                .Group(Tween.Custom(relicNameText.characterSpacing, 0, nameSpacingDuration,
-                    v => relicNameText.characterSpacing = v))
+                .Chain(Tween.LocalPosition(relicImage.transform, Vector3.zero, Interval(relicEnterDuration), Ease.OutBounce))
+                .Group(Tween.Alpha(relicImage, 1, Interval(relicEnterAlphaDuration)))
+                .Group(Tween.Scale(relicImage.transform, Vector3.one, Interval(relicEnterScaleDuration), Ease.OutBounce))
+                .Group(Tween.Alpha(relicNameText, 1, Interval(relicNameFadeDuration)))
+                .Group(Tween.Custom(relicNameText.characterSpacing, 0, Interval(nameSpacingDuration), v => relicNameText.characterSpacing = v))
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(descriptionAppearAudio))
-                .Chain(Tween.LocalPosition(descriptionObject, descriptionPosition.localPosition, descriptionMoveDuration, descriptionMoveEase))
+                .Chain(Tween.LocalPosition(descriptionObject, descriptionPosition.localPosition, Interval(descriptionMoveDuration), descriptionMoveEase))
                 .ChainCallback(() => { addRelicButton.interactable = true; });
 
             // breathing pulse animation
@@ -128,7 +131,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
                 Tween.Scale(
                     relicImage.transform,
                     Vector3.one * relicPulseScale,
-                    relicPulseDuration,
+                    Interval(relicPulseDuration),
                     Ease.InCubic,
                     relicPulseCycles,
                     CycleMode.Rewind
@@ -141,7 +144,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
                 light,
                 Vector3.zero,
                 new Vector3(0, 0, 360f),
-                lightSpinDuration,
+                Interval(lightSpinDuration),
                 Ease.Linear,
                 lightSpinCycles,
                 CycleMode.Incremental
@@ -159,11 +162,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddRelicAnimation
 
             sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
-                .Chain(Tween.LocalPosition(descriptionObject, descriptionInitPosition.localPosition, descriptionExitDuration, Ease.OutCubic))
-                .Group(Tween.Scale(relicImage.transform, Vector3.zero, relicShrinkDuration, Ease.InCubic))
-                .Group(Tween.LocalPosition(relicImage.transform, Vector3.zero, relicMoveToLibraryDuration, Ease.InCubic))
-                .Group(Tween.Custom(relicNameText.characterSpacing, 0, relicNameHideDuration, v => relicNameText.characterSpacing = v))
-                .Group(Tween.Alpha(relicNameText, 0, relicNameHideDuration))
+                .Chain(Tween.LocalPosition(descriptionObject, descriptionInitPosition.localPosition, Interval(descriptionExitDuration), Ease.OutCubic))
+                .Group(Tween.Scale(relicImage.transform, Vector3.zero, Interval(relicShrinkDuration), Ease.InCubic))
+                .Group(Tween.LocalPosition(relicImage.transform, Vector3.zero, Interval(relicMoveToLibraryDuration), Ease.InCubic))
+                .Group(Tween.Custom(relicNameText.characterSpacing, 0, Interval(relicNameHideDuration), v => relicNameText.characterSpacing = v))
+                .Group(Tween.Alpha(relicNameText, 0, Interval(relicNameHideDuration)))
                 .ChainCallback(() =>
                 {
                     relicImage.transform.SetParent(ui.transform);

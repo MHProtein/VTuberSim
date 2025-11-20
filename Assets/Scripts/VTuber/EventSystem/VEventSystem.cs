@@ -230,7 +230,6 @@ namespace VTuber.EventSystem
 
         public void ExitStore()
         {
-            storeObject.SetActive(false);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd,
                 new Dictionary<string, object>
                 {
@@ -238,12 +237,21 @@ namespace VTuber.EventSystem
                 });
             VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
             {
-                _currentEvent = null;
-                VAudioPlayer.Instance.StopBGM();
                 
                 var state = VGameManager.Instance.GetState<VExecutionState>();
                 if (state is not null)
-                    state.OnEventEndAnimationEnd();
+                    state.OnEventEndAnimationEnd(() =>
+                    {
+                        _currentEvent = null;
+                        storeObject.SetActive(false);
+                        VAudioPlayer.Instance.StopBGM();
+                    });
+                else
+                {
+                    _currentEvent = null;
+                    storeObject.SetActive(false);
+                    VAudioPlayer.Instance.StopBGM();
+                }
             });
         }
 
@@ -292,6 +300,10 @@ namespace VTuber.EventSystem
                     storeObject.SetActive(true);
                     _store.EnterStore(_character);
                     _shouldEnterStore = false;
+                    VAudioPlayer.Instance.PlayBGM(VBGMType.Store);
+                },
+                () =>
+                {
                     dialogueSystem.HideMe();
                     dialogueSystem.Clear();
                 });
@@ -320,7 +332,6 @@ namespace VTuber.EventSystem
                         dialogueSystem.Clear();
                         VEventSystemUI.Instance.CloseLoadingAnimation(); 
                     }
-                    VAudioPlayer.Instance.StopBGM();
                 });
             }
         }

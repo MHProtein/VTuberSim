@@ -28,9 +28,13 @@ namespace VTuber.ScheduleSystem.UI
         private VScheduleCreatorSlot slot;
 
         private bool spawnable;
+        
+        private bool _canDrag;
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            if (!_canDrag)
+                return;
             VDebug.Log("Begin Drag");
             if (!spawnable)
                 return;
@@ -53,6 +57,8 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
+            if (!_canDrag)
+                return;
             spawnable = true;
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
                 new Dictionary<string, object>
@@ -92,11 +98,12 @@ namespace VTuber.ScheduleSystem.UI
             eventUIObject.GetComponent<VEventUI>().InitializeDrag(_data.CreateEvent(), transform.position);
         }
 
-        public void Initialize(VScheduleEventConfiguration data)
+        public void Initialize(VScheduleEventConfiguration data, bool canDrag = true)
         {
             _data = data;
             icon.sprite = VResourcesManager.Instance.TryGetSprite(data.icon);
-            ;
+            
+            _canDrag = canDrag;
             background.color = data.backgroundColor;
             duration.text = data.Duration.ToString();
             nameText.text = data.eventName;
