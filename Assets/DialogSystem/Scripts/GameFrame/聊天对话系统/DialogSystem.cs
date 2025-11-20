@@ -116,14 +116,18 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         _character = character;
         AdjustScrollView();
         //StartCoroutine(StartDialog());
-        VAudioPlayer.Instance.PlayBGM(VBGMType.Dialog);
     }
 
     public void HideMe()
     {
         //StopCoroutine(StartDialog());
         this.gameObject.SetActive(false);
-        VAudioPlayer.Instance.StopBGM();
+    }
+    
+    public void Clear()
+    {
+        ClearBtns();
+        ClearDialogs();
     }
 
     public void LoadDialog(string dialogName)
@@ -344,13 +348,12 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     public void AdjustScrollView()
     {
         // 如果需要滚动且内容超出视图
-        if (gameObject.activeSelf)
+
+        if ( scrollContent.rect.height > scrollRect.viewport.rect.height)
         {
-            if ( scrollContent.rect.height > scrollRect.viewport.rect.height)
-            {
-                StartCoroutine(ScrollToBottomAfterDelay());
-            }
+            StartCoroutine(ScrollToBottomAfterDelay());
         }
+        
     }
     IEnumerator ScrollToBottomAfterDelay()
     {

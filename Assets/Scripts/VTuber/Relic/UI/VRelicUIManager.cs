@@ -12,6 +12,7 @@ namespace VTuber.Relic.UI
         [SerializeField] private Transform content;
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private bool areStreamingRelics;
+        [SerializeField] private VRelicMenu relicMenu;
         private List<VRelicSlotUI> _slotUIs;
 
         protected override void Awake()
@@ -67,13 +68,13 @@ namespace VTuber.Relic.UI
 
             if (TryGetEmptySlot(out var slot))
             {
-                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics);
+                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics, relicMenu);
             }
             else
             {
                 var go = Instantiate(slotPrefab, content);
                 slot = go.GetComponent<VRelicSlotUI>();
-                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics);
+                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics, relicMenu);
                 slot.SetIsAdditional(true);
                 _slotUIs.Add(slot);
             }

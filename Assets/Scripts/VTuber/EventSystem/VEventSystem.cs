@@ -35,19 +35,6 @@ namespace VTuber.EventSystem
         public List<int> executedLines;
         public bool isInBattle;
         public uint replaceSelectedCardID;
-        public VSelectionMenuType selectionMenuType;
-    }
-
-    public enum VSelectionMenuType
-    {
-        AddCard,
-        AddConsumable,
-        SelectCard,
-        SelectCardFrom3,
-        SelectConsumableFrom3,
-        SelectUpgradeCard,
-        SelectPhaseEnding,
-        None
     }
 
     public class VEventSystem : VMonoBehaviour
@@ -69,7 +56,6 @@ namespace VTuber.EventSystem
         private List<int> _executedLines;
         private bool _loaded;
 
-        private VSelectionMenuType _selectionMenuType = VSelectionMenuType.None;
         private List<VConsumable> _consumablesToSelect;
         private List<VCard> _cardsToSelect;
         private VCard _replaceSelectedCard;
@@ -80,6 +66,7 @@ namespace VTuber.EventSystem
         protected override void Awake()
         {
             base.Awake();
+            dialogueSystem.HideMe();
         }
 
         protected override void OnEnable()
@@ -163,6 +150,7 @@ namespace VTuber.EventSystem
                 
                 VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
                 {
+                    VAudioPlayer.Instance.PlayBGM(VBGMType.NonDialogEvent);
                     foreach (var effect in e.effects)
                         effect.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Dialog, e.Icon, e.Description));
             
@@ -182,17 +170,17 @@ namespace VTuber.EventSystem
             bool isPhaseStartEvent = false)
         {
             _hasDialogue = true;
-            dialogueSystem.LoadDialog(e.dialogueNode);
 
             if (!loaded)
                 _executedLines = new List<int>();
+            dialogueSystem.Clear();
 
             VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
+                VAudioPlayer.Instance.PlayBGM(VBGMType.Dialog);
                 _character = character;
                 _currentEvent = e;
                 VEventSystemUI.Instance.OpenEventUI();
-                dialogueSystem.ShowMe(character);
                 if (!loaded)
                 {
                     dialogueSystem.ContinueDialog();
@@ -201,6 +189,11 @@ namespace VTuber.EventSystem
                 }
                 
                 _loaded = false;
+            },
+            () =>
+            {
+                dialogueSystem.ShowMe(character);
+                dialogueSystem.LoadDialog(e.dialogueNode);
             });
         }
 
@@ -268,15 +261,10 @@ namespace VTuber.EventSystem
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck,
                 tutorialTurnHandCards, tipConfig);
-            _character.ConsumableManager.SetBattle(battle);
-            VRaisingUI.Instance.SetConsumableToBattle();
         }
 
         private void OnDialogueComplete(Dialog dialog)
         {
-            if (!_hasDialogue && _selectionMenuType != VSelectionMenuType.None)
-                return;
-            
             dialogueSystem.OnDialogFinished -= OnDialogueComplete;
             dialogueSystem.OnLineFinished -= OnLineFinished;
             if (_currentEvent.Type == VEventType.Stream)
@@ -304,6 +292,8 @@ namespace VTuber.EventSystem
                     storeObject.SetActive(true);
                     _store.EnterStore(_character);
                     _shouldEnterStore = false;
+                    dialogueSystem.HideMe();
+                    dialogueSystem.Clear();
                 });
             }
             else
@@ -321,8 +311,16 @@ namespace VTuber.EventSystem
                     if (state is not null)
                         state.OnEventEndAnimationEnd(()=> {
                             dialogueSystem.HideMe();
+                            dialogueSystem.Clear();
                             VEventSystemUI.Instance.CloseLoadingAnimation(); 
                         });
+                    else
+                    {
+                        dialogueSystem.HideMe();
+                        dialogueSystem.Clear();
+                        VEventSystemUI.Instance.CloseLoadingAnimation(); 
+                    }
+                    VAudioPlayer.Instance.StopBGM();
                 });
             }
         }
@@ -365,7 +363,6 @@ namespace VTuber.EventSystem
             data.eventSystemSaveData = new VEventSystemSaveData
             {
                 executedLines = _executedLines,
-                selectionMenuType = _selectionMenuType,
                 cardsToSelectSaveDatas = _cardsToSelect?.Select(card => card.Save()).ToList(),
                 consumablesToSelectConfigIDs = _consumablesToSelect?.Select(consumable => consumable.ConfigId).ToList(),
                 replaceSelectedCardID = _replaceSelectedCard?.Id ?? 0,

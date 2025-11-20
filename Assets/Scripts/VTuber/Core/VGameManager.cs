@@ -156,25 +156,23 @@ namespace VTuber.BattleSystem.Core
             foreach (var saveData in data.accounts) _accounts.Add(new VAccount(saveData));
             
             var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
-
-            _script = VScript.Load(data.script, scriptConfig);
             
             Character = new VCharacter(null);
             Character.Load(data, _characterConfigs.Find(config
                 => config.name == data.characterSaveData.characterConfigurationName));
 
 
-            // if (scriptConfig is VTutorialScriptConfiguration)
-            // {
-            //     isTutorial = true;
-            //     _tutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
-            //     
-            //     _script = _tutorialScript;
-            // }
-            // else
-            // {
-            //     _script = VScript.Load(data.script, scriptConfig);
-            // }
+            if (scriptConfig is VTutorialScriptConfiguration)
+            {
+                IsTutorial = true;
+                TutorialScript = VTutorialScript.Load(data.script, (VTutorialScriptConfiguration)scriptConfig);
+                
+                _script = TutorialScript;
+            }
+            else
+            {
+                _script = VScript.Load(data.script, scriptConfig);
+            }
 
             _weeklySchedule = VWeeklySchedule.Load(data.weeklySchedule, _script);
 

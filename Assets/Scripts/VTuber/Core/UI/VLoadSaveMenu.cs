@@ -29,7 +29,7 @@ namespace VTuber.BattleSystem.Core.UI
 
             var characterConfig =
                 VGameManager.Instance.GetCharacterConfig(saveData.characterSaveData.characterConfigurationName);
-            characterName.text = characterConfig.name;
+            characterName.text = characterConfig.characterName;
 
             currentPhase.text = "当前阶段: " + scriptConfig.phases[saveData.script.currentPhaseIndex].phaseName;
             currentWeek.text = saveData.stateMachine.weekIndex + "/" +

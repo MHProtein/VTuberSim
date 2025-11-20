@@ -137,7 +137,9 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
         public void Initialize(List<VCard> cards, bool returnable, bool selectable, VAnimationType cardSelectAnimationType, Action<VCard> cardSelectConfirmAction,
             Action returnAction = null, Action<VCard> previewAction = null, VCard previewCard = null)
         {
-            title.text = VUIUtils.Instance.GetSelectCardMenuTitle(cardSelectAnimationType);
+
+            if(title != null)
+                title.text = VUIUtils.Instance.GetSelectCardMenuTitle(cardSelectAnimationType);
             if (previewCardUI is not null)
             {
                 previewTitle.text = VUIUtils.Instance.GetSelectCardMenuPreviewCardTitle(cardSelectAnimationType);

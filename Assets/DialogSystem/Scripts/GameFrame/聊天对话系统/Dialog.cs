@@ -119,6 +119,8 @@ public class Dialog
 
     public void InitDialog()
     {
+        if(loaded)
+            return;
         loaded = true;
         string[] data = csvFile.text.Split(new char[] { '\n' });
 

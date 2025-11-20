@@ -5,12 +5,13 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.UI;
-using VTuber.Core.Managers;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
 {
+    
     public class VAddCardAnimation : VRaisingAnimation
     {
         [SerializeField] private VCardUI cardUI;
@@ -63,21 +64,22 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
         [LabelText("光环淡出时长")]
         [SerializeField] private float haloFadeDuration = 0.5f;
 
+        [FoldoutGroup("音效")] [LabelText("卡牌出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("移动到卡牌库音效")] [SerializeField] private VAudioPlayInfo moveShrinkAudio;
 
         private Action _onComplete;
         private Action _applyEffect;
         private Sequence _sequence;
         private Vector3 _initScale;
-
-
+        
         protected override void Awake()
         {
             base.Awake();
             confirmButton.onClick.AddListener(OnConfirmButtonClicked);
             _initScale = cardUI.transform.localScale;
         }
-
-
+        
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             if (!debug)
@@ -89,13 +91,15 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
 
             _onComplete = onComplete;
             _applyEffect = request.effectApply;
+
             _sequence = Sequence.Create();
-
-
+            confirmButton.interactable = false;
+            
             _sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.Scale(cardUI.transform, _initScale, appearDuration, appearEase))
                 .Group(Tween.Scale(halo, Vector3.one, appearDuration, Ease.OutCubic))
-
+                .ChainCallback(() => confirmButton.interactable = true)
                 .Chain(
                     Tween.Scale(
                         cardUI.transform,
@@ -107,6 +111,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
                     )
                 );
             
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
+
             Tween.LocalEulerAngles(
                 halo,
                 Vector3.zero,
@@ -118,19 +124,21 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             );
         }
 
-
         private void OnConfirmButtonClicked()
         {
             _sequence.Stop();
 
+            confirmButton.interactable = false;
             var moveToLibrarySeq = Sequence.Create();
 
             cardUI.transform.SetParent(cardLibraryPosition);
 
             moveToLibrarySeq
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
                 .Chain(Tween.Scale(cardUI.transform, Vector3.zero, moveShrinkDuration, moveShrinkEase))
                 .Group(Tween.LocalPosition(cardUI.transform, Vector3.zero, movePositionDuration, movePositionEase))
                 .Group(Tween.Alpha(haloImage, 0f, haloFadeDuration))
+
                 .ChainCallback(() =>
                 {
                     cardUI.transform.SetParent(ui.transform);
@@ -143,7 +151,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
                 });
         }
 
-
+        
         public override void ResetAnimation()
         {
             base.ResetAnimation();

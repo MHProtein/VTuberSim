@@ -36,13 +36,13 @@ namespace VTuber.BattleSystem.UI
                 shouldPlayTwice = false;
                 return;
             }
-
-            if (isFromCard)
-            {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>());
-                isFromCard = false;
-            }
+            //
+            // if (isFromCard)
+            // {
+            //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+            //         new Dictionary<string, object>());
+            //     isFromCard = false;
+            // }
         }
 
         protected void SetFontStyle(TMP_Text text, FontStyles style)

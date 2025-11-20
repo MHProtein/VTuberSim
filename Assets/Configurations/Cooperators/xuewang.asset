@@ -54,7 +54,7 @@ MonoBehaviour:
   - from: 101
     to: -1
     levelName: "\u66A7\u6627"
-    levelIndex: 0
+    levelIndex: 4
     eventType: 0
     upgradeEventID: 0
   minEvents: 2

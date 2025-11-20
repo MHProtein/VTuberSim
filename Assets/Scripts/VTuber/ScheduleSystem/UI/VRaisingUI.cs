@@ -20,7 +20,6 @@ using VTuber.RaisingAnimationSystem;
 using VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation;
 using VTuber.Reincarnation;
 using VTuber.Relic;
-using VTuber.Relic.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {

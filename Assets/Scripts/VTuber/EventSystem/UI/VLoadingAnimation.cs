@@ -1,9 +1,12 @@
-﻿using PrimeTween;
+﻿using System;
+using PrimeTween;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.SE;
+using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Events;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
 
@@ -14,6 +17,7 @@ namespace VTuber.EventSystem.UI
         [SerializeField] private GameObject ui;
 
         [SerializeField] private Image backgroundImage;
+        [SerializeField] private Image tiles;
 
         [SerializeField] private Image eventImage;
 
@@ -30,11 +34,11 @@ namespace VTuber.EventSystem.UI
         [FoldoutGroup("动画参数：背景")]
         [LabelText("背景填充时间")]
         [SerializeField] private float bgFillDuration = 0.5f;
-
+        [LabelText("无图标停留时间")]
+        [SerializeField] private float noIconDelay = 1.5f;
         [FoldoutGroup("动画参数：背景")]
         [LabelText("背景淡出时间")]
         [SerializeField] private float bgFadeOutDuration = 0.5f;
-
 
         [FoldoutGroup("动画参数：角标移动")]
         [LabelText("从初始 → 中间 时间")]
@@ -48,7 +52,6 @@ namespace VTuber.EventSystem.UI
         [LabelText("从结束 → 初始 时间")]
         [SerializeField] private float moveBackDuration = 0.5f;
 
-
         [FoldoutGroup("动画参数：事件图标")]
         [LabelText("事件图标缩放时间")]
         [SerializeField] private float iconScaleDuration = 0.5f;
@@ -57,22 +60,30 @@ namespace VTuber.EventSystem.UI
         [LabelText("停留时间")]
         [SerializeField] private float holdDuration = 1.0f;
 
-        public Sequence PlayAnimation(VStreamEventConfiguration e)
+        private Action _onBackgroundFilled;
+
+        public Sequence PlayAnimation(VStreamEventConfiguration e, Action onBackgroundFilled)
         {
+            _onBackgroundFilled = onBackgroundFilled;
             eventImage.sprite = VResourcesManager.Instance.TryGetSprite(e.icon);
             backgroundImage.color = e.backgroundColor;
 
             var sequence = PlayAnimationInternal();
 
             sequence.Chain(Tween.Alpha(backgroundImage, 0.0f, bgFadeOutDuration));
+            sequence.Group(Tween.Alpha(tiles, 0.0f, bgFadeOutDuration));
             sequence.ChainCallback(() => ui.SetActive(false));
 
             return sequence;
         }
 
 
-        public Sequence PlayAnimation(VDialogueEvent e)
+        public Sequence PlayAnimation(VDialogueEvent e, Action onBackgroundFilled)
         {
+            _onBackgroundFilled = onBackgroundFilled;
+            leftCorner.gameObject.SetActive(true);
+            rightCorner.gameObject.SetActive(true);
+            eventImage.gameObject.SetActive(true);
             eventImage.sprite = e.Icon;
             backgroundImage.color = e.BackgroundColor;
 
@@ -81,6 +92,7 @@ namespace VTuber.EventSystem.UI
             if (!e.dialogueNode.IsNullOrWhitespace())
             {
                 sequence.Chain(Tween.Alpha(backgroundImage, 0.0f, bgFadeOutDuration));
+                sequence.Group(Tween.Alpha(tiles, 0.0f, bgFadeOutDuration));
                 sequence.ChainCallback(() => ui.SetActive(false));
             }
 
@@ -91,30 +103,49 @@ namespace VTuber.EventSystem.UI
         private Sequence PlayAnimationInternal()
         {
             ui.SetActive(true);
+            VAudioPlayer.Instance.PlayBGM(VBGMType.Loading);
 
             eventImage.transform.localScale = Vector3.zero;
             leftCorner.localScale = Vector3.one;
             rightCorner.localScale = Vector3.one;
 
             var sequence = Sequence.Create();
-
+            backgroundImage.fillAmount = 0;
+            tiles.fillAmount = 0;
+            VUIUtils.SetImageAlpha(tiles, 1);
             sequence.Chain(Tween.UIFillAmount(backgroundImage, 1.0f, bgFillDuration, Ease.InExpo));
+            sequence.Group(Tween.UIFillAmount(tiles, 1.0f, bgFillDuration, Ease.InExpo));
+            sequence.ChainCallback(() =>
+            {
+                _onBackgroundFilled?.Invoke();
+            });
+            if (eventImage.sprite == null)
+            {
+                leftCorner.gameObject.SetActive(false);
+                rightCorner.gameObject.SetActive(false);
+                eventImage.gameObject.SetActive(false);
+                sequence.ChainDelay(noIconDelay);
+            }
+            else
+            {
+                sequence.Chain(Tween.LocalPosition(leftCorner, middlePosition.localPosition, moveToMiddleDuration, Ease.InOutSine));
+                sequence.Group(Tween.LocalPosition(rightCorner, -middlePosition.localPosition, moveToMiddleDuration, Ease.InOutSine));
 
-            sequence.Chain(Tween.LocalPosition(leftCorner, middlePosition.localPosition, moveToMiddleDuration, Ease.InOutSine));
-            sequence.Group(Tween.LocalPosition(rightCorner, -middlePosition.localPosition, moveToMiddleDuration, Ease.InOutSine));
+                sequence.Chain(Tween.LocalPosition(leftCorner, finalPosition.localPosition, moveToFinalDuration, Ease.InOutSine));
+                sequence.Group(Tween.LocalPosition(rightCorner, -finalPosition.localPosition, moveToFinalDuration, Ease.InOutSine));
+                sequence.Group(Tween.Scale(eventImage.transform, 1.0f, iconScaleDuration, Ease.InOutSine));
 
-            sequence.Chain(Tween.LocalPosition(leftCorner, finalPosition.localPosition, moveToFinalDuration, Ease.InOutSine));
-            sequence.Group(Tween.LocalPosition(rightCorner, -finalPosition.localPosition, moveToFinalDuration, Ease.InOutSine));
-            sequence.Group(Tween.Scale(eventImage.transform, 1.0f, iconScaleDuration, Ease.InOutSine));
+                sequence.ChainDelay(holdDuration);
 
-            sequence.ChainDelay(holdDuration);
+                sequence.Chain(Tween.LocalPosition(leftCorner, initialPosition.localPosition, moveBackDuration, Ease.InOutSine));
+                sequence.Group(Tween.LocalPosition(rightCorner, -initialPosition.localPosition, moveBackDuration, Ease.InOutSine));
+                sequence.Group(Tween.Scale(eventImage.transform, Vector3.zero, iconScaleDuration));
+                sequence.Group(Tween.Scale(leftCorner, 0f, 0.5f));
+                sequence.Group(Tween.Scale(rightCorner, 0f, 0.5f));
+            }
 
-            sequence.Chain(Tween.LocalPosition(leftCorner, initialPosition.localPosition, moveBackDuration, Ease.InOutSine));
-            sequence.Group(Tween.LocalPosition(rightCorner, -initialPosition.localPosition, moveBackDuration, Ease.InOutSine));
-            sequence.Group(Tween.Scale(eventImage.transform, Vector3.zero, iconScaleDuration));
-            sequence.Group(Tween.Scale(leftCorner, 0f, 0.5f));
-            sequence.Group(Tween.Scale(rightCorner, 0f, 0.5f));
-
+            sequence.ChainCallback(() => VAudioPlayer.Instance.StopBGM());
+            
             return sequence;
         }
 

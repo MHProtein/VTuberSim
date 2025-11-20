@@ -132,6 +132,8 @@ namespace VTuber.Core.UI
 
         public string GetSelectCardMenuTitle(VAnimationType cardSelectAnimationType)
         {
+            if (cardSelectAnimationType == VAnimationType.None)
+                return "";
             return selectCardMenuTitles[cardSelectAnimationType];
         }
 

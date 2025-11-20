@@ -487,9 +487,6 @@ namespace VTuber.BattleSystem.UI
             if (shouldPlayTwice)
                 VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnPlayTheSecondTime,
                     new Dictionary<string, object>());
-            else if (isFromCard)
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>());
 
             SetSkipTurnButtonInteractable(true);
         }
