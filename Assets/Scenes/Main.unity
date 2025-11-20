@@ -45388,14 +45388,14 @@ MonoBehaviour:
   initialPosition: {fileID: 318789939}
   middlePosition: {fileID: 863244286}
   finalPosition: {fileID: 1122453058}
-  bgFillDuration: 0.5
-  noIconDelay: 1.5
-  bgFadeOutDuration: 0.5
+  bgFillDuration: 0.25
+  noIconDelay: 1
+  bgFadeOutDuration: 0.25
   moveToMiddleDuration: 0.25
   moveToFinalDuration: 0.5
-  moveBackDuration: 0.5
-  iconScaleDuration: 0.5
-  holdDuration: 1
+  moveBackDuration: 0.25
+  iconScaleDuration: 0.25
+  holdDuration: 0.5
 --- !u!224 &834717766
 RectTransform:
   m_ObjectHideFlags: 0
