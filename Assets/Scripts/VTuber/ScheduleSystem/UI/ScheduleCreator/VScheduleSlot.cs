@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.CoopSystem;
 using VTuber.Core.Foundation;
@@ -18,7 +19,7 @@ namespace VTuber.ScheduleSystem.UI
         public int coopEventID;
     }
 
-    public class VScheduleSlot : VUIBehaviour
+    public class VScheduleSlot : VUIBehaviour, IPointerEnterHandler
     {
         [SerializeField] private GameObject coopEventGameObject;
         [SerializeField] private GameObject highlightFrame;
@@ -244,7 +245,7 @@ namespace VTuber.ScheduleSystem.UI
 
         private void ChangeIndicatorPosition(Vector3 position)
         {
-            _scheduleUI?.ChangeIndicatorPosition(position);
+            _scheduleUI?.ChangeIndicatorPosition(position, false);
         }
 
         private void ChangeIndicatorColor(Color color)
@@ -252,6 +253,12 @@ namespace VTuber.ScheduleSystem.UI
             _scheduleUI?.ChangeIndicatorColor(color);
         }
 
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (!_scheduleUI.Editing)
+                return;
+            _scheduleUI.MoveIndicator(Coordination);
+        }
 
         public void SetIndicator(int height, float offsetY)
         {

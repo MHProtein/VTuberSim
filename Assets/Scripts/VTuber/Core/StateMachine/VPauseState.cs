@@ -16,7 +16,10 @@ namespace VTuber.Core.StateMachine
             base.Enter(state, enterParams);
             stateMachine.PauseSchedule();
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseUIActive(true);
-            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToPause();
+            VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToPause(() =>
+            {
+                stateMachine.ScheduleUI.SetIndicatorToCurrentEvents();
+            });
             stateMachine.ScheduleUI.SwitchToExecution();
             VAudioPlayer.Instance.PlayBGM(VBGMType.Pause);
         }
