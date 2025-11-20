@@ -65,7 +65,7 @@ namespace VTuber.BattleSystem.UI
                     popularityText.color = Color.white;
                 }));
 
-            if (!_isPhaseEnding)
+            if (_isPhaseEnding)
             {
                 if (value <= _target)
                 {

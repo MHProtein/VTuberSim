@@ -170,10 +170,10 @@ namespace VTuber.EventSystem
             bool isPhaseStartEvent = false)
         {
             _hasDialogue = true;
-            dialogueSystem.LoadDialog(e.dialogueNode);
 
             if (!loaded)
                 _executedLines = new List<int>();
+            dialogueSystem.Clear();
 
             VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
@@ -193,6 +193,7 @@ namespace VTuber.EventSystem
             () =>
             {
                 dialogueSystem.ShowMe(character);
+                dialogueSystem.LoadDialog(e.dialogueNode);
             });
         }
 
@@ -291,6 +292,8 @@ namespace VTuber.EventSystem
                     storeObject.SetActive(true);
                     _store.EnterStore(_character);
                     _shouldEnterStore = false;
+                    dialogueSystem.HideMe();
+                    dialogueSystem.Clear();
                 });
             }
             else
@@ -308,8 +311,15 @@ namespace VTuber.EventSystem
                     if (state is not null)
                         state.OnEventEndAnimationEnd(()=> {
                             dialogueSystem.HideMe();
+                            dialogueSystem.Clear();
                             VEventSystemUI.Instance.CloseLoadingAnimation(); 
                         });
+                    else
+                    {
+                        dialogueSystem.HideMe();
+                        dialogueSystem.Clear();
+                        VEventSystemUI.Instance.CloseLoadingAnimation(); 
+                    }
                     VAudioPlayer.Instance.StopBGM();
                 });
             }

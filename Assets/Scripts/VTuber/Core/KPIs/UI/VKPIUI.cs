@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 using VTuber.ScheduleSystem.Core;
 
 namespace VTuber.BattleSystem.Core.KPIs.UI
@@ -19,7 +20,7 @@ namespace VTuber.BattleSystem.Core.KPIs.UI
         public void Initialize(VKPI kpi)
         {
             ID = kpi.ID;
-            _eventName = kpi.EventName;
+            _eventName = VUIUtils.Instance.GetEventName(kpi.EventType);
             _requiredAmount = kpi.RequiredAmount;
             _abilityName = kpi.AbilityName;
             _abilityIndex = kpi.AbilityIndex;
