@@ -57,6 +57,9 @@ namespace VTuber.Character
         public VCooperatorManager CooperatorManager { get; private set; }
 
         public VConsumableManager ConsumableManager { get; private set; }
+        
+        public bool IsCharacterEventStream => _characterConfig.isCharacterEventStream;
+        public uint CharacterEventID => _characterConfig.characterEvent;
 
         public void Initialize(bool isLoaded)
         {

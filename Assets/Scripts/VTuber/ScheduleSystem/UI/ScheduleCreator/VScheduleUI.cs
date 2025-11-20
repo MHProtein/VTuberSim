@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
 using SlayTheSpire.System.SavingSystem;
+using Tutorial.Script;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -221,6 +222,12 @@ namespace VTuber.ScheduleSystem.UI
                 var ui = VRaisingUI.Instance.CreateEventUI(VScheduleUIHelper.Instance.CanvasRect);
                 ui.Initialize(e, slots[(int)specialEvent.timeOfDay, specialEvent.DayIndex], false);
                 ui.SetFixed(true);
+            }
+
+            if (_script is VTutorialScript tutorialScript)
+            {
+                if (!tutorialScript.CurrentWeekUseCoopEvent)
+                    return;
             }
 
             foreach (var slot in slots) slot.SetPlaceable(false, false, -1);

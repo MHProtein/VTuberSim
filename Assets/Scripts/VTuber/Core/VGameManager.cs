@@ -225,7 +225,7 @@ namespace VTuber.BattleSystem.Core
                 _script.StreamEventList.Select(id => VDataManager.Instance.GetStreamEventConfigurationByID(id)));
 
             VRaisingUI.Instance.Initialize(IsTutorial);
-            scheduleCreator.InitializeCreator(_script);
+            scheduleCreator.InitializeCreator(_script, Character);
 
             mainMenu.gameObject.SetActive(false);
         }
@@ -236,24 +236,25 @@ namespace VTuber.BattleSystem.Core
             scheduleCreator.gameObject.SetActive(true);
             _startGameTime = DateTime.UtcNow;
 
+            Character = new VCharacter(characterConfiguration);
+            Character.Initialize(false);
+            
             if (scriptConfig is VTutorialScriptConfiguration)
             {
                 IsTutorial = true;
                 TutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
                 _script = TutorialScript;
-                scheduleCreator.InitializeTutorialCreator(TutorialScript);
+                scheduleCreator.InitializeTutorialCreator(TutorialScript, Character);
             }
             else
             {
                 IsTutorial = false;
                 _script = new VScript(scriptConfig);
-                scheduleCreator.InitializeCreator(_script);
+                scheduleCreator.InitializeCreator(_script, Character);
             }
             VRaisingUI.Instance.Initialize(IsTutorial);
             VDataPersistenceManager.Instance.NewGame(IsTutorial);
 
-            Character = new VCharacter(characterConfiguration);
-            Character.Initialize(false);
 
             foreach (var account in accounts)
                 foreach (var effect in account.Effects)

@@ -82506,6 +82506,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7265649754168869692, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 7265649754168869692, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
     - target: {fileID: 7692096295703266434, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
       propertyPath: m_SizeDelta.y
       value: 511.32
@@ -82564,7 +82568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9035661449475004400, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1397.66
+      value: 1471.21
       objectReference: {fileID: 0}
     - target: {fileID: 9035661449475004400, guid: 57231f045d44aff49b108a03774eaa07, type: 3}
       propertyPath: m_SizeDelta.y
