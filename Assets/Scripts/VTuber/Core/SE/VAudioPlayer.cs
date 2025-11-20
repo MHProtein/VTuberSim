@@ -30,6 +30,7 @@ namespace VTuber.Core.SE
         Raising_PlaceEvent,
         Raising_ZoomInOut,
         Raising_EnterEvent,
+        Loading,
     }
 
     public enum VBGMType
@@ -41,14 +42,17 @@ namespace VTuber.Core.SE
         Dialog,
         ScheduleCreation,
         Store,
-        Loading,
-        NonDialogEvent
+        NonDialogEvent,
+        Stream,
+        Pause,
+        None
     }
 
     public class VAudioPlayer : VSingletonMonobehaviour<VAudioPlayer>
     {
         [SerializeField] private Dictionary<VSFXType, List<VAudioPlayInfo>> sfxs;
         [SerializeField] private Dictionary<VBGMType, List<VAudioPlayInfo>> bgms;
+        private VBGMType _currentBGM = VBGMType.None;
 
         protected override void Awake()
         {
@@ -76,8 +80,13 @@ namespace VTuber.Core.SE
 
         public void PlayBGM(VBGMType bgmType)
         {
+            if (_currentBGM == bgmType)
+                return;
             if (bgms.TryGetValue(bgmType, out var bgmList))
             {
+                StopBGM();
+                VDebug.Log($"PlayBGM: {bgmType}");
+                _currentBGM = bgmType;
                 var bgm = bgmList.First();
                 AudioManager.Instance.PlaySound(bgm.soundName, bgm.channel, bgm.volume, bgm.pitch, bgm.loop, bgm.delay);
             }
@@ -85,6 +94,8 @@ namespace VTuber.Core.SE
 
         public void StopBGM()
         {
+            VDebug.Log($"StopBGM: {_currentBGM}");
+            _currentBGM = VBGMType.None;
             AudioManager.Instance.StopSoundsByChannel(SoundChannel.Music);
         }
 

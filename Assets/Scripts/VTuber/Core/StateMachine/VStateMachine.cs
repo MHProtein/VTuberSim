@@ -204,7 +204,6 @@ namespace VTuber.Core.StateMachine
                 { "WeekIndex", Script.WeekIndex }
             });
             
-            Script.NextWeek();
             VRaisingUI.Instance.UpdateWeekCount(Script.WeekIndex + 1);
             var e = Script.NextWeek();
             if (e is not null)

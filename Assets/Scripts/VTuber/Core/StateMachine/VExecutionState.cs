@@ -253,7 +253,7 @@ namespace VTuber.Core.StateMachine
 
             if (state is null)
             {
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() =>
                 {
                     ExecuteEvent(_currentEvent);
                 });
@@ -261,17 +261,22 @@ namespace VTuber.Core.StateMachine
             }
 
             if (state.StateType == VStateType.ScheduleCreation)
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() =>
                 {
                     stateMachine.ScheduleUI.ResetIndicatorPosition().OnComplete(() =>
                     {
                         var e = stateMachine.WeeklySchedule.BeginExecution();
                         ExecuteEvent(e);
+                        stateMachine.ScheduleUI.SetIndicatorActive();
                     });
                 });
             else if (state.StateType == VStateType.Pause)
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution()
-                    .OnComplete(() => NextEvent());
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() =>
+                {
+                    
+                    stateMachine.ScheduleUI.SetIndicatorActive();
+                    NextEvent();
+                });
         }
 
         public override void Exit(VState nextState)

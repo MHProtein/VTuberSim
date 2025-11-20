@@ -55,6 +55,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
         private Action _onComplete;
 
 
+        [FoldoutGroup("动画速度")]
+        [LabelText("动画速度倍数")]
+        [SerializeField] private float speed = 1f;
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
+
         protected override void Awake()
         {
             base.Awake();
@@ -75,7 +80,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
             VUIUtils.SetImageAlpha(haloImage, 0);
             Sequence sequence = Sequence.Create();
             Sequence replaceSequence = Sequence.Create();
-            replaceSequence.ChainDelay(flipDuration / 2);
+            confirmButton.interactable = false;
+            replaceSequence.ChainDelay(Interval(flipDuration) / 2);
             replaceSequence.ChainCallback(() => {
                 VAudioPlayer.Instance.PlaySFX(flipAudio);
                 if (debug)
@@ -83,23 +89,24 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
                 else
                     cardUI.SetCard(_cardToReplace);
             });
-            replaceSequence.Group(Tween.Alpha(haloImage, 1, flipDuration / 2));
+            replaceSequence.Group(Tween.Alpha(haloImage, 1, Interval(flipDuration) / 2));
             sequence.ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio));
-            sequence.Chain(cardUI.TweenAlpha(1, 0.5f));
+            sequence.Chain(cardUI.TweenAlpha(1, Interval(0.5f)));
             sequence.Group(replaceSequence);
             sequence.Group(Tween.LocalEulerAngles(
                 cardUI.transform,
                 Vector3.zero,
                 new Vector3(0, flipAngle, 0),
-                flipDuration,
+                Interval(flipDuration),
                 flipEase
             ));
+            sequence.ChainCallback(() => confirmButton.interactable = true);
             VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             Tween.LocalEulerAngles(
                 halo,
                 Vector3.zero,
                 new Vector3(0, 0, 360f),
-                haloSpinDuration,
+                Interval(haloSpinDuration),
                 Ease.Linear,
                 -1,
                 CycleMode.Incremental
@@ -112,8 +119,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
             var sequence = Sequence.Create();
             sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(collectAudio))
-                .Chain(Tween.LocalPosition(cardUI.transform, Vector3.zero, collectMoveDuration, Ease.InSine))
-                .Group(Tween.Scale(cardUI.transform, Vector3.zero, collectScaleDuration, Ease.InBack))
+                .Chain(Tween.LocalPosition(cardUI.transform, Vector3.zero, Interval(collectMoveDuration), Ease.InSine))
+                .Group(Tween.Scale(cardUI.transform, Vector3.zero, Interval(collectScaleDuration), Ease.InBack))
                 .ChainCallback(() =>
                 {
                     _onComplete?.Invoke();

@@ -22,7 +22,7 @@ namespace VTuber.Core.StateMachine
 
             if(stateMachine.isTutorial)
                 VRaisingUI.Instance.SetTips(stateMachine.TutorialScript.CurrentWeekTip);
-            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(true);
+            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(false);
             stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
                 stateMachine.Script.WeekIndex);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete(() =>
@@ -39,7 +39,7 @@ namespace VTuber.Core.StateMachine
         {
             base.Exit(nextState);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(false);
-            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(false);
+            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(true);
             VAudioPlayer.Instance.StopBGM();
         }
     }

@@ -14,6 +14,7 @@ namespace VTuber.Core.RaisingEffect
         {
             _discount = new VUpgradableValue<float>(float.Parse(parameter.Trim()),
                 float.Parse(upgradedParameter.Trim()));
+            shouldPlayAnimation = false;
         }
 
         protected override void ApplyEffectImplement(VCharacter character, Dictionary<string, object> messagedict)

@@ -18,6 +18,7 @@ namespace Tutorial.Script
     public class VTutorialWeek
     {
         public int weekID;
+        [LabelText("产生帮助事件")] public bool useCoopEvents;
         [LabelText("每周可使用事件")] public List<uint> eventIDs;
         [LabelText("每周可使用直播事件")] public List<uint> streamEventIDs;
         [LabelText("周结束条件")] public List<VTutorialWeekCondition> conditions;

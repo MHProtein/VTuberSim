@@ -2,6 +2,7 @@
 using System.Linq;
 using Tutorial.Script;
 using UnityEngine;
+using VTuber.Character;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
 using VTuber.ScheduleSystem.Events;
@@ -47,7 +48,7 @@ namespace VTuber.ScheduleSystem.UI
             _eventObjects.Clear();
         }
 
-        public void InitializeTutorialCreator(VTutorialScript script)
+        public void InitializeTutorialCreator(VTutorialScript script, VCharacter character)
         {
             script.AddOnWeekAdvancedCallback(weekIndex =>
             {
@@ -56,9 +57,18 @@ namespace VTuber.ScheduleSystem.UI
                     script.CurrentWeekDialogEventList.Select(e =>
                             (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e))
                         .ToList();
-                eventConfigs.AddRange(script.StreamEventList
+                eventConfigs.AddRange(script.CurrentWeekStreamEventList
                     .Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
                 _eventDatas = eventConfigs;
+                
+                if (character.IsCharacterEventStream)
+                {
+                    _eventDatas.Add(VDataManager.Instance.GetStreamEventConfigurationByID(character.CharacterEventID));
+                }
+                else
+                {
+                    _eventDatas.Add(VDataManager.Instance.GetDialogueEventConfigurationByID(character.CharacterEventID));
+                }
 
                 CreateEventObjects();
             });
@@ -72,13 +82,23 @@ namespace VTuber.ScheduleSystem.UI
             if (!_isFirstTime) CreateEventObjects();
         }
 
-        public void InitializeCreator(VScript script)
+        public void InitializeCreator(VScript script, VCharacter character)
         {
             var events = script.EventList.Select(e =>
                 (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e)).ToList();
             events.AddRange(script.StreamEventList.Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e))
                 .ToList());
             _eventDatas = events;
+            
+            if (character.IsCharacterEventStream)
+            {
+                _eventDatas.Add(VDataManager.Instance.GetStreamEventConfigurationByID(character.CharacterEventID));
+            }
+            else
+            {
+                _eventDatas.Add(VDataManager.Instance.GetDialogueEventConfigurationByID(character.CharacterEventID));
+            }
+            
             if (!_isFirstTime) CreateEventObjects();
         }
 

@@ -120,6 +120,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
                 })
                 .Chain(Tween.Scale(cardUI.transform, Vector3.one * upgradeScale, upgradeScaleDuration, Ease.OutBack))
                 .Chain(Tween.Scale(halo, Vector3.one, haloExpandDuration, Ease.OutBack))
+                .ChainCallback(() => confirmButton.interactable = true)
                 .ChainDelay(afterUpgradeDelay)
                 .Chain(
                     Tween.Scale(

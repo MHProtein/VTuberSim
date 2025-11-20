@@ -7,6 +7,8 @@ using VTuber.BattleSystem.UI;
 using VTuber.Character;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Relic.UI;
+using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.UI.VCharacterSelection
 {
@@ -22,6 +24,8 @@ namespace VTuber.Core.UI.VCharacterSelection
         [SerializeField] private VAbilityDetails abilityDetails;
         [SerializeField] private Transform pressureEffectTableGrid;
         [SerializeField] private GameObject pressureEffectEntryPrefab;
+        [SerializeField] private VEventDataUI eventDataUI;
+        [SerializeField] private VRelicSlotUI relicSlotUI;
 
         private readonly Dictionary<uint, VCard> _cardsCreated = new();
         private List<VPressureEffectTableEntry> _pressureEffects;
@@ -81,6 +85,16 @@ namespace VTuber.Core.UI.VCharacterSelection
                 entry.GetComponent<VPressureEffectTableEntry>().SetEffect(pressureLevelInfo.Value, pressureLevelInfo.Key, "每天结束时, " + characterConfig.pressureEffects[i].CreateRaisingEffect().Description);
                 _pressureEffects.Add(entry.GetComponent<VPressureEffectTableEntry>());
             }
+            if (characterConfig.isCharacterEventStream)
+            {
+                eventDataUI.Initialize(VDataManager.Instance.GetStreamEventConfigurationByID(characterConfig.characterEvent), false);
+            }
+            else
+            {
+                eventDataUI.Initialize(VDataManager.Instance.GetDialogueEventConfigurationByID(characterConfig.characterEvent), false);
+            }
+            
+            relicSlotUI.Initialize(VDataManager.Instance.CreateRelicByID(characterConfig.initialRelicId), false);
         }
     }
 }

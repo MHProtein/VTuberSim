@@ -59,6 +59,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.RemoveCardAnimation
         [FoldoutGroup("音效")] [LabelText("烟雾出现音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo smokeAppearAudio;
         [FoldoutGroup("音效")] [LabelText("烟雾消失音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo smokeFadeAudio;
 
+        [FoldoutGroup("动画速度")]
+        [LabelText("动画速度倍数")]
+        [SerializeField] private float speed = 1f;
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
+
         private Vector3 _initScale;
 
         protected override void Awake()
@@ -78,16 +83,16 @@ namespace VTuber.RaisingAnimationSystem.Animations.RemoveCardAnimation
             var sequence = Sequence.Create();
             sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
-                .Chain(Tween.Scale(cardUI.transform, _initScale, cardScaleInDuration, Ease.OutBack))
-                .Group(cardUI.TweenAlpha(1.0f, cardFadeInDuration))
-                .ChainDelay(cardPauseBeforeRemoval)
+                .Chain(Tween.Scale(cardUI.transform, _initScale, Interval(cardScaleInDuration), Ease.OutBack))
+                .Group(cardUI.TweenAlpha(1.0f, Interval(cardFadeInDuration)))
+                .ChainDelay(Interval(cardPauseBeforeRemoval))
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(removeAudio))
-                .Chain(Tween.Scale(cardUI.transform, Vector3.zero, cardShrinkDuration, Ease.InQuart))
+                .Chain(Tween.Scale(cardUI.transform, Vector3.zero, Interval(cardShrinkDuration), Ease.InQuart))
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(smokeAppearAudio))
-                .Group(Tween.Scale(smoke, Vector3.one, smokeExpandDuration, Ease.OutCubic))
+                .Group(Tween.Scale(smoke, Vector3.one, Interval(smokeExpandDuration), Ease.OutCubic))
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(smokeFadeAudio))
-                .Chain(Tween.Scale(smoke, Vector3.zero, smokeFadeOutDuration))
-                .ChainDelay(smokeFinishDelay)
+                .Chain(Tween.Scale(smoke, Vector3.zero, Interval(smokeFadeOutDuration)))
+                .ChainDelay(Interval(smokeFinishDelay))
                 .ChainCallback(() =>
                 {
                     request.effectApply?.Invoke();

@@ -57,6 +57,9 @@ namespace VTuber.Character
         public VCooperatorManager CooperatorManager { get; private set; }
 
         public VConsumableManager ConsumableManager { get; private set; }
+        
+        public bool IsCharacterEventStream => _characterConfig.isCharacterEventStream;
+        public uint CharacterEventID => _characterConfig.characterEvent;
 
         public void Initialize(bool isLoaded)
         {
@@ -344,6 +347,14 @@ namespace VTuber.Character
                 succeededStreams = succeededStreams
             };
             data.characterSaveData = characterSaveData;
+        }
+
+        public void Clear()
+        {
+            CardLibrary.Clear();
+            CharacterRelicManager.Clear();
+            ConsumableManager.Clear();
+            CooperatorManager.Clear();
         }
     }
 }

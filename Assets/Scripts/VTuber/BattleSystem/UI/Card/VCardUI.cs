@@ -55,6 +55,13 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] public TMP_Text shieldText;
 
         public VCard Card { get; private set; }
+        
+        private Sprite _initSprite;
+        
+        private void Awake()
+        {
+            _initSprite = costImage.sprite;
+        }
 
         public void SetCard(VCard card)
         {
@@ -71,17 +78,20 @@ namespace VTuber.BattleSystem.UI
             if (card.IsExhaust)
                 description.text += "\nExhaust.";
             typeText.text = card.CardType;
-
+            
+            if (card.CostType == CostType.Stamina) costImage.color = Color.white;
             if (card.CostType == CostType.TrueStamina) costImage.color = Color.red;
 
             if (card.CostType == CostType.Buff)
             {
+                costImage.color = Color.white;
                 costImage.sprite = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId).icon;
                 cost.text = "-" + card.Cost;
                 cost.transform.localPosition = new Vector3(cost.transform.localPosition.x, -40f, 0f);
             }
             else
             {
+                costImage.sprite = _initSprite;
                 cost.text = "-" + card.Cost;
             }
 

@@ -35,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 317, y: -15}
+  m_AnchoredPosition: {x: 317, y: -28}
   m_SizeDelta: {x: 594, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1887167164435175205
@@ -73,7 +73,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 42
-    m_Alignment: 4
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -724,5 +724,5 @@ MonoBehaviour:
   words: {fileID: 8036898344636618567}
   rect: {fileID: 6430993792532683235}
   wordsImage: {fileID: 0}
-  numToChangeLine: 20
+  numToChangeLine: 15
   lineHeight: 35

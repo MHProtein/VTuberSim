@@ -14,6 +14,7 @@ using VTuber.Character.Attributes;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
+using VTuber.Core.SE;
 using VTuber.Dialogue.UI;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Events.DialogueEvent;
@@ -323,8 +324,6 @@ namespace VTuber.BattleSystem.Core
                 return;
             }
             _eventID = e.EventID;
-
- 
             
             VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
@@ -337,6 +336,7 @@ namespace VTuber.BattleSystem.Core
                     { "CharacterAttributeManager", characterAttributeManager },
                     { "BattleAttributeManager", battleAttributeManager }
                 });
+                VAudioPlayer.Instance.PlayBGM(VBGMType.Stream);
 
                 foreach (var buff in characterAttributeManager.GetBuffs())
                     if (buff is not null)

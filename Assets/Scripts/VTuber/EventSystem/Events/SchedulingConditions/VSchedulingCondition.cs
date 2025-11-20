@@ -205,7 +205,7 @@ namespace VTuber.ScheduleSystem.Events
                 foreach (var s in slots)
                     if (s.Item is not null)
                     {
-                        if (_isStream && s.Item.Event is VStreamEvent && s.Item.Event.EventID == _targetID)
+                        if (_isStream == s.Item.Event is VStreamEvent && s.Item.Event.EventID == _targetID)
                             return false;
                     }
 
@@ -218,7 +218,7 @@ namespace VTuber.ScheduleSystem.Events
                     {
                         case VSchedulingConditionType.ID:
                         {
-                            if (_isStream && s.Item.Event is not VStreamEvent)
+                            if (_isStream != s.Item.Event is VStreamEvent)
                                 return false;
                             return s.Item.Event.EventID == _targetID;
                         }

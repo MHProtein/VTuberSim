@@ -123,6 +123,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
         {
             _returnAction?.Invoke();
             _onComplete?.Invoke();
+            ResetAnimation();
         }
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
@@ -137,7 +138,6 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
         public void Initialize(List<VCard> cards, bool returnable, bool selectable, VAnimationType cardSelectAnimationType, Action<VCard> cardSelectConfirmAction,
             Action returnAction = null, Action<VCard> previewAction = null, VCard previewCard = null)
         {
-
             if(title != null)
                 title.text = VUIUtils.Instance.GetSelectCardMenuTitle(cardSelectAnimationType);
             if (previewCardUI is not null)
@@ -182,7 +182,6 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
                 foreach (var cardUI in _cardUIs) ReturnCardToPool(cardUI);
                 _cardUIs.Clear();
                 _displayingCardUIs.Clear();
-                
             }
             _selectedCardUI = null;
             _typeDropdown.value = 0; 
@@ -248,7 +247,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
         private void ReturnCardToPool(VSelectCardCardUI card)
         {
             if (card == null) return;
-            card.transform.SetParent(null);
+            card.transform.localScale = Vector3.one;
+            card.transform.SetParent(transform);
             card.gameObject.SetActive(false);
             _cardPool.Enqueue(card);
         }

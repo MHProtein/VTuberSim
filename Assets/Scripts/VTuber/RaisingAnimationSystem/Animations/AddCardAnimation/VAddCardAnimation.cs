@@ -49,20 +49,20 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
         [SerializeField] private float moveShrinkDuration = 0.5f;
 
         [FoldoutGroup("移入卡库动画")]
-        [LabelText("缩小缓动")]
-        [SerializeField] private Ease moveShrinkEase = Ease.InCubic;
-
-        [FoldoutGroup("移入卡库动画")]
         [LabelText("位置动画时长")]
         [SerializeField] private float movePositionDuration = 0.5f;
 
         [FoldoutGroup("移入卡库动画")]
-        [LabelText("位置缓动")]
-        [SerializeField] private Ease movePositionEase = Ease.InCubic;
-
-        [FoldoutGroup("移入卡库动画")]
         [LabelText("光环淡出时长")]
         [SerializeField] private float haloFadeDuration = 0.5f;
+
+        // 新增：动画速度（乘算到所有时间间隔）
+        [FoldoutGroup("动画设置")]
+        [LabelText("速度")]
+        [SerializeField] private float speed = 1f;
+
+        // 辅助：把基础时长乘以速度，避免非正值
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
 
         [FoldoutGroup("音效")] [LabelText("卡牌出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
         [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
@@ -97,14 +97,14 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             
             _sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
-                .Chain(Tween.Scale(cardUI.transform, _initScale, appearDuration, appearEase))
-                .Group(Tween.Scale(halo, Vector3.one, appearDuration, Ease.OutCubic))
+                .Chain(Tween.Scale(cardUI.transform, _initScale, Interval(appearDuration), appearEase))
+                .Group(Tween.Scale(halo, Vector3.one, Interval(appearDuration), Ease.OutCubic))
                 .ChainCallback(() => confirmButton.interactable = true)
                 .Chain(
                     Tween.Scale(
                         cardUI.transform,
                         cardPulseScale,
-                        cardPulseDuration,
+                        Interval(cardPulseDuration),
                         Ease.InOutCubic,
                         1000,
                         CycleMode.Rewind
@@ -117,7 +117,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
                 halo,
                 Vector3.zero,
                 new Vector3(0, 0, 360f),
-                haloSpinDuration,
+                Interval(haloSpinDuration),
                 Ease.Linear,
                 -1,
                 CycleMode.Incremental
@@ -135,10 +135,9 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
 
             moveToLibrarySeq
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
-                .Chain(Tween.Scale(cardUI.transform, Vector3.zero, moveShrinkDuration, moveShrinkEase))
-                .Group(Tween.LocalPosition(cardUI.transform, Vector3.zero, movePositionDuration, movePositionEase))
-                .Group(Tween.Alpha(haloImage, 0f, haloFadeDuration))
-
+                .Group(Tween.Alpha(haloImage, 0f, Interval(haloFadeDuration)))
+                .Group(Tween.Scale(cardUI.transform, Vector3.zero, Interval(moveShrinkDuration), Ease.InCubic))
+                .Group(Tween.LocalPosition(cardUI.transform, Vector3.zero, Interval(movePositionDuration), Ease.InOutCubic))
                 .ChainCallback(() =>
                 {
                     cardUI.transform.SetParent(ui.transform);
