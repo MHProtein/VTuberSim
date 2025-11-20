@@ -126,7 +126,7 @@ TextureImporter:
         width: 557
         height: 198
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -139,7 +139,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wrok1
+      name: work1
       rect:
         serializedVersion: 2
         x: 52
@@ -147,7 +147,7 @@ TextureImporter:
         width: 557
         height: 198
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -168,7 +168,7 @@ TextureImporter:
         width: 557
         height: 198
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -193,8 +193,8 @@ TextureImporter:
     nameFileIdTable:
       sleep1: 594049836
       sleep2: 2029498019
+      work1: 990056390
       work2: 384116969
-      wrok1: 990056390
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
