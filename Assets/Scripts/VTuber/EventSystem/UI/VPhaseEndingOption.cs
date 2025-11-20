@@ -23,6 +23,9 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private Transform characterRelicsGrid;   // 用于角色遗物
         [SerializeField] private Transform inheritableRelicsGrid; // 用于可继承遗物
         
+        [SerializeField] private Image eventIcon;
+        
+        
         [SerializeField] private Image backgroundImage;
         [SerializeField] private TMP_Text titleText;
         [SerializeField] private GameObject conditionPrefab;
@@ -36,7 +39,17 @@ namespace VTuber.Dialogue.UI
             _menu = menu;
             conditionDescriptions = new List<TMP_Text>();
             titleText.text = streamEvent.EventName;
+            
             var kpis = streamEvent.Kpis;
+            if (eventIcon != null)
+            {
+                // VScheduleEvent (父类) 中已经有了 Icon 属性
+                eventIcon.sprite = streamEvent.Icon;
+                
+                // 可选：如果图标为空，可能需要隐藏 Image 防止显示白色方块
+                eventIcon.gameObject.SetActive(streamEvent.Icon != null);
+            }
+            
             foreach (var kpi in kpis)
             {
                 GameObject conditionGo = Instantiate(conditionPrefab, grids);
@@ -53,6 +66,7 @@ namespace VTuber.Dialogue.UI
 
             // 1. 角色遗物 (Character Relics)
             Dialog dialog = VResourcesManager.Instance.TryGetDialog(e.dialogueNode);
+            
             if (dialog != null)
             {
                 List<VRelicConfiguration> relicConfigs = dialog.GetRelics();
@@ -63,6 +77,8 @@ namespace VTuber.Dialogue.UI
                         VRelic relicData = config.CreateRelic();
                         if (relicData != null)
                         {
+                            
+                            Debug.Log($"Character Relic Found: {relicData}");
                             // --- 核心修改点 2：实例化到 characterRelicsGrid ---
                             // Instantiate the prefab
                             GameObject relicGo = Instantiate(relicUiPrefab, characterRelicsGrid);
@@ -83,6 +99,7 @@ namespace VTuber.Dialogue.UI
                     VRelic relicData = VDataManager.Instance.CreateRelicByID(relicId);
                     if (relicData != null)
                     {
+                        Debug.Log($"Inheritable Relic Found: {relicData}");
                         // --- 核心修改点 3：实例化到 inheritableRelicsGrid ---
                         // Instantiate the prefab
                         GameObject relicGo = Instantiate(relicUiPrefab, inheritableRelicsGrid);
