@@ -16,6 +16,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
         [SerializeField] private Transform infoInitPosition;
         [SerializeField] private Transform infoPosition;
         [SerializeField] private Image icon;
+        [SerializeField] private GameObject maxText;
         [SerializeField] private TMP_Text valueText;
         [SerializeField] private Transform light;
 
@@ -61,6 +62,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
             ResetAnimation();
             base.BeginAnimation(request, onComplete, isLastSameType);
 
+            maxText.SetActive(request.isMaxValue);
             // Display values
             icon.sprite = request.attributeIcon;
             valueText.color = request.value > 0 ? Color.green : Color.red;

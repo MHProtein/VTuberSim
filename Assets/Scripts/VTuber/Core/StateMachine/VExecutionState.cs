@@ -267,10 +267,16 @@ namespace VTuber.Core.StateMachine
                     {
                         var e = stateMachine.WeeklySchedule.BeginExecution();
                         ExecuteEvent(e);
+                        stateMachine.ScheduleUI.SetIndicatorActive();
                     });
                 });
             else if (state.StateType == VStateType.Pause)
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() => NextEvent());
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() =>
+                {
+                    
+                    stateMachine.ScheduleUI.SetIndicatorActive();
+                    NextEvent();
+                });
         }
 
         public override void Exit(VState nextState)

@@ -240,7 +240,7 @@ namespace VTuber.ScheduleSystem.UI
 
         private void ChangeIndicatorScale(float scale)
         {
-            _scheduleUI?.ChangeIndicatorScale(scale);
+            _scheduleUI?.ChangeIndicatorScale(scale, false);
         }
 
         private void ChangeIndicatorPosition(Vector3 position)
@@ -253,11 +253,16 @@ namespace VTuber.ScheduleSystem.UI
             _scheduleUI?.ChangeIndicatorColor(color);
         }
 
+        public void MoveIndicator()
+        {
+            _scheduleUI?.MoveIndicator(Coordination);
+        }
+
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (_scheduleUI is null || !_scheduleUI.Editing)
                 return;
-            _scheduleUI.MoveIndicator(Coordination);
+            MoveIndicator();
         }
 
         public void SetIndicator(int height, float offsetY)

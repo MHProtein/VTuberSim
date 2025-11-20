@@ -13,6 +13,7 @@ namespace VTuber.Relic.UI
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
         [SerializeField] private TMP_Text layer;
+        private bool _shouldShowDescription;
         public VRelic Relic { get; private set; }
 
         public uint BattleID { get; private set; }
@@ -25,10 +26,15 @@ namespace VTuber.Relic.UI
             base.Awake();
             IsAdditional = false;
         }
+        
+        public void SetShouldShowDescription(bool shouldShowDescription)
+        {
+            _shouldShowDescription = shouldShowDescription;
+        }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_isPermanentDescriptionShown)
+            if (_isPermanentDescriptionShown || !_shouldShowDescription)
                 return;
             if (_relicMenu)
             {
@@ -40,7 +46,7 @@ namespace VTuber.Relic.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (_isPermanentDescriptionShown)
+            if (_isPermanentDescriptionShown || !_shouldShowDescription)
                 return;
             if (_relicMenu)
             {

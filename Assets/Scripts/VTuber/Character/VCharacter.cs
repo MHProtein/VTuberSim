@@ -348,5 +348,13 @@ namespace VTuber.Character
             };
             data.characterSaveData = characterSaveData;
         }
+
+        public void Clear()
+        {
+            CardLibrary.Clear();
+            CharacterRelicManager.Clear();
+            ConsumableManager.Clear();
+            CooperatorManager.Clear();
+        }
     }
 }

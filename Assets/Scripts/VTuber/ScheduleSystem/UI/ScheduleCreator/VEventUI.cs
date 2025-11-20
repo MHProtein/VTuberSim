@@ -343,8 +343,6 @@ namespace VTuber.ScheduleSystem.UI
                 OnEndDragging();
             }
         }
-        
-        
 
         public void OnEndDragging()
         {
@@ -407,7 +405,7 @@ namespace VTuber.ScheduleSystem.UI
             });
         }
         
-public void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData)
         {            
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnNotifyEventDescriptionChange,
                 new Dictionary<string, object>()
@@ -416,10 +414,11 @@ public void OnPointerEnter(PointerEventData eventData)
                     {"Description", _event.Description}
                 });
 
-
+            if (parentSlots is not null && parentSlots.Count != 0)
+            {
+                parentSlots[0].MoveIndicator();
+            }
         }
-
-
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -454,8 +453,7 @@ public void OnPointerEnter(PointerEventData eventData)
         }
         
         public void OnPointerUp(PointerEventData eventData)
-        {   
-            
+        {
         }
         
         public void OnPointerExit(PointerEventData eventData)

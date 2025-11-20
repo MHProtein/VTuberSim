@@ -12,6 +12,7 @@ namespace VTuber.Character
     public class VCharacterConfiguration : VScriptableObject
     {
         public string characterName;
+        public Sprite characterIcon;
         [TextArea] public string description;
         public string liveType;
         public uint initialCardId;

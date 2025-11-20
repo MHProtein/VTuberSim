@@ -22,10 +22,13 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   characterName: "\u58A8\u6CAB\u5B8C\u5168\u4F53"
+  characterIcon: {fileID: 21300000, guid: 65628a7e3a1104a47b667022c9eb6d72, type: 3}
   description: "\u5728\u53E6\u4E00\u4E2A\u65F6\u95F4\u7EBF\uFF0C\u58A8\u6CAB\u5DF2\u7ECF\u6210\u4E3A\u4E86bigbigV\u3002"
   liveType: C
   initialCardId: 67
   initialRelicId: 11
+  isCharacterEventStream: 0
+  characterEvent: 0
   fillingEventIDDuration1: 75
   fillingEventIDDuration2: 76
   fillingEventIDDuration3: 77

@@ -20,6 +20,10 @@ namespace VTuber.Relic.UI
             base.Awake();
 
             _slotUIs = content.GetComponentsInChildren<VRelicSlotUI>().ToList();
+            foreach (var slotUI in _slotUIs)
+            {
+                slotUI.SetShouldShowDescription(false);
+            }
         }
 
         protected override void OnEnable()
@@ -76,6 +80,8 @@ namespace VTuber.Relic.UI
                 slot = go.GetComponent<VRelicSlotUI>();
                 slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics, relicMenu);
                 slot.SetIsAdditional(true);
+                slot.SetShouldShowDescription(false);
+                
                 _slotUIs.Add(slot);
             }
         }

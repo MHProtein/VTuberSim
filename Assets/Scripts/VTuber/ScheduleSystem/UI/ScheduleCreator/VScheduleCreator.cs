@@ -57,7 +57,7 @@ namespace VTuber.ScheduleSystem.UI
                     script.CurrentWeekDialogEventList.Select(e =>
                             (VScheduleEventConfiguration)VDataManager.Instance.GetDialogueEventConfigurationByID(e))
                         .ToList();
-                eventConfigs.AddRange(script.StreamEventList
+                eventConfigs.AddRange(script.CurrentWeekStreamEventList
                     .Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
                 _eventDatas = eventConfigs;
                 

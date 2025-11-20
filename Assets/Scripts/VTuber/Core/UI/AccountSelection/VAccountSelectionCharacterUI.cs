@@ -14,6 +14,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
     {
         [SerializeField] private TMP_Text maxStaminaText;
         [SerializeField] private Image initialPressureImage;
+        [SerializeField] private Image icon;
         [SerializeField] private TMP_Text initialMoneyText;
         [SerializeField] private TMP_Text initialMembershipText;
         [SerializeField] private TMP_Text initialFollowerText;
@@ -32,6 +33,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
         public void SetCharacter(VCharacterConfiguration character)
         {
             _config = character;
+            icon.sprite = character.characterIcon;
             ApplyAccounts();
         }
 

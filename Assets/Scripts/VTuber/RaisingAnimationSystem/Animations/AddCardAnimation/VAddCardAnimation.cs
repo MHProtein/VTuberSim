@@ -136,7 +136,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             moveToLibrarySeq
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
                 .Group(Tween.Alpha(haloImage, 0f, Interval(haloFadeDuration)))
-                .Group(Tween.Scale(cardUI.transform, Vector3.one * 0.5f, Interval(moveShrinkDuration), Ease.InCubic))
+                .Group(Tween.Scale(cardUI.transform, Vector3.zero, Interval(moveShrinkDuration), Ease.InCubic))
                 .Group(Tween.LocalPosition(cardUI.transform, Vector3.zero, Interval(movePositionDuration), Ease.InOutCubic))
                 .ChainCallback(() =>
                 {

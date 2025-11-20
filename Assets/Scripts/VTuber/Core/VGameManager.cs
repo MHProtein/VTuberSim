@@ -225,7 +225,14 @@ namespace VTuber.BattleSystem.Core
                 _script.StreamEventList.Select(id => VDataManager.Instance.GetStreamEventConfigurationByID(id)));
 
             VRaisingUI.Instance.Initialize(IsTutorial);
-            scheduleCreator.InitializeCreator(_script, Character);
+            if (isTutorialSave)
+            {
+                scheduleCreator.InitializeTutorialCreator(TutorialScript, Character);
+            }
+            else
+            {
+                scheduleCreator.InitializeCreator(_script, Character);
+            }
 
             mainMenu.gameObject.SetActive(false);
         }
@@ -396,6 +403,7 @@ namespace VTuber.BattleSystem.Core
                 _stateMachine.OnDisable();
             }
 
+            Character.Clear();
             if (Character is not null)
                 Character.OnDisable();
             if (scheduleUI is not null)
