@@ -75,6 +75,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.RemoveCardAnimation
             {
                 cardUI.SetCard(request.cards[0]);
             }
+            
             var sequence = Sequence.Create();
             sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))

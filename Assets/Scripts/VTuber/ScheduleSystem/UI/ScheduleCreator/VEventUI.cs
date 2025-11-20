@@ -258,7 +258,10 @@ namespace VTuber.ScheduleSystem.UI
 
             foreach (var parent in parentSlots) parent.SetItem(this);
             if (shouldTween)
+            {
                 Tween.Position(transform, position, 0.2f);
+                VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_PlaceEvent);
+            }
             else
                 transform.position = position;
             transform.SetParent(transformParent);
@@ -268,7 +271,6 @@ namespace VTuber.ScheduleSystem.UI
                 {
                     { "Event", Event }
                 });
-            VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_PlaceEvent);
         }
 
         public bool TryPlaceEvent(List<RaycastResult> results)

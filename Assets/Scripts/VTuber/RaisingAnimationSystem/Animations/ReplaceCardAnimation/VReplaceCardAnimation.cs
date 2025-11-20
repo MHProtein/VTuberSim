@@ -75,6 +75,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
             VUIUtils.SetImageAlpha(haloImage, 0);
             Sequence sequence = Sequence.Create();
             Sequence replaceSequence = Sequence.Create();
+            confirmButton.interactable = false;
             replaceSequence.ChainDelay(flipDuration / 2);
             replaceSequence.ChainCallback(() => {
                 VAudioPlayer.Instance.PlaySFX(flipAudio);
@@ -94,6 +95,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
                 flipDuration,
                 flipEase
             ));
+            sequence.ChainCallback(() => confirmButton.interactable = true);
             VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             Tween.LocalEulerAngles(
                 halo,

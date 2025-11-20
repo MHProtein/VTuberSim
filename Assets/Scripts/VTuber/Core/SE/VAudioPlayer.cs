@@ -78,6 +78,7 @@ namespace VTuber.Core.SE
         {
             if (bgms.TryGetValue(bgmType, out var bgmList))
             {
+                StopBGM();
                 var bgm = bgmList.First();
                 AudioManager.Instance.PlaySound(bgm.soundName, bgm.channel, bgm.volume, bgm.pitch, bgm.loop, bgm.delay);
             }
