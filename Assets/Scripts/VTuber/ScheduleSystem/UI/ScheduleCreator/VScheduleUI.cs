@@ -4,7 +4,9 @@ using System.Linq;
 using PrimeTween;
 using SlayTheSpire.System.SavingSystem;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
@@ -12,6 +14,7 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
+using VTuber.Core.StateMachine;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
@@ -26,7 +29,7 @@ namespace VTuber.ScheduleSystem.UI
         public VScheduleSlotSaveData[,] slots;
     }
 
-    public class VScheduleUI : VUIBehaviour
+    public class VScheduleUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject eventUIPrefab;
@@ -178,6 +181,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToCreation(VCharacter character, VScript script, int weekIndex)
         {
+            indicator.gameObject.SetActive(false);
             _events.Clear();
             _eventCount = new Dictionary<VEventType, int>();
             foreach (VEventType eventType in Enum.GetValues(typeof(VEventType))) _eventCount.Add(eventType, 0);
@@ -228,6 +232,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToModify()
         {
+            indicator.gameObject.SetActive(false);
             for (var y = 0; y < slotSize.y; y++)
             for (var x = 0; x < slotSize.x; x++)
                 if (slots[y, x].Item != null)
@@ -470,6 +475,24 @@ namespace VTuber.ScheduleSystem.UI
             }
 
             DestroyAllItems();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            var currentState = VGameManager.Instance.GetCurrentState();
+            if (currentState == VStateType.ScheduleCreation || currentState == VStateType.ScheduleModify)
+            {
+                indicator.gameObject.SetActive(true);
+            }
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            var currentState = VGameManager.Instance.GetCurrentState();
+            if (currentState == VStateType.ScheduleCreation || currentState == VStateType.ScheduleModify)
+            {
+                indicator.gameObject.SetActive(false);
+            }
         }
     }
 }
