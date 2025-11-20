@@ -188,6 +188,7 @@ namespace VTuber.ScheduleSystem.UI
         public void SwitchToCreation(VCharacter character, VScript script, int weekIndex)
         {
             _editing = true;
+            ChangeIndicatorScale(1);
             indicator.gameObject.SetActive(false);
             _events.Clear();
             _eventCount = new Dictionary<VEventType, int>();
@@ -246,6 +247,7 @@ namespace VTuber.ScheduleSystem.UI
         public void SwitchToModify()
         {
             _editing = true;
+            ChangeIndicatorScale(1);
             indicator.gameObject.SetActive(false);
             for (var y = 0; y < slotSize.y; y++)
             for (var x = 0; x < slotSize.x; x++)

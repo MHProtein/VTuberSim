@@ -255,7 +255,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (!_scheduleUI.Editing)
+            if (_scheduleUI is null || !_scheduleUI.Editing)
                 return;
             _scheduleUI.MoveIndicator(Coordination);
         }
