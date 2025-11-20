@@ -38913,7 +38913,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 8
+      Data: 9
     - Name: 
       Entry: 7
       Data: 
@@ -39267,6 +39267,52 @@ MonoBehaviour:
     - Name: loop
       Entry: 5
       Data: true
+    - Name: delay
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 7
+    - Name: $v
+      Entry: 7
+      Data: 40|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 41|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
+    - Name: soundName
+      Entry: 1
+      Data: change
+    - Name: channel
+      Entry: 3
+      Data: 1
+    - Name: volume
+      Entry: 4
+      Data: 1
+    - Name: pitch
+      Entry: 4
+      Data: 1
+    - Name: loop
+      Entry: 5
+      Data: false
     - Name: delay
       Entry: 4
       Data: 0
