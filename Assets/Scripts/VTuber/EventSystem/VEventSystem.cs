@@ -35,19 +35,6 @@ namespace VTuber.EventSystem
         public List<int> executedLines;
         public bool isInBattle;
         public uint replaceSelectedCardID;
-        public VSelectionMenuType selectionMenuType;
-    }
-
-    public enum VSelectionMenuType
-    {
-        AddCard,
-        AddConsumable,
-        SelectCard,
-        SelectCardFrom3,
-        SelectConsumableFrom3,
-        SelectUpgradeCard,
-        SelectPhaseEnding,
-        None
     }
 
     public class VEventSystem : VMonoBehaviour
@@ -69,7 +56,6 @@ namespace VTuber.EventSystem
         private List<int> _executedLines;
         private bool _loaded;
 
-        private VSelectionMenuType _selectionMenuType = VSelectionMenuType.None;
         private List<VConsumable> _consumablesToSelect;
         private List<VCard> _cardsToSelect;
         private VCard _replaceSelectedCard;
@@ -278,9 +264,6 @@ namespace VTuber.EventSystem
 
         private void OnDialogueComplete(Dialog dialog)
         {
-            if (!_hasDialogue && _selectionMenuType != VSelectionMenuType.None)
-                return;
-            
             dialogueSystem.OnDialogFinished -= OnDialogueComplete;
             dialogueSystem.OnLineFinished -= OnLineFinished;
             if (_currentEvent.Type == VEventType.Stream)
@@ -370,7 +353,6 @@ namespace VTuber.EventSystem
             data.eventSystemSaveData = new VEventSystemSaveData
             {
                 executedLines = _executedLines,
-                selectionMenuType = _selectionMenuType,
                 cardsToSelectSaveDatas = _cardsToSelect?.Select(card => card.Save()).ToList(),
                 consumablesToSelectConfigIDs = _consumablesToSelect?.Select(consumable => consumable.ConfigId).ToList(),
                 replaceSelectedCardID = _replaceSelectedCard?.Id ?? 0,

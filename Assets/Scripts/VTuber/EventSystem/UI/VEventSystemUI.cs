@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using UnityEngine.Video;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
@@ -27,6 +28,7 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private RectTransform eventUIWrapper;
         [SerializeField] private VPhaseEndingSelectionMenu phaseEndingSelectionMenu;
         [SerializeField] private GameObject endingOptionPrefab;
+        [SerializeField] private Button fullScreenButton;
 
         [SerializeField] private VSelectFrom3ConsumablesMenu selectFrom3ConsumablesMenu;
 
@@ -38,7 +40,11 @@ namespace VTuber.Dialogue.UI
         protected override void Awake()
         {
             base.Awake();
-
+        }
+        
+        public void SetFullScreenButtonActive(bool active)
+        {
+            fullScreenButton.gameObject.SetActive(active);
         }
 
         public void SetFullScreenButton()

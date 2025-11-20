@@ -349,6 +349,7 @@ namespace VTuber.BattleSystem.Core
                         buffManager.AddBuff(buff, 1, false, false);
 
                 InitializeTurn(false);
+                if (isTutorial) VDataPersistenceManager.Instance.SaveGameTutorialBattle();
             },
             () =>
             {
@@ -361,7 +362,6 @@ namespace VTuber.BattleSystem.Core
                 InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
                     mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity,
                     characterAttributeManager);
-                if (isTutorial) VDataPersistenceManager.Instance.SaveGameTutorialBattle();
             });
         }
 

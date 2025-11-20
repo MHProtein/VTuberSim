@@ -79,7 +79,6 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddCardAnimation
             confirmButton.onClick.AddListener(OnConfirmButtonClicked);
             _initScale = cardUI.transform.localScale;
         }
-
         
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {

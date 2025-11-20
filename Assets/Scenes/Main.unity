@@ -122637,6 +122637,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4618892612665653730, guid: ae03eb6c02f9f2745890bcd8ba696e10, type: 3}
   m_PrefabInstance: {fileID: 1054298415560753069}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2124779401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6980624970643440647, guid: ae03eb6c02f9f2745890bcd8ba696e10, type: 3}
+  m_PrefabInstance: {fileID: 1054298415560753069}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124779399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &2127972845
 Mesh:
   m_ObjectHideFlags: 0
@@ -125754,7 +125765,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4529601916699466718, guid: ae03eb6c02f9f2745890bcd8ba696e10, type: 3}
       propertyPath: m_Name
-      value: Pause
+      value: FullScreenButton
       objectReference: {fileID: 0}
     - target: {fileID: 4618892612665653730, guid: ae03eb6c02f9f2745890bcd8ba696e10, type: 3}
       propertyPath: m_Pivot.x
@@ -135589,6 +135600,7 @@ MonoBehaviour:
   eventUIWrapper: {fileID: 1062185834}
   phaseEndingSelectionMenu: {fileID: 1972509704}
   endingOptionPrefab: {fileID: 6391049936804075039, guid: 96a2f7077926c184fa7d03c28bcdc575, type: 3}
+  fullScreenButton: {fileID: 2124779401}
   selectFrom3ConsumablesMenu: {fileID: 1030235346}
 --- !u!114 &8155677421443101862
 MonoBehaviour:
@@ -135863,7 +135875,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7558668064708109066, guid: dbfcdcb2aee7a2543ad0e0fa04c263e2, type: 3}
       propertyPath: m_Name
-      value: Pause
+      value: FullScreenButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

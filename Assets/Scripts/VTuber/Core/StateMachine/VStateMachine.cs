@@ -29,27 +29,6 @@ namespace VTuber.Core.StateMachine
         public readonly bool isTutorial;
         protected bool shouldPauseSchedule;
 
-        public VStateMachine(bool isTutorial, VScheduleUI scheduleUI,
-            VWeeklySchedule weeklySchedule,
-            GameObject battleRoot,
-            GameObject eventSystemRoot, VEventSystem eventSystemSystem,
-            VCharacter character, VScript script, VReincarnationConfiguration reincarnationConfiguration)
-        {
-            this.isTutorial = isTutorial;
-
-            if (isTutorial) TutorialScript = script as VTutorialScript;
-
-            ScheduleUI = scheduleUI;
-            WeeklySchedule = weeklySchedule;
-            BattleRoot = battleRoot;
-            EventSystemRoot = eventSystemRoot;
-            EventSystemSystem = eventSystemSystem;
-            Character = character;
-            Script = script;
-            IsInitialized = true;
-            ReincarnationConfiguration = reincarnationConfiguration;
-        }
-
         public bool IsInitialized { get; }
 
         private List<VState> RegisteredStateList { get; } = new();
@@ -78,6 +57,27 @@ namespace VTuber.Core.StateMachine
 
         public VReincarnationConfiguration ReincarnationConfiguration { get; }
 
+        public VStateMachine(bool isTutorial, VScheduleUI scheduleUI,
+            VWeeklySchedule weeklySchedule,
+            GameObject battleRoot,
+            GameObject eventSystemRoot, VEventSystem eventSystemSystem,
+            VCharacter character, VScript script, VReincarnationConfiguration reincarnationConfiguration)
+        {
+            this.isTutorial = isTutorial;
+
+            if (isTutorial) TutorialScript = script as VTutorialScript;
+
+            ScheduleUI = scheduleUI;
+            WeeklySchedule = weeklySchedule;
+            BattleRoot = battleRoot;
+            EventSystemRoot = eventSystemRoot;
+            EventSystemSystem = eventSystemSystem;
+            Character = character;
+            Script = script;
+            IsInitialized = true;
+            ReincarnationConfiguration = reincarnationConfiguration;
+        }
+        
         public VStateMachineSaveData Save()
         {
             return new VStateMachineSaveData

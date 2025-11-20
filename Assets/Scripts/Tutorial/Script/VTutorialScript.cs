@@ -26,6 +26,14 @@ namespace Tutorial.Script
             _onWeekAdvanced += callback;
         }
 
+        public static VTutorialScript Load(VScriptSaveData data, VScriptConfiguration configuration)
+        {
+            var script = new VTutorialScript(configuration);
+            script.currentPhase = script.Phases[data.currentPhaseIndex];
+            script._weekIndex = data.weekIndex;
+            return script;
+        }
+        
         public override VScheduleEvent NextWeek()
         {
             var e = base.NextWeek();
