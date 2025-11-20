@@ -435,5 +435,10 @@ namespace VTuber.BattleSystem.Core
         {
             return _script.Coops.Find(config => config.Id == saveDataConfigId);
         }
+
+        public VStateType GetCurrentState()
+        {
+            return _stateMachine.CurrentState.StateType;
+        }
     }
 }
