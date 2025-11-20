@@ -1,4 +1,5 @@
 ﻿using VTuber.Core.Foundation;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
@@ -17,6 +18,7 @@ namespace VTuber.Core.StateMachine
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetPauseUIActive(true);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToPause();
             stateMachine.ScheduleUI.SwitchToExecution();
+            VAudioPlayer.Instance.PlayBGM(VBGMType.Pause);
         }
 
         public override void Exit(VState nextState)
