@@ -744,6 +744,7 @@ MonoBehaviour:
   - {fileID: 347819966453664584}
   effectText: {fileID: 4820406170970959374}
   effectImage: {fileID: 3583198002475197997}
+  conditionHighlight: {fileID: 0}
 --- !u!1 &5344611657407242782
 GameObject:
   m_ObjectHideFlags: 0
