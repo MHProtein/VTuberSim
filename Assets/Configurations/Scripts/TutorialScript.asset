@@ -419,7 +419,7 @@ MonoBehaviour:
       title: "\u6784\u7B51\u5361\u7EC4"
       description: "\u901A\u8FC7\u201C\u76F4\u64AD\u51C6\u5907\u201D\u4E8B\u4EF6,\u5C06\u5361\u7EC4\u4E2D\u5361\u724C\u7684\u6570\u91CF\u63D0\u5347\u81F316\u5F20\u4EE5\u4E0A\u5427"
       image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
-  - weekID: 3
+  - weekID: 2
     eventIDs: 000000000100000002000000030000004e0000004f000000
     streamEventIDs: 000000000100000002000000
     conditions:
