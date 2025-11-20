@@ -188,7 +188,7 @@ namespace VTuber.Core.StateMachine
             else
                 Tween.Delay(0.1f, () =>
                 {
-                    var staminaNotEnoughEvent = VDataManager.Instance.CreateDialogueEventByID(8);
+                    var staminaNotEnoughEvent = VDataManager.Instance.CreateDialogueEventByID(stateMachine.Script.StaminaNotEnoughEventID);
                     staminaNotEnoughEvent.SetDaySchedule(e.DaySchedule, -1 * Vector2Int.one);
                     staminaNotEnoughEvent.Execute(stateMachine.Character);
 

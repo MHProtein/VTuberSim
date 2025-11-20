@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 
 namespace VTuber.Relic.UI
 {
@@ -13,14 +14,17 @@ namespace VTuber.Relic.UI
         [SerializeField] private Image icon;
         [SerializeField] private Image background;
         [SerializeField] private TMP_Text layer;
-        private bool _shouldShowDescription;
+        private bool _shouldShowDescription = true;
         public VRelic Relic { get; private set; }
 
         public uint BattleID { get; private set; }
         public bool IsAdditional { get; private set; }
-        
+        public Image Icon => icon;
+
         private bool _isPermanentDescriptionShown = false;
         private VRelicMenu _relicMenu;
+        public bool IsDisplayValue => layer.gameObject.activeSelf;
+
         protected override void Awake()
         {
             base.Awake();
@@ -34,14 +38,15 @@ namespace VTuber.Relic.UI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_isPermanentDescriptionShown || !_shouldShowDescription)
+            if (_isPermanentDescriptionShown)
                 return;
             if (_relicMenu)
             {
                 _relicMenu.SetDescription(Relic);
                 return;
             }
-            descriptionObject.SetActive(true);
+            if(_shouldShowDescription)
+                descriptionObject.SetActive(true);
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -53,7 +58,8 @@ namespace VTuber.Relic.UI
                 _relicMenu.SetDescription(null);
                 return;
             }
-            descriptionObject.SetActive(false);
+            if(_shouldShowDescription)
+                descriptionObject.SetActive(false);
         }
 
         public void SetIsAdditional(bool isAdditional)
@@ -106,6 +112,21 @@ namespace VTuber.Relic.UI
         {
             _isPermanentDescriptionShown = true;
             descriptionObject.SetActive(true);
+        }
+
+        public void SetAlpha(float f)
+        {
+            VUIUtils.SetImageAlpha(icon, f);
+        }
+
+        public void DisplayValue(bool isDisplay)
+        {
+            layer.gameObject.SetActive(isDisplay);
+        }
+
+        public void DisplayBackground(bool isDisplay)
+        {
+            background.gameObject.SetActive(isDisplay);
         }
     }
 }

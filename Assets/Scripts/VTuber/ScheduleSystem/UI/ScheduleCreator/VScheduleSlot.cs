@@ -255,13 +255,13 @@ namespace VTuber.ScheduleSystem.UI
 
         public void MoveIndicator()
         {
+            if (_scheduleUI is null || !_scheduleUI.Editing)
+                return;
             _scheduleUI?.MoveIndicator(Coordination);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_scheduleUI is null || !_scheduleUI.Editing)
-                return;
             MoveIndicator();
         }
 

@@ -48,7 +48,7 @@ namespace VTuber.ScheduleSystem.UI
             _eventObjects.Clear();
         }
 
-        public void InitializeTutorialCreator(VTutorialScript script, VCharacter character)
+        public void InitializeTutorialCreator(VTutorialScript script)
         {
             script.AddOnWeekAdvancedCallback(weekIndex =>
             {
@@ -60,15 +60,6 @@ namespace VTuber.ScheduleSystem.UI
                 eventConfigs.AddRange(script.CurrentWeekStreamEventList
                     .Select(e => VDataManager.Instance.GetStreamEventConfigurationByID(e)).ToList());
                 _eventDatas = eventConfigs;
-                
-                if (character.IsCharacterEventStream)
-                {
-                    _eventDatas.Add(VDataManager.Instance.GetStreamEventConfigurationByID(character.CharacterEventID));
-                }
-                else
-                {
-                    _eventDatas.Add(VDataManager.Instance.GetDialogueEventConfigurationByID(character.CharacterEventID));
-                }
 
                 CreateEventObjects();
             });

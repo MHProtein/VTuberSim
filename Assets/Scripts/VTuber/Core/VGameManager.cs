@@ -227,7 +227,7 @@ namespace VTuber.BattleSystem.Core
             VRaisingUI.Instance.Initialize(IsTutorial);
             if (isTutorialSave)
             {
-                scheduleCreator.InitializeTutorialCreator(TutorialScript, Character);
+                scheduleCreator.InitializeTutorialCreator(TutorialScript);
             }
             else
             {
@@ -243,22 +243,30 @@ namespace VTuber.BattleSystem.Core
             scheduleCreator.gameObject.SetActive(true);
             _startGameTime = DateTime.UtcNow;
 
-            Character = new VCharacter(characterConfiguration);
-            Character.Initialize(false);
             
             if (scriptConfig is VTutorialScriptConfiguration)
             {
                 IsTutorial = true;
                 TutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
                 _script = TutorialScript;
-                scheduleCreator.InitializeTutorialCreator(TutorialScript, Character);
             }
             else
             {
                 IsTutorial = false;
                 _script = new VScript(scriptConfig);
+            }
+            Character = new VCharacter(characterConfiguration);
+            Character.Initialize(false);
+
+            if (IsTutorial)
+            {
+                scheduleCreator.InitializeTutorialCreator(TutorialScript);
+            }
+            else
+            {
                 scheduleCreator.InitializeCreator(_script, Character);
             }
+            
             VRaisingUI.Instance.Initialize(IsTutorial);
             VDataPersistenceManager.Instance.NewGame(IsTutorial);
 

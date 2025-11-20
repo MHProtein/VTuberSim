@@ -76,7 +76,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override string GetValue()
         {
-            return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";
+            return VMathUtils.FloatToInt(_percentage.Value * 100, VMathUtils.RoundingType.Round) + "%";
         }
     }
 }

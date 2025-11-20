@@ -248,7 +248,7 @@ namespace VTuber.BattleSystem.Effect
             switch (_modifiyType)
             {
                 case VStaminaModifiyType.Rate:
-                    return VMathUtils.FloatToInt(_deltaRate.Value * 100) + "%";
+                    return VMathUtils.FloatToInt(_deltaRate.Value * 100, VMathUtils.RoundingType.Round) + "%";
                 case VStaminaModifiyType.Points:
                     return _deltaPoints.Value.ToString();
             }
