@@ -108691,7 +108691,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 91848.04}
+  m_AnchoredPosition: {x: 0, y: 204771.72}
   m_SizeDelta: {x: 0, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1885443972
@@ -127424,16 +127424,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.624483, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7a184148437294a7b8d96378a700727d, type: 3}
+  m_Sprite: {fileID: 2099159807, guid: a75ff47d6754b9540ad5977334e87ff3, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -128561,15 +128561,15 @@ RectTransform:
   m_GameObject: {fileID: 1262393511112452469}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: -1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4516984883995514870}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -130, y: -38.56}
-  m_SizeDelta: {x: 100, y: 40}
+  m_AnchoredPosition: {x: -130, y: -57.7}
+  m_SizeDelta: {x: 100, y: 78.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &2837743745946323899
 PrefabInstance:
@@ -135437,7 +135437,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MultiplierText: {fileID: 6424657759054677616}
   grid: {fileID: 3403247642773318335}
-  colorPrefab: {fileID: 9219189283833556736, guid: 9f34e037907a2f049a42697c1898ddff, type: 3}
+  blockPrefabLeft: {fileID: 3170903020296711206, guid: 1f61f0a849cecfa448fe9b1240d5f436, type: 3}
+  blockPrefabMiddle: {fileID: 8503989836100919797, guid: 698a9c1a6f79092468e401c318118e71, type: 3}
+  blockPrefabRight: {fileID: 7111186933788730213, guid: 3d044cf873fc8074d9632909a3701717, type: 3}
   arrow: {fileID: 1550040058469525383}
 --- !u!1 &7289454262435219327
 GameObject:

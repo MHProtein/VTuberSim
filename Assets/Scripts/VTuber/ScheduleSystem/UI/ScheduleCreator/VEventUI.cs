@@ -467,7 +467,6 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            Debug.Log("OnBeginDrag");
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -477,7 +476,6 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            Debug.Log("EndDrag");
         }
         // VEventUI.cs (在类的任何地方添加这个新方法)
 

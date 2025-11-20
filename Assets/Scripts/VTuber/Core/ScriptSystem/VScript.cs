@@ -40,7 +40,8 @@ namespace VTuber.Core.ScriptSystem
         public List<uint> EventList => configuration.eventIDs;
         public List<uint> StreamEventList => configuration.streamEventIDs;
         public List<VCooperatorConfiguration> Coops => configuration.coops;
-        
+        public uint StaminaNotEnoughEventID => configuration.staminaNotEnoughEventID;
+
         public VScript(VScriptConfiguration configuration)
         {
             this.configuration = configuration;

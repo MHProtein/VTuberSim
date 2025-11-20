@@ -113,7 +113,7 @@ namespace VTuber.BattleSystem.Effect
 
         public override string GetValue()
         {
-            return VMathUtils.FloatToInt(_deltaRate.Value * 100) + "%";
+            return VMathUtils.FloatToInt(_deltaRate.Value * 100, VMathUtils.RoundingType.Round) + "%";
         }
 
         public void Apply(VBattle battle, int layer)

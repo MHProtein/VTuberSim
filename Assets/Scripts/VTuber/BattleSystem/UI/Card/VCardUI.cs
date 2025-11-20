@@ -76,7 +76,7 @@ namespace VTuber.BattleSystem.UI
             name.text = card.CardName;
             description.text = card.GetDescription();
             if (card.IsExhaust)
-                description.text += "\nExhaust.";
+                description.text += "\n消耗牌.";
             typeText.text = card.CardType;
             
             if (card.CostType == CostType.Stamina) costImage.color = Color.white;
@@ -91,6 +91,7 @@ namespace VTuber.BattleSystem.UI
             }
             else
             {
+                cost.transform.localPosition = new Vector3(cost.transform.localPosition.x, 0f, 0f);
                 costImage.sprite = _initSprite;
                 cost.text = "-" + card.Cost;
             }

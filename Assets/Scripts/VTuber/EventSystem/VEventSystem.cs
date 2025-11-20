@@ -66,6 +66,7 @@ namespace VTuber.EventSystem
         protected override void Awake()
         {
             base.Awake();
+            dialogueSystem.gameObject.SetActive(false);
             dialogueSystem.HideMe();
         }
 
@@ -192,6 +193,7 @@ namespace VTuber.EventSystem
             },
             () =>
             {
+                dialogueSystem.gameObject.SetActive(true);
                 dialogueSystem.ShowMe(character);
                 dialogueSystem.LoadDialog(e.dialogueNode);
             });
