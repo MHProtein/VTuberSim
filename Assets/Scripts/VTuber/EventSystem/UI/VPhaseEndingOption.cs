@@ -65,7 +65,7 @@ namespace VTuber.Dialogue.UI
             if (relicUiPrefab == null || e == null) return;
 
             // 1. 角色遗物 (Character Relics)
-            Dialog dialog = VResourcesManager.Instance.TryGetDialog(e.dialogueNode);
+            Dialog dialog = VResourcesManager.Instance.TryGetDialog(VDataManager.Instance.DialogueEventConfigs[(uint)e.SuccessEvent].dialogueNode);
             
             if (dialog != null)
             {
