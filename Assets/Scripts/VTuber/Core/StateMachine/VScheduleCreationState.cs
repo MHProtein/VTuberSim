@@ -3,6 +3,7 @@ using SlayTheSpire.System.SavingSystem;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
+using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
@@ -21,10 +22,11 @@ namespace VTuber.Core.StateMachine
 
             if(stateMachine.isTutorial)
                 VRaisingUI.Instance.SetTips(stateMachine.TutorialScript.CurrentWeekTip);
+            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(true);
+            stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
+                stateMachine.Script.WeekIndex);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete(() =>
             {
-                stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
-                    stateMachine.Script.WeekIndex);
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToScheduleCreation,
                     new Dictionary<string, object>());
                 VDataPersistenceManager.Instance.SaveGame(VSavePointType.ScheduleCreation);
@@ -37,6 +39,7 @@ namespace VTuber.Core.StateMachine
         {
             base.Exit(nextState);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(false);
+            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(false);
             VAudioPlayer.Instance.StopBGM();
         }
     }

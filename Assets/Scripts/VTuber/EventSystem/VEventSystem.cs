@@ -35,19 +35,6 @@ namespace VTuber.EventSystem
         public List<int> executedLines;
         public bool isInBattle;
         public uint replaceSelectedCardID;
-        public VSelectionMenuType selectionMenuType;
-    }
-
-    public enum VSelectionMenuType
-    {
-        AddCard,
-        AddConsumable,
-        SelectCard,
-        SelectCardFrom3,
-        SelectConsumableFrom3,
-        SelectUpgradeCard,
-        SelectPhaseEnding,
-        None
     }
 
     public class VEventSystem : VMonoBehaviour
@@ -69,7 +56,6 @@ namespace VTuber.EventSystem
         private List<int> _executedLines;
         private bool _loaded;
 
-        private VSelectionMenuType _selectionMenuType = VSelectionMenuType.None;
         private List<VConsumable> _consumablesToSelect;
         private List<VCard> _cardsToSelect;
         private VCard _replaceSelectedCard;
@@ -184,10 +170,10 @@ namespace VTuber.EventSystem
             bool isPhaseStartEvent = false)
         {
             _hasDialogue = true;
-            dialogueSystem.LoadDialog(e.dialogueNode);
 
             if (!loaded)
                 _executedLines = new List<int>();
+            dialogueSystem.Clear();
 
             VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
@@ -207,6 +193,7 @@ namespace VTuber.EventSystem
             () =>
             {
                 dialogueSystem.ShowMe(character);
+                dialogueSystem.LoadDialog(e.dialogueNode);
             });
         }
 
@@ -278,9 +265,6 @@ namespace VTuber.EventSystem
 
         private void OnDialogueComplete(Dialog dialog)
         {
-            if (!_hasDialogue && _selectionMenuType != VSelectionMenuType.None)
-                return;
-            
             dialogueSystem.OnDialogFinished -= OnDialogueComplete;
             dialogueSystem.OnLineFinished -= OnLineFinished;
             if (_currentEvent.Type == VEventType.Stream)
@@ -308,6 +292,8 @@ namespace VTuber.EventSystem
                     storeObject.SetActive(true);
                     _store.EnterStore(_character);
                     _shouldEnterStore = false;
+                    dialogueSystem.HideMe();
+                    dialogueSystem.Clear();
                 });
             }
             else
@@ -325,8 +311,15 @@ namespace VTuber.EventSystem
                     if (state is not null)
                         state.OnEventEndAnimationEnd(()=> {
                             dialogueSystem.HideMe();
+                            dialogueSystem.Clear();
                             VEventSystemUI.Instance.CloseLoadingAnimation(); 
                         });
+                    else
+                    {
+                        dialogueSystem.HideMe();
+                        dialogueSystem.Clear();
+                        VEventSystemUI.Instance.CloseLoadingAnimation(); 
+                    }
                     VAudioPlayer.Instance.StopBGM();
                 });
             }
@@ -370,7 +363,6 @@ namespace VTuber.EventSystem
             data.eventSystemSaveData = new VEventSystemSaveData
             {
                 executedLines = _executedLines,
-                selectionMenuType = _selectionMenuType,
                 cardsToSelectSaveDatas = _cardsToSelect?.Select(card => card.Save()).ToList(),
                 consumablesToSelectConfigIDs = _consumablesToSelect?.Select(consumable => consumable.ConfigId).ToList(),
                 replaceSelectedCardID = _replaceSelectedCard?.Id ?? 0,

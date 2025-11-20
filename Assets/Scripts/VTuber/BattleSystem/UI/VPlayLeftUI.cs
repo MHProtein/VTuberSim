@@ -9,7 +9,7 @@ namespace VTuber.BattleSystem.UI
     public class VBattlePlayLeftUI : VBattleAttributeUI
     {
         [SerializeField] private TMP_Text PlayLeftText;
-
+        [SerializeField] private GameObject textObject;
 
         protected override void Awake()
         {
@@ -26,20 +26,27 @@ namespace VTuber.BattleSystem.UI
             var delta = messagedict["Delta"] as int? ?? 0;
             var value = messagedict["NewValue"] as int? ?? 0;
 
-            PlayLeftText.gameObject.SetActive(value > 1);
+            if (value > 1)
+            {
+                textObject.gameObject.SetActive(true);
+            }
 
             PlayLeftText.text = $"{value}";
 
             if (delta == 0)
                 return;
 
+            PlayLeftText.faceColor = delta > 0 ? Color.green : Color.red;
             _animationQueue.Enqueue(Tween.PunchScale(transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
             {
                 RaiseEvents(isFromCard, shouldPlayTwice);
                 PlayLeftText.faceColor = Color.white;
+                if (value <= 1)
+                {
+                    textObject.gameObject.SetActive(false);
+                }
             }));
 
-            PlayLeftText.faceColor = delta > 0 ? Color.green : Color.red;
         }
     }
 }

@@ -228,14 +228,6 @@ namespace VTuber.BattleSystem.Core
             _isTutorial = _tutorialConditions is not null;
             _tipConfig = tipConfig;
             _eventID = saveData.eventID;
-            
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
-            {
-                { "TargetPopularity", targetPopularity },
-                { "ExtraTargetPopularity", extraTargetPopularity },
-                { "IsPhaseEnding", isPhaseEnding },
-                { "TipConfig", tipConfig }
-            });
 
             VEventSystemUI.Instance.PlayLoadingAnimation(VDataManager.Instance.GetStreamEventConfigurationByID(_eventID), () =>
             {
@@ -255,6 +247,14 @@ namespace VTuber.BattleSystem.Core
             {
                 VRaisingUI.Instance.SwitchAttributesUIBattle(false);
                 VEventSystemUI.Instance.OpenBattleUI();
+                
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
+                {
+                    { "TargetPopularity", targetPopularity },
+                    { "ExtraTargetPopularity", extraTargetPopularity },
+                    { "IsPhaseEnding", isPhaseEnding },
+                    { "TipConfig", tipConfig }
+                });
                 
                 battleAttributeManager =
                     new VBattleAttributeManager(isPhaseEnding, saveData.attributeManagerSaveData);
@@ -324,13 +324,7 @@ namespace VTuber.BattleSystem.Core
             }
             _eventID = e.EventID;
 
-            VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
-            {
-                { "TargetPopularity", this.targetPopularity },
-                { "ExtraTargetPopularity", this.extraTargetPopularity },
-                { "IsPhaseEnding", this.isPhaseEnding },
-                { "TipConfig", tipConfig }
-            });
+ 
             
             VEventSystemUI.Instance.PlayLoadingAnimation(e, () =>
             {
@@ -349,6 +343,7 @@ namespace VTuber.BattleSystem.Core
                         buffManager.AddBuff(buff, 1, false, false);
 
                 InitializeTurn(false);
+                if (isTutorial) VDataPersistenceManager.Instance.SaveGameTutorialBattle();
             },
             () =>
             {
@@ -358,10 +353,16 @@ namespace VTuber.BattleSystem.Core
                     VEventSystemUI.Instance.OpenBattleUI();
                 }
                 _initialized = true;
+                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnBattleUIInitialize, new Dictionary<string, object>
+                {
+                    { "TargetPopularity", this.targetPopularity },
+                    { "ExtraTargetPopularity", this.extraTargetPopularity },
+                    { "IsPhaseEnding", this.isPhaseEnding },
+                    { "TipConfig", tipConfig }
+                });
                 InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
                     mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity,
                     characterAttributeManager);
-                if (isTutorial) VDataPersistenceManager.Instance.SaveGameTutorialBattle();
             });
         }
 

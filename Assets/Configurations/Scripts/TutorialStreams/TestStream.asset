@@ -317,5 +317,9 @@ MonoBehaviour:
     operatorType: 3
     description: 
     attributeName: BAPopularity
-    targetValue: 50
+    targetValue: 10
   deck: 000000000100000002000000030000000400000005000000060000000800000009000000
+  tip:
+    title: 
+    description: 
+    image: {fileID: 0}
