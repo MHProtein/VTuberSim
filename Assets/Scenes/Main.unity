@@ -8599,6 +8599,7 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     delay: 0
+  speed: 1
 --- !u!1 &162412284
 GameObject:
   m_ObjectHideFlags: 0
@@ -49722,6 +49723,7 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     delay: 0
+  speed: 1
 --- !u!43 &912112159
 Mesh:
   m_ObjectHideFlags: 0
@@ -77543,6 +77545,7 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     delay: 0
+  speed: 1
 --- !u!1 &1264999962
 GameObject:
   m_ObjectHideFlags: 0
@@ -91045,6 +91048,7 @@ MonoBehaviour:
   moveEase: 3
   cardHoldDelay: 1
   finalRemoveDuration: 0.25
+  speed: 1
   appearAudio:
     soundName: 
     channel: 1
@@ -99076,6 +99080,7 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     delay: 0
+  speed: 1
 --- !u!1 &1673317506
 GameObject:
   m_ObjectHideFlags: 0
@@ -131858,7 +131863,7 @@ MonoBehaviour:
   popScale: 1
   fadeDuration: 0.25
   moveDuration: 0.25
-  holdDuration: 2
+  holdDuration: 1
   fadeOutDuration: 0.1
   lightSpinDuration: 8
   speed: 1
