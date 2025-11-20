@@ -210,40 +210,6 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       isPhaseStart: 0
-    - weekIndexForInspector: 1
-      dayIndexForInspector: 4
-      timeOfDay: 0
-      eventType: 5
-      eventID: 5
-      tutorialStreamConfig: {fileID: 0}
-      phase:
-        phaseName: 
-        description: 
-        startEventWeekIndex: 0
-        startEventType: 0
-        startEventID: 0
-        endEventWeekIndex: 0
-        endEventIDs: 
-        specialEventData: []
-        decayCurve1:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        decayCurve2:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-        decayCurve3:
-          serializedVersion: 2
-          m_Curve: []
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-      isPhaseStart: 0
     decayCurve1:
       serializedVersion: 2
       m_Curve:
