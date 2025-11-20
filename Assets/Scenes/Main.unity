@@ -38730,7 +38730,7 @@ MonoBehaviour:
       Data: 17|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
       Entry: 1
-      Data: BuffTrigger
+      Data: PlaceSpecial
     - Name: channel
       Entry: 3
       Data: 1
@@ -39112,7 +39112,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 3
-      Data: 7
+      Data: 8
     - Name: $v
       Entry: 7
       Data: 34|System.Collections.Generic.List`1[[VTuber.Core.SE.VAudioPlayInfo,
@@ -39124,11 +39124,11 @@ MonoBehaviour:
       Entry: 7
       Data: 35|VTuber.Core.SE.VAudioPlayInfo, Assembly-CSharp
     - Name: soundName
-      Entry: 6
-      Data: 
+      Entry: 1
+      Data: work
     - Name: channel
       Entry: 3
-      Data: 1
+      Data: 5
     - Name: volume
       Entry: 4
       Data: 1
@@ -39137,7 +39137,7 @@ MonoBehaviour:
       Data: 1
     - Name: loop
       Entry: 5
-      Data: false
+      Data: true
     - Name: delay
       Entry: 4
       Data: 0
