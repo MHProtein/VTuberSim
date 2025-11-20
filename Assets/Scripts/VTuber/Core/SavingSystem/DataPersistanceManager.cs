@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Reincarnation;
 
 namespace SlayTheSpire.System.SavingSystem
 {
@@ -12,7 +14,8 @@ namespace SlayTheSpire.System.SavingSystem
         Battle,
         ScheduleCreation,
         ListenerSystem,
-        TutorialWeek
+        TutorialWeek,
+        Ending
     }
     public class VDataPersistenceManager : VSingleton<VDataPersistenceManager>
     {
@@ -96,6 +99,12 @@ namespace SlayTheSpire.System.SavingSystem
         public void SaveGame(VSavePointType savePointType)
         {
             SavePersistences(SaveData, savePointType);
+            _dataHandler.Save(SaveData);
+        }
+
+        public void EndingSaveAccount(List<VAccount> accounts)
+        {
+            SaveData.accounts = accounts.Select(account => account.Save()).ToList();
             _dataHandler.Save(SaveData);
         }
 

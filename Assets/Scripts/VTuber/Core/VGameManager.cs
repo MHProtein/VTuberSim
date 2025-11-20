@@ -86,6 +86,7 @@ namespace VTuber.BattleSystem.Core
         public bool IsTutorial { get; private set; }
 
         public VTutorialScript TutorialScript { get; private set; }
+        public List<VAccount> Accounts => _accounts;
 
         protected override void Awake()
         {

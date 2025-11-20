@@ -20,6 +20,7 @@ namespace VTuber.ScheduleSystem.UI
     public class VEndingUI : VUIBehaviour
     {
         [SerializeField] private GameObject ui;
+        [SerializeField] private Image characterIcon;
         [SerializeField] private Image ratingLevelImage;
         [SerializeField] private TMP_Text scoreText;
         [SerializeField] private GameObject cardPrefab;
@@ -42,9 +43,11 @@ namespace VTuber.ScheduleSystem.UI
             continueButton.onClick.AddListener(OnNextButtonClicked);
         }
 
-        public void Initialize(string characterName, string ratingLevel, int score, VAccount account)
+        public void Initialize(string characterName, Sprite characterIcon, string ratingLevel, int score, VAccount account)
         {
+            this.characterIcon.sprite = characterIcon;
             _account = account;
+            account.icon = characterIcon;
             inputField.text = characterName;
             inputField.characterLimit = 10;
             ratingLevelImage.sprite = VUIUtils.Instance.GetScoreLevelSprite(ratingLevel);
@@ -101,6 +104,7 @@ namespace VTuber.ScheduleSystem.UI
             _account.accountName = inputField.text;
             VGameManager.Instance.AddAccount(_account);
             VGameManager.Instance.ReturnToMainMenu();
+            VDataPersistenceManager.Instance.EndingSaveAccount(VGameManager.Instance.Accounts);
 
             Hide();
 

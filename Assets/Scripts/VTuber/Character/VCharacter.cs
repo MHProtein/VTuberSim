@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SlayTheSpire.System.SavingSystem;
+using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
@@ -60,6 +61,7 @@ namespace VTuber.Character
         
         public bool IsCharacterEventStream => _characterConfig.isCharacterEventStream;
         public uint CharacterEventID => _characterConfig.characterEvent;
+        public Sprite Icon => _characterConfig.characterIcon;
 
         public void Initialize(bool isLoaded)
         {

@@ -103,8 +103,11 @@ namespace VTuber.CoopSystem.UI
         {
             var cooperator = messagedict["Cooperator"] as VCooperator;
             var ui = uis.Find(x => x.Id == cooperator.Id);
-            uis.Remove(ui);
-            Destroy(ui.gameObject);
+            if (ui != null && ui.gameObject != null)
+            {
+                uis.Remove(ui);
+                Destroy(ui.gameObject);
+            }
         }
 
         private void OnCooperatorValueUpdated(Dictionary<string, object> messagedict)

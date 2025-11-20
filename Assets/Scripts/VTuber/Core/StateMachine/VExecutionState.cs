@@ -149,7 +149,7 @@ namespace VTuber.Core.StateMachine
             var account = VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
                 result.scoreLevelName, stateMachine.Character);
 
-            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, result.scoreLevelName, result.score,
+            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, stateMachine.Character.Icon, result.scoreLevelName, result.score,
                 account);
             VRaisingUI.Instance.ShowEndingUI();
             stateMachine.Character.EndRun();

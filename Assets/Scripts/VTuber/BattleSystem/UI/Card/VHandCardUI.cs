@@ -299,7 +299,7 @@ namespace VTuber.BattleSystem.UI
             {
                 if (cardUI.popularityText != null)
                     cardUI.popularityText.gameObject.SetActive(false);
-                if (cardUI.popularityImage is not null)
+                if (cardUI.popularityImage != null)
                     cardUI.popularityImage.gameObject.SetActive(false);
                 return;
             }

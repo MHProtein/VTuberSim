@@ -271,6 +271,7 @@ namespace VTuber.EventSystem
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck,
                 tutorialTurnHandCards, tipConfig);
+            VRaisingUI.Instance.SetConsumableToBattle();
         }
 
         private void OnDialogueComplete(Dialog dialog)
