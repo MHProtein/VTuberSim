@@ -29,21 +29,35 @@ namespace VTuber.ScheduleSystem.UI
         [Header("日程规划条件UI")]
         [Tooltip("用于容纳所有位置指示器的父对象")]
         [SerializeField] private GameObject conditionIndicatorsContainer; 
-        [Tooltip("上方向指示器的 Image 组件")]
-        [SerializeField] private Image upIndicatorImage;
-        [Tooltip("下方向指示器的 Image 组件")]
-        [SerializeField] private Image downIndicatorImage;
-        [Tooltip("左方向指示器的 Image 组件")]
-        [SerializeField] private Image leftIndicatorImage;
-        [Tooltip("右方向指示器的 Image 组件")]
-        [SerializeField] private Image rightIndicatorImage;
         
-        [Header("指示器文本")]
-        [Tooltip("请确保这些数组/字段对应 Up, Down, Left, Right 的 Text 组件")]
-        [SerializeField] private TMP_Text upText;
-        [SerializeField] private TMP_Text downText;
-        [SerializeField] private TMP_Text leftText;
-        [SerializeField] private TMP_Text rightText;
+        
+        // [Tooltip("上方向指示器的 Image 组件")]
+        // [SerializeField] private Image upIndicatorImage;
+        // [Tooltip("下方向指示器的 Image 组件")]
+        // [SerializeField] private Image downIndicatorImage;
+        // [Tooltip("左方向指示器的 Image 组件")]
+        // [SerializeField] private Image leftIndicatorImage;
+        // [Tooltip("右方向指示器的 Image 组件")]
+        // [SerializeField] private Image rightIndicatorImage;
+        //
+        // [Header("指示器文本")]
+        // [Tooltip("请确保这些数组/字段对应 Up, Down, Left, Right 的 Text 组件")]
+        // [SerializeField] private TMP_Text upText;
+        // [SerializeField] private TMP_Text downText;
+        // [SerializeField] private TMP_Text leftText;
+        // [SerializeField] private TMP_Text rightText;
+        
+        // --- 修改点：使用封装好的组件代替零散的 Image/Text ---
+        [Header("指示器组件")]
+        [Tooltip("上方向指示器组件")]
+        [SerializeField] private VSchedulingConditionIndicatorUI upIndicator;
+        [Tooltip("下方向指示器组件")]
+        [SerializeField] private VSchedulingConditionIndicatorUI downIndicator;
+        [Tooltip("左方向指示器组件")]
+        [SerializeField] private VSchedulingConditionIndicatorUI leftIndicator;
+        [Tooltip("右方向指示器组件")]
+        [SerializeField] private VSchedulingConditionIndicatorUI rightIndicator;
+        // --------------------------------------------------
         
         [Header("状态反馈")]
         [Tooltip("当规划条件满足时显示的绿色边框")]
@@ -565,8 +579,10 @@ namespace VTuber.ScheduleSystem.UI
         {
             public string HintText;
             public Color BackgroundColor;
+            public Sprite Icon;
             public bool IsValid;
         }
+        
         private void ShowConditionIndicators()
         {
             if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
@@ -584,28 +600,28 @@ namespace VTuber.ScheduleSystem.UI
             conditionIndicatorsContainer.SetActive(true);
             
             // 重置状态
-            upIndicatorImage?.gameObject.SetActive(false);
-            downIndicatorImage?.gameObject.SetActive(false);
-            leftIndicatorImage?.gameObject.SetActive(false);
-            rightIndicatorImage?.gameObject.SetActive(false);
+            upIndicator?.Hide();
+            downIndicator?.Hide();
+            leftIndicator?.Hide();
+            rightIndicator?.Hide();
             
             // 3. 根据模式显示指示器，并传入文本和颜色
             switch (pattern)
             {
                 case VSchedulingConditionPositionPatterns.UD:
-                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
-                    ActivateIndicator(downIndicatorImage, downText, info.HintText, info.BackgroundColor);
+                    upIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
+                    downIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
                     break;
                 case VSchedulingConditionPositionPatterns.LR:
-                    ActivateIndicator(leftIndicatorImage, leftText, info.HintText, info.BackgroundColor);
-                    ActivateIndicator(rightIndicatorImage, rightText, info.HintText, info.BackgroundColor);
+                    leftIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
+                    rightIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
                     break;
                 case VSchedulingConditionPositionPatterns.UDLR:
                 case VSchedulingConditionPositionPatterns.All:
-                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
-                    ActivateIndicator(downIndicatorImage, downText, info.HintText, info.BackgroundColor);
-                    ActivateIndicator(leftIndicatorImage, leftText, info.HintText, info.BackgroundColor);
-                    ActivateIndicator(rightIndicatorImage, rightText, info.HintText, info.BackgroundColor);
+                    upIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
+                    downIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
+                    leftIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
+                    rightIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
                     break;
             }
         }
@@ -633,6 +649,7 @@ namespace VTuber.ScheduleSystem.UI
             string text = "";
             Color color = Color.grey; // 默认灰色
             bool isValid = true;
+            Sprite icon = null;
             
             VScheduleEventConfiguration config = null;
 
@@ -655,6 +672,7 @@ namespace VTuber.ScheduleSystem.UI
                         text = config.eventName;
                         // text = GetEventName(text);
                         color = config.backgroundColor; // 获取配置的颜色
+                        icon = VResourcesManager.Instance.TryGetSprite(config.icon);
                     }
                     else
                     {
@@ -665,6 +683,7 @@ namespace VTuber.ScheduleSystem.UI
                 case VSchedulingConditionType.SameType:
                     text = "Same Type";
                     color = _event.BackgroundColor; // 直接使用当前拖拽事件的颜色
+                    icon = VResourcesManager.Instance.TryGetSprite(condition.TargetType.ToString());
                     break;
                     
                 case VSchedulingConditionType.Type:
@@ -689,7 +708,7 @@ namespace VTuber.ScheduleSystem.UI
                 text = "NOT " + text;
             }
 
-            return new ConditionTargetInfo { HintText = text, BackgroundColor = color, IsValid = isValid };
+            return new ConditionTargetInfo { HintText = text, BackgroundColor = color, Icon = icon, IsValid = isValid };
         }
         
         
