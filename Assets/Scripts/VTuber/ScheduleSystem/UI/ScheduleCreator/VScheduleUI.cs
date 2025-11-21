@@ -413,6 +413,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void CompleteSchedule(uint size1Id, uint size2Id, uint size3Id)
         {
+            _loadingEvents = true;
             foreach (var slot in slots) slot.SetPlaceable(true, false, -1);
             for (var x = 0; x < slotSize.x; x++)
             {
@@ -463,6 +464,7 @@ namespace VTuber.ScheduleSystem.UI
             }
 
             foreach (var slot in slots) slot.SetPlaceable(false, false, -1);
+            _loadingEvents = false;
         }
 
         public void RecordEvent(VScheduleEvent e)
