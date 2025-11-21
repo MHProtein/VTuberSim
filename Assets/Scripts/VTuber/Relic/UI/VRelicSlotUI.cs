@@ -24,6 +24,7 @@ namespace VTuber.Relic.UI
         private bool _isPermanentDescriptionShown = false;
         private VRelicMenu _relicMenu;
         public bool IsDisplayValue => layer.gameObject.activeSelf;
+        private bool _available = true;
 
         protected override void Awake()
         {
@@ -70,6 +71,7 @@ namespace VTuber.Relic.UI
         public void Initialize(VRelic relic, bool displayValue, VRelicMenu relicMenu = null)
         {
             Relic = relic;
+            _available = false;
             _relicMenu = relicMenu;
             if (displayValue && !relic.IsPermanent)
             {
@@ -87,11 +89,12 @@ namespace VTuber.Relic.UI
 
         public bool HasRelic()
         {
-            return Relic is not null;
+            return _available;
         }
 
         public void Clear()
         {
+            _available = true;
             Relic = null;
             layer.gameObject.SetActive(false);
             icon.gameObject.SetActive(false);

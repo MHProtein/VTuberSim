@@ -132,6 +132,11 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBattleUIInitialize(Dictionary<string, object> messagedict)
         {
+            if (messagedict["TipConfig"] is null)
+            {
+                streamTips.gameObject.SetActive(false);
+                return;
+            }
             var tips = messagedict["TipConfig"] as List<Sprite>;
             streamTips.SetTips(tips);
             streamTips.Show();

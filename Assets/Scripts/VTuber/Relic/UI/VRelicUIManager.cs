@@ -33,6 +33,15 @@ namespace VTuber.Relic.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicRemoved, OnRelicRemoved);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicValueChanged,
                 OnRelicValueChanged);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnReset, OnReset);
+        }
+
+        private void OnReset(Dictionary<string, object> messagedict)
+        {
+            foreach (var slotUI in _slotUIs)
+            {
+                slotUI.Clear();
+            }
         }
 
         protected override void OnDisable()
@@ -41,6 +50,7 @@ namespace VTuber.Relic.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicAdded, OnRelicAdded);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicRemoved, OnRelicRemoved);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicValueChanged, OnRelicValueChanged);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnReset, OnReset);
         }
 
         public void Show(bool show)

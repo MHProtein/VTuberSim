@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using SlayTheSpire.System.SavingSystem;
 using Tutorial.Script;
+using Tutorial.UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
@@ -436,6 +437,7 @@ namespace VTuber.BattleSystem.Core
             eventSystem.CloseUI();
             scheduleCreator.gameObject.SetActive(false);
             VRaisingAnimationSystem.Instance.StopAllAnimations();
+            VTutorialConditionsUIManager.Instance.Clear();
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnReset, new Dictionary<string, object>());
         }
 

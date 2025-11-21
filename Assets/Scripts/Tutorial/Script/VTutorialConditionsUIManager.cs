@@ -29,5 +29,16 @@ namespace Tutorial.Script
                 _conditions.Add(ui);
             }
         }
+
+        public void Clear()
+        {
+            if (_conditions is null)
+                return;
+            foreach (var condition in _conditions)
+            {
+                Destroy(condition.gameObject);
+            }
+            _conditions.Clear();
+        }
     }
 }

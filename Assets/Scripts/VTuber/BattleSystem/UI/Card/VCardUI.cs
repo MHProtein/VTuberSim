@@ -56,7 +56,6 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] private Sprite staminaSprite;
 
         public VCard Card { get; private set; }
-        
 
         public void SetCard(VCard card)
         {
@@ -99,7 +98,7 @@ namespace VTuber.BattleSystem.UI
             }
             else
             {
-                name.color = Color.white;
+                name.color = Color.black;
             }
 
             Card = card;

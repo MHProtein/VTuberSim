@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.Consumable;
+using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 
 namespace VTuber.Relic.UI
