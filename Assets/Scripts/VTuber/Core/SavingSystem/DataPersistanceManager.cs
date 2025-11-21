@@ -66,8 +66,9 @@ namespace SlayTheSpire.System.SavingSystem
         public void DeleteSave()
         {
             _accounts = SaveData.accounts;
-            SaveData = null;
-            _dataHandler.Delete();
+            SaveData = new SaveData();
+            SaveData.accounts = _accounts;
+            _dataHandler.Save(SaveData);
         }
 
         public bool SaveExists()

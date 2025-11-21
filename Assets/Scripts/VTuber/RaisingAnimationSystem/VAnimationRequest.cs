@@ -19,6 +19,7 @@ namespace VTuber.RaisingAnimationSystem
         public string description;
         public int value;
         public bool isMaxValue;
+        public bool isPercentage;
         public VAnimationType animationType;
         public Action effectApply;
         public VCooperator coop;

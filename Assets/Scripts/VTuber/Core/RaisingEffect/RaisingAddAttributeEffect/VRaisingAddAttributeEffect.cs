@@ -32,8 +32,11 @@ namespace VTuber.Core.RaisingEffect
         
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            if(animationRequest is not null)
+            if (animationRequest is not null)
+            {
                 animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
+                animationRequest.isPercentage = character.AttributeManager.Attributes[AttributeName].IsPercentage;
+            }
             base.ApplyEffect(character, messagedict, animationRequest);
         }
 

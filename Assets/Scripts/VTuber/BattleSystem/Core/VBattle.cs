@@ -210,6 +210,9 @@ namespace VTuber.BattleSystem.Core
             VCharacterAttributeManager characterAttributeManager,
             VCardLibrary cardLibrary, VTipConfig tipConfig)
         {
+            if (_initialized)
+                return;
+            _initialized = true;
             VBattleLookUpTables.Instance.Initialize(saveData);
 
             _mainAttributeIndex = saveData.mainAttributeIndex;
@@ -288,6 +291,8 @@ namespace VTuber.BattleSystem.Core
             bool isTutorial = false, List<VAttributeCondition> tutorialConditions = null,
             List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null, VTipConfig tipConfig = null)
         {
+            if (_initialized)
+                return;
             _initialized = true;
             _isDebugScene = isDebugScene;
             _battleEnded = false;
