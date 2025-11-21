@@ -168,8 +168,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -55.3, y: -48.78}
-  m_SizeDelta: {x: 64.44, y: 24.917}
+  m_AnchoredPosition: {x: -50.54, y: -52.21}
+  m_SizeDelta: {x: 135.27, y: 54.86}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8573176743358086525
 CanvasRenderer:
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 100
+  m_text: 100/100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
   m_sharedMaterial: {fileID: 2140474, guid: 8a89fa14b10d46a99122fd4f73fca9a2, type: 2}
@@ -208,8 +208,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4288545023
+  m_fontColor: {r: 1, g: 0, b: 0.6176958, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -226,8 +226,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45.9
-  m_fontSizeBase: 45.9
+  m_fontSize: 37.35
+  m_fontSizeBase: 37.35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -460,8 +460,8 @@ MonoBehaviour:
   coopValue: {fileID: 3391520443436356697}
   coopValueExecutionPosition: {fileID: 7912760014556001161}
   coopValueCreationPosition: {fileID: 8446776999134217720}
-  coopValueExecutionSize: 38.3
-  coopValueCreationSize: 45.9
+  coopValueExecutionSize: 30
+  coopValueCreationSize: 37.5
 --- !u!1 &5114314858739145176
 GameObject:
   m_ObjectHideFlags: 0

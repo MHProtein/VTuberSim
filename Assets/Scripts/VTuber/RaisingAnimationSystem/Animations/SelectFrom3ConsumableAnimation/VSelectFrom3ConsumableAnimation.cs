@@ -101,6 +101,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectFrom3ConsumableAnimatio
 
         public void Confirm()
         {
+            confirmButton.interactable = false;
             VRaisingAnimationSystem.Instance.EnqueueAnimationRequest(VAnimationRequestFactory.
                 CreateAddConsumableRequest(_selectedConsumableUI.Consumable, false), true);
             _onComplete?.Invoke();

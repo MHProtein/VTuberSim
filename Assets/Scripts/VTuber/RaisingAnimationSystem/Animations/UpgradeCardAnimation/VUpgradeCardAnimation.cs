@@ -83,6 +83,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.UpgradeCardAnimation
 
         private void OnConfirmButtonClicked()
         {
+            confirmButton.interactable = false;
             _sequence.Stop();
             _sequence = Sequence.Create();
             _sequence

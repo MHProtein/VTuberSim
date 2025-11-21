@@ -95,6 +95,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
             var position = _selectedCardUI.transform.position;
             _selectedCardUI.transform.position = position;
             
+            confirmButton.interactable = false;
             _confirmAction?.Invoke(_selectedCardUI.Card);
             switch (_cardSelectAnimationType)
             {
@@ -124,6 +125,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
             _returnAction?.Invoke();
             _onComplete?.Invoke();
             ResetAnimation();
+            confirmButton.interactable = false;
         }
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
@@ -145,8 +147,12 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
                 previewTitle.text = VUIUtils.Instance.GetSelectCardMenuPreviewCardTitle(cardSelectAnimationType);
             }
             
+            confirmButton.interactable = true;
+            returnButton.interactable = true;
             confirmButton.gameObject.SetActive(selectable);
             returnButton.gameObject.SetActive(!selectable);
+            
+            confirmButton.interactable = false;
             if (returnable)
                 returnButton.gameObject.SetActive(true);
             _returnAction = returnAction;

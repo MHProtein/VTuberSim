@@ -10,7 +10,8 @@ using VTuber.Core.SE;
 using VTuber.ScheduleSystem.Events;
 using VTuber.Core.Managers; // 引入 VDataManager
 using VTuber.ScheduleSystem.Core; // 引入 VScheduleEventConfiguration
-
+using VTuber.Core.UI; // 引入 VUIUtils 所在的命名空间
+ 
 namespace VTuber.ScheduleSystem.UI
 {
     public class VEventUI : VUIBehaviour, IPointerEnterHandler, IPointerDownHandler,
@@ -22,6 +23,7 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private TMP_Text costText;
         [SerializeField] private Image costIcon;
+        
         
         //  Position Pattern for UI purposes
         [Header("日程规划条件UI")]
@@ -123,6 +125,7 @@ namespace VTuber.ScheduleSystem.UI
         //     Tween.Scale(background.transform, new Vector3(1, eventData.height, 1), 0.3f);
         // }
 
+        
         public void SetColorGrey()
         {
             background.color = Color.grey;
@@ -564,7 +567,7 @@ namespace VTuber.ScheduleSystem.UI
             public Color BackgroundColor;
             public bool IsValid;
         }
-private void ShowConditionIndicators()
+        private void ShowConditionIndicators()
         {
             if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
 
@@ -625,8 +628,8 @@ private void ShowConditionIndicators()
             }
         }
         
-        // 新增：核心逻辑 - 获取条件描述文字
-// 重构 GetConditionHintText 为 GetConditionTargetInfo
+            // 新增：核心逻辑 - 获取条件描述文字
+    // 重构 GetConditionHintText 为 GetConditionTargetInfo
         private ConditionTargetInfo GetConditionTargetInfo(VSchedulingCondition condition)
         {
             // 默认值
@@ -651,7 +654,9 @@ private void ShowConditionIndicators()
                     
                     if (config != null)
                     {
+                        
                         text = config.eventName;
+                        // text = GetEventName(text);
                         color = config.backgroundColor; // 获取配置的颜色
                     }
                     else
@@ -667,10 +672,10 @@ private void ShowConditionIndicators()
                     
                 case VSchedulingConditionType.Type:
                 case VSchedulingConditionType.ExcludeType:
-                    text = condition.TargetType.ToString();
-                    color = Color.grey; // 类型条件太泛，使用中性色
-                    break;
-                    
+                // 使用 VUIUtils 获取本地化名称（如“直播”、“练习”等）
+                text = VUIUtils.Instance.GetEventName(condition.TargetType);
+                color = Color.grey;
+                break;
                 case VSchedulingConditionType.ExcludeID:
                     text = "NOT ID: " + condition.TargetID;
                     color = Color.grey; // 排除条件也用中性色

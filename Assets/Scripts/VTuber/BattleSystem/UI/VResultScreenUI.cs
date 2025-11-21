@@ -178,12 +178,14 @@ namespace VTuber.BattleSystem.UI
                     { "Popularity", _popularity }
                 });
             });
+            continueButton.interactable = false;
         }
 
         public void OnRestartButtonClicked()
         {
             Hide();
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRestartBattle, new Dictionary<string, object>());
+            restartButton.interactable = false;
         }
     }
 }
