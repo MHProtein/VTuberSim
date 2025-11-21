@@ -41,6 +41,7 @@ namespace VTuber.Relic.UI
             foreach (var slotUI in _slotUIs)
             {
                 slotUI.Clear();
+                slotUI.transform.SetAsLastSibling();
             }
         }
 

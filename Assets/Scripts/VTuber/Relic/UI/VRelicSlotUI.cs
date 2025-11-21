@@ -89,7 +89,7 @@ namespace VTuber.Relic.UI
 
         public bool HasRelic()
         {
-            return _available;
+            return !_available;
         }
 
         public void Clear()
