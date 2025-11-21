@@ -609,7 +609,7 @@ namespace VTuber.ScheduleSystem.UI
             switch (pattern)
             {
                 case VSchedulingConditionPositionPatterns.U:
-                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
+                    upIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
                     break;
                 case VSchedulingConditionPositionPatterns.UD:
                     upIndicator?.Show(info.HintText, info.BackgroundColor, info.Icon);
