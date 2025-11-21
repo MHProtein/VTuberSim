@@ -652,6 +652,18 @@ namespace VTuber.ScheduleSystem.UI
             Sprite icon = null;
             
             VScheduleEventConfiguration config = null;
+            //ExcludeID 也要进行配置查询
+            if (condition.Type == VSchedulingConditionType.ID || condition.Type == VSchedulingConditionType.ExcludeID)
+            {
+                if (condition.IsTargetStream) 
+                {
+                    config = VDataManager.Instance.GetStreamEventConfigurationByID(condition.TargetID);
+                }
+                else
+                {
+                    config = VDataManager.Instance.GetDialogueEventConfigurationByID(condition.TargetID);
+                }
+            }
 
             switch (condition.Type)
             {
@@ -693,8 +705,18 @@ namespace VTuber.ScheduleSystem.UI
                 color = Color.grey;
                 break;
                 case VSchedulingConditionType.ExcludeID:
-                    text = "NOT ID: " + condition.TargetID;
-                    color = Color.grey; // 排除条件也用中性色
+                    if (config != null)
+                    {
+                        // 成功查到配置，显示名字和图标
+                        text = config.eventName;
+                        icon = VResourcesManager.Instance.TryGetSprite(config.icon);
+                    }
+                    else
+                    {
+                        // 没查到（可能是ID错误），回退到显示ID
+                        text = "ID: " + condition.TargetID;
+                    }
+                    color = Color.grey; // 保持灰色，表示"排除"
                     break;
                     
                 default:
@@ -705,7 +727,7 @@ namespace VTuber.ScheduleSystem.UI
             // 为“排除”条件添加前缀
             if (condition.Type == VSchedulingConditionType.ExcludeType || condition.Type == VSchedulingConditionType.ExcludeID)
             {
-                text = "NOT " + text;
+                text = "非" + text;
             }
 
             return new ConditionTargetInfo { HintText = text, BackgroundColor = color, Icon = icon, IsValid = isValid };
