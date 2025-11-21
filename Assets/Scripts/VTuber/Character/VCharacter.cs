@@ -357,6 +357,7 @@ namespace VTuber.Character
             CharacterRelicManager.Clear();
             ConsumableManager.Clear();
             CooperatorManager.Clear();
+            CharacterRelicManager.Clear();
         }
     }
 }

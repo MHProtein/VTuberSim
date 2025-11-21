@@ -34,6 +34,7 @@ namespace VTuber.BattleSystem.Core
 {
     public class VGameManager : VSingletonMonobehaviour<VGameManager>, IDataPersistence
     {
+        [SerializeField] private bool isDebug;
         [SerializeField] private bool useDevData;
         [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
 
@@ -107,12 +108,26 @@ namespace VTuber.BattleSystem.Core
             _scripts = new List<VScriptConfiguration>();
             _characterConfigs = new List<VCharacterConfiguration>();
             Addressables
-                .LoadAssetsAsync<VScriptConfiguration>(scriptLabel, scriptConfig => { _scripts.Add(scriptConfig); })
-                .Completed += handle => { };
+                .LoadAssetsAsync<VScriptConfiguration>(scriptLabel, scriptConfig =>
+                {
+                    if (!isDebug && scriptConfig.isDebug)
+                        return;
+                    _scripts.Add(scriptConfig);
+                })
+                .Completed += handle =>
+            {
+            };
 
             Addressables.LoadAssetsAsync<VCharacterConfiguration>(characterLabel,
-                characterConfig => { _characterConfigs.Add(characterConfig); }).Completed += handle => { };
-
+                characterConfig =>
+                {
+                    if (!isDebug && characterConfig.isDebug)
+                        return;
+                    _characterConfigs.Add(characterConfig);
+                }).Completed += handle => 
+            { 
+            };
+            
             VResourcesManager.Instance.LoadSprites();
             loader.Load();
             VResourcesManager.Instance.LoadDialogs();
@@ -126,6 +141,7 @@ namespace VTuber.BattleSystem.Core
             eventSystem.Initialize();
 
             _newGame = saveData == null;
+            
             OpenMainMenu();
         }
 

@@ -21,7 +21,7 @@ namespace VTuber.Core.RaisingEffect
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict,
             VAnimationRequest animationRequest)
         {
-            animationRequest.attributeIcon = VUIUtils.Instance.GetCoopIcon();
+            animationRequest.coop = character.CooperatorManager.GetCooperator(cooperatorID);
             base.ApplyEffect(character, messagedict, animationRequest);
         }
 

@@ -12,6 +12,7 @@ namespace VTuber.BattleSystem.UI
     {
         [SerializeField] private TMP_Text staminaText;
         [SerializeField] private Image bar;
+        private float _barWidth;
 
         protected override void Awake()
         {
@@ -19,6 +20,7 @@ namespace VTuber.BattleSystem.UI
 
             key = VBattleEventKey.OnStaminaChange;
             SetFontStyle(staminaText, FontStyles.Bold);
+            _barWidth = bar.rectTransform.rect.width;
         }
 
         protected override void OnEnable()
@@ -38,7 +40,8 @@ namespace VTuber.BattleSystem.UI
             if (delta == 0)
                 return;
 
-            Tween.UIFillAmount(bar, (float)value / maxValue, 0.3f);
+            var x = -(1.0f - (value / (float)maxValue)) * _barWidth;
+            Tween.LocalPositionX(bar.transform, x, 0.3f);
             _animationQueue.Enqueue(Tween.PunchScale(staminaText.transform, Vector3.one * 1.3f, 0.4f).OnComplete(() =>
             {
                 RaiseEvents(isFromCard, shouldPlayTwice);

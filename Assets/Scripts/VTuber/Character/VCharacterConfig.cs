@@ -11,6 +11,7 @@ namespace VTuber.Character
 {
     public class VCharacterConfiguration : VScriptableObject
     {
+        public bool isDebug;
         public string characterName;
         public Sprite characterIcon;
         [TextArea] public string description;
