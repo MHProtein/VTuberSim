@@ -41,9 +41,11 @@ namespace VTuber.Core.RaisingEffect
                 {
                     animationRequest.instigatorType = VInstigatorType.Ignore;
                     animationRequest.animationType = VAnimationType.Pressure;
-                    var value = character.AttributeManager.Attributes[AttributeName].Value;
-                    animationRequest.currentPressureLevel = value;
-                    animationRequest.nextPressureLevel = value + _value.Value;
+                    var attribute = character.AttributeManager.Attributes[AttributeName];
+                    animationRequest.currentPressureLevel = attribute.Value;
+                    animationRequest.nextPressureLevel = attribute.PreviewAddTo(_value.Value);
+                    if (animationRequest.currentPressureLevel == animationRequest.nextPressureLevel)
+                        return;
                 }
             }
             base.ApplyEffect(character, messagedict, animationRequest);

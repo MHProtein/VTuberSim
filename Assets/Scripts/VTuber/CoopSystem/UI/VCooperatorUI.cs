@@ -105,7 +105,7 @@ namespace VTuber.CoopSystem.UI
         public void UpdateValue(VCooperator cooperator)
         {
             coopLevel.text = cooperator.CurrentCoopLevel.levelName;
-            coopValue.text = cooperator.CoopValue.ToString();
+            coopValue.text = cooperator.CoopValue.ToString() + "/" + (cooperator.CurrentCoopLevel.to + 1).ToString();
         }
 
         public void SetUpgradeEvent(VScheduleEvent scheduleEvent)
