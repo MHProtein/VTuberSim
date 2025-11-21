@@ -17,6 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e9e4c50b909580f4abc1fab343658735
   m_SerializeEntries:
+  - m_GUID: 3906dc5cf0ddd294ea8ea68fae029fe1
+    m_Address: Assets/Configurations/Characters/Superman.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Character
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c1fb19fe6c05f64458e6c0dd3110203a
     m_Address: Assets/Configurations/Characters/VCharacterConfiguration.asset
     m_ReadOnly: 0
