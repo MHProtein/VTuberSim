@@ -463,14 +463,14 @@ MonoBehaviour:
       image: {fileID: 21300000, guid: 09911234645cdee4191b57cc4660bc79, type: 3}
   - weekID: 2
     useCoopEvents: 1
-    eventIDs: 000000000100000002000000030000004e0000004f000000
+    eventIDs: 000000000100000002000000030000000c0000004e0000004f000000
     streamEventIDs: 
     conditions:
     - conditionType: 3
       eventType: 0
       idOrName: 0
       operatorType: 3
-      targetValue: 2
+      targetValue: 1
     tip:
       title: "\u52A0\u6DF1\u5173\u7CFB"
       description: "\u4E0E\u534F\u52A9\u8005\u79EF\u7D2F\u8DB3\u591F\u597D\u611F\u5EA6\u5373\u53EF\u5F00\u542F\u5173\u7CFB\u52A0\u6DF1\u4E8B\u4EF6\uFF0C\u80FD\u83B7\u5F97\u7279\u522B\u7684\u5956\u52B1"
