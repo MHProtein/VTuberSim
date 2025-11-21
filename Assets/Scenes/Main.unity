@@ -12147,6 +12147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ui: {fileID: 338566805}
+  characterIcon: {fileID: 700051495940529562}
   ratingLevelImage: {fileID: 2044530349}
   scoreText: {fileID: 601852354}
   cardPrefab: {fileID: 3892113020135790413, guid: 0bd722d3e1ec75443bc49dae6da8955a, type: 3}
@@ -97128,7 +97129,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1059, y: -561}
+  m_AnchoredPosition: {x: 1021, y: -535}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1621864184

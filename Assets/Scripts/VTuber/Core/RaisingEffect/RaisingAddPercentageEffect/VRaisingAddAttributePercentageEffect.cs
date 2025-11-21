@@ -43,7 +43,8 @@ namespace VTuber.Core.RaisingEffect
         
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
+            if(animationRequest is not null)
+                animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
             base.ApplyEffect(character, messagedict, animationRequest);
         }
 

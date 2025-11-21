@@ -86,6 +86,7 @@ namespace VTuber.BattleSystem.Core
         public bool IsTutorial { get; private set; }
 
         public VTutorialScript TutorialScript { get; private set; }
+        public List<VAccount> Accounts => _accounts;
 
         protected override void Awake()
         {
@@ -394,6 +395,7 @@ namespace VTuber.BattleSystem.Core
         public void OpenMainMenu()
         {
             mainMenu.gameObject.SetActive(true);
+            _accounts = VDataPersistenceManager.Instance.SaveData.accounts.Select(account => new VAccount(account)).ToList();
             mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts);
         }
 

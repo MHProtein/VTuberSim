@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
 using Sirenix.OdinInspector;
 using SlayTheSpire.System.SavingSystem;
 using TMPro;
@@ -109,7 +111,7 @@ namespace VTuber.BattleSystem.Core.UI
 
             _accounts = accounts;
 
-            _loadGameButton.interactable = VDataPersistenceManager.Instance.SaveData is not null && VDataPersistenceManager.Instance.SaveData.saved;
+            _loadGameButton.interactable = VDataPersistenceManager.Instance.SaveData is not null && VDataPersistenceManager.Instance.SaveData.saved && !VDataPersistenceManager.Instance.SaveData.ended;
             VAudioPlayer.Instance.PlayBGM(VBGMType.MainMenu);
         }
 

@@ -65,24 +65,16 @@ namespace VTuber.BattleSystem.UI
                     popularityText.color = Color.white;
                 }));
 
-            if (_isPhaseEnding)
-            {
-                if (value <= _target)
-                {
-                    Tween.UIFillAmount(bar, Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
-                    targetText.text = _target.ToString();
-                }
-                else
-                {
-                    Tween.UIFillAmount(bar,
-                        Mathf.Clamp((float)(value - _target) / (_extraTarget - _target), 0.0f, 1.0f), 0.3f);
-                    targetText.text = _extraTarget.ToString();
-                }
-            }
-            else
+            if (value <= _target)
             {
                 Tween.UIFillAmount(bar, Mathf.Clamp((float)value / _target, 0.0f, 1.0f), 0.3f);
                 targetText.text = _target.ToString();
+            }
+            else
+            {
+                Tween.UIFillAmount(bar,
+                    Mathf.Clamp((float)(value - _target) / (_extraTarget - _target), 0.0f, 1.0f), 0.3f);
+                targetText.text = _extraTarget.ToString();
             }
         }
     }

@@ -22,7 +22,8 @@ namespace VTuber.EventSystem.UI
             confirmButton.interactable = false;
             _options = new List<VPhaseEndingOption>();
             foreach (var ending in endings)
-            {
+            {   
+                
                 var endingGo = Instantiate(endingPrefab, grid);
                 var option = endingGo.GetComponent<VPhaseEndingOption>();
                 option.Initialize(ending, this);

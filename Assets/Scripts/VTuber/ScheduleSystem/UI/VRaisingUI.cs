@@ -181,9 +181,9 @@ namespace VTuber.ScheduleSystem.UI
             membershipUI.SetActive(active);
         }
 
-        public void InitializeEndingUI(string characterName, string ratingLevel, int score, VAccount account)
+        public void InitializeEndingUI(string characterName, Sprite characterIcon, string ratingLevel, int score, VAccount account)
         {
-            endingUI.Initialize(characterName, ratingLevel, score, account);
+            endingUI.Initialize(characterName, characterIcon, ratingLevel, score, account);
         }
 
         public void ShowEndingUI()
