@@ -288,7 +288,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         ClearBtns();
         canContinue = true;
         
-        
         if (dc.nextId == -1)
         {
             shouldEnd = true;
@@ -422,11 +421,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             PauseAuto();
             PauseSkip();
         }
-    }
-
-    public void SetCanContinue(bool p0)
-    {
-        canContinue = p0;
     }
 
     public void OnPointerClick(PointerEventData eventData)
