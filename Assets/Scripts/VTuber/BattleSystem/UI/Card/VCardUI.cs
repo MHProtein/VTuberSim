@@ -102,6 +102,10 @@ namespace VTuber.BattleSystem.UI
                 ColorUtility.TryParseHtmlString("#0ac736", out var color);
                 name.color = color;
             }
+            else
+            {
+                name.color = Color.white;
+            }
 
             Card = card;
         }

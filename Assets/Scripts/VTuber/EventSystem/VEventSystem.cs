@@ -106,6 +106,7 @@ namespace VTuber.EventSystem
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e, bool isPhaseStartEvent = false)
         {
+            VEventSystemUI.Instance.ClosePhaseEndingSelectionMenu(false);
             dialogueSystem.OnDialogFinished += OnDialogueComplete;
             dialogueSystem.OnLineFinished += OnLineFinished;
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_EnterEvent);
@@ -272,6 +273,7 @@ namespace VTuber.EventSystem
                 _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck,
                 tutorialTurnHandCards, tipConfig);
             VRaisingUI.Instance.SetConsumableToBattle();
+            _character.ConsumableManager.SetBattle(battle);
         }
 
         private void OnDialogueComplete(Dialog dialog)

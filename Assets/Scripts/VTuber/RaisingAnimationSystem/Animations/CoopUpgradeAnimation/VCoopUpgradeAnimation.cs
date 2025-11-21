@@ -155,25 +155,18 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
                 position.x = coopInfo.position.x;
                 
                 sequence
-                    .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveInfoAudio))
                     .Chain(Tween.Position(coopInfo.transform, position, Interval(0.4f)))
 
-                    .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(upgradeTextAudio))
                     .Chain(Tween.Alpha(upgradeText, 0, Interval(0.25f)))
 
-                    .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(currentLevelMoveAudio))
                     .ChainCallback(() => currentLevelText.alpha = 0)
 
-                    .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(currentLevelMoveAudio))
                     .Chain(Tween.Position(currentLevelText.transform, currentLevelTextPosition.position, Interval(0.25f)))
 
-                    .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(arrowFillAudio))
                     .Chain(Tween.UIFillAmount(arrow, 0, Interval(0.25f)))
 
-                    .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(upgradeLevelFadeAudio))
                     .Chain(Tween.Alpha(upgradeLevelText, 0, Interval(0.25f)))
 
-                    .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(upgradeLevelFadeAudio))
                     .Chain(Tween.Alpha(upgradeLevelText, 0, Interval(0.25f)))
                     
                     .ChainCallback(() => _onComplete?.Invoke());
