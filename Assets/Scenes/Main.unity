@@ -95576,8 +95576,8 @@ MonoBehaviour:
       Data: 
   pressureIcons:
   - {fileID: -481025564, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
-  - {fileID: -850377572, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
-  - {fileID: 815032599, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
+  - {fileID: -1596389685, guid: c8c6438d60bad384b882f7182d3bfa99, type: 3}
+  - {fileID: 1652314341, guid: c8c6438d60bad384b882f7182d3bfa99, type: 3}
   - {fileID: 2126007384, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
   - {fileID: 527271978, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
   pressureNames:

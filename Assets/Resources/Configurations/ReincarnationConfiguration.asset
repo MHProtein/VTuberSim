@@ -773,8 +773,8 @@ MonoBehaviour:
       Data: 8
     - Name: streamEffectsRequirements
       Entry: 7
-      Data: 42|Antlr4.Runtime.Misc.ArrayList`1[[VTuber.Reincarnation.VEffectLevelRequirement,
-        Assembly-CSharp]], Yarn.Antlr4.Runtime.Standard
+      Data: 42|System.Collections.Generic.List`1[[VTuber.Reincarnation.VEffectLevelRequirement,
+        Assembly-CSharp]], mscorlib
     - Name: 
       Entry: 12
       Data: 2
@@ -1599,13 +1599,13 @@ MonoBehaviour:
   - eventID: 10
     relicIDs: 19000000
   - eventID: 11
-    relicIDs: 1a000000
+    relicIDs: 24000000
   - eventID: 12
-    relicIDs: 1b000000
+    relicIDs: 25000000
   - eventID: 13
-    relicIDs: 1c000000
+    relicIDs: 26000000
   - eventID: 14
-    relicIDs: 1d000000
+    relicIDs: 27000000
   - eventID: 15
     relicIDs: 2a000000
   - eventID: 16

@@ -41,7 +41,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  baseEventID: 0
+  baseEventID: 22
   conditions:
   - id: 0
     operatorType: 3

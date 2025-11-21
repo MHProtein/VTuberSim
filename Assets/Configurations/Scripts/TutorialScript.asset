@@ -452,20 +452,25 @@ MonoBehaviour:
       idOrName: 
       operatorType: 4
       targetValue: 10
+    - conditionType: 4
+      eventType: 2
+      idOrName: 
+      operatorType: 3
+      targetValue: 4
     tip:
       title: "\u6784\u7B51\u5361\u7EC4"
-      description: "\u901A\u8FC7\u201C\u76F4\u64AD\u51C6\u5907\u201D\u4E8B\u4EF6,\u5C06\u5361\u7EC4\u4E2D\u5361\u724C\u7684\u6570\u91CF\u63D0\u5347\u81F310\u5F20\u4EE5\u4E0A\u5427\u3002\n\u534F\u52A9\u8005\u4F1A\u5728\u968F\u673A\u65F6\u95F4\u6BB5\u51FA\u73B0\uFF0C\u5B89\u6392\u5BF9\u5E94\u7C7B\u578B\u7684\u4E8B\u4EF6\u5373\u53EF\u83B7\u5F97\u989D\u5916\u5956\u52B1\u5E76\u52A0\u6DF1\u534F\u52A9\u8005\u7684\u5173\u7CFB"
+      description: "\u901A\u8FC7\u201C\u76F4\u64AD\u51C6\u5907\u201D\u4E8B\u4EF6,\u5C06\u5361\u7EC4\u4E2D\u5361\u724C\u7684\u6570\u91CF\u63D0\u5347\u81F310\u5F20\u4EE5\u4E0A,\u5E76\u4E14\u5B89\u63924\u6B21\u201C\u627E\u5C0F\u5BA4\u73A9\u201D\n\u534F\u52A9\u8005\u4F1A\u5728\u968F\u673A\u65F6\u95F4\u6BB5\u51FA\u73B0\uFF0C\u5B89\u6392\u5BF9\u5E94\u7C7B\u578B\u7684\u4E8B\u4EF6\u5373\u53EF\u83B7\u5F97\u989D\u5916\u5956\u52B1\u5E76\u52A0\u6DF1\u534F\u52A9\u8005\u7684\u5173\u7CFB"
       image: {fileID: 21300000, guid: 09911234645cdee4191b57cc4660bc79, type: 3}
   - weekID: 2
     useCoopEvents: 1
-    eventIDs: 000000000100000002000000030000004e0000004f000000
+    eventIDs: 000000000100000002000000030000000c0000004e0000004f000000
     streamEventIDs: 
     conditions:
     - conditionType: 3
       eventType: 0
       idOrName: 0
       operatorType: 3
-      targetValue: 2
+      targetValue: 1
     tip:
       title: "\u52A0\u6DF1\u5173\u7CFB"
       description: "\u4E0E\u534F\u52A9\u8005\u79EF\u7D2F\u8DB3\u591F\u597D\u611F\u5EA6\u5373\u53EF\u5F00\u542F\u5173\u7CFB\u52A0\u6DF1\u4E8B\u4EF6\uFF0C\u80FD\u83B7\u5F97\u7279\u522B\u7684\u5956\u52B1"
