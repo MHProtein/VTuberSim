@@ -4047,14 +4047,14 @@ MonoBehaviour:
   smokeFadeOutDuration: 0.15
   smokeFinishDelay: 0.25
   appearAudio:
-    soundName: 
+    soundName: itemAppear
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   removeAudio:
-    soundName: 
+    soundName: CardDelete
     channel: 1
     volume: 1
     pitch: 1
@@ -9480,7 +9480,7 @@ MonoBehaviour:
   haloFadeDuration: 0.5
   speed: 1
   appearAudio:
-    soundName: 
+    soundName: itemAppear
     channel: 1
     volume: 1
     pitch: 1
@@ -14374,21 +14374,21 @@ MonoBehaviour:
   collectMoveDuration: 0.5
   collectScaleDuration: 0.5
   appearAudio:
-    soundName: 
+    soundName: itemAppear
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   flipAudio:
-    soundName: 
+    soundName: spin
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   haloSpinAudio:
-    soundName: 
+    soundName: partnerUp
     channel: 3
     volume: 1
     pitch: 1
@@ -14833,14 +14833,14 @@ MonoBehaviour:
   cardPulseScale: 1.8
   haloSpinDuration: 8
   appearAudio:
-    soundName: 
+    soundName: itemAppear
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   upgradeAudio:
-    soundName: 
+    soundName: cardUpgrade
     channel: 1
     volume: 1
     pitch: 1
@@ -15062,14 +15062,14 @@ MonoBehaviour:
   relicMoveToLibraryDuration: 0.5
   relicNameHideDuration: 0.5
   appearAudio:
-    soundName: 
+    soundName: itemAppear
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   descriptionAppearAudio:
-    soundName: 
+    soundName: description
     channel: 1
     volume: 1
     pitch: 1
@@ -20241,7 +20241,7 @@ MonoBehaviour:
   speed: 1
   initScale: 1.5
   appearAudio:
-    soundName: 
+    soundName: attribute
     channel: 1
     volume: 1
     pitch: 1
@@ -20526,28 +20526,28 @@ MonoBehaviour:
   upgradeLevelFadeDuration: 0.25
   spacingAnimDuration: 0.5
   moveInfoAudio:
-    soundName: 
+    soundName: Card
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   upgradeTextAudio:
-    soundName: 
+    soundName: lvUp
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   moveInfoPhase2Audio:
-    soundName: 
+    soundName: move
     channel: 1
     volume: 1
     pitch: 1
     loop: 0
     delay: 0
   currentLevelMoveAudio:
-    soundName: 
+    soundName: partnerUp
     channel: 1
     volume: 1
     pitch: 1

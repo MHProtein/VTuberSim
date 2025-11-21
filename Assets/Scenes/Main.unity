@@ -96338,11 +96338,11 @@ MonoBehaviour:
   - {fileID: 2126007384, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
   - {fileID: 527271978, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
   pressureNames:
-  - "\u7EDD\u597D\u8C03"
-  - "\u597D\u8C03"
+  - "\u6109\u60A6"
+  - "\u8F7B\u677E"
   - "\u5E73\u5E38\u5FC3"
-  - "\u4E0D\u8C03"
-  - "\u7EDD\u4E0D\u8C03"
+  - "\u70E6\u607C"
+  - "\u75DB\u82E6"
   coopIcon: {fileID: -2090269636, guid: 9a3f0341aeb07054384bd1c52d1fc5af, type: 3}
   haloSprites:
   - {fileID: 21300000, guid: f14380ba47ce93c46b4a03e505b177da, type: 3}
@@ -102947,7 +102947,7 @@ MonoBehaviour:
   cardLibraryPosition: {fileID: 1900267185}
   appearDuration: 0.5
   appearEase: 27
-  cardPulseDuration: 3
+  cardPulseDuration: 1
   cardPulseScale: 1.8
   haloSpinDuration: 8
   moveShrinkDuration: 0.5
