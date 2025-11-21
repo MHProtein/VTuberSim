@@ -811,6 +811,34 @@ MonoBehaviour:
   cardPulseDuration: 3
   cardPulseScale: 1.8
   haloSpinDuration: 8
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  upgradeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  confirmAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &341688003
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +953,35 @@ MonoBehaviour:
   relicShrinkDuration: 0.5
   relicMoveToLibraryDuration: 0.5
   relicNameHideDuration: 0.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  descriptionAppearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveShrinkAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  speed: 1
 --- !u!1 &356213322
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,10 +1036,42 @@ MonoBehaviour:
   confirmButton: {fileID: 532341807}
   halo: {fileID: 727928060}
   haloImage: {fileID: 727928061}
-  angle: 2880
-  duration: 4
-  ease: 4
+  cardLibrary: {fileID: 0}
+  flipDuration: 3
+  flipAngle: 36000
+  flipEase: 22
   haloSpinDuration: 8
+  collectMoveDuration: 0.5
+  collectScaleDuration: 0.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  flipAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  collectAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  speed: 1
 --- !u!1 &360476747
 GameObject:
   m_ObjectHideFlags: 0
@@ -3685,6 +3774,34 @@ MonoBehaviour:
   relicShrinkDuration: 0.5
   relicMoveToLibraryDuration: 0.5
   relicNameHideDuration: 0.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  descriptionAppearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveShrinkAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &862673484
 GameObject:
   m_ObjectHideFlags: 0
@@ -4622,10 +4739,30 @@ MonoBehaviour:
   cardPulseScale: 1.8
   haloSpinDuration: 8
   moveShrinkDuration: 0.5
-  moveShrinkEase: 8
   movePositionDuration: 0.5
-  movePositionEase: 8
   haloFadeDuration: 0.5
+  speed: 1
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveShrinkAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &1115643873
 GameObject:
   m_ObjectHideFlags: 0
@@ -6885,6 +7022,12 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: selectCardMenuTitles
+      Entry: 6
+      Data: 
+    - Name: selectCardMenuPreviewCardTitles
+      Entry: 6
+      Data: 
   pressureIcons:
   - {fileID: -481025564, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
   - {fileID: -850377572, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
@@ -8076,6 +8219,35 @@ MonoBehaviour:
   smokeExpandDuration: 1
   smokeFadeOutDuration: 0.15
   smokeFinishDelay: 0.25
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  removeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  smokeAppearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  smokeFadeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  speed: 1
 --- !u!1 &1935501159
 GameObject:
   m_ObjectHideFlags: 0
@@ -8315,6 +8487,7 @@ MonoBehaviour:
   infoInitPosition: {fileID: 1442386994}
   infoPosition: {fileID: 629233258}
   icon: {fileID: 750217385}
+  maxText: {fileID: 0}
   valueText: {fileID: 525199545}
   light: {fileID: 911022377}
   popScale: 1
@@ -8323,7 +8496,29 @@ MonoBehaviour:
   holdDuration: 2
   fadeOutDuration: 0.1
   lightSpinDuration: 8
+  speed: 1
   initScale: 1.5
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  disappearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &2070954825
 GameObject:
   m_ObjectHideFlags: 0
@@ -9224,6 +9419,35 @@ MonoBehaviour:
   moveEase: 3
   cardHoldDelay: 1
   finalRemoveDuration: 0.25
+  speed: 1
+  appearAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  removeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  finalRemoveAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
 --- !u!1 &5628027876404036791
 GameObject:
   m_ObjectHideFlags: 0
@@ -9573,6 +9797,63 @@ MonoBehaviour:
   arrowFillDuration: 0.25
   upgradeLevelFadeDuration: 0.25
   spacingAnimDuration: 0.5
+  moveInfoAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  upgradeTextAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  moveInfoPhase2Audio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  currentLevelMoveAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  arrowFillAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  upgradeLevelFadeAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  spacingAnimAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  haloSpinAudio:
+    soundName: 
+    channel: 1
+    volume: 1
+    pitch: 1
+    loop: 0
+    delay: 0
+  speed: 1
 --- !u!224 &7937123090688271165
 RectTransform:
   m_ObjectHideFlags: 0
