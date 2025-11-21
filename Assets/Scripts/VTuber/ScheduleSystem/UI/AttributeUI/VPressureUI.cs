@@ -21,7 +21,7 @@ namespace VTuber.ScheduleSystem.UI
                 VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_AttributeChange);
             base.OnValueChanged(messagedict);
             var delta = messagedict["Delta"] as int? ?? 0;
-            var info = VUIUtils.Instance.GetPressureIcon((int)messagedict["NewValue"]);
+            var info = VUIUtils.Instance.GetPressureInfo((int)messagedict["NewValue"]);
             icon.sprite = info.Value;
             if ((int)messagedict["NewValue"] == 3)
             {

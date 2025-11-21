@@ -33,6 +33,8 @@ namespace VTuber.RaisingAnimationSystem
         public Action<VCard> cardSelectPreviewAction;
         public Action cardSelectReturnAction;
         public VCard previewCard;
+        public int currentPressureLevel;
+        public int nextPressureLevel;
     }
 
     public class VAnimationRequestFactory

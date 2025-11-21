@@ -81,7 +81,7 @@ namespace VTuber.Core.UI.VCharacterSelection
             for (int i = 0; i < characterConfig.pressureEffects.Count; i++)
             {
                 var entry = Instantiate(pressureEffectEntryPrefab, pressureEffectTableGrid);
-                var pressureLevelInfo = VUIUtils.Instance.GetPressureIcon(i + 1);
+                var pressureLevelInfo = VUIUtils.Instance.GetPressureInfo(i + 1);
                 if (i == 2)
                 {
                     

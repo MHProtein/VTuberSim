@@ -31,6 +31,11 @@ namespace VTuber.CoopSystem.UI
         [SerializeField] private Transform levelTransform;
         [SerializeField] private float creationLevelScale;
         [SerializeField] private float executionLevelScale;
+        [SerializeField] private TMP_Text coopValue;
+        [SerializeField] private Transform coopValueExecutionPosition;
+        [SerializeField] private Transform coopValueCreationPosition;
+        [SerializeField] private float coopValueExecutionSize;
+        [SerializeField] private float coopValueCreationSize;
         private bool _isSlotShowing;
         private Action<VCooperatorUI> _onClicked;
         private bool _selected;
@@ -79,10 +84,13 @@ namespace VTuber.CoopSystem.UI
             _onClicked = onClicked;
             pfp.sprite = cooperator.configuration.Icon;
             cooperatorName.text = cooperator.configuration.Name;
-            coopLevel.text = cooperator.CurrentCoopLevel.levelName;
+            UpdateValue(cooperator);
             SetBaseCoopEvent(VDataManager.Instance.GetAllEventConfigurations()
                 .Find(x => x.id == cooperator.configuration.BaseCoopEvent));
             _slotShowable = false;
+            
+            coopValue.fontSize = coopValueExecutionSize;
+            coopValue.transform.position = coopValueExecutionPosition.position;
         }
 
         public void SetBaseCoopEvent(VScheduleEventConfiguration eventData)
@@ -97,6 +105,7 @@ namespace VTuber.CoopSystem.UI
         public void UpdateValue(VCooperator cooperator)
         {
             coopLevel.text = cooperator.CurrentCoopLevel.levelName;
+            coopValue.text = cooperator.CoopValue.ToString();
         }
 
         public void SetUpgradeEvent(VScheduleEvent scheduleEvent)
@@ -123,6 +132,9 @@ namespace VTuber.CoopSystem.UI
             Tween.Scale(levelTransform, Vector3.one * executionLevelScale, 0.3f);
             Tween.Position(levelTransform, executionLevelPosition.position, 0.3f);
 
+            Tween.TextFontSize(coopValue, coopValueExecutionSize, 0.3f);
+            Tween.Position(coopValue.transform, coopValueExecutionPosition.position, 0.3f);
+
             showHideButton.gameObject.SetActive(false);
             HideSlot(false);
             _slotShowable = false;
@@ -134,6 +146,9 @@ namespace VTuber.CoopSystem.UI
             creatorSlot.gameObject.SetActive(true);
             Tween.Scale(levelTransform, Vector3.one * creationLevelScale, 0.3f);
             Tween.Position(levelTransform, creationLevelPosition.position, 0.3f);
+            
+            Tween.TextFontSize(coopValue, coopValueCreationSize, 0.3f);
+            Tween.Position(coopValue.transform, coopValueCreationPosition.position, 0.3f);
         }
 
         public void ShowSlot()

@@ -36,6 +36,15 @@ namespace VTuber.Core.RaisingEffect
             {
                 animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
                 animationRequest.isPercentage = character.AttributeManager.Attributes[AttributeName].IsPercentage;
+
+                if (AttributeName == "CAPressure")
+                {
+                    animationRequest.instigatorType = VInstigatorType.Ignore;
+                    animationRequest.animationType = VAnimationType.Pressure;
+                    var value = character.AttributeManager.Attributes[AttributeName].Value;
+                    animationRequest.currentPressureLevel = value;
+                    animationRequest.nextPressureLevel = value + _value.Value;
+                }
             }
             base.ApplyEffect(character, messagedict, animationRequest);
         }
