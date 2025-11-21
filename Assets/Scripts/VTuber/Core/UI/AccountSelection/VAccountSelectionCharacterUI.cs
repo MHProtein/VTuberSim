@@ -64,7 +64,7 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             maxStaminaText.text = _character.AttributeManager.Attributes["CAStamina"].MaxValue.ToString();
 
             var pressure = _character.AttributeManager.Attributes["CAPressure"].Value;
-            initialPressureImage.sprite = VUIUtils.Instance.GetPressureIcon(pressure).Value;
+            initialPressureImage.sprite = VUIUtils.Instance.GetPressureInfo(pressure).Value;
             initialMoneyText.text = _character.AttributeManager.Attributes["CAMoney"].Value.ToString();
             initialMembershipText.text = _character.AttributeManager.Attributes["CAMembershipCount"].Value.ToString();
             initialFollowerText.text = _character.AttributeManager.Attributes["CAFollowerCount"].Value.ToString();

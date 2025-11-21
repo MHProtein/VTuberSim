@@ -29,7 +29,7 @@ namespace VTuber.Character.Attributes
             if (Value == 3)
                 return;
             _effects[Value - 1].ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Pressure,
-                VUIUtils.Instance.GetPressureIcon(Value).Value, "每天结束时, " + _effects[Value - 1].Description));
+                VUIUtils.Instance.GetPressureInfo(Value).Value, "每天结束时, " + _effects[Value - 1].Description));
         }
         
         protected override void AddAdditionalEventParameters(Dictionary<string, object> messageDict)

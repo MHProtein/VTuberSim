@@ -75,8 +75,10 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
                 icon.sprite = request.attributeIcon;
             }
             
-            valueText.color = request.value > 0 ? Color.green : Color.red;
             valueText.text = (request.value > 0 ? "+" : "") + request.value;
+            if(request.isPercentage)
+                valueText.text += "%";
+            valueText.color = request.value > 0 ? Color.green : Color.red;
 
             // Build sequence
             var sequence = Sequence.Create();

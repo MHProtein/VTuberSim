@@ -32,8 +32,20 @@ namespace VTuber.Core.RaisingEffect
         
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            if(animationRequest is not null)
+            if (animationRequest is not null)
+            {
                 animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
+                animationRequest.isPercentage = character.AttributeManager.Attributes[AttributeName].IsPercentage;
+
+                if (AttributeName == "CAPressure")
+                {
+                    animationRequest.instigatorType = VInstigatorType.Ignore;
+                    animationRequest.animationType = VAnimationType.Pressure;
+                    var value = character.AttributeManager.Attributes[AttributeName].Value;
+                    animationRequest.currentPressureLevel = value;
+                    animationRequest.nextPressureLevel = value + _value.Value;
+                }
+            }
             base.ApplyEffect(character, messagedict, animationRequest);
         }
 

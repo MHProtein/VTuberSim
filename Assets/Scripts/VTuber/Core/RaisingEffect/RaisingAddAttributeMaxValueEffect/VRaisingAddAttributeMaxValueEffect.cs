@@ -26,6 +26,7 @@ namespace VTuber.Core.RaisingEffect
             {
                 animationRequest.attributeIcon = VUIUtils.Instance.GetAttributeIcon(AttributeName);
                 animationRequest.isMaxValue = true;
+                animationRequest.isPercentage = character.AttributeManager.Attributes[AttributeName].IsPercentage;
             }
             base.ApplyEffect(character, messagedict, animationRequest);
         }

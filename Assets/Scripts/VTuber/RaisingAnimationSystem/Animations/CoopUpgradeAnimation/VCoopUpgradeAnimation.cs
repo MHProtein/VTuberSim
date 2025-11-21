@@ -60,9 +60,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
 
         private Action _onComplete;
         private bool _isAnimating;
+        private bool _clicked;
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
+            _clicked = false;
             _onComplete = onComplete;
             if (!debug)
             {
@@ -145,6 +147,9 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
         {
             if (!_isAnimating)
             {
+                if (_clicked)
+                    return;
+                _clicked = true;
                 var sequence = Sequence.Create();
                 var position = coopInfoInitPosition.position;
                 position.x = coopInfo.position.x;

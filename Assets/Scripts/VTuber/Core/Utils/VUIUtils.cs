@@ -41,7 +41,7 @@ namespace VTuber.Core.UI
             return haloSprites[level];
         }
 
-        public KeyValuePair<string, Sprite> GetPressureIcon(int i)
+        public KeyValuePair<string, Sprite> GetPressureInfo(int i)
         {
             return new KeyValuePair<string, Sprite>(pressureNames[i - 1], pressureIcons[i - 1]);
         }
