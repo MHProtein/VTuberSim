@@ -116,6 +116,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
         private void Confirm()
         {
             cardUI.transform.SetParent(cardLibrary);
+            confirmButton.interactable = false;
             var sequence = Sequence.Create();
             var scale = cardUI.transform.localScale;
             sequence
