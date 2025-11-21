@@ -116,6 +116,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  isDebug: 0
   index: 0
   scriptName: "\u51FA\u9053"
   description: "\u5728\u505A\u4E86\u5341\u8DB3\u7684\u51C6\u5907\u540E\uFF0C\u4F60\u51C6\u5907\u8E0F\u4E0A\u4E86\u865A\u62DF\u4E3B\u64AD\u4E4B\u8DEF\uFF0C"
