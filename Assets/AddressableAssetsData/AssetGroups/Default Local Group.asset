@@ -16,7 +16,12 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: f52ff284aa8cfad4989ab63eb4dd9056
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 3906dc5cf0ddd294ea8ea68fae029fe1
+    m_Address: Assets/Configurations/Characters/Superman.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7d074f93e766578458cf34492c0bb11e, type: 2}
   m_SchemaSet:

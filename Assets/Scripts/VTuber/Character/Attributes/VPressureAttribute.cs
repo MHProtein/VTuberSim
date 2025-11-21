@@ -26,6 +26,8 @@ namespace VTuber.Character.Attributes
 
         public void ApplyEffects(VCharacter character)
         {
+            if (Value == 3)
+                return;
             _effects[Value - 1].ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Pressure,
                 VUIUtils.Instance.GetPressureIcon(Value).Value, "每天结束时, " + _effects[Value - 1].Description));
         }
@@ -34,6 +36,5 @@ namespace VTuber.Character.Attributes
         {
             messageDict.Add("Effect", _effects[Value - 1]);
         }
-        
     }
 }

@@ -82,7 +82,18 @@ namespace VTuber.Core.UI.VCharacterSelection
             {
                 var entry = Instantiate(pressureEffectEntryPrefab, pressureEffectTableGrid);
                 var pressureLevelInfo = VUIUtils.Instance.GetPressureIcon(i + 1);
-                entry.GetComponent<VPressureEffectTableEntry>().SetEffect(pressureLevelInfo.Value, pressureLevelInfo.Key, "每天结束时, " + characterConfig.pressureEffects[i].CreateRaisingEffect().Description);
+                if (i == 2)
+                {
+                    
+                    entry.GetComponent<VPressureEffectTableEntry>().SetEffect(pressureLevelInfo.Value, 
+                        pressureLevelInfo.Key, "无效果");
+                }
+                else
+                {
+                    entry.GetComponent<VPressureEffectTableEntry>().SetEffect(pressureLevelInfo.Value, 
+                        pressureLevelInfo.Key, "每天结束时, " + characterConfig.pressureEffects[i].CreateRaisingEffect().Description);
+                }
+                
                 _pressureEffects.Add(entry.GetComponent<VPressureEffectTableEntry>());
             }
             if (characterConfig.isCharacterEventStream)

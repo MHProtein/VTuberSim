@@ -23,9 +23,18 @@ namespace VTuber.ScheduleSystem.UI
             var delta = messagedict["Delta"] as int? ?? 0;
             var info = VUIUtils.Instance.GetPressureIcon((int)messagedict["NewValue"]);
             icon.sprite = info.Value;
-            pressureEffectTableEntry.SetEffect(info.Value,
-                info.Key,
-                "每天结束时, " + (messagedict["Effect"] as VRaisingEffect).Description);
+            if ((int)messagedict["NewValue"] == 3)
+            {
+                pressureEffectTableEntry.SetEffect(info.Value,
+                    info.Key,
+                    "无效果");
+            }
+            else
+            {
+                pressureEffectTableEntry.SetEffect(info.Value,
+                    info.Key,
+                    "每天结束时, " + (messagedict["Effect"] as VRaisingEffect).Description);
+            }
             
             text.text = info.Key;
             if (delta == 0)
