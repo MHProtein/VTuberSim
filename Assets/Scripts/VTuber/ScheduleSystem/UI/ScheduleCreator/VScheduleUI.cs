@@ -358,6 +358,15 @@ namespace VTuber.ScheduleSystem.UI
         {
             return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
         }
+        
+        public List<VScheduleSlot> GetUSlot(VScheduleSlot slot)
+        {
+            var down = slot.Coordination.y - 1;
+            var ret = new List<VScheduleSlot>();
+            if (down >= 0)
+                ret.Add(slots[down, slot.Coordination.x]);
+            return ret;
+        }
 
         public List<VScheduleSlot> GetUDSlots(VScheduleSlot slot)
         {

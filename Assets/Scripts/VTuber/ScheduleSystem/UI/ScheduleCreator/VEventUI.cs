@@ -589,6 +589,9 @@ private void ShowConditionIndicators()
             // 3. 根据模式显示指示器，并传入文本和颜色
             switch (pattern)
             {
+                case VSchedulingConditionPositionPatterns.U:
+                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
+                    break;
                 case VSchedulingConditionPositionPatterns.UD:
                     ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
                     ActivateIndicator(downIndicatorImage, downText, info.HintText, info.BackgroundColor);
