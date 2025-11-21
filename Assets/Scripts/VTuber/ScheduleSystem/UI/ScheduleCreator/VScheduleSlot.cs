@@ -102,6 +102,11 @@ namespace VTuber.ScheduleSystem.UI
             _useThisTransformAsParent = useThisTransformAsParent;
             _coopEventID = -1;
         }
+        
+        public List<VScheduleSlot> GetUSlot()
+        {
+            return _scheduleUI.GetUSlot(this);
+        }
 
         public List<VScheduleSlot> GetUDSlots()
         {

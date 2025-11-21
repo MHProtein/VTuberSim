@@ -117,6 +117,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
         {
             cardUI.transform.SetParent(cardLibrary);
             var sequence = Sequence.Create();
+            var scale = cardUI.transform.localScale;
             sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(collectAudio))
                 .Chain(Tween.LocalPosition(cardUI.transform, Vector3.zero, Interval(collectMoveDuration), Ease.InSine))
@@ -127,7 +128,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
                     if (!debug)
                         VGameManager.Instance.Character.CardLibrary.ReplaceCard(_cardToReplace, _cardToBeReplaced);
                     cardUI.transform.SetParent(ui.transform);
-                    cardUI.transform.localScale = Vector3.zero;
+                    cardUI.transform.localPosition = Vector3.zero;
+                    cardUI.transform.localScale = scale;
                 });
         }
 

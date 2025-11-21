@@ -23,6 +23,7 @@ namespace VTuber.ScheduleSystem.Events
     public enum VSchedulingConditionPositionPatterns
     {
         None,
+        U,
         UD,
         LR,
         UDLR,
@@ -63,8 +64,6 @@ namespace VTuber.ScheduleSystem.Events
         // 具体判断逻辑取决于你的策划配置表是否在 ID 模式下也指定了类型。
         // 如果配置表中 ID 模式下没有指定类型，你可能需要尝试获取或在 VSchedulingCondition 解析时存储 IsStream。
         public bool IsTargetStream => _isStream;
-        
-        
         
         public List<VRaisingEffect> Effects => _effects;
         private List<VRaisingEffect> _effects;
@@ -173,6 +172,9 @@ namespace VTuber.ScheduleSystem.Events
             {
                 case VSchedulingConditionPositionPatterns.None:
                     return false;
+                case VSchedulingConditionPositionPatterns.U:
+                    slots = slot.GetUSlot();
+                    break;
                 case VSchedulingConditionPositionPatterns.UD:
                     slots = slot.GetUDSlots();
                     break;
@@ -208,6 +210,7 @@ namespace VTuber.ScheduleSystem.Events
                         if (_isStream == s.Item.Event is VStreamEvent && s.Item.Event.EventID == _targetID)
                             return false;
                     }
+                
 
                 return true;
             }
