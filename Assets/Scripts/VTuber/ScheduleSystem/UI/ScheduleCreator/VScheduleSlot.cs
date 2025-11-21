@@ -120,6 +120,8 @@ namespace VTuber.ScheduleSystem.UI
 
         public List<VScheduleSlot> GetSurroundingSlots()
         {
+            if (_scheduleUI is null)
+                return null;
             return _scheduleUI.GetSurroundingSlots(this);
         }
 
