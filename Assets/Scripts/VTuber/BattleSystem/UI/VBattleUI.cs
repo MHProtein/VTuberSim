@@ -62,7 +62,7 @@ namespace VTuber.BattleSystem.UI
         [Space(3)] [SerializeField] private Button skipTurnButton;
 
         [SerializeField] private GameObject cardUIPrefab;
-        [SerializeField] private VTips tipUI;
+        [SerializeField] private VStreamTipsUI streamTips;
 
         public Vector2 cardSize;
 
@@ -132,19 +132,9 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBattleUIInitialize(Dictionary<string, object> messagedict)
         {
-            SetTips(messagedict["TipConfig"] as VTipConfig);
-        }
-
-        public void SetTips(VTipConfig tipConfig)
-        {
-            if (tipConfig is null)
-            {
-                tipUI.gameObject.SetActive(false);
-                return;
-            }
-            
-            tipUI.gameObject.SetActive(true);
-            tipUI.SetTips(tipConfig.title, tipConfig.description, tipConfig.image);
+            var tips = messagedict["TipConfig"] as List<Sprite>;
+            streamTips.SetTips(tips);
+            streamTips.Show();
         }
 
         public void Rearrange(int index)
@@ -669,4 +659,6 @@ namespace VTuber.BattleSystem.UI
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Battle_CardPlayed);
         }
     }
+
+
 }

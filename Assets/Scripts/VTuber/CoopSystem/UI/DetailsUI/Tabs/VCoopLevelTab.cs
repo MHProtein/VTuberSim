@@ -42,7 +42,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
                     var effectText = Instantiate(effectPrefab, effectContainer).GetComponent<TMP_Text>();
                     if (effect is VRaisingAddAttributeMaxValueEffect raisingAddAttributeMaxValueEffect) text += "最大";
 
-                    text += VUIUtils.Instance.GetAttributeName(attributeEffect.AttributeName);
+                    text += VUIUtils.GetAttributeName(attributeEffect.AttributeName);
 
                     var parameter = effect.GetParameter();
                     if (parameter.Contains('-'))

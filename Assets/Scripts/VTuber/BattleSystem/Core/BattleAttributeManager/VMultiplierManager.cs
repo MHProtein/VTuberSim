@@ -64,7 +64,7 @@ namespace VTuber.BattleSystem.Core
                 new Dictionary<string, object>
                 {
                     { "Colors", multiplierSequence.Select(index => Multipliers[index].color).ToList() },
-                    { "Index", _currentTurnIndex }
+                    { "Index", _currentTurnIndex - 1 }
                 });
         }
 

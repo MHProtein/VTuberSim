@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Tutorial.Script;
+using UnityEngine;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.Effect.Conditions;
 using VTuber.Core.Managers;
@@ -31,7 +32,7 @@ namespace VTuber.ScheduleSystem.Events
         public List<uint> TutorialDeck { get; }
 
         public Dictionary<int, List<uint>> TutorialTurnHandCards { get; }
-        public VTipConfig TutorialTipConfig { get; }
+        public List<Sprite> TutorialTips { get; }
 
         public VStreamEvent(VStreamEventConfiguration config) : base(config)
         {
@@ -48,7 +49,7 @@ namespace VTuber.ScheduleSystem.Events
             TutorialConditions = config.conditions;
             TutorialDeck = config.deck;
             TutorialTurnHandCards = config.turnHandCards;
-            TutorialTipConfig = config.tip;
+            TutorialTips = config.tips;
         }
         
         private void Initialize(VStreamEventConfiguration config)

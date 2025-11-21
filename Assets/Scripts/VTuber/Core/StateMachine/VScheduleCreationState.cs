@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SlayTheSpire.System.SavingSystem;
+using Tutorial.Script;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
@@ -20,8 +21,14 @@ namespace VTuber.Core.StateMachine
             base.Enter(state, enterParams);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
 
-            if(stateMachine.isTutorial)
+            if (stateMachine.isTutorial)
+            {
                 VRaisingUI.Instance.SetTips(stateMachine.TutorialScript.CurrentWeekTip);
+                VRaisingUI.Instance.ShowTips();
+                VTutorialConditionsUIManager.Instance.SetConditions(stateMachine.TutorialScript.CurrentWeekConditions,
+                    stateMachine.Character);
+            }
+            
             VEventSystemUI.Instance.CloseEventUI();
             VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(false);
             stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,

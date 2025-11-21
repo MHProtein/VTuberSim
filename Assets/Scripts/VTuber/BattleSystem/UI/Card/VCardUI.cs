@@ -53,15 +53,10 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] public TMP_Text typeText;
         [SerializeField] public TMP_Text popularityText;
         [SerializeField] public TMP_Text shieldText;
+        [SerializeField] private Sprite staminaSprite;
 
         public VCard Card { get; private set; }
         
-        private Sprite _initSprite;
-
-        protected override void Awake()
-        {
-            _initSprite = costImage.sprite;
-        }
 
         public void SetCard(VCard card)
         {
@@ -92,7 +87,7 @@ namespace VTuber.BattleSystem.UI
             else
             {
                 cost.transform.localPosition = new Vector3(cost.transform.localPosition.x, 0f, 0f);
-                costImage.sprite = _initSprite;
+                costImage.sprite = staminaSprite;
                 cost.text = "-" + card.Cost;
             }
 

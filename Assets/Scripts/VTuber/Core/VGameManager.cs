@@ -173,11 +173,6 @@ namespace VTuber.BattleSystem.Core
             foreach (var saveData in data.accounts) _accounts.Add(new VAccount(saveData));
             
             var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
-            
-            Character = new VCharacter(null);
-            Character.Load(data, _characterConfigs.Find(config
-                => config.name == data.characterSaveData.characterConfigurationName));
-
 
             if (scriptConfig is VTutorialScriptConfiguration)
             {
@@ -191,6 +186,9 @@ namespace VTuber.BattleSystem.Core
                 _script = VScript.Load(data.script, scriptConfig);
             }
 
+            Character = new VCharacter(null);
+            Character.Load(data, _characterConfigs.Find(config
+                => config.name == data.characterSaveData.characterConfigurationName));
             _weeklySchedule = VWeeklySchedule.Load(data.weeklySchedule, _script);
 
             scheduleUI.Initialize(Character, _script);
@@ -235,16 +233,11 @@ namespace VTuber.BattleSystem.Core
             else
                 VDataPersistenceManager.Instance.LoadGame(IsTutorial);
 
-            var eventConfigs = new List<VScheduleEventConfiguration>();
-            eventConfigs.AddRange(_script.EventList.Select(id =>
-                VDataManager.Instance.GetDialogueEventConfigurationByID(id)));
-            eventConfigs.AddRange(
-                _script.StreamEventList.Select(id => VDataManager.Instance.GetStreamEventConfigurationByID(id)));
-
             VRaisingUI.Instance.Initialize(IsTutorial);
-            if (isTutorialSave)
+            if (IsTutorial)
             {
                 scheduleCreator.InitializeTutorialCreator(TutorialScript);
+                VTutorialConditionsUIManager.Instance.SetConditions(TutorialScript.CurrentWeekConditions, Character);
             }
             else
             {

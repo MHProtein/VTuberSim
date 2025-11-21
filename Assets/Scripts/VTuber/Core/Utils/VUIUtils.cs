@@ -69,7 +69,7 @@ namespace VTuber.Core.UI
             return "";
         }
 
-        public string GetAttributeName(string attributeName)
+        public static string GetAttributeName(string attributeName)
         {
             switch (attributeName)
             {
@@ -100,6 +100,27 @@ namespace VTuber.Core.UI
             return "";
         }
 
+        public static string GetOperatorTypeName(VOperatorType operatorType)
+        {
+            switch (operatorType)
+            {
+                case VOperatorType.Equal:
+                    return "=";
+                case VOperatorType.GreaterThan:
+                    return ">";
+                case VOperatorType.LessThan:
+                    return "<";
+                case VOperatorType.GreaterEqual:
+                    return ">=";
+                case VOperatorType.LessEqual:
+                    return "<=";
+                case VOperatorType.NotEqual:
+                    return "!=";
+            }
+
+            return "";
+        }
+        
         public Sprite GetScoreLevelSprite(string level)
         {
             if (level.IsNullOrWhitespace()) return VResourcesManager.Instance.TryGetSprite("ScoreLevel_SSS");

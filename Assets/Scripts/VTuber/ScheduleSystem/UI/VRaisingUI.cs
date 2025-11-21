@@ -301,5 +301,10 @@ namespace VTuber.ScheduleSystem.UI
             consumableUI.transform.localPosition = Vector3.zero;
             consumableUI.transform.localScale = Vector3.one;
         }
+
+        public void ShowTips()
+        {
+            tipUI.ShowTip();
+        }
     }
 }

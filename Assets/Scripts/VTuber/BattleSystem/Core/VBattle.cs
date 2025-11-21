@@ -108,7 +108,7 @@ namespace VTuber.BattleSystem.Core
         #endregion
         
         private bool _isTutorial;
-        private VTipConfig _tipConfig;
+        private List<Sprite> _tips;
         private uint _eventID;
         
         protected override void OnEnable()
@@ -208,7 +208,7 @@ namespace VTuber.BattleSystem.Core
         // ReSharper disable Unity.PerformanceAnalysis
         public void InitializeBattle(VBattleSaveData saveData, List<AnimationCurve> decayCurves,
             VCharacterAttributeManager characterAttributeManager,
-            VCardLibrary cardLibrary, VTipConfig tipConfig)
+            VCardLibrary cardLibrary, List<Sprite> tips)
         {
             if (_initialized)
                 return;
@@ -230,7 +230,7 @@ namespace VTuber.BattleSystem.Core
             _battleEnded = saveData.battleEnded;
 
             _isTutorial = _tutorialConditions is not null;
-            _tipConfig = tipConfig;
+            _tips = tips;
             _eventID = saveData.eventID;
 
             VEventSystemUI.Instance.PlayLoadingAnimation(VDataManager.Instance.GetStreamEventConfigurationByID(_eventID), () =>
@@ -257,7 +257,7 @@ namespace VTuber.BattleSystem.Core
                     { "TargetPopularity", targetPopularity },
                     { "ExtraTargetPopularity", extraTargetPopularity },
                     { "IsPhaseEnding", isPhaseEnding },
-                    { "TipConfig", tipConfig }
+                    { "TipConfig", tips }
                 });
                 
                 battleAttributeManager =
@@ -289,7 +289,7 @@ namespace VTuber.BattleSystem.Core
             int targetPopularity, int extraTargetPopularity, int abilityBonus, int initialViewers,
             List<VBattleRelic> relics,
             bool isTutorial = false, List<VAttributeCondition> tutorialConditions = null,
-            List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null, VTipConfig tipConfig = null)
+            List<uint> tutorialDeck = null, Dictionary<int, List<uint>> tutorialTurnHandCards = null, List<Sprite> tips = null)
         {
             if (_initialized)
                 return;
@@ -317,7 +317,7 @@ namespace VTuber.BattleSystem.Core
             battleAttributeManager.OnEnable();
             cardPilesManager.OnEnable();
             buffManager.OnEnable();
-            _tipConfig = tipConfig;
+            _tips = tips;
 
             _isTutorial = _tutorialConditions is not null;
 
@@ -363,7 +363,7 @@ namespace VTuber.BattleSystem.Core
                     { "TargetPopularity", this.targetPopularity },
                     { "ExtraTargetPopularity", this.extraTargetPopularity },
                     { "IsPhaseEnding", this.isPhaseEnding },
-                    { "TipConfig", tipConfig }
+                    { "TipConfig", tips }
                 });
                 InitializeLogic(isPhaseEnding, initialTurnCount, initialViewers, relics,
                     mainAttributeIndex, abilityTurnCounts, targetPopularity, extraTargetPopularity,
@@ -818,7 +818,7 @@ namespace VTuber.BattleSystem.Core
                 { "ReachedExtraTarget", popularityAttribute.Value >= extraTargetPopularity }
             });
 
-            _tipConfig = null;
+            _tips = null;
             _initialized = false;
             buffManager.Clear();
             battleAttributeManager.Clear();
@@ -837,7 +837,7 @@ namespace VTuber.BattleSystem.Core
         {
             var save = VDataPersistenceManager.Instance.LoadTutorialBattleSave();
 
-            InitializeBattle(save.battleSaveData, _decayCurves, characterAttributeManager, null, _tipConfig);
+            InitializeBattle(save.battleSaveData, _decayCurves, characterAttributeManager, null, _tips);
         }
 
         private bool TestTutorialConditions()

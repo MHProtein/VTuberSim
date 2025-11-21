@@ -130,6 +130,7 @@ namespace VTuber.CoopSystem
 
         public VScheduleEvent UpgradeEvent { get; private set; }
         public Sprite Pfp => configuration.Icon;
+        public string CoopName => configuration.Name;
 
         public static VCooperator Load(VCoopSaveData saveData)
         {
@@ -345,6 +346,11 @@ namespace VTuber.CoopSystem
         public VCoopLevel GetNextLevel()
         {
             return configuration.CoopLevels[CurrentLevel + 1];
+        }
+
+        public string GetLevelName(int targetValue)
+        {
+            return configuration.CoopLevels[targetValue].levelName;
         }
     }
 }

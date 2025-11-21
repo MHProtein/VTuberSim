@@ -76,6 +76,9 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            failureText.SetActive(false);
+            successText.SetActive(false);
+            hugeSuccessText.SetActive(false);
             if (messagedict.ContainsKey("IsReturnToMainMenu"))
                 return;
             if (!messagedict.TryGetValue("CharacterAttributeManager", out var x))

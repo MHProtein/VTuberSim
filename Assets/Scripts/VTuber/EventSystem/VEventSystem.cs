@@ -127,7 +127,7 @@ namespace VTuber.EventSystem
                     battle.InitializeBattle(VDataPersistenceManager.Instance.SaveData.battleSaveData,
                         e.Phase.DecayCurves,
                         _character.AttributeManager,
-                        _character.CardLibrary, (e as VStreamEvent)?.TutorialTipConfig);
+                        _character.CardLibrary, (e as VStreamEvent)?.TutorialTips);
                     return;
                 }
 
@@ -262,7 +262,7 @@ namespace VTuber.EventSystem
             int extraTargetPopularity, int abilityBonus, int initialViewers,
             int mainAttributeIndex, List<int> abilityTurnCounts, List<AnimationCurve> decayCurves,
             bool isTutorial, List<VAttributeCondition> tutorialConditions,
-            List<uint> tutorialDeck, Dictionary<int, List<uint>> tutorialTurnHandCards, VTipConfig tipConfig)
+            List<uint> tutorialDeck, Dictionary<int, List<uint>> tutorialTurnHandCards, List<Sprite> tips)
         {
             _isInBattle = true;
             battleObject.SetActive(true);
@@ -271,7 +271,7 @@ namespace VTuber.EventSystem
                 initialTurnCount, mainAttributeIndex, abilityTurnCounts, decayCurves,
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck,
-                tutorialTurnHandCards, tipConfig);
+                tutorialTurnHandCards, tips);
             VRaisingUI.Instance.SetConsumableToBattle();
             _character.ConsumableManager.SetBattle(battle);
         }
@@ -303,7 +303,7 @@ namespace VTuber.EventSystem
                     streamEvent.TutorialConditions,
                     streamEvent.TutorialDeck,
                     streamEvent.TutorialTurnHandCards,
-                    streamEvent.TutorialTipConfig);
+                    streamEvent.TutorialTips);
             }
             else if (_shouldEnterStore)
             {
@@ -354,7 +354,7 @@ namespace VTuber.EventSystem
             _store.Load(data.storeSaveData);
             _executedLines = data.eventSystemSaveData.executedLines;
             
-            if(data.savePointType == VSavePointType.Dialog)
+            if(data.savePointType == VSavePointType.Dialog || data.savePointType == VSavePointType.Battle)
                 _loaded = true;
 
 
