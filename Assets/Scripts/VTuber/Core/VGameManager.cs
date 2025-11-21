@@ -395,6 +395,7 @@ namespace VTuber.BattleSystem.Core
         public void OpenMainMenu()
         {
             mainMenu.gameObject.SetActive(true);
+            _accounts = VDataPersistenceManager.Instance.SaveData.accounts.Select(account => new VAccount(account)).ToList();
             mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts);
         }
 

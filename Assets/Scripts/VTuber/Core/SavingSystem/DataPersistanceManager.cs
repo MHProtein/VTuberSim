@@ -29,6 +29,7 @@ namespace SlayTheSpire.System.SavingSystem
         public SaveData TutorialBattleSaveData => _tutorialBattleSaveData;
         public SaveData TutorialWeekSaveData => _tutorialWeekSaveData;
 
+        List<VAccountSaveData> _accounts;
         public List<IDataPersistence> DataPersistences { get; private set; }
 
         public void Register(IDataPersistence data)
@@ -58,11 +59,13 @@ namespace SlayTheSpire.System.SavingSystem
                 return;
             _tutorialBattleSaveData = new SaveData();
             _tutorialWeekSaveData = new SaveData();
+            SaveData.accounts = _accounts;
             //GameManager.Instance.newGame = true;
         }
 
         public void DeleteSave()
         {
+            _accounts = SaveData.accounts;
             SaveData = null;
             _dataHandler.Delete();
         }
@@ -105,6 +108,7 @@ namespace SlayTheSpire.System.SavingSystem
         public void EndingSaveAccount(List<VAccount> accounts)
         {
             SaveData.accounts = accounts.Select(account => account.Save()).ToList();
+            SaveData.ended = true;
             _dataHandler.Save(SaveData);
         }
 

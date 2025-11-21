@@ -57,8 +57,8 @@ namespace VTuber.BattleSystem.UI
         public VCard Card { get; private set; }
         
         private Sprite _initSprite;
-        
-        private void Awake()
+
+        protected override void Awake()
         {
             _initSprite = costImage.sprite;
         }

@@ -103,8 +103,8 @@ namespace VTuber.ScheduleSystem.UI
         {
             _account.accountName = inputField.text;
             VGameManager.Instance.AddAccount(_account);
-            VGameManager.Instance.ReturnToMainMenu();
             VDataPersistenceManager.Instance.EndingSaveAccount(VGameManager.Instance.Accounts);
+            VGameManager.Instance.ReturnToMainMenu();
 
             Hide();
 

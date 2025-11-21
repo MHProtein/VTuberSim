@@ -22,7 +22,10 @@ namespace VTuber.Reincarnation
 
         public static List<VCard> GetCards(VReincarnationConfiguration config, string ratingLevel, VCharacter character)
         {
-            var cardLibrary = character.CardLibrary.GetCards();
+            // Work on a *mutable* pool so we can remove cards as we pick them
+            var pool = character.CardLibrary.GetCards()
+                .OrderBy(_ => Random.Range(0f, 1f))
+                .ToList();
 
             var cards = new List<VCard>();
 
@@ -30,47 +33,65 @@ namespace VTuber.Reincarnation
             var maxCapacity = config.cardLevels[ratingLevel].cardTotalCapacity;
             var maxCount = config.cardLevels[ratingLevel].cardCount;
 
+            // ----- STEP 1: rarity requirements -----
             foreach (var requirement in config.cardLevels[ratingLevel].cardRarityRequirements)
-                cards.AddRange(cardLibrary.Where(card => (int)card.Rarity >= (int)requirement.rarity)
-                    .OrderBy(r => Random.Range(0f, 1f))
-                    .Take(requirement.count));
+            {
+                // find all candidates that meet rarity, from the shrinking pool
+                var candidates = pool
+                    .Where(card => (int)card.Rarity >= (int)requirement.rarity)
+                    .OrderBy(_ => Random.Range(0f, 1f))
+                    .ToList();
 
-            // calculate current capacity from required cards
+                var takeCount = Mathf.Min(requirement.count, candidates.Count);
+
+                for (int i = 0; i < takeCount; i++)
+                {
+                    var card = candidates[i];
+                    cards.Add(card);
+                    pool.Remove(card); // ← prevents duplicates
+                }
+            }
+
+            // ----- Recalculate capacity -----
             currentCapacity = 0;
             foreach (var card in cards)
-            foreach (var cardCapacityInfo in config.cardCapacities)
-                if (cardCapacityInfo.rarity == card.Rarity)
+            {
+                foreach (var cap in config.cardCapacities)
                 {
-                    currentCapacity += card.IsUpgraded ? cardCapacityInfo.upgradeCapacity : cardCapacityInfo.capacity;
-                    break;
+                    if (cap.rarity == card.Rarity)
+                    {
+                        currentCapacity += card.IsUpgraded ? cap.upgradeCapacity : cap.capacity;
+                        break;
+                    }
                 }
+            }
 
-            // get remaining capacity
+            // How much space is left?
             var remainingCapacity = maxCapacity - currentCapacity;
 
-            // try to fill optimally
-            var shuffledPool = cardLibrary
-                .OrderBy(r => Random.Range(0f, 1f)) // shuffle card pool
-                .ToList();
-
-            foreach (var card in shuffledPool)
+            // ----- STEP 2: fill remaining slots optimally -----
+            // pool is already shuffled from above
+            foreach (var card in pool.ToList()) // iterate safely
             {
                 if (cards.Count >= maxCount) break;
 
-                var capacity = 0;
-                foreach (var cardCapacityInfo in config.cardCapacities)
-                    if (cardCapacityInfo.rarity == card.Rarity)
+                int capacity = 0;
+                foreach (var cap in config.cardCapacities)
+                {
+                    if (cap.rarity == card.Rarity)
                     {
-                        capacity = card.IsUpgraded ? cardCapacityInfo.upgradeCapacity : cardCapacityInfo.capacity;
+                        capacity = card.IsUpgraded ? cap.upgradeCapacity : cap.capacity;
                         break;
                     }
+                }
 
-                if (capacity <= remainingCapacity) // only add if it fits
+                if (capacity <= remainingCapacity)
                 {
                     cards.Add(card);
+                    pool.Remove(card); // ← also prevents duplicates here
                     remainingCapacity -= capacity;
 
-                    if (remainingCapacity == 0) // perfect fit, stop early
+                    if (remainingCapacity == 0)
                         break;
                 }
             }

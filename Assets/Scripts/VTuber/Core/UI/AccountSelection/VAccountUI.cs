@@ -73,7 +73,6 @@ namespace VTuber.BattleSystem.Core.UI.VAccountSelection
             _menu = menu;
             Account = account;
             nameText.text = account.accountName;
-            icon.sprite = account.icon;
 
             scoreLevelImage.sprite = VUIUtils.Instance.GetScoreLevelSprite(account.ScoreLevel);
 
