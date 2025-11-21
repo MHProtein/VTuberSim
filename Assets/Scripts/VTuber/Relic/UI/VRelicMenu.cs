@@ -23,6 +23,7 @@ namespace VTuber.Relic.UI
             base.Awake();
             showButton.onClick.AddListener(Show);
             detectionPanel.onClick += Show;
+            descriptionObject.SetActive(false);
         }
 
         public void Show()
@@ -31,6 +32,9 @@ namespace VTuber.Relic.UI
             detectionPanel.gameObject.SetActive(isShowing);
             background.gameObject.SetActive(isShowing);
             foreach (var uiManager in uiManagers) uiManager.Show(isShowing);
+            
+            if(!isShowing)
+                descriptionObject.SetActive(false);
         }
 
         public void SetDescription(VRelic relic)

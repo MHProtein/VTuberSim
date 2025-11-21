@@ -32,6 +32,7 @@ namespace VTuber.Core.ScriptSystem
 
     public class VScriptConfiguration : VScriptableObject
     {
+        public bool isDebug;
         public int index;
         public string scriptName;
         public string description;
