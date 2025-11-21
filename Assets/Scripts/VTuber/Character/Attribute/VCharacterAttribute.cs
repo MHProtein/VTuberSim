@@ -147,7 +147,7 @@ namespace VTuber.Character.Attribute
             SendEvent(Value, Value - temp, shouldPlaySFX);
         }
 
-        public int PreviewAddTo(int delta)
+        public int PreviewAddTo(int delta, bool clamp = false)
         {
             if (delta == 0)
                 return Value;
@@ -156,6 +156,8 @@ namespace VTuber.Character.Attribute
             var finalDelta = (int)((delta + gainPointsModifierValue) * gainRateModifierValue);
             if (delta < 0 && finalDelta > 0)
                 finalDelta = 0;
+            if(clamp)
+                return Mathf.Clamp(Value + finalDelta, _minValue, _maxValue);
             return Value + finalDelta;
         }
 

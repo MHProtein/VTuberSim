@@ -12,6 +12,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
     public class VCoopLevelTab : VCoopTab
     {
         [SerializeField] private int level;
+        [SerializeField] private TMP_Text levelText;
         [SerializeField] private Transform effectContainer;
         [SerializeField] private Transform itemPosition;
         [SerializeField] private TMP_Text itemText;
@@ -28,6 +29,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
             var node = VDataManager.Instance
                 .DialogueEventConfigs[cooperator.configuration.CoopLevels[level].upgradeEventID]
                 .dialogueNode;
+            levelText.text = cooperator.GetLevelName(level);
             var dialog = VResourcesManager.Instance.TryGetDialog(node);
 
             var effects = dialog.GetEffects();

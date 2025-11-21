@@ -29,6 +29,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
 
         [HideInInspector] public VPhase phase;
         public bool isPhaseStart;
+        public bool isPhaseEnding;
         public int WeekIndex => weekIndexForInspector - 1;
 
         public int DayIndex => dayIndexForInspector - 1;
@@ -105,6 +106,7 @@ namespace VTuber.BattleSystem.Core.ScriptSystem
                 phase = this
             };
             endingEvent.SetWeekDay(endEventWeekIndex - 1, 7);
+            endingEvent.isPhaseEnding = true;
             list.Add(endingEvent);
 
             return list;

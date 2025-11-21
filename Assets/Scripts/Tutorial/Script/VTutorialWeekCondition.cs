@@ -40,22 +40,22 @@ namespace Tutorial.Script
                 }
                 case VTutorialWeekConditionType.CardLibrarySize:
                 {
-                    return $"卡牌库大小 {operatorType} {targetValue}";
+                    return $"卡牌库大小 {VUIUtils.GetOperatorTypeName(operatorType)} {targetValue}";
                 }
                 case VTutorialWeekConditionType.CoopValue:
                 {
-                    return $"{character.CooperatorManager.GetCooperator(uint.Parse(idOrName)).CoopName}好感度 {operatorType} {targetValue}";
+                    return $"{character.CooperatorManager.GetCooperator(uint.Parse(idOrName)).CoopName}好感度 {VUIUtils.GetOperatorTypeName(operatorType)} {targetValue}";
                 }
                 case VTutorialWeekConditionType.CoopLevel:
                 {
                     var coop = character.CooperatorManager.GetCooperator(uint.Parse(idOrName));
-                    return $"{coop.CoopName}等级 {operatorType} {coop.GetLevelName(targetValue)}";
+                    return $"{coop.CoopName}等级 {VUIUtils.GetOperatorTypeName(operatorType)} {coop.GetLevelName(targetValue)}";
                 }
                 case VTutorialWeekConditionType.WeeklyEventKPI:
                 {
                     if (idOrName.IsNullOrWhitespace())
                     {
-                        return $"安排{VUIUtils.Instance.GetEventName(eventType)}类型事件 {operatorType} {targetValue}";
+                        return $"安排{VUIUtils.Instance.GetEventName(eventType)}类型事件 {VUIUtils.GetOperatorTypeName(operatorType)} {targetValue}";
                     }
                     else
                     {
@@ -67,7 +67,7 @@ namespace Tutorial.Script
                         }
                         else
                             e = VDataManager.Instance.GetDialogueEventConfigurationByID(id);
-                        return $"安排{e.eventName}事件 {operatorType} {targetValue}";
+                        return $"安排{e.eventName}事件 {VUIUtils.GetOperatorTypeName(operatorType)} {targetValue}";
                     }
                 }
                 default:

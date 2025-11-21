@@ -211,6 +211,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       isPhaseStart: 0
+      isPhaseEnding: 0
     decayCurve1:
       serializedVersion: 2
       m_Curve:
@@ -470,7 +471,7 @@ MonoBehaviour:
     - conditionType: 3
       eventType: 0
       idOrName: 0
-      operatorType: 3
+      operatorType: 4
       targetValue: 1
     tip:
       title: "\u52A0\u6DF1\u5173\u7CFB"
@@ -489,4 +490,13 @@ MonoBehaviour:
     tip:
       title: "\u5B89\u6392\u76F4\u64AD"
       description: "\u5B89\u63922\u573A\u76F4\u64AD\u5427"
+      image: {fileID: 0}
+  - weekID: 0
+    useCoopEvents: 0
+    eventIDs: 000000000100000002000000030000004e0000004f0000000c000000
+    streamEventIDs: 000000000100000002000000
+    conditions: []
+    tip:
+      title: 
+      description: 
       image: {fileID: 0}

@@ -166,6 +166,14 @@ namespace VTuber.BattleSystem.Core
                 Character.OnDisable();
         }
 
+        public void AddSuccessfulEvent()
+        {
+            Character.succeededStreams.Add(4);
+            Character.succeededStreams.Add(7);
+            Character.succeededStreams.Add(14);
+            Character.succeededStreams.Add(15);
+        }
+
         public void Load(SaveData data)
         {
             VCardConfiguration.LoadIDDistributor(data.cardIDDistributor);

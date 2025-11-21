@@ -11,6 +11,7 @@ using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.UI;
+using VTuber.Dialogue.UI;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.Relic.UI;
@@ -68,6 +69,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             ui.SetActive(true);
             Tween.PunchScale(ratingLevelImage.transform, Vector3.one * 1.3f, 0.5f);
+            VEventSystemUI.Instance.CloseEventUI();
         }
 
         public void Hide()
@@ -85,6 +87,8 @@ namespace VTuber.ScheduleSystem.UI
 
         private void SpawnRelic(VRelic relic)
         {
+            if (relic is null)
+                return;
             var go = Instantiate(relicPrefab, relicGrid);
             var ui = go.GetComponent<VRelicSlotUI>();
             ui.Initialize(relic, false);

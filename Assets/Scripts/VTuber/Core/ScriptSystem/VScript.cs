@@ -86,9 +86,9 @@ namespace VTuber.Core.ScriptSystem
 
         public virtual VScheduleEvent NextWeek()
         {
+            _weekIndex++;
             if (currentPhase.nextPhase is null)
                 return null;
-            _weekIndex++;
             if (currentPhase.nextPhase.IsInPhase(_weekIndex))
             {
                 currentPhase = currentPhase.nextPhase;
