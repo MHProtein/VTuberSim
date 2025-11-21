@@ -27,14 +27,14 @@ namespace VTuber.ScheduleSystem.UI
         [Header("日程规划条件UI")]
         [Tooltip("用于容纳所有位置指示器的父对象")]
         [SerializeField] private GameObject conditionIndicatorsContainer; 
-        [Tooltip("上方向指示器")]
-        [SerializeField] private GameObject upIndicator;
-        [Tooltip("下方向指示器")]
-        [SerializeField] private GameObject downIndicator;
-        [Tooltip("左方向指示器")]
-        [SerializeField] private GameObject leftIndicator;
-        [Tooltip("右方向指示器")]
-        [SerializeField] private GameObject rightIndicator;
+        [Tooltip("上方向指示器的 Image 组件")]
+        [SerializeField] private Image upIndicatorImage;
+        [Tooltip("下方向指示器的 Image 组件")]
+        [SerializeField] private Image downIndicatorImage;
+        [Tooltip("左方向指示器的 Image 组件")]
+        [SerializeField] private Image leftIndicatorImage;
+        [Tooltip("右方向指示器的 Image 组件")]
+        [SerializeField] private Image rightIndicatorImage;
         
         [Header("指示器文本")]
         [Tooltip("请确保这些数组/字段对应 Up, Down, Left, Right 的 Text 组件")]
@@ -43,8 +43,17 @@ namespace VTuber.ScheduleSystem.UI
         [SerializeField] private TMP_Text leftText;
         [SerializeField] private TMP_Text rightText;
         
+        [Header("状态反馈")]
+        [Tooltip("当规划条件满足时显示的绿色边框")]
+        [SerializeField] private GameObject conditionMetBorder; // 【步骤A】记得在Prefab里创建并拖入这个绿框
+        
         
         [HideInInspector] public Vector2 initOffset;
+        
+        
+        [Header("高亮显示")]
+        [Tooltip("用于“作为邻居”满足条件时的高亮")]
+        [SerializeField] private GameObject neighborHighlightVisual; // 拖入你新创建的UI
 
         private Color _bgColor;
 
@@ -75,6 +84,9 @@ namespace VTuber.ScheduleSystem.UI
         // Add this field to your VEventUI class to keep track of the last slot hovered over.
         private VScheduleSlot _lastHoveredSlot = null;
         
+        // 用于缓存当前高亮的所有邻居，以便拖拽结束时清除
+        private static List<VEventUI> _highlightedNeighbors = new List<VEventUI>();
+        
         protected override void Awake()
         {
             parentSlots = new List<VScheduleSlot>();
@@ -87,8 +99,14 @@ namespace VTuber.ScheduleSystem.UI
             {
                 conditionIndicatorsContainer.SetActive(false);
             }
+            neighborHighlightVisual?.SetActive(false); // 确保默认隐藏
+            if (conditionMetBorder != null) conditionMetBorder.SetActive(false);
         }
-
+        //用于打开/关闭条件高亮
+        public void SetNeighborHighlight(bool value)
+        {
+            neighborHighlightVisual?.SetActive(value);
+        }
         // public void InitializeMove(EventData eventData, Vector2 initPosition)
         // {
         //     _eventData = eventData;
@@ -177,7 +195,23 @@ namespace VTuber.ScheduleSystem.UI
             _disposable = disposable;
             _hasInSchedule = false;
         }
+        
+        private void UpdateConditionMetVisuals(VScheduleSlot anchorSlot)
+        {
+            if (anchorSlot == null || _event == null) return;
 
+            // 调用 Slot 现有的方法进行检测
+            // 传入 true，表示同时更新 Event 内部的 IsSchedulingConditionMet 数据
+            // 这样"特殊效果区"就能读到正确的数据了
+            bool isMet = anchorSlot.TestSchedulingCondition(true);
+
+            // 更新绿框显隐
+            if (conditionMetBorder != null)
+            {
+                conditionMetBorder.SetActive(isMet);
+            }
+        }
+        
         public void InitializeDrag(VScheduleEvent e, Vector2 initPosition)
         {
             _event = e;
@@ -222,6 +256,9 @@ namespace VTuber.ScheduleSystem.UI
             
             // 调用显示指示器
             ShowConditionIndicators();
+            // --- 新增逻辑：高亮所有满足条件的事件 ---
+            HighlightAllSatisfyingEvents(_event);
+            // --- 逻辑结束 ---
         }
 
         public void SetParentBeforeDrag()
@@ -230,13 +267,43 @@ namespace VTuber.ScheduleSystem.UI
 
             Tween.Position(transform, _lastPosition, 0.2f);
             //transform.position = _lastPosition;
-            foreach (var parent in parentSlots) parent.SetItem(this);
-
+            foreach (var parent in parentSlots)
+            {
+                parent.SetItem(this);
+            }
+            
+            if (parentSlots.Count > 0)
+            {
+                UpdateConditionMetVisuals(parentSlots[0]);
+            }
+            
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
             {
                 { "Event", Event }
             });
         }
+        
+        // --- 新增：环境改变响应 ---
+        // 这个方法会被邻居 VScheduleSlot 调用
+        public void OnEnvironmentChanged()
+        {
+            // 只有已经在日程表上的事件才需要响应
+            if (!_hasInSchedule || parentSlots == null || parentSlots.Count == 0) return;
+
+            // 重新检测自身条件
+            UpdateConditionMetVisuals(parentSlots[0]);
+
+            // 广播事件，通知特殊效果区刷新
+            // 这里我们复用 OnEventUIPlaced 事件，因为它本质上是一次放置状态的更新
+            if(!_event.IsSpecialEvent)
+            {
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>()
+                {
+                    { "Event", _event }
+                });
+            }
+        }
+        // ----------------------
 
         public void SetParentDisposeSlot()
         {
@@ -266,6 +333,11 @@ namespace VTuber.ScheduleSystem.UI
                 transform.position = position;
             transform.SetParent(transformParent);
             //transform.position = position;
+            if (parentSlots.Count > 0)
+            {
+                UpdateConditionMetVisuals(parentSlots[0]);
+            }
+            
             if (!Event.IsSpecialEvent)
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventUIPlaced, new Dictionary<string, object>
                 {
@@ -346,6 +418,9 @@ namespace VTuber.ScheduleSystem.UI
 
         public void OnEndDragging()
         {
+            // --- 新增逻辑：在拖拽最开始时，清除所有高亮 ---
+            ClearAllSatisfyingEventHighlights();
+            // --- 逻辑结束 ---
             // 新增：在拖拽结束时，也隐藏指示器
             if (conditionIndicatorsContainer != null)
             {
@@ -438,6 +513,10 @@ namespace VTuber.ScheduleSystem.UI
                 ShowConditionIndicators(); 
                 // --- 新逻辑结束 ---
 
+                // --- 新增逻辑：高亮所有满足条件的事件 ---
+                HighlightAllSatisfyingEvents(_event);
+                // --- 逻辑结束 ---
+                
                 foreach (var parent in parentSlots)
                 {
                     parent.RemoveItem();
@@ -477,56 +556,65 @@ namespace VTuber.ScheduleSystem.UI
         public void OnEndDrag(PointerEventData eventData)
         {
         }
-        // VEventUI.cs (在类的任何地方添加这个新方法)
-
-        private void ShowConditionIndicators()
+        
+        // 新增：一个私有结构体，用于在方法间传递条件信息
+        private struct ConditionTargetInfo
+        {
+            public string HintText;
+            public Color BackgroundColor;
+            public bool IsValid;
+        }
+private void ShowConditionIndicators()
         {
             if (_event?.SchedulingCondition == null || conditionIndicatorsContainer == null) return;
 
-            var condition = _event.SchedulingCondition; // 获取条件对象
+            var condition = _event.SchedulingCondition;
             var pattern = condition.PositionPattern;
             
             if (pattern == VSchedulingConditionPositionPatterns.None) return;
 
-            // 1. 获取提示文字
-            string hintText = GetConditionHintText(condition);
+            // 1. 获取包含文本和颜色的信息
+            ConditionTargetInfo info = GetConditionTargetInfo(condition);
+            if (!info.IsValid) return; // 如果条件无效（如 SameType 但无事件），则不显示
 
             // 2. 激活容器
             conditionIndicatorsContainer.SetActive(true);
             
             // 重置状态
-            upIndicator?.SetActive(false);
-            downIndicator?.SetActive(false);
-            leftIndicator?.SetActive(false);
-            rightIndicator?.SetActive(false);
+            upIndicatorImage?.gameObject.SetActive(false);
+            downIndicatorImage?.gameObject.SetActive(false);
+            leftIndicatorImage?.gameObject.SetActive(false);
+            rightIndicatorImage?.gameObject.SetActive(false);
             
-            // 3. 根据模式显示指示器并设置文字
+            // 3. 根据模式显示指示器，并传入文本和颜色
             switch (pattern)
             {
                 case VSchedulingConditionPositionPatterns.UD:
-                    ActivateIndicator(upIndicator, upText, hintText);
-                    ActivateIndicator(downIndicator, downText, hintText);
+                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(downIndicatorImage, downText, info.HintText, info.BackgroundColor);
                     break;
                 case VSchedulingConditionPositionPatterns.LR:
-                    ActivateIndicator(leftIndicator, leftText, hintText);
-                    ActivateIndicator(rightIndicator, rightText, hintText);
+                    ActivateIndicator(leftIndicatorImage, leftText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(rightIndicatorImage, rightText, info.HintText, info.BackgroundColor);
                     break;
                 case VSchedulingConditionPositionPatterns.UDLR:
                 case VSchedulingConditionPositionPatterns.All:
-                    ActivateIndicator(upIndicator, upText, hintText);
-                    ActivateIndicator(downIndicator, downText, hintText);
-                    ActivateIndicator(leftIndicator, leftText, hintText);
-                    ActivateIndicator(rightIndicator, rightText, hintText);
+                    ActivateIndicator(upIndicatorImage, upText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(downIndicatorImage, downText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(leftIndicatorImage, leftText, info.HintText, info.BackgroundColor);
+                    ActivateIndicator(rightIndicatorImage, rightText, info.HintText, info.BackgroundColor);
                     break;
             }
         }
         
         // 新增：激活指示器并设置文字的辅助方法
-        private void ActivateIndicator(GameObject indicator, TMP_Text textComponent, string text)
+        private void ActivateIndicator(Image indicatorImage, TMP_Text textComponent, string text, Color color)
         {
-            if (indicator != null)
+            if (indicatorImage != null)
             {
-                indicator.SetActive(true);
+                indicatorImage.gameObject.SetActive(true);
+                indicatorImage.color = color; 
+                
                 if (textComponent != null)
                 {
                     textComponent.text = text;
@@ -535,19 +623,21 @@ namespace VTuber.ScheduleSystem.UI
         }
         
         // 新增：核心逻辑 - 获取条件描述文字
-        private string GetConditionHintText(VSchedulingCondition condition)
+// 重构 GetConditionHintText 为 GetConditionTargetInfo
+        private ConditionTargetInfo GetConditionTargetInfo(VSchedulingCondition condition)
         {
-            string result = "";
+            // 默认值
+            string text = "";
+            Color color = Color.grey; // 默认灰色
+            bool isValid = true;
+            
+            VScheduleEventConfiguration config = null;
 
             switch (condition.Type)
             {
                 case VSchedulingConditionType.ID:
-                    // --- 使用你提供的 API 逻辑 ---
-                    VScheduleEventConfiguration config = null;
-                    
-                    // 这里使用我们在 VSchedulingCondition 中公开的 IsTargetStream 属性
-                    // 或者根据 _targetID 尝试获取（如果 ID 区分段位）
-                    if (condition.IsTargetStream) 
+                    // 使用你提供的 API 逻辑
+                    if (condition.IsTargetStream) // (假设 IsTargetStream 存在于 VSchedulingCondition)
                     {
                         config = VDataManager.Instance.GetStreamEventConfigurationByID(condition.TargetID);
                     }
@@ -555,42 +645,116 @@ namespace VTuber.ScheduleSystem.UI
                     {
                         config = VDataManager.Instance.GetDialogueEventConfigurationByID(condition.TargetID);
                     }
-
+                    
                     if (config != null)
                     {
-                        result = config.eventName; // 或者 config.icon 等
+                        text = config.eventName;
+                        color = config.backgroundColor; // 获取配置的颜色
                     }
                     else
                     {
-                        result = "Unknown Event";
+                        text = "Unknown Event";
                     }
                     break;
 
-                case VSchedulingConditionType.Type:
-                case VSchedulingConditionType.ExcludeType:
-                    // 如果是类型检查，直接显示类型名称
-                    result = condition.TargetType.ToString();
+                case VSchedulingConditionType.SameType:
+                    text = "Same Type";
+                    color = _event.BackgroundColor; // 直接使用当前拖拽事件的颜色
                     break;
                     
-                case VSchedulingConditionType.SameType:
-                    result = "Same Type";
+                case VSchedulingConditionType.Type:
+                case VSchedulingConditionType.ExcludeType:
+                    text = condition.TargetType.ToString();
+                    color = Color.grey; // 类型条件太泛，使用中性色
+                    break;
+                    
+                case VSchedulingConditionType.ExcludeID:
+                    text = "NOT ID: " + condition.TargetID;
+                    color = Color.grey; // 排除条件也用中性色
                     break;
                     
                 default:
-                    result = "Condition";
+                    isValid = false;
                     break;
             }
 
-            // 可选：如果是“排除”条件，加个前缀
+            // 为“排除”条件添加前缀
             if (condition.Type == VSchedulingConditionType.ExcludeType || condition.Type == VSchedulingConditionType.ExcludeID)
             {
-                result = "NOT " + result;
+                text = "NOT " + text;
             }
 
-            return result;
+            return new ConditionTargetInfo { HintText = text, BackgroundColor = color, IsValid = isValid };
         }
         
         
+        
+        // 高亮所有满足条件的事件
+        private void HighlightAllSatisfyingEvents(VScheduleEvent eventBeingDragged)
+        {
+            // 清除任何可能残留的高亮
+            ClearAllSatisfyingEventHighlights();
+
+            var condition = eventBeingDragged?.SchedulingCondition;
+            if (condition == null) return;
+
+            // 我们只关心需要“特定事件”的条件
+            if (condition.Type != VSchedulingConditionType.ID && 
+                condition.Type != VSchedulingConditionType.Type && 
+                condition.Type != VSchedulingConditionType.SameType)
+            {
+                return;
+            }
+
+            // 获取所有事件所在的父节点 (CanvasRect 似乎是最安全的根)
+            var eventParent = VSingletonMonobehaviour<VScheduleUIHelper>.Instance.CanvasRect;
+            if (eventParent == null) return;
+
+            // 查找所有当前在日程表中的 VEventUI 实例
+            VEventUI[] allPlacedEvents = eventParent.GetComponentsInChildren<VEventUI>();
+
+            foreach (var placedEventUI in allPlacedEvents)
+            {
+                // 排除自己
+                if (placedEventUI == this) continue;
+                // 排除其他正在被拖拽的（理论上不应该）
+                if (placedEventUI._isSelected) continue; 
+
+                var placedEvent = placedEventUI.Event;
+                if (placedEvent == null) continue;
+
+                bool conditionMet = false;
+                switch (condition.Type)
+                {
+                    case VSchedulingConditionType.ID:
+                        conditionMet = (placedEvent.EventID == condition.TargetID);
+                        break;
+                    case VSchedulingConditionType.Type:
+                        conditionMet = (placedEvent.Type == condition.TargetType);
+                        break;
+                    case VSchedulingConditionType.SameType:
+                        conditionMet = (placedEvent.Type == eventBeingDragged.Type);
+                        break;
+                }
+
+                if (conditionMet)
+                {
+                    placedEventUI.SetNeighborHighlight(true);
+                    _highlightedNeighbors.Add(placedEventUI); // 存入缓存，以便清除
+                }
+            }
+        }
+
+        // 清除所有高亮
+        private void ClearAllSatisfyingEventHighlights()
+        {
+            foreach (var eventUI in _highlightedNeighbors)
+            {
+                if(eventUI != null) // 增加安全检查
+                    eventUI.SetNeighborHighlight(false);
+            }
+            _highlightedNeighbors.Clear();
+        }
         
     }
 }

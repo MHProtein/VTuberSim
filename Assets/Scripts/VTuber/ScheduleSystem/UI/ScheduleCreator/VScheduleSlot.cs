@@ -55,6 +55,8 @@ namespace VTuber.ScheduleSystem.UI
         /// <summary>
         ///     X=Day, Y=TimeOfDay
         /// </summary>
+        ///
+        
         public Vector2Int Coordination => _coordination;
 
         public bool Available
@@ -201,6 +203,9 @@ namespace VTuber.ScheduleSystem.UI
                 redCross.gameObject.SetActive(true);
                 redCross.transform.SetParent(VScheduleUIHelper.Instance.CheckMarkParent);
             }
+            
+            // 【新增】当有物品放入时，通知邻居重新检测
+            NotifyNeighborsToReevaluate();
         }
 
         public void RemoveItem()
@@ -220,7 +225,27 @@ namespace VTuber.ScheduleSystem.UI
             }
 
             Item = null;
+            // 【新增】当物品被移除时，通知邻居重新检测
+            NotifyNeighborsToReevaluate();
         }
+        
+        // 【新增】通知所有周围的邻居
+        private void NotifyNeighborsToReevaluate()
+        {
+            // 获取周围所有的槽位 (涵盖所有可能的条件模式)
+            var neighbors = GetSurroundingSlots(); 
+            if (neighbors == null) return;
+
+            foreach (var slot in neighbors)
+            {
+                // 如果邻居槽位里有事件，通知该事件环境变了
+                if (slot != null && slot.Item != null)
+                {
+                    slot.Item.OnEnvironmentChanged();
+                }
+            }
+        }
+
 
         public void DespawnItem()
         {
