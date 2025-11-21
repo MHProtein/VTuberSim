@@ -102280,7 +102280,7 @@ MonoBehaviour:
   cardLibraryPosition: {fileID: 1900267185}
   appearDuration: 0.5
   appearEase: 27
-  cardPulseDuration: 3
+  cardPulseDuration: 1
   cardPulseScale: 1.8
   haloSpinDuration: 8
   moveShrinkDuration: 0.5
