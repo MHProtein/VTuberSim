@@ -279,7 +279,7 @@ namespace VTuber.EventSystem
             dialogueSystem.OnDialogFinished -= OnDialogueComplete;
             dialogueSystem.OnLineFinished -= OnLineFinished;
 
-            VDebug.Log("OnDialogueComplete");
+            VDebug.Log("OnDialogueCompleteCalled");
             if (_currentEvent is null)
             {
                 VDebug.LogError("_currentEvent是空");
