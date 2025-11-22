@@ -22,17 +22,43 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   soundEffects:
-  - {fileID: 8300000, guid: fd86c0dee733b554c9c9bc1104f90e52, type: 3}
+  - {fileID: 8300000, guid: c15c5aeec0fdbb94780f6e123191ac8e, type: 3}
   - {fileID: 8300000, guid: f226f8ea0d101a94099c2d311b79f459, type: 3}
+  - {fileID: 8300000, guid: 8fb6fc271871d2849b07799f5207689d, type: 3}
   - {fileID: 8300000, guid: 5ecae95a037f17e47bdd4f4a6d063183, type: 3}
+  - {fileID: 8300000, guid: 3ab3a5bd2c5a90c42a45ed544b36ac40, type: 3}
+  - {fileID: 8300000, guid: c5e8e6fa230c65b4ca2a10747c75c939, type: 3}
+  - {fileID: 8300000, guid: 4b5a390e30a48bf42b651d9d17991cdd, type: 3}
+  - {fileID: 8300000, guid: d6506fdd41857af468f9015a65bf8aff, type: 3}
+  - {fileID: 8300000, guid: 0e8e3f1701608894dbe5490a44105156, type: 3}
+  - {fileID: 8300000, guid: f6d2c129f62723245819ac44b2eaf31f, type: 3}
   - {fileID: 8300000, guid: ed3ca8552ea7cf541a162bb768c5d889, type: 3}
   - {fileID: 8300000, guid: 9242745faa38bdd4b900be1477ff0767, type: 3}
-  - {fileID: 8300000, guid: b02ddedfa67bb7f40b7c63a60175221b, type: 3}
   - {fileID: 8300000, guid: 0ab1e1ac7f6856b498129c36cb3a1354, type: 3}
+  - {fileID: 8300000, guid: 505f297b5ec64024b960b5614913546d, type: 3}
+  - {fileID: 8300000, guid: dd0ba607f4879f040bc2daf7ae60f3b9, type: 3}
   - {fileID: 8300000, guid: 0471dfb8e6ca2814996ce8815d054cbf, type: 3}
   - {fileID: 8300000, guid: f4a18ab864d96934290953ed99a9c973, type: 3}
+  - {fileID: 8300000, guid: c90d34dd9a5b2234e8616a03e099d6e6, type: 3}
+  - {fileID: 8300000, guid: d985d4b67d099da4db2766d4b168ab7f, type: 3}
+  - {fileID: 8300000, guid: e4d2780c461cbc048b8db4fa2f7d1d06, type: 3}
+  - {fileID: 8300000, guid: a5383dfeeca0fb944a4b2ed0392733e7, type: 3}
+  - {fileID: 8300000, guid: a7b85e0aa392c3940a8c1a4d4947818b, type: 3}
+  - {fileID: 8300000, guid: db6bd0d2b6ebc304c9b96dd730663407, type: 3}
+  - {fileID: 8300000, guid: 16ef0f7e203cc5d44aaa834f2f3a900c, type: 3}
+  - {fileID: 8300000, guid: e37340af57b0d1d4eb870fb18a0f41e3, type: 3}
+  - {fileID: 8300000, guid: e51b0526a0895744a90efc16421c8372, type: 3}
   - {fileID: 8300000, guid: 7114d87533c5afc4d8b162df307fb7ab, type: 3}
   - {fileID: 8300000, guid: 43f3e028e937a8542ae62bfa84bd2f09, type: 3}
-  - {fileID: 8300000, guid: 37437bc5e260ee1428839e7e83a9e943, type: 3}
+  - {fileID: 8300000, guid: 68d3d4c7d22e1b6479cbf7e8226cb7d3, type: 3}
+  - {fileID: 8300000, guid: 40dc0dfc1044e7f459b39e6aade7e09c, type: 3}
+  - {fileID: 8300000, guid: c3d7b97941b479c4ba304765b2acb5bb, type: 3}
+  - {fileID: 8300000, guid: 5490d5de78b3d2f46af38f8901d831fe, type: 3}
+  - {fileID: 8300000, guid: b09077fb135c17e408aded724adc81eb, type: 3}
+  - {fileID: 8300000, guid: ed21678c8293cad489e06a937d961aff, type: 3}
+  - {fileID: 8300000, guid: c76b7b8c298d0f04a9ad7c002b0a0a88, type: 3}
+  - {fileID: 8300000, guid: 32cfb52d39ff8bd41843f9ee46e51817, type: 3}
+  - {fileID: 8300000, guid: 0c69f2b9a2a05834b9754fd430726dec, type: 3}
+  - {fileID: 8300000, guid: 129a4a958e92891428af0874a85defcd, type: 3}
   soundFolderPath: Assets/Audio
   includeSubfolders: 1

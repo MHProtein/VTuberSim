@@ -1,4 +1,5 @@
 ﻿using System;
+using PrimeTween;
 using UnityEngine;
 using VTuber.Core.Foundation;
 using VTuber.RaisingAnimationSystem;
@@ -36,6 +37,12 @@ namespace VTuber.ScheduleSystem.UI.RaisingAnimationSystem
         public void SetDebug(bool debug)
         {
             this.debug = debug;
+        }
+
+        public void StopAnimation()
+        {
+            ResetAnimation();
+            Hide();
         }
     }
 }

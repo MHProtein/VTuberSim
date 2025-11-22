@@ -76,6 +76,9 @@ namespace VTuber.BattleSystem.UI
 
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
+            failureText.SetActive(false);
+            successText.SetActive(false);
+            hugeSuccessText.SetActive(false);
             if (messagedict.ContainsKey("IsReturnToMainMenu"))
                 return;
             if (!messagedict.TryGetValue("CharacterAttributeManager", out var x))
@@ -178,12 +181,14 @@ namespace VTuber.BattleSystem.UI
                     { "Popularity", _popularity }
                 });
             });
+            continueButton.interactable = false;
         }
 
         public void OnRestartButtonClicked()
         {
             Hide();
             VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnRestartBattle, new Dictionary<string, object>());
+            restartButton.interactable = false;
         }
     }
 }

@@ -16,11 +16,11 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.UI;
+using VTuber.Dialogue.UI;
 using VTuber.RaisingAnimationSystem;
 using VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation;
 using VTuber.Reincarnation;
 using VTuber.Relic;
-using VTuber.Relic.UI;
 
 namespace VTuber.ScheduleSystem.UI
 {
@@ -168,6 +168,7 @@ namespace VTuber.ScheduleSystem.UI
         public void ShowRestartWeekUI()
         {
             tutorialRestartWeekPanel.SetActive(true);
+            VEventSystemUI.Instance.CloseEventUI();
         }
 
         private void RestartWeek()
@@ -182,9 +183,9 @@ namespace VTuber.ScheduleSystem.UI
             membershipUI.SetActive(active);
         }
 
-        public void InitializeEndingUI(string characterName, string ratingLevel, int score, VAccount account)
+        public void InitializeEndingUI(string characterName, Sprite characterIcon, string ratingLevel, int score, VAccount account)
         {
-            endingUI.Initialize(characterName, ratingLevel, score, account);
+            endingUI.Initialize(characterName, characterIcon, ratingLevel, score, account);
         }
 
         public void ShowEndingUI()
@@ -235,14 +236,20 @@ namespace VTuber.ScheduleSystem.UI
             return Tween.Position(_scheduleUI, creationSchedulePosition.position, 0.3f);
         }
 
-        public Tween SetScheduleUIPositionToExecution()
+        public void SetScheduleUIPositionToExecution(Action onComplete)
         {
-            return Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f);
+            Tween.Position(_scheduleUI, executionSchedulePosition.position, 0.3f).OnComplete(() =>
+            {
+                onComplete?.Invoke();
+            });
         }
 
-        public Tween SetScheduleUIPositionToPause()
+        public Tween SetScheduleUIPositionToPause(Action onComplete = null)
         {
-            return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f);
+            return Tween.Position(_scheduleUI, pauseSchedulePosition.position, 0.3f).OnComplete(() =>
+            {
+                onComplete?.Invoke();
+            });
         }
 
         public void SetScheduleUIPositionToInitial()
@@ -295,6 +302,11 @@ namespace VTuber.ScheduleSystem.UI
             consumableUI.transform.SetParent(consumableUIParent.transform);
             consumableUI.transform.localPosition = Vector3.zero;
             consumableUI.transform.localScale = Vector3.one;
+        }
+
+        public void ShowTips()
+        {
+            tipUI.ShowTip();
         }
     }
 }

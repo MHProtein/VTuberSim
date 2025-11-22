@@ -47,16 +47,16 @@ namespace VTuber.BattleSystem.Effect
                 VDebug.Log("Effect " + _configuration.effectName + " added " + value + " to buff with ID: " + _buffID +
                            ". New value: " + buff.Value);
             }
-            else
-            {
-                VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
-                    new Dictionary<string, object>());
-            }
+            // else
+            // {
+            //     VBattleRootEventCenter.Instance.Raise(VBattleEventKey.OnNotifyBeginDisposeCard,
+            //         new Dictionary<string, object>());
+            // }
         }
 
         public override string GetValue()
         {
-            return VMathUtils.FloatToInt(_percentage.Value * 100) + "%";
+            return VMathUtils.FloatToInt(_percentage.Value * 100, VMathUtils.RoundingType.Round) + "%";
         }
     }
 }

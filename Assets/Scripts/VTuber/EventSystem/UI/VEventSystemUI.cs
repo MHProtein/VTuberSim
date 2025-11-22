@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using UnityEngine.Video;
 using VTuber.BattleSystem.Card;
 using VTuber.Character;
@@ -27,20 +28,23 @@ namespace VTuber.Dialogue.UI
         [SerializeField] private RectTransform eventUIWrapper;
         [SerializeField] private VPhaseEndingSelectionMenu phaseEndingSelectionMenu;
         [SerializeField] private GameObject endingOptionPrefab;
+        [SerializeField] private Button fullScreenButton;
 
         [SerializeField] private VSelectFrom3ConsumablesMenu selectFrom3ConsumablesMenu;
 
         private Action _closePhaseEndingSelectionMenuAction;
         private Action _closeCardLibrary;
-        private Action _CloseSelectFrom3Menu;
-        private Action _CloseSelectFrom3ConsumablesMenu;
-        private Action onVideoFinish;
+        private Action _onVideoFinish;
         private bool _isFullScreen;
 
         protected override void Awake()
         {
             base.Awake();
-
+        }
+        
+        public void SetFullScreenButtonActive(bool active)
+        {
+            fullScreenButton.gameObject.SetActive(active);
         }
 
         public void SetFullScreenButton()
@@ -68,20 +72,20 @@ namespace VTuber.Dialogue.UI
 
         private void OnLoadingEnded()
         {
-            onVideoFinish?.Invoke();
-            onVideoFinish = null;
+            _onVideoFinish?.Invoke();
+            _onVideoFinish = null;
         }
 
-        public void PlayLoadingAnimation(VDialogueEvent e, Action onFinish)
+        public void PlayLoadingAnimation(VDialogueEvent e, Action onFinish, Action onBackgroundFilled = null)
         {
-            loadingAnimation.PlayAnimation(e).OnComplete(OnLoadingEnded);
-            onVideoFinish = onFinish;
+            _onVideoFinish = onFinish;
+            loadingAnimation.PlayAnimation(e, onBackgroundFilled).OnComplete(OnLoadingEnded);
         }
         
-        public void PlayLoadingAnimation(VStreamEventConfiguration e, Action onFinish)
+        public void PlayLoadingAnimation(VStreamEventConfiguration e, Action onFinish, Action onBackgroundFilled = null)
         {
-            loadingAnimation.PlayAnimation(e).OnComplete(OnLoadingEnded);
-            onVideoFinish = onFinish;
+            _onVideoFinish = onFinish;
+            loadingAnimation.PlayAnimation(e, onBackgroundFilled).OnComplete(OnLoadingEnded);
         }
 
         public void InitializePhaseEndingSelectionMenu(List<VStreamEvent> endings, Action confirmAction)
@@ -91,16 +95,11 @@ namespace VTuber.Dialogue.UI
             _closePhaseEndingSelectionMenuAction = confirmAction;
         }
 
-        public void ClosePhaseEndingSelectionMenu()
+        public void ClosePhaseEndingSelectionMenu(bool invoke)
         {
             phaseEndingSelectionMenu.gameObject.SetActive(false);
-            _closePhaseEndingSelectionMenuAction?.Invoke();
-        }
-
-        public void CloseSelectFrom3ConsumablesMenu()
-        {
-            selectFrom3ConsumablesMenu.gameObject.SetActive(false);
-            _CloseSelectFrom3ConsumablesMenu?.Invoke();
+            if(invoke)
+                _closePhaseEndingSelectionMenuAction?.Invoke();
         }
 
         public void OpenEventUI()
@@ -132,5 +131,9 @@ namespace VTuber.Dialogue.UI
         }
 
 
+        public void CloseEventUI()
+        {
+            eventUIWrapper.gameObject.SetActive(false);
+        }
     }
 }

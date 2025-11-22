@@ -21,7 +21,7 @@ namespace VTuber.ScheduleSystem.Events.DialogueEvent
 
         public VDialogueEventConfiguration(CellRange row) : base(row)
         {
-            dialogueNode = row.Columns[VStreamEventHeaderIndex.DialogueNode].Value;
+            dialogueNode = row.Columns[VStreamEventHeaderIndex.DialogueNode].Value.Trim();
             effects = new List<VRaisingEffect>();
             if (!dialogueNode.IsNullOrWhitespace())
                 return;

@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
@@ -15,6 +16,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
         [SerializeField] private Transform infoInitPosition;
         [SerializeField] private Transform infoPosition;
         [SerializeField] private Image icon;
+        [SerializeField] private GameObject maxText;
+        [SerializeField] private GameObject coopIcon;
         [SerializeField] private TMP_Text valueText;
         [SerializeField] private Transform light;
 
@@ -39,49 +42,76 @@ namespace VTuber.RaisingAnimationSystem.Animations.AttributeAnimation
         [LabelText("360度旋转时长")]
         [SerializeField] private float lightSpinDuration = 8f;
 
+        // 新增：动画速度（乘算到所有时间间隔）
+        [FoldoutGroup("Animation Settings")]
+        [LabelText("速度")]
+        [SerializeField] private float speed = 1f;
+
+        // 辅助：将基础时长乘以速度，避免非正值
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
+
         [Header("初始缩放")]
         [LabelText("初始缩放值")]
         [SerializeField] private float initScale = 1.5f;
 
+        [FoldoutGroup("音效")] [LabelText("出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("消失音效")] [SerializeField] private VAudioPlayInfo disappearAudio;
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             ResetAnimation();
             base.BeginAnimation(request, onComplete, isLastSameType);
 
-            // Display values
-            icon.sprite = request.attributeIcon;
-            valueText.color = request.value > 0 ? Color.green : Color.red;
+            maxText.SetActive(request.isMaxValue);
+            coopIcon.SetActive(request.coop != null);
+            if (coopIcon.activeSelf)
+            {
+                icon.sprite = request.coop.Pfp;
+            }
+            else
+            {
+                // Display values
+                icon.sprite = request.attributeIcon;
+            }
+            
             valueText.text = (request.value > 0 ? "+" : "") + request.value;
+            if(request.isPercentage)
+                valueText.text += "%";
+            valueText.color = request.value > 0 ? Color.green : Color.red;
 
             // Build sequence
             var sequence = Sequence.Create();
 
             sequence
                 // pop animation
-                .Chain(Tween.Scale(infoTransform, popScale, fadeDuration, Ease.OutElastic))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
+                .Chain(Tween.Scale(infoTransform, popScale, Interval(fadeDuration), Ease.OutElastic))
 
                 // fade in + move at the same time
-                .Group(Tween.Alpha(icon, 1, fadeDuration))
-                .Group(Tween.Alpha(valueText, 1, fadeDuration))
-                .Group(Tween.Position(infoTransform, infoPosition.position, fadeDuration))
+                .Group(Tween.Alpha(icon, 1, Interval(fadeDuration)))
+                .Group(Tween.Alpha(valueText, 1, Interval(fadeDuration)))
+                .Group(Tween.Position(infoTransform, infoPosition.position, Interval(fadeDuration)))
 
                 // wait
-                .ChainDelay(holdDuration)
+                .ChainDelay(Interval(holdDuration))
 
                 // fade out
-                .Chain(Tween.Alpha(icon, 0, fadeOutDuration))
-                .Group(Tween.Alpha(valueText, 0, fadeOutDuration))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(disappearAudio))
+                .Chain(Tween.Alpha(icon, 0, Interval(fadeOutDuration)))
+                .Group(Tween.Alpha(valueText, 0, Interval(fadeOutDuration)))
 
                 // final callback
                 .ChainCallback(() => onComplete?.Invoke());
 
+
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             // light rotation
             Tween.LocalEulerAngles(
                 light,
                 Vector3.zero,
                 new Vector3(0, 0, 360f),
-                lightSpinDuration,
+                Interval(lightSpinDuration),
                 Ease.Linear,
                 100,
                 CycleMode.Incremental

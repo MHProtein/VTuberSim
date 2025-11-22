@@ -23,6 +23,7 @@ namespace VTuber.ScheduleSystem.Events
     public enum VSchedulingConditionPositionPatterns
     {
         None,
+        U,
         UD,
         LR,
         UDLR,
@@ -64,8 +65,6 @@ namespace VTuber.ScheduleSystem.Events
         // 如果配置表中 ID 模式下没有指定类型，你可能需要尝试获取或在 VSchedulingCondition 解析时存储 IsStream。
         public bool IsTargetStream => _isStream;
         
-        
-        
         public List<VRaisingEffect> Effects => _effects;
         private List<VRaisingEffect> _effects;
         
@@ -87,26 +86,37 @@ namespace VTuber.ScheduleSystem.Events
         {
             _id = uint.Parse(row.Columns[VSchedulingConditionHeaderIndex.Id].Value);
 
-            var placingConditionStr = row.Columns[VSchedulingConditionHeaderIndex.PlacingCondition].Value;
+            string placingConditionStr = row.Columns[VSchedulingConditionHeaderIndex.PlacingCondition].Value;
             if (!placingConditionStr.IsNullOrWhitespace())
                 _placingCondition = VDataManager.Instance.GetPlacingCondtionByID(uint.Parse(placingConditionStr));
 
             var typeStr = row.Columns[VSchedulingConditionHeaderIndex.TargetType].Value;
             
-            _shouldExecuteBeforeEvent = int.Parse(row.Columns[VSchedulingConditionHeaderIndex.ExecuteBeforeEvent].Value) == 1;
+            // 【修改 1】安全性修复：防止空单元格导致崩溃
+            // 使用 TryParse 或者先检查 IsNullOrWhitespace
+            string executeBeforeStr = row.Columns[VSchedulingConditionHeaderIndex.ExecuteBeforeEvent].Value;
+            if (!executeBeforeStr.IsNullOrWhitespace() && int.TryParse(executeBeforeStr, out int executeVal))
+            {
+                _shouldExecuteBeforeEvent = (executeVal == 1);
+            }
+            else
+            {
+                _shouldExecuteBeforeEvent = false; // 默认为 false
+            }
             
             if (!typeStr.IsNullOrWhitespace())
             {
-                _positionPattern =
-                    Enum.Parse<VSchedulingConditionPositionPatterns>(row
-                        .Columns[VSchedulingConditionHeaderIndex.Pattern].Value);
-                _type = Enum.Parse<VSchedulingConditionType>(typeStr);
+                // 【修改 2】安全性修复：解析 Enum 前先 Trim() 去除可能存在的空格
+                _positionPattern = Enum.Parse<VSchedulingConditionPositionPatterns>(
+                    row.Columns[VSchedulingConditionHeaderIndex.Pattern].Value.Trim());
+                
+                _type = Enum.Parse<VSchedulingConditionType>(typeStr.Trim());
 
                 switch (_type)
                 {
                     case VSchedulingConditionType.ID:
                     {
-                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value;
+                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value.Trim(); // Trim
                         if (targetStr.Contains("S"))
                         {
                             _isStream = true;
@@ -116,18 +126,20 @@ namespace VTuber.ScheduleSystem.Events
                         break;
                     }
                     case VSchedulingConditionType.Type:
-                        _targetType =
-                            Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        // Trim
+                        _targetType = Enum.Parse<VEventType>(
+                            row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value.Trim());
                         break;
                     case VSchedulingConditionType.SameType:
                         break;
                     case VSchedulingConditionType.ExcludeType:
-                        _targetType =
-                            Enum.Parse<VEventType>(row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value);
+                        // Trim
+                        _targetType = Enum.Parse<VEventType>(
+                            row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value.Trim());
                         break;
                     case VSchedulingConditionType.ExcludeID:
                     {
-                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value;
+                        var targetStr = row.Columns[VSchedulingConditionHeaderIndex.TargetValue].Value.Trim(); // Trim
                         if (targetStr.Contains("S"))
                         {
                             _isStream = true;
@@ -160,6 +172,9 @@ namespace VTuber.ScheduleSystem.Events
             {
                 case VSchedulingConditionPositionPatterns.None:
                     return false;
+                case VSchedulingConditionPositionPatterns.U:
+                    slots = slot.GetUSlot();
+                    break;
                 case VSchedulingConditionPositionPatterns.UD:
                     slots = slot.GetUDSlots();
                     break;
@@ -192,9 +207,10 @@ namespace VTuber.ScheduleSystem.Events
                 foreach (var s in slots)
                     if (s.Item is not null)
                     {
-                        if (_isStream && s.Item.Event is VStreamEvent && s.Item.Event.EventID == _targetID)
+                        if (_isStream == s.Item.Event is VStreamEvent && s.Item.Event.EventID == _targetID)
                             return false;
                     }
+                
 
                 return true;
             }
@@ -205,7 +221,7 @@ namespace VTuber.ScheduleSystem.Events
                     {
                         case VSchedulingConditionType.ID:
                         {
-                            if (_isStream && s.Item.Event is not VStreamEvent)
+                            if (_isStream != s.Item.Event is VStreamEvent)
                                 return false;
                             return s.Item.Event.EventID == _targetID;
                         }

@@ -53,6 +53,7 @@ namespace VTuber.BattleSystem.UI
         [SerializeField] public TMP_Text typeText;
         [SerializeField] public TMP_Text popularityText;
         [SerializeField] public TMP_Text shieldText;
+        [SerializeField] private Sprite staminaSprite;
 
         public VCard Card { get; private set; }
 
@@ -69,19 +70,23 @@ namespace VTuber.BattleSystem.UI
             name.text = card.CardName;
             description.text = card.GetDescription();
             if (card.IsExhaust)
-                description.text += "\nExhaust.";
+                description.text += "\n消耗牌.";
             typeText.text = card.CardType;
-
+            
+            if (card.CostType == CostType.Stamina) costImage.color = Color.white;
             if (card.CostType == CostType.TrueStamina) costImage.color = Color.red;
 
             if (card.CostType == CostType.Buff)
             {
+                costImage.color = Color.white;
                 costImage.sprite = VDataManager.Instance.GetBuffConfigurationByID(card.CostBuffId).icon;
                 cost.text = "-" + card.Cost;
                 cost.transform.localPosition = new Vector3(cost.transform.localPosition.x, -40f, 0f);
             }
             else
             {
+                cost.transform.localPosition = new Vector3(cost.transform.localPosition.x, 0f, 0f);
+                costImage.sprite = staminaSprite;
                 cost.text = "-" + card.Cost;
             }
 
@@ -90,6 +95,10 @@ namespace VTuber.BattleSystem.UI
                 name.text += "+";
                 ColorUtility.TryParseHtmlString("#0ac736", out var color);
                 name.color = color;
+            }
+            else
+            {
+                name.color = Color.black;
             }
 
             Card = card;

@@ -41,7 +41,7 @@ namespace VTuber.Core.UI
             return haloSprites[level];
         }
 
-        public KeyValuePair<string, Sprite> GetPressureIcon(int i)
+        public KeyValuePair<string, Sprite> GetPressureInfo(int i)
         {
             return new KeyValuePair<string, Sprite>(pressureNames[i - 1], pressureIcons[i - 1]);
         }
@@ -69,7 +69,7 @@ namespace VTuber.Core.UI
             return "";
         }
 
-        public string GetAttributeName(string attributeName)
+        public static string GetAttributeName(string attributeName)
         {
             switch (attributeName)
             {
@@ -100,6 +100,27 @@ namespace VTuber.Core.UI
             return "";
         }
 
+        public static string GetOperatorTypeName(VOperatorType operatorType)
+        {
+            switch (operatorType)
+            {
+                case VOperatorType.Equal:
+                    return "=";
+                case VOperatorType.GreaterThan:
+                    return ">";
+                case VOperatorType.LessThan:
+                    return "<";
+                case VOperatorType.GreaterEqual:
+                    return ">=";
+                case VOperatorType.LessEqual:
+                    return "<=";
+                case VOperatorType.NotEqual:
+                    return "!=";
+            }
+
+            return "";
+        }
+        
         public Sprite GetScoreLevelSprite(string level)
         {
             if (level.IsNullOrWhitespace()) return VResourcesManager.Instance.TryGetSprite("ScoreLevel_SSS");
@@ -132,6 +153,8 @@ namespace VTuber.Core.UI
 
         public string GetSelectCardMenuTitle(VAnimationType cardSelectAnimationType)
         {
+            if (cardSelectAnimationType == VAnimationType.None)
+                return "";
             return selectCardMenuTitles[cardSelectAnimationType];
         }
 

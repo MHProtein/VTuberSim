@@ -44,5 +44,17 @@ namespace VTuber.CoopSystem
         {
             return _cooperators;
         }
+
+        public void Clear()
+        {
+            foreach (var cooperator in _cooperators)
+            {
+                cooperator.OnDisable();
+                VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCooperatorRemoved,
+                    new Dictionary<string, object> { { "Cooperator", cooperator } });
+            }
+
+            _cooperators.Clear();
+        }
     }
 }

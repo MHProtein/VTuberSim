@@ -14,6 +14,7 @@ namespace SlayTheSpire.System.SavingSystem
 {
     public class SaveData
     {
+        public VSavePointType savePointType;
         public List<VAccountSaveData> accounts;
         public VBattleSaveData battleSaveData;
 
@@ -29,5 +30,6 @@ namespace SlayTheSpire.System.SavingSystem
         public VStoreSaveData storeSaveData;
         public VWeeklyScheduleSaveData weeklySchedule;
         public bool saved;
+        public bool ended;
     }
 }

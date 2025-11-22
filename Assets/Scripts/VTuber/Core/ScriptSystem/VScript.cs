@@ -31,14 +31,6 @@ namespace VTuber.Core.ScriptSystem
         protected VPhase currentPhase;
         public List<VKPI> kpis;
 
-        public VScript(VScriptConfiguration configuration)
-        {
-            this.configuration = configuration;
-            kpis = new List<VKPI>();
-            foreach (var kpi in configuration.kpis)
-                kpis.Add(new VKPI(kpi.EventType, kpi.RequiredAmount, kpi.AbilityIndex, true));
-        }
-
         protected List<VPhase> Phases => configuration.phases;
 
         public VPhase CurrentPhase => currentPhase;
@@ -48,6 +40,15 @@ namespace VTuber.Core.ScriptSystem
         public List<uint> EventList => configuration.eventIDs;
         public List<uint> StreamEventList => configuration.streamEventIDs;
         public List<VCooperatorConfiguration> Coops => configuration.coops;
+        public uint StaminaNotEnoughEventID => configuration.staminaNotEnoughEventID;
+
+        public VScript(VScriptConfiguration configuration)
+        {
+            this.configuration = configuration;
+            kpis = new List<VKPI>();
+            foreach (var kpi in configuration.kpis)
+                kpis.Add(new VKPI(kpi.EventType, kpi.RequiredAmount, kpi.AbilityIndex, true));
+        }
 
         public VScriptSaveData Save()
         {
@@ -85,9 +86,9 @@ namespace VTuber.Core.ScriptSystem
 
         public virtual VScheduleEvent NextWeek()
         {
+            _weekIndex++;
             if (currentPhase.nextPhase is null)
                 return null;
-            _weekIndex++;
             if (currentPhase.nextPhase.IsInPhase(_weekIndex))
             {
                 currentPhase = currentPhase.nextPhase;

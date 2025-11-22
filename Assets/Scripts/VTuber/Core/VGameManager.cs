@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using SlayTheSpire.System.SavingSystem;
 using Tutorial.Script;
+using Tutorial.UI;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Serialization;
@@ -19,6 +20,7 @@ using VTuber.Core.RaisingEffect;
 using VTuber.Core.ScriptSystem;
 using VTuber.Core.StateMachine;
 using VTuber.EventSystem;
+using VTuber.RaisingAnimationSystem;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.ScheduleSystem.Core;
@@ -33,6 +35,7 @@ namespace VTuber.BattleSystem.Core
 {
     public class VGameManager : VSingletonMonobehaviour<VGameManager>, IDataPersistence
     {
+        [SerializeField] private bool isDebug;
         [SerializeField] private bool useDevData;
         [SerializeField] private VReincarnationConfiguration reincarnationConfiguration;
 
@@ -85,6 +88,7 @@ namespace VTuber.BattleSystem.Core
         public bool IsTutorial { get; private set; }
 
         public VTutorialScript TutorialScript { get; private set; }
+        public List<VAccount> Accounts => _accounts;
 
         protected override void Awake()
         {
@@ -105,12 +109,26 @@ namespace VTuber.BattleSystem.Core
             _scripts = new List<VScriptConfiguration>();
             _characterConfigs = new List<VCharacterConfiguration>();
             Addressables
-                .LoadAssetsAsync<VScriptConfiguration>(scriptLabel, scriptConfig => { _scripts.Add(scriptConfig); })
-                .Completed += handle => { };
+                .LoadAssetsAsync<VScriptConfiguration>(scriptLabel, scriptConfig =>
+                {
+                    if (!isDebug && scriptConfig.isDebug)
+                        return;
+                    _scripts.Add(scriptConfig);
+                })
+                .Completed += handle =>
+            {
+            };
 
             Addressables.LoadAssetsAsync<VCharacterConfiguration>(characterLabel,
-                characterConfig => { _characterConfigs.Add(characterConfig); }).Completed += handle => { };
-
+                characterConfig =>
+                {
+                    if (!isDebug && characterConfig.isDebug)
+                        return;
+                    _characterConfigs.Add(characterConfig);
+                }).Completed += handle => 
+            { 
+            };
+            
             VResourcesManager.Instance.LoadSprites();
             loader.Load();
             VResourcesManager.Instance.LoadDialogs();
@@ -124,6 +142,7 @@ namespace VTuber.BattleSystem.Core
             eventSystem.Initialize();
 
             _newGame = saveData == null;
+            
             OpenMainMenu();
         }
 
@@ -147,6 +166,14 @@ namespace VTuber.BattleSystem.Core
                 Character.OnDisable();
         }
 
+        public void AddSuccessfulEvent()
+        {
+            Character.succeededStreams.Add(4);
+            Character.succeededStreams.Add(7);
+            Character.succeededStreams.Add(14);
+            Character.succeededStreams.Add(15);
+        }
+
         public void Load(SaveData data)
         {
             VCardConfiguration.LoadIDDistributor(data.cardIDDistributor);
@@ -156,25 +183,21 @@ namespace VTuber.BattleSystem.Core
             
             var scriptConfig = GetScriptConfig(data.script.scriptConfigurationName);
 
-            _script = VScript.Load(data.script, scriptConfig);
-            
+            if (scriptConfig is VTutorialScriptConfiguration)
+            {
+                IsTutorial = true;
+                TutorialScript = VTutorialScript.Load(data.script, (VTutorialScriptConfiguration)scriptConfig);
+                
+                _script = TutorialScript;
+            }
+            else
+            {
+                _script = VScript.Load(data.script, scriptConfig);
+            }
+
             Character = new VCharacter(null);
             Character.Load(data, _characterConfigs.Find(config
                 => config.name == data.characterSaveData.characterConfigurationName));
-
-
-            // if (scriptConfig is VTutorialScriptConfiguration)
-            // {
-            //     isTutorial = true;
-            //     _tutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
-            //     
-            //     _script = _tutorialScript;
-            // }
-            // else
-            // {
-            //     _script = VScript.Load(data.script, scriptConfig);
-            // }
-
             _weeklySchedule = VWeeklySchedule.Load(data.weeklySchedule, _script);
 
             scheduleUI.Initialize(Character, _script);
@@ -219,14 +242,16 @@ namespace VTuber.BattleSystem.Core
             else
                 VDataPersistenceManager.Instance.LoadGame(IsTutorial);
 
-            var eventConfigs = new List<VScheduleEventConfiguration>();
-            eventConfigs.AddRange(_script.EventList.Select(id =>
-                VDataManager.Instance.GetDialogueEventConfigurationByID(id)));
-            eventConfigs.AddRange(
-                _script.StreamEventList.Select(id => VDataManager.Instance.GetStreamEventConfigurationByID(id)));
-
             VRaisingUI.Instance.Initialize(IsTutorial);
-            scheduleCreator.InitializeCreator(_script);
+            if (IsTutorial)
+            {
+                scheduleCreator.InitializeTutorialCreator(TutorialScript);
+                VTutorialConditionsUIManager.Instance.SetConditions(TutorialScript.CurrentWeekConditions, Character);
+            }
+            else
+            {
+                scheduleCreator.InitializeCreator(_script, Character);
+            }
 
             mainMenu.gameObject.SetActive(false);
         }
@@ -237,24 +262,33 @@ namespace VTuber.BattleSystem.Core
             scheduleCreator.gameObject.SetActive(true);
             _startGameTime = DateTime.UtcNow;
 
+            
             if (scriptConfig is VTutorialScriptConfiguration)
             {
                 IsTutorial = true;
                 TutorialScript = new VTutorialScript((VTutorialScriptConfiguration)scriptConfig);
                 _script = TutorialScript;
-                scheduleCreator.InitializeTutorialCreator(TutorialScript);
             }
             else
             {
                 IsTutorial = false;
                 _script = new VScript(scriptConfig);
-                scheduleCreator.InitializeCreator(_script);
             }
+            Character = new VCharacter(characterConfiguration);
+            Character.Initialize(false);
+
+            if (IsTutorial)
+            {
+                scheduleCreator.InitializeTutorialCreator(TutorialScript);
+            }
+            else
+            {
+                scheduleCreator.InitializeCreator(_script, Character);
+            }
+            
             VRaisingUI.Instance.Initialize(IsTutorial);
             VDataPersistenceManager.Instance.NewGame(IsTutorial);
 
-            Character = new VCharacter(characterConfiguration);
-            Character.Initialize(false);
 
             foreach (var account in accounts)
                 foreach (var effect in account.Effects)
@@ -379,6 +413,12 @@ namespace VTuber.BattleSystem.Core
         public void OpenMainMenu()
         {
             mainMenu.gameObject.SetActive(true);
+            if(VDataPersistenceManager.Instance.SaveData is not null)
+                _accounts = VDataPersistenceManager.Instance.SaveData.accounts.Select(account => new VAccount(account)).ToList();
+            else
+            {
+                _accounts = new List<VAccount>();
+            }
             mainMenu.Initialize(true, _scripts, _characterConfigs, _accounts);
         }
 
@@ -396,6 +436,7 @@ namespace VTuber.BattleSystem.Core
                 _stateMachine.OnDisable();
             }
 
+            Character.Clear();
             if (Character is not null)
                 Character.OnDisable();
             if (scheduleUI is not null)
@@ -403,6 +444,8 @@ namespace VTuber.BattleSystem.Core
 
             eventSystem.CloseUI();
             scheduleCreator.gameObject.SetActive(false);
+            VRaisingAnimationSystem.Instance.StopAllAnimations();
+            VTutorialConditionsUIManager.Instance.Clear();
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnReset, new Dictionary<string, object>());
         }
 
@@ -434,6 +477,11 @@ namespace VTuber.BattleSystem.Core
         public VCooperatorConfiguration GetCooperatorConfigurationByID(uint saveDataConfigId)
         {
             return _script.Coops.Find(config => config.Id == saveDataConfigId);
+        }
+
+        public VStateType GetCurrentState()
+        {
+            return _stateMachine.CurrentState.StateType;
         }
     }
 }

@@ -55,7 +55,7 @@ MonoBehaviour:
       Data: 1
     - Name: 
       Entry: 3
-      Data: 2
+      Data: 45
     - Name: 
       Entry: 13
       Data: 
@@ -79,13 +79,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 3
+      Data: 1
     - Name: 
       Entry: 3
-      Data: 4
+      Data: 0
     - Name: 
       Entry: 3
-      Data: 5
+      Data: 37
     - Name: 
       Entry: 13
       Data: 
@@ -109,13 +109,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 6
+      Data: 0
     - Name: 
       Entry: 3
-      Data: 8
+      Data: 12
     - Name: 
       Entry: 3
-      Data: 9
+      Data: 1
     - Name: 
       Entry: 13
       Data: 
@@ -139,13 +139,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 0
+      Data: 28
+    - Name: 
+      Entry: 3
+      Data: 24
     - Name: 
       Entry: 3
       Data: 1
-    - Name: 
-      Entry: 3
-      Data: 2
     - Name: 
       Entry: 13
       Data: 
@@ -169,13 +169,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 3
+      Data: 12
     - Name: 
       Entry: 3
-      Data: 4
+      Data: 0
     - Name: 
       Entry: 3
-      Data: 5
+      Data: 1
     - Name: 
       Entry: 13
       Data: 
@@ -199,13 +199,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 6
+      Data: 28
     - Name: 
       Entry: 3
-      Data: 8
+      Data: 45
     - Name: 
       Entry: 3
-      Data: 9
+      Data: 0
     - Name: 
       Entry: 13
       Data: 
@@ -229,13 +229,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 3
       Data: 1
     - Name: 
       Entry: 3
-      Data: 2
+      Data: 37
+    - Name: 
+      Entry: 3
+      Data: 1
     - Name: 
       Entry: 13
       Data: 
@@ -259,13 +259,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 3
+      Data: 0
     - Name: 
       Entry: 3
-      Data: 4
+      Data: 28
     - Name: 
       Entry: 3
-      Data: 5
+      Data: 12
     - Name: 
       Entry: 13
       Data: 
@@ -289,13 +289,13 @@ MonoBehaviour:
       Data: 3
     - Name: 
       Entry: 3
-      Data: 6
+      Data: 0
     - Name: 
       Entry: 3
-      Data: 8
+      Data: 0
     - Name: 
       Entry: 3
-      Data: 9
+      Data: 34
     - Name: 
       Entry: 13
       Data: 
@@ -311,11 +311,16 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  baseEventID: 0
+  baseEventID: 22
   conditions:
   - id: 0
     operatorType: 3
     description: 
     attributeName: BAPopularity
     targetValue: 50
-  deck: 000000000100000002000000030000000400000005000000060000000800000009000000
+  deck: 000000000000000001000000010000000c0000002d0000002d0000002500000022000000180000001c00000025000000
+  tips:
+  - {fileID: 21300000, guid: 4ef74057ce2ac0e4a9fde9a2a87c8485, type: 3}
+  - {fileID: 21300000, guid: f38fb72d13c43e744ba2bd4929161d55, type: 3}
+  - {fileID: 21300000, guid: b31e8748d3c4c2b48b2a1e17372df188, type: 3}
+  - {fileID: 21300000, guid: 8120deb28374ed5469ccab53dbae7cb4, type: 3}

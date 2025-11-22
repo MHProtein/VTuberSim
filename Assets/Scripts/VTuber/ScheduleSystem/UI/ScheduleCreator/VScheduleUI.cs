@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
 using SlayTheSpire.System.SavingSystem;
+using Tutorial.Script;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.Core.KPIs;
 using VTuber.BattleSystem.UI;
 using VTuber.Character;
@@ -12,6 +15,7 @@ using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.Managers;
 using VTuber.Core.ScriptSystem;
+using VTuber.Core.StateMachine;
 using VTuber.EventSystem.Events;
 using VTuber.ScheduleSystem.Core;
 using VTuber.ScheduleSystem.Events;
@@ -26,7 +30,7 @@ namespace VTuber.ScheduleSystem.UI
         public VScheduleSlotSaveData[,] slots;
     }
 
-    public class VScheduleUI : VUIBehaviour
+    public class VScheduleUI : VUIBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public Vector2Int slotSize;
         [SerializeField] protected GameObject eventUIPrefab;
@@ -45,10 +49,16 @@ namespace VTuber.ScheduleSystem.UI
 
         protected VAnimationQueue animationQueue;
         protected VScheduleSlot[,] slots;
+        
+        public bool Editing => _editing;
+        private bool _editing;
 
         public VCharacter Character { get; private set; }
 
         public VScheduleSlot[,] Slots => slots;
+        
+        private Vector3 _currentEventPosition;
+        private float _currentEventScale;
 
         protected override void Awake()
         {
@@ -178,6 +188,9 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToCreation(VCharacter character, VScript script, int weekIndex)
         {
+            _editing = true;
+            ChangeIndicatorScale(1, false);
+            indicator.gameObject.SetActive(false);
             _events.Clear();
             _eventCount = new Dictionary<VEventType, int>();
             foreach (VEventType eventType in Enum.GetValues(typeof(VEventType))) _eventCount.Add(eventType, 0);
@@ -213,6 +226,12 @@ namespace VTuber.ScheduleSystem.UI
                 ui.SetFixed(true);
             }
 
+            if (_script is VTutorialScript tutorialScript)
+            {
+                if (!tutorialScript.CurrentWeekUseCoopEvent)
+                    return;
+            }
+
             foreach (var slot in slots) slot.SetPlaceable(false, false, -1);
 
             var occupiedPositions = new List<Vector2Int>();
@@ -228,6 +247,9 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToModify()
         {
+            _editing = true;
+            ChangeIndicatorScale(1, false);
+            indicator.gameObject.SetActive(false);
             for (var y = 0; y < slotSize.y; y++)
             for (var x = 0; x < slotSize.x; x++)
                 if (slots[y, x].Item != null)
@@ -246,6 +268,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void SwitchToExecution()
         {
+            _editing = false;   
             for (var y = 0; y < slotSize.y; y++)
             for (var x = 0; x < slotSize.x; x++)
                 if (slots[y, x].Item != null)
@@ -271,18 +294,25 @@ namespace VTuber.ScheduleSystem.UI
             var coordinate = (Vector2Int)messagedict["Coordinate"];
             if (coordinate.x == -1)
                 return;
-            ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
-            ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
+            ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position, true);
+            ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration, true);
         }
 
         public Tween MoveIndicator(Vector2Int coordinate)
         {
             if (coordinate.x == -1)
-                return ChangeIndicatorPosition(slots[_currentIndicatorCoord.y, _currentIndicatorCoord.x].Item.transform
-                    .position);
-            ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position);
+                return ChangeIndicatorPosition(slots[_currentIndicatorCoord.y, _currentIndicatorCoord.x].transform
+                    .position, false);
+
+            if (slots[coordinate.y, coordinate.x].Item == null)
+            {
+                ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].transform.position, false);
+                _currentIndicatorCoord = coordinate;
+                return ChangeIndicatorScale(1, false);
+            }
+            ChangeIndicatorPosition(slots[coordinate.y, coordinate.x].Item.transform.position, false);
             _currentIndicatorCoord = coordinate;
-            return ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration);
+            return ChangeIndicatorScale(slots[coordinate.y, coordinate.x].Item.Event.Duration, false);
         }
 
         public void ResetSchedule()
@@ -304,13 +334,17 @@ namespace VTuber.ScheduleSystem.UI
                 slots[y, x].DestroyItem();
         }
 
-        public Tween ChangeIndicatorPosition(Vector2 position)
+        public Tween ChangeIndicatorPosition(Vector2 position, bool fromEvent)
         {
+            if (fromEvent)
+                _currentEventPosition = position;
             return Tween.Position(indicator, position, 0.2f);
         }
 
-        public Tween ChangeIndicatorScale(float scale)
+        public Tween ChangeIndicatorScale(float scale, bool fromEvent)
         {
+            if (fromEvent)
+                _currentEventScale = scale;
             return Tween.ScaleY(indicator, scale, 0.2f);
         }
 
@@ -323,6 +357,15 @@ namespace VTuber.ScheduleSystem.UI
         public Tween ResetIndicatorPosition()
         {
             return Tween.Position(indicator, slots[0, 0].Item.transform.position, 0.2f);
+        }
+        
+        public List<VScheduleSlot> GetUSlot(VScheduleSlot slot)
+        {
+            var down = slot.Coordination.y - 1;
+            var ret = new List<VScheduleSlot>();
+            if (down >= 0)
+                ret.Add(slots[down, slot.Coordination.x]);
+            return ret;
         }
 
         public List<VScheduleSlot> GetUDSlots(VScheduleSlot slot)
@@ -379,6 +422,7 @@ namespace VTuber.ScheduleSystem.UI
 
         public void CompleteSchedule(uint size1Id, uint size2Id, uint size3Id)
         {
+            _loadingEvents = true;
             foreach (var slot in slots) slot.SetPlaceable(true, false, -1);
             for (var x = 0; x < slotSize.x; x++)
             {
@@ -429,6 +473,7 @@ namespace VTuber.ScheduleSystem.UI
             }
 
             foreach (var slot in slots) slot.SetPlaceable(false, false, -1);
+            _loadingEvents = false;
         }
 
         public void RecordEvent(VScheduleEvent e)
@@ -470,6 +515,35 @@ namespace VTuber.ScheduleSystem.UI
             }
 
             DestroyAllItems();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            var currentState = VGameManager.Instance.GetCurrentState();
+            if (currentState == VStateType.ScheduleCreation || currentState == VStateType.ScheduleModify)
+            {
+                indicator.gameObject.SetActive(true);
+            }
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            var currentState = VGameManager.Instance.GetCurrentState();
+            if (currentState == VStateType.ScheduleCreation || currentState == VStateType.ScheduleModify)
+            {
+                indicator.gameObject.SetActive(false);
+            }
+        }
+
+        public void SetIndicatorToCurrentEvents()
+        {
+            ChangeIndicatorPosition(_currentEventPosition, false);
+            ChangeIndicatorScale(_currentEventScale, false);
+        }
+
+        public void SetIndicatorActive()
+        {
+            indicator.gameObject.SetActive(true);
         }
     }
 }

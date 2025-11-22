@@ -11,6 +11,7 @@ using VTuber.BattleSystem.UI;
 using VTuber.Core.Foundation;
 using VTuber.Core.RaisingEffect;
 using VTuber.Core.UI;
+using VTuber.Dialogue.UI;
 using VTuber.Reincarnation;
 using VTuber.Relic;
 using VTuber.Relic.UI;
@@ -20,6 +21,7 @@ namespace VTuber.ScheduleSystem.UI
     public class VEndingUI : VUIBehaviour
     {
         [SerializeField] private GameObject ui;
+        [SerializeField] private Image characterIcon;
         [SerializeField] private Image ratingLevelImage;
         [SerializeField] private TMP_Text scoreText;
         [SerializeField] private GameObject cardPrefab;
@@ -42,9 +44,11 @@ namespace VTuber.ScheduleSystem.UI
             continueButton.onClick.AddListener(OnNextButtonClicked);
         }
 
-        public void Initialize(string characterName, string ratingLevel, int score, VAccount account)
+        public void Initialize(string characterName, Sprite characterIcon, string ratingLevel, int score, VAccount account)
         {
+            this.characterIcon.sprite = characterIcon;
             _account = account;
+            account.icon = characterIcon;
             inputField.text = characterName;
             inputField.characterLimit = 10;
             ratingLevelImage.sprite = VUIUtils.Instance.GetScoreLevelSprite(ratingLevel);
@@ -65,6 +69,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             ui.SetActive(true);
             Tween.PunchScale(ratingLevelImage.transform, Vector3.one * 1.3f, 0.5f);
+            VEventSystemUI.Instance.CloseEventUI();
         }
 
         public void Hide()
@@ -82,6 +87,8 @@ namespace VTuber.ScheduleSystem.UI
 
         private void SpawnRelic(VRelic relic)
         {
+            if (relic is null)
+                return;
             var go = Instantiate(relicPrefab, relicGrid);
             var ui = go.GetComponent<VRelicSlotUI>();
             ui.Initialize(relic, false);
@@ -100,6 +107,7 @@ namespace VTuber.ScheduleSystem.UI
         {
             _account.accountName = inputField.text;
             VGameManager.Instance.AddAccount(_account);
+            VDataPersistenceManager.Instance.EndingSaveAccount(VGameManager.Instance.Accounts);
             VGameManager.Instance.ReturnToMainMenu();
 
             Hide();

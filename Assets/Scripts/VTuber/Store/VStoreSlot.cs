@@ -52,7 +52,7 @@ namespace VTuber.Store
             IsDiscount = isDiscount;
             IsGlobalDiscount = isGlobalDiscount;
             OriginalPrice = originalPrice;
-            if (isDiscount)
+            if (isDiscount || isGlobalDiscount)
                 Price = (int)(originalPrice * (1.0f - discount));
             else
                 Price = originalPrice;

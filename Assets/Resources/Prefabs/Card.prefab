@@ -668,6 +668,7 @@ MonoBehaviour:
   typeText: {fileID: 917523294627215125}
   popularityText: {fileID: 8898288951475502126}
   shieldText: {fileID: 931608200567531995}
+  staminaSprite: {fileID: 272575777, guid: 4b3ddd2d00eae5d45b2117263791b94a, type: 3}
 --- !u!1 &4360240044549308165
 GameObject:
   m_ObjectHideFlags: 0

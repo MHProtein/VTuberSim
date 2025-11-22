@@ -95,6 +95,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
             var position = _selectedCardUI.transform.position;
             _selectedCardUI.transform.position = position;
             
+            confirmButton.interactable = false;
             _confirmAction?.Invoke(_selectedCardUI.Card);
             switch (_cardSelectAnimationType)
             {
@@ -123,6 +124,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
         {
             _returnAction?.Invoke();
             _onComplete?.Invoke();
+            ResetAnimation();
+            confirmButton.interactable = false;
         }
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
@@ -137,14 +140,19 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
         public void Initialize(List<VCard> cards, bool returnable, bool selectable, VAnimationType cardSelectAnimationType, Action<VCard> cardSelectConfirmAction,
             Action returnAction = null, Action<VCard> previewAction = null, VCard previewCard = null)
         {
-            title.text = VUIUtils.Instance.GetSelectCardMenuTitle(cardSelectAnimationType);
+            if(title != null)
+                title.text = VUIUtils.Instance.GetSelectCardMenuTitle(cardSelectAnimationType);
             if (previewCardUI is not null)
             {
                 previewTitle.text = VUIUtils.Instance.GetSelectCardMenuPreviewCardTitle(cardSelectAnimationType);
             }
             
+            confirmButton.interactable = true;
+            returnButton.interactable = true;
             confirmButton.gameObject.SetActive(selectable);
             returnButton.gameObject.SetActive(!selectable);
+            
+            confirmButton.interactable = false;
             if (returnable)
                 returnButton.gameObject.SetActive(true);
             _returnAction = returnAction;
@@ -175,10 +183,13 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
             base.ResetAnimation();
             if(_selectedCardUI)
                 _selectedCardUI.transform.SetParent(grid);
-            foreach (var cardUI in _cardUIs) ReturnCardToPool(cardUI);
-            _cardUIs.Clear();
+            if (_cardUIs is not null)
+            {
+                foreach (var cardUI in _cardUIs) ReturnCardToPool(cardUI);
+                _cardUIs.Clear();
+                _displayingCardUIs.Clear();
+            }
             _selectedCardUI = null;
-            _displayingCardUIs.Clear();
             _typeDropdown.value = 0; 
             _rarityDropdown.value = 0; 
             _isUpgraded.isOn = false;
@@ -242,7 +253,8 @@ namespace VTuber.RaisingAnimationSystem.Animations.SelectCardMenuAnimation
         private void ReturnCardToPool(VSelectCardCardUI card)
         {
             if (card == null) return;
-            card.transform.SetParent(null);
+            card.transform.localScale = Vector3.one;
+            card.transform.SetParent(transform);
             card.gameObject.SetActive(false);
             _cardPool.Enqueue(card);
         }

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using VTuber.Consumable;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Managers;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
@@ -88,7 +89,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddConsumableAnimation
 
         [LabelText("名称透明度隐藏时长")]
         [SerializeField] private float relicNameHideDuration = 0.5f;
-
+        
+        [FoldoutGroup("音效")] [LabelText("消耗品出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("描述框出现音效")] [SerializeField] private VAudioPlayInfo descriptionAppearAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("移动到库音效")] [SerializeField] private VAudioPlayInfo moveShrinkAudio;
 
         private Action _onComplete;
         private Action _applyEffect;
@@ -150,12 +155,14 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddConsumableAnimation
             _sequence = Sequence.Create();
 
             _sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio))
                 .Chain(Tween.LocalPosition(consumableImage.transform, Vector3.zero, relicEnterDuration, Ease.OutBounce))
                 .Group(Tween.Alpha(consumableImage, 1, relicEnterAlphaDuration))
                 .Group(Tween.Scale(consumableImage.transform, Vector3.one, relicEnterScaleDuration, Ease.OutBounce))
                 .Group(Tween.Alpha(nameText, 1, relicNameFadeDuration))
                 .Group(Tween.Custom(nameText.characterSpacing, 0, nameSpacingDuration,
                     v => nameText.characterSpacing = v))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(descriptionAppearAudio))
                 .Chain(Tween.LocalPosition(descriptionObject, descriptionPosition.localPosition, descriptionMoveDuration, descriptionMoveEase))
                 .ChainCallback(() =>
                 {
@@ -179,6 +186,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddConsumableAnimation
                 )
             );
 
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             Tween.LocalEulerAngles(
                 light,
                 Vector3.zero,
@@ -227,6 +235,7 @@ namespace VTuber.RaisingAnimationSystem.Animations.AddConsumableAnimation
             }
 
             sequence
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveShrinkAudio))
                 .Chain(Tween.LocalPosition(descriptionObject, descriptionInitPosition.localPosition, descriptionExitDuration, Ease.OutCubic))
                 .Group(Tween.Scale(consumableImage.transform, Vector3.zero, relicShrinkDuration, Ease.InCubic))
                 .Group(Tween.LocalPosition(consumableImage.transform, Vector3.zero, relicMoveToLibraryDuration, Ease.InCubic))

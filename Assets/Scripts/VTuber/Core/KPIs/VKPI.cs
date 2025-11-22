@@ -21,29 +21,6 @@ namespace VTuber.BattleSystem.Core.KPIs
 
     public class VKPI
     {
-        public VKPI(VEventType eventType, int requiredAmount, int abilityIndex, bool isPermanent)
-        {
-            RequiredAmount = requiredAmount;
-            EventType = eventType;
-            IsPermanent = isPermanent;
-            AbilityIndex = abilityIndex;
-
-            if (abilityIndex == -1)
-            {
-                EventName = "";
-                return;
-            }
-
-            if (eventType == VEventType.Stream)
-            {
-                if (abilityIndex == 0) AbilityName = "歌回";
-                if (abilityIndex == 1) AbilityName = "游戏";
-                if (abilityIndex == 2) AbilityName = "杂谈";
-            }
-
-            EventName = VUIUtils.Instance.GetEventName(eventType);
-        }
-
         public uint ID { get; private set; }
         public VEventType EventType { get; }
         public int RequiredAmount { get; }
@@ -54,6 +31,23 @@ namespace VTuber.BattleSystem.Core.KPIs
         public int AbilityIndex { get; }
         public string AbilityName { get; private set; }
 
+        public VKPI(VEventType eventType, int requiredAmount, int abilityIndex, bool isPermanent)
+        {
+            RequiredAmount = requiredAmount;
+            EventType = eventType;
+            IsPermanent = isPermanent;
+            AbilityIndex = abilityIndex;
+
+            if (eventType == VEventType.Stream)
+            {
+                if (abilityIndex == 0) AbilityName = "歌回";
+                if (abilityIndex == 1) AbilityName = "游戏";
+                if (abilityIndex == 2) AbilityName = "杂谈";
+            }
+
+            EventName = VUIUtils.Instance.GetEventName(eventType);
+        }
+        
         public void OnAdded(uint id)
         {
             ID = id;

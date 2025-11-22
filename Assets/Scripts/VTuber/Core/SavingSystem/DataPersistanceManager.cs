@@ -1,11 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
+using VTuber.Reincarnation;
 
 namespace SlayTheSpire.System.SavingSystem
 {
+    public enum VSavePointType
+    {
+        Dialog,
+        Battle,
+        ScheduleCreation,
+        ListenerSystem,
+        TutorialWeek,
+        Ending
+    }
     public class VDataPersistenceManager : VSingleton<VDataPersistenceManager>
     {
         private FileDataHandler _dataHandler;
@@ -18,6 +29,7 @@ namespace SlayTheSpire.System.SavingSystem
         public SaveData TutorialBattleSaveData => _tutorialBattleSaveData;
         public SaveData TutorialWeekSaveData => _tutorialWeekSaveData;
 
+        List<VAccountSaveData> _accounts;
         public List<IDataPersistence> DataPersistences { get; private set; }
 
         public void Register(IDataPersistence data)
@@ -32,7 +44,6 @@ namespace SlayTheSpire.System.SavingSystem
             _tutorialBattleDataHandler = new FileDataHandler(Application.persistentDataPath, "player_tutorial.vtb");
             _tutorialWeekDataHandler = new FileDataHandler(Application.persistentDataPath, "player_week.vtb");
 
-            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEventEndSave, EventSaveGame);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnEndRun, EventSaveGame);
         }
 
@@ -48,13 +59,16 @@ namespace SlayTheSpire.System.SavingSystem
                 return;
             _tutorialBattleSaveData = new SaveData();
             _tutorialWeekSaveData = new SaveData();
+            SaveData.accounts = _accounts;
             //GameManager.Instance.newGame = true;
         }
 
         public void DeleteSave()
         {
-            SaveData = null;
-            _dataHandler.Delete();
+            _accounts = SaveData.accounts;
+            SaveData = new SaveData();
+            SaveData.accounts = _accounts;
+            _dataHandler.Save(SaveData);
         }
 
         public bool SaveExists()
@@ -83,17 +97,25 @@ namespace SlayTheSpire.System.SavingSystem
 
         public void EventSaveGame(Dictionary<string, object> message)
         {
-            SaveGame();
+            SaveGame(VSavePointType.ListenerSystem);
         }
 
-        public void SaveGame()
+        public void SaveGame(VSavePointType savePointType)
         {
-            SavePersistences(SaveData);
+            SavePersistences(SaveData, savePointType);
             _dataHandler.Save(SaveData);
         }
 
-        public void SavePersistences(SaveData saveData)
+        public void EndingSaveAccount(List<VAccount> accounts)
         {
+            SaveData.accounts = accounts.Select(account => account.Save()).ToList();
+            SaveData.ended = true;
+            _dataHandler.Save(SaveData);
+        }
+
+        public void SavePersistences(SaveData saveData, VSavePointType savePointType)
+        {
+            saveData.savePointType = savePointType;
             foreach (var dataPersistence in DataPersistences)
             {
                 dataPersistence.Save(saveData);
@@ -105,7 +127,7 @@ namespace SlayTheSpire.System.SavingSystem
         {            
             if (_tutorialBattleSaveData is null)
                 return;
-            SavePersistences(_tutorialBattleSaveData);
+            SavePersistences(_tutorialBattleSaveData, VSavePointType.Battle);
             _tutorialBattleDataHandler.Save(_tutorialBattleSaveData);
         }
 
@@ -128,7 +150,7 @@ namespace SlayTheSpire.System.SavingSystem
         {
             if (_tutorialWeekSaveData is null)
                 return;
-            SavePersistences(_tutorialWeekSaveData);
+            SavePersistences(_tutorialWeekSaveData, VSavePointType.TutorialWeek);
             _tutorialWeekDataHandler.Save(_tutorialWeekSaveData);
         }
 

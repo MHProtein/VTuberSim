@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VTuber.Core.SE;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
 namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
@@ -43,11 +44,27 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
         [LabelText("下一等级文字淡入时间")][SerializeField] private float upgradeLevelFadeDuration = 0.25f;   
         [LabelText("字间距动画时间")][SerializeField] private float spacingAnimDuration = 0.5f;   
 
+        [FoldoutGroup("音效")] [LabelText("角色信息移动音效")] [SerializeField] private VAudioPlayInfo moveInfoAudio;
+        [FoldoutGroup("音效")] [LabelText("关系加深文字淡入音效")] [SerializeField] private VAudioPlayInfo upgradeTextAudio;
+        [FoldoutGroup("音效")] [LabelText("角色信息移动到第二阶段音效")] [SerializeField] private VAudioPlayInfo moveInfoPhase2Audio;
+        [FoldoutGroup("音效")] [LabelText("当前等级文字移动音效")] [SerializeField] private VAudioPlayInfo currentLevelMoveAudio;
+        [FoldoutGroup("音效")] [LabelText("箭头填充音效")] [SerializeField] private VAudioPlayInfo arrowFillAudio;
+        [FoldoutGroup("音效")] [LabelText("下一等级文字淡入音效")] [SerializeField] private VAudioPlayInfo upgradeLevelFadeAudio;
+        [FoldoutGroup("音效")] [LabelText("字间距动画音效")] [SerializeField] private VAudioPlayInfo spacingAnimAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+
+        [FoldoutGroup("动画速度")]
+        [LabelText("动画速度倍数")]
+        [SerializeField] private float speed = 1f;
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
+
         private Action _onComplete;
         private bool _isAnimating;
+        private bool _clicked;
 
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
+            _clicked = false;
             _onComplete = onComplete;
             if (!debug)
             {
@@ -58,50 +75,55 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
                 currentLevelText.text = coop.CurrentCoopLevel.levelName;
                 upgradeLevelText.text = coop.GetNextLevel().levelName;
             }
-
             _isAnimating = true;
-
             var sequence = Sequence.Create();
-
             sequence
                 // Phase 1: Move coopInfo
-                .Chain(Tween.Position(coopInfo.transform, coopInfoPhase1Position.position, phase1MoveDuration, Ease.OutBounce))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveInfoAudio))
+                .Chain(Tween.Position(coopInfo.transform, coopInfoPhase1Position.position, Interval(phase1MoveDuration), Ease.OutBounce))
 
                 // Fade in upgradeText
-                .Chain(Tween.Alpha(upgradeText, 1, phase1TextFadeDuration))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(upgradeTextAudio))
+                .Chain(Tween.Alpha(upgradeText, 1, Interval(phase1TextFadeDuration)))
 
                 // Delay
-                .ChainDelay(phase1Delay)
+                .ChainDelay(Interval(phase1Delay))
 
                 // Phase 2: Move coopInfo down
-                .Chain(Tween.Position(coopInfo.transform, coopInfoPhase2Position.position, phase2MoveDuration))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveInfoPhase2Audio))
+                .Chain(Tween.Position(coopInfo.transform, coopInfoPhase2Position.position, Interval(phase2MoveDuration)))
 
                 // Show current level text
                 .ChainCallback(() => currentLevelText.alpha = 1)
 
                 // Animate current level text position
-                .Chain(Tween.Position(currentLevelText.transform, currentLevelTextPosition.position, currentLevelMoveDuration))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(currentLevelMoveAudio))
+                .Chain(Tween.Position(currentLevelText.transform, currentLevelTextPosition.position, Interval(currentLevelMoveDuration)))
 
                 // Arrow fill
-                .Chain(Tween.UIFillAmount(arrow, 1, arrowFillDuration))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(arrowFillAudio))
+                .Chain(Tween.UIFillAmount(arrow, 1, Interval(arrowFillDuration)))
 
                 // Fade in Next level text
-                .Chain(Tween.Alpha(upgradeLevelText, 1, upgradeLevelFadeDuration))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(upgradeLevelFadeAudio))
+                .Chain(Tween.Alpha(upgradeLevelText, 1, Interval(upgradeLevelFadeDuration)))
 
                 // Run base animation
                 .ChainCallback(() => base.BeginAnimation(request, onComplete, isLastSameType))
 
                 // Character spacing animation
-                .Chain(Tween.Custom(-100, 0, spacingAnimDuration, v => upgradeLevelText.characterSpacing = v))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(spacingAnimAudio))
+                .Chain(Tween.Custom(-100, 0, Interval(spacingAnimDuration), v => upgradeLevelText.characterSpacing = v))
 
                 // Finalize
                 .ChainCallback(() => _isAnimating = false);
             
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             Tween.LocalEulerAngles(
                 light,
                 Vector3.zero,
                 new Vector3(0, 0, 360f),
-                lightSpinDuration,
+                Interval(lightSpinDuration),
                 Ease.Linear,
                 100,
                 CycleMode.Incremental
@@ -125,24 +147,27 @@ namespace VTuber.RaisingAnimationSystem.Animations.CoopUpgradeAnimation
         {
             if (!_isAnimating)
             {
+                if (_clicked)
+                    return;
+                _clicked = true;
                 var sequence = Sequence.Create();
                 var position = coopInfoInitPosition.position;
                 position.x = coopInfo.position.x;
                 
                 sequence
-                    .Chain(Tween.Position(coopInfo.transform, position, 0.4f))
+                    .Chain(Tween.Position(coopInfo.transform, position, Interval(0.4f)))
 
-                    .Chain(Tween.Alpha(upgradeText, 0, 0.25f))
+                    .Chain(Tween.Alpha(upgradeText, 0, Interval(0.25f)))
 
                     .ChainCallback(() => currentLevelText.alpha = 0)
 
-                    .Chain(Tween.Position(currentLevelText.transform, currentLevelTextPosition.position, 0.25f))
+                    .Chain(Tween.Position(currentLevelText.transform, currentLevelTextPosition.position, Interval(0.25f)))
 
-                    .Chain(Tween.UIFillAmount(arrow, 0, 0.25f))
+                    .Chain(Tween.UIFillAmount(arrow, 0, Interval(0.25f)))
 
-                    .Chain(Tween.Alpha(upgradeLevelText, 0, 0.25f))
+                    .Chain(Tween.Alpha(upgradeLevelText, 0, Interval(0.25f)))
 
-                    .Chain(Tween.Alpha(upgradeLevelText, 0, 0.25f))
+                    .Chain(Tween.Alpha(upgradeLevelText, 0, Interval(0.25f)))
                     
                     .ChainCallback(() => _onComplete?.Invoke());
             }

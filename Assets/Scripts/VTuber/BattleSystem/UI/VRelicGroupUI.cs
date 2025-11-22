@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using PrimeTween;
 using UnityEngine;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 using VTuber.Consumable;
 using VTuber.Core.Foundation;
+using VTuber.Core.UI;
 using VTuber.Relic;
 using VTuber.Relic.UI;
 
@@ -129,30 +131,32 @@ namespace VTuber.BattleSystem.UI
             {
                 if (hiddenRelics.Count == 0)
                 {
-                    displayingRelics.Remove(relic);
-                    Destroy(relic.gameObject);
+                    Tween.Alpha(relic.Icon, 0.5f, 0.5f);
+                    relic.transform.SetAsLastSibling();
+                    relic.DisplayValue(false);
                 }
                 else
                 {
-                    displayingRelics.Remove(relic);
-                    Destroy(relic.gameObject);
-
                     var hiddenRelic = hiddenRelics[0];
                     hiddenRelics.Remove(hiddenRelic);
+                    
+                    displayingRelics.Remove(relic);
+                    hiddenRelics.Add(relic);
+                    var newRelic = SpawnRelicSlot(submenuRelicSlotPrefab, submenuRelicGroup);
+                    newRelic.Initialize(relic.Relic, true);
+                    Destroy(relic.gameObject);
+                    hiddenRelics.Add(newRelic);
+                    Tween.Alpha(newRelic.Icon, 0.5f, 0.5f);
+                    relic.DisplayValue(false);
 
-                    if (hiddenRelics.Count == 0)
-                    {
-                        Destroy(_ellipsisObject);
-                        _ellipsisObject = null;
-                    }
-                    else
-                    {
-                        _ellipsisObject.gameObject.transform.SetParent(null);
-                    }
-
+                    _ellipsisObject.gameObject.transform.SetParent(null);
+                    
                     var newDisplayingRelic = SpawnRelicSlot(displayingRelicSlotPrefab, displayGroup);
                     newDisplayingRelic.Initialize(hiddenRelic.Relic, true);
                     displayingRelics.Add(newDisplayingRelic);
+                    VUIUtils.SetImageAlpha(newDisplayingRelic.Icon, hiddenRelic.Icon.color.a);
+                    newDisplayingRelic.DisplayValue(hiddenRelic.IsDisplayValue);
+                    Destroy(hiddenRelic.gameObject);
 
                     if (_ellipsisObject != null)
                         _ellipsisObject.gameObject.transform.SetParent(displayGroup);
@@ -162,14 +166,10 @@ namespace VTuber.BattleSystem.UI
             {
                 var hiddenRelic = hiddenRelics.Find(ui => ui.BattleID == id);
                 if (hiddenRelic is null) return;
-                hiddenRelics.Remove(hiddenRelic);
-                Destroy(hiddenRelic.gameObject);
-
-                if (hiddenRelics.Count == 0)
-                {
-                    Destroy(_ellipsisObject);
-                    _ellipsisObject = null;
-                }
+                
+                Tween.Alpha(hiddenRelic.Icon, 0.5f, 0.5f);
+                hiddenRelic.transform.SetAsLastSibling();
+                hiddenRelic.DisplayValue(false);
             }
         }
     }

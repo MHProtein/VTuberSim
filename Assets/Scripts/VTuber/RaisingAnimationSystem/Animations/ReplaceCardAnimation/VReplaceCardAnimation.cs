@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.BattleSystem.Core;
 using VTuber.BattleSystem.UI;
+using VTuber.Core.SE;
 using VTuber.Core.UI;
 using VTuber.ScheduleSystem.UI.RaisingAnimationSystem;
 
@@ -44,10 +45,20 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
         [LabelText("回收时间（缩放）")]
         [SerializeField] private float collectScaleDuration = 0.5f;
 
+        [FoldoutGroup("音效")] [LabelText("卡牌出现音效")] [SerializeField] private VAudioPlayInfo appearAudio;
+        [FoldoutGroup("音效")] [LabelText("卡牌翻转音效")] [SerializeField] private VAudioPlayInfo flipAudio;
+        [FoldoutGroup("音效")] [LabelText("光环旋转音效")] [SerializeField] private VAudioPlayInfo haloSpinAudio;
+        [FoldoutGroup("音效")] [LabelText("卡牌回收音效")] [SerializeField] private VAudioPlayInfo collectAudio;
+
         private VCard _cardToReplace;
         private VCard _cardToBeReplaced;
         private Action _onComplete;
 
+
+        [FoldoutGroup("动画速度")]
+        [LabelText("动画速度倍数")]
+        [SerializeField] private float speed = 1f;
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
 
         protected override void Awake()
         {
@@ -58,47 +69,44 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
         public override void BeginAnimation(VAnimationRequest request, Action onComplete, bool isLastSameType)
         {
             _onComplete = onComplete;
-
             if (!debug)
             {
                 _cardToReplace = request.cards[0];
                 _cardToBeReplaced = request.cards[1];
-
                 cardUI.SetCard(_cardToBeReplaced);
                 haloImage.sprite = VUIUtils.Instance.GetHaloSprite((int)_cardToReplace.Rarity);
             }
-
             cardUI.SetAlpha(0);
             VUIUtils.SetImageAlpha(haloImage, 0);
-
             Sequence sequence = Sequence.Create();
             Sequence replaceSequence = Sequence.Create();
-
-            replaceSequence.ChainDelay(flipDuration / 2);
-            replaceSequence.ChainCallback(() =>
-            {
+            confirmButton.interactable = false;
+            replaceSequence.ChainDelay(Interval(flipDuration) / 2);
+            replaceSequence.ChainCallback(() => {
+                VAudioPlayer.Instance.PlaySFX(flipAudio);
                 if (debug)
                     cardUI.SetBackgroundColor(Color.cyan);
                 else
                     cardUI.SetCard(_cardToReplace);
             });
-            replaceSequence.Group(Tween.Alpha(haloImage, 1, flipDuration / 2));
-
-            sequence.Chain(cardUI.TweenAlpha(1, 0.5f));
+            replaceSequence.Group(Tween.Alpha(haloImage, 1, Interval(flipDuration) / 2));
+            sequence.ChainCallback(() => VAudioPlayer.Instance.PlaySFX(appearAudio));
+            sequence.Chain(cardUI.TweenAlpha(1, Interval(0.5f)));
             sequence.Group(replaceSequence);
             sequence.Group(Tween.LocalEulerAngles(
                 cardUI.transform,
                 Vector3.zero,
                 new Vector3(0, flipAngle, 0),
-                flipDuration,
+                Interval(flipDuration),
                 flipEase
             ));
-
+            sequence.ChainCallback(() => confirmButton.interactable = true);
+            VAudioPlayer.Instance.PlaySFX(haloSpinAudio);
             Tween.LocalEulerAngles(
                 halo,
                 Vector3.zero,
                 new Vector3(0, 0, 360f),
-                haloSpinDuration,
+                Interval(haloSpinDuration),
                 Ease.Linear,
                 -1,
                 CycleMode.Incremental
@@ -108,20 +116,21 @@ namespace VTuber.RaisingAnimationSystem.Animations.ReplaceCardAnimation
         private void Confirm()
         {
             cardUI.transform.SetParent(cardLibrary);
-
+            confirmButton.interactable = false;
             var sequence = Sequence.Create();
+            var scale = cardUI.transform.localScale;
             sequence
-                .Chain(Tween.LocalPosition(cardUI.transform, Vector3.zero, collectMoveDuration, Ease.InSine))
-                .Group(Tween.Scale(cardUI.transform, Vector3.zero, collectScaleDuration, Ease.InBack))
+                .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(collectAudio))
+                .Chain(Tween.LocalPosition(cardUI.transform, Vector3.zero, Interval(collectMoveDuration), Ease.InSine))
+                .Group(Tween.Scale(cardUI.transform, Vector3.zero, Interval(collectScaleDuration), Ease.InBack))
                 .ChainCallback(() =>
                 {
                     _onComplete?.Invoke();
-
                     if (!debug)
                         VGameManager.Instance.Character.CardLibrary.ReplaceCard(_cardToReplace, _cardToBeReplaced);
-
                     cardUI.transform.SetParent(ui.transform);
-                    cardUI.transform.localScale = Vector3.zero;
+                    cardUI.transform.localPosition = Vector3.zero;
+                    cardUI.transform.localScale = scale;
                 });
         }
 

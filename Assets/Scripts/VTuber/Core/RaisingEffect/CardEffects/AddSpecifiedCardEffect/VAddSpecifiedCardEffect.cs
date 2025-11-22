@@ -21,10 +21,14 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
-            _card = VDataManager.Instance.CreateCardByID(CardId);
-            animationRequest.animationType = VAnimationType.AddCard;
-            animationRequest.cards = new (){ _card };
-            animationRequest.instigatorType = VInstigatorType.Ignore;
+            if (animationRequest is not null)
+            {
+                _card = VDataManager.Instance.CreateCardByID(CardId);
+                animationRequest.animationType = VAnimationType.AddCard;
+                animationRequest.cards = new() { _card };
+                animationRequest.instigatorType = VInstigatorType.Ignore;
+            }
+
             base.ApplyEffect(character, messagedict, animationRequest);
         }
 

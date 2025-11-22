@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 using VTuber.BattleSystem.Card;
 using VTuber.Core.Managers;
 using VTuber.Core.RaisingEffect;
@@ -15,12 +17,14 @@ namespace VTuber.Reincarnation
         public List<VEffectItem> effects;
         public List<uint> relics;
         public string scoreLevel;
+        public string icon;
     }
 
     public class VAccount
     {
         private readonly List<VEffectItem> _effectItems;
         public string accountName;
+        public Sprite icon;
 
         public VAccount(string scoreLevel, List<VCard> cards, List<VRelic> relics, List<VEffectItem> effects)
         {
@@ -49,6 +53,7 @@ namespace VTuber.Reincarnation
             if (_effectItems is null)
                 return;
             foreach (var effect in _effectItems) Effects.Add(effect.CreateRaisingEffect());
+            icon = VResourcesManager.Instance.TryGetSprite(data.icon);
         }
 
         public VAccount(string scoreLevel, List<VCard> cards, List<VRelic> relics, List<VRaisingEffect> effects,
@@ -81,7 +86,8 @@ namespace VTuber.Reincarnation
                 relics = Relics.Select(relic => relic.ConfigId).ToList(),
                 effects = _effectItems,
                 effectLevels = EffectLevels,
-                scoreLevel = ScoreLevel
+                scoreLevel = ScoreLevel,
+                icon = icon.name
             };
         }
     }

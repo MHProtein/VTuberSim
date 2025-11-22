@@ -18,6 +18,8 @@ namespace VTuber.RaisingAnimationSystem
         public Sprite attributeIcon;
         public string description;
         public int value;
+        public bool isMaxValue;
+        public bool isPercentage;
         public VAnimationType animationType;
         public Action effectApply;
         public VCooperator coop;
@@ -31,6 +33,8 @@ namespace VTuber.RaisingAnimationSystem
         public Action<VCard> cardSelectPreviewAction;
         public Action cardSelectReturnAction;
         public VCard previewCard;
+        public int currentPressureLevel;
+        public int nextPressureLevel;
     }
 
     public class VAnimationRequestFactory

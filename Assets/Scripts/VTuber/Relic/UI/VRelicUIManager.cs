@@ -12,6 +12,7 @@ namespace VTuber.Relic.UI
         [SerializeField] private Transform content;
         [SerializeField] private GameObject slotPrefab;
         [SerializeField] private bool areStreamingRelics;
+        [SerializeField] private VRelicMenu relicMenu;
         private List<VRelicSlotUI> _slotUIs;
 
         protected override void Awake()
@@ -19,6 +20,10 @@ namespace VTuber.Relic.UI
             base.Awake();
 
             _slotUIs = content.GetComponentsInChildren<VRelicSlotUI>().ToList();
+            foreach (var slotUI in _slotUIs)
+            {
+                slotUI.SetShouldShowDescription(false);
+            }
         }
 
         protected override void OnEnable()
@@ -28,6 +33,16 @@ namespace VTuber.Relic.UI
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicRemoved, OnRelicRemoved);
             VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnRelicValueChanged,
                 OnRelicValueChanged);
+            VRaisingRootEventCenter.Instance.RegisterListener(VRaisingEventKey.OnReset, OnReset);
+        }
+
+        private void OnReset(Dictionary<string, object> messagedict)
+        {
+            foreach (var slotUI in _slotUIs)
+            {
+                slotUI.Clear();
+                slotUI.transform.SetAsLastSibling();
+            }
         }
 
         protected override void OnDisable()
@@ -36,6 +51,7 @@ namespace VTuber.Relic.UI
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicAdded, OnRelicAdded);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicRemoved, OnRelicRemoved);
             VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnRelicValueChanged, OnRelicValueChanged);
+            VRaisingRootEventCenter.Instance.RemoveListener(VRaisingEventKey.OnReset, OnReset);
         }
 
         public void Show(bool show)
@@ -67,14 +83,16 @@ namespace VTuber.Relic.UI
 
             if (TryGetEmptySlot(out var slot))
             {
-                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics);
+                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics, relicMenu);
             }
             else
             {
                 var go = Instantiate(slotPrefab, content);
                 slot = go.GetComponent<VRelicSlotUI>();
-                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics);
+                slot.Initialize((VRelic)messagedict["Relic"], areStreamingRelics, relicMenu);
                 slot.SetIsAdditional(true);
+                slot.SetShouldShowDescription(false);
+                
                 _slotUIs.Add(slot);
             }
         }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using SlayTheSpire.System.SavingSystem;
+using Tutorial.Script;
 using VTuber.Core.EventCenter;
 using VTuber.Core.Foundation;
 using VTuber.Core.SE;
+using VTuber.Dialogue.UI;
 using VTuber.ScheduleSystem.UI;
 
 namespace VTuber.Core.StateMachine
@@ -19,15 +21,23 @@ namespace VTuber.Core.StateMachine
             base.Enter(state, enterParams);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(true);
 
-            if(stateMachine.isTutorial)
+            if (stateMachine.isTutorial)
+            {
                 VRaisingUI.Instance.SetTips(stateMachine.TutorialScript.CurrentWeekTip);
+                VRaisingUI.Instance.ShowTips();
+                VTutorialConditionsUIManager.Instance.SetConditions(stateMachine.TutorialScript.CurrentWeekConditions,
+                    stateMachine.Character);
+            }
+            
+            VEventSystemUI.Instance.CloseEventUI();
+            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(false);
+            stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
+                stateMachine.Script.WeekIndex);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToCreation().OnComplete(() =>
             {
-                stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
-                    stateMachine.Script.WeekIndex);
                 VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnSwitchToScheduleCreation,
                     new Dictionary<string, object>());
-                VDataPersistenceManager.Instance.SaveGame();
+                VDataPersistenceManager.Instance.SaveGame(VSavePointType.ScheduleCreation);
                 VDataPersistenceManager.Instance.SaveGameTutorialWeek();
                 VAudioPlayer.Instance.PlayBGM(VBGMType.ScheduleCreation);
             });
@@ -37,6 +47,7 @@ namespace VTuber.Core.StateMachine
         {
             base.Exit(nextState);
             VSingletonMonobehaviour<VRaisingUI>.Instance.SetCreationUIActive(false);
+            VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(true);
             VAudioPlayer.Instance.StopBGM();
         }
     }

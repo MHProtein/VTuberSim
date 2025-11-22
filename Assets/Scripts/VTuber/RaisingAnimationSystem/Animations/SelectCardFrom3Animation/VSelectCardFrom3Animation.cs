@@ -96,7 +96,7 @@ namespace VTuber.ScheduleSystem.UI
                 }
             }
             
-            sequence.Chain(Tween.Position(_selectedCardUI.transform, positions[2].position, 0.25f, Ease.InOutCubic))
+            sequence.Chain(Tween.Position(_selectedCardUI.transform, positions[1].position, 0.25f, Ease.InOutCubic))
                 .Chain(Tween.Scale(_selectedCardUI.GetComponent<VCardUI>().transform, Vector3.one * 1.3f, 0.25f,
                     Ease.InOutCubic))
                 .Chain(Tween.Scale(_selectedCardUI.GetComponent<VCardUI>().transform, Vector3.zero, 0.1f,

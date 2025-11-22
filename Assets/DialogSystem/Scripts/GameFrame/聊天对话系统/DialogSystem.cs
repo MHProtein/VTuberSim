@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     private UnityAction<Dialog> onDialogFinished;
     public event UnityAction<Dialog> OnDialogFinished;
     public event UnityAction<int> OnLineFinished;
+    public event Action OnSaveGame;
 
     public Text optionDescription;
     public GameObject descriptionObj;
@@ -114,14 +116,18 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         _character = character;
         AdjustScrollView();
         //StartCoroutine(StartDialog());
-        VAudioPlayer.Instance.PlayBGM(VBGMType.Dialog);
     }
 
     public void HideMe()
     {
         //StopCoroutine(StartDialog());
         this.gameObject.SetActive(false);
-        VAudioPlayer.Instance.StopBGM();
+    }
+    
+    public void Clear()
+    {
+        ClearBtns();
+        ClearDialogs();
     }
 
     public void LoadDialog(string dialogName)
@@ -139,6 +145,8 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         EnableFunctionBtn(true);
         PauseBtn.interactable = false;
         this.dialogName.text = dialog.dialogName;
+
+        paused = false;
     }
     
     private void ClearDialogs()
@@ -256,8 +264,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             {
                 dialogObj = Instantiate(dialogPrefab_R, canvas, false);
             }
-
-            
         }
         else
         {
@@ -282,9 +288,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
         ClearBtns();
         canContinue = true;
         
-        if(!isLoadedSkip) 
-            OnLineFinished?.Invoke(dc.id);
-        
         if (dc.nextId == -1)
         {
             shouldEnd = true;
@@ -303,7 +306,14 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
                 auto = tempAuto;
                 skip = tempSkip;
                 SetPaused(false);
+                if(!isLoadedSkip) 
+                    OnLineFinished?.Invoke(dc.id);
             });
+        }
+        else
+        {
+            if(!isLoadedSkip) 
+                OnLineFinished?.Invoke(dc.id);
         }
     }
 
@@ -337,16 +347,21 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
     public void AdjustScrollView()
     {
         // 如果需要滚动且内容超出视图
+
         if ( scrollContent.rect.height > scrollRect.viewport.rect.height)
         {
             StartCoroutine(ScrollToBottomAfterDelay());
         }
+        
     }
     IEnumerator ScrollToBottomAfterDelay()
     {
         yield return new WaitForSeconds(scrollDelay);
-        Canvas.ForceUpdateCanvases();
-        scrollRect.verticalNormalizedPosition = 0f;
+        if (gameObject.activeSelf)
+        {
+            Canvas.ForceUpdateCanvases();
+            scrollRect.verticalNormalizedPosition = 0f;
+        }
     }
 
     IEnumerator AutoDialog()
@@ -406,11 +421,6 @@ public class DialogSystem : SingletonMono<DialogSystem>, IPointerClickHandler
             PauseAuto();
             PauseSkip();
         }
-    }
-
-    public void SetCanContinue(bool p0)
-    {
-        canContinue = p0;
     }
 
     public void OnPointerClick(PointerEventData eventData)

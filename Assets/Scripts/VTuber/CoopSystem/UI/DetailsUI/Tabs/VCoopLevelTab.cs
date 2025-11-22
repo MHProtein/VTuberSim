@@ -12,6 +12,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
     public class VCoopLevelTab : VCoopTab
     {
         [SerializeField] private int level;
+        [SerializeField] private TMP_Text levelText;
         [SerializeField] private Transform effectContainer;
         [SerializeField] private Transform itemPosition;
         [SerializeField] private TMP_Text itemText;
@@ -28,6 +29,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
             var node = VDataManager.Instance
                 .DialogueEventConfigs[cooperator.configuration.CoopLevels[level].upgradeEventID]
                 .dialogueNode;
+            levelText.text = cooperator.GetLevelName(level);
             var dialog = VResourcesManager.Instance.TryGetDialog(node);
 
             var effects = dialog.GetEffects();
@@ -42,7 +44,7 @@ namespace VTuber.CoopSystem.UI.DetailsUI
                     var effectText = Instantiate(effectPrefab, effectContainer).GetComponent<TMP_Text>();
                     if (effect is VRaisingAddAttributeMaxValueEffect raisingAddAttributeMaxValueEffect) text += "最大";
 
-                    text += VUIUtils.Instance.GetAttributeName(attributeEffect.AttributeName);
+                    text += VUIUtils.GetAttributeName(attributeEffect.AttributeName);
 
                     var parameter = effect.GetParameter();
                     if (parameter.Contains('-'))

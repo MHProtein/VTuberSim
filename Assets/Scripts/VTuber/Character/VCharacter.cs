@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SlayTheSpire.System.SavingSystem;
+using UnityEngine;
 using VTuber.BattleSystem.Card;
 using VTuber.Character.Attribute;
 using VTuber.Character.Attributes;
@@ -57,6 +58,10 @@ namespace VTuber.Character
         public VCooperatorManager CooperatorManager { get; private set; }
 
         public VConsumableManager ConsumableManager { get; private set; }
+        
+        public bool IsCharacterEventStream => _characterConfig.isCharacterEventStream;
+        public uint CharacterEventID => _characterConfig.characterEvent;
+        public Sprite Icon => _characterConfig.characterIcon;
 
         public void Initialize(bool isLoaded)
         {
@@ -344,6 +349,15 @@ namespace VTuber.Character
                 succeededStreams = succeededStreams
             };
             data.characterSaveData = characterSaveData;
+        }
+
+        public void Clear()
+        {
+            CardLibrary.Clear();
+            CharacterRelicManager.Clear();
+            ConsumableManager.Clear();
+            CooperatorManager.Clear();
+            CharacterRelicManager.Clear();
         }
     }
 }
