@@ -1450,7 +1450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &33083661
 RectTransform:
   m_ObjectHideFlags: 0
@@ -46082,10 +46082,10 @@ MonoBehaviour:
   middlePosition: {fileID: 863244286}
   finalPosition: {fileID: 1122453058}
   bgFillDuration: 0.25
-  noIconDelay: 0
+  noIconDelay: 1
   bgFadeOutDuration: 0.25
   moveToMiddleDuration: 0.25
-  moveToFinalDuration: 0
+  moveToFinalDuration: 0.5
   moveBackDuration: 0.25
   iconScaleDuration: 0.25
   holdDuration: 0.5
@@ -90532,7 +90532,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1469338846
 RectTransform:
   m_ObjectHideFlags: 0
@@ -108843,7 +108843,7 @@ MonoBehaviour:
   holdDuration: 1
   fadeOutDuration: 0.1
   lightSpinDuration: 8
-  speed: 10
+  speed: 1
   initScale: 1.5
   appearAudio:
     soundName: attribute
@@ -119797,7 +119797,7 @@ MonoBehaviour:
   moveEase: 3
   cardHoldDelay: 1
   finalRemoveDuration: 0.25
-  speed: 10
+  speed: 1
   appearAudio:
     soundName: 
     channel: 1
