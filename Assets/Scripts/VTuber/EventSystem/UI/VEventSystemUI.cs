@@ -95,10 +95,11 @@ namespace VTuber.Dialogue.UI
             _closePhaseEndingSelectionMenuAction = confirmAction;
         }
 
-        public void ClosePhaseEndingSelectionMenu()
+        public void ClosePhaseEndingSelectionMenu(bool invoke)
         {
             phaseEndingSelectionMenu.gameObject.SetActive(false);
-            _closePhaseEndingSelectionMenuAction?.Invoke();
+            if(invoke)
+                _closePhaseEndingSelectionMenuAction?.Invoke();
         }
 
         public void OpenEventUI()
@@ -130,5 +131,9 @@ namespace VTuber.Dialogue.UI
         }
 
 
+        public void CloseEventUI()
+        {
+            eventUIWrapper.gameObject.SetActive(false);
+        }
     }
 }

@@ -185,7 +185,7 @@ namespace VTuber.ScheduleSystem.Events
         {
             if (_isSchedulingConditionMet && SchedulingCondition.ShouldExecuteBeforeEvent)
                 foreach (var effect in SchedulingCondition.Effects)
-                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, Description));
+                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, effect.Description));
         }
         
         public void ExecuteAppendedEffects(VCharacter character)
@@ -198,7 +198,7 @@ namespace VTuber.ScheduleSystem.Events
 
             if (_isSchedulingConditionMet && !SchedulingCondition.ShouldExecuteBeforeEvent)
                 foreach (var effect in SchedulingCondition.Effects)
-                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, Description));
+                    effect?.ApplyEffect(character, null, VAnimationRequestFactory.Create(VInstigatorType.Event, Icon, effect.Description));
         }
 
         public void SetExecuted()

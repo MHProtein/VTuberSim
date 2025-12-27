@@ -21,7 +21,9 @@ namespace VTuber.Core.RaisingEffect
 
         public override void ApplyEffect(VCharacter character, Dictionary<string, object> messagedict, VAnimationRequest animationRequest)
         {
+            _character = character;
             _consumable = GetRandomConsumables(1, character.LiveType).FirstOrDefault();
+            animationRequest.instigatorType = VInstigatorType.Ignore;
             animationRequest.animationType = VAnimationType.AddConsumable;
             animationRequest.consumableIDs = new List<uint>(){ _consumable.ConfigId };
             animationRequest.returnable = true;

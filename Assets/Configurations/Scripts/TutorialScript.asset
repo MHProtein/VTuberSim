@@ -116,6 +116,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  isDebug: 0
   index: 0
   scriptName: "\u51FA\u9053"
   description: "\u5728\u505A\u4E86\u5341\u8DB3\u7684\u51C6\u5907\u540E\uFF0C\u4F60\u51C6\u5907\u8E0F\u4E0A\u4E86\u865A\u62DF\u4E3B\u64AD\u4E4B\u8DEF\uFF0C"
@@ -175,7 +176,41 @@ MonoBehaviour:
     startEventID: 73
     endEventWeekIndex: 3
     endEventIDs: 16000000
-    specialEventData: []
+    specialEventData:
+    - weekIndexForInspector: 3
+      dayIndexForInspector: 4
+      timeOfDay: 2
+      eventType: 7
+      eventID: 0
+      tutorialStreamConfig: {fileID: 11400000, guid: 24fee718a9eee4f4fbb8f777b4ec0e7d, type: 2}
+      phase:
+        phaseName: 
+        description: 
+        startEventWeekIndex: 0
+        startEventType: 0
+        startEventID: 0
+        endEventWeekIndex: 0
+        endEventIDs: 
+        specialEventData: []
+        decayCurve1:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        decayCurve2:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        decayCurve3:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      isPhaseStart: 0
     decayCurve1:
       serializedVersion: 2
       m_Curve:
@@ -382,31 +417,34 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+  staminaNotEnoughEventID: 8
   weeks:
   - weekID: 0
+    useCoopEvents: 0
     eventIDs: 000000000100000002000000030000004e0000004f000000
     streamEventIDs: 
     conditions:
     - conditionType: 0
       eventType: 0
-      idOrName: BASingingMultiplier
+      idOrName: CASingingAbility
       operatorType: 4
-      targetValue: 200
+      targetValue: 150
     - conditionType: 0
       eventType: 0
-      idOrName: BAGamingMultiplier
+      idOrName: CAGamingAbility
       operatorType: 4
-      targetValue: 200
+      targetValue: 150
     - conditionType: 0
       eventType: 0
-      idOrName: BAChattingMultiplier
+      idOrName: CAChattingAbility
       operatorType: 4
-      targetValue: 200
+      targetValue: 150
     tip:
       title: "\u5B89\u6392\u5468\u8868"
-      description: "\u901A\u8FC7\u5728\u5468\u8868\u4E2D\u5B89\u6392\u7EC3\u4E60\u4E8B\u4EF6\u63D0\u5347\u5C5E\u6027\uFF0C\u5B89\u6392\u4F11\u606F\u4E8B\u4EF6\u6062\u590D\u4F53\u529B\uFF0C\u6709\u4E9B\u4E8B\u4EF6\u5728\u6EE1\u8DB3\u7279\u5B9A\u6761\u4EF6\u4E0B\u4F1A\u83B7\u5F97\u989D\u5916\u5956\u52B1"
-      image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
+      description: "\u901A\u8FC7\u5728\u5468\u8868\u4E2D\u5B89\u6392\u7EC3\u4E60\u4E8B\u4EF6\u63D0\u5347\u5C5E\u6027\uFF0C\u5B89\u6392\u4F11\u606F\u4E8B\u4EF6\u6062\u590D\u4F53\u529B\uFF0C\u6709\u4E9B\u4E8B\u4EF6\u5728\u6EE1\u8DB3\u7279\u5B9A\u6761\u4EF6\u4E0B\u4F1A\u83B7\u5F97\u989D\u5916\u5956\u52B1.\u5C06\u4E09\u79CD\u5C5E\u6027\u90FD\u63D0\u5347\u5230150\u4EE5\u4E0A\u5427"
+      image: {fileID: 21300000, guid: 031e6a3915920744aa0b526f7a474903, type: 3}
   - weekID: 1
+    useCoopEvents: 1
     eventIDs: 000000000100000002000000030000004e0000004f0000000c000000
     streamEventIDs: 
     conditions:
@@ -414,34 +452,41 @@ MonoBehaviour:
       eventType: 0
       idOrName: 
       operatorType: 4
-      targetValue: 16
-    tip:
-      title: "\u6784\u7B51\u5361\u7EC4"
-      description: "\u901A\u8FC7\u201C\u76F4\u64AD\u51C6\u5907\u201D\u4E8B\u4EF6,\u5C06\u5361\u7EC4\u4E2D\u5361\u724C\u7684\u6570\u91CF\u63D0\u5347\u81F316\u5F20\u4EE5\u4E0A\u5427"
-      image: {fileID: 21300000, guid: 50077cc4439872f4195fae66e1fab8b0, type: 3}
-  - weekID: 3
-    eventIDs: 000000000100000002000000030000004e0000004f000000
-    streamEventIDs: 000000000100000002000000
-    conditions:
+      targetValue: 10
     - conditionType: 4
-      eventType: 0
+      eventType: 2
       idOrName: 
       operatorType: 3
-      targetValue: 3
+      targetValue: 4
     tip:
-      title: "\u5B89\u6392\u76F4\u64AD"
-      description: "\u7A33\u5B9A\u7684\u76F4\u64AD\u5BF9\u865A\u62DF\u4E3B\u64AD\u800C\u8A00\u5F88\u91CD\u8981\uFF0C\u8BD5\u7740\u5728\u4E00\u5468\u4E2D\u5B89\u63923\u573A\u76F4\u64AD\u5427\uFF0C\u6CE8\u610F\u7559\u8DB3\u591F\u7684\u4F53\u529B\u3002"
-      image: {fileID: 0}
-  - weekID: 3
-    eventIDs: 000000000100000002000000
+      title: "\u6784\u7B51\u5361\u7EC4"
+      description: "\u901A\u8FC7\u201C\u76F4\u64AD\u51C6\u5907\u201D\u4E8B\u4EF6,\u5C06\u5361\u7EC4\u4E2D\u5361\u724C\u7684\u6570\u91CF\u63D0\u5347\u81F310\u5F20\u4EE5\u4E0A,\u5E76\u4E14\u5B89\u63924\u6B21\u201C\u627E\u5C0F\u5BA4\u73A9\u201D\n\u534F\u52A9\u8005\u4F1A\u5728\u968F\u673A\u65F6\u95F4\u6BB5\u51FA\u73B0\uFF0C\u5B89\u6392\u5BF9\u5E94\u7C7B\u578B\u7684\u4E8B\u4EF6\u5373\u53EF\u83B7\u5F97\u989D\u5916\u5956\u52B1\u5E76\u52A0\u6DF1\u534F\u52A9\u8005\u7684\u5173\u7CFB"
+      image: {fileID: 21300000, guid: 09911234645cdee4191b57cc4660bc79, type: 3}
+  - weekID: 2
+    useCoopEvents: 1
+    eventIDs: 000000000100000002000000030000000c0000004e0000004f000000
     streamEventIDs: 
     conditions:
     - conditionType: 3
       eventType: 0
       idOrName: 0
-      operatorType: 4
+      operatorType: 3
       targetValue: 1
     tip:
-      title: "\u63D0\u5347\u5173\u7CFB"
-      description: "\u534F\u52A9\u8005\u4F1A\u5728\u968F\u673A\u65F6\u95F4\u6BB5\u51FA\u73B0\uFF0C\u5B89\u6392\u5BF9\u5E94\u7C7B\u578B\u7684\u4E8B\u4EF6\u5373\u53EF\u83B7\u5F97\u989D\u5916\u5956\u52B1\u5E76\u52A0\u6DF1\u534F\u52A9\u8005\u7684\u5173\u7CFB"
+      title: "\u52A0\u6DF1\u5173\u7CFB"
+      description: "\u4E0E\u534F\u52A9\u8005\u79EF\u7D2F\u8DB3\u591F\u597D\u611F\u5EA6\u5373\u53EF\u5F00\u542F\u5173\u7CFB\u52A0\u6DF1\u4E8B\u4EF6\uFF0C\u80FD\u83B7\u5F97\u7279\u522B\u7684\u5956\u52B1\uFF0C\u5C06\u5C0F\u5BA4\u7684\u5173\u7CFB\u63D0\u5347\u4E00\u7EA7\u5427"
+      image: {fileID: 0}
+  - weekID: 3
+    useCoopEvents: 0
+    eventIDs: 000000000100000002000000030000004e0000004f0000000c000000
+    streamEventIDs: 000000000100000002000000
+    conditions:
+    - conditionType: 4
+      eventType: 0
+      idOrName: 0
+      operatorType: 4
+      targetValue: 2
+    tip:
+      title: "\u5B89\u6392\u76F4\u64AD"
+      description: "\u5B89\u63922\u573A\u76F4\u64AD\u5427"
       image: {fileID: 0}

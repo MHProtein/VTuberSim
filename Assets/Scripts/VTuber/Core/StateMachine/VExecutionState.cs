@@ -149,7 +149,7 @@ namespace VTuber.Core.StateMachine
             var account = VAccountCreator.CreateAccount(stateMachine.ReincarnationConfiguration,
                 result.scoreLevelName, stateMachine.Character);
 
-            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, result.scoreLevelName, result.score,
+            VRaisingUI.Instance.InitializeEndingUI(stateMachine.Character.Name, stateMachine.Character.Icon, result.scoreLevelName, result.score,
                 account);
             VRaisingUI.Instance.ShowEndingUI();
             stateMachine.Character.EndRun();
@@ -188,7 +188,7 @@ namespace VTuber.Core.StateMachine
             else
                 Tween.Delay(0.1f, () =>
                 {
-                    var staminaNotEnoughEvent = VDataManager.Instance.CreateDialogueEventByID(8);
+                    var staminaNotEnoughEvent = VDataManager.Instance.CreateDialogueEventByID(stateMachine.Script.StaminaNotEnoughEventID);
                     staminaNotEnoughEvent.SetDaySchedule(e.DaySchedule, -1 * Vector2Int.one);
                     staminaNotEnoughEvent.Execute(stateMachine.Character);
 
@@ -253,7 +253,7 @@ namespace VTuber.Core.StateMachine
 
             if (state is null)
             {
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() =>
                 {
                     ExecuteEvent(_currentEvent);
                 });
@@ -261,17 +261,22 @@ namespace VTuber.Core.StateMachine
             }
 
             if (state.StateType == VStateType.ScheduleCreation)
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution().OnComplete(() =>
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() =>
                 {
                     stateMachine.ScheduleUI.ResetIndicatorPosition().OnComplete(() =>
                     {
                         var e = stateMachine.WeeklySchedule.BeginExecution();
                         ExecuteEvent(e);
+                        stateMachine.ScheduleUI.SetIndicatorActive();
                     });
                 });
             else if (state.StateType == VStateType.Pause)
-                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution()
-                    .OnComplete(() => NextEvent());
+                VSingletonMonobehaviour<VRaisingUI>.Instance.SetScheduleUIPositionToExecution(() =>
+                {
+                    
+                    stateMachine.ScheduleUI.SetIndicatorActive();
+                    NextEvent();
+                });
         }
 
         public override void Exit(VState nextState)

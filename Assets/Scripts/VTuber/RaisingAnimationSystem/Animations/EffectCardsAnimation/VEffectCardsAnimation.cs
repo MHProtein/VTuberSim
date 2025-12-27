@@ -50,6 +50,11 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
         [SerializeField, LabelText("最后全部卡片移除时间")]
         private float finalRemoveDuration = 0.25f;
 
+        [Header("Animation Speed")]
+        [LabelText("动画速度倍数")]
+        [SerializeField] private float speed = 1f;
+        private float Interval(float baseDuration) => baseDuration / Mathf.Max(0.0001f, speed);
+
         [FoldoutGroup("音效")] [LabelText("卡片出现音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo appearAudio;
         [FoldoutGroup("音效")] [LabelText("卡片移除音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo removeAudio;
         [FoldoutGroup("音效")] [LabelText("卡片移动音效")] [SerializeField] private VTuber.Core.SE.VAudioPlayInfo moveAudio;
@@ -90,15 +95,15 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
                 var sequence = Sequence.Create();
                 sequence
                     .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(removeAudio))
-                    .Chain(Tween.LocalPosition(topCard.transform, endPosition.localPosition, removeDuration))
-                    .ChainDelay(removeDelay);
+                    .Chain(Tween.LocalPosition(topCard.transform, endPosition.localPosition, Interval(removeDuration)))
+                    .ChainDelay(Interval(removeDelay));
                 _currentCards--;
                 foreach (var card in _cards)
                 {
                     card.index--;
                     sequence
                         .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveAudio))
-                        .Chain(Tween.LocalPosition(card.transform, _cardPositions[card.index], moveDuration));
+                        .Chain(Tween.LocalPosition(card.transform, _cardPositions[card.index], Interval(moveDuration)));
                 }
                 sequence.ChainCallback(() =>
                 {
@@ -126,15 +131,15 @@ namespace VTuber.RaisingAnimationSystem.Animations.EffectCardsAnimation
             var sequence = Sequence.Create();
             sequence
                 .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(moveAudio))
-                .Chain(Tween.LocalPosition(card.transform, _cardPositions[_currentCards - 1], moveDuration, moveEase))
-                .ChainDelay(cardHoldDelay);
+                .Chain(Tween.LocalPosition(card.transform, _cardPositions[_currentCards - 1], Interval(moveDuration), moveEase))
+                .ChainDelay(Interval(cardHoldDelay));
             if (isLastSameType)
             {
                 foreach (var c in _cards)
                 {
                     sequence
                         .ChainCallback(() => VAudioPlayer.Instance.PlaySFX(finalRemoveAudio))
-                        .Chain(Tween.LocalPosition(c.transform, endPosition.localPosition, finalRemoveDuration));
+                        .Chain(Tween.LocalPosition(c.transform, endPosition.localPosition, Interval(finalRemoveDuration)));
                 }
             }
             sequence.ChainCallback(() =>

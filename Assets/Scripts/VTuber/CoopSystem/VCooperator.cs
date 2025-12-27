@@ -220,6 +220,12 @@ namespace VTuber.CoopSystem
         {
             CoopValue += value;
             VDebug.Log("CoopValue: " + CoopValue);
+            VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnCooperatorValueUpdated,
+                new Dictionary<string, object>
+                {
+                    { "Cooperator", this },
+                    { "Level", CurrentLevel }
+                });
             if (CoopValue - CurrentCoopLevel.to >= 0)
             {
                 if (CurrentCoopLevel.eventType == VEventType.Stream)

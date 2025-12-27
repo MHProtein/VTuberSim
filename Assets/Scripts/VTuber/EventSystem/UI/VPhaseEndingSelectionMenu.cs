@@ -19,10 +19,12 @@ namespace VTuber.EventSystem.UI
 
         public void Initialize(GameObject endingPrefab, List<VStreamEvent> endings)
         {
+            Clear();
             confirmButton.interactable = false;
             _options = new List<VPhaseEndingOption>();
             foreach (var ending in endings)
-            {
+            {   
+                
                 var endingGo = Instantiate(endingPrefab, grid);
                 var option = endingGo.GetComponent<VPhaseEndingOption>();
                 option.Initialize(ending, this);
@@ -48,10 +50,18 @@ namespace VTuber.EventSystem.UI
                 {
                     { "KPIs", _selectedOption.E.Kpis }
                 });
-            foreach (var option in _options) Destroy(option.gameObject);
-            _options.Clear();
+            Clear();
+            VEventSystemUI.Instance.ClosePhaseEndingSelectionMenu(true);
+        }
+        
+        private void Clear()
+        {
+            if (_options is not null)
+            {
+                foreach (var option in _options) Destroy(option.gameObject);
+                _options.Clear();
+            }
             _selectedOption = null;
-            VEventSystemUI.Instance.ClosePhaseEndingSelectionMenu();
         }
     }
 }

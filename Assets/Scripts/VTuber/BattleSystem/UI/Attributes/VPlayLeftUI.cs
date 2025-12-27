@@ -46,7 +46,6 @@ namespace VTuber.BattleSystem.UI
                     textObject.gameObject.SetActive(false);
                 }
             }));
-
         }
     }
 }

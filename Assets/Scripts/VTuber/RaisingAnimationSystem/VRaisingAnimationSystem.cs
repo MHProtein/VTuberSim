@@ -26,7 +26,8 @@ namespace VTuber.RaisingAnimationSystem
         SelectCard,
         UpgradeCard,
         SelectCardPreview,
-        ReplaceCard
+        ReplaceCard,
+        Pressure
     }
     
     public class VRaisingAnimationSystem : VSingletonMonobehaviour<VRaisingAnimationSystem>

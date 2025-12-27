@@ -22,6 +22,7 @@ namespace VTuber.Core.StateMachine
 
             if(stateMachine.isTutorial)
                 VRaisingUI.Instance.SetTips(stateMachine.TutorialScript.CurrentWeekTip);
+            VEventSystemUI.Instance.CloseEventUI();
             VSingletonMonobehaviour<VEventSystemUI>.Instance.SetFullScreenButtonActive(false);
             stateMachine.ScheduleUI.SwitchToCreation(stateMachine.Character, stateMachine.Script,
                 stateMachine.Script.WeekIndex);

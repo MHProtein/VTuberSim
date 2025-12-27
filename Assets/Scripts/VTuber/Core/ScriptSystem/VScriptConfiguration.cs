@@ -32,6 +32,7 @@ namespace VTuber.Core.ScriptSystem
 
     public class VScriptConfiguration : VScriptableObject
     {
+        public bool isDebug;
         public int index;
         public string scriptName;
         public string description;
@@ -61,5 +62,7 @@ namespace VTuber.Core.ScriptSystem
 
         [Space(5)] [Header("阶段")] [SerializeField]
         public List<VPhase> phases;
+
+        public uint staminaNotEnoughEventID = 8;
     }
 }

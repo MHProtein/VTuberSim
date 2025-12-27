@@ -66,6 +66,7 @@ namespace VTuber.EventSystem
         protected override void Awake()
         {
             base.Awake();
+            dialogueSystem.gameObject.SetActive(false);
             dialogueSystem.HideMe();
         }
 
@@ -105,6 +106,7 @@ namespace VTuber.EventSystem
 
         public void InitializeEvent(VCharacter character, VDialogueEvent e, bool isPhaseStartEvent = false)
         {
+            VEventSystemUI.Instance.ClosePhaseEndingSelectionMenu(false);
             dialogueSystem.OnDialogFinished += OnDialogueComplete;
             dialogueSystem.OnLineFinished += OnLineFinished;
             VAudioPlayer.Instance.PlayStaticSFX(VSFXType.Raising_EnterEvent);
@@ -192,6 +194,7 @@ namespace VTuber.EventSystem
             },
             () =>
             {
+                dialogueSystem.gameObject.SetActive(true);
                 dialogueSystem.ShowMe(character);
                 dialogueSystem.LoadDialog(e.dialogueNode);
             });
@@ -230,7 +233,6 @@ namespace VTuber.EventSystem
 
         public void ExitStore()
         {
-            storeObject.SetActive(false);
             VRaisingRootEventCenter.Instance.Raise(VRaisingEventKey.OnEventEnd,
                 new Dictionary<string, object>
                 {
@@ -238,12 +240,21 @@ namespace VTuber.EventSystem
                 });
             VRaisingAnimationSystem.Instance.ExecuteAnimations(() =>
             {
-                _currentEvent = null;
-                VAudioPlayer.Instance.StopBGM();
                 
                 var state = VGameManager.Instance.GetState<VExecutionState>();
                 if (state is not null)
-                    state.OnEventEndAnimationEnd();
+                    state.OnEventEndAnimationEnd(() =>
+                    {
+                        _currentEvent = null;
+                        storeObject.SetActive(false);
+                        VAudioPlayer.Instance.StopBGM();
+                    });
+                else
+                {
+                    _currentEvent = null;
+                    storeObject.SetActive(false);
+                    VAudioPlayer.Instance.StopBGM();
+                }
             });
         }
 
@@ -261,12 +272,21 @@ namespace VTuber.EventSystem
                 targetPopularity, extraTargetPopularity, abilityBonus, initialViewers,
                 _character.CharacterRelicManager.GetBattleRelics(), isTutorial, tutorialConditions, tutorialDeck,
                 tutorialTurnHandCards, tipConfig);
+            VRaisingUI.Instance.SetConsumableToBattle();
+            _character.ConsumableManager.SetBattle(battle);
         }
 
         private void OnDialogueComplete(Dialog dialog)
         {
             dialogueSystem.OnDialogFinished -= OnDialogueComplete;
             dialogueSystem.OnLineFinished -= OnLineFinished;
+
+            VDebug.Log("OnDialogueCompleteCalled");
+            if (_currentEvent is null)
+            {
+                VDebug.LogError("_currentEvent是空");
+                return;
+            }
             if (_currentEvent.Type == VEventType.Stream)
             {
                 var streamEvent = _currentEvent as VStreamEvent;
@@ -292,6 +312,10 @@ namespace VTuber.EventSystem
                     storeObject.SetActive(true);
                     _store.EnterStore(_character);
                     _shouldEnterStore = false;
+                    VAudioPlayer.Instance.PlayBGM(VBGMType.Store);
+                },
+                () =>
+                {
                     dialogueSystem.HideMe();
                     dialogueSystem.Clear();
                 });
@@ -320,7 +344,6 @@ namespace VTuber.EventSystem
                         dialogueSystem.Clear();
                         VEventSystemUI.Instance.CloseLoadingAnimation(); 
                     }
-                    VAudioPlayer.Instance.StopBGM();
                 });
             }
         }

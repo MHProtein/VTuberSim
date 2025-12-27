@@ -4,6 +4,7 @@ using System.Linq;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VTuber.BattleSystem.Core;
 
@@ -13,10 +14,12 @@ namespace VTuber.BattleSystem.UI
     {
         [SerializeField] private TMP_Text MultiplierText;
         [SerializeField] private Transform grid;
-        [SerializeField] private GameObject colorPrefab;
+        [SerializeField] private GameObject blockPrefabLeft;
+        [SerializeField] private GameObject blockPrefabMiddle;
+        [SerializeField] private GameObject blockPrefabRight;
         [SerializeField] private Image arrow;
 
-        private readonly List<Image> colorObjects = new();
+        private readonly List<VMultiplierBlockUI> blocks = new();
         private string _attributeName = "";
 
         private float arrowHeight;
@@ -36,8 +39,8 @@ namespace VTuber.BattleSystem.UI
 
             key = VBattleEventKey.OnMultiplierChange;
             SetFontStyle(MultiplierText, FontStyles.Bold);
-            arrowHeight = arrow.rectTransform.rect.height;
-            arrowWidth = arrow.rectTransform.rect.width;
+            arrowHeight = 50;
+            arrowWidth = 100;
 
             textSequence = new VAnimationQueue();
             arrowSequence = new VAnimationQueue();
@@ -76,12 +79,12 @@ namespace VTuber.BattleSystem.UI
         private void OnBattleEnd(Dictionary<string, object> messagedict)
         {
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnRotateMultiplier, OnRotateMultiplier);
-            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnBegin, OnTurnEnd);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnTurnChange, OnTurnChange);
             VBattleRootEventCenter.Instance.RemoveListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
-            foreach (var colorObject in colorObjects) Destroy(colorObject.gameObject);
-            colorObjects.Clear();
+            foreach (var colorObject in blocks) Destroy(colorObject.gameObject);
+            blocks.Clear();
             arrowIndex = -1;
         }
 
@@ -93,11 +96,12 @@ namespace VTuber.BattleSystem.UI
 
             for (var i = 0; i < delta; i++)
             {
-                var colorObj = Instantiate(colorPrefab, grid);
-                var image = colorObj.GetComponent<Image>();
-                image.color = colorObjects.Last().color;
-                colorObjects.Add(image);
-                var scale = initSize / (colorObjects.Count * blockWidth);
+                var colorObj = Instantiate(blockPrefabMiddle, grid);
+                colorObj.transform.SetSiblingIndex(blocks.Count - 1);
+                var block = colorObj.GetComponent<VMultiplierBlockUI>();
+                block.SetColor(blocks.Last().Color);
+                blocks.Insert(blocks.Count - 1, block);
+                var scale = initSize / (blocks.Count * blockWidth);
 
                 arrowSequence.Enqueue(Tween.Scale(grid.transform, new Vector3(scale, 1, 1), 0.2f));
 
@@ -108,27 +112,27 @@ namespace VTuber.BattleSystem.UI
         public IEnumerator DelayMoveArrow()
         {
             yield return new WaitForSeconds(0.2f);
-            if (arrowIndex >= colorObjects.Count || arrowIndex < 0)
+            if (arrowIndex >= blocks.Count || arrowIndex < 0)
                 yield break;
             arrowSequence.Enqueue(Tween.LocalPosition(arrow.transform,
-                colorObjects[arrowIndex].transform.localPosition +
+                blocks[arrowIndex].transform.localPosition +
                 new Vector3(0, -arrowHeight, 0), 0.2f));
         }
 
         private void OnBattleBegin(Dictionary<string, object> messagedict)
         {
-            Tween.Delay(0.1f, () =>
-            {
-                arrow.transform.position = colorObjects[0].transform.position + new Vector3(0, -arrowHeight, 0);
-                initSize = colorObjects[0].rectTransform.rect.width * colorObjects.Count;
-                blockHeight = colorObjects[0].rectTransform.rect.height;
-                blockWidth = colorObjects[0].rectTransform.rect.width;
-            });
+            // Tween.Delay(0.1f, () =>
+            // {
+            //     arrow.transform.position = blocks[0].transform.position + new Vector3(0, -arrowHeight, 0);
+            //     initSize = 100 * blocks.Count;
+            //     blockHeight = 100;
+            //     blockWidth = 100;
+            // });
         }
 
         private void OnMultiplierSequenceCalculated(Dictionary<string, object> messagedict)
         {
-            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnEnd, OnTurnEnd);
+            VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnBegin, OnTurnEnd);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleBegin, OnBattleBegin);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnTurnChange, OnTurnChange);
             VBattleRootEventCenter.Instance.RegisterListener(VBattleEventKey.OnBattleEnd, OnBattleEnd);
@@ -139,10 +143,13 @@ namespace VTuber.BattleSystem.UI
                 return;
             for (var i = 0; i < colors.Count; i++)
             {
-                var colorObj = Instantiate(colorPrefab, grid);
-                var image = colorObj.GetComponent<Image>();
-                image.color = colors[i];
-                colorObjects.Add(image);
+                GameObject colorObj;
+                if(i == 0) colorObj = Instantiate(blockPrefabLeft, grid);
+                else if(i == colors.Count - 1) colorObj = Instantiate(blockPrefabRight, grid);
+                else colorObj = Instantiate(blockPrefabMiddle, grid);
+                var block = colorObj.GetComponent<VMultiplierBlockUI>();
+                block.SetColor(colors[i]);
+                blocks.Add(block);
             }
 
             if (messagedict.TryGetValue("Index", out var indexObj))
@@ -151,8 +158,7 @@ namespace VTuber.BattleSystem.UI
             }
             else
             {
-                arrowIndex++;
-                if (arrowIndex >= colorObjects.Count)
+                if (arrowIndex >= blocks.Count)
                     return;
             }
 
@@ -171,7 +177,7 @@ namespace VTuber.BattleSystem.UI
         private void OnTurnEnd(Dictionary<string, object> messagedict)
         {
             arrowIndex++;
-            if (arrowIndex >= colorObjects.Count)
+            if (arrowIndex >= blocks.Count)
                 return;
 
             StartCoroutine(DelayMoveArrow());

@@ -11,11 +11,16 @@ namespace VTuber.Character
 {
     public class VCharacterConfiguration : VScriptableObject
     {
+        public bool isDebug;
         public string characterName;
+        public Sprite characterIcon;
         [TextArea] public string description;
         public string liveType;
         public uint initialCardId;
         public uint initialRelicId;
+
+        [LabelText("角色专属事件是否直播")] public bool isCharacterEventStream;
+        [LabelText("角色专属事件")] public uint characterEvent;
 
         [FormerlySerializedAs("fillingEventIDSize1")] [Header("补充事件")] [SerializeField] [LabelText("补充事件(大小1)")]
         public uint fillingEventIDDuration1;
